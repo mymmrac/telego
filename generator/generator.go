@@ -45,20 +45,32 @@ const fieldPattern = `
 </tr>
 `
 
-const urlPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
+const (
+	urlPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
+	imgPattern = `<img.*?alt="(.+?)".*?>`
 
-const tagPattern = `<.+?>(.+?)</.+?>`
+	tagPattern         = `<.+?>(.+?)</.+?>`
+	unclosedTagPattern = `<.+?>`
+)
 
-var urlPatternReg *regexp.Regexp
-var tagPatternReg *regexp.Regexp
+var (
+	urlPatternReg         *regexp.Regexp
+	imgPatternReg         *regexp.Regexp
+	tagPatternReg         *regexp.Regexp
+	unclosedTagPatternReg *regexp.Regexp
+)
 
 func main() {
 	log := logger.CreateLogrusLogger(logrus.ErrorLevel)
 
 	typePatternReg := regexp.MustCompile(removeNewline(typePattern))
 	fieldPatternReg := regexp.MustCompile(removeNewline(fieldPattern))
+
 	urlPatternReg = regexp.MustCompile(urlPattern)
+	imgPatternReg = regexp.MustCompile(imgPattern)
+
 	tagPatternReg = regexp.MustCompile(tagPattern)
+	unclosedTagPatternReg = regexp.MustCompile(unclosedTagPattern)
 
 	file, err := os.Create("types.go")
 	if err != nil {
@@ -101,12 +113,13 @@ func main() {
 
 		for _, fieldMatched := range fieldMatch {
 			fieldName := fieldMatched[1]
-			fieldType := convertType(removeTags(fieldMatched[2]))
 			fieldDescription := removeTags(cleanDescription(fieldMatched[3]))
+			isOptional := strings.HasPrefix(fieldDescription, "Optional.")
 			omitemptyStr := ""
-			if strings.HasPrefix(fieldDescription, "Optional.") {
+			if isOptional {
 				omitemptyStr = ",omitempty"
 			}
+			fieldType := convertType(removeTags(fieldMatched[2]), isOptional)
 
 			fmt.Fprintf(file, "\t// %s - %s\n\t%s %s `json:\"%s%s\"`\n\n",
 				snakeToCamelCase(fieldName), fieldDescription, snakeToCamelCase(fieldName), fieldType, fieldName, omitemptyStr)
@@ -121,11 +134,14 @@ func removeNewline(text string) string {
 }
 
 func cleanDescription(text string) string {
-	return html.UnescapeString(urlPatternReg.ReplaceAllString(text, "$2 ($1)"))
+	return imgPatternReg.ReplaceAllString(
+		urlPatternReg.ReplaceAllString(text, "$2 ($1)"), "$1")
 }
 
 func removeTags(text string) string {
-	return tagPatternReg.ReplaceAllString(text, "$1")
+	return html.UnescapeString(
+		unclosedTagPatternReg.ReplaceAllString(
+			tagPatternReg.ReplaceAllString(text, "$1"), ""))
 }
 
 func snakeToCamelCase(text string) string {
@@ -151,7 +167,7 @@ func snakeToCamelCase(text string) string {
 	return sb.String()
 }
 
-func convertType(text string) string {
+func convertType(text string, isOptional bool) string {
 	switch text {
 	case "String":
 		return "string"
@@ -163,9 +179,12 @@ func convertType(text string) string {
 		return "bool"
 	default:
 		if strings.HasPrefix(text, "Array of ") {
-			return "[]" + convertType(strings.ReplaceAll(text, "Array of ", ""))
+			return "[]" + convertType(strings.ReplaceAll(text, "Array of ", ""), false)
 		}
 
-		return "*" + text
+		if isOptional {
+			return "*" + text
+		}
+		return text
 	}
 }

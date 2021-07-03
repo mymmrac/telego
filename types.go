@@ -1,9 +1,11 @@
 package telego
 
-// Update - This object (#available-types) represents an incoming update.At most <strong>one of the optional parameters can be present in any given update.
+import "encoding/json"
+
+// Update - This object (#available-types) represents an incoming update.At most one of the optional parameters can be present in any given update.
 type Update struct {
-	// UpdateId - The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using Webhooks (#setwebhook), since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
-	UpdateId int `json:"update_id"`
+	// UpdateID - The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using Webhooks (#setwebhook), since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+	UpdateID int `json:"update_id"`
 
 	// Message - Optional. New incoming message of any kind — text, photo, sticker, etc.
 	Message *Message `json:"message,omitempty"`
@@ -43,13 +45,12 @@ type Update struct {
 
 	// ChatMember - Optional. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify “chat_member” in the list of allowed_updates to receive these updates.
 	ChatMember *ChatMemberUpdated `json:"chat_member,omitempty"`
-
 }
 
 // WebhookInfo - Contains information about the current status of a webhook.
 type WebhookInfo struct {
-	// Url - Webhook URL, may be empty if webhook is not set up
-	Url string `json:"url"`
+	// URL - Webhook URL, may be empty if webhook is not set up
+	URL string `json:"url"`
 
 	// HasCustomCertificate - True, if a custom certificate was provided for webhook certificate checks
 	HasCustomCertificate bool `json:"has_custom_certificate"`
@@ -71,13 +72,12 @@ type WebhookInfo struct {
 
 	// AllowedUpdates - Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
-
 }
 
 // User - This object represents a Telegram user or bot.
 type User struct {
-	// Id - Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
-	Id int `json:"id"`
+	// ID - Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+	ID int `json:"id"`
 
 	// IsBot - True, if this user is a bot
 	IsBot bool `json:"is_bot"`
@@ -102,13 +102,12 @@ type User struct {
 
 	// SupportsInlineQueries - Optional. True, if the bot supports inline queries. Returned only in getMe (#getme).
 	SupportsInlineQueries bool `json:"supports_inline_queries,omitempty"`
-
 }
 
 // Chat - This object represents a chat.
 type Chat struct {
-	// Id - Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
-	Id int `json:"id"`
+	// ID - Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+	ID int `json:"id"`
 
 	// Type - Type of chat, can be either “private”, “group”, “supergroup” or “channel”
 	Type string `json:"type"`
@@ -155,18 +154,17 @@ type Chat struct {
 	// CanSetStickerSet - Optional. True, if the bot can change the group sticker set. Returned only in getChat (#getchat).
 	CanSetStickerSet bool `json:"can_set_sticker_set,omitempty"`
 
-	// LinkedChatId - Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat (#getchat).
-	LinkedChatId int `json:"linked_chat_id,omitempty"`
+	// LinkedChatID - Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat (#getchat).
+	LinkedChatID int `json:"linked_chat_id,omitempty"`
 
 	// Location - Optional. For supergroups, the location to which the supergroup is connected. Returned only in getChat (#getchat).
 	Location *ChatLocation `json:"location,omitempty"`
-
 }
 
 // Message - This object represents a message.
 type Message struct {
-	// MessageId - Unique message identifier inside this chat
-	MessageId int `json:"message_id"`
+	// MessageID - Unique message identifier inside this chat
+	MessageID int `json:"message_id"`
 
 	// From - Optional. Sender, empty for messages sent to channels
 	From *User `json:"from,omitempty"`
@@ -178,7 +176,7 @@ type Message struct {
 	Date int `json:"date"`
 
 	// Chat - Conversation the message belongs to
-	Chat *Chat `json:"chat"`
+	Chat Chat `json:"chat"`
 
 	// ForwardFrom - Optional. For forwarded messages, sender of the original message
 	ForwardFrom *User `json:"forward_from,omitempty"`
@@ -186,8 +184,8 @@ type Message struct {
 	// ForwardFromChat - Optional. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
 	ForwardFromChat *Chat `json:"forward_from_chat,omitempty"`
 
-	// ForwardFromMessageId - Optional. For messages forwarded from channels, identifier of the original message in the channel
-	ForwardFromMessageId int `json:"forward_from_message_id,omitempty"`
+	// ForwardFromMessageID - Optional. For messages forwarded from channels, identifier of the original message in the channel
+	ForwardFromMessageID int `json:"forward_from_message_id,omitempty"`
 
 	// ForwardSignature - Optional. For messages forwarded from channels, signature of the post author if present
 	ForwardSignature string `json:"forward_signature,omitempty"`
@@ -207,8 +205,8 @@ type Message struct {
 	// EditDate - Optional. Date the message was last edited in Unix time
 	EditDate int `json:"edit_date,omitempty"`
 
-	// MediaGroupId - Optional. The unique identifier of a media message group this message belongs to
-	MediaGroupId string `json:"media_group_id,omitempty"`
+	// MediaGroupID - Optional. The unique identifier of a media message group this message belongs to
+	MediaGroupID string `json:"media_group_id,omitempty"`
 
 	// AuthorSignature - Optional. Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
 	AuthorSignature string `json:"author_signature,omitempty"`
@@ -217,7 +215,7 @@ type Message struct {
 	Text string `json:"text,omitempty"`
 
 	// Entities - Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
-	Entities []*MessageEntity `json:"entities,omitempty"`
+	Entities []MessageEntity `json:"entities,omitempty"`
 
 	// Animation - Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
 	Animation *Animation `json:"animation,omitempty"`
@@ -229,7 +227,7 @@ type Message struct {
 	Document *Document `json:"document,omitempty"`
 
 	// Photo - Optional. Message is a photo, available sizes of the photo
-	Photo []*PhotoSize `json:"photo,omitempty"`
+	Photo []PhotoSize `json:"photo,omitempty"`
 
 	// Sticker - Optional. Message is a sticker, information about the sticker
 	Sticker *Sticker `json:"sticker,omitempty"`
@@ -247,7 +245,7 @@ type Message struct {
 	Caption string `json:"caption,omitempty"`
 
 	// CaptionEntities - Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Contact - Optional. Message is a shared contact, information about the contact
 	Contact *Contact `json:"contact,omitempty"`
@@ -268,7 +266,7 @@ type Message struct {
 	Location *Location `json:"location,omitempty"`
 
 	// NewChatMembers - Optional. New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
-	NewChatMembers []*User `json:"new_chat_members,omitempty"`
+	NewChatMembers []User `json:"new_chat_members,omitempty"`
 
 	// LeftChatMember - Optional. A member was removed from the group, information about them (this member may be the bot itself)
 	LeftChatMember *User `json:"left_chat_member,omitempty"`
@@ -277,7 +275,7 @@ type Message struct {
 	NewChatTitle string `json:"new_chat_title,omitempty"`
 
 	// NewChatPhoto - Optional. A chat photo was change to this value
-	NewChatPhoto []*PhotoSize `json:"new_chat_photo,omitempty"`
+	NewChatPhoto []PhotoSize `json:"new_chat_photo,omitempty"`
 
 	// DeleteChatPhoto - Optional. Service message: the chat photo was deleted
 	DeleteChatPhoto bool `json:"delete_chat_photo,omitempty"`
@@ -294,11 +292,11 @@ type Message struct {
 	// MessageAutoDeleteTimerChanged - Optional. Service message: auto-delete timer settings changed in the chat
 	MessageAutoDeleteTimerChanged *MessageAutoDeleteTimerChanged `json:"message_auto_delete_timer_changed,omitempty"`
 
-	// MigrateToChatId - Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
-	MigrateToChatId int `json:"migrate_to_chat_id,omitempty"`
+	// MigrateToChatID - Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+	MigrateToChatID int `json:"migrate_to_chat_id,omitempty"`
 
-	// MigrateFromChatId - Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
-	MigrateFromChatId int `json:"migrate_from_chat_id,omitempty"`
+	// MigrateFromChatID - Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+	MigrateFromChatID int `json:"migrate_from_chat_id,omitempty"`
 
 	// PinnedMessage - Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.
 	PinnedMessage *Message `json:"pinned_message,omitempty"`
@@ -330,21 +328,19 @@ type Message struct {
 	// VoiceChatParticipantsInvited - Optional. Service message: new participants invited to a voice chat
 	VoiceChatParticipantsInvited *VoiceChatParticipantsInvited `json:"voice_chat_participants_invited,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
+	// ReplyMarkup - Optional. Inline keyboard attached to the message. login_URL buttons are represented as ordinary URL buttons.
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-
 }
 
-// MessageId - This object represents a unique message identifier.
-type MessageId struct {
-	// MessageId - Unique message identifier
-	MessageId int `json:"message_id"`
-
+// MessageID - This object represents a unique message identifier.
+type MessageID struct {
+	// MessageID - Unique message identifier
+	MessageID int `json:"message_id"`
 }
 
 // MessageEntity - This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 type MessageEntity struct {
-	// Type - Type of the entity. Can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions))
+	// Type - Type of the entity. Can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “URL” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions))
 	Type string `json:"type"`
 
 	// Offset - Offset in UTF-16 code units to the start of the entity
@@ -353,24 +349,23 @@ type MessageEntity struct {
 	// Length - Length of the entity in UTF-16 code units
 	Length int `json:"length"`
 
-	// Url - Optional. For “text_link” only, url that will be opened after user taps on the text
-	Url string `json:"url,omitempty"`
+	// URL - Optional. For “text_link” only, URL that will be opened after user taps on the text
+	URL string `json:"url,omitempty"`
 
 	// User - Optional. For “text_mention” only, the mentioned user
 	User *User `json:"user,omitempty"`
 
 	// Language - Optional. For “pre” only, the programming language of the entity text
 	Language string `json:"language,omitempty"`
-
 }
 
 // PhotoSize - This object represents one size of a photo or a file (#document) / sticker (#sticker) thumbnail.
 type PhotoSize struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Width - Photo width
 	Width int `json:"width"`
@@ -380,16 +375,15 @@ type PhotoSize struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // Animation - This object represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
 type Animation struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Width - Video width as defined by sender
 	Width int `json:"width"`
@@ -411,16 +405,15 @@ type Animation struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // Audio - This object represents an audio file to be treated as music by the Telegram clients.
 type Audio struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Duration - Duration of the audio in seconds as defined by sender
 	Duration int `json:"duration"`
@@ -442,16 +435,15 @@ type Audio struct {
 
 	// Thumb - Optional. Thumbnail of the album cover to which the music file belongs
 	Thumb *PhotoSize `json:"thumb,omitempty"`
-
 }
 
 // Document - This object represents a general file (as opposed to photos (#photosize), voice messages (#voice) and audio files (#audio)).
 type Document struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Thumb - Optional. Document thumbnail as defined by sender
 	Thumb *PhotoSize `json:"thumb,omitempty"`
@@ -464,16 +456,15 @@ type Document struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // Video - This object represents a video file.
 type Video struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Width - Video width as defined by sender
 	Width int `json:"width"`
@@ -495,16 +486,15 @@ type Video struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // VideoNote - This object represents a video message (https://telegram.org/blog/video-messages-and-telescope) (available in Telegram apps as of v.4.0 (https://telegram.org/blog/video-messages-and-telescope)).
 type VideoNote struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Length - Video width and height (diameter of the video message) as defined by sender
 	Length int `json:"length"`
@@ -517,16 +507,15 @@ type VideoNote struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // Voice - This object represents a voice note.
 type Voice struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Duration - Duration of the audio in seconds as defined by sender
 	Duration int `json:"duration"`
@@ -536,7 +525,6 @@ type Voice struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // Contact - This object represents a phone contact.
@@ -550,12 +538,11 @@ type Contact struct {
 	// LastName - Optional. Contact's last name
 	LastName string `json:"last_name,omitempty"`
 
-	// UserId - Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
-	UserId int `json:"user_id,omitempty"`
+	// UserID - Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+	UserID int `json:"user_id,omitempty"`
 
 	// Vcard - Optional. Additional data about the contact in the form of a vCard (https://en.wikipedia.org/wiki/VCard)
 	Vcard string `json:"vcard,omitempty"`
-
 }
 
 // Dice - This object represents an animated emoji that displays a random value.
@@ -563,9 +550,8 @@ type Dice struct {
 	// Emoji - Emoji on which the dice throw animation is based
 	Emoji string `json:"emoji"`
 
-	// Value - Value of the dice, 1-6 for “<img class="emoji" src="//telegram.org/img/emoji/40/F09F8EB2.png" width="20" height="20" alt="🎲" />”, “<img class="emoji" src="//telegram.org/img/emoji/40/F09F8EAF.png" width="20" height="20" alt="🎯" />” and “<img class="emoji" src="//telegram.org/img/emoji/40/F09F8EB3.png" width="20" height="20" alt="🎳" />” base emoji, 1-5 for “<img class="emoji" src="//telegram.org/img/emoji/40/F09F8F80.png" width="20" height="20" alt="🏀" />” and “<img class="emoji" src="//telegram.org/img/emoji/40/E29ABD.png" width="20" height="20" alt="⚽" />” base emoji, 1-64 for “<img class="emoji" src="//telegram.org/img/emoji/40/F09F8EB0.png" width="20" height="20" alt="🎰" />” base emoji
+	// Value - Value of the dice, 1-6 for “🎲”, “🎯” and “🎳” base emoji, 1-5 for “🏀” and “⚽” base emoji, 1-64 for “🎰” base emoji
 	Value int `json:"value"`
-
 }
 
 // PollOption - This object contains information about one answer option in a poll.
@@ -575,32 +561,30 @@ type PollOption struct {
 
 	// VoterCount - Number of users that voted for this option
 	VoterCount int `json:"voter_count"`
-
 }
 
 // PollAnswer - This object represents an answer of a user in a non-anonymous poll.
 type PollAnswer struct {
-	// PollId - Unique poll identifier
-	PollId string `json:"poll_id"`
+	// PollID - Unique poll identifier
+	PollID string `json:"poll_id"`
 
 	// User - The user, who changed the answer to the poll
-	User *User `json:"user"`
+	User User `json:"user"`
 
 	// OptionIds - 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
 	OptionIds []int `json:"option_ids"`
-
 }
 
 // Poll - This object contains information about a poll.
 type Poll struct {
-	// Id - Unique poll identifier
-	Id string `json:"id"`
+	// ID - Unique poll identifier
+	ID string `json:"id"`
 
 	// Question - Poll question, 1-300 characters
 	Question string `json:"question"`
 
 	// Options - List of poll options
-	Options []*PollOption `json:"options"`
+	Options []PollOption `json:"options"`
 
 	// TotalVoterCount - Total number of users that voted in the poll
 	TotalVoterCount int `json:"total_voter_count"`
@@ -617,21 +601,20 @@ type Poll struct {
 	// AllowsMultipleAnswers - True, if the poll allows multiple answers
 	AllowsMultipleAnswers bool `json:"allows_multiple_answers"`
 
-	// CorrectOptionId - Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
-	CorrectOptionId int `json:"correct_option_id,omitempty"`
+	// CorrectOptionID - Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
+	CorrectOptionID int `json:"correct_option_id,omitempty"`
 
 	// Explanation - Optional. Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
 	Explanation string `json:"explanation,omitempty"`
 
 	// ExplanationEntities - Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
-	ExplanationEntities []*MessageEntity `json:"explanation_entities,omitempty"`
+	ExplanationEntities []MessageEntity `json:"explanation_entities,omitempty"`
 
 	// OpenPeriod - Optional. Amount of time in seconds the poll will be active after creation
 	OpenPeriod int `json:"open_period,omitempty"`
 
 	// CloseDate - Optional. Point in time (Unix timestamp) when the poll will be automatically closed
 	CloseDate int `json:"close_date,omitempty"`
-
 }
 
 // Location - This object represents a point on the map.
@@ -653,13 +636,12 @@ type Location struct {
 
 	// ProximityAlertRadius - Optional. Maximum distance for proximity alerts about approaching another chat member, in meters. For sent live locations only.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
-
 }
 
 // Venue - This object represents a venue.
 type Venue struct {
 	// Location - Venue location. Can't be a live location
-	Location *Location `json:"location"`
+	Location Location `json:"location"`
 
 	// Title - Name of the venue
 	Title string `json:"title"`
@@ -667,45 +649,41 @@ type Venue struct {
 	// Address - Address of the venue
 	Address string `json:"address"`
 
-	// FoursquareId - Optional. Foursquare identifier of the venue
-	FoursquareId string `json:"foursquare_id,omitempty"`
+	// FoursquareID - Optional. Foursquare identifier of the venue
+	FoursquareID string `json:"foursquare_id,omitempty"`
 
 	// FoursquareType - Optional. Foursquare type of the venue. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
 	FoursquareType string `json:"foursquare_type,omitempty"`
 
-	// GooglePlaceId - Optional. Google Places identifier of the venue
-	GooglePlaceId string `json:"google_place_id,omitempty"`
+	// GooglePlaceID - Optional. Google Places identifier of the venue
+	GooglePlaceID string `json:"google_place_id,omitempty"`
 
 	// GooglePlaceType - Optional. Google Places type of the venue. (See supported types (https://developers.google.com/places/web-service/supported_types).)
 	GooglePlaceType string `json:"google_place_type,omitempty"`
-
 }
 
 // ProximityAlertTriggered - This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
 type ProximityAlertTriggered struct {
 	// Traveler - User that triggered the alert
-	Traveler *User `json:"traveler"`
+	Traveler User `json:"traveler"`
 
 	// Watcher - User that set the alert
-	Watcher *User `json:"watcher"`
+	Watcher User `json:"watcher"`
 
 	// Distance - The distance between the users
 	Distance int `json:"distance"`
-
 }
 
 // MessageAutoDeleteTimerChanged - This object represents a service message about a change in auto-delete timer settings.
 type MessageAutoDeleteTimerChanged struct {
 	// MessageAutoDeleteTime - New auto-delete time for messages in the chat
 	MessageAutoDeleteTime int `json:"message_auto_delete_time"`
-
 }
 
 // VoiceChatScheduled - This object represents a service message about a voice chat scheduled in the chat.
 type VoiceChatScheduled struct {
 	// StartDate - Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat administrator
 	StartDate int `json:"start_date"`
-
 }
 
 // VoiceChatStarted - This object represents a service message about a voice chat started in the chat. Currently holds no information.
@@ -716,14 +694,12 @@ type VoiceChatStarted struct {
 type VoiceChatEnded struct {
 	// Duration - Voice chat duration; in seconds
 	Duration int `json:"duration"`
-
 }
 
 // VoiceChatParticipantsInvited - This object represents a service message about new members invited to a voice chat.
 type VoiceChatParticipantsInvited struct {
 	// Users - Optional. New members that were invited to the voice chat
-	Users []*User `json:"users,omitempty"`
-
+	Users []User `json:"users,omitempty"`
 }
 
 // UserProfilePhotos - This object represent a user's profile pictures.
@@ -732,8 +708,7 @@ type UserProfilePhotos struct {
 	TotalCount int `json:"total_count"`
 
 	// Photos - Requested profile pictures (in up to 4 sizes each)
-	Photos []*PhotoSize `json:"photos"`
-
+	Photos []PhotoSize `json:"photos"`
 }
 
 // File - This object represents a file ready to be downloaded. The file can be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile (#getfile).
@@ -743,7 +718,7 @@ type File struct {
 // ReplyKeyboardMarkup - This object represents a custom keyboard (https://core.telegram.org/bots#keyboards) with reply options (see Introduction to bots (https://core.telegram.org/bots#keyboards) for details and examples).
 type ReplyKeyboardMarkup struct {
 	// Keyboard - Array of button rows, each represented by an Array of KeyboardButton (#keyboardbutton) objects
-	Keyboard []*KeyboardButton `json:"keyboard"`
+	Keyboard []KeyboardButton `json:"keyboard"`
 
 	// ResizeKeyboard - Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
 	ResizeKeyboard bool `json:"resize_keyboard,omitempty"`
@@ -754,9 +729,8 @@ type ReplyKeyboardMarkup struct {
 	// InputFieldPlaceholder - Optional. The placeholder to be shown in the input field when the keyboard is active; 1-64 characters
 	InputFieldPlaceholder string `json:"input_field_placeholder,omitempty"`
 
-	// Selective - Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message (#message) object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.<br><em>Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
+	// Selective - Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message (#message) object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
 	Selective bool `json:"selective,omitempty"`
-
 }
 
 // KeyboardButton - This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields request_contact, request_location, and request_poll are mutually exclusive.
@@ -772,14 +746,12 @@ type KeyboardButton struct {
 
 	// RequestPoll - Optional. If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only
 	RequestPoll *KeyboardButtonPollType `json:"request_poll,omitempty"`
-
 }
 
 // KeyboardButtonPollType - This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
 type KeyboardButtonPollType struct {
 	// Type - Optional. If quiz is passed, the user will be allowed to create only polls in the quiz mode. If regular is passed, only regular polls will be allowed. Otherwise, the user will be allowed to create a poll of any type.
 	Type string `json:"type,omitempty"`
-
 }
 
 // ReplyKeyboardRemove - Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup (#replykeyboardmarkup)).
@@ -787,16 +759,14 @@ type ReplyKeyboardRemove struct {
 	// RemoveKeyboard - Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup (#replykeyboardmarkup))
 	RemoveKeyboard bool `json:"remove_keyboard"`
 
-	// Selective - Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message (#message) object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.<br><em>Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
+	// Selective - Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message (#message) object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
 	Selective bool `json:"selective,omitempty"`
-
 }
 
 // InlineKeyboardMarkup - This object represents an inline keyboard (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) that appears right next to the message it belongs to.
 type InlineKeyboardMarkup struct {
 	// InlineKeyboard - Array of button rows, each represented by an Array of InlineKeyboardButton (#inlinekeyboardbutton) objects
-	InlineKeyboard []*InlineKeyboardButton `json:"inline_keyboard"`
-
+	InlineKeyboard []InlineKeyboardButton `json:"inline_keyboard"`
 }
 
 // InlineKeyboardButton - This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
@@ -804,46 +774,45 @@ type InlineKeyboardButton struct {
 	// Text - Label text on the button
 	Text string `json:"text"`
 
-	// Url - Optional. HTTP or tg:// url to be opened when button is pressed
-	Url string `json:"url,omitempty"`
+	// URL - Optional. HTTP or tg:// URL to be opened when button is pressed
+	URL string `json:"url,omitempty"`
 
-	// LoginUrl - Optional. An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget (https://core.telegram.org/widgets/login).
-	LoginUrl *LoginUrl `json:"login_url,omitempty"`
+	// LoginURL - Optional. An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget (https://core.telegram.org/widgets/login).
+	LoginURL *LoginURL `json:"login_url,omitempty"`
 
 	// CallbackData - Optional. Data to be sent in a callback query (#callbackquery) to the bot when button is pressed, 1-64 bytes
 	CallbackData string `json:"callback_data,omitempty"`
 
-	// SwitchInlineQuery - Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. Can be empty, in which case just the bot's username will be inserted.<br><strong>Note: This offers an easy way for users to start using your bot in inline mode (/bots/inline) when they are currently in a private chat with it. Especially useful when combined with switch_pm… (#answerinlinequery) actions – in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
+	// SwitchInlineQuery - Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. Can be empty, in which case just the bot's username will be inserted.Note: This offers an easy way for users to start using your bot in inline mode (/bots/inline) when they are currently in a private chat with it. Especially useful when combined with switch_pm… (#answerinlinequery) actions – in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
 	SwitchInlineQuery string `json:"switch_inline_query,omitempty"`
 
-	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. Can be empty, in which case only the bot's username will be inserted.<br><br>This offers a quick way for the user to open your bot in inline mode in the same chat – good for selecting something from multiple options.
+	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. Can be empty, in which case only the bot's username will be inserted.This offers a quick way for the user to open your bot in inline mode in the same chat – good for selecting something from multiple options.
 	SwitchInlineQueryCurrentChat string `json:"switch_inline_query_current_chat,omitempty"`
 
-	// CallbackGame - Optional. Description of the game that will be launched when the user presses the button.<br><strong>NOTE: This type of button must always be the first button in the first row.
+	// CallbackGame - Optional. Description of the game that will be launched when the user presses the button.NOTE: This type of button must always be the first button in the first row.
 	CallbackGame *CallbackGame `json:"callback_game,omitempty"`
 
-	// Pay - Optional. Specify True, to send a Pay button (#payments).<br><strong>NOTE: This type of button must always be the first button in the first row.
+	// Pay - Optional. Specify True, to send a Pay button (#payments).NOTE: This type of button must always be the first button in the first row.
 	Pay bool `json:"pay,omitempty"`
-
 }
 
-// LoginUrl - This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget (https://core.telegram.org/widgets/login) when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
-type LoginUrl struct {
+// LoginURL - This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget (https://core.telegram.org/widgets/login) when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
+type LoginURL struct {
 }
 
 // CallbackQuery - This object represents an incoming callback query from a callback button in an inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating). If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode (#inline-mode)), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
 type CallbackQuery struct {
-	// Id - Unique identifier for this query
-	Id string `json:"id"`
+	// ID - Unique identifier for this query
+	ID string `json:"id"`
 
 	// From - Sender
-	From *User `json:"from"`
+	From User `json:"from"`
 
 	// Message - Optional. Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
 	Message *Message `json:"message,omitempty"`
 
-	// InlineMessageId - Optional. Identifier of the message sent via the bot in inline mode, that originated the query.
-	InlineMessageId string `json:"inline_message_id,omitempty"`
+	// InlineMessageID - Optional. Identifier of the message sent via the bot in inline mode, that originated the query.
+	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ChatInstance - Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games (#games).
 	ChatInstance string `json:"chat_instance"`
@@ -853,7 +822,6 @@ type CallbackQuery struct {
 
 	// GameShortName - Optional. Short name of a Game (#games) to be returned, serves as the unique identifier for the game
 	GameShortName string `json:"game_short_name,omitempty"`
-
 }
 
 // ForceReply - Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode (/bots#privacy-mode).
@@ -866,23 +834,21 @@ type ForceReply struct {
 
 	// Selective - Optional. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message (#message) object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
 	Selective bool `json:"selective,omitempty"`
-
 }
 
 // ChatPhoto - This object represents a chat photo.
 type ChatPhoto struct {
-	// SmallFileId - File identifier of small (160x160) chat photo. This file_id can be used only for photo download and only for as long as the photo is not changed.
-	SmallFileId string `json:"small_file_id"`
+	// SmallFileID - File identifier of small (160x160) chat photo. This file_id can be used only for photo download and only for as long as the photo is not changed.
+	SmallFileID string `json:"small_file_id"`
 
-	// SmallFileUniqueId - Unique file identifier of small (160x160) chat photo, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	SmallFileUniqueId string `json:"small_file_unique_id"`
+	// SmallFileUniqueID - Unique file identifier of small (160x160) chat photo, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	SmallFileUniqueID string `json:"small_file_unique_id"`
 
-	// BigFileId - File identifier of big (640x640) chat photo. This file_id can be used only for photo download and only for as long as the photo is not changed.
-	BigFileId string `json:"big_file_id"`
+	// BigFileID - File identifier of big (640x640) chat photo. This file_id can be used only for photo download and only for as long as the photo is not changed.
+	BigFileID string `json:"big_file_id"`
 
-	// BigFileUniqueId - Unique file identifier of big (640x640) chat photo, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	BigFileUniqueId string `json:"big_file_unique_id"`
-
+	// BigFileUniqueID - Unique file identifier of big (640x640) chat photo, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	BigFileUniqueID string `json:"big_file_unique_id"`
 }
 
 // ChatInviteLink - Represents an invite link for a chat.
@@ -891,7 +857,7 @@ type ChatInviteLink struct {
 	InviteLink string `json:"invite_link"`
 
 	// Creator - Creator of the link
-	Creator *User `json:"creator"`
+	Creator User `json:"creator"`
 
 	// IsPrimary - True, if the link is primary
 	IsPrimary bool `json:"is_primary"`
@@ -904,7 +870,6 @@ type ChatInviteLink struct {
 
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
 	MemberLimit int `json:"member_limit,omitempty"`
-
 }
 
 // ChatMember - This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
@@ -917,14 +882,13 @@ type ChatMemberOwner struct {
 	Status string `json:"status"`
 
 	// User - Information about the user
-	User *User `json:"user"`
+	User User `json:"user"`
 
 	// CustomTitle - Custom title for this user
 	CustomTitle string `json:"custom_title"`
 
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
-
 }
 
 // ChatMemberAdministrator - Represents a chat member (#chatmember) that has some additional privileges.
@@ -933,7 +897,7 @@ type ChatMemberAdministrator struct {
 	Status string `json:"status"`
 
 	// User - Information about the user
-	User *User `json:"user"`
+	User User `json:"user"`
 
 	// CanBeEdited - True, if the bot is allowed to edit administrator privileges of that user
 	CanBeEdited bool `json:"can_be_edited"`
@@ -973,7 +937,6 @@ type ChatMemberAdministrator struct {
 
 	// CanPinMessages - True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages"`
-
 }
 
 // ChatMemberMember - Represents a chat member (#chatmember) that has no additional privileges or restrictions.
@@ -982,8 +945,7 @@ type ChatMemberMember struct {
 	Status string `json:"status"`
 
 	// User - Information about the user
-	User *User `json:"user"`
-
+	User User `json:"user"`
 }
 
 // ChatMemberRestricted - Represents a chat member (#chatmember) that is under certain restrictions in the chat. Supergroups only.
@@ -992,7 +954,7 @@ type ChatMemberRestricted struct {
 	Status string `json:"status"`
 
 	// User - Information about the user
-	User *User `json:"user"`
+	User User `json:"user"`
 
 	// IsMember - True, if the user is a member of the chat at the moment of the request
 	IsMember bool `json:"is_member"`
@@ -1023,7 +985,6 @@ type ChatMemberRestricted struct {
 
 	// UntilDate - Date when restrictions will be lifted for this user; unix time
 	UntilDate int `json:"until_date"`
-
 }
 
 // ChatMemberLeft - Represents a chat member (#chatmember) that isn't currently a member of the chat, but may join it themselves.
@@ -1032,8 +993,7 @@ type ChatMemberLeft struct {
 	Status string `json:"status"`
 
 	// User - Information about the user
-	User *User `json:"user"`
-
+	User User `json:"user"`
 }
 
 // ChatMemberBanned - Represents a chat member (#chatmember) that was banned in the chat and can't return to the chat or view chat messages.
@@ -1042,33 +1002,31 @@ type ChatMemberBanned struct {
 	Status string `json:"status"`
 
 	// User - Information about the user
-	User *User `json:"user"`
+	User User `json:"user"`
 
 	// UntilDate - Date when restrictions will be lifted for this user; unix time
 	UntilDate int `json:"until_date"`
-
 }
 
 // ChatMemberUpdated - This object represents changes in the status of a chat member.
 type ChatMemberUpdated struct {
 	// Chat - Chat the user belongs to
-	Chat *Chat `json:"chat"`
+	Chat Chat `json:"chat"`
 
 	// From - Performer of the action, which resulted in the change
-	From *User `json:"from"`
+	From User `json:"from"`
 
 	// Date - Date the change was done in Unix time
 	Date int `json:"date"`
 
 	// OldChatMember - Previous information about the chat member
-	OldChatMember *ChatMember `json:"old_chat_member"`
+	OldChatMember ChatMember `json:"old_chat_member"`
 
 	// NewChatMember - New information about the chat member
-	NewChatMember *ChatMember `json:"new_chat_member"`
+	NewChatMember ChatMember `json:"new_chat_member"`
 
 	// InviteLink - Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
-
 }
 
 // ChatPermissions - Describes actions that a non-administrator user is allowed to take in a chat.
@@ -1096,17 +1054,15 @@ type ChatPermissions struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
-
 }
 
 // ChatLocation - Represents a location to which a chat is connected.
 type ChatLocation struct {
 	// Location - The location to which the supergroup is connected. Can't be a live location.
-	Location *Location `json:"location"`
+	Location Location `json:"location"`
 
 	// Address - Location address; 1-64 characters, as defined by the chat owner
 	Address string `json:"address"`
-
 }
 
 // BotCommand - This object represents a bot command.
@@ -1116,7 +1072,6 @@ type BotCommand struct {
 
 	// Description - Description of the command, 3-256 characters.
 	Description string `json:"description"`
-
 }
 
 // BotCommandScope - This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
@@ -1127,28 +1082,42 @@ type BotCommandScope struct {
 type BotCommandScopeDefault struct {
 	// Type - Scope type, must be default
 	Type string `json:"type"`
-
 }
 
 // BotCommandScopeAllPrivateChats - Represents the scope (#botcommandscope) of bot commands, covering all private chats.
 type BotCommandScopeAllPrivateChats struct {
 	// Type - Scope type, must be all_private_chats
 	Type string `json:"type"`
-
 }
 
 // BotCommandScopeAllGroupChats - Represents the scope (#botcommandscope) of bot commands, covering all group and supergroup chats.
 type BotCommandScopeAllGroupChats struct {
 	// Type - Scope type, must be all_group_chats
 	Type string `json:"type"`
-
 }
 
 // BotCommandScopeAllChatAdministrators - Represents the scope (#botcommandscope) of bot commands, covering all group and supergroup chat administrators.
 type BotCommandScopeAllChatAdministrators struct {
 	// Type - Scope type, must be all_chat_administrators
 	Type string `json:"type"`
+}
 
+// IntOrStringChatID - Represents chat ID as int or stringF
+type IntOrStringChatID struct {
+	IntValue    int
+	StringValue string
+}
+
+func (c IntOrStringChatID) MarshalJSON() ([]byte, error) {
+	if c.StringValue != "" {
+		return json.Marshal(struct {
+			ChatID string `json:"chat_id"`
+		}{ChatID: c.StringValue})
+	}
+
+	return json.Marshal(struct {
+		ChatID int `json:"chat_id"`
+	}{ChatID: c.IntValue})
 }
 
 // BotCommandScopeChat - Represents the scope (#botcommandscope) of bot commands, covering a specific chat.
@@ -1156,9 +1125,8 @@ type BotCommandScopeChat struct {
 	// Type - Scope type, must be chat
 	Type string `json:"type"`
 
-	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
-	ChatId *Integer or String `json:"chat_id"`
-
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+	ChatID IntOrStringChatID
 }
 
 // BotCommandScopeChatAdministrators - Represents the scope (#botcommandscope) of bot commands, covering all administrators of a specific group or supergroup chat.
@@ -1166,9 +1134,8 @@ type BotCommandScopeChatAdministrators struct {
 	// Type - Scope type, must be chat_administrators
 	Type string `json:"type"`
 
-	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
-	ChatId *Integer or String `json:"chat_id"`
-
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+	ChatID IntOrStringChatID
 }
 
 // BotCommandScopeChatMember - Represents the scope (#botcommandscope) of bot commands, covering a specific member of a group or supergroup chat.
@@ -1176,22 +1143,20 @@ type BotCommandScopeChatMember struct {
 	// Type - Scope type, must be chat_member
 	Type string `json:"type"`
 
-	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
-	ChatId *Integer or String `json:"chat_id"`
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+	ChatID IntOrStringChatID
 
-	// UserId - Unique identifier of the target user
-	UserId int `json:"user_id"`
-
+	// UserID - Unique identifier of the target user
+	UserID int `json:"user_id"`
 }
 
 // ResponseParameters - Contains information about why a request was unsuccessful.
 type ResponseParameters struct {
-	// MigrateToChatId - Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
-	MigrateToChatId int `json:"migrate_to_chat_id,omitempty"`
+	// MigrateToChatID - Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+	MigrateToChatID int `json:"migrate_to_chat_id,omitempty"`
 
 	// RetryAfter - Optional. In case of exceeding flood control, the number of seconds left to wait before the request can be repeated
 	RetryAfter int `json:"retry_after,omitempty"`
-
 }
 
 // InputMedia - This object represents the content of a media message to be sent. It should be one of
@@ -1213,8 +1178,7 @@ type InputMediaPhoto struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
-
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 }
 
 // InputMediaVideo - Represents a video to be sent.
@@ -1226,7 +1190,8 @@ type InputMediaVideo struct {
 	Media string `json:"media"`
 
 	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	// FIX: *InputFile or String
+	Thumb string `json:"thumb,omitempty"`
 
 	// Caption - Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -1235,7 +1200,7 @@ type InputMediaVideo struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Width - Optional. Video width
 	Width int `json:"width,omitempty"`
@@ -1248,7 +1213,6 @@ type InputMediaVideo struct {
 
 	// SupportsStreaming - Optional. Pass True, if the uploaded video is suitable for streaming
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
-
 }
 
 // InputMediaAnimation - Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
@@ -1260,7 +1224,8 @@ type InputMediaAnimation struct {
 	Media string `json:"media"`
 
 	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	// FIX: *InputFile or String
+	Thumb string `json:"thumb,omitempty"`
 
 	// Caption - Optional. Caption of the animation to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -1269,7 +1234,7 @@ type InputMediaAnimation struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Width - Optional. Animation width
 	Width int `json:"width,omitempty"`
@@ -1279,7 +1244,6 @@ type InputMediaAnimation struct {
 
 	// Duration - Optional. Animation duration
 	Duration int `json:"duration,omitempty"`
-
 }
 
 // InputMediaAudio - Represents an audio file to be treated as music to be sent.
@@ -1291,7 +1255,8 @@ type InputMediaAudio struct {
 	Media string `json:"media"`
 
 	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	// FIX: *InputFile or String
+	Thumb string `json:"thumb,omitempty"`
 
 	// Caption - Optional. Caption of the audio to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -1300,7 +1265,7 @@ type InputMediaAudio struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Duration - Optional. Duration of the audio in seconds
 	Duration int `json:"duration,omitempty"`
@@ -1310,7 +1275,6 @@ type InputMediaAudio struct {
 
 	// Title - Optional. Title of the audio
 	Title string `json:"title,omitempty"`
-
 }
 
 // InputMediaDocument - Represents a general file to be sent.
@@ -1322,7 +1286,8 @@ type InputMediaDocument struct {
 	Media string `json:"media"`
 
 	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	// FIX: *InputFile or String
+	Thumb string `json:"thumb,omitempty"`
 
 	// Caption - Optional. Caption of the document to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -1331,11 +1296,10 @@ type InputMediaDocument struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// DisableContentTypeDetection - Optional. Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always true, if the document is sent as part of an album.
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
-
 }
 
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using multipart/form-data in the usual way that files are uploaded via the browser.
@@ -1344,11 +1308,11 @@ type InputFile struct {
 
 // Sticker - This object represents a sticker.
 type Sticker struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// Width - Sticker width
 	Width int `json:"width"`
@@ -1373,7 +1337,6 @@ type Sticker struct {
 
 	// FileSize - Optional. File size
 	FileSize int `json:"file_size,omitempty"`
-
 }
 
 // StickerSet - This object represents a sticker set.
@@ -1391,11 +1354,10 @@ type StickerSet struct {
 	ContainsMasks bool `json:"contains_masks"`
 
 	// Stickers - List of all set stickers
-	Stickers []*Sticker `json:"stickers"`
+	Stickers []Sticker `json:"stickers"`
 
 	// Thumb - Optional. Sticker set thumbnail in the .WEBP or .TGS format
 	Thumb *PhotoSize `json:"thumb,omitempty"`
-
 }
 
 // MaskPosition - This object describes the position on faces where a mask should be placed by default.
@@ -1411,16 +1373,15 @@ type MaskPosition struct {
 
 	// Scale - Mask scaling coefficient. For example, 2.0 means double size.
 	Scale float64 `json:"scale"`
-
 }
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
 type InlineQuery struct {
-	// Id - Unique identifier for this query
-	Id string `json:"id"`
+	// ID - Unique identifier for this query
+	ID string `json:"id"`
 
 	// From - Sender
-	From *User `json:"from"`
+	From User `json:"from"`
 
 	// Query - Text of the query (up to 256 characters)
 	Query string `json:"query"`
@@ -1433,7 +1394,6 @@ type InlineQuery struct {
 
 	// Location - Optional. Sender location, only for bots that request user location
 	Location *Location `json:"location,omitempty"`
-
 }
 
 // InlineQueryResult - This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
@@ -1445,36 +1405,35 @@ type InlineQueryResultArticle struct {
 	// Type - Type of the result, must be article
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 Bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 Bytes
+	ID string `json:"id"`
 
 	// Title - Title of the result
 	Title string `json:"title"`
 
 	// InputMessageContent - Content of the message to be sent
-	InputMessageContent *InputMessageContent `json:"input_message_content"`
+	InputMessageContent InputMessageContent `json:"input_message_content"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
-	// Url - Optional. URL of the result
-	Url string `json:"url,omitempty"`
+	// URL - Optional. URL of the result
+	URL string `json:"url,omitempty"`
 
-	// HideUrl - Optional. Pass True, if you don't want the URL to be shown in the message
-	HideUrl bool `json:"hide_url,omitempty"`
+	// HideURL - Optional. Pass True, if you don't want the URL to be shown in the message
+	HideURL bool `json:"hide_url,omitempty"`
 
 	// Description - Optional. Short description of the result
 	Description string `json:"description,omitempty"`
 
-	// ThumbUrl - Optional. Url of the thumbnail for the result
-	ThumbUrl string `json:"thumb_url,omitempty"`
+	// ThumbURL - Optional. URL of the thumbnail for the result
+	ThumbURL string `json:"thumb_url,omitempty"`
 
 	// ThumbWidth - Optional. Thumbnail width
 	ThumbWidth int `json:"thumb_width,omitempty"`
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
-
 }
 
 // InlineQueryResultPhoto - Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
@@ -1482,14 +1441,14 @@ type InlineQueryResultPhoto struct {
 	// Type - Type of the result, must be photo
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// PhotoUrl - A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
-	PhotoUrl string `json:"photo_url"`
+	// PhotoURL - A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
+	PhotoURL string `json:"photo_url"`
 
-	// ThumbUrl - URL of the thumbnail for the photo
-	ThumbUrl string `json:"thumb_url"`
+	// ThumbURL - URL of the thumbnail for the photo
+	ThumbURL string `json:"thumb_url"`
 
 	// PhotoWidth - Optional. Width of the photo
 	PhotoWidth int `json:"photo_width,omitempty"`
@@ -1510,14 +1469,13 @@ type InlineQueryResultPhoto struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultGif - Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
@@ -1525,11 +1483,11 @@ type InlineQueryResultGif struct {
 	// Type - Type of the result, must be gif
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// GifUrl - A valid URL for the GIF file. File size must not exceed 1MB
-	GifUrl string `json:"gif_url"`
+	// GifURL - A valid URL for the GIF file. File size must not exceed 1MB
+	GifURL string `json:"gif_url"`
 
 	// GifWidth - Optional. Width of the GIF
 	GifWidth int `json:"gif_width,omitempty"`
@@ -1540,8 +1498,8 @@ type InlineQueryResultGif struct {
 	// GifDuration - Optional. Duration of the GIF
 	GifDuration int `json:"gif_duration,omitempty"`
 
-	// ThumbUrl - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-	ThumbUrl string `json:"thumb_url"`
+	// ThumbURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
+	ThumbURL string `json:"thumb_url"`
 
 	// ThumbMimeType - Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
 	ThumbMimeType string `json:"thumb_mime_type,omitempty"`
@@ -1556,14 +1514,13 @@ type InlineQueryResultGif struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
@@ -1571,11 +1528,11 @@ type InlineQueryResultMpeg4Gif struct {
 	// Type - Type of the result, must be mpeg4_gif
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// Mpeg4Url - A valid URL for the MP4 file. File size must not exceed 1MB
-	Mpeg4Url string `json:"mpeg4_url"`
+	// Mpeg4URL - A valid URL for the MP4 file. File size must not exceed 1MB
+	Mpeg4URL string `json:"mpeg4_url"`
 
 	// Mpeg4Width - Optional. Video width
 	Mpeg4Width int `json:"mpeg4_width,omitempty"`
@@ -1586,8 +1543,8 @@ type InlineQueryResultMpeg4Gif struct {
 	// Mpeg4Duration - Optional. Video duration
 	Mpeg4Duration int `json:"mpeg4_duration,omitempty"`
 
-	// ThumbUrl - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-	ThumbUrl string `json:"thumb_url"`
+	// ThumbURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
+	ThumbURL string `json:"thumb_url"`
 
 	// ThumbMimeType - Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
 	ThumbMimeType string `json:"thumb_mime_type,omitempty"`
@@ -1602,14 +1559,13 @@ type InlineQueryResultMpeg4Gif struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultVideo - Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
@@ -1621,11 +1577,11 @@ type InlineQueryResultAudio struct {
 	// Type - Type of the result, must be audio
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// AudioUrl - A valid URL for the audio file
-	AudioUrl string `json:"audio_url"`
+	// AudioURL - A valid URL for the audio file
+	AudioURL string `json:"audio_url"`
 
 	// Title - Title
 	Title string `json:"title"`
@@ -1637,7 +1593,7 @@ type InlineQueryResultAudio struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Performer - Optional. Performer
 	Performer string `json:"performer,omitempty"`
@@ -1650,7 +1606,6 @@ type InlineQueryResultAudio struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the audio
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultVoice - Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
@@ -1658,11 +1613,11 @@ type InlineQueryResultVoice struct {
 	// Type - Type of the result, must be voice
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// VoiceUrl - A valid URL for the voice recording
-	VoiceUrl string `json:"voice_url"`
+	// VoiceURL - A valid URL for the voice recording
+	VoiceURL string `json:"voice_url"`
 
 	// Title - Recording title
 	Title string `json:"title"`
@@ -1674,7 +1629,7 @@ type InlineQueryResultVoice struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// VoiceDuration - Optional. Recording duration in seconds
 	VoiceDuration int `json:"voice_duration,omitempty"`
@@ -1684,7 +1639,6 @@ type InlineQueryResultVoice struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice recording
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultDocument - Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
@@ -1692,8 +1646,8 @@ type InlineQueryResultDocument struct {
 	// Type - Type of the result, must be document
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
 	// Title - Title for the result
 	Title string `json:"title"`
@@ -1705,10 +1659,10 @@ type InlineQueryResultDocument struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// DocumentUrl - A valid URL for the file
-	DocumentUrl string `json:"document_url"`
+	// DocumentURL - A valid URL for the file
+	DocumentURL string `json:"document_url"`
 
 	// MimeType - Mime type of the content of the file, either “application/pdf” or “application/zip”
 	MimeType string `json:"mime_type"`
@@ -1722,15 +1676,14 @@ type InlineQueryResultDocument struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbUrl - Optional. URL of the thumbnail (jpeg only) for the file
-	ThumbUrl string `json:"thumb_url,omitempty"`
+	// ThumbURL - Optional. URL of the thumbnail (jpeg only) for the file
+	ThumbURL string `json:"thumb_url,omitempty"`
 
 	// ThumbWidth - Optional. Thumbnail width
 	ThumbWidth int `json:"thumb_width,omitempty"`
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
-
 }
 
 // InlineQueryResultLocation - Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
@@ -1738,8 +1691,8 @@ type InlineQueryResultLocation struct {
 	// Type - Type of the result, must be location
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 Bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 Bytes
+	ID string `json:"id"`
 
 	// Latitude - Location latitude in degrees
 	Latitude float64 `json:"latitude"`
@@ -1768,15 +1721,14 @@ type InlineQueryResultLocation struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the location
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbUrl - Optional. Url of the thumbnail for the result
-	ThumbUrl string `json:"thumb_url,omitempty"`
+	// ThumbURL - Optional. URL of the thumbnail for the result
+	ThumbURL string `json:"thumb_url,omitempty"`
 
 	// ThumbWidth - Optional. Thumbnail width
 	ThumbWidth int `json:"thumb_width,omitempty"`
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
-
 }
 
 // InlineQueryResultVenue - Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
@@ -1784,8 +1736,8 @@ type InlineQueryResultVenue struct {
 	// Type - Type of the result, must be venue
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 Bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 Bytes
+	ID string `json:"id"`
 
 	// Latitude - Latitude of the venue location in degrees
 	Latitude float64 `json:"latitude"`
@@ -1799,14 +1751,14 @@ type InlineQueryResultVenue struct {
 	// Address - Address of the venue
 	Address string `json:"address"`
 
-	// FoursquareId - Optional. Foursquare identifier of the venue if known
-	FoursquareId string `json:"foursquare_id,omitempty"`
+	// FoursquareID - Optional. Foursquare identifier of the venue if known
+	FoursquareID string `json:"foursquare_id,omitempty"`
 
 	// FoursquareType - Optional. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
 	FoursquareType string `json:"foursquare_type,omitempty"`
 
-	// GooglePlaceId - Optional. Google Places identifier of the venue
-	GooglePlaceId string `json:"google_place_id,omitempty"`
+	// GooglePlaceID - Optional. Google Places identifier of the venue
+	GooglePlaceID string `json:"google_place_id,omitempty"`
 
 	// GooglePlaceType - Optional. Google Places type of the venue. (See supported types (https://developers.google.com/places/web-service/supported_types).)
 	GooglePlaceType string `json:"google_place_type,omitempty"`
@@ -1817,15 +1769,14 @@ type InlineQueryResultVenue struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the venue
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbUrl - Optional. Url of the thumbnail for the result
-	ThumbUrl string `json:"thumb_url,omitempty"`
+	// ThumbURL - Optional. URL of the thumbnail for the result
+	ThumbURL string `json:"thumb_url,omitempty"`
 
 	// ThumbWidth - Optional. Thumbnail width
 	ThumbWidth int `json:"thumb_width,omitempty"`
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
-
 }
 
 // InlineQueryResultContact - Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
@@ -1833,8 +1784,8 @@ type InlineQueryResultContact struct {
 	// Type - Type of the result, must be contact
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 Bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 Bytes
+	ID string `json:"id"`
 
 	// PhoneNumber - Contact's phone number
 	PhoneNumber string `json:"phone_number"`
@@ -1854,15 +1805,14 @@ type InlineQueryResultContact struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the contact
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbUrl - Optional. Url of the thumbnail for the result
-	ThumbUrl string `json:"thumb_url,omitempty"`
+	// ThumbURL - Optional. URL of the thumbnail for the result
+	ThumbURL string `json:"thumb_url,omitempty"`
 
 	// ThumbWidth - Optional. Thumbnail width
 	ThumbWidth int `json:"thumb_width,omitempty"`
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
-
 }
 
 // InlineQueryResultGame - Represents a Game (#games).
@@ -1870,15 +1820,14 @@ type InlineQueryResultGame struct {
 	// Type - Type of the result, must be game
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
 	// GameShortName - Short name of the game
 	GameShortName string `json:"game_short_name"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-
 }
 
 // InlineQueryResultCachedPhoto - Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
@@ -1886,11 +1835,11 @@ type InlineQueryResultCachedPhoto struct {
 	// Type - Type of the result, must be photo
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// PhotoFileId - A valid file identifier of the photo
-	PhotoFileId string `json:"photo_file_id"`
+	// PhotoFileID - A valid file identifier of the photo
+	PhotoFileID string `json:"photo_file_id"`
 
 	// Title - Optional. Title for the result
 	Title string `json:"title,omitempty"`
@@ -1905,14 +1854,13 @@ type InlineQueryResultCachedPhoto struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedGif - Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with specified content instead of the animation.
@@ -1920,11 +1868,11 @@ type InlineQueryResultCachedGif struct {
 	// Type - Type of the result, must be gif
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// GifFileId - A valid file identifier for the GIF file
-	GifFileId string `json:"gif_file_id"`
+	// GifFileID - A valid file identifier for the GIF file
+	GifFileID string `json:"gif_file_id"`
 
 	// Title - Optional. Title for the result
 	Title string `json:"title,omitempty"`
@@ -1936,14 +1884,13 @@ type InlineQueryResultCachedGif struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
@@ -1951,11 +1898,11 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	// Type - Type of the result, must be mpeg4_gif
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// Mpeg4FileId - A valid file identifier for the MP4 file
-	Mpeg4FileId string `json:"mpeg4_file_id"`
+	// Mpeg4FileID - A valid file identifier for the MP4 file
+	Mpeg4FileID string `json:"mpeg4_file_id"`
 
 	// Title - Optional. Title for the result
 	Title string `json:"title,omitempty"`
@@ -1967,14 +1914,13 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedSticker - Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
@@ -1982,18 +1928,17 @@ type InlineQueryResultCachedSticker struct {
 	// Type - Type of the result, must be sticker
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// StickerFileId - A valid file identifier of the sticker
-	StickerFileId string `json:"sticker_file_id"`
+	// StickerFileID - A valid file identifier of the sticker
+	StickerFileID string `json:"sticker_file_id"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the sticker
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedDocument - Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
@@ -2001,14 +1946,14 @@ type InlineQueryResultCachedDocument struct {
 	// Type - Type of the result, must be document
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
 	// Title - Title for the result
 	Title string `json:"title"`
 
-	// DocumentFileId - A valid file identifier for the file
-	DocumentFileId string `json:"document_file_id"`
+	// DocumentFileID - A valid file identifier for the file
+	DocumentFileID string `json:"document_file_id"`
 
 	// Description - Optional. Short description of the result
 	Description string `json:"description,omitempty"`
@@ -2020,14 +1965,13 @@ type InlineQueryResultCachedDocument struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedVideo - Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
@@ -2035,11 +1979,11 @@ type InlineQueryResultCachedVideo struct {
 	// Type - Type of the result, must be video
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// VideoFileId - A valid file identifier for the video file
-	VideoFileId string `json:"video_file_id"`
+	// VideoFileID - A valid file identifier for the video file
+	VideoFileID string `json:"video_file_id"`
 
 	// Title - Title for the result
 	Title string `json:"title"`
@@ -2054,14 +1998,13 @@ type InlineQueryResultCachedVideo struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedVoice - Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
@@ -2069,11 +2012,11 @@ type InlineQueryResultCachedVoice struct {
 	// Type - Type of the result, must be voice
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// VoiceFileId - A valid file identifier for the voice message
-	VoiceFileId string `json:"voice_file_id"`
+	// VoiceFileID - A valid file identifier for the voice message
+	VoiceFileID string `json:"voice_file_id"`
 
 	// Title - Voice message title
 	Title string `json:"title"`
@@ -2085,14 +2028,13 @@ type InlineQueryResultCachedVoice struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice message
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InlineQueryResultCachedAudio - Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
@@ -2100,11 +2042,11 @@ type InlineQueryResultCachedAudio struct {
 	// Type - Type of the result, must be audio
 	Type string `json:"type"`
 
-	// Id - Unique identifier for this result, 1-64 bytes
-	Id string `json:"id"`
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
 
-	// AudioFileId - A valid file identifier for the audio file
-	AudioFileId string `json:"audio_file_id"`
+	// AudioFileID - A valid file identifier for the audio file
+	AudioFileID string `json:"audio_file_id"`
 
 	// Caption - Optional. Caption, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -2113,14 +2055,13 @@ type InlineQueryResultCachedAudio struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
-	CaptionEntities []*MessageEntity `json:"caption_entities,omitempty"`
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the audio
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
-
 }
 
 // InputMessageContent - This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 5 types:
@@ -2136,11 +2077,10 @@ type InputTextMessageContent struct {
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// Entities - Optional. List of special entities that appear in message text, which can be specified instead of parse_mode
-	Entities []*MessageEntity `json:"entities,omitempty"`
+	Entities []MessageEntity `json:"entities,omitempty"`
 
 	// DisableWebPagePreview - Optional. Disables link previews for links in the sent message
 	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
-
 }
 
 // InputLocationMessageContent - Represents the content (#inputmessagecontent) of a location message to be sent as the result of an inline query.
@@ -2162,7 +2102,6 @@ type InputLocationMessageContent struct {
 
 	// ProximityAlertRadius - Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
-
 }
 
 // InputVenueMessageContent - Represents the content (#inputmessagecontent) of a venue message to be sent as the result of an inline query.
@@ -2179,18 +2118,17 @@ type InputVenueMessageContent struct {
 	// Address - Address of the venue
 	Address string `json:"address"`
 
-	// FoursquareId - Optional. Foursquare identifier of the venue, if known
-	FoursquareId string `json:"foursquare_id,omitempty"`
+	// FoursquareID - Optional. Foursquare identifier of the venue, if known
+	FoursquareID string `json:"foursquare_id,omitempty"`
 
 	// FoursquareType - Optional. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
 	FoursquareType string `json:"foursquare_type,omitempty"`
 
-	// GooglePlaceId - Optional. Google Places identifier of the venue
-	GooglePlaceId string `json:"google_place_id,omitempty"`
+	// GooglePlaceID - Optional. Google Places identifier of the venue
+	GooglePlaceID string `json:"google_place_id,omitempty"`
 
 	// GooglePlaceType - Optional. Google Places type of the venue. (See supported types (https://developers.google.com/places/web-service/supported_types).)
 	GooglePlaceType string `json:"google_place_type,omitempty"`
-
 }
 
 // InputContactMessageContent - Represents the content (#inputmessagecontent) of a contact message to be sent as the result of an inline query.
@@ -2206,7 +2144,6 @@ type InputContactMessageContent struct {
 
 	// Vcard - Optional. Additional data about the contact in the form of a vCard (https://en.wikipedia.org/wiki/VCard), 0-2048 bytes
 	Vcard string `json:"vcard,omitempty"`
-
 }
 
 // InputInvoiceMessageContent - Represents the content (#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
@@ -2227,7 +2164,7 @@ type InputInvoiceMessageContent struct {
 	Currency string `json:"currency"`
 
 	// Prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
-	Prices []*LabeledPrice `json:"prices"`
+	Prices []LabeledPrice `json:"prices"`
 
 	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
@@ -2238,8 +2175,8 @@ type InputInvoiceMessageContent struct {
 	// ProviderData - Optional. A JSON-serialized object for data about the invoice, which will be shared with the payment provider. A detailed description of the required fields should be provided by the payment provider.
 	ProviderData string `json:"provider_data,omitempty"`
 
-	// PhotoUrl - Optional. URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
-	PhotoUrl string `json:"photo_url,omitempty"`
+	// PhotoURL - Optional. URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
+	PhotoURL string `json:"photo_url,omitempty"`
 
 	// PhotoSize - Optional. Photo size
 	PhotoSize int `json:"photo_size,omitempty"`
@@ -2270,26 +2207,24 @@ type InputInvoiceMessageContent struct {
 
 	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
 	IsFlexible bool `json:"is_flexible,omitempty"`
-
 }
 
 // ChosenInlineResult - Represents a result (#inlinequeryresult) of an inline query that was chosen by the user and sent to their chat partner.
 type ChosenInlineResult struct {
-	// ResultId - The unique identifier for the result that was chosen
-	ResultId string `json:"result_id"`
+	// ResultID - The unique identifier for the result that was chosen
+	ResultID string `json:"result_id"`
 
 	// From - The user that chose the result
-	From *User `json:"from"`
+	From User `json:"from"`
 
 	// Location - Optional. Sender location, only for bots that require user location
 	Location *Location `json:"location,omitempty"`
 
-	// InlineMessageId - Optional. Identifier of the sent inline message. Available only if there is an inline keyboard (#inlinekeyboardmarkup) attached to the message. Will be also received in callback queries (#callbackquery) and can be used to edit (#updating-messages) the message.
-	InlineMessageId string `json:"inline_message_id,omitempty"`
+	// InlineMessageID - Optional. Identifier of the sent inline message. Available only if there is an inline keyboard (#inlinekeyboardmarkup) attached to the message. Will be also received in callback queries (#callbackquery) and can be used to edit (#updating-messages) the message.
+	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Query - The query that was used to obtain the result
 	Query string `json:"query"`
-
 }
 
 // LabeledPrice - This object represents a portion of the price for goods or services.
@@ -2299,7 +2234,6 @@ type LabeledPrice struct {
 
 	// Amount - Price of the product in the smallest units of the currency (/bots/payments#supported-currencies) (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
 	Amount int `json:"amount"`
-
 }
 
 // Invoice - This object contains basic information about an invoice.
@@ -2318,7 +2252,6 @@ type Invoice struct {
 
 	// TotalAmount - Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
 	TotalAmount int `json:"total_amount"`
-
 }
 
 // ShippingAddress - This object represents a shipping address.
@@ -2340,7 +2273,6 @@ type ShippingAddress struct {
 
 	// PostCode - Address post code
 	PostCode string `json:"post_code"`
-
 }
 
 // OrderInfo - This object represents information about an order.
@@ -2356,20 +2288,18 @@ type OrderInfo struct {
 
 	// ShippingAddress - Optional. User shipping address
 	ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
-
 }
 
 // ShippingOption - This object represents one shipping option.
 type ShippingOption struct {
-	// Id - Shipping option identifier
-	Id string `json:"id"`
+	// ID - Shipping option identifier
+	ID string `json:"id"`
 
 	// Title - Option title
 	Title string `json:"title"`
 
 	// Prices - List of price portions
-	Prices []*LabeledPrice `json:"prices"`
-
+	Prices []LabeledPrice `json:"prices"`
 }
 
 // SuccessfulPayment - This object contains basic information about a successful payment.
@@ -2383,43 +2313,41 @@ type SuccessfulPayment struct {
 	// InvoicePayload - Bot specified invoice payload
 	InvoicePayload string `json:"invoice_payload"`
 
-	// ShippingOptionId - Optional. Identifier of the shipping option chosen by the user
-	ShippingOptionId string `json:"shipping_option_id,omitempty"`
+	// ShippingOptionID - Optional. Identifier of the shipping option chosen by the user
+	ShippingOptionID string `json:"shipping_option_id,omitempty"`
 
 	// OrderInfo - Optional. Order info provided by the user
 	OrderInfo *OrderInfo `json:"order_info,omitempty"`
 
-	// TelegramPaymentChargeId - Telegram payment identifier
-	TelegramPaymentChargeId string `json:"telegram_payment_charge_id"`
+	// TelegramPaymentChargeID - Telegram payment identifier
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
 
-	// ProviderPaymentChargeId - Provider payment identifier
-	ProviderPaymentChargeId string `json:"provider_payment_charge_id"`
-
+	// ProviderPaymentChargeID - Provider payment identifier
+	ProviderPaymentChargeID string `json:"provider_payment_charge_id"`
 }
 
 // ShippingQuery - This object contains information about an incoming shipping query.
 type ShippingQuery struct {
-	// Id - Unique query identifier
-	Id string `json:"id"`
+	// ID - Unique query identifier
+	ID string `json:"id"`
 
 	// From - User who sent the query
-	From *User `json:"from"`
+	From User `json:"from"`
 
 	// InvoicePayload - Bot specified invoice payload
 	InvoicePayload string `json:"invoice_payload"`
 
 	// ShippingAddress - User specified shipping address
-	ShippingAddress *ShippingAddress `json:"shipping_address"`
-
+	ShippingAddress ShippingAddress `json:"shipping_address"`
 }
 
 // PreCheckoutQuery - This object contains information about an incoming pre-checkout query.
 type PreCheckoutQuery struct {
-	// Id - Unique query identifier
-	Id string `json:"id"`
+	// ID - Unique query identifier
+	ID string `json:"id"`
 
 	// From - User who sent the query
-	From *User `json:"from"`
+	From User `json:"from"`
 
 	// Currency - Three-letter ISO 4217 currency (/bots/payments#supported-currencies) code
 	Currency string `json:"currency"`
@@ -2430,38 +2358,35 @@ type PreCheckoutQuery struct {
 	// InvoicePayload - Bot specified invoice payload
 	InvoicePayload string `json:"invoice_payload"`
 
-	// ShippingOptionId - Optional. Identifier of the shipping option chosen by the user
-	ShippingOptionId string `json:"shipping_option_id,omitempty"`
+	// ShippingOptionID - Optional. Identifier of the shipping option chosen by the user
+	ShippingOptionID string `json:"shipping_option_id,omitempty"`
 
 	// OrderInfo - Optional. Order info provided by the user
 	OrderInfo *OrderInfo `json:"order_info,omitempty"`
-
 }
 
 // PassportData - Contains information about Telegram Passport data shared with the bot by the user.
 type PassportData struct {
 	// Data - Array with information about documents and other Telegram Passport elements that was shared with the bot
-	Data []*EncryptedPassportElement `json:"data"`
+	Data []EncryptedPassportElement `json:"data"`
 
 	// Credentials - Encrypted credentials required to decrypt the data
-	Credentials *EncryptedCredentials `json:"credentials"`
-
+	Credentials EncryptedCredentials `json:"credentials"`
 }
 
 // PassportFile - This object represents a file uploaded to Telegram Passport. Currently all Telegram Passport files are in JPEG format when decrypted and don't exceed 10MB.
 type PassportFile struct {
-	// FileId - Identifier for this file, which can be used to download or reuse the file
-	FileId string `json:"file_id"`
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
 
-	// FileUniqueId - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-	FileUniqueId string `json:"file_unique_id"`
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
 
 	// FileSize - File size
 	FileSize int `json:"file_size"`
 
 	// FileDate - Unix time when the file was uploaded
 	FileDate int `json:"file_date"`
-
 }
 
 // EncryptedPassportElement - Contains information about documents or other Telegram Passport elements shared with the bot by the user.
@@ -2479,7 +2404,7 @@ type EncryptedPassportElement struct {
 	Email string `json:"email,omitempty"`
 
 	// Files - Optional. Array of encrypted files with documents provided by the user, available for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials (#encryptedcredentials).
-	Files []*PassportFile `json:"files,omitempty"`
+	Files []PassportFile `json:"files,omitempty"`
 
 	// FrontSide - Optional. Encrypted file with the front side of the document, provided by the user. Available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials (#encryptedcredentials).
 	FrontSide *PassportFile `json:"front_side,omitempty"`
@@ -2491,11 +2416,10 @@ type EncryptedPassportElement struct {
 	Selfie *PassportFile `json:"selfie,omitempty"`
 
 	// Translation - Optional. Array of encrypted files with translated versions of documents provided by the user. Available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials (#encryptedcredentials).
-	Translation []*PassportFile `json:"translation,omitempty"`
+	Translation []PassportFile `json:"translation,omitempty"`
 
 	// Hash - Base64-encoded element hash for using in PassportElementErrorUnspecified (#passportelementerrorunspecified)
 	Hash string `json:"hash"`
-
 }
 
 // EncryptedCredentials - Contains data required for decrypting and authenticating EncryptedPassportElement (#encryptedpassportelement). See the Telegram Passport Documentation (https://core.telegram.org/passport#receiving-information) for a complete description of the data decryption and authentication processes.
@@ -2508,7 +2432,6 @@ type EncryptedCredentials struct {
 
 	// Secret - Base64-encoded secret, encrypted with the bot's public RSA key, required for data decryption
 	Secret string `json:"secret"`
-
 }
 
 // PassportElementError - This object represents an error in the Telegram Passport element which was submitted that should be resolved by the user. It should be one of:
@@ -2531,7 +2454,6 @@ type PassportElementErrorDataField struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorFrontSide - Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
@@ -2547,7 +2469,6 @@ type PassportElementErrorFrontSide struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorReverseSide - Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
@@ -2563,7 +2484,6 @@ type PassportElementErrorReverseSide struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorSelfie - Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
@@ -2579,7 +2499,6 @@ type PassportElementErrorSelfie struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorFile - Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
@@ -2595,7 +2514,6 @@ type PassportElementErrorFile struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorFiles - Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
@@ -2611,7 +2529,6 @@ type PassportElementErrorFiles struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorTranslationFile - Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
@@ -2627,7 +2544,6 @@ type PassportElementErrorTranslationFile struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorTranslationFiles - Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
@@ -2643,7 +2559,6 @@ type PassportElementErrorTranslationFiles struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // PassportElementErrorUnspecified - Represents an issue in an unspecified place. The error is considered resolved when new data is added.
@@ -2659,7 +2574,6 @@ type PassportElementErrorUnspecified struct {
 
 	// Message - Error message
 	Message string `json:"message"`
-
 }
 
 // Game - This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
@@ -2671,17 +2585,16 @@ type Game struct {
 	Description string `json:"description"`
 
 	// Photo - Photo that will be displayed in the game message in chats.
-	Photo []*PhotoSize `json:"photo"`
+	Photo []PhotoSize `json:"photo"`
 
 	// Text - Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to include current high scores for the game when the bot calls setGameScore (#setgamescore), or manually edited using editMessageText (#editmessagetext). 0-4096 characters.
 	Text string `json:"text,omitempty"`
 
-	// TextEntities - Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
-	TextEntities []*MessageEntity `json:"text_entities,omitempty"`
+	// TextEntities - Optional. Special entities that appear in text, such as usernames, URLFs, bot commands, etc.
+	TextEntities []MessageEntity `json:"text_entities,omitempty"`
 
 	// Animation - Optional. Animation that will be displayed in the game message in chats. Upload via BotFather (https://t.me/botfather)
 	Animation *Animation `json:"animation,omitempty"`
-
 }
 
 // CallbackGame - A placeholder, currently holds no information. Use BotFather (https://t.me/botfather) to set up your game.
@@ -2694,10 +2607,8 @@ type GameHighScore struct {
 	Position int `json:"position"`
 
 	// User - User
-	User *User `json:"user"`
+	User User `json:"user"`
 
 	// Score - Score
 	Score int `json:"score"`
-
 }
-
