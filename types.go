@@ -94,7 +94,7 @@ type User struct {
 	// ID - Unique identifier for this user or bot. This number may have more than 32 significant bits and some
 	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant
 	// bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
-	ID int `json:"id"`
+	ID int64 `json:"id"`
 
 	// IsBot - True, if this user is a bot
 	IsBot bool `json:"is_bot"`
@@ -128,7 +128,7 @@ type Chat struct {
 	// ID - Unique identifier for this chat. This number may have more than 32 significant bits and some
 	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant
 	// bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
-	ID int `json:"id"`
+	ID int64 `json:"id"`
 
 	// Type - Type of chat, can be either “private”, “group”, “supergroup” or “channel”
 	Type string `json:"type"`
@@ -186,7 +186,7 @@ type Chat struct {
 	// some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits,
 	// so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
 	// Returned only in getChat (#getchat).
-	LinkedChatID int `json:"linked_chat_id,omitempty"`
+	LinkedChatID int64 `json:"linked_chat_id,omitempty"`
 
 	// Location - Optional. For supergroups, the location to which the supergroup is connected.
 	// Returned only in getChat (#getchat).
@@ -348,13 +348,13 @@ type Message struct {
 	// This number may have more than 32 significant bits and some programming languages may have difficulty/silent
 	// defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or
 	// double-precision float type are safe for storing this identifier.
-	MigrateToChatID int `json:"migrate_to_chat_id,omitempty"`
+	MigrateToChatID int64 `json:"migrate_to_chat_id,omitempty"`
 
 	// MigrateFromChatID - Optional. The supergroup has been migrated from a group with the specified identifier.
 	// This number may have more than 32 significant bits and some programming languages may have difficulty/silent
 	// defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or
 	// double-precision float type are safe for storing this identifier.
-	MigrateFromChatID int `json:"migrate_from_chat_id,omitempty"`
+	MigrateFromChatID int64 `json:"migrate_from_chat_id,omitempty"`
 
 	// PinnedMessage - Optional. Specified message was pinned. Note that the Message object in this field will not
 	// contain further reply_to_message fields even if it is itself a reply.
@@ -620,7 +620,7 @@ type Contact struct {
 	// UserID - Optional. Contact's user identifier in Telegram. This number may have more than 32 significant
 	// bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at
 	// most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 
 	// Vcard - Optional. Additional data about the contact in the form of a vCard (https://en.wikipedia.org/wiki/VCard)
 	Vcard string `json:"vcard,omitempty"`
@@ -1345,7 +1345,7 @@ type ResponseParameters struct {
 	// This number may have more than 32 significant bits and some programming languages may have difficulty/silent
 	// defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or
 	// double-precision float type are safe for storing this identifier.
-	MigrateToChatID int `json:"migrate_to_chat_id,omitempty"`
+	MigrateToChatID int64 `json:"migrate_to_chat_id,omitempty"`
 
 	// RetryAfter - Optional. In case of exceeding flood control, the number of seconds left to wait
 	// before the request can be repeated
