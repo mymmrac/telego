@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -13,9 +12,6 @@ import (
 
 	"github.com/mymmrac/go-telegram-bot-api/logger"
 )
-
-const packageName = "telego"
-const docsURL = "https://core.telegram.org/bots/api"
 
 const typePattern = `
 <h4><a class="anchor" name="\w+?" href="#\w+?"><i class="anchor-icon"></i></a>([A-Z]\w+?)</h4>
@@ -45,32 +41,11 @@ const fieldPattern = `
 </tr>
 `
 
-const (
-	urlPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
-	imgPattern = `<img.*?alt="(.+?)".*?>`
-
-	tagPattern         = `<.+?>(.+?)</.+?>`
-	unclosedTagPattern = `<.+?>`
-)
-
-var (
-	urlPatternReg         *regexp.Regexp
-	imgPatternReg         *regexp.Regexp
-	tagPatternReg         *regexp.Regexp
-	unclosedTagPatternReg *regexp.Regexp
-)
-
 func main() {
 	log := logger.CreateLogrusLogger(logrus.ErrorLevel)
 
 	typePatternReg := regexp.MustCompile(removeNewline(typePattern))
 	fieldPatternReg := regexp.MustCompile(removeNewline(fieldPattern))
-
-	urlPatternReg = regexp.MustCompile(urlPattern)
-	imgPatternReg = regexp.MustCompile(imgPattern)
-
-	tagPatternReg = regexp.MustCompile(tagPattern)
-	unclosedTagPatternReg = regexp.MustCompile(unclosedTagPattern)
 
 	file, err := os.Create("types.go")
 	if err != nil {
@@ -87,6 +62,7 @@ func main() {
 		err := response.Body.Close()
 		if err != nil {
 			log.Error(err)
+			return
 		}
 	}()
 
@@ -127,44 +103,6 @@ func main() {
 
 		fmt.Fprintf(file, "}\n\n")
 	}
-}
-
-func removeNewline(text string) string {
-	return strings.ReplaceAll(text, "\n", "")
-}
-
-func cleanDescription(text string) string {
-	return imgPatternReg.ReplaceAllString(
-		urlPatternReg.ReplaceAllString(text, "$2 ($1)"), "$1")
-}
-
-func removeTags(text string) string {
-	return html.UnescapeString(
-		unclosedTagPatternReg.ReplaceAllString(
-			tagPatternReg.ReplaceAllString(text, "$1"), ""))
-}
-
-func snakeToCamelCase(text string) string {
-	nextUpper := true
-	sb := strings.Builder{}
-	sb.Grow(len(text))
-	for _, v := range []byte(text) {
-		if v == '_' {
-			nextUpper = true
-			continue
-		}
-
-		if nextUpper {
-			nextUpper = false
-			v += 'A'
-			v -= 'a'
-			sb.WriteByte(v)
-		} else {
-			sb.WriteByte(v)
-		}
-	}
-
-	return sb.String()
 }
 
 func convertType(text string, isOptional bool) string {
