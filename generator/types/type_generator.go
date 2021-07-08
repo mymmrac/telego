@@ -10,6 +10,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/mymmrac/go-telegram-bot-api/generator"
 	"github.com/mymmrac/go-telegram-bot-api/logger"
 )
 
@@ -44,8 +45,8 @@ const fieldPattern = `
 func main() {
 	log := logger.CreateLogrusLogger(logrus.ErrorLevel)
 
-	typePatternReg := regexp.MustCompile(removeNewline(typePattern))
-	fieldPatternReg := regexp.MustCompile(removeNewline(fieldPattern))
+	typePatternReg := regexp.MustCompile(generator.RemoveNewline(typePattern))
+	fieldPatternReg := regexp.MustCompile(generator.RemoveNewline(fieldPattern))
 
 	file, err := os.Create("types.go")
 	if err != nil {
@@ -53,7 +54,7 @@ func main() {
 		return
 	}
 
-	response, err := http.Get(docsURL)
+	response, err := http.Get(generator.DocsURL)
 	if err != nil {
 		log.Error(err)
 		return
@@ -72,15 +73,15 @@ func main() {
 		return
 	}
 
-	fmt.Fprintf(file, "package %s\n\n", packageName)
+	fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
 
-	body := removeNewline(string(bodyBytes))
+	body := generator.RemoveNewline(string(bodyBytes))
 
 	typeMatch := typePatternReg.FindAllStringSubmatch(body, -1)
 
 	for _, typeMatched := range typeMatch {
 		typeName := typeMatched[1]
-		typeDescription := removeTags(cleanDescription(typeMatched[2]))
+		typeDescription := generator.RemoveTags(generator.CleanDescription(typeMatched[2]))
 
 		fmt.Fprintf(file, "// %s - %s\ntype %s struct {\n", typeName, typeDescription, typeName)
 
@@ -89,40 +90,18 @@ func main() {
 
 		for _, fieldMatched := range fieldMatch {
 			fieldName := fieldMatched[1]
-			fieldDescription := removeTags(cleanDescription(fieldMatched[3]))
+			fieldDescription := generator.RemoveTags(generator.CleanDescription(fieldMatched[3]))
 			isOptional := strings.HasPrefix(fieldDescription, "Optional.")
 			omitemptyStr := ""
 			if isOptional {
 				omitemptyStr = ",omitempty"
 			}
-			fieldType := convertType(removeTags(fieldMatched[2]), isOptional)
+			fieldType := generator.ConvertType(generator.RemoveTags(fieldMatched[2]), isOptional)
 
 			fmt.Fprintf(file, "\t// %s - %s\n\t%s %s `json:\"%s%s\"`\n\n",
-				snakeToCamelCase(fieldName), fieldDescription, snakeToCamelCase(fieldName), fieldType, fieldName, omitemptyStr)
+				generator.SnakeToCamelCase(fieldName, true), fieldDescription, generator.SnakeToCamelCase(fieldName, true), fieldType, fieldName, omitemptyStr)
 		}
 
 		fmt.Fprintf(file, "}\n\n")
-	}
-}
-
-func convertType(text string, isOptional bool) string {
-	switch text {
-	case "String":
-		return "string"
-	case "Integer":
-		return "int"
-	case "Float number", "Float":
-		return "float64"
-	case "Boolean", "True":
-		return "bool"
-	default:
-		if strings.HasPrefix(text, "Array of ") {
-			return "[]" + convertType(strings.ReplaceAll(text, "Array of ", ""), false)
-		}
-
-		if isOptional {
-			return "*" + text
-		}
-		return text
 	}
 }

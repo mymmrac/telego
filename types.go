@@ -1,6 +1,8 @@
 package telego
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 // Update - This object (#available-types) represents an incoming update.At most one of the optional parameters
 // can be present in any given update.
@@ -1286,7 +1288,7 @@ type BotCommandScopeAllChatAdministrators struct {
 	Type string `json:"type"`
 }
 
-// IntOrStringChatID - Represents chat ID as int or stringF
+// IntOrStringChatID - Represents chat ID as int or string
 type IntOrStringChatID struct {
 	IntValue    int
 	StringValue string

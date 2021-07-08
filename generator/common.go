@@ -1,4 +1,4 @@
-package main
+package generator
 
 import (
 	"html"
@@ -6,42 +6,43 @@ import (
 	"strings"
 )
 
-const packageName = "telego"
-const docsURL = "https://core.telegram.org/bots/api"
+const PackageName = "telego"
+const DocsURL = "https://core.telegram.org/bots/api"
+const MaxLineLen = 110
 
 const (
-	urlPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
-	imgPattern = `<img.*?alt="(.+?)".*?>`
+	URLPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
+	ImgPattern = `<img.*?alt="(.+?)".*?>`
 
-	tagPattern         = `<.+?>(.+?)</.+?>`
-	unclosedTagPattern = `<.+?>`
+	TagPattern         = `<.+?>(.+?)</.+?>`
+	UnclosedTagPattern = `<.+?>`
 )
 
 var (
-	urlPatternReg = regexp.MustCompile(urlPattern)
-	imgPatternReg = regexp.MustCompile(imgPattern)
+	URLPatternReg = regexp.MustCompile(URLPattern)
+	ImgPatternReg = regexp.MustCompile(ImgPattern)
 
-	tagPatternReg         = regexp.MustCompile(tagPattern)
-	unclosedTagPatternReg = regexp.MustCompile(unclosedTagPattern)
+	TagPatternReg         = regexp.MustCompile(TagPattern)
+	UnclosedTagPatternReg = regexp.MustCompile(UnclosedTagPattern)
 )
 
-func removeNewline(text string) string {
+func RemoveNewline(text string) string {
 	return strings.ReplaceAll(text, "\n", "")
 }
 
-func cleanDescription(text string) string {
-	return imgPatternReg.ReplaceAllString(
-		urlPatternReg.ReplaceAllString(text, "$2 ($1)"), "$1")
+func CleanDescription(text string) string {
+	return ImgPatternReg.ReplaceAllString(
+		URLPatternReg.ReplaceAllString(text, "$2 ($1)"), "$1")
 }
 
-func removeTags(text string) string {
+func RemoveTags(text string) string {
 	return html.UnescapeString(
-		unclosedTagPatternReg.ReplaceAllString(
-			tagPatternReg.ReplaceAllString(text, "$1"), ""))
+		UnclosedTagPatternReg.ReplaceAllString(
+			TagPatternReg.ReplaceAllString(text, "$1"), ""))
 }
 
-func snakeToCamelCase(text string) string {
-	nextUpper := true
+func SnakeToCamelCase(text string, firstUpper bool) string {
+	nextUpper := firstUpper
 	sb := strings.Builder{}
 	sb.Grow(len(text))
 	for _, v := range []byte(text) {
@@ -61,4 +62,44 @@ func snakeToCamelCase(text string) string {
 	}
 
 	return sb.String()
+}
+
+func ConvertType(text string, isOptional bool) string {
+	switch text {
+	case "String":
+		return "string"
+	case "Integer":
+		return "int"
+	case "Float number", "Float":
+		return "float64"
+	case "Boolean", "True":
+		return "bool"
+	default:
+		if strings.HasPrefix(text, "Array of ") {
+			return "[]" + ConvertType(strings.ReplaceAll(text, "Array of ", ""), false)
+		}
+
+		if isOptional {
+			return "*" + text
+		}
+		return text
+	}
+}
+
+func FitLine(text string, lineLen int) []string {
+	words := strings.Split(text, " ")
+	result := make([]string, 0)
+	line := strings.Builder{}
+	for _, word := range words {
+		if line.Len()+len(word)+1 > lineLen {
+			result = append(result, line.String())
+			line.Reset()
+		}
+		line.WriteString(word + " ")
+	}
+
+	if line.Len() != 0 {
+		result = append(result, line.String())
+	}
+	return result
 }
