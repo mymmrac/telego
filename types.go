@@ -1290,7 +1290,7 @@ type BotCommandScopeAllChatAdministrators struct {
 
 // IntOrStringChatID - Represents chat ID as int or string
 type IntOrStringChatID struct {
-	IntValue    int
+	IntValue    int64
 	StringValue string
 }
 
@@ -1302,7 +1302,7 @@ func (c IntOrStringChatID) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(struct {
-		ChatID int `json:"chat_id"`
+		ChatID int64 `json:"chat_id"`
 	}{ChatID: c.IntValue})
 }
 

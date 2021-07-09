@@ -99,7 +99,8 @@ func main() {
 			fieldType := generator.ConvertType(generator.RemoveTags(fieldMatched[2]), isOptional)
 
 			fmt.Fprintf(file, "\t// %s - %s\n\t%s %s `json:\"%s%s\"`\n\n",
-				generator.SnakeToCamelCase(fieldName, true), fieldDescription, generator.SnakeToCamelCase(fieldName, true), fieldType, fieldName, omitemptyStr)
+				generator.SnakeToCamelCase(fieldName, true), fieldDescription,
+				generator.SnakeToCamelCase(fieldName, true), fieldType, fieldName, omitemptyStr)
 		}
 
 		fmt.Fprintf(file, "}\n\n")
