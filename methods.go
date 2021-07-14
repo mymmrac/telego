@@ -154,7 +154,7 @@ type SendMessageParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendMessage - Use this method to send text messages. On success, the sent Message (#message) is returned. 
@@ -236,7 +236,7 @@ type CopyMessageParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // CopyMessage - Use this method to copy messages of any kind. Service messages and invoice messages can't be 
@@ -292,7 +292,7 @@ type SendPhotoParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendPhoto - Use this method to send photos. On success, the sent Message (#message) is returned. 
@@ -367,7 +367,7 @@ type SendDocumentParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendDocument - Use this method to send general files. On success, the sent Message (#message) is returned. 
@@ -439,7 +439,7 @@ type SendVideoParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendVideo - Use this method to send video files, Telegram clients support mp4 videos (other formats may be 
@@ -509,7 +509,7 @@ type SendAnimationParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendAnimation - Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On 
@@ -564,7 +564,7 @@ type SendVoiceParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendVoice - Use this method to send audio files, if you want Telegram clients to display the file as a 
@@ -620,7 +620,7 @@ type SendVideoNoteParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients 
@@ -710,7 +710,7 @@ type SendLocationParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendLocation - Use this method to send point on the map. On success, the sent Message (#message) is 
@@ -850,7 +850,7 @@ type SendVenueParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendVenue - Use this method to send information about a venue. On success, the sent Message (#message) is 
@@ -898,7 +898,7 @@ type SendContactParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove keyboard or to force a reply from the 
 	// user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendContact - Use this method to send phone contacts. On success, the sent Message (#message) is returned. 
@@ -976,7 +976,7 @@ type SendPollParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendPoll - Use this method to send a native poll. On success, the sent Message (#message) is returned. 
@@ -1016,7 +1016,7 @@ type SendDiceParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendDice - Use this method to send an animated emoji that will display a random value. On success, the 
@@ -1983,7 +1983,7 @@ type SendStickerParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard 
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from 
 	// the user. 
-	ReplyMarkup *InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
 // SendSticker - Use this method to send static .WEBP or animated 

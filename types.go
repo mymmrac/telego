@@ -1,9 +1,5 @@
 package telego
 
-import (
-	"encoding/json"
-)
-
 // Update - This object (#available-types) represents an incoming update.At most one of the optional parameters
 // can be present in any given update.
 type Update struct {
@@ -1286,24 +1282,6 @@ type BotCommandScopeAllGroupChats struct {
 type BotCommandScopeAllChatAdministrators struct {
 	// Type - Scope type, must be all_chat_administrators
 	Type string `json:"type"`
-}
-
-// ChatID - Represents chat ID as int or string
-type ChatID struct {
-	ID       int64
-	Username string
-}
-
-func (c ChatID) MarshalJSON() ([]byte, error) {
-	if c.Username != "" {
-		return json.Marshal(struct {
-			ChatID string `json:"chat_id"`
-		}{ChatID: c.Username})
-	}
-
-	return json.Marshal(struct {
-		ChatID int64 `json:"chat_id"`
-	}{ChatID: c.ID})
 }
 
 // BotCommandScopeChat - Represents the scope (#botcommandscope) of bot commands, covering a specific chat.
