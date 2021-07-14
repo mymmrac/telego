@@ -1288,22 +1288,22 @@ type BotCommandScopeAllChatAdministrators struct {
 	Type string `json:"type"`
 }
 
-// IntOrStringChatID - Represents chat ID as int or string
-type IntOrStringChatID struct {
-	IntValue    int64
-	StringValue string
+// ChatID - Represents chat ID as int or string
+type ChatID struct {
+	ID       int64
+	Username string
 }
 
-func (c IntOrStringChatID) MarshalJSON() ([]byte, error) {
-	if c.StringValue != "" {
+func (c ChatID) MarshalJSON() ([]byte, error) {
+	if c.Username != "" {
 		return json.Marshal(struct {
 			ChatID string `json:"chat_id"`
-		}{ChatID: c.StringValue})
+		}{ChatID: c.Username})
 	}
 
 	return json.Marshal(struct {
 		ChatID int64 `json:"chat_id"`
-	}{ChatID: c.IntValue})
+	}{ChatID: c.ID})
 }
 
 // BotCommandScopeChat - Represents the scope (#botcommandscope) of bot commands, covering a specific chat.
@@ -1313,7 +1313,7 @@ type BotCommandScopeChat struct {
 
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
-	ChatID IntOrStringChatID
+	ChatID ChatID
 }
 
 // BotCommandScopeChatAdministrators - Represents the scope (#botcommandscope) of bot commands,
@@ -1324,7 +1324,7 @@ type BotCommandScopeChatAdministrators struct {
 
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
-	ChatID IntOrStringChatID
+	ChatID ChatID
 }
 
 // BotCommandScopeChatMember - Represents the scope (#botcommandscope) of bot commands,
@@ -1335,7 +1335,7 @@ type BotCommandScopeChatMember struct {
 
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
-	ChatID IntOrStringChatID
+	ChatID ChatID
 
 	// UserID - Unique identifier of the target user
 	UserID int `json:"user_id"`

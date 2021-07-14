@@ -118,21 +118,12 @@ func (b Bot) performRequest(methodName string, parameters, v interface{}) error 
 		return fmt.Errorf("api: %w", resp.Error)
 	}
 
-	err = json.Unmarshal(resp.Result, &v)
-	if err != nil {
-		return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(v), err)
+	if resp.Result != nil {
+		err = json.Unmarshal(resp.Result, &v)
+		if err != nil {
+			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(v), err)
+		}
 	}
 
 	return nil
-}
-
-func (b *Bot) GetMe() (*User, error) {
-	var user User
-
-	err := b.performRequest("getMe", nil, &user)
-	if err != nil {
-		return nil, fmt.Errorf("GetMe(): %w", err)
-	}
-
-	return &user, nil
 }

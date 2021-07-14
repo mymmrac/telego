@@ -74,6 +74,8 @@ func ConvertType(text string, isOptional bool) string {
 		return "float64"
 	case "Boolean", "True":
 		return "bool"
+	case "Integer or String":
+		return "ChatID"
 	default:
 		if strings.HasPrefix(text, "Array of ") {
 			return "[]" + ConvertType(strings.ReplaceAll(text, "Array of ", ""), false)

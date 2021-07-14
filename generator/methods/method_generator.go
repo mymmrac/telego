@@ -83,42 +83,65 @@ func main() {
 
 	for _, methodMatched := range methodMatch {
 		methodName := methodMatched[1]
-		methodDescription := generator.RemoveTags(generator.CleanDescription(methodMatched[2]))
+		funcName := strings.Title(methodName)
+		paramsStructName := funcName + "Params"
 
-		allMethodDescription := strings.Builder{}
-		allMethodDescription.WriteString(fmt.Sprintf("%s - %s{|}{|}Parameters:{|}", methodName, methodDescription))
-		allMethodParams := strings.Builder{}
+		methodDescription := generator.RemoveTags(generator.CleanDescription(methodMatched[2]))
+		funcDescriptionLines := generator.FitLine(fmt.Sprintf("// %s - %s",
+			funcName, methodDescription), generator.MaxLineLen)
+		funcDescription := strings.Join(funcDescriptionLines, "\n// ")
 
 		paramsDefinitionTable := methodMatched[3]
 		paramsMatch := paramsPatternReg.FindAllStringSubmatch(paramsDefinitionTable, -1)
 
-		for i, paramMatched := range paramsMatch {
-			paramName := generator.SnakeToCamelCase(paramMatched[1], false)
-			paramOptional := paramMatched[3]
-			isOptional := paramOptional == "Optional"
-			paramDescription := generator.RemoveTags(generator.CleanDescription(paramMatched[4]))
-			paramType := generator.ConvertType(generator.RemoveTags(paramMatched[2]), isOptional)
+		params := ""
+		paramsOrNil := "nil"
 
-			optional := ""
-			if isOptional {
-				optional = " (optional)"
+		if len(paramsMatch) != 0 {
+			fmt.Fprintf(file, "// %s - represents parameters of %s method.\ntype %s struct {\n",
+				paramsStructName, methodName, paramsStructName)
+
+			for _, paramMatched := range paramsMatch {
+				paramName := paramMatched[1]
+				fieldName := generator.SnakeToCamelCase(paramName, true)
+
+				isOptional := paramMatched[3] == "Optional"
+				omitemptyStr := ""
+				optionalStr := ""
+				if isOptional {
+					omitemptyStr = ",omitempty"
+					optionalStr = "Optional. "
+				}
+
+				paramDescription := generator.RemoveTags(generator.CleanDescription(paramMatched[4]))
+				filedDescriptionLines := generator.FitLine(fmt.Sprintf("// %s - %s%s",
+					fieldName, optionalStr, paramDescription), generator.MaxLineLen)
+				fieldDescription := strings.Join(filedDescriptionLines, "\n\t// ")
+
+				fieldType := generator.ConvertType(generator.RemoveTags(paramMatched[2]), isOptional)
+
+				fmt.Fprintf(file, "\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
+					fieldDescription, fieldName, fieldType, paramName, omitemptyStr)
 			}
 
-			allMethodDescription.WriteString(fmt.Sprintf("%s%s - %s{|}{|}", paramName, optional, paramDescription))
+			fmt.Fprintf(file, "}\n")
 
-			allMethodParams.WriteString(fmt.Sprintf("%s %s", paramName, paramType))
-			if i != len(paramsMatch)-1 {
-				allMethodParams.WriteString(", ")
-			}
+			params = fmt.Sprintf("params %s", paramsStructName)
+			paramsOrNil = "params"
 		}
 
-		splitedDescription := strings.Builder{}
-		lines := generator.FitLine(allMethodDescription.String(), generator.MaxLineLen)
-		for _, line := range lines {
-			splitedDescription.WriteString(fmt.Sprintf("// %s\n", line))
-		}
-		desc := strings.ReplaceAll(splitedDescription.String(), "{|}", "\n// ")
+		fmt.Fprintf(file, `
+%s
+func (b *Bot) %s(%s) error {
+	err := b.performRequest("%s", %s, nil)
+	if err != nil {
+		return fmt.Errorf("%s(): %%w", err)
+	}
 
-		fmt.Fprintf(file, "%sfunc %s(%s){\n\t\n}\n\n", desc, methodName, allMethodParams.String())
+	return nil
+}
+
+`,
+			funcDescription, funcName, params, methodName, paramsOrNil, methodName)
 	}
 }
