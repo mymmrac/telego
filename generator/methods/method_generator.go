@@ -98,7 +98,7 @@ func main() {
 		paramsOrNil := "nil"
 
 		if len(paramsMatch) != 0 {
-			fmt.Fprintf(file, "// %s - represents parameters of %s method.\ntype %s struct {\n",
+			fmt.Fprintf(file, "// %s - Represents parameters of %s method.\ntype %s struct {\n",
 				paramsStructName, methodName, paramsStructName)
 
 			for _, paramMatched := range paramsMatch {

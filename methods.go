@@ -2,7 +2,7 @@ package telego
 
 import "fmt"
 
-// GetUpdatesParams - represents parameters of getUpdates method.
+// GetUpdatesParams - Represents parameters of getUpdates method.
 type GetUpdatesParams struct {
 	// Offset - Optional. Identifier of the first update to be returned. Must be greater by one than the highest 
 	// among the identifiers of previously received updates. By default, updates starting with the earliest 
@@ -53,7 +53,7 @@ func (b *Bot) SetWebhook() error {
 	return nil
 }
 
-// DeleteWebhookParams - represents parameters of deleteWebhook method.
+// DeleteWebhookParams - Represents parameters of deleteWebhook method.
 type DeleteWebhookParams struct {
 	// DropPendingUpdates - Optional. Pass True to drop all pending updates 
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
@@ -119,7 +119,7 @@ func (b *Bot) Close() error {
 	return nil
 }
 
-// SendMessageParams - represents parameters of sendMessage method.
+// SendMessageParams - Represents parameters of sendMessage method.
 type SendMessageParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -167,7 +167,7 @@ func (b *Bot) SendMessage(params SendMessageParams) error {
 	return nil
 }
 
-// ForwardMessageParams - represents parameters of forwardMessage method.
+// ForwardMessageParams - Represents parameters of forwardMessage method.
 type ForwardMessageParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -196,7 +196,7 @@ func (b *Bot) ForwardMessage(params ForwardMessageParams) error {
 	return nil
 }
 
-// CopyMessageParams - represents parameters of copyMessage method.
+// CopyMessageParams - Represents parameters of copyMessage method.
 type CopyMessageParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -252,7 +252,7 @@ func (b *Bot) CopyMessage(params CopyMessageParams) error {
 	return nil
 }
 
-// SendPhotoParams - represents parameters of sendPhoto method.
+// SendPhotoParams - Represents parameters of sendPhoto method.
 type SendPhotoParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -317,7 +317,7 @@ func (b *Bot) SendAudio() error {
 	return nil
 }
 
-// SendDocumentParams - represents parameters of sendDocument method.
+// SendDocumentParams - Represents parameters of sendDocument method.
 type SendDocumentParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -381,7 +381,7 @@ func (b *Bot) SendDocument(params SendDocumentParams) error {
 	return nil
 }
 
-// SendVideoParams - represents parameters of sendVideo method.
+// SendVideoParams - Represents parameters of sendVideo method.
 type SendVideoParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -454,7 +454,7 @@ func (b *Bot) SendVideo(params SendVideoParams) error {
 	return nil
 }
 
-// SendAnimationParams - represents parameters of sendAnimation method.
+// SendAnimationParams - Represents parameters of sendAnimation method.
 type SendAnimationParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -524,7 +524,7 @@ func (b *Bot) SendAnimation(params SendAnimationParams) error {
 	return nil
 }
 
-// SendVoiceParams - represents parameters of sendVoice method.
+// SendVoiceParams - Represents parameters of sendVoice method.
 type SendVoiceParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -580,7 +580,7 @@ func (b *Bot) SendVoice(params SendVoiceParams) error {
 	return nil
 }
 
-// SendVideoNoteParams - represents parameters of sendVideoNote method.
+// SendVideoNoteParams - Represents parameters of sendVideoNote method.
 type SendVideoNoteParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -635,7 +635,7 @@ func (b *Bot) SendVideoNote(params SendVideoNoteParams) error {
 	return nil
 }
 
-// SendMediaGroupParams - represents parameters of sendMediaGroup method.
+// SendMediaGroupParams - Represents parameters of sendMediaGroup method.
 type SendMediaGroupParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -668,7 +668,7 @@ func (b *Bot) SendMediaGroup(params SendMediaGroupParams) error {
 	return nil
 }
 
-// SendLocationParams - represents parameters of sendLocation method.
+// SendLocationParams - Represents parameters of sendLocation method.
 type SendLocationParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -724,7 +724,7 @@ func (b *Bot) SendLocation(params SendLocationParams) error {
 	return nil
 }
 
-// EditMessageLiveLocationParams - represents parameters of editMessageLiveLocation method.
+// EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
 type EditMessageLiveLocationParams struct {
 	// ChatId - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat 
 	// or username of the target channel (in the format @channelusername) 
@@ -772,7 +772,7 @@ func (b *Bot) EditMessageLiveLocation(params EditMessageLiveLocationParams) erro
 	return nil
 }
 
-// StopMessageLiveLocationParams - represents parameters of stopMessageLiveLocation method.
+// StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
 type StopMessageLiveLocationParams struct {
 	// ChatId - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat 
 	// or username of the target channel (in the format @channelusername) 
@@ -803,7 +803,7 @@ func (b *Bot) StopMessageLiveLocation(params StopMessageLiveLocationParams) erro
 	return nil
 }
 
-// SendVenueParams - represents parameters of sendVenue method.
+// SendVenueParams - Represents parameters of sendVenue method.
 type SendVenueParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -864,7 +864,7 @@ func (b *Bot) SendVenue(params SendVenueParams) error {
 	return nil
 }
 
-// SendContactParams - represents parameters of sendContact method.
+// SendContactParams - Represents parameters of sendContact method.
 type SendContactParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -911,7 +911,7 @@ func (b *Bot) SendContact(params SendContactParams) error {
 	return nil
 }
 
-// SendPollParams - represents parameters of sendPoll method.
+// SendPollParams - Represents parameters of sendPoll method.
 type SendPollParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -989,7 +989,7 @@ func (b *Bot) SendPoll(params SendPollParams) error {
 	return nil
 }
 
-// SendDiceParams - represents parameters of sendDice method.
+// SendDiceParams - Represents parameters of sendDice method.
 type SendDiceParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1042,7 +1042,7 @@ func (b *Bot) SendChatAction() error {
 	return nil
 }
 
-// GetUserProfilePhotosParams - represents parameters of getUserProfilePhotos method.
+// GetUserProfilePhotosParams - Represents parameters of getUserProfilePhotos method.
 type GetUserProfilePhotosParams struct {
 	// UserId - Unique identifier of the target user 
 	UserId int `json:"user_id"`
@@ -1067,7 +1067,7 @@ func (b *Bot) GetUserProfilePhotos(params GetUserProfilePhotosParams) error {
 	return nil
 }
 
-// GetFileParams - represents parameters of getFile method.
+// GetFileParams - Represents parameters of getFile method.
 type GetFileParams struct {
 	// FileId - File identifier to get info about 
 	FileId string `json:"file_id"`
@@ -1087,7 +1087,7 @@ func (b *Bot) GetFile(params GetFileParams) error {
 	return nil
 }
 
-// BanChatMemberParams - represents parameters of banChatMember method.
+// BanChatMemberParams - Represents parameters of banChatMember method.
 type BanChatMemberParams struct {
 	// ChatId - Unique identifier for the target group or username of the target supergroup or channel (in the 
 	// format @channelusername) 
@@ -1120,7 +1120,7 @@ func (b *Bot) BanChatMember(params BanChatMemberParams) error {
 	return nil
 }
 
-// UnbanChatMemberParams - represents parameters of unbanChatMember method.
+// UnbanChatMemberParams - Represents parameters of unbanChatMember method.
 type UnbanChatMemberParams struct {
 	// ChatId - Unique identifier for the target group or username of the target supergroup or channel (in the 
 	// format @username) 
@@ -1147,7 +1147,7 @@ func (b *Bot) UnbanChatMember(params UnbanChatMemberParams) error {
 	return nil
 }
 
-// RestrictChatMemberParams - represents parameters of restrictChatMember method.
+// RestrictChatMemberParams - Represents parameters of restrictChatMember method.
 type RestrictChatMemberParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format 
 	// @supergroupusername) 
@@ -1177,7 +1177,7 @@ func (b *Bot) RestrictChatMember(params RestrictChatMemberParams) error {
 	return nil
 }
 
-// PromoteChatMemberParams - represents parameters of promoteChatMember method.
+// PromoteChatMemberParams - Represents parameters of promoteChatMember method.
 type PromoteChatMemberParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1237,7 +1237,7 @@ func (b *Bot) PromoteChatMember(params PromoteChatMemberParams) error {
 	return nil
 }
 
-// SetChatAdministratorCustomTitleParams - represents parameters of setChatAdministratorCustomTitle method.
+// SetChatAdministratorCustomTitleParams - Represents parameters of setChatAdministratorCustomTitle method.
 type SetChatAdministratorCustomTitleParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format 
 	// @supergroupusername) 
@@ -1261,7 +1261,7 @@ func (b *Bot) SetChatAdministratorCustomTitle(params SetChatAdministratorCustomT
 	return nil
 }
 
-// SetChatPermissionsParams - represents parameters of setChatPermissions method.
+// SetChatPermissionsParams - Represents parameters of setChatPermissions method.
 type SetChatPermissionsParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format 
 	// @supergroupusername) 
@@ -1283,7 +1283,7 @@ func (b *Bot) SetChatPermissions(params SetChatPermissionsParams) error {
 	return nil
 }
 
-// ExportChatInviteLinkParams - represents parameters of exportChatInviteLink method.
+// ExportChatInviteLinkParams - Represents parameters of exportChatInviteLink method.
 type ExportChatInviteLinkParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1302,7 +1302,7 @@ func (b *Bot) ExportChatInviteLink(params ExportChatInviteLinkParams) error {
 	return nil
 }
 
-// CreateChatInviteLinkParams - represents parameters of createChatInviteLink method.
+// CreateChatInviteLinkParams - Represents parameters of createChatInviteLink method.
 type CreateChatInviteLinkParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1329,7 +1329,7 @@ func (b *Bot) CreateChatInviteLink(params CreateChatInviteLinkParams) error {
 	return nil
 }
 
-// EditChatInviteLinkParams - represents parameters of editChatInviteLink method.
+// EditChatInviteLinkParams - Represents parameters of editChatInviteLink method.
 type EditChatInviteLinkParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1358,7 +1358,7 @@ func (b *Bot) EditChatInviteLink(params EditChatInviteLinkParams) error {
 	return nil
 }
 
-// RevokeChatInviteLinkParams - represents parameters of revokeChatInviteLink method.
+// RevokeChatInviteLinkParams - Represents parameters of revokeChatInviteLink method.
 type RevokeChatInviteLinkParams struct {
 	// ChatId - Unique identifier of the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1381,7 +1381,7 @@ func (b *Bot) RevokeChatInviteLink(params RevokeChatInviteLinkParams) error {
 	return nil
 }
 
-// SetChatPhotoParams - represents parameters of setChatPhoto method.
+// SetChatPhotoParams - Represents parameters of setChatPhoto method.
 type SetChatPhotoParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1403,7 +1403,7 @@ func (b *Bot) SetChatPhoto(params SetChatPhotoParams) error {
 	return nil
 }
 
-// DeleteChatPhotoParams - represents parameters of deleteChatPhoto method.
+// DeleteChatPhotoParams - Represents parameters of deleteChatPhoto method.
 type DeleteChatPhotoParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1422,7 +1422,7 @@ func (b *Bot) DeleteChatPhoto(params DeleteChatPhotoParams) error {
 	return nil
 }
 
-// SetChatTitleParams - represents parameters of setChatTitle method.
+// SetChatTitleParams - Represents parameters of setChatTitle method.
 type SetChatTitleParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1444,7 +1444,7 @@ func (b *Bot) SetChatTitle(params SetChatTitleParams) error {
 	return nil
 }
 
-// SetChatDescriptionParams - represents parameters of setChatDescription method.
+// SetChatDescriptionParams - Represents parameters of setChatDescription method.
 type SetChatDescriptionParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1466,7 +1466,7 @@ func (b *Bot) SetChatDescription(params SetChatDescriptionParams) error {
 	return nil
 }
 
-// PinChatMessageParams - represents parameters of pinChatMessage method.
+// PinChatMessageParams - Represents parameters of pinChatMessage method.
 type PinChatMessageParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1493,7 +1493,7 @@ func (b *Bot) PinChatMessage(params PinChatMessageParams) error {
 	return nil
 }
 
-// UnpinChatMessageParams - represents parameters of unpinChatMessage method.
+// UnpinChatMessageParams - Represents parameters of unpinChatMessage method.
 type UnpinChatMessageParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1517,7 +1517,7 @@ func (b *Bot) UnpinChatMessage(params UnpinChatMessageParams) error {
 	return nil
 }
 
-// UnpinAllChatMessagesParams - represents parameters of unpinAllChatMessages method.
+// UnpinAllChatMessagesParams - Represents parameters of unpinAllChatMessages method.
 type UnpinAllChatMessagesParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1537,7 +1537,7 @@ func (b *Bot) UnpinAllChatMessages(params UnpinAllChatMessagesParams) error {
 	return nil
 }
 
-// LeaveChatParams - represents parameters of leaveChat method.
+// LeaveChatParams - Represents parameters of leaveChat method.
 type LeaveChatParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup or channel (in the 
 	// format @channelusername) 
@@ -1554,7 +1554,7 @@ func (b *Bot) LeaveChat(params LeaveChatParams) error {
 	return nil
 }
 
-// GetChatParams - represents parameters of getChat method.
+// GetChatParams - Represents parameters of getChat method.
 type GetChatParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup or channel (in the 
 	// format @channelusername) 
@@ -1573,7 +1573,7 @@ func (b *Bot) GetChat(params GetChatParams) error {
 	return nil
 }
 
-// GetChatAdministratorsParams - represents parameters of getChatAdministrators method.
+// GetChatAdministratorsParams - Represents parameters of getChatAdministrators method.
 type GetChatAdministratorsParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup or channel (in the 
 	// format @channelusername) 
@@ -1593,7 +1593,7 @@ func (b *Bot) GetChatAdministrators(params GetChatAdministratorsParams) error {
 	return nil
 }
 
-// GetChatMemberCountParams - represents parameters of getChatMemberCount method.
+// GetChatMemberCountParams - Represents parameters of getChatMemberCount method.
 type GetChatMemberCountParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup or channel (in the 
 	// format @channelusername) 
@@ -1610,7 +1610,7 @@ func (b *Bot) GetChatMemberCount(params GetChatMemberCountParams) error {
 	return nil
 }
 
-// GetChatMemberParams - represents parameters of getChatMember method.
+// GetChatMemberParams - Represents parameters of getChatMember method.
 type GetChatMemberParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup or channel (in the 
 	// format @channelusername) 
@@ -1631,7 +1631,7 @@ func (b *Bot) GetChatMember(params GetChatMemberParams) error {
 	return nil
 }
 
-// SetChatStickerSetParams - represents parameters of setChatStickerSet method.
+// SetChatStickerSetParams - Represents parameters of setChatStickerSet method.
 type SetChatStickerSetParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format 
 	// @supergroupusername) 
@@ -1654,7 +1654,7 @@ func (b *Bot) SetChatStickerSet(params SetChatStickerSetParams) error {
 	return nil
 }
 
-// DeleteChatStickerSetParams - represents parameters of deleteChatStickerSet method.
+// DeleteChatStickerSetParams - Represents parameters of deleteChatStickerSet method.
 type DeleteChatStickerSetParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target supergroup (in the format 
 	// @supergroupusername) 
@@ -1686,7 +1686,7 @@ func (b *Bot) AnswerCallbackQuery() error {
 	return nil
 }
 
-// SetMyCommandsParams - represents parameters of setMyCommands method.
+// SetMyCommandsParams - Represents parameters of setMyCommands method.
 type SetMyCommandsParams struct {
 	// Commands - A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 
 	// commands can be specified. 
@@ -1713,7 +1713,7 @@ func (b *Bot) SetMyCommands(params SetMyCommandsParams) error {
 	return nil
 }
 
-// DeleteMyCommandsParams - represents parameters of deleteMyCommands method.
+// DeleteMyCommandsParams - Represents parameters of deleteMyCommands method.
 type DeleteMyCommandsParams struct {
 	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are relevant. 
 	// Defaults to BotCommandScopeDefault (#botcommandscopedefault). 
@@ -1736,7 +1736,7 @@ func (b *Bot) DeleteMyCommands(params DeleteMyCommandsParams) error {
 	return nil
 }
 
-// GetMyCommandsParams - represents parameters of getMyCommands method.
+// GetMyCommandsParams - Represents parameters of getMyCommands method.
 type GetMyCommandsParams struct {
 	// Scope - Optional. A JSON-serialized object, describing scope of users. Defaults to BotCommandScopeDefault 
 	// (#botcommandscopedefault). 
@@ -1758,7 +1758,7 @@ func (b *Bot) GetMyCommands(params GetMyCommandsParams) error {
 	return nil
 }
 
-// EditMessageTextParams - represents parameters of editMessageText method.
+// EditMessageTextParams - Represents parameters of editMessageText method.
 type EditMessageTextParams struct {
 	// ChatId - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat 
 	// or username of the target channel (in the format @channelusername) 
@@ -1801,7 +1801,7 @@ func (b *Bot) EditMessageText(params EditMessageTextParams) error {
 	return nil
 }
 
-// EditMessageCaptionParams - represents parameters of editMessageCaption method.
+// EditMessageCaptionParams - Represents parameters of editMessageCaption method.
 type EditMessageCaptionParams struct {
 	// ChatId - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat 
 	// or username of the target channel (in the format @channelusername) 
@@ -1841,7 +1841,7 @@ func (b *Bot) EditMessageCaption(params EditMessageCaptionParams) error {
 	return nil
 }
 
-// EditMessageMediaParams - represents parameters of editMessageMedia method.
+// EditMessageMediaParams - Represents parameters of editMessageMedia method.
 type EditMessageMediaParams struct {
 	// ChatId - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat 
 	// or username of the target channel (in the format @channelusername) 
@@ -1876,7 +1876,7 @@ func (b *Bot) EditMessageMedia(params EditMessageMediaParams) error {
 	return nil
 }
 
-// EditMessageReplyMarkupParams - represents parameters of editMessageReplyMarkup method.
+// EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
 type EditMessageReplyMarkupParams struct {
 	// ChatId - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat 
 	// or username of the target channel (in the format @channelusername) 
@@ -1906,7 +1906,7 @@ func (b *Bot) EditMessageReplyMarkup(params EditMessageReplyMarkupParams) error 
 	return nil
 }
 
-// StopPollParams - represents parameters of stopPoll method.
+// StopPollParams - Represents parameters of stopPoll method.
 type StopPollParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1931,7 +1931,7 @@ func (b *Bot) StopPoll(params StopPollParams) error {
 	return nil
 }
 
-// DeleteMessageParams - represents parameters of deleteMessage method.
+// DeleteMessageParams - Represents parameters of deleteMessage method.
 type DeleteMessageParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1957,7 +1957,7 @@ func (b *Bot) DeleteMessage(params DeleteMessageParams) error {
 	return nil
 }
 
-// SendStickerParams - represents parameters of sendSticker method.
+// SendStickerParams - Represents parameters of sendSticker method.
 type SendStickerParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -1998,7 +1998,7 @@ func (b *Bot) SendSticker(params SendStickerParams) error {
 	return nil
 }
 
-// GetStickerSetParams - represents parameters of getStickerSet method.
+// GetStickerSetParams - Represents parameters of getStickerSet method.
 type GetStickerSetParams struct {
 	// Name - Name of the sticker set 
 	Name string `json:"name"`
@@ -2015,7 +2015,7 @@ func (b *Bot) GetStickerSet(params GetStickerSetParams) error {
 	return nil
 }
 
-// UploadStickerFileParams - represents parameters of uploadStickerFile method.
+// UploadStickerFileParams - Represents parameters of uploadStickerFile method.
 type UploadStickerFileParams struct {
 	// UserId - User identifier of sticker file owner 
 	UserId int `json:"user_id"`
@@ -2037,7 +2037,7 @@ func (b *Bot) UploadStickerFile(params UploadStickerFileParams) error {
 	return nil
 }
 
-// CreateNewStickerSetParams - represents parameters of createNewStickerSet method.
+// CreateNewStickerSetParams - Represents parameters of createNewStickerSet method.
 type CreateNewStickerSetParams struct {
 	// UserId - User identifier of created sticker set owner 
 	UserId int `json:"user_id"`
@@ -2083,7 +2083,7 @@ func (b *Bot) CreateNewStickerSet(params CreateNewStickerSetParams) error {
 	return nil
 }
 
-// AddStickerToSetParams - represents parameters of addStickerToSet method.
+// AddStickerToSetParams - Represents parameters of addStickerToSet method.
 type AddStickerToSetParams struct {
 	// UserId - User identifier of sticker set owner 
 	UserId int `json:"user_id"`
@@ -2122,7 +2122,7 @@ func (b *Bot) AddStickerToSet(params AddStickerToSetParams) error {
 	return nil
 }
 
-// SetStickerPositionInSetParams - represents parameters of setStickerPositionInSet method.
+// SetStickerPositionInSetParams - Represents parameters of setStickerPositionInSet method.
 type SetStickerPositionInSetParams struct {
 	// Sticker - File identifier of the sticker 
 	Sticker string `json:"sticker"`
@@ -2142,7 +2142,7 @@ func (b *Bot) SetStickerPositionInSet(params SetStickerPositionInSetParams) erro
 	return nil
 }
 
-// DeleteStickerFromSetParams - represents parameters of deleteStickerFromSet method.
+// DeleteStickerFromSetParams - Represents parameters of deleteStickerFromSet method.
 type DeleteStickerFromSetParams struct {
 	// Sticker - File identifier of the sticker 
 	Sticker string `json:"sticker"`
@@ -2159,7 +2159,7 @@ func (b *Bot) DeleteStickerFromSet(params DeleteStickerFromSetParams) error {
 	return nil
 }
 
-// SetStickerSetThumbParams - represents parameters of setStickerSetThumb method.
+// SetStickerSetThumbParams - Represents parameters of setStickerSetThumb method.
 type SetStickerSetThumbParams struct {
 	// Name - Sticker set name 
 	Name string `json:"name"`
@@ -2189,7 +2189,7 @@ func (b *Bot) SetStickerSetThumb(params SetStickerSetThumbParams) error {
 	return nil
 }
 
-// AnswerInlineQueryParams - represents parameters of answerInlineQuery method.
+// AnswerInlineQueryParams - Represents parameters of answerInlineQuery method.
 type AnswerInlineQueryParams struct {
 	// InlineQueryId - Unique identifier for the answered query 
 	InlineQueryId string `json:"inline_query_id"`
@@ -2236,7 +2236,7 @@ func (b *Bot) AnswerInlineQuery(params AnswerInlineQueryParams) error {
 	return nil
 }
 
-// SendInvoiceParams - represents parameters of sendInvoice method.
+// SendInvoiceParams - Represents parameters of sendInvoice method.
 type SendInvoiceParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format 
 	// @channelusername) 
@@ -2346,7 +2346,7 @@ func (b *Bot) SendInvoice(params SendInvoiceParams) error {
 	return nil
 }
 
-// AnswerShippingQueryParams - represents parameters of answerShippingQuery method.
+// AnswerShippingQueryParams - Represents parameters of answerShippingQuery method.
 type AnswerShippingQueryParams struct {
 	// ShippingQueryId - Unique identifier for the query to be answered 
 	ShippingQueryId string `json:"shipping_query_id"`
@@ -2376,7 +2376,7 @@ func (b *Bot) AnswerShippingQuery(params AnswerShippingQueryParams) error {
 	return nil
 }
 
-// AnswerPreCheckoutQueryParams - represents parameters of answerPreCheckoutQuery method.
+// AnswerPreCheckoutQueryParams - Represents parameters of answerPreCheckoutQuery method.
 type AnswerPreCheckoutQueryParams struct {
 	// PreCheckoutQueryId - Unique identifier for the query to be answered 
 	PreCheckoutQueryId string `json:"pre_checkout_query_id"`
@@ -2417,7 +2417,7 @@ func (b *Bot) SetPassportDataErrors() error {
 	return nil
 }
 
-// SendGameParams - represents parameters of sendGame method.
+// SendGameParams - Represents parameters of sendGame method.
 type SendGameParams struct {
 	// ChatId - Unique identifier for the target chat 
 	ChatId int `json:"chat_id"`
@@ -2453,7 +2453,7 @@ func (b *Bot) SendGame(params SendGameParams) error {
 	return nil
 }
 
-// SetGameScoreParams - represents parameters of setGameScore method.
+// SetGameScoreParams - Represents parameters of setGameScore method.
 type SetGameScoreParams struct {
 	// UserId - User identifier 
 	UserId int `json:"user_id"`

@@ -10,11 +10,13 @@ import (
 	"regexp"
 )
 
-const defaultAPIURL = "https://api.telegram.org"
+const (
+	defaultAPIURL = "https://api.telegram.org"
 
-const jsonContentType = "application/json"
+	jsonContentType = "application/json"
 
-const tokenRegexp = `^\d{9}:[\w-]{35}$` //nolint:gosec
+	tokenRegexp = `^\d{9}:[\w-]{35}$` //nolint:gosec
+)
 
 func validateToken(token string) bool {
 	reg := regexp.MustCompile(tokenRegexp)
@@ -22,10 +24,14 @@ func validateToken(token string) bool {
 }
 
 var (
-	ErrInvalidToken  = errors.New("invalid token")
+	// ErrInvalidToken - Bot token is invalid according to token regexp
+	ErrInvalidToken = errors.New("invalid token")
+
+	// ErrNilHTTPClient - Provided nil HTTP client
 	ErrNilHTTPClient = errors.New("nil http client")
 )
 
+// Bot - Represents telegram bot
 type Bot struct {
 	token  string
 	apiURL string
@@ -46,18 +52,22 @@ func botCreator(token, apiURL string, client *http.Client) (*Bot, error) {
 	}, nil
 }
 
+// NewBot - Creates new bot
 func NewBot(token string) (*Bot, error) {
 	return botCreator(token, defaultAPIURL, http.DefaultClient)
 }
 
+// NewBotWithAPI - Creates new bot with API URL
 func NewBotWithAPI(token, apiURL string) (*Bot, error) {
 	return botCreator(token, apiURL, http.DefaultClient)
 }
 
+// NewBotWithClient - Creates new bot with HTTP client
 func NewBotWithClient(token string, client *http.Client) (*Bot, error) {
 	return botCreator(token, defaultAPIURL, client)
 }
 
+// NewBotWithAPIAndClient - Creates new bot with API URL and HTTP client
 func NewBotWithAPIAndClient(token, apiURL string, client *http.Client) (*Bot, error) {
 	return botCreator(token, apiURL, client)
 }
