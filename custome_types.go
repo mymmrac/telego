@@ -1,6 +1,10 @@
 package telego
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 // ChatID - Represents chat ID as int or string
 type ChatID struct {
@@ -8,16 +12,20 @@ type ChatID struct {
 	Username string
 }
 
-func (c ChatID) MarshalJSON() ([]byte, error) {
+func (c ChatID) String() string {
 	if c.Username != "" {
-		return json.Marshal(struct {
-			ChatID string `json:"chat_id"`
-		}{ChatID: c.Username})
+		return c.Username
 	}
 
-	return json.Marshal(struct {
-		ChatID int64 `json:"chat_id"`
-	}{ChatID: c.ID})
+	return fmt.Sprintf("%d", c.ID)
+}
+
+func (c ChatID) MarshalJSON() ([]byte, error) {
+	if c.Username != "" {
+		return json.Marshal(c.Username)
+	}
+
+	return json.Marshal(fmt.Sprintf("%d", c.ID))
 }
 
 // ReplyMarkup - Represents reply markup (inline keyboard, custom reply keyboard, etc.)
@@ -43,4 +51,42 @@ func (i *ReplyKeyboardRemove) ReplyType() string {
 // ReplyType - Returns ForceReply type
 func (i *ForceReply) ReplyType() string {
 	return "ForceReply"
+}
+
+func (i InputFile) MarshalJSON() ([]byte, error) {
+	if i.File != nil {
+		return json.Marshal("")
+	}
+
+	if i.FileID != "" {
+		return json.Marshal(i.FileID)
+	}
+
+	return json.Marshal(i.URL)
+}
+
+type fileCompatible interface {
+	isDirectFile() bool
+	fileParameters() map[string]*os.File
+}
+
+func (p *SendDocumentParams) isDirectFile() bool {
+	fp := p.fileParameters()
+	for _, file := range fp {
+		if file != nil {
+			return true
+		}
+	}
+	return false
+}
+
+func (p *SendDocumentParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["document"] = p.Document.File
+	if p.Thumb != nil {
+		fp["thumb"] = p.Thumb.File
+	}
+
+	return fp
 }

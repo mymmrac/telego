@@ -1,5 +1,7 @@
 package telego
 
+import "os"
+
 // Update - This object (#available-types) represents an incoming update.At most one of the optional parameters
 // can be present in any given update.
 type Update struct {
@@ -1291,7 +1293,7 @@ type BotCommandScopeChat struct {
 
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
-	ChatID ChatID
+	ChatID ChatID `json:"chat_id"`
 }
 
 // BotCommandScopeChatAdministrators - Represents the scope (#botcommandscope) of bot commands,
@@ -1302,7 +1304,7 @@ type BotCommandScopeChatAdministrators struct {
 
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
-	ChatID ChatID
+	ChatID ChatID `json:"chat_id"`
 }
 
 // BotCommandScopeChatMember - Represents the scope (#botcommandscope) of bot commands,
@@ -1313,7 +1315,7 @@ type BotCommandScopeChatMember struct {
 
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
-	ChatID ChatID
+	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
 	UserID int `json:"user_id"`
@@ -1519,6 +1521,9 @@ type InputMediaDocument struct {
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using
 // multipart/form-data in the usual way that files are uploaded via the browser.
 type InputFile struct {
+	File   *os.File
+	FileID string
+	URL    string
 }
 
 // Sticker - This object represents a sticker.
