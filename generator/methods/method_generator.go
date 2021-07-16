@@ -8,10 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/mymmrac/go-telegram-bot-api/generator"
-	"github.com/mymmrac/go-telegram-bot-api/logger"
 )
 
 const methodPattern = `
@@ -44,42 +41,39 @@ const paramsPattern = `
 </tr>
 `
 
+//nolint:funlen
 func main() {
-	log := logger.CreateLogrusLogger(logrus.ErrorLevel)
-
 	methodPatternReg := regexp.MustCompile(generator.RemoveNewline(methodPattern))
 	paramsPatternReg := regexp.MustCompile(generator.RemoveNewline(paramsPattern))
 
 	file, err := os.Create("methods.go")
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		return
 	}
 
 	response, err := http.Get(generator.DocsURL)
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		return
 	}
 	defer func() {
 		err := response.Body.Close()
 		if err != nil {
-			log.Error(err)
+			fmt.Println(err)
 			return
 		}
 	}()
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		return
 	}
+	body := generator.RemoveNewline(string(bodyBytes))
+	methodMatch := methodPatternReg.FindAllStringSubmatch(body, -1)
 
 	fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
-
-	body := generator.RemoveNewline(string(bodyBytes))
-
-	methodMatch := methodPatternReg.FindAllStringSubmatch(body, -1)
 
 	for _, methodMatched := range methodMatch {
 		methodName := methodMatched[1]

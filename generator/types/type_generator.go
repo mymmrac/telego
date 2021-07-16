@@ -8,10 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/mymmrac/go-telegram-bot-api/generator"
-	"github.com/mymmrac/go-telegram-bot-api/logger"
 )
 
 const typePattern = `
@@ -43,33 +40,31 @@ const fieldPattern = `
 `
 
 func main() {
-	log := logger.CreateLogrusLogger(logrus.ErrorLevel)
-
 	typePatternReg := regexp.MustCompile(generator.RemoveNewline(typePattern))
 	fieldPatternReg := regexp.MustCompile(generator.RemoveNewline(fieldPattern))
 
 	file, err := os.Create("types.go")
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		return
 	}
 
 	response, err := http.Get(generator.DocsURL)
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		return
 	}
 	defer func() {
 		err := response.Body.Close()
 		if err != nil {
-			log.Error(err)
+			fmt.Println(err)
 			return
 		}
 	}()
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		return
 	}
 
