@@ -78,14 +78,18 @@ func NewBotWithAPIAndClient(token, apiURL string, client *http.Client) (*Bot, er
 }
 
 type apiResponse struct {
-	Ok          bool                `json:"ok"`
+	Ok     bool            `json:"ok"`
+	Result json.RawMessage `json:"result,omitempty"`
+	APIError
+}
+
+type APIError struct {
 	Description string              `json:"description,omitempty"`
 	ErrorCode   int                 `json:"error_code,omitempty"`
 	Parameters  *ResponseParameters `json:"parameters,omitempty"`
-	Result      json.RawMessage     `json:"result,omitempty"`
 }
 
-func (a apiResponse) Error() string {
+func (a APIError) Error() string {
 	if a.Parameters != nil {
 		return fmt.Sprintf("%d %s migrate to chat id: %d, retry after: %d",
 			a.ErrorCode, a.Description, a.Parameters.MigrateToChatID, a.Parameters.RetryAfter)
@@ -212,7 +216,7 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	}
 
 	if !resp.Ok {
-		return fmt.Errorf("api: %w", resp)
+		return fmt.Errorf("api: %w", resp.APIError)
 	}
 
 	if resp.Result != nil {
