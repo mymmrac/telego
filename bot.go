@@ -194,9 +194,17 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 
 	switch p := parameters.(type) {
 	case fileCompatible:
-		if p.isDirectFile() {
+		fileParams := p.fileParameters()
+		isDirectFile := false
+		for _, file := range fileParams {
+			if file != nil {
+				isDirectFile = true
+				break
+			}
+		}
+
+		if isDirectFile {
 			params := toParams(parameters)
-			fileParams := p.fileParameters()
 
 			resp, err = b.apiRequestMultipartFormData(methodName, params, fileParams)
 			if err != nil {

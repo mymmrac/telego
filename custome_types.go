@@ -66,18 +66,7 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 }
 
 type fileCompatible interface {
-	isDirectFile() bool
 	fileParameters() map[string]*os.File
-}
-
-func (p *SendDocumentParams) isDirectFile() bool {
-	fp := p.fileParameters()
-	for _, file := range fp {
-		if file != nil {
-			return true
-		}
-	}
-	return false
 }
 
 func (p *SendDocumentParams) fileParameters() map[string]*os.File {

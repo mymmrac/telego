@@ -33,7 +33,7 @@ type GetUpdatesParams struct {
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki
 // (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). An Array of Update (#update) objects is
 // returned.
-func (b *Bot) GetUpdates(params GetUpdatesParams) error {
+func (b *Bot) GetUpdates(params *GetUpdatesParams) error {
 	err := b.performRequest("getUpdates", params, nil)
 	if err != nil {
 		return fmt.Errorf("getUpdates(): %w", err)
@@ -63,7 +63,7 @@ type DeleteWebhookParams struct {
 
 // DeleteWebhook - Use this method to remove webhook integration if you decide to switch back to getUpdates
 // (#getupdates). Returns True on success.
-func (b *Bot) DeleteWebhook(params DeleteWebhookParams) error {
+func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
 	err := b.performRequest("deleteWebhook", params, nil)
 	if err != nil {
 		return fmt.Errorf("deleteWebhook(): %w", err)
@@ -147,7 +147,7 @@ type SendMessageParams struct {
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
 	// ReplyToMessageId - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageId int `json:"reply_to_message_id,omitempty"`
+	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
 	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
 	// replied-to message is not found
@@ -161,7 +161,7 @@ type SendMessageParams struct {
 }
 
 // SendMessage - Use this method to send text messages. On success, the sent Message (#message) is returned.
-func (b *Bot) SendMessage(params SendMessageParams) error {
+func (b *Bot) SendMessage(params *SendMessageParams) error {
 	err := b.performRequest("sendMessage", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendMessage(): %w", err)
@@ -190,7 +190,7 @@ type ForwardMessageParams struct {
 
 // ForwardMessage - Use this method to forward messages of any kind. Service messages can't be forwarded. On
 // success, the sent Message (#message) is returned.
-func (b *Bot) ForwardMessage(params ForwardMessageParams) error {
+func (b *Bot) ForwardMessage(params *ForwardMessageParams) error {
 	err := b.performRequest("forwardMessage", params, nil)
 	if err != nil {
 		return fmt.Errorf("forwardMessage(): %w", err)
@@ -246,7 +246,7 @@ type CopyMessageParams struct {
 // copied. The method is analogous to the method forwardMessage (#forwardmessage), but the copied message
 // doesn't have a link to the original message. Returns the MessageId (#messageid) of the sent message on
 // success.
-func (b *Bot) CopyMessage(params CopyMessageParams) error {
+func (b *Bot) CopyMessage(params *CopyMessageParams) error {
 	err := b.performRequest("copyMessage", params, nil)
 	if err != nil {
 		return fmt.Errorf("copyMessage(): %w", err)
@@ -254,8 +254,6 @@ func (b *Bot) CopyMessage(params CopyMessageParams) error {
 
 	return nil
 }
-
-/*
 
 // SendPhotoParams - Represents parameters of sendPhoto method.
 type SendPhotoParams struct {
@@ -268,7 +266,7 @@ type SendPhotoParams struct {
 	// photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must
 	// not exceed 10000 in total. Width and height ratio must be at most 20. More info on Sending Files »
 	// (#sending-files)
-	Photo InputFile or String `json:"photo"`
+	Photo InputFile `json:"photo"`
 	//Photo     string `json:"photo"`
 	//PhotoFile *os.File
 
@@ -303,7 +301,7 @@ type SendPhotoParams struct {
 }
 
 // SendPhoto - Use this method to send photos. On success, the sent Message (#message) is returned.
-func (b *Bot) SendPhoto(params SendPhotoParams) error {
+func (b *Bot) SendPhoto(params *SendPhotoParams) error {
 	err := b.performRequest("sendPhoto", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendPhoto(): %w", err)
@@ -311,8 +309,6 @@ func (b *Bot) SendPhoto(params SendPhotoParams) error {
 
 	return nil
 }
-
-*/
 
 // FIX (https://core.telegram.org/bots/api#sendaudio)
 
@@ -393,7 +389,6 @@ func (b *Bot) SendDocument(params *SendDocumentParams) (*Message, error) {
 	return message, nil
 }
 
-/*
 // SendVideoParams - Represents parameters of sendVideo method.
 type SendVideoParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format
@@ -403,7 +398,7 @@ type SendVideoParams struct {
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
 	// video using multipart/form-data. More info on Sending Files » (#sending-files)
-	Video InputFile or String `json:"video"`
+	Video InputFile `json:"video"`
 
 	// Duration - Optional. Duration of sent video in seconds
 	Duration int `json:"duration,omitempty"`
@@ -420,7 +415,7 @@ type SendVideoParams struct {
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Video caption (may also be used when resending videos by file_id), 0-1024 characters
 	// after entities parsing
@@ -458,7 +453,7 @@ type SendVideoParams struct {
 // SendVideo - Use this method to send video files, Telegram clients support mp4 videos (other formats may be
 // sent as Document (#document)). On success, the sent Message (#message) is returned. Bots can currently send
 // video files of up to 50 MB in size, this limit may be changed in the future.
-func (b *Bot) SendVideo(params SendVideoParams) error {
+func (b *Bot) SendVideo(params *SendVideoParams) error {
 	err := b.performRequest("sendVideo", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendVideo(): %w", err)
@@ -476,7 +471,7 @@ type SendAnimationParams struct {
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
 	// upload a new animation using multipart/form-data. More info on Sending Files » (#sending-files)
-	Animation InputFile or String `json:"animation"`
+	Animation InputFile `json:"animation"`
 
 	// Duration - Optional. Duration of sent animation in seconds
 	Duration int `json:"duration,omitempty"`
@@ -493,7 +488,7 @@ type SendAnimationParams struct {
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Animation caption (may also be used when resending animation by file_id), 0-1024
 	// characters after entities parsing
@@ -528,7 +523,7 @@ type SendAnimationParams struct {
 // SendAnimation - Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On
 // success, the sent Message (#message) is returned. Bots can currently send animation files of up to 50 MB in
 // size, this limit may be changed in the future.
-func (b *Bot) SendAnimation(params SendAnimationParams) error {
+func (b *Bot) SendAnimation(params *SendAnimationParams) error {
 	err := b.performRequest("sendAnimation", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendAnimation(): %w", err)
@@ -546,7 +541,7 @@ type SendVoiceParams struct {
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
 	// using multipart/form-data. More info on Sending Files » (#sending-files)
-	Voice InputFile or String `json:"voice"`
+	Voice InputFile `json:"voice"`
 
 	// Caption - Optional. Voice message caption, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -584,7 +579,7 @@ type SendVoiceParams struct {
 // playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats
 // may be sent as Audio (#audio) or Document (#document)). On success, the sent Message (#message) is returned.
 // Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
-func (b *Bot) SendVoice(params SendVoiceParams) error {
+func (b *Bot) SendVoice(params *SendVoiceParams) error {
 	err := b.performRequest("sendVoice", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendVoice(): %w", err)
@@ -602,7 +597,7 @@ type SendVideoNoteParams struct {
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More info on Sending Files »
 	// (#sending-files). Sending video notes by a URL is currently unsupported
-	VideoNote InputFile or String `json:"video_note"`
+	VideoNote InputFile `json:"video_note"`
 
 	// Duration - Optional. Duration of sent video in seconds
 	Duration int `json:"duration,omitempty"`
@@ -616,7 +611,7 @@ type SendVideoNoteParams struct {
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More info on Sending Files » (#sending-files)
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -639,7 +634,7 @@ type SendVideoNoteParams struct {
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients
 // support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success,
 // the sent Message (#message) is returned.
-func (b *Bot) SendVideoNote(params SendVideoNoteParams) error {
+func (b *Bot) SendVideoNote(params *SendVideoNoteParams) error {
 	err := b.performRequest("sendVideoNote", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendVideoNote(): %w", err)
@@ -648,6 +643,7 @@ func (b *Bot) SendVideoNote(params SendVideoNoteParams) error {
 	return nil
 }
 
+/*
 // SendMediaGroupParams - Represents parameters of sendMediaGroup method.
 type SendMediaGroupParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format
@@ -672,7 +668,7 @@ type SendMediaGroupParams struct {
 // SendMediaGroup - Use this method to send a group of photos, videos, documents or audios as an album.
 // Documents and audio files can be only grouped in an album with messages of the same type. On success, an
 // array of Messages (#message) that were sent is returned.
-func (b *Bot) SendMediaGroup(params SendMediaGroupParams) error {
+func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) error {
 	err := b.performRequest("sendMediaGroup", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendMediaGroup(): %w", err)
@@ -680,7 +676,6 @@ func (b *Bot) SendMediaGroup(params SendMediaGroupParams) error {
 
 	return nil
 }
-
 */
 
 // SendLocationParams - Represents parameters of sendLocation method.
@@ -730,7 +725,7 @@ type SendLocationParams struct {
 
 // SendLocation - Use this method to send point on the map. On success, the sent Message (#message) is
 // returned.
-func (b *Bot) SendLocation(params SendLocationParams) error {
+func (b *Bot) SendLocation(params *SendLocationParams) error {
 	err := b.performRequest("sendLocation", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendLocation(): %w", err)
@@ -778,7 +773,7 @@ type EditMessageLiveLocationParams struct {
 // its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
 // (#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited Message
 // (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageLiveLocation(params EditMessageLiveLocationParams) error {
+func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) error {
 	err := b.performRequest("editMessageLiveLocation", params, nil)
 	if err != nil {
 		return fmt.Errorf("editMessageLiveLocation(): %w", err)
@@ -809,7 +804,7 @@ type StopMessageLiveLocationParams struct {
 // StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
 // expires. On success, if the message was sent by the bot, the sent Message (#message) is returned, otherwise
 // True is returned.
-func (b *Bot) StopMessageLiveLocation(params StopMessageLiveLocationParams) error {
+func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) error {
 	err := b.performRequest("stopMessageLiveLocation", params, nil)
 	if err != nil {
 		return fmt.Errorf("stopMessageLiveLocation(): %w", err)
@@ -870,7 +865,7 @@ type SendVenueParams struct {
 
 // SendVenue - Use this method to send information about a venue. On success, the sent Message (#message) is
 // returned.
-func (b *Bot) SendVenue(params SendVenueParams) error {
+func (b *Bot) SendVenue(params *SendVenueParams) error {
 	err := b.performRequest("sendVenue", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendVenue(): %w", err)
@@ -917,7 +912,7 @@ type SendContactParams struct {
 }
 
 // SendContact - Use this method to send phone contacts. On success, the sent Message (#message) is returned.
-func (b *Bot) SendContact(params SendContactParams) error {
+func (b *Bot) SendContact(params *SendContactParams) error {
 	err := b.performRequest("sendContact", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendContact(): %w", err)
@@ -995,7 +990,7 @@ type SendPollParams struct {
 }
 
 // SendPoll - Use this method to send a native poll. On success, the sent Message (#message) is returned.
-func (b *Bot) SendPoll(params SendPollParams) error {
+func (b *Bot) SendPoll(params *SendPollParams) error {
 	err := b.performRequest("sendPoll", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendPoll(): %w", err)
@@ -1036,7 +1031,7 @@ type SendDiceParams struct {
 
 // SendDice - Use this method to send an animated emoji that will display a random value. On success, the
 // sent Message (#message) is returned.
-func (b *Bot) SendDice(params SendDiceParams) error {
+func (b *Bot) SendDice(params *SendDiceParams) error {
 	err := b.performRequest("sendDice", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendDice(): %w", err)
@@ -1073,7 +1068,7 @@ type GetUserProfilePhotosParams struct {
 
 // GetUserProfilePhotos - Use this method to get a list of profile pictures for a user. Returns a
 // UserProfilePhotos (#userprofilephotos) object.
-func (b *Bot) GetUserProfilePhotos(params GetUserProfilePhotosParams) error {
+func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) error {
 	err := b.performRequest("getUserProfilePhotos", params, nil)
 	if err != nil {
 		return fmt.Errorf("getUserProfilePhotos(): %w", err)
@@ -1093,7 +1088,7 @@ type GetFileParams struct {
 // then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is
 // taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link
 // expires, a new one can be requested by calling getFile (#getfile) again.
-func (b *Bot) GetFile(params GetFileParams) error {
+func (b *Bot) GetFile(params *GetFileParams) error {
 	err := b.performRequest("getFile", params, nil)
 	if err != nil {
 		return fmt.Errorf("getFile(): %w", err)
@@ -1126,7 +1121,7 @@ type BanChatMemberParams struct {
 // supergroups and channels, the user will not be able to return to the chat on their own using invite links,
 // etc., unless unbanned (#unbanchatmember) first. The bot must be an administrator in the chat for this to work
 // and must have the appropriate admin rights. Returns True on success.
-func (b *Bot) BanChatMember(params BanChatMemberParams) error {
+func (b *Bot) BanChatMember(params *BanChatMemberParams) error {
 	err := b.performRequest("banChatMember", params, nil)
 	if err != nil {
 		return fmt.Errorf("banChatMember(): %w", err)
@@ -1153,7 +1148,7 @@ type UnbanChatMemberParams struct {
 // be an administrator for this to work. By default, this method guarantees that after the call the user is not
 // a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be
 // removed from the chat. If you don't want this, use the parameter only_if_banned. Returns True on success.
-func (b *Bot) UnbanChatMember(params UnbanChatMemberParams) error {
+func (b *Bot) UnbanChatMember(params *UnbanChatMemberParams) error {
 	err := b.performRequest("unbanChatMember", params, nil)
 	if err != nil {
 		return fmt.Errorf("unbanChatMember(): %w", err)
@@ -1183,7 +1178,7 @@ type RestrictChatMemberParams struct {
 // RestrictChatMember - Use this method to restrict a user in a supergroup. The bot must be an administrator
 // in the supergroup for this to work and must have the appropriate admin rights. Pass True for all permissions
 // to lift restrictions from a user. Returns True on success.
-func (b *Bot) RestrictChatMember(params RestrictChatMemberParams) error {
+func (b *Bot) RestrictChatMember(params *RestrictChatMemberParams) error {
 	err := b.performRequest("restrictChatMember", params, nil)
 	if err != nil {
 		return fmt.Errorf("restrictChatMember(): %w", err)
@@ -1243,7 +1238,7 @@ type PromoteChatMemberParams struct {
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
 // be an administrator in the chat for this to work and must have the appropriate admin rights. Pass False for
 // all boolean parameters to demote a user. Returns True on success.
-func (b *Bot) PromoteChatMember(params PromoteChatMemberParams) error {
+func (b *Bot) PromoteChatMember(params *PromoteChatMemberParams) error {
 	err := b.performRequest("promoteChatMember", params, nil)
 	if err != nil {
 		return fmt.Errorf("promoteChatMember(): %w", err)
@@ -1267,7 +1262,7 @@ type SetChatAdministratorCustomTitleParams struct {
 
 // SetChatAdministratorCustomTitle - Use this method to set a custom title for an administrator in a
 // supergroup promoted by the bot. Returns True on success.
-func (b *Bot) SetChatAdministratorCustomTitle(params SetChatAdministratorCustomTitleParams) error {
+func (b *Bot) SetChatAdministratorCustomTitle(params *SetChatAdministratorCustomTitleParams) error {
 	err := b.performRequest("setChatAdministratorCustomTitle", params, nil)
 	if err != nil {
 		return fmt.Errorf("setChatAdministratorCustomTitle(): %w", err)
@@ -1289,7 +1284,7 @@ type SetChatPermissionsParams struct {
 // SetChatPermissions - Use this method to set default chat permissions for all members. The bot must be an
 // administrator in the group or a supergroup for this to work and must have the can_restrict_members admin
 // rights. Returns True on success.
-func (b *Bot) SetChatPermissions(params SetChatPermissionsParams) error {
+func (b *Bot) SetChatPermissions(params *SetChatPermissionsParams) error {
 	err := b.performRequest("setChatPermissions", params, nil)
 	if err != nil {
 		return fmt.Errorf("setChatPermissions(): %w", err)
@@ -1308,7 +1303,7 @@ type ExportChatInviteLinkParams struct {
 // ExportChatInviteLink - Use this method to generate a new primary invite link for a chat; any previously
 // generated primary link is revoked. The bot must be an administrator in the chat for this to work and must
 // have the appropriate admin rights. Returns the new invite link as String on success.
-func (b *Bot) ExportChatInviteLink(params ExportChatInviteLinkParams) error {
+func (b *Bot) ExportChatInviteLink(params *ExportChatInviteLinkParams) error {
 	err := b.performRequest("exportChatInviteLink", params, nil)
 	if err != nil {
 		return fmt.Errorf("exportChatInviteLink(): %w", err)
@@ -1335,7 +1330,7 @@ type CreateChatInviteLinkParams struct {
 // administrator in the chat for this to work and must have the appropriate admin rights. The link can be
 // revoked using the method revokeChatInviteLink (#revokechatinvitelink). Returns the new invite link as
 // ChatInviteLink (#chatinvitelink) object.
-func (b *Bot) CreateChatInviteLink(params CreateChatInviteLinkParams) error {
+func (b *Bot) CreateChatInviteLink(params *CreateChatInviteLinkParams) error {
 	err := b.performRequest("createChatInviteLink", params, nil)
 	if err != nil {
 		return fmt.Errorf("createChatInviteLink(): %w", err)
@@ -1364,7 +1359,7 @@ type EditChatInviteLinkParams struct {
 // EditChatInviteLink - Use this method to edit a non-primary invite link created by the bot. The bot must be
 // an administrator in the chat for this to work and must have the appropriate admin rights. Returns the edited
 // invite link as a ChatInviteLink (#chatinvitelink) object.
-func (b *Bot) EditChatInviteLink(params EditChatInviteLinkParams) error {
+func (b *Bot) EditChatInviteLink(params *EditChatInviteLinkParams) error {
 	err := b.performRequest("editChatInviteLink", params, nil)
 	if err != nil {
 		return fmt.Errorf("editChatInviteLink(): %w", err)
@@ -1387,7 +1382,7 @@ type RevokeChatInviteLinkParams struct {
 // revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work
 // and must have the appropriate admin rights. Returns the revoked invite link as ChatInviteLink
 // (#chatinvitelink) object.
-func (b *Bot) RevokeChatInviteLink(params RevokeChatInviteLinkParams) error {
+func (b *Bot) RevokeChatInviteLink(params *RevokeChatInviteLinkParams) error {
 	err := b.performRequest("revokeChatInviteLink", params, nil)
 	if err != nil {
 		return fmt.Errorf("revokeChatInviteLink(): %w", err)
@@ -1409,7 +1404,7 @@ type SetChatPhotoParams struct {
 // SetChatPhoto - Use this method to set a new profile photo for the chat. Photos can't be changed for
 // private chats. The bot must be an administrator in the chat for this to work and must have the appropriate
 // admin rights. Returns True on success.
-func (b *Bot) SetChatPhoto(params SetChatPhotoParams) error {
+func (b *Bot) SetChatPhoto(params *SetChatPhotoParams) error {
 	err := b.performRequest("setChatPhoto", params, nil)
 	if err != nil {
 		return fmt.Errorf("setChatPhoto(): %w", err)
@@ -1428,7 +1423,7 @@ type DeleteChatPhotoParams struct {
 // DeleteChatPhoto - Use this method to delete a chat photo. Photos can't be changed for private chats. The
 // bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns
 // True on success.
-func (b *Bot) DeleteChatPhoto(params DeleteChatPhotoParams) error {
+func (b *Bot) DeleteChatPhoto(params *DeleteChatPhotoParams) error {
 	err := b.performRequest("deleteChatPhoto", params, nil)
 	if err != nil {
 		return fmt.Errorf("deleteChatPhoto(): %w", err)
@@ -1450,7 +1445,7 @@ type SetChatTitleParams struct {
 // SetChatTitle - Use this method to change the title of a chat. Titles can't be changed for private chats.
 // The bot must be an administrator in the chat for this to work and must have the appropriate admin rights.
 // Returns True on success.
-func (b *Bot) SetChatTitle(params SetChatTitleParams) error {
+func (b *Bot) SetChatTitle(params *SetChatTitleParams) error {
 	err := b.performRequest("setChatTitle", params, nil)
 	if err != nil {
 		return fmt.Errorf("setChatTitle(): %w", err)
@@ -1472,7 +1467,7 @@ type SetChatDescriptionParams struct {
 // SetChatDescription - Use this method to change the description of a group, a supergroup or a channel. The
 // bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns
 // True on success.
-func (b *Bot) SetChatDescription(params SetChatDescriptionParams) error {
+func (b *Bot) SetChatDescription(params *SetChatDescriptionParams) error {
 	err := b.performRequest("setChatDescription", params, nil)
 	if err != nil {
 		return fmt.Errorf("setChatDescription(): %w", err)
@@ -1499,7 +1494,7 @@ type PinChatMessageParams struct {
 // not a private chat, the bot must be an administrator in the chat for this to work and must have the
 // 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True
 // on success.
-func (b *Bot) PinChatMessage(params PinChatMessageParams) error {
+func (b *Bot) PinChatMessage(params *PinChatMessageParams) error {
 	err := b.performRequest("pinChatMessage", params, nil)
 	if err != nil {
 		return fmt.Errorf("pinChatMessage(): %w", err)
@@ -1523,7 +1518,7 @@ type UnpinChatMessageParams struct {
 // chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the
 // 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True
 // on success.
-func (b *Bot) UnpinChatMessage(params UnpinChatMessageParams) error {
+func (b *Bot) UnpinChatMessage(params *UnpinChatMessageParams) error {
 	err := b.performRequest("unpinChatMessage", params, nil)
 	if err != nil {
 		return fmt.Errorf("unpinChatMessage(): %w", err)
@@ -1543,7 +1538,7 @@ type UnpinAllChatMessagesParams struct {
 // a private chat, the bot must be an administrator in the chat for this to work and must have the
 // 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True
 // on success.
-func (b *Bot) UnpinAllChatMessages(params UnpinAllChatMessagesParams) error {
+func (b *Bot) UnpinAllChatMessages(params *UnpinAllChatMessagesParams) error {
 	err := b.performRequest("unpinAllChatMessages", params, nil)
 	if err != nil {
 		return fmt.Errorf("unpinAllChatMessages(): %w", err)
@@ -1560,7 +1555,7 @@ type LeaveChatParams struct {
 }
 
 // LeaveChat - Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
-func (b *Bot) LeaveChat(params LeaveChatParams) error {
+func (b *Bot) LeaveChat(params *LeaveChatParams) error {
 	err := b.performRequest("leaveChat", params, nil)
 	if err != nil {
 		return fmt.Errorf("leaveChat(): %w", err)
@@ -1579,7 +1574,7 @@ type GetChatParams struct {
 // GetChat - Use this method to get up to date information about the chat (current name of the user for
 // one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat (#chat) object
 // on success.
-func (b *Bot) GetChat(params GetChatParams) error {
+func (b *Bot) GetChat(params *GetChatParams) error {
 	err := b.performRequest("getChat", params, nil)
 	if err != nil {
 		return fmt.Errorf("getChat(): %w", err)
@@ -1599,7 +1594,7 @@ type GetChatAdministratorsParams struct {
 // Array of ChatMember (#chatmember) objects that contains information about all chat administrators except
 // other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator
 // will be returned.
-func (b *Bot) GetChatAdministrators(params GetChatAdministratorsParams) error {
+func (b *Bot) GetChatAdministrators(params *GetChatAdministratorsParams) error {
 	err := b.performRequest("getChatAdministrators", params, nil)
 	if err != nil {
 		return fmt.Errorf("getChatAdministrators(): %w", err)
@@ -1616,7 +1611,7 @@ type GetChatMemberCountParams struct {
 }
 
 // GetChatMemberCount - Use this method to get the number of members in a chat. Returns Int on success.
-func (b *Bot) GetChatMemberCount(params GetChatMemberCountParams) error {
+func (b *Bot) GetChatMemberCount(params *GetChatMemberCountParams) error {
 	err := b.performRequest("getChatMemberCount", params, nil)
 	if err != nil {
 		return fmt.Errorf("getChatMemberCount(): %w", err)
@@ -1637,7 +1632,7 @@ type GetChatMemberParams struct {
 
 // GetChatMember - Use this method to get information about a member of a chat. Returns a ChatMember
 // (#chatmember) object on success.
-func (b *Bot) GetChatMember(params GetChatMemberParams) error {
+func (b *Bot) GetChatMember(params *GetChatMemberParams) error {
 	err := b.performRequest("getChatMember", params, nil)
 	if err != nil {
 		return fmt.Errorf("getChatMember(): %w", err)
@@ -1660,7 +1655,7 @@ type SetChatStickerSetParams struct {
 // administrator in the chat for this to work and must have the appropriate admin rights. Use the field
 // can_set_sticker_set optionally returned in getChat (#getchat) requests to check if the bot can use this
 // method. Returns True on success.
-func (b *Bot) SetChatStickerSet(params SetChatStickerSetParams) error {
+func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
 	err := b.performRequest("setChatStickerSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("setChatStickerSet(): %w", err)
@@ -1680,7 +1675,7 @@ type DeleteChatStickerSetParams struct {
 // administrator in the chat for this to work and must have the appropriate admin rights. Use the field
 // can_set_sticker_set optionally returned in getChat (#getchat) requests to check if the bot can use this
 // method. Returns True on success.
-func (b *Bot) DeleteChatStickerSet(params DeleteChatStickerSetParams) error {
+func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
 	err := b.performRequest("deleteChatStickerSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("deleteChatStickerSet(): %w", err)
@@ -1719,7 +1714,7 @@ type SetMyCommandsParams struct {
 // SetMyCommands - Use this method to change the list of the bot's commands. See
 // https://core.telegram.org/bots#commands (https://core.telegram.org/bots#commands) for more details about bot
 // commands. Returns True on success.
-func (b *Bot) SetMyCommands(params SetMyCommandsParams) error {
+func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
 	err := b.performRequest("setMyCommands", params, nil)
 	if err != nil {
 		return fmt.Errorf("setMyCommands(): %w", err)
@@ -1742,7 +1737,7 @@ type DeleteMyCommandsParams struct {
 // DeleteMyCommands - Use this method to delete the list of the bot's commands for the given scope and user
 // language. After deletion, higher level commands (#determining-list-of-commands) will be shown to affected
 // users. Returns True on success.
-func (b *Bot) DeleteMyCommands(params DeleteMyCommandsParams) error {
+func (b *Bot) DeleteMyCommands(params *DeleteMyCommandsParams) error {
 	err := b.performRequest("deleteMyCommands", params, nil)
 	if err != nil {
 		return fmt.Errorf("deleteMyCommands(): %w", err)
@@ -1764,7 +1759,7 @@ type GetMyCommandsParams struct {
 // GetMyCommands - Use this method to get the current list of the bot's commands for the given scope and user
 // language. Returns Array of BotCommand (#botcommand) on success. If commands aren't set, an empty list is
 // returned.
-func (b *Bot) GetMyCommands(params GetMyCommandsParams) error {
+func (b *Bot) GetMyCommands(params *GetMyCommandsParams) error {
 	err := b.performRequest("getMyCommands", params, nil)
 	if err != nil {
 		return fmt.Errorf("getMyCommands(): %w", err)
@@ -1807,7 +1802,7 @@ type EditMessageTextParams struct {
 
 // EditMessageText - Use this method to edit text and game (#games) messages. On success, if the edited
 // message is not an inline message, the edited Message (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageText(params EditMessageTextParams) error {
+func (b *Bot) EditMessageText(params *EditMessageTextParams) error {
 	err := b.performRequest("editMessageText", params, nil)
 	if err != nil {
 		return fmt.Errorf("editMessageText(): %w", err)
@@ -1847,7 +1842,7 @@ type EditMessageCaptionParams struct {
 
 // EditMessageCaption - Use this method to edit captions of messages. On success, if the edited message is
 // not an inline message, the edited Message (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageCaption(params EditMessageCaptionParams) error {
+func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) error {
 	err := b.performRequest("editMessageCaption", params, nil)
 	if err != nil {
 		return fmt.Errorf("editMessageCaption(): %w", err)
@@ -1882,7 +1877,7 @@ type EditMessageMediaParams struct {
 // document for document albums and to a photo or a video otherwise. When an inline message is edited, a new
 // file can't be uploaded. Use a previously uploaded file via its file_id or specify a URL. On success, if the
 // edited message was sent by the bot, the edited Message (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageMedia(params EditMessageMediaParams) error {
+func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) error {
 	err := b.performRequest("editMessageMedia", params, nil)
 	if err != nil {
 		return fmt.Errorf("editMessageMedia(): %w", err)
@@ -1912,7 +1907,7 @@ type EditMessageReplyMarkupParams struct {
 // EditMessageReplyMarkup - Use this method to edit only the reply markup of messages. On success, if the
 // edited message is not an inline message, the edited Message (#message) is returned, otherwise True is
 // returned.
-func (b *Bot) EditMessageReplyMarkup(params EditMessageReplyMarkupParams) error {
+func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) error {
 	err := b.performRequest("editMessageReplyMarkup", params, nil)
 	if err != nil {
 		return fmt.Errorf("editMessageReplyMarkup(): %w", err)
@@ -1937,7 +1932,7 @@ type StopPollParams struct {
 
 // StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll (#poll)
 // with the final results is returned.
-func (b *Bot) StopPoll(params StopPollParams) error {
+func (b *Bot) StopPoll(params *StopPollParams) error {
 	err := b.performRequest("stopPoll", params, nil)
 	if err != nil {
 		return fmt.Errorf("stopPoll(): %w", err)
@@ -1963,7 +1958,7 @@ type DeleteMessageParams struct {
 // can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a
 // group, it can delete any message there.- If the bot has can_delete_messages permission in a supergroup or a
 // channel, it can delete any message there.Returns True on success.
-func (b *Bot) DeleteMessage(params DeleteMessageParams) error {
+func (b *Bot) DeleteMessage(params *DeleteMessageParams) error {
 	err := b.performRequest("deleteMessage", params, nil)
 	if err != nil {
 		return fmt.Errorf("deleteMessage(): %w", err)
@@ -1972,7 +1967,6 @@ func (b *Bot) DeleteMessage(params DeleteMessageParams) error {
 	return nil
 }
 
-/*
 // SendStickerParams - Represents parameters of sendSticker method.
 type SendStickerParams struct {
 	// ChatId - Unique identifier for the target chat or username of the target channel (in the format
@@ -1982,7 +1976,7 @@ type SendStickerParams struct {
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a
 	// new one using multipart/form-data. More info on Sending Files » (#sending-files)
-	Sticker InputFile or String `json:"sticker"`
+	Sticker InputFile `json:"sticker"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -2005,7 +1999,7 @@ type SendStickerParams struct {
 // SendSticker - Use this method to send static .WEBP or animated
 // (https://telegram.org/blog/animated-stickers) .TGS stickers. On success, the sent Message (#message) is
 // returned.
-func (b *Bot) SendSticker(params SendStickerParams) error {
+func (b *Bot) SendSticker(params *SendStickerParams) error {
 	err := b.performRequest("sendSticker", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendSticker(): %w", err)
@@ -2013,8 +2007,6 @@ func (b *Bot) SendSticker(params SendStickerParams) error {
 
 	return nil
 }
-
-*/
 
 // GetStickerSetParams - Represents parameters of getStickerSet method.
 type GetStickerSetParams struct {
@@ -2024,7 +2016,7 @@ type GetStickerSetParams struct {
 
 // GetStickerSet - Use this method to get a sticker set. On success, a StickerSet (#stickerset) object is
 // returned.
-func (b *Bot) GetStickerSet(params GetStickerSetParams) error {
+func (b *Bot) GetStickerSet(params *GetStickerSetParams) error {
 	err := b.performRequest("getStickerSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("getStickerSet(): %w", err)
@@ -2046,7 +2038,7 @@ type UploadStickerFileParams struct {
 // UploadStickerFile - Use this method to upload a .PNG file with a sticker for later use in
 // createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File
 // (#file) on success.
-func (b *Bot) UploadStickerFile(params UploadStickerFileParams) error {
+func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) error {
 	err := b.performRequest("uploadStickerFile", params, nil)
 	if err != nil {
 		return fmt.Errorf("uploadStickerFile(): %w", err)
@@ -2055,7 +2047,6 @@ func (b *Bot) UploadStickerFile(params UploadStickerFileParams) error {
 	return nil
 }
 
-/*
 // CreateNewStickerSetParams - Represents parameters of createNewStickerSet method.
 type CreateNewStickerSetParams struct {
 	// UserId - User identifier of created sticker set owner
@@ -2073,7 +2064,7 @@ type CreateNewStickerSetParams struct {
 	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
 	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
 	// Internet, or upload a new one using multipart/form-data. More info on Sending Files » (#sending-files)
-	PngSticker *InputFile or String `json:"png_sticker,omitempty"`
+	PngSticker *InputFile `json:"png_sticker,omitempty"`
 
 	// TgsSticker - Optional. TGS animation with the sticker, uploaded using multipart/form-data. See
 	// https://core.telegram.org/animated_stickers#technical-requirements
@@ -2093,7 +2084,7 @@ type CreateNewStickerSetParams struct {
 // CreateNewStickerSet - Use this method to create a new sticker set owned by a user. The bot will be able to
 // edit the sticker set thus created. You must use exactly one of the fields png_sticker or tgs_sticker. Returns
 // True on success.
-func (b *Bot) CreateNewStickerSet(params CreateNewStickerSetParams) error {
+func (b *Bot) CreateNewStickerSet(params *CreateNewStickerSetParams) error {
 	err := b.performRequest("createNewStickerSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("createNewStickerSet(): %w", err)
@@ -2114,7 +2105,7 @@ type AddStickerToSetParams struct {
 	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
 	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
 	// Internet, or upload a new one using multipart/form-data. More info on Sending Files » (#sending-files)
-	PngSticker *InputFile or String `json:"png_sticker,omitempty"`
+	PngSticker *InputFile `json:"png_sticker,omitempty"`
 
 	// TgsSticker - Optional. TGS animation with the sticker, uploaded using multipart/form-data. See
 	// https://core.telegram.org/animated_stickers#technical-requirements
@@ -2132,7 +2123,7 @@ type AddStickerToSetParams struct {
 // one of the fields png_sticker or tgs_sticker. Animated stickers can be added to animated sticker sets and
 // only to them. Animated sticker sets can have up to 50 stickers. Static sticker sets can have up to 120
 // stickers. Returns True on success.
-func (b *Bot) AddStickerToSet(params AddStickerToSetParams) error {
+func (b *Bot) AddStickerToSet(params *AddStickerToSetParams) error {
 	err := b.performRequest("addStickerToSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("addStickerToSet(): %w", err)
@@ -2140,8 +2131,6 @@ func (b *Bot) AddStickerToSet(params AddStickerToSetParams) error {
 
 	return nil
 }
-
-*/
 
 // SetStickerPositionInSetParams - Represents parameters of setStickerPositionInSet method.
 type SetStickerPositionInSetParams struct {
@@ -2154,7 +2143,7 @@ type SetStickerPositionInSetParams struct {
 
 // SetStickerPositionInSet - Use this method to move a sticker in a set created by the bot to a specific
 // position. Returns True on success.
-func (b *Bot) SetStickerPositionInSet(params SetStickerPositionInSetParams) error {
+func (b *Bot) SetStickerPositionInSet(params *SetStickerPositionInSetParams) error {
 	err := b.performRequest("setStickerPositionInSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("setStickerPositionInSet(): %w", err)
@@ -2171,7 +2160,7 @@ type DeleteStickerFromSetParams struct {
 
 // DeleteStickerFromSet - Use this method to delete a sticker from a set created by the bot. Returns True on
 // success.
-func (b *Bot) DeleteStickerFromSet(params DeleteStickerFromSetParams) error {
+func (b *Bot) DeleteStickerFromSet(params *DeleteStickerFromSetParams) error {
 	err := b.performRequest("deleteStickerFromSet", params, nil)
 	if err != nil {
 		return fmt.Errorf("deleteStickerFromSet(): %w", err)
@@ -2180,7 +2169,6 @@ func (b *Bot) DeleteStickerFromSet(params DeleteStickerFromSetParams) error {
 	return nil
 }
 
-/*
 // SetStickerSetThumbParams - Represents parameters of setStickerSetThumb method.
 type SetStickerSetThumbParams struct {
 	// Name - Sticker set name
@@ -2197,12 +2185,12 @@ type SetStickerSetThumbParams struct {
 	// HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using
 	// multipart/form-data. More info on Sending Files » (#sending-files). Animated sticker set thumbnail can't be
 	// uploaded via HTTP URL.
-	Thumb *InputFile or String `json:"thumb,omitempty"`
+	Thumb *InputFile `json:"thumb,omitempty"`
 }
 
 // SetStickerSetThumb - Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set
 // for animated sticker sets only. Returns True on success.
-func (b *Bot) SetStickerSetThumb(params SetStickerSetThumbParams) error {
+func (b *Bot) SetStickerSetThumb(params *SetStickerSetThumbParams) error {
 	err := b.performRequest("setStickerSetThumb", params, nil)
 	if err != nil {
 		return fmt.Errorf("setStickerSetThumb(): %w", err)
@@ -2210,8 +2198,6 @@ func (b *Bot) SetStickerSetThumb(params SetStickerSetThumbParams) error {
 
 	return nil
 }
-
-*/
 
 // AnswerInlineQueryParams - Represents parameters of answerInlineQuery method.
 type AnswerInlineQueryParams struct {
@@ -2251,7 +2237,7 @@ type AnswerInlineQueryParams struct {
 
 // AnswerInlineQuery - Use this method to send answers to an inline query. On success, True is returned.No
 // more than 50 results per query are allowed.
-func (b *Bot) AnswerInlineQuery(params AnswerInlineQueryParams) error {
+func (b *Bot) AnswerInlineQuery(params *AnswerInlineQueryParams) error {
 	err := b.performRequest("answerInlineQuery", params, nil)
 	if err != nil {
 		return fmt.Errorf("answerInlineQuery(): %w", err)
@@ -2361,7 +2347,7 @@ type SendInvoiceParams struct {
 }
 
 // SendInvoice - Use this method to send invoices. On success, the sent Message (#message) is returned.
-func (b *Bot) SendInvoice(params SendInvoiceParams) error {
+func (b *Bot) SendInvoice(params *SendInvoiceParams) error {
 	err := b.performRequest("sendInvoice", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendInvoice(): %w", err)
@@ -2391,7 +2377,7 @@ type AnswerShippingQueryParams struct {
 // AnswerShippingQuery - If you sent an invoice requesting a shipping address and the parameter is_flexible
 // was specified, the Bot API will send an Update (#update) with a shipping_query field to the bot. Use this
 // method to reply to shipping queries. On success, True is returned.
-func (b *Bot) AnswerShippingQuery(params AnswerShippingQueryParams) error {
+func (b *Bot) AnswerShippingQuery(params *AnswerShippingQueryParams) error {
 	err := b.performRequest("answerShippingQuery", params, nil)
 	if err != nil {
 		return fmt.Errorf("answerShippingQuery(): %w", err)
@@ -2420,7 +2406,7 @@ type AnswerPreCheckoutQueryParams struct {
 // the final confirmation in the form of an Update (#update) with the field pre_checkout_query. Use this method
 // to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an
 // answer within 10 seconds after the pre-checkout query was sent.
-func (b *Bot) AnswerPreCheckoutQuery(params AnswerPreCheckoutQueryParams) error {
+func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error {
 	err := b.performRequest("answerPreCheckoutQuery", params, nil)
 	if err != nil {
 		return fmt.Errorf("answerPreCheckoutQuery(): %w", err)
@@ -2468,7 +2454,7 @@ type SendGameParams struct {
 }
 
 // SendGame - Use this method to send a game. On success, the sent Message (#message) is returned.
-func (b *Bot) SendGame(params SendGameParams) error {
+func (b *Bot) SendGame(params *SendGameParams) error {
 	err := b.performRequest("sendGame", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendGame(): %w", err)
@@ -2507,7 +2493,7 @@ type SetGameScoreParams struct {
 // SetGameScore - Use this method to set the score of the specified user in a game. On success, if the
 // message was sent by the bot, returns the edited Message (#message), otherwise returns True. Returns an error,
 // if the new score is not greater than the user's current score in the chat and force is False.
-func (b *Bot) SetGameScore(params SetGameScoreParams) error {
+func (b *Bot) SetGameScore(params *SetGameScoreParams) error {
 	err := b.performRequest("setGameScore", params, nil)
 	if err != nil {
 		return fmt.Errorf("setGameScore(): %w", err)
