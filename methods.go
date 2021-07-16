@@ -2,7 +2,13 @@ package telego
 
 import (
 	"fmt"
+	"os"
 )
+
+// fileCompatible - Represents types that can be send as files
+type fileCompatible interface {
+	fileParameters() map[string]*os.File
+}
 
 // GetUpdatesParams - Represents parameters of getUpdates method.
 type GetUpdatesParams struct {
@@ -373,6 +379,17 @@ type SendDocumentParams struct {
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
 	// the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+func (p *SendDocumentParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["document"] = p.Document.File
+	if p.Thumb != nil {
+		fp["thumb"] = p.Thumb.File
+	}
+
+	return fp
 }
 
 // SendDocument - Use this method to send general files. On success, the sent Message (#message) is returned.

@@ -1,6 +1,10 @@
 package telego
 
-import "os"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 // Update - This object (#available-types) represents an incoming update.At most one of the optional parameters
 // can be present in any given update.
@@ -811,6 +815,12 @@ type UserProfilePhotos struct {
 type File struct {
 }
 
+// ReplyMarkup - Represents reply markup (inline keyboard, custom reply keyboard, etc.)
+type ReplyMarkup interface {
+	// ReplyType - Returns type of reply
+	ReplyType() string
+}
+
 // ReplyKeyboardMarkup - This object represents a custom keyboard (https://core.telegram.org/bots#keyboards) with
 // reply options (see Introduction to bots (https://core.telegram.org/bots#keyboards) for details and examples).
 type ReplyKeyboardMarkup struct {
@@ -838,6 +848,11 @@ type ReplyKeyboardMarkup struct {
 	// the bot's language, bot replies to the request with a keyboard to select the new language. Other users in
 	// the group don't see the keyboard.
 	Selective bool `json:"selective,omitempty"`
+}
+
+// ReplyType - Returns ReplyKeyboardMarkup type
+func (i *ReplyKeyboardMarkup) ReplyType() string {
+	return "ReplyKeyboardMarkup"
 }
 
 // KeyboardButton - This object represents one button of the reply keyboard. For simple text buttons String can be
@@ -888,6 +903,11 @@ type ReplyKeyboardRemove struct {
 	Selective bool `json:"selective,omitempty"`
 }
 
+// ReplyType - Returns ReplyKeyboardRemove type
+func (i *ReplyKeyboardRemove) ReplyType() string {
+	return "ReplyKeyboardRemove"
+}
+
 // InlineKeyboardMarkup - This object represents an inline keyboard
 // (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) that appears right next
 // to the message it belongs to.
@@ -895,6 +915,11 @@ type InlineKeyboardMarkup struct {
 	// InlineKeyboard - Array of button rows, each represented by an Array of InlineKeyboardButton
 	// (#inlinekeyboardbutton) objects
 	InlineKeyboard []InlineKeyboardButton `json:"inline_keyboard"`
+}
+
+// ReplyType - Returns InlineKeyboardMarkup type
+func (i *InlineKeyboardMarkup) ReplyType() string {
+	return "InlineKeyboardMarkup"
 }
 
 // InlineKeyboardButton - This object represents one button of an inline keyboard. You must use exactly
@@ -990,6 +1015,11 @@ type ForceReply struct {
 	// Targets: 1) users that are @mentioned in the text of the Message (#message) object; 2) if the bot's message
 	// is a reply (has reply_to_message_id), sender of the original message.
 	Selective bool `json:"selective,omitempty"`
+}
+
+// ReplyType - Returns ForceReply type
+func (i *ForceReply) ReplyType() string {
+	return "ForceReply"
 }
 
 // ChatPhoto - This object represents a chat photo.
@@ -1286,6 +1316,28 @@ type BotCommandScopeAllChatAdministrators struct {
 	Type string `json:"type"`
 }
 
+// ChatID - Represents chat ID as int or string
+type ChatID struct {
+	ID       int64
+	Username string
+}
+
+func (c ChatID) String() string {
+	if c.Username != "" {
+		return c.Username
+	}
+
+	return fmt.Sprintf("%d", c.ID)
+}
+
+func (c ChatID) MarshalJSON() ([]byte, error) {
+	if c.Username != "" {
+		return json.Marshal(c.Username)
+	}
+
+	return json.Marshal(fmt.Sprintf("%d", c.ID))
+}
+
 // BotCommandScopeChat - Represents the scope (#botcommandscope) of bot commands, covering a specific chat.
 type BotCommandScopeChat struct {
 	// Type - Scope type, must be chat
@@ -1520,6 +1572,18 @@ type InputFile struct {
 	File   *os.File
 	FileID string
 	URL    string
+}
+
+func (i *InputFile) MarshalJSON() ([]byte, error) {
+	if i.File != nil {
+		return json.Marshal("")
+	}
+
+	if i.FileID != "" {
+		return json.Marshal(i.FileID)
+	}
+
+	return json.Marshal(i.URL)
 }
 
 // Sticker - This object represents a sticker.
