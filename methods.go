@@ -304,6 +304,12 @@ type SendPhotoParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *SendPhotoParams) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"photo": p.Photo.File,
+	}
+}
+
 // SendPhoto - Use this method to send photos. On success, the sent Message (#message) is returned.
 func (b *Bot) SendPhoto(params *SendPhotoParams) error {
 	err := b.performRequest("sendPhoto", params, nil)
@@ -465,6 +471,17 @@ type SendVideoParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *SendVideoParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["video"] = p.Video.File
+	if p.Thumb != nil {
+		fp["thumb"] = p.Thumb.File
+	}
+
+	return fp
+}
+
 // SendVideo - Use this method to send video files, Telegram clients support mp4 videos (other formats may be
 // sent as Document (#document)). On success, the sent Message (#message) is returned. Bots can currently send
 // video files of up to 50 MB in size, this limit may be changed in the future.
@@ -535,6 +552,17 @@ type SendAnimationParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *SendAnimationParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["animation"] = p.Animation.File
+	if p.Thumb != nil {
+		fp["thumb"] = p.Thumb.File
+	}
+
+	return fp
+}
+
 // SendAnimation - Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On
 // success, the sent Message (#message) is returned. Bots can currently send animation files of up to 50 MB in
 // size, this limit may be changed in the future.
@@ -588,6 +616,12 @@ type SendVoiceParams struct {
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
 	// the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+func (p *SendVoiceParams) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"voice": p.Voice.File,
+	}
 }
 
 // SendVoice - Use this method to send audio files, if you want Telegram clients to display the file as a
@@ -644,6 +678,17 @@ type SendVideoNoteParams struct {
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
 	// the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+func (p *SendVideoNoteParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["video_note"] = p.VideoNote.File
+	if p.Thumb != nil {
+		fp["thumb"] = p.Thumb.File
+	}
+
+	return fp
 }
 
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients
@@ -1416,6 +1461,12 @@ type SetChatPhotoParams struct {
 	Photo InputFile `json:"photo"`
 }
 
+func (p *SetChatPhotoParams) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"photo": p.Photo.File,
+	}
+}
+
 // SetChatPhoto - Use this method to set a new profile photo for the chat. Photos can't be changed for
 // private chats. The bot must be an administrator in the chat for this to work and must have the appropriate
 // admin rights. Returns True on success.
@@ -2011,6 +2062,12 @@ type SendStickerParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *SendStickerParams) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"sticker": p.Sticker.File,
+	}
+}
+
 // SendSticker - Use this method to send static .WEBP or animated
 // (https://telegram.org/blog/animated-stickers) .TGS stickers. On success, the sent Message (#message) is
 // returned.
@@ -2048,6 +2105,12 @@ type UploadStickerFileParams struct {
 	// PngSticker - PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed
 	// 512px, and either width or height must be exactly 512px. More info on Sending Files » (#sending-files)
 	PngSticker InputFile `json:"png_sticker"`
+}
+
+func (p *UploadStickerFileParams) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"png_sticker": p.PngSticker.File,
+	}
 }
 
 // UploadStickerFile - Use this method to upload a .PNG file with a sticker for later use in
@@ -2096,6 +2159,19 @@ type CreateNewStickerSetParams struct {
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
 }
 
+func (p *CreateNewStickerSetParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	if p.PngSticker != nil {
+		fp["png_sticker"] = p.PngSticker.File
+	}
+	if p.TgsSticker != nil {
+		fp["tgs_sticker"] = p.TgsSticker.File
+	}
+
+	return fp
+}
+
 // CreateNewStickerSet - Use this method to create a new sticker set owned by a user. The bot will be able to
 // edit the sticker set thus created. You must use exactly one of the fields png_sticker or tgs_sticker. Returns
 // True on success.
@@ -2132,6 +2208,19 @@ type AddStickerToSetParams struct {
 
 	// MaskPosition - Optional. A JSON-serialized object for position where the mask should be placed on faces
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
+}
+
+func (p *AddStickerToSetParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	if p.PngSticker != nil {
+		fp["png_sticker"] = p.PngSticker.File
+	}
+	if p.TgsSticker != nil {
+		fp["tgs_sticker"] = p.TgsSticker.File
+	}
+
+	return fp
 }
 
 // AddStickerToSet - Use this method to add a new sticker to a set created by the bot. You must use exactly
@@ -2201,6 +2290,16 @@ type SetStickerSetThumbParams struct {
 	// multipart/form-data. More info on Sending Files » (#sending-files). Animated sticker set thumbnail can't be
 	// uploaded via HTTP URL.
 	Thumb *InputFile `json:"thumb,omitempty"`
+}
+
+func (p *SetStickerSetThumbParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	if p.Thumb != nil {
+		fp["thumb"] = p.Thumb.File
+	}
+
+	return fp
 }
 
 // SetStickerSetThumb - Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set
