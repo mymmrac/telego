@@ -14,6 +14,7 @@ import (
 const methodPattern = `
 <h4><a class="anchor" name="\w+?" href="#\w+?"><i class="anchor-icon"></i></a>([a-z]\w+?)</h4>
 <p>(.+?)</p>
+(?:<p>.+?</p>|)
 .*?
 (?:
 <table class="table">
@@ -46,7 +47,7 @@ func main() {
 	methodPatternReg := regexp.MustCompile(generator.RemoveNewline(methodPattern))
 	paramsPatternReg := regexp.MustCompile(generator.RemoveNewline(paramsPattern))
 
-	file, err := os.Create("methods.go")
+	file, err := os.Create("methods_generated.go")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -120,7 +121,7 @@ func main() {
 
 			fmt.Fprintf(file, "}\n")
 
-			params = fmt.Sprintf("params %s", paramsStructName)
+			params = fmt.Sprintf("params *%s", paramsStructName)
 			paramsOrNil = "params"
 		}
 

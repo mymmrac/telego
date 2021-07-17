@@ -14,6 +14,9 @@ import (
 const typePattern = `
 <h4><a class="anchor" name="\w+?" href="#\w+?"><i class="anchor-icon"></i></a>([A-Z]\w+?)</h4>
 <p>(.+?)</p>
+(?:<div.*?>.+?</div>|)
+(?:<p>.+?</p>|)
+(?:<blockquote>.+?</blockquote>|)
 .*?
 (?:
 <table class="table">
@@ -43,7 +46,7 @@ func main() {
 	typePatternReg := regexp.MustCompile(generator.RemoveNewline(typePattern))
 	fieldPatternReg := regexp.MustCompile(generator.RemoveNewline(fieldPattern))
 
-	file, err := os.Create("types.go")
+	file, err := os.Create("types_generated.go")
 	if err != nil {
 		fmt.Println(err)
 		return

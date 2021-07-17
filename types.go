@@ -785,8 +785,7 @@ type VoiceChatScheduled struct {
 
 // VoiceChatStarted - This object represents a service message about a voice chat started in the chat.
 // Currently holds no information.
-type VoiceChatStarted struct {
-}
+type VoiceChatStarted struct{}
 
 // VoiceChatEnded - This object represents a service message about a voice chat ended in the chat.
 type VoiceChatEnded struct {
@@ -812,7 +811,20 @@ type UserProfilePhotos struct {
 // File - This object represents a file ready to be downloaded. The file can be downloaded via the
 // link https://api.telegram.org/file/bot<token>/<file_path>. It is guaranteed that the link will be valid for
 // at least 1 hour. When the link expires, a new one can be requested by calling getFile (#getfile).
+// Maximum file size to download is 20 MB
 type File struct {
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
+
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for
+	// different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
+
+	// FileSize - Optional. File size, if known
+	FileSize int `json:"file_size,omitempty"`
+
+	// FilePath - Optional. File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
+	FilePath string `json:"file_path,omitempty"`
 }
 
 // ReplyMarkup - Represents reply markup (inline keyboard, custom reply keyboard, etc.)
@@ -966,7 +978,30 @@ type InlineKeyboardButton struct {
 // authorize a user. Serves as a great replacement for the Telegram Login Widget
 // (https://core.telegram.org/widgets/login) when the user is coming from Telegram.
 // All the user needs to do is tap/click a button and confirm that they want to log in:
+// Image: https://core.telegram.org/file/811140015/1734/8VZFkwWXalM.97872/6127fa62d8a0bf2b3c
+// Telegram apps support these buttons as of version 5.7.
+// Sample bot: @discussbot
 type LoginURL struct {
+	// Url - An HTTP URL to be opened with user authorization data added to the query string when the button is
+	// pressed. If the user refuses to provide authorization data, the original URL without information about the
+	// user will be opened. The data added is the same as described in Receiving authorization
+	// data (https://core.telegram.org/widgets/login#receiving-authorization-data).NOTE: You must always check the
+	// hash of the received data to verify the authentication and the integrity of the data as described in Checking
+	// authorization (https://core.telegram.org/widgets/login#checking-authorization).
+	URL string `json:"url"`
+
+	// ForwardText - Optional. New text of the button in forwarded messages.
+	ForwardText string `json:"forward_text,omitempty"`
+
+	// BotUsername - Optional. Username of a bot, which will be used for user authorization.
+	// See Setting up a bot (https://core.telegram.org/widgets/login#setting-up-a-bot) for more details.
+	// If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain
+	// linked with the bot. See Linking your domain to the
+	// bot (https://core.telegram.org/widgets/login#linking-your-domain-to-the-bot) for more details.
+	BotUsername string `json:"bot_username,omitempty"`
+
+	// RequestWriteAccess - Optional. Pass True to request the permission for your bot to send messages to the user.
+	RequestWriteAccess bool `json:"request_write_access,omitempty"`
 }
 
 // CallbackQuery - This object represents an incoming callback query from a callback button in an inline
@@ -974,6 +1009,11 @@ type LoginURL struct {
 // message sent by the bot, the field message will be present. If the button was attached to a message sent via the
 // bot (in inline mode (#inline-mode)), the field inline_message_id will be present. Exactly one of the fields
 // data or game_short_name will be present.
+//
+// NOTE: After the user presses a callback button, Telegram clients will display a progress bar until you call
+// answerCallbackQuery (#answercallbackquery). It is, therefore, necessary to react by calling
+// answerCallbackQuery (#answercallbackquery) even if no notification to the user is
+// needed (e.g., without specifying any of the optional parameters).
 type CallbackQuery struct {
 	// ID - Unique identifier for this query
 	ID string `json:"id"`
@@ -1003,6 +1043,7 @@ type CallbackQuery struct {
 // ForceReply - Upon receiving a message with this object, Telegram clients will display a reply interface to the
 // user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you
 // want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode (/bots#privacy-mode).
+// Example: https://core.telegram.org/bots/api#forcereply
 type ForceReply struct {
 	// ForceReply - Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
 	ForceReply bool `json:"force_reply"`
@@ -1066,7 +1107,14 @@ type ChatInviteLink struct {
 
 // ChatMember - This object contains information about one member of a chat. Currently, the following 6 types of
 // chat members are supported:
+// TODO: Test if works (https://core.telegram.org/bots/api#chatmember)
 type ChatMember struct {
+	*ChatMemberOwner
+	*ChatMemberAdministrator
+	*ChatMemberMember
+	*ChatMemberRestricted
+	*ChatMemberLeft
+	*ChatMemberBanned
 }
 
 // ChatMemberOwner - Represents a chat member (#chatmember) that owns the chat and has all administrator privileges.
@@ -1284,7 +1332,15 @@ type BotCommand struct {
 
 // BotCommandScope - This object represents the scope to which bot commands are applied. Currently,
 // the following 7 scopes are supported:
+// TODO: Test if works (https://core.telegram.org/bots/api#botcommandscope)
 type BotCommandScope struct {
+	*BotCommandScopeDefault
+	*BotCommandScopeAllPrivateChats
+	*BotCommandScopeAllGroupChats
+	*BotCommandScopeAllChatAdministrators
+	*BotCommandScopeChat
+	*BotCommandScopeChatAdministrators
+	*BotCommandScopeChatMember
 }
 
 // BotCommandScopeDefault - Represents the default scope (#botcommandscope) of bot commands.
@@ -1387,10 +1443,17 @@ type ResponseParameters struct {
 }
 
 // InputMedia - This object represents the content of a media message to be sent. It should be one of
+// TODO: Test if works (https://core.telegram.org/bots/api#inputmedia)
 type InputMedia struct {
+	*InputMediaAnimation
+	*InputMediaDocument
+	*InputMediaAudio
+	*InputMediaPhoto
+	*InputMediaVideo
 }
 
 // InputMediaPhoto - Represents a photo to be sent.
+// FIXME: Implement fileCompatible
 type InputMediaPhoto struct {
 	// Type - Type of the result, must be photo
 	Type string `json:"type"`
@@ -1414,6 +1477,7 @@ type InputMediaPhoto struct {
 }
 
 // InputMediaVideo - Represents a video to be sent.
+// FIXME: Implement fileCompatible
 type InputMediaVideo struct {
 	// Type - Type of the result, must be video
 	Type string `json:"type"`
@@ -1456,6 +1520,7 @@ type InputMediaVideo struct {
 }
 
 // InputMediaAnimation - Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
+// FIXME: Implement fileCompatible
 type InputMediaAnimation struct {
 	// Type - Type of the result, must be animation
 	Type string `json:"type"`
@@ -1496,6 +1561,7 @@ type InputMediaAnimation struct {
 }
 
 // InputMediaAudio - Represents an audio file to be treated as music to be sent.
+// FIXME: Implement fileCompatible
 type InputMediaAudio struct {
 	// Type - Type of the result, must be audio
 	Type string `json:"type"`
@@ -1534,6 +1600,7 @@ type InputMediaAudio struct {
 }
 
 // InputMediaDocument - Represents a general file to be sent.
+// FIXME: Implement fileCompatible
 type InputMediaDocument struct {
 	// Type - Type of the result, must be document
 	Type string `json:"type"`
@@ -1585,6 +1652,8 @@ func (i *InputFile) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(i.URL)
 }
+
+// TODO: Continue checking
 
 // Sticker - This object represents a sticker.
 type Sticker struct {
