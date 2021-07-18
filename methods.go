@@ -39,13 +39,14 @@ type GetUpdatesParams struct {
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki
 // (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). An Array of Update (#update) objects is
 // returned.
-func (b *Bot) GetUpdates(params *GetUpdatesParams) error {
-	err := b.performRequest("getUpdates", params, nil)
+func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
+	var updates []Update
+	err := b.performRequest("getUpdates", params, &updates)
 	if err != nil {
-		return fmt.Errorf("getUpdates(): %w", err)
+		return nil, fmt.Errorf("getUpdates(): %w", err)
 	}
 
-	return nil
+	return updates, nil
 }
 
 // SetWebhook - Use this method to specify a url and receive incoming updates via an outgoing webhook.
