@@ -15,6 +15,8 @@ import (
 	"strings"
 )
 
+// TODO: Make use of https://github.com/json-iterator/go
+
 const (
 	defaultAPIURL = "https://api.telegram.org"
 
@@ -204,7 +206,10 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 		}
 
 		if isDirectFile {
-			params := toParams(parameters)
+			params, err := toParams(parameters)
+			if err != nil {
+				return fmt.Errorf("get params: %w", err)
+			}
 
 			resp, err = b.apiRequestMultipartFormData(methodName, params, fileParams)
 			if err != nil {
@@ -237,17 +242,23 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	return nil
 }
 
-func toParams(v interface{}) map[string]string {
+func toParams(v interface{}) (map[string]string, error) {
 	buf := bytes.Buffer{}
-	_ = json.NewEncoder(&buf).Encode(v)
+	err := json.NewEncoder(&buf).Encode(v)
+	if err != nil {
+		return nil, fmt.Errorf("encoding json: %w", err)
+	}
 
 	var m map[string]interface{}
-	_ = json.NewDecoder(strings.NewReader(buf.String())).Decode(&m)
+	err = json.NewDecoder(strings.NewReader(buf.String())).Decode(&m)
+	if err != nil {
+		return nil, fmt.Errorf("decoding json: %w", err)
+	}
 
 	params := make(map[string]string)
 	extractParams(m, "", params)
 
-	return params
+	return params, nil
 }
 
 func extractParams(v1 interface{}, prefix string, params map[string]string) {

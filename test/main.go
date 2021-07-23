@@ -10,29 +10,32 @@ const testToken = "950209960:AAEXV03s6bW5C1O138ydeW8fnYxeG_CcGl4" //nolint:gosec
 func main() {
 	bot, err := telego.NewBot(testToken)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
-	_, err = bot.GetMe()
+	botUser, err := bot.GetMe()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	updParams := &telego.GetUpdatesParams{
-		Offset:  0,
-		Limit:   0,
-		Timeout: 0,
-		//AllowedUpdates: []string{"chat_member"},
-	}
-	upd, err := bot.GetUpdates(updParams)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	for _, u := range upd {
-		fmt.Println(u)
-	}
+	fmt.Println(botUser.Username)
+
+	//updParams := &telego.GetUpdatesParams{
+	//	Offset:  0,
+	//	Limit:   0,
+	//	Timeout: 0,
+	//	//AllowedUpdates: []string{"chat_member"},
+	//}
+	//upd, err := bot.GetUpdates(updParams)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//for _, u := range upd {
+	//	fmt.Println(u)
+	//}
 
 	//file, err := os.Open("doc.txt")
 	//if err != nil {
