@@ -18,7 +18,7 @@ import (
 // TODO: Make use of https://github.com/json-iterator/go
 
 const (
-	defaultAPIURL = "https://api.telegram.org"
+	defaultBotAPIServer = "https://api.telegram.org"
 
 	jsonContentType = "application/json"
 
@@ -34,6 +34,9 @@ var (
 	// ErrInvalidToken - Bot token is invalid according to token regexp
 	ErrInvalidToken = errors.New("invalid token")
 
+	// ErrEmptyBotAPIServer - Provided nil HTTP client
+	ErrEmptyBotAPIServer = errors.New("empty api url")
+
 	// ErrNilHTTPClient - Provided nil HTTP client
 	ErrNilHTTPClient = errors.New("nil http client")
 )
@@ -45,38 +48,40 @@ type Bot struct {
 	client *http.Client
 }
 
-func botCreator(token, apiURL string, client *http.Client) (*Bot, error) {
+// NewBot - Creates new bot
+func NewBot(token string) (*Bot, error) {
 	if !validateToken(token) {
 		return nil, ErrInvalidToken
 	}
-	if client == nil {
-		return nil, ErrNilHTTPClient
-	}
 	return &Bot{
 		token:  token,
-		apiURL: apiURL,
-		client: client,
+		apiURL: defaultBotAPIServer,
+		client: http.DefaultClient,
 	}, nil
 }
 
-// NewBot - Creates new bot
-func NewBot(token string) (*Bot, error) {
-	return botCreator(token, defaultAPIURL, http.DefaultClient)
+func (b *Bot) SetToken(token string) error {
+	if !validateToken(token) {
+		return ErrInvalidToken
+	}
+	b.token = token
+	return nil
 }
 
-// NewBotWithAPI - Creates new bot with API URL
-func NewBotWithAPI(token, apiURL string) (*Bot, error) {
-	return botCreator(token, apiURL, http.DefaultClient)
+func (b *Bot) SetAPIServer(apiURL string) error {
+	if apiURL == "" {
+		return ErrEmptyBotAPIServer
+	}
+	b.apiURL = apiURL
+	return nil
 }
 
-// NewBotWithClient - Creates new bot with HTTP client
-func NewBotWithClient(token string, client *http.Client) (*Bot, error) {
-	return botCreator(token, defaultAPIURL, client)
-}
-
-// NewBotWithAPIAndClient - Creates new bot with API URL and HTTP client
-func NewBotWithAPIAndClient(token, apiURL string, client *http.Client) (*Bot, error) {
-	return botCreator(token, apiURL, client)
+func (b *Bot) SetClient(client *http.Client) error {
+	if client == nil {
+		return ErrNilHTTPClient
+	}
+	b.client = client
+	return nil
 }
 
 type apiResponse struct {

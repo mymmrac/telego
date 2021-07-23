@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	telego "github.com/mymmrac/go-telegram-bot-api"
 )
 
-const testToken = "950209960:AAEXV03s6bW5C1O138ydeW8fnYxeG_CcGl4" //nolint:gosec
-
 func main() {
+	testToken := os.Getenv("TEST_TOKEN")
+
 	bot, err := telego.NewBot(testToken)
 	if err != nil {
 		fmt.Println(err)
