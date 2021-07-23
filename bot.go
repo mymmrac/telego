@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // TODO: Make use of https://github.com/json-iterator/go
@@ -40,6 +42,7 @@ type Bot struct {
 	token  string
 	apiURL string
 	client *http.Client
+	log    *logrus.Logger
 }
 
 // NewBot - Creates new bot
@@ -47,10 +50,19 @@ func NewBot(token string) (*Bot, error) {
 	if !validateToken(token) {
 		return nil, ErrInvalidToken
 	}
+
+	log := logrus.StandardLogger()
+	formatter := new(logrus.TextFormatter)
+	formatter.TimestampFormat = time.RFC1123
+	formatter.FullTimestamp = true
+	log.SetFormatter(formatter)
+	log.SetLevel(logrus.ErrorLevel)
+
 	return &Bot{
 		token:  token,
 		apiURL: defaultBotAPIServer,
 		client: http.DefaultClient,
+		log:    log,
 	}, nil
 }
 
@@ -78,10 +90,22 @@ func (b *Bot) SetClient(client *http.Client) error {
 	return nil
 }
 
+func (b *Bot) DebugMode(is bool) {
+	if is {
+		b.log.SetLevel(logrus.DebugLevel)
+		return
+	}
+	b.log.SetLevel(logrus.ErrorLevel)
+}
+
 type apiResponse struct {
 	Ok     bool            `json:"ok"`
 	Result json.RawMessage `json:"result,omitempty"`
 	APIError
+}
+
+func (a apiResponse) String() string {
+	return fmt.Sprintf("[OK: %t, ERR: %s]: %s", a.Ok, a.APIError.Error(), string(a.Result))
 }
 
 type APIError struct {
@@ -95,7 +119,7 @@ func (a APIError) Error() string {
 		return fmt.Sprintf("%d %s migrate to chat id: %d, retry after: %d",
 			a.ErrorCode, a.Description, a.Parameters.MigrateToChatID, a.Parameters.RetryAfter)
 	}
-	return fmt.Sprintf("%d %s", a.ErrorCode, a.Description)
+	return fmt.Sprintf("%d %q", a.ErrorCode, a.Description)
 }
 
 func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiResponse, error) {
@@ -121,6 +145,8 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
+
+	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
 
 	return apiResp, nil
 }
@@ -183,6 +209,8 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
+
+	b.log.Debug(apiResp.String())
 
 	return apiResp, nil
 }

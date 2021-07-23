@@ -2,6 +2,7 @@ package telego
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 )
@@ -1107,14 +1108,60 @@ type ChatInviteLink struct {
 
 // ChatMember - This object contains information about one member of a chat. Currently, the following 6 types of
 // chat members are supported:
-// TODO: Test if works (https://core.telegram.org/bots/api#chatmember)
-type ChatMember struct {
-	*ChatMemberOwner
-	*ChatMemberAdministrator
-	*ChatMemberMember
-	*ChatMemberRestricted
-	*ChatMemberLeft
-	*ChatMemberBanned
+// ChatMemberOwner
+// ChatMemberAdministrator
+// ChatMemberMember
+// ChatMemberRestricted
+// ChatMemberLeft
+// ChatMemberBanned
+type ChatMember interface {
+	MemberStatus() string
+}
+
+type chatMemberData struct {
+	Data ChatMember
+}
+
+func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
+	var memberStatus struct {
+		Status string `json:"status"`
+	}
+
+	err := json.Unmarshal(bytes, &memberStatus)
+	if err != nil {
+		return err
+	}
+
+	switch memberStatus.Status {
+	case "creator":
+		var cm ChatMemberOwner
+		err = json.Unmarshal(bytes, &cm)
+		c.Data = cm
+	case "administrator":
+		var cm ChatMemberAdministrator
+		err = json.Unmarshal(bytes, &cm)
+		c.Data = cm
+	case "member":
+		var cm ChatMemberMember
+		err = json.Unmarshal(bytes, &cm)
+		c.Data = cm
+	case "restricted":
+		var cm ChatMemberRestricted
+		err = json.Unmarshal(bytes, &cm)
+		c.Data = cm
+	case "left":
+		var cm ChatMemberLeft
+		err = json.Unmarshal(bytes, &cm)
+		c.Data = cm
+	case "kicked":
+		var cm ChatMemberBanned
+		err = json.Unmarshal(bytes, &cm)
+		c.Data = cm
+	default:
+		return errors.New(fmt.Sprintf("unknown member member status: %q", memberStatus.Status))
+	}
+
+	return err
 }
 
 // ChatMemberOwner - Represents a chat member (#chatmember) that owns the chat and has all administrator privileges.
@@ -1126,10 +1173,14 @@ type ChatMemberOwner struct {
 	User User `json:"user"`
 
 	// CustomTitle - Custom title for this user
-	CustomTitle string `json:"custom_title"`
+	CustomTitle string `json:"custom_title,omitempty"`
 
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
+}
+
+func (c ChatMemberOwner) MemberStatus() string {
+	return c.Status
 }
 
 // ChatMemberAdministrator - Represents a chat member (#chatmember) that has some additional privileges.
@@ -1185,6 +1236,10 @@ type ChatMemberAdministrator struct {
 	CanPinMessages bool `json:"can_pin_messages"`
 }
 
+func (c ChatMemberAdministrator) MemberStatus() string {
+	return c.Status
+}
+
 // ChatMemberMember - Represents a chat member (#chatmember) that has no additional privileges or restrictions.
 type ChatMemberMember struct {
 	// Status - The member's status in the chat, always “member”
@@ -1192,6 +1247,10 @@ type ChatMemberMember struct {
 
 	// User - Information about the user
 	User User `json:"user"`
+}
+
+func (c ChatMemberMember) MemberStatus() string {
+	return c.Status
 }
 
 // ChatMemberRestricted - Represents a chat member (#chatmember) that is under certain restrictions in the chat.
@@ -1235,6 +1294,10 @@ type ChatMemberRestricted struct {
 	UntilDate int `json:"until_date"`
 }
 
+func (c ChatMemberRestricted) MemberStatus() string {
+	return c.Status
+}
+
 // ChatMemberLeft - Represents a chat member (#chatmember) that isn't currently a member of the chat,
 // but may join it themselves.
 type ChatMemberLeft struct {
@@ -1243,6 +1306,10 @@ type ChatMemberLeft struct {
 
 	// User - Information about the user
 	User User `json:"user"`
+}
+
+func (c ChatMemberLeft) MemberStatus() string {
+	return c.Status
 }
 
 // ChatMemberBanned - Represents a chat member (#chatmember) that was banned in the chat and can't return to
@@ -1256,6 +1323,10 @@ type ChatMemberBanned struct {
 
 	// UntilDate - Date when restrictions will be lifted for this user; unix time
 	UntilDate int `json:"until_date"`
+}
+
+func (c ChatMemberBanned) MemberStatus() string {
+	return c.Status
 }
 
 // ChatMemberUpdated - This object represents changes in the status of a chat member.
@@ -1332,16 +1403,68 @@ type BotCommand struct {
 
 // BotCommandScope - This object represents the scope to which bot commands are applied. Currently,
 // the following 7 scopes are supported:
-// TODO: Test if works (https://core.telegram.org/bots/api#botcommandscope)
-type BotCommandScope struct {
-	*BotCommandScopeDefault
-	*BotCommandScopeAllPrivateChats
-	*BotCommandScopeAllGroupChats
-	*BotCommandScopeAllChatAdministrators
-	*BotCommandScopeChat
-	*BotCommandScopeChatAdministrators
-	*BotCommandScopeChatMember
+// BotCommandScopeDefault
+// BotCommandScopeAllPrivateChats
+// BotCommandScopeAllGroupChats
+// BotCommandScopeAllChatAdministrators
+// BotCommandScopeChat
+// BotCommandScopeChatAdministrators
+// BotCommandScopeChatMember
+type BotCommandScope interface {
+	ScopeType() string
 }
+
+/* TODO: Check if needed
+type botCommandScopeData struct {
+	Data BotCommandScope
+}
+
+func (b *botCommandScopeData) UnmarshalJSON(bytes []byte) error {
+	var scopeType struct {
+		Type string `json:"type"`
+	}
+
+	err := json.Unmarshal(bytes, &scopeType)
+	if err != nil {
+		return err
+	}
+
+	switch scopeType.Type {
+	case "default":
+		var bcs BotCommandScopeDefault
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	case "all_private_chats":
+		var bcs BotCommandScopeAllPrivateChats
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	case "all_group_chats":
+		var bcs BotCommandScopeAllGroupChats
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	case "all_chat_administrators":
+		var bcs BotCommandScopeAllChatAdministrators
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	case "chat":
+		var bcs BotCommandScopeChat
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	case "chat_administrators":
+		var bcs BotCommandScopeChatAdministrators
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	case "chat_member":
+		var bcs BotCommandScopeChatMember
+		err = json.Unmarshal(bytes, &bcs)
+		b.Data = bcs
+	default:
+		return errors.New("unknown member status")
+	}
+
+	return err
+}
+*/
 
 // BotCommandScopeDefault - Represents the default scope (#botcommandscope) of bot commands.
 // Default commands are used if no commands with a narrower scope (#determining-list-of-commands)
@@ -1351,11 +1474,19 @@ type BotCommandScopeDefault struct {
 	Type string `json:"type"`
 }
 
+func (b BotCommandScopeDefault) ScopeType() string {
+	return b.Type
+}
+
 // BotCommandScopeAllPrivateChats - Represents the scope (#botcommandscope) of bot commands,
 // covering all private chats.
 type BotCommandScopeAllPrivateChats struct {
 	// Type - Scope type, must be all_private_chats
 	Type string `json:"type"`
+}
+
+func (b BotCommandScopeAllPrivateChats) ScopeType() string {
+	return b.Type
 }
 
 // BotCommandScopeAllGroupChats - Represents the scope (#botcommandscope) of bot commands,
@@ -1365,11 +1496,19 @@ type BotCommandScopeAllGroupChats struct {
 	Type string `json:"type"`
 }
 
+func (b BotCommandScopeAllGroupChats) ScopeType() string {
+	return b.Type
+}
+
 // BotCommandScopeAllChatAdministrators - Represents the scope (#botcommandscope) of bot commands,
 // covering all group and supergroup chat administrators.
 type BotCommandScopeAllChatAdministrators struct {
 	// Type - Scope type, must be all_chat_administrators
 	Type string `json:"type"`
+}
+
+func (b BotCommandScopeAllChatAdministrators) ScopeType() string {
+	return b.Type
 }
 
 // ChatID - Represents chat ID as int or string
@@ -1404,6 +1543,10 @@ type BotCommandScopeChat struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
+func (b BotCommandScopeChat) ScopeType() string {
+	return b.Type
+}
+
 // BotCommandScopeChatAdministrators - Represents the scope (#botcommandscope) of bot commands,
 // covering all administrators of a specific group or supergroup chat.
 type BotCommandScopeChatAdministrators struct {
@@ -1413,6 +1556,10 @@ type BotCommandScopeChatAdministrators struct {
 	// ChatID - Unique identifier for the target chat or username of the target
 	// supergroup (in the format @supergroupusername)
 	ChatID ChatID `json:"chat_id"`
+}
+
+func (b BotCommandScopeChatAdministrators) ScopeType() string {
+	return b.Type
 }
 
 // BotCommandScopeChatMember - Represents the scope (#botcommandscope) of bot commands,
@@ -1427,6 +1574,10 @@ type BotCommandScopeChatMember struct {
 
 	// UserID - Unique identifier of the target user
 	UserID int `json:"user_id"`
+}
+
+func (b BotCommandScopeChatMember) ScopeType() string {
+	return b.Type
 }
 
 // ResponseParameters - Contains information about why a request was unsuccessful.
