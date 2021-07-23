@@ -14,6 +14,7 @@ import (
 const methodPattern = `
 <h4><a class="anchor" name="\w+?" href="#\w+?"><i class="anchor-icon"></i></a>([a-z]\w+?)</h4>
 <p>(.+?)</p>
+(?:<blockquote>.+?</blockquote>|)
 (?:<p>.+?</p>|)
 .*?
 (?:

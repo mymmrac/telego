@@ -49,12 +49,42 @@ func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
 	return updates, nil
 }
 
+// SetWebhookParams - Represents parameters of setWebhook method.
+type SetWebhookParams struct {
+	// URL - HTTPS url to send updates to. Use an empty string to remove webhook integration
+	URL string `json:"url"`
+
+	// Certificate - Optional. Upload your public key certificate so that the root certificate in use can be
+	// checked. See our self-signed guide (/bots/self-signed) for details.
+	Certificate *InputFile `json:"certificate,omitempty"`
+
+	// IPAddress - Optional. The fixed IP address which will be used to send webhook requests instead of the IP
+	// address resolved through DNS
+	IPAddress string `json:"ip_address,omitempty"`
+
+	// MaxConnections - Optional. Maximum allowed number of simultaneous HTTPS connections to the webhook for
+	// update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot's server, and higher
+	// values to increase your bot's throughput.
+	MaxConnections int `json:"max_connections,omitempty"`
+
+	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
+	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
+	// these types. See Update (#update) for a complete list of available update types. Specify an empty list to
+	// receive all update types except chat_member (default). If not specified, the previous setting will be
+	// used.Please note that this parameter doesn't affect updates created before the call to the setWebhook, so
+	// unwanted updates may be received for a short period of time.
+	AllowedUpdates []string `json:"allowed_updates,omitempty"`
+
+	// DropPendingUpdates - Optional. Pass True to drop all pending updates
+	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
+}
+
 // SetWebhook - Use this method to specify a url and receive incoming updates via an outgoing webhook.
 // Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing
 // a JSON-serialized Update (#update). In case of an unsuccessful request, we will give up after a reasonable
 // amount of attempts. Returns True on success.
-func (b *Bot) SetWebhook() error {
-	err := b.performRequest("setWebhook", nil, nil)
+func (b *Bot) SetWebhook(params *SetWebhookParams) error {
+	err := b.performRequest("setWebhook", params, nil)
 	if err != nil {
 		return fmt.Errorf("setWebhook(): %w", err)
 	}
@@ -82,13 +112,14 @@ func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
 // GetWebhookInfo - Use this method to get current webhook status. Requires no parameters. On success,
 // returns a WebhookInfo (#webhookinfo) object. If the bot is using getUpdates (#getupdates), will return an
 // object with the url field empty.
-func (b *Bot) GetWebhookInfo() error {
-	err := b.performRequest("getWebhookInfo", nil, nil)
+func (b *Bot) GetWebhookInfo() (*WebhookInfo, error) {
+	var webhookInfo *WebhookInfo
+	err := b.performRequest("getWebhookInfo", nil, &webhookInfo)
 	if err != nil {
-		return fmt.Errorf("getWebhookInfo(): %w", err)
+		return nil, fmt.Errorf("getWebhookInfo(): %w", err)
 	}
 
-	return nil
+	return webhookInfo, nil
 }
 
 // GetMe - A simple method for testing your bot's auth token. Requires no parameters. Returns basic
@@ -168,13 +199,14 @@ type SendMessageParams struct {
 }
 
 // SendMessage - Use this method to send text messages. On success, the sent Message (#message) is returned.
-func (b *Bot) SendMessage(params *SendMessageParams) error {
-	err := b.performRequest("sendMessage", params, nil)
+func (b *Bot) SendMessage(params *SendMessageParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendMessage", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendMessage(): %w", err)
+		return nil, fmt.Errorf("sendMessage(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // ForwardMessageParams - Represents parameters of forwardMessage method.
@@ -197,13 +229,14 @@ type ForwardMessageParams struct {
 
 // ForwardMessage - Use this method to forward messages of any kind. Service messages can't be forwarded. On
 // success, the sent Message (#message) is returned.
-func (b *Bot) ForwardMessage(params *ForwardMessageParams) error {
-	err := b.performRequest("forwardMessage", params, nil)
+func (b *Bot) ForwardMessage(params *ForwardMessageParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("forwardMessage", params, &message)
 	if err != nil {
-		return fmt.Errorf("forwardMessage(): %w", err)
+		return nil, fmt.Errorf("forwardMessage(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // CopyMessageParams - Represents parameters of copyMessage method.
@@ -253,13 +286,14 @@ type CopyMessageParams struct {
 // copied. The method is analogous to the method forwardMessage (#forwardmessage), but the copied message
 // doesn't have a link to the original message. Returns the MessageID (#messageid) of the sent message on
 // success.
-func (b *Bot) CopyMessage(params *CopyMessageParams) error {
-	err := b.performRequest("copyMessage", params, nil)
+func (b *Bot) CopyMessage(params *CopyMessageParams) (*MessageID, error) {
+	var messageID *MessageID
+	err := b.performRequest("copyMessage", params, &messageID)
 	if err != nil {
-		return fmt.Errorf("copyMessage(): %w", err)
+		return nil, fmt.Errorf("copyMessage(): %w", err)
 	}
 
-	return nil
+	return messageID, nil
 }
 
 // SendPhotoParams - Represents parameters of sendPhoto method.
@@ -312,13 +346,14 @@ func (p *SendPhotoParams) fileParameters() map[string]*os.File {
 }
 
 // SendPhoto - Use this method to send photos. On success, the sent Message (#message) is returned.
-func (b *Bot) SendPhoto(params *SendPhotoParams) error {
-	err := b.performRequest("sendPhoto", params, nil)
+func (b *Bot) SendPhoto(params *SendPhotoParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendPhoto", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendPhoto(): %w", err)
+		return nil, fmt.Errorf("sendPhoto(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendAudioParams - Represents parameters of sendAudio method.
@@ -393,13 +428,14 @@ func (p *SendAudioParams) fileParameters() map[string]*os.File {
 // player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message (#message) is returned.
 // Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
 // For sending voice messages, use the SendVoice (https://core.telegram.org/bots/api#sendvoice) method instead.
-func (b *Bot) SendAudio(params *SendAudioParams) error {
-	err := b.performRequest("sendAudio", params, nil)
+func (b *Bot) SendAudio(params *SendAudioParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendAudio", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendAudio(): %w", err)
+		return nil, fmt.Errorf("sendAudio(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendDocumentParams - Represents parameters of sendDocument method.
@@ -553,13 +589,14 @@ func (p *SendVideoParams) fileParameters() map[string]*os.File {
 // SendVideo - Use this method to send video files, Telegram clients support mp4 videos (other formats may be
 // sent as Document (#document)). On success, the sent Message (#message) is returned. Bots can currently send
 // video files of up to 50 MB in size, this limit may be changed in the future.
-func (b *Bot) SendVideo(params *SendVideoParams) error {
-	err := b.performRequest("sendVideo", params, nil)
+func (b *Bot) SendVideo(params *SendVideoParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendVideo", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendVideo(): %w", err)
+		return nil, fmt.Errorf("sendVideo(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendAnimationParams - Represents parameters of sendAnimation method.
@@ -634,13 +671,14 @@ func (p *SendAnimationParams) fileParameters() map[string]*os.File {
 // SendAnimation - Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On
 // success, the sent Message (#message) is returned. Bots can currently send animation files of up to 50 MB in
 // size, this limit may be changed in the future.
-func (b *Bot) SendAnimation(params *SendAnimationParams) error {
-	err := b.performRequest("sendAnimation", params, nil)
+func (b *Bot) SendAnimation(params *SendAnimationParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendAnimation", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendAnimation(): %w", err)
+		return nil, fmt.Errorf("sendAnimation(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendVoiceParams - Represents parameters of sendVoice method.
@@ -696,13 +734,14 @@ func (p *SendVoiceParams) fileParameters() map[string]*os.File {
 // playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats
 // may be sent as Audio (#audio) or Document (#document)). On success, the sent Message (#message) is returned.
 // Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
-func (b *Bot) SendVoice(params *SendVoiceParams) error {
-	err := b.performRequest("sendVoice", params, nil)
+func (b *Bot) SendVoice(params *SendVoiceParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendVoice", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendVoice(): %w", err)
+		return nil, fmt.Errorf("sendVoice(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendVideoNoteParams - Represents parameters of sendVideoNote method.
@@ -762,16 +801,17 @@ func (p *SendVideoNoteParams) fileParameters() map[string]*os.File {
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients
 // support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success,
 // the sent Message (#message) is returned.
-func (b *Bot) SendVideoNote(params *SendVideoNoteParams) error {
-	err := b.performRequest("sendVideoNote", params, nil)
+func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendVideoNote", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendVideoNote(): %w", err)
+		return nil, fmt.Errorf("sendVideoNote(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
-/*
+/* FIXME
 // SendMediaGroupParams - Represents parameters of sendMediaGroup method.
 type SendMediaGroupParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
@@ -853,13 +893,14 @@ type SendLocationParams struct {
 
 // SendLocation - Use this method to send point on the map. On success, the sent Message (#message) is
 // returned.
-func (b *Bot) SendLocation(params *SendLocationParams) error {
-	err := b.performRequest("sendLocation", params, nil)
+func (b *Bot) SendLocation(params *SendLocationParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendLocation", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendLocation(): %w", err)
+		return nil, fmt.Errorf("sendLocation(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
@@ -897,17 +938,20 @@ type EditMessageLiveLocationParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+// TODO: Test
+
 // EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
 // its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
 // (#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited Message
 // (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) error {
-	err := b.performRequest("editMessageLiveLocation", params, nil)
+func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("editMessageLiveLocation", params, &message)
 	if err != nil {
-		return fmt.Errorf("editMessageLiveLocation(): %w", err)
+		return nil, fmt.Errorf("editMessageLiveLocation(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
@@ -929,16 +973,19 @@ type StopMessageLiveLocationParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+// TODO: Test
+
 // StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
 // expires. On success, if the message was sent by the bot, the sent Message (#message) is returned, otherwise
 // True is returned.
-func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) error {
-	err := b.performRequest("stopMessageLiveLocation", params, nil)
+func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("stopMessageLiveLocation", params, &message)
 	if err != nil {
-		return fmt.Errorf("stopMessageLiveLocation(): %w", err)
+		return nil, fmt.Errorf("stopMessageLiveLocation(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendVenueParams - Represents parameters of sendVenue method.
@@ -993,13 +1040,14 @@ type SendVenueParams struct {
 
 // SendVenue - Use this method to send information about a venue. On success, the sent Message (#message) is
 // returned.
-func (b *Bot) SendVenue(params *SendVenueParams) error {
-	err := b.performRequest("sendVenue", params, nil)
+func (b *Bot) SendVenue(params *SendVenueParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendVenue", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendVenue(): %w", err)
+		return nil, fmt.Errorf("sendVenue(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendContactParams - Represents parameters of sendContact method.
@@ -1040,13 +1088,14 @@ type SendContactParams struct {
 }
 
 // SendContact - Use this method to send phone contacts. On success, the sent Message (#message) is returned.
-func (b *Bot) SendContact(params *SendContactParams) error {
-	err := b.performRequest("sendContact", params, nil)
+func (b *Bot) SendContact(params *SendContactParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendContact", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendContact(): %w", err)
+		return nil, fmt.Errorf("sendContact(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendPollParams - Represents parameters of sendPoll method.
@@ -1118,13 +1167,14 @@ type SendPollParams struct {
 }
 
 // SendPoll - Use this method to send a native poll. On success, the sent Message (#message) is returned.
-func (b *Bot) SendPoll(params *SendPollParams) error {
-	err := b.performRequest("sendPoll", params, nil)
+func (b *Bot) SendPoll(params *SendPollParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendPoll", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendPoll(): %w", err)
+		return nil, fmt.Errorf("sendPoll(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SendDiceParams - Represents parameters of sendDice method.
@@ -1159,20 +1209,36 @@ type SendDiceParams struct {
 
 // SendDice - Use this method to send an animated emoji that will display a random value. On success, the
 // sent Message (#message) is returned.
-func (b *Bot) SendDice(params *SendDiceParams) error {
-	err := b.performRequest("sendDice", params, nil)
+func (b *Bot) SendDice(params *SendDiceParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendDice", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendDice(): %w", err)
+		return nil, fmt.Errorf("sendDice(): %w", err)
 	}
 
-	return nil
+	return message, nil
+}
+
+// SendChatActionParams - Represents parameters of sendChatAction method.
+type SendChatActionParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channelusername)
+	ChatID ChatID `json:"chat_id"`
+
+	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
+	// for text messages (#sendmessage), upload_photo for photos (#sendphoto), record_video or upload_video for
+	// videos (#sendvideo), record_voice or upload_voice for voice notes (#sendvoice), upload_document for general
+	// files (#senddocument), find_location for location data (#sendlocation), record_video_note or
+	// upload_video_note for video notes (#sendvideonote).
+	Action string `json:"action"`
 }
 
 // SendChatAction - Use this method when you need to tell the user that something is happening on the bot's
 // side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear
 // its typing status). Returns True on success.
-func (b *Bot) SendChatAction() error {
-	err := b.performRequest("sendChatAction", nil, nil)
+// We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive.
+func (b *Bot) SendChatAction(params *SendChatActionParams) error {
+	err := b.performRequest("sendChatAction", params, nil)
 	if err != nil {
 		return fmt.Errorf("sendChatAction(): %w", err)
 	}
@@ -1196,13 +1262,14 @@ type GetUserProfilePhotosParams struct {
 
 // GetUserProfilePhotos - Use this method to get a list of profile pictures for a user. Returns a
 // UserProfilePhotos (#userprofilephotos) object.
-func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) error {
-	err := b.performRequest("getUserProfilePhotos", params, nil)
+func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) (*UserProfilePhotos, error) {
+	var userProfilePhotos *UserProfilePhotos
+	err := b.performRequest("getUserProfilePhotos", params, &userProfilePhotos)
 	if err != nil {
-		return fmt.Errorf("getUserProfilePhotos(): %w", err)
+		return nil, fmt.Errorf("getUserProfilePhotos(): %w", err)
 	}
 
-	return nil
+	return userProfilePhotos, nil
 }
 
 // GetFileParams - Represents parameters of getFile method.
@@ -1216,13 +1283,14 @@ type GetFileParams struct {
 // then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is
 // taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link
 // expires, a new one can be requested by calling getFile (#getfile) again.
-func (b *Bot) GetFile(params *GetFileParams) error {
-	err := b.performRequest("getFile", params, nil)
+func (b *Bot) GetFile(params *GetFileParams) (*File, error) {
+	var file *File
+	err := b.performRequest("getFile", params, &file)
 	if err != nil {
-		return fmt.Errorf("getFile(): %w", err)
+		return nil, fmt.Errorf("getFile(): %w", err)
 	}
 
-	return nil
+	return file, nil
 }
 
 // BanChatMemberParams - Represents parameters of banChatMember method.

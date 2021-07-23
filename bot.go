@@ -33,12 +33,6 @@ func validateToken(token string) bool {
 var (
 	// ErrInvalidToken - Bot token is invalid according to token regexp
 	ErrInvalidToken = errors.New("invalid token")
-
-	// ErrEmptyBotAPIServer - Provided nil HTTP client
-	ErrEmptyBotAPIServer = errors.New("empty api url")
-
-	// ErrNilHTTPClient - Provided nil HTTP client
-	ErrNilHTTPClient = errors.New("nil http client")
 )
 
 // Bot - Represents telegram bot
@@ -70,7 +64,7 @@ func (b *Bot) SetToken(token string) error {
 
 func (b *Bot) SetAPIServer(apiURL string) error {
 	if apiURL == "" {
-		return ErrEmptyBotAPIServer
+		return errors.New("empty bot api server url")
 	}
 	b.apiURL = apiURL
 	return nil
@@ -78,7 +72,7 @@ func (b *Bot) SetAPIServer(apiURL string) error {
 
 func (b *Bot) SetClient(client *http.Client) error {
 	if client == nil {
-		return ErrNilHTTPClient
+		return errors.New("nil http client")
 	}
 	b.client = client
 	return nil

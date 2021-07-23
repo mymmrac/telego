@@ -982,7 +982,7 @@ type InlineKeyboardButton struct {
 // Telegram apps support these buttons as of version 5.7.
 // Sample bot: @discussbot
 type LoginURL struct {
-	// Url - An HTTP URL to be opened with user authorization data added to the query string when the button is
+	// URL - An HTTP URL to be opened with user authorization data added to the query string when the button is
 	// pressed. If the user refuses to provide authorization data, the original URL without information about the
 	// user will be opened. The data added is the same as described in Receiving authorization
 	// data (https://core.telegram.org/widgets/login#receiving-authorization-data).NOTE: You must always check the
