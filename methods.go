@@ -2004,13 +2004,14 @@ type GetMyCommandsParams struct {
 // GetMyCommands - Use this method to get the current list of the bot's commands for the given scope and user
 // language. Returns Array of BotCommand (#botcommand) on success. If commands aren't set, an empty list is
 // returned.
-func (b *Bot) GetMyCommands(params *GetMyCommandsParams) error {
-	err := b.performRequest("getMyCommands", params, nil)
+func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
+	var botCommands []BotCommand
+	err := b.performRequest("getMyCommands", params, &botCommands)
 	if err != nil {
-		return fmt.Errorf("getMyCommands(): %w", err)
+		return nil, fmt.Errorf("getMyCommands(): %w", err)
 	}
 
-	return nil
+	return botCommands, nil
 }
 
 // EditMessageTextParams - Represents parameters of editMessageText method.
