@@ -5,11 +5,6 @@ import (
 	"os"
 )
 
-// fileCompatible - Represents types that can be send as files
-type fileCompatible interface {
-	fileParameters() map[string]*os.File
-}
-
 // GetUpdatesParams - Represents parameters of getUpdates method.
 type GetUpdatesParams struct {
 	// Offset - Optional. Identifier of the first update to be returned. Must be greater by one than the highest
@@ -811,7 +806,8 @@ func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 	return message, nil
 }
 
-/* FIXME
+// FIXME
+/*
 // SendMediaGroupParams - Represents parameters of sendMediaGroup method.
 type SendMediaGroupParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
@@ -819,7 +815,7 @@ type SendMediaGroupParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// Media - A JSON-serialized array describing messages to be sent, must include 2-10 items
-	Media []InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo `json:"media"`
+	Media []InputMedia `json:"media"`
 
 	// DisableNotification - Optional. Sends messages silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -833,16 +829,29 @@ type SendMediaGroupParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 }
 
+//func (p *SendMediaGroupParams) fileParameters() map[string]*os.File {
+//	fp := make(map[string]*os.File)
+//
+//	for i, m := range p.Media {
+//		for k, v := range m.fileParameters(){
+//			fp[fmt.Sprintf("media-%d-%s", i, k)] = v
+//		}
+//	}
+//
+//	return fp
+//}
+
 // SendMediaGroup - Use this method to send a group of photos, videos, documents or audios as an album.
 // Documents and audio files can be only grouped in an album with messages of the same type. On success, an
 // array of Messages (#message) that were sent is returned.
-func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) error {
-	err := b.performRequest("sendMediaGroup", params, nil)
+func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) ([]Message, error) {
+	var messages []Message
+	err := b.performRequest("sendMediaGroup", params, &messages)
 	if err != nil {
-		return fmt.Errorf("sendMediaGroup(): %w", err)
+		return nil, fmt.Errorf("sendMediaGroup(): %w", err)
 	}
 
-	return nil
+	return messages, nil
 }
 */
 
@@ -2099,6 +2108,8 @@ func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, er
 	return message, nil
 }
 
+// FIXME
+/*
 // EditMessageMediaParams - Represents parameters of editMessageMedia method.
 type EditMessageMediaParams struct {
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
@@ -2134,6 +2145,7 @@ func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error)
 
 	return message, nil
 }
+*/
 
 // EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
 type EditMessageReplyMarkupParams struct {

@@ -1593,18 +1593,45 @@ type ResponseParameters struct {
 	RetryAfter int `json:"retry_after,omitempty"`
 }
 
-// InputMedia - This object represents the content of a media message to be sent. It should be one of
-// TODO: Test if works (https://core.telegram.org/bots/api#inputmedia)
-type InputMedia struct {
-	*InputMediaAnimation
-	*InputMediaDocument
-	*InputMediaAudio
-	*InputMediaPhoto
-	*InputMediaVideo
+// fileCompatible - Represents types that can be send as files
+type fileCompatible interface {
+	fileParameters() map[string]*os.File
+}
+
+// InputFile - This object represents the contents of a file to be uploaded. Must be posted using
+// multipart/form-data in the usual way that files are uploaded via the browser.
+type InputFile struct {
+	File   *os.File
+	FileID string
+	URL    string
+}
+
+func (i InputFile) MarshalJSON() ([]byte, error) {
+	if i.File != nil {
+		return json.Marshal("")
+	}
+
+	if i.FileID != "" {
+		return json.Marshal(i.FileID)
+	}
+
+	return json.Marshal(i.URL)
+}
+
+// FIXME
+
+// InputMedia - This object represents the content of a media message to be sent. It should be one of:
+// InputMediaAnimation
+// InputMediaDocument
+// InputMediaAudio
+// InputMediaPhoto
+// InputMediaVideo
+type InputMedia interface {
+	MediaType() string
+	fileCompatible
 }
 
 // InputMediaPhoto - Represents a photo to be sent.
-// FIXME: Implement fileCompatible
 type InputMediaPhoto struct {
 	// Type - Type of the result, must be photo
 	Type string `json:"type"`
@@ -1613,7 +1640,7 @@ type InputMediaPhoto struct {
 	// pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>”
 	// to upload a new one using multipart/form-data under <file_attach_name> name.
 	// More info on Sending Files » (#sending-files)
-	Media string `json:"media"`
+	Media InputFile `json:"media"`
 
 	// Caption - Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -1627,8 +1654,17 @@ type InputMediaPhoto struct {
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 }
 
+func (i InputMediaPhoto) MediaType() string {
+	return "photo"
+}
+
+func (i InputMediaPhoto) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"media": i.Media.File,
+	}
+}
+
 // InputMediaVideo - Represents a video to be sent.
-// FIXME: Implement fileCompatible
 type InputMediaVideo struct {
 	// Type - Type of the result, must be video
 	Type string `json:"type"`
@@ -1670,8 +1706,22 @@ type InputMediaVideo struct {
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 }
 
+func (i InputMediaVideo) MediaType() string {
+	return "video"
+}
+
+func (i InputMediaVideo) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["media"] = i.Media.File
+	if i.Thumb != nil {
+		fp["thumb"] = i.Thumb.File
+	}
+
+	return fp
+}
+
 // InputMediaAnimation - Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
-// FIXME: Implement fileCompatible
 type InputMediaAnimation struct {
 	// Type - Type of the result, must be animation
 	Type string `json:"type"`
@@ -1711,8 +1761,22 @@ type InputMediaAnimation struct {
 	Duration int `json:"duration,omitempty"`
 }
 
+func (i InputMediaAnimation) MediaType() string {
+	return "animation"
+}
+
+func (i InputMediaAnimation) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["media"] = i.Media.File
+	if i.Thumb != nil {
+		fp["thumb"] = i.Thumb.File
+	}
+
+	return fp
+}
+
 // InputMediaAudio - Represents an audio file to be treated as music to be sent.
-// FIXME: Implement fileCompatible
 type InputMediaAudio struct {
 	// Type - Type of the result, must be audio
 	Type string `json:"type"`
@@ -1750,8 +1814,22 @@ type InputMediaAudio struct {
 	Title string `json:"title,omitempty"`
 }
 
+func (i InputMediaAudio) MediaType() string {
+	return "audio"
+}
+
+func (i InputMediaAudio) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["media"] = i.Media.File
+	if i.Thumb != nil {
+		fp["thumb"] = i.Thumb.File
+	}
+
+	return fp
+}
+
 // InputMediaDocument - Represents a general file to be sent.
-// FIXME: Implement fileCompatible
 type InputMediaDocument struct {
 	// Type - Type of the result, must be document
 	Type string `json:"type"`
@@ -1784,24 +1862,19 @@ type InputMediaDocument struct {
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
 }
 
-// InputFile - This object represents the contents of a file to be uploaded. Must be posted using
-// multipart/form-data in the usual way that files are uploaded via the browser.
-type InputFile struct {
-	File   *os.File
-	FileID string
-	URL    string
+func (i InputMediaDocument) MediaType() string {
+	return "document"
 }
 
-func (i *InputFile) MarshalJSON() ([]byte, error) {
-	if i.File != nil {
-		return json.Marshal("")
+func (i InputMediaDocument) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	fp["media"] = i.Media.File
+	if i.Thumb != nil {
+		fp["thumb"] = i.Thumb.File
 	}
 
-	if i.FileID != "" {
-		return json.Marshal(i.FileID)
-	}
-
-	return json.Marshal(i.URL)
+	return fp
 }
 
 // TODO: Continue checking

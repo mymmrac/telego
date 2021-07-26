@@ -158,12 +158,12 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 	buffer := &bytes.Buffer{}
 	writer := multipart.NewWriter(buffer)
 
-	for filed, file := range fileParameters {
+	for field, file := range fileParameters {
 		if file == nil {
 			continue
 		}
 
-		wr, err := writer.CreateFormFile(filed, file.Name())
+		wr, err := writer.CreateFormFile(field, file.Name())
 		if err != nil {
 			return nil, err
 		}
@@ -303,6 +303,9 @@ func extractParams(v1 interface{}, prefix string, params map[string]string) {
 			extractParams(v3, prefix+"."+strconv.Itoa(i), params)
 		}
 	default:
-		params[prefix] = fmt.Sprintf("%v", v2)
+		value := fmt.Sprintf("%v", v2)
+		if value != "" {
+			params[prefix] = value
+		}
 	}
 }
