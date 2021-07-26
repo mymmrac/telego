@@ -1511,7 +1511,7 @@ func (b BotCommandScopeAllChatAdministrators) ScopeType() string {
 	return b.Type
 }
 
-// ChatID - Represents chat ID as int or string
+// ChatID - Represents chat ID as int64 or string
 type ChatID struct {
 	ID       int64
 	Username string
@@ -1903,6 +1903,8 @@ type InlineQuery struct {
 	// Location - Optional. Sender location, only for bots that request user location
 	Location *Location `json:"location,omitempty"`
 }
+
+// FIXME
 
 // InlineQueryResult - This object represents one result of an inline query. Telegram clients currently
 // support results of the following 20 types:
@@ -3074,6 +3076,8 @@ type EncryptedCredentials struct {
 	// Secret - Base64-encoded secret, encrypted with the bot's public RSA key, required for data decryption
 	Secret string `json:"secret"`
 }
+
+// FIXME
 
 // PassportElementError - This object represents an error in the Telegram Passport element which was submitted
 // that should be resolved by the user. It should be one of:

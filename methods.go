@@ -1249,7 +1249,7 @@ func (b *Bot) SendChatAction(params *SendChatActionParams) error {
 // GetUserProfilePhotosParams - Represents parameters of getUserProfilePhotos method.
 type GetUserProfilePhotosParams struct {
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// Offset - Optional. Sequential number of the first photo to be returned. By default, all photos are
 	// returned.
@@ -1300,7 +1300,7 @@ type BanChatMemberParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// UntilDate - Optional. Date when the user will be unbanned, unix time. If user is banned for more than 366
 	// days or less than 30 seconds from the current time they are considered to be banned forever. Applied for
@@ -1333,7 +1333,7 @@ type UnbanChatMemberParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// OnlyIfBanned - Optional. Do nothing if the user is not banned
 	OnlyIfBanned bool `json:"only_if_banned,omitempty"`
@@ -1360,7 +1360,7 @@ type RestrictChatMemberParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// Permissions - A JSON-serialized object for new user permissions
 	Permissions ChatPermissions `json:"permissions"`
@@ -1390,7 +1390,7 @@ type PromoteChatMemberParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// IsAnonymous - Optional. Pass True, if the administrator's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous,omitempty"`
@@ -1450,7 +1450,7 @@ type SetChatAdministratorCustomTitleParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// CustomTitle - New custom title for the administrator; 0-16 characters, emoji are not allowed
 	CustomTitle string `json:"custom_title"`
@@ -1847,7 +1847,7 @@ type GetChatMemberParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 }
 
 // GetChatMember - Use this method to get information about a member of a chat. Returns a ChatMember
@@ -2048,13 +2048,14 @@ type EditMessageTextParams struct {
 
 // EditMessageText - Use this method to edit text and game (#games) messages. On success, if the edited
 // message is not an inline message, the edited Message (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageText(params *EditMessageTextParams) error {
-	err := b.performRequest("editMessageText", params, nil)
+func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("editMessageText", params, &message)
 	if err != nil {
-		return fmt.Errorf("editMessageText(): %w", err)
+		return nil, fmt.Errorf("editMessageText(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // EditMessageCaptionParams - Represents parameters of editMessageCaption method.
@@ -2088,13 +2089,14 @@ type EditMessageCaptionParams struct {
 
 // EditMessageCaption - Use this method to edit captions of messages. On success, if the edited message is
 // not an inline message, the edited Message (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) error {
-	err := b.performRequest("editMessageCaption", params, nil)
+func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("editMessageCaption", params, &message)
 	if err != nil {
-		return fmt.Errorf("editMessageCaption(): %w", err)
+		return nil, fmt.Errorf("editMessageCaption(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // EditMessageMediaParams - Represents parameters of editMessageMedia method.
@@ -2123,13 +2125,14 @@ type EditMessageMediaParams struct {
 // document for document albums and to a photo or a video otherwise. When an inline message is edited, a new
 // file can't be uploaded. Use a previously uploaded file via its file_id or specify a URL. On success, if the
 // edited message was sent by the bot, the edited Message (#message) is returned, otherwise True is returned.
-func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) error {
-	err := b.performRequest("editMessageMedia", params, nil)
+func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("editMessageMedia", params, &message)
 	if err != nil {
-		return fmt.Errorf("editMessageMedia(): %w", err)
+		return nil, fmt.Errorf("editMessageMedia(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
@@ -2153,13 +2156,14 @@ type EditMessageReplyMarkupParams struct {
 // EditMessageReplyMarkup - Use this method to edit only the reply markup of messages. On success, if the
 // edited message is not an inline message, the edited Message (#message) is returned, otherwise True is
 // returned.
-func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) error {
-	err := b.performRequest("editMessageReplyMarkup", params, nil)
+func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("editMessageReplyMarkup", params, &message)
 	if err != nil {
-		return fmt.Errorf("editMessageReplyMarkup(): %w", err)
+		return nil, fmt.Errorf("editMessageReplyMarkup(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // StopPollParams - Represents parameters of stopPoll method.
@@ -2178,13 +2182,14 @@ type StopPollParams struct {
 
 // StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll (#poll)
 // with the final results is returned.
-func (b *Bot) StopPoll(params *StopPollParams) error {
-	err := b.performRequest("stopPoll", params, nil)
+func (b *Bot) StopPoll(params *StopPollParams) (*Poll, error) {
+	var poll *Poll
+	err := b.performRequest("stopPoll", params, &poll)
 	if err != nil {
-		return fmt.Errorf("stopPoll(): %w", err)
+		return nil, fmt.Errorf("stopPoll(): %w", err)
 	}
 
-	return nil
+	return poll, nil
 }
 
 // DeleteMessageParams - Represents parameters of deleteMessage method.
@@ -2251,13 +2256,14 @@ func (p *SendStickerParams) fileParameters() map[string]*os.File {
 // SendSticker - Use this method to send static .WEBP or animated
 // (https://telegram.org/blog/animated-stickers) .TGS stickers. On success, the sent Message (#message) is
 // returned.
-func (b *Bot) SendSticker(params *SendStickerParams) error {
-	err := b.performRequest("sendSticker", params, nil)
+func (b *Bot) SendSticker(params *SendStickerParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendSticker", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendSticker(): %w", err)
+		return nil, fmt.Errorf("sendSticker(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // GetStickerSetParams - Represents parameters of getStickerSet method.
@@ -2268,19 +2274,20 @@ type GetStickerSetParams struct {
 
 // GetStickerSet - Use this method to get a sticker set. On success, a StickerSet (#stickerset) object is
 // returned.
-func (b *Bot) GetStickerSet(params *GetStickerSetParams) error {
-	err := b.performRequest("getStickerSet", params, nil)
+func (b *Bot) GetStickerSet(params *GetStickerSetParams) (*StickerSet, error) {
+	var stickerSet *StickerSet
+	err := b.performRequest("getStickerSet", params, &stickerSet)
 	if err != nil {
-		return fmt.Errorf("getStickerSet(): %w", err)
+		return nil, fmt.Errorf("getStickerSet(): %w", err)
 	}
 
-	return nil
+	return stickerSet, nil
 }
 
 // UploadStickerFileParams - Represents parameters of uploadStickerFile method.
 type UploadStickerFileParams struct {
 	// UserID - User identifier of sticker file owner
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// PngSticker - PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed
 	// 512px, and either width or height must be exactly 512px. More info on Sending Files » (#sending-files)
@@ -2296,19 +2303,20 @@ func (p *UploadStickerFileParams) fileParameters() map[string]*os.File {
 // UploadStickerFile - Use this method to upload a .PNG file with a sticker for later use in
 // createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File
 // (#file) on success.
-func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) error {
-	err := b.performRequest("uploadStickerFile", params, nil)
+func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) (*File, error) {
+	var file *File
+	err := b.performRequest("uploadStickerFile", params, &file)
 	if err != nil {
-		return fmt.Errorf("uploadStickerFile(): %w", err)
+		return nil, fmt.Errorf("uploadStickerFile(): %w", err)
 	}
 
-	return nil
+	return file, nil
 }
 
 // CreateNewStickerSetParams - Represents parameters of createNewStickerSet method.
 type CreateNewStickerSetParams struct {
 	// UserID - User identifier of created sticker set owner
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// Name - Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only
 	// english letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and
@@ -2367,7 +2375,7 @@ func (b *Bot) CreateNewStickerSet(params *CreateNewStickerSetParams) error {
 // AddStickerToSetParams - Represents parameters of addStickerToSet method.
 type AddStickerToSetParams struct {
 	// UserID - User identifier of sticker set owner
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// Name - Sticker set name
 	Name string `json:"name"`
@@ -2459,7 +2467,7 @@ type SetStickerSetThumbParams struct {
 	Name string `json:"name"`
 
 	// UserID - User identifier of the sticker set owner
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// Thumb - Optional. A PNG image with the thumbnail, must be up to 128 kilobytes in size and have width and
 	// height exactly 100px, or a TGS animation with the thumbnail up to 32 kilobytes in size; see
@@ -2641,13 +2649,14 @@ type SendInvoiceParams struct {
 }
 
 // SendInvoice - Use this method to send invoices. On success, the sent Message (#message) is returned.
-func (b *Bot) SendInvoice(params *SendInvoiceParams) error {
-	err := b.performRequest("sendInvoice", params, nil)
+func (b *Bot) SendInvoice(params *SendInvoiceParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendInvoice", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendInvoice(): %w", err)
+		return nil, fmt.Errorf("sendInvoice(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // AnswerShippingQueryParams - Represents parameters of answerShippingQuery method.
@@ -2709,11 +2718,20 @@ func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error
 	return nil
 }
 
+// SetPassportDataErrorsParams - Represents parameters of setPassportDataErrors method.
+type SetPassportDataErrorsParams struct {
+	// UserID - User identifier
+	UserID int64 `json:"user_id"`
+
+	// Errors - A JSON-serialized array describing the errors
+	Errors []PassportElementError `json:"errors"`
+}
+
 // SetPassportDataErrors - Informs a user that some of the Telegram Passport elements they provided contains
 // errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents
 // of the field for which you returned the error must change). Returns True on success.
-func (b *Bot) SetPassportDataErrors() error {
-	err := b.performRequest("setPassportDataErrors", nil, nil)
+func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
+	err := b.performRequest("setPassportDataErrors", params, nil)
 	if err != nil {
 		return fmt.Errorf("setPassportDataErrors(): %w", err)
 	}
@@ -2724,7 +2742,7 @@ func (b *Bot) SetPassportDataErrors() error {
 // SendGameParams - Represents parameters of sendGame method.
 type SendGameParams struct {
 	// ChatID - Unique identifier for the target chat
-	ChatID int `json:"chat_id"`
+	ChatID int64 `json:"chat_id"`
 
 	// GameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games
 	// via Botfather (https://t.me/botfather).
@@ -2748,19 +2766,20 @@ type SendGameParams struct {
 }
 
 // SendGame - Use this method to send a game. On success, the sent Message (#message) is returned.
-func (b *Bot) SendGame(params *SendGameParams) error {
-	err := b.performRequest("sendGame", params, nil)
+func (b *Bot) SendGame(params *SendGameParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendGame", params, &message)
 	if err != nil {
-		return fmt.Errorf("sendGame(): %w", err)
+		return nil, fmt.Errorf("sendGame(): %w", err)
 	}
 
-	return nil
+	return message, nil
 }
 
 // SetGameScoreParams - Represents parameters of setGameScore method.
 type SetGameScoreParams struct {
 	// UserID - User identifier
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 
 	// Score - New score, must be non-negative
 	Score int `json:"score"`
@@ -2774,7 +2793,7 @@ type SetGameScoreParams struct {
 	DisableEditMessage bool `json:"disable_edit_message,omitempty"`
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	ChatID int `json:"chat_id,omitempty"`
+	ChatID int64 `json:"chat_id,omitempty"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
 	MessageID int `json:"message_id,omitempty"`
@@ -2787,20 +2806,37 @@ type SetGameScoreParams struct {
 // SetGameScore - Use this method to set the score of the specified user in a game. On success, if the
 // message was sent by the bot, returns the edited Message (#message), otherwise returns True. Returns an error,
 // if the new score is not greater than the user's current score in the chat and force is False.
-func (b *Bot) SetGameScore(params *SetGameScoreParams) error {
-	err := b.performRequest("setGameScore", params, nil)
+func (b *Bot) SetGameScore(params *SetGameScoreParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("setGameScore", params, &message)
 	if err != nil {
-		return fmt.Errorf("setGameScore(): %w", err)
+		return nil, fmt.Errorf("setGameScore(): %w", err)
 	}
 
-	return nil
+	return message, nil
+}
+
+// GetGameHighScoresParams - Represents parameters of getGameHighScores method.
+type GetGameHighScoresParams struct {
+	// UserID - Target user id
+	UserID int64 `json:"user_id"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	ChatID int64 `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageId - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
+	// message
+	InlineMessageId string `json:"inline_message_id,omitempty"`
 }
 
 // GetGameHighScores - Use this method to get data for high score tables. Will return the score of the
 // specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore
 // (#gamehighscore) objects.
-func (b *Bot) GetGameHighScores() error {
-	err := b.performRequest("getGameHighScores", nil, nil)
+func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) error {
+	err := b.performRequest("getGameHighScores", params, nil)
 	if err != nil {
 		return fmt.Errorf("getGameHighScores(): %w", err)
 	}
