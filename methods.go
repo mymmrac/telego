@@ -1502,8 +1502,6 @@ type ExportChatInviteLinkParams struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-// TODO: Test
-
 // ExportChatInviteLink - Use this method to generate a new primary invite link for a chat; any previously
 // generated primary link is revoked. The bot must be an administrator in the chat for this to work and must
 // have the appropriate admin rights. Returns the new invite link as String on success.
@@ -2105,8 +2103,6 @@ func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, er
 	return message, nil
 }
 
-// FIXME
-/*
 // EditMessageMediaParams - Represents parameters of editMessageMedia method.
 type EditMessageMediaParams struct {
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
@@ -2128,6 +2124,16 @@ type EditMessageMediaParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *EditMessageMediaParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	for _, v := range p.Media.fileParameters() {
+		fp[v.Name()] = v
+	}
+
+	return fp
+}
+
 // EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages. If a
 // message is part of a message album, then it can be edited only to an audio for audio albums, only to a
 // document for document albums and to a photo or a video otherwise. When an inline message is edited, a new
@@ -2142,7 +2148,6 @@ func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error)
 
 	return message, nil
 }
-*/
 
 // EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
 type EditMessageReplyMarkupParams struct {
