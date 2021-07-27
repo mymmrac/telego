@@ -1,3 +1,4 @@
+//nolint
 package main
 
 import (
@@ -7,11 +8,11 @@ import (
 	telego "github.com/mymmrac/go-telegram-bot-api"
 )
 
+var myID = telego.ChatID{ID: 331849104}
+var groupID = telego.ChatID{ID: -1001516926498}
+
 func main() {
 	testToken := os.Getenv("TEST_TOKEN")
-
-	//myID := telego.ChatID{ID: 331849104}
-	groupID := telego.ChatID{ID: -1001516926498}
 
 	bot, err := telego.NewBot(testToken)
 	if err != nil {
@@ -26,13 +27,13 @@ func main() {
 		return
 	}
 
-	p := &telego.ExportChatInviteLinkParams{ChatID: groupID}
-	link, err := bot.ExportChatInviteLink(p)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(*link)
+	//p := &telego.ExportChatInviteLinkParams{ChatID: groupID}
+	//link, err := bot.ExportChatInviteLink(p)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//fmt.Println(*link)
 
 	//p := &telego.SendMediaGroupParams{
 	//	ChatID: myID,
@@ -125,29 +126,25 @@ func main() {
 	//	}
 	//}
 
-	//file, err := os.Open("doc.txt")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//dp := &telego.SendDocumentParams{
-	//	ChatID:   myID,
-	//	Document: telego.InputFile{File: file},
-	//	Caption:  "Hello world",
-	//	ReplyMarkup: telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
-	//		{
-	//			{
-	//				Text: "Test",
-	//				CallbackData: "1",
-	//			},
-	//		},
-	//	}},
-	//}
-	//msg, err := bot.SendDocument(dp)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//fmt.Println(msg.Document)
+	dp := &telego.SendDocumentParams{
+		ChatID: myID,
+		//Document: telego.InputFile{File: mustOpen("doc.txt")},
+		Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
+		Caption:  "Hello world",
+		ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
+			{
+				{
+					Text:         "Test",
+					CallbackData: "1",
+				},
+			},
+		}},
+	}
+	msg, err := bot.SendDocument(dp)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(msg.Document)
 }
 
 func mustOpen(filename string) *os.File {

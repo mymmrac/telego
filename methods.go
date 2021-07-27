@@ -394,8 +394,8 @@ type SendAudioParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
-	// ReplyToMessageId - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageId int `json:"reply_to_message_id,omitempty"`
+	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
+	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
 	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
 	// replied-to message is not found
@@ -2841,9 +2841,9 @@ type GetGameHighScoresParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageId - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
 	// message
-	InlineMessageId string `json:"inline_message_id,omitempty"`
+	InlineMessageID string `json:"inline_message_id,omitempty"`
 }
 
 // GetGameHighScores - Use this method to get data for high score tables. Will return the score of the

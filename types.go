@@ -2,7 +2,6 @@ package telego
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 )
@@ -172,7 +171,7 @@ type Chat struct {
 	Permissions *ChatPermissions `json:"permissions,omitempty"`
 
 	// SlowModeDelay - Optional. For supergroups, the minimum allowed delay between consecutive messages sent by
-	// each unpriviledged user. Returned only in getChat (#getchat).
+	// each unprivileged user. Returned only in getChat (#getchat).
 	SlowModeDelay int `json:"slow_mode_delay,omitempty"`
 
 	// MessageAutoDeleteTime - Optional. The time after which all messages sent to the chat will be
@@ -864,7 +863,7 @@ type ReplyKeyboardMarkup struct {
 }
 
 // ReplyType - Returns ReplyKeyboardMarkup type
-func (i ReplyKeyboardMarkup) ReplyType() string {
+func (i *ReplyKeyboardMarkup) ReplyType() string {
 	return "ReplyKeyboardMarkup"
 }
 
@@ -917,7 +916,7 @@ type ReplyKeyboardRemove struct {
 }
 
 // ReplyType - Returns ReplyKeyboardRemove type
-func (i ReplyKeyboardRemove) ReplyType() string {
+func (i *ReplyKeyboardRemove) ReplyType() string {
 	return "ReplyKeyboardRemove"
 }
 
@@ -931,7 +930,7 @@ type InlineKeyboardMarkup struct {
 }
 
 // ReplyType - Returns InlineKeyboardMarkup type
-func (i InlineKeyboardMarkup) ReplyType() string {
+func (i *InlineKeyboardMarkup) ReplyType() string {
 	return "InlineKeyboardMarkup"
 }
 
@@ -996,7 +995,7 @@ type LoginURL struct {
 
 	// BotUsername - Optional. Username of a bot, which will be used for user authorization.
 	// See Setting up a bot (https://core.telegram.org/widgets/login#setting-up-a-bot) for more details.
-	// If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain
+	// If not specified, the current bot's username will be assumed. The URL's domain must be the same as the domain
 	// linked with the bot. See Linking your domain to the
 	// bot (https://core.telegram.org/widgets/login#linking-your-domain-to-the-bot) for more details.
 	BotUsername string `json:"bot_username,omitempty"`
@@ -1060,7 +1059,7 @@ type ForceReply struct {
 }
 
 // ReplyType - Returns ForceReply type
-func (i ForceReply) ReplyType() string {
+func (i *ForceReply) ReplyType() string {
 	return "ForceReply"
 }
 
@@ -1134,31 +1133,31 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 
 	switch memberStatus.Status {
 	case "creator":
-		var cm ChatMemberOwner
+		var cm *ChatMemberOwner
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	case "administrator":
-		var cm ChatMemberAdministrator
+		var cm *ChatMemberAdministrator
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	case "member":
-		var cm ChatMemberMember
+		var cm *ChatMemberMember
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	case "restricted":
-		var cm ChatMemberRestricted
+		var cm *ChatMemberRestricted
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	case "left":
-		var cm ChatMemberLeft
+		var cm *ChatMemberLeft
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	case "kicked":
-		var cm ChatMemberBanned
+		var cm *ChatMemberBanned
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	default:
-		return errors.New(fmt.Sprintf("unknown member member status: %q", memberStatus.Status))
+		return fmt.Errorf("unknown member member status: %q", memberStatus.Status)
 	}
 
 	return err
@@ -1179,7 +1178,7 @@ type ChatMemberOwner struct {
 	IsAnonymous bool `json:"is_anonymous"`
 }
 
-func (c ChatMemberOwner) MemberStatus() string {
+func (c *ChatMemberOwner) MemberStatus() string {
 	return c.Status
 }
 
@@ -1236,7 +1235,7 @@ type ChatMemberAdministrator struct {
 	CanPinMessages bool `json:"can_pin_messages"`
 }
 
-func (c ChatMemberAdministrator) MemberStatus() string {
+func (c *ChatMemberAdministrator) MemberStatus() string {
 	return c.Status
 }
 
@@ -1249,7 +1248,7 @@ type ChatMemberMember struct {
 	User User `json:"user"`
 }
 
-func (c ChatMemberMember) MemberStatus() string {
+func (c *ChatMemberMember) MemberStatus() string {
 	return c.Status
 }
 
@@ -1294,7 +1293,7 @@ type ChatMemberRestricted struct {
 	UntilDate int `json:"until_date"`
 }
 
-func (c ChatMemberRestricted) MemberStatus() string {
+func (c *ChatMemberRestricted) MemberStatus() string {
 	return c.Status
 }
 
@@ -1308,7 +1307,7 @@ type ChatMemberLeft struct {
 	User User `json:"user"`
 }
 
-func (c ChatMemberLeft) MemberStatus() string {
+func (c *ChatMemberLeft) MemberStatus() string {
 	return c.Status
 }
 
@@ -1325,7 +1324,7 @@ type ChatMemberBanned struct {
 	UntilDate int `json:"until_date"`
 }
 
-func (c ChatMemberBanned) MemberStatus() string {
+func (c *ChatMemberBanned) MemberStatus() string {
 	return c.Status
 }
 
@@ -1474,7 +1473,7 @@ type BotCommandScopeDefault struct {
 	Type string `json:"type"`
 }
 
-func (b BotCommandScopeDefault) ScopeType() string {
+func (b *BotCommandScopeDefault) ScopeType() string {
 	return b.Type
 }
 
@@ -1485,7 +1484,7 @@ type BotCommandScopeAllPrivateChats struct {
 	Type string `json:"type"`
 }
 
-func (b BotCommandScopeAllPrivateChats) ScopeType() string {
+func (b *BotCommandScopeAllPrivateChats) ScopeType() string {
 	return b.Type
 }
 
@@ -1496,7 +1495,7 @@ type BotCommandScopeAllGroupChats struct {
 	Type string `json:"type"`
 }
 
-func (b BotCommandScopeAllGroupChats) ScopeType() string {
+func (b *BotCommandScopeAllGroupChats) ScopeType() string {
 	return b.Type
 }
 
@@ -1507,7 +1506,7 @@ type BotCommandScopeAllChatAdministrators struct {
 	Type string `json:"type"`
 }
 
-func (b BotCommandScopeAllChatAdministrators) ScopeType() string {
+func (b *BotCommandScopeAllChatAdministrators) ScopeType() string {
 	return b.Type
 }
 
@@ -1517,7 +1516,7 @@ type ChatID struct {
 	Username string
 }
 
-func (c ChatID) String() string {
+func (c *ChatID) String() string {
 	if c.Username != "" {
 		return c.Username
 	}
@@ -1525,7 +1524,7 @@ func (c ChatID) String() string {
 	return fmt.Sprintf("%d", c.ID)
 }
 
-func (c ChatID) MarshalJSON() ([]byte, error) {
+func (c *ChatID) MarshalJSON() ([]byte, error) {
 	if c.Username != "" {
 		return json.Marshal(c.Username)
 	}
@@ -1543,7 +1542,7 @@ type BotCommandScopeChat struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-func (b BotCommandScopeChat) ScopeType() string {
+func (b *BotCommandScopeChat) ScopeType() string {
 	return b.Type
 }
 
@@ -1558,7 +1557,7 @@ type BotCommandScopeChatAdministrators struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-func (b BotCommandScopeChatAdministrators) ScopeType() string {
+func (b *BotCommandScopeChatAdministrators) ScopeType() string {
 	return b.Type
 }
 
@@ -1576,7 +1575,7 @@ type BotCommandScopeChatMember struct {
 	UserID int `json:"user_id"`
 }
 
-func (b BotCommandScopeChatMember) ScopeType() string {
+func (b *BotCommandScopeChatMember) ScopeType() string {
 	return b.Type
 }
 
@@ -1607,7 +1606,7 @@ type InputFile struct {
 	needAttach bool
 }
 
-func (i InputFile) MarshalJSON() ([]byte, error) {
+func (i *InputFile) MarshalJSON() ([]byte, error) {
 	if i.File != nil {
 		if i.needAttach {
 			return json.Marshal(attachFile + i.File.Name())
@@ -1622,7 +1621,7 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.URL)
 }
 
-func (i InputFile) String() string {
+func (i *InputFile) String() string {
 	return fmt.Sprintf("{File: %v ID: %q URL: %q NeedAttach: %t}", i.File, i.FileID, i.URL, i.needAttach)
 }
 
@@ -1660,7 +1659,7 @@ type InputMediaPhoto struct {
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 }
 
-func (i InputMediaPhoto) MediaType() string {
+func (i *InputMediaPhoto) MediaType() string {
 	return "photo"
 }
 
@@ -1713,7 +1712,7 @@ type InputMediaVideo struct {
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 }
 
-func (i InputMediaVideo) MediaType() string {
+func (i *InputMediaVideo) MediaType() string {
 	return "video"
 }
 
@@ -1770,7 +1769,7 @@ type InputMediaAnimation struct {
 	Duration int `json:"duration,omitempty"`
 }
 
-func (i InputMediaAnimation) MediaType() string {
+func (i *InputMediaAnimation) MediaType() string {
 	return "animation"
 }
 
@@ -1825,7 +1824,7 @@ type InputMediaAudio struct {
 	Title string `json:"title,omitempty"`
 }
 
-func (i InputMediaAudio) MediaType() string {
+func (i *InputMediaAudio) MediaType() string {
 	return "audio"
 }
 
@@ -1875,7 +1874,7 @@ type InputMediaDocument struct {
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
 }
 
-func (i InputMediaDocument) MediaType() string {
+func (i *InputMediaDocument) MediaType() string {
 	return "document"
 }
 
