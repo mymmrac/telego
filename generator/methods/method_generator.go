@@ -48,7 +48,7 @@ func main() {
 	methodPatternReg := regexp.MustCompile(generator.RemoveNewline(methodPattern))
 	paramsPatternReg := regexp.MustCompile(generator.RemoveNewline(paramsPattern))
 
-	file, err := os.Create("methods_generated.go")
+	file, err := os.Create("methods_generated.go.bak")
 	if err != nil {
 		fmt.Println(err)
 		return

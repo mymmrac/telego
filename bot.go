@@ -271,6 +271,8 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	return nil
 }
 
+// TODO: Refactor (without json encoding)
+
 func toParams(v interface{}) (map[string]string, error) {
 	tmpBuf := bytes.Buffer{}
 	err := json.NewEncoder(&tmpBuf).Encode(v)

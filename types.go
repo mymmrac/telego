@@ -1413,58 +1413,6 @@ type BotCommandScope interface {
 	ScopeType() string
 }
 
-/* TODO: Check if needed
-type botCommandScopeData struct {
-	Data BotCommandScope
-}
-
-func (b *botCommandScopeData) UnmarshalJSON(bytes []byte) error {
-	var scopeType struct {
-		Type string `json:"type"`
-	}
-
-	err := json.Unmarshal(bytes, &scopeType)
-	if err != nil {
-		return err
-	}
-
-	switch scopeType.Type {
-	case "default":
-		var bcs BotCommandScopeDefault
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	case "all_private_chats":
-		var bcs BotCommandScopeAllPrivateChats
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	case "all_group_chats":
-		var bcs BotCommandScopeAllGroupChats
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	case "all_chat_administrators":
-		var bcs BotCommandScopeAllChatAdministrators
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	case "chat":
-		var bcs BotCommandScopeChat
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	case "chat_administrators":
-		var bcs BotCommandScopeChatAdministrators
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	case "chat_member":
-		var bcs BotCommandScopeChatMember
-		err = json.Unmarshal(bytes, &bcs)
-		b.Data = bcs
-	default:
-		return errors.New("unknown member status")
-	}
-
-	return err
-}
-*/
-
 // BotCommandScopeDefault - Represents the default scope (#botcommandscope) of bot commands.
 // Default commands are used if no commands with a narrower scope (#determining-list-of-commands)
 // are specified for the user.
@@ -1891,8 +1839,6 @@ func (i *InputMediaDocument) fileParameters() map[string]*os.File {
 	return fp
 }
 
-// TODO: Continue checking
-
 // Sticker - This object represents a sticker.
 type Sticker struct {
 	// FileID - Identifier for this file, which can be used to download or reuse the file
@@ -1991,11 +1937,30 @@ type InlineQuery struct {
 	Location *Location `json:"location,omitempty"`
 }
 
-// FIXME
-
 // InlineQueryResult - This object represents one result of an inline query. Telegram clients currently
 // support results of the following 20 types:
-type InlineQueryResult struct {
+// InlineQueryResultCachedAudio
+// InlineQueryResultCachedDocument
+// InlineQueryResultCachedGif
+// InlineQueryResultCachedMpeg4Gif
+// InlineQueryResultCachedPhoto
+// InlineQueryResultCachedSticker
+// InlineQueryResultCachedVideo
+// InlineQueryResultCachedVoice
+// InlineQueryResultArticle
+// InlineQueryResultAudio
+// InlineQueryResultContact
+// InlineQueryResultGame
+// InlineQueryResultDocument
+// InlineQueryResultGif
+// InlineQueryResultLocation
+// InlineQueryResultMpeg4Gif
+// InlineQueryResultPhoto
+// InlineQueryResultVenue
+// InlineQueryResultVideo
+// InlineQueryResultVoice
+type InlineQueryResult interface {
+	ResultType() string
 }
 
 // InlineQueryResultArticle - Represents a link to an article or web page.
@@ -2032,6 +1997,10 @@ type InlineQueryResultArticle struct {
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
+}
+
+func (i *InlineQueryResultArticle) ResultType() string {
+	return "article"
 }
 
 // InlineQueryResultPhoto - Represents a link to a photo. By default, this photo will be sent by the user with
@@ -2078,6 +2047,10 @@ type InlineQueryResultPhoto struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+}
+
+func (i *InlineQueryResultPhoto) ResultType() string {
+	return "photo"
 }
 
 // InlineQueryResultGif - Represents a link to an animated GIF file. By default, this animated GIF file will be
@@ -2130,6 +2103,10 @@ type InlineQueryResultGif struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultGif) ResultType() string {
+	return "gif"
+}
+
 // InlineQueryResultMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without sound).
 // By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use
 // input_message_content to send a message with the specified content instead of the animation.
@@ -2180,10 +2157,65 @@ type InlineQueryResultMpeg4Gif struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultMpeg4Gif) ResultType() string {
+	return "mpeg4_gif"
+}
+
 // InlineQueryResultVideo - Represents a link to a page containing an embedded video player or a video file.
 // By default, this video file will be sent by the user with an optional caption. Alternatively, you can use
 // input_message_content to send a message with the specified content instead of the video.
 type InlineQueryResultVideo struct {
+	// Type - Type of the result, must be video
+	Type string `json:"type"`
+
+	// ID - Unique identifier for this result, 1-64 bytes
+	ID string `json:"id"`
+
+	// VideoURL - A valid URL for the embedded video player or video file
+	VideoURL string `json:"video_url"`
+
+	// MimeType - Mime type of the content of video url, “text/html” or “video/mp4”
+	MimeType string `json:"mime_type"`
+
+	// ThumbURL - URL of the thumbnail (jpeg only) for the video
+	ThumbURL string `json:"thumb_url"`
+
+	// Title - Title for the result
+	Title string `json:"title"`
+
+	// Caption - Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the video caption. See formatting options
+	// (#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
+	// instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// VideoWidth - Optional. Video width
+	VideoWidth int `json:"video_width,omitempty"`
+
+	// VideoHeight - Optional. Video height
+	VideoHeight int `json:"video_height,omitempty"`
+
+	// VideoDuration - Optional. Video duration in seconds
+	VideoDuration int `json:"video_duration,omitempty"`
+
+	// Description - Optional. Short description of the result
+	Description string `json:"description,omitempty"`
+
+	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+
+	// InputMessageContent - Optional. Content of the message to be sent instead of the video. This field is required
+	// if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
+	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+}
+
+func (i *InlineQueryResultVideo) ResultType() string {
+	return "video"
 }
 
 // InlineQueryResultAudio - Represents a link to an MP3 audio file. By default, this audio file will be
@@ -2226,6 +2258,10 @@ type InlineQueryResultAudio struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultAudio) ResultType() string {
+	return "audio"
+}
+
 // InlineQueryResultVoice - Represents a link to a voice recording in an .OGG container encoded with OPUS.
 // By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content
 // to send a message with the specified content instead of the the voice message.
@@ -2261,6 +2297,10 @@ type InlineQueryResultVoice struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice recording
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+}
+
+func (i *InlineQueryResultVoice) ResultType() string {
+	return "voice"
 }
 
 // InlineQueryResultDocument - Represents a link to a file. By default, this file will be sent by the user
@@ -2312,6 +2352,10 @@ type InlineQueryResultDocument struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+func (i *InlineQueryResultDocument) ResultType() string {
+	return "document"
+}
+
 // InlineQueryResultLocation - Represents a location on a map. By default, the location will be sent by the user.
 // Alternatively, you can use input_message_content to send a message with the specified content
 // instead of the location.
@@ -2359,6 +2403,10 @@ type InlineQueryResultLocation struct {
 
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
+}
+
+func (i *InlineQueryResultLocation) ResultType() string {
+	return "location"
 }
 
 // InlineQueryResultVenue - Represents a venue. By default, the venue will be sent by the user.
@@ -2412,6 +2460,10 @@ type InlineQueryResultVenue struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+func (i *InlineQueryResultVenue) ResultType() string {
+	return "venue"
+}
+
 // InlineQueryResultContact - Represents a contact with a phone number. By default,
 // this contact will be sent by the user. Alternatively, you can use input_message_content to send
 // a message with the specified content instead of the contact.
@@ -2452,6 +2504,10 @@ type InlineQueryResultContact struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+func (i *InlineQueryResultContact) ResultType() string {
+	return "contact"
+}
+
 // InlineQueryResultGame - Represents a Game (#games).
 type InlineQueryResultGame struct {
 	// Type - Type of the result, must be game
@@ -2465,6 +2521,10 @@ type InlineQueryResultGame struct {
 
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+func (i *InlineQueryResultGame) ResultType() string {
+	return "game"
 }
 
 // InlineQueryResultCachedPhoto - Represents a link to a photo stored on the Telegram servers.
@@ -2504,6 +2564,10 @@ type InlineQueryResultCachedPhoto struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultCachedPhoto) ResultType() string {
+	return "photo"
+}
+
 // InlineQueryResultCachedGif - Represents a link to an animated GIF file stored on the Telegram servers.
 // By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use
 // input_message_content to send a message with specified content instead of the animation.
@@ -2536,6 +2600,10 @@ type InlineQueryResultCachedGif struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+}
+
+func (i *InlineQueryResultCachedGif) ResultType() string {
+	return "gif"
 }
 
 // InlineQueryResultCachedMpeg4Gif - Represents a link to a video animation
@@ -2573,6 +2641,10 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultCachedMpeg4Gif) ResultType() string {
+	return "mpeg4_gif"
+}
+
 // InlineQueryResultCachedSticker - Represents a link to a sticker stored on the Telegram servers.
 // By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send
 // a message with the specified content instead of the sticker.
@@ -2591,6 +2663,10 @@ type InlineQueryResultCachedSticker struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the sticker
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+}
+
+func (i *InlineQueryResultCachedSticker) ResultType() string {
+	return "sticker"
 }
 
 // InlineQueryResultCachedDocument - Represents a link to a file stored on the Telegram servers.
@@ -2630,6 +2706,10 @@ type InlineQueryResultCachedDocument struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultCachedDocument) ResultType() string {
+	return "document"
+}
+
 // InlineQueryResultCachedVideo - Represents a link to a video file stored on the Telegram servers.
 // By default, this video file will be sent by the user with an optional caption. Alternatively, you can use
 // input_message_content to send a message with the specified content instead of the video.
@@ -2667,6 +2747,10 @@ type InlineQueryResultCachedVideo struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultCachedVideo) ResultType() string {
+	return "video"
+}
+
 // InlineQueryResultCachedVoice - Represents a link to a voice message stored on the Telegram servers.
 // By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send
 // a message with the specified content instead of the voice message.
@@ -2701,6 +2785,10 @@ type InlineQueryResultCachedVoice struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultCachedVoice) ResultType() string {
+	return "voice"
+}
+
 // InlineQueryResultCachedAudio - Represents a link to an MP3 audio file stored on the Telegram servers.
 // By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send
 // a message with the specified content instead of the audio.
@@ -2732,9 +2820,19 @@ type InlineQueryResultCachedAudio struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+func (i *InlineQueryResultCachedAudio) ResultType() string {
+	return "audio"
+}
+
 // InputMessageContent - This object represents the content of a message to be sent as a result of an
 // inline query. Telegram clients currently support the following 5 types:
-type InputMessageContent struct {
+// InputTextMessageContent
+// InputLocationMessageContent
+// InputVenueMessageContent
+// InputContactMessageContent
+// InputInvoiceMessageContent
+type InputMessageContent interface {
+	ContentType() string
 }
 
 // InputTextMessageContent - Represents the content (#inputmessagecontent) of a text message to be sent
@@ -2753,6 +2851,10 @@ type InputTextMessageContent struct {
 
 	// DisableWebPagePreview - Optional. Disables link previews for links in the sent message
 	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
+}
+
+func (i *InputTextMessageContent) ContentType() string {
+	return "text"
 }
 
 // InputLocationMessageContent - Represents the content (#inputmessagecontent) of a location message to be sent as
@@ -2777,6 +2879,10 @@ type InputLocationMessageContent struct {
 	// ProximityAlertRadius - Optional. For live locations, a maximum distance for proximity alerts about
 	// approaching another chat member, in meters. Must be between 1 and 100000 if specified.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
+}
+
+func (i *InputLocationMessageContent) ContentType() string {
+	return "location"
 }
 
 // InputVenueMessageContent - Represents the content (#inputmessagecontent) of a venue message to be sent as
@@ -2809,6 +2915,10 @@ type InputVenueMessageContent struct {
 	GooglePlaceType string `json:"google_place_type,omitempty"`
 }
 
+func (i *InputVenueMessageContent) ContentType() string {
+	return "venue"
+}
+
 // InputContactMessageContent - Represents the content (#inputmessagecontent) of a contact message
 // to be sent as the result of an inline query.
 type InputContactMessageContent struct {
@@ -2824,6 +2934,10 @@ type InputContactMessageContent struct {
 	// Vcard - Optional. Additional data about the contact in the form of a
 	// vCard (https://en.wikipedia.org/wiki/VCard), 0-2048 bytes
 	Vcard string `json:"vcard,omitempty"`
+}
+
+func (i *InputContactMessageContent) ContentType() string {
+	return "contact"
 }
 
 // InputInvoiceMessageContent - Represents the content (#inputmessagecontent) of an invoice message to be sent
@@ -2899,6 +3013,10 @@ type InputInvoiceMessageContent struct {
 
 	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
 	IsFlexible bool `json:"is_flexible,omitempty"`
+}
+
+func (i *InputInvoiceMessageContent) ContentType() string {
+	return "invoice"
 }
 
 // ChosenInlineResult - Represents a result (#inlinequeryresult) of an inline query that was chosen
@@ -3164,11 +3282,19 @@ type EncryptedCredentials struct {
 	Secret string `json:"secret"`
 }
 
-// FIXME
-
 // PassportElementError - This object represents an error in the Telegram Passport element which was submitted
 // that should be resolved by the user. It should be one of:
-type PassportElementError struct {
+// PassportElementErrorDataField
+// PassportElementErrorFrontSide
+// PassportElementErrorReverseSide
+// PassportElementErrorSelfie
+// PassportElementErrorFile
+// PassportElementErrorFiles
+// PassportElementErrorTranslationFile
+// PassportElementErrorTranslationFiles
+// PassportElementErrorUnspecified
+type PassportElementError interface {
+	ErrorSource() string
 }
 
 // PassportElementErrorDataField - Represents an issue in one of the data fields that was provided by the user.
@@ -3191,6 +3317,10 @@ type PassportElementErrorDataField struct {
 	Message string `json:"message"`
 }
 
+func (p *PassportElementErrorDataField) ErrorSource() string {
+	return "data"
+}
+
 // PassportElementErrorFrontSide - Represents an issue with the front side of a document. The error is considered
 // resolved when the file with the front side of the document changes.
 type PassportElementErrorFrontSide struct {
@@ -3208,6 +3338,10 @@ type PassportElementErrorFrontSide struct {
 	Message string `json:"message"`
 }
 
+func (p *PassportElementErrorFrontSide) ErrorSource() string {
+	return "front_side"
+}
+
 // PassportElementErrorReverseSide - Represents an issue with the reverse side of a document. The error is
 // considered resolved when the file with reverse side of the document changes.
 type PassportElementErrorReverseSide struct {
@@ -3222,6 +3356,10 @@ type PassportElementErrorReverseSide struct {
 
 	// Message - Error message
 	Message string `json:"message"`
+}
+
+func (p *PassportElementErrorReverseSide) ErrorSource() string {
+	return "reverse_side"
 }
 
 // PassportElementErrorSelfie - Represents an issue with the selfie with a document. The error is considered
@@ -3241,6 +3379,10 @@ type PassportElementErrorSelfie struct {
 	Message string `json:"message"`
 }
 
+func (p *PassportElementErrorSelfie) ErrorSource() string {
+	return "selfie"
+}
+
 // PassportElementErrorFile - Represents an issue with a document scan. The error is considered resolved when
 // the file with the document scan changes.
 type PassportElementErrorFile struct {
@@ -3258,6 +3400,10 @@ type PassportElementErrorFile struct {
 	Message string `json:"message"`
 }
 
+func (p *PassportElementErrorFile) ErrorSource() string {
+	return "file"
+}
+
 // PassportElementErrorFiles - Represents an issue with a list of scans. The error is considered resolved
 // when the list of files containing the scans changes.
 type PassportElementErrorFiles struct {
@@ -3273,6 +3419,10 @@ type PassportElementErrorFiles struct {
 
 	// Message - Error message
 	Message string `json:"message"`
+}
+
+func (p *PassportElementErrorFiles) ErrorSource() string {
+	return "files"
 }
 
 // PassportElementErrorTranslationFile - Represents an issue with one of the files that constitute the
@@ -3293,6 +3443,10 @@ type PassportElementErrorTranslationFile struct {
 	Message string `json:"message"`
 }
 
+func (p *PassportElementErrorTranslationFile) ErrorSource() string {
+	return "translation_file"
+}
+
 // PassportElementErrorTranslationFiles - Represents an issue with the translated version of a document.
 // The error is considered resolved when a file with the document translation change.
 type PassportElementErrorTranslationFiles struct {
@@ -3311,6 +3465,10 @@ type PassportElementErrorTranslationFiles struct {
 	Message string `json:"message"`
 }
 
+func (p *PassportElementErrorTranslationFiles) ErrorSource() string {
+	return "translation_files"
+}
+
 // PassportElementErrorUnspecified - Represents an issue in an unspecified place. The error is considered
 // resolved when new data is added.
 type PassportElementErrorUnspecified struct {
@@ -3325,6 +3483,10 @@ type PassportElementErrorUnspecified struct {
 
 	// Message - Error message
 	Message string `json:"message"`
+}
+
+func (p *PassportElementErrorUnspecified) ErrorSource() string {
+	return "unspecified"
 }
 
 // Game - This object represents a game. Use BotFather to create and edit games, their short names
