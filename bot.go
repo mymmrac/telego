@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"reflect"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 // TODO: Make use of https://github.com/json-iterator/go
@@ -25,6 +25,8 @@ const (
 	jsonContentType = "application/json"
 
 	tokenRegexp = `^\d{9}:[\w-]{35}$` //nolint:gosec
+
+	attachFile = `attach://`
 )
 
 func validateToken(token string) bool {
@@ -270,42 +272,45 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 }
 
 func toParams(v interface{}) (map[string]string, error) {
-	buf := bytes.Buffer{}
-	err := json.NewEncoder(&buf).Encode(v)
+	tmpBuf := bytes.Buffer{}
+	err := json.NewEncoder(&tmpBuf).Encode(v)
 	if err != nil {
 		return nil, fmt.Errorf("encoding json: %w", err)
 	}
 
 	var m map[string]interface{}
-	err = json.NewDecoder(strings.NewReader(buf.String())).Decode(&m)
+	err = json.NewDecoder(&tmpBuf).Decode(&m)
 	if err != nil {
 		return nil, fmt.Errorf("decoding json: %w", err)
 	}
 
 	params := make(map[string]string)
-	extractParams(m, "", params)
+
+	for key, value := range m {
+		kind := reflect.ValueOf(value).Kind()
+		if kind == reflect.Struct || kind == reflect.Slice || kind == reflect.Map {
+			buf := bytes.Buffer{}
+
+			err = json.NewEncoder(&buf).Encode(value)
+			if err != nil {
+				return nil, fmt.Errorf("encoding json: %w", err)
+			}
+
+			strVal := buf.String()
+			if strVal == "" {
+				continue
+			}
+			params[key] = strVal
+
+			continue
+		}
+
+		strVal := fmt.Sprintf("%v", value)
+		if strVal == "" {
+			continue
+		}
+		params[key] = strVal
+	}
 
 	return params, nil
-}
-
-func extractParams(v1 interface{}, prefix string, params map[string]string) {
-	switch v2 := v1.(type) {
-	case map[string]interface{}:
-		for key, v3 := range v2 {
-			if prefix == "" {
-				extractParams(v3, key, params)
-			} else {
-				extractParams(v3, prefix+"."+key, params)
-			}
-		}
-	case []interface{}:
-		for i, v3 := range v2 {
-			extractParams(v3, prefix+"."+strconv.Itoa(i), params)
-		}
-	default:
-		value := fmt.Sprintf("%v", v2)
-		if value != "" {
-			params[prefix] = value
-		}
-	}
 }

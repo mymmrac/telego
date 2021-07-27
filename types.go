@@ -864,7 +864,7 @@ type ReplyKeyboardMarkup struct {
 }
 
 // ReplyType - Returns ReplyKeyboardMarkup type
-func (i *ReplyKeyboardMarkup) ReplyType() string {
+func (i ReplyKeyboardMarkup) ReplyType() string {
 	return "ReplyKeyboardMarkup"
 }
 
@@ -917,7 +917,7 @@ type ReplyKeyboardRemove struct {
 }
 
 // ReplyType - Returns ReplyKeyboardRemove type
-func (i *ReplyKeyboardRemove) ReplyType() string {
+func (i ReplyKeyboardRemove) ReplyType() string {
 	return "ReplyKeyboardRemove"
 }
 
@@ -927,11 +927,11 @@ func (i *ReplyKeyboardRemove) ReplyType() string {
 type InlineKeyboardMarkup struct {
 	// InlineKeyboard - Array of button rows, each represented by an Array of InlineKeyboardButton
 	// (#inlinekeyboardbutton) objects
-	InlineKeyboard []InlineKeyboardButton `json:"inline_keyboard"`
+	InlineKeyboard [][]InlineKeyboardButton `json:"inline_keyboard"`
 }
 
 // ReplyType - Returns InlineKeyboardMarkup type
-func (i *InlineKeyboardMarkup) ReplyType() string {
+func (i InlineKeyboardMarkup) ReplyType() string {
 	return "InlineKeyboardMarkup"
 }
 
@@ -1060,7 +1060,7 @@ type ForceReply struct {
 }
 
 // ReplyType - Returns ForceReply type
-func (i *ForceReply) ReplyType() string {
+func (i ForceReply) ReplyType() string {
 	return "ForceReply"
 }
 
@@ -1601,13 +1601,17 @@ type fileCompatible interface {
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using
 // multipart/form-data in the usual way that files are uploaded via the browser.
 type InputFile struct {
-	File   *os.File
-	FileID string
-	URL    string
+	File       *os.File
+	FileID     string
+	URL        string
+	needAttach bool
 }
 
 func (i InputFile) MarshalJSON() ([]byte, error) {
 	if i.File != nil {
+		if i.needAttach {
+			return json.Marshal(attachFile + i.File.Name())
+		}
 		return json.Marshal("")
 	}
 
@@ -1618,7 +1622,9 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.URL)
 }
 
-// FIXME
+func (i InputFile) String() string {
+	return fmt.Sprintf("{File: %v ID: %q URL: %q NeedAttach: %t}", i.File, i.FileID, i.URL, i.needAttach)
+}
 
 // InputMedia - This object represents the content of a media message to be sent. It should be one of:
 // InputMediaAnimation
@@ -1658,7 +1664,8 @@ func (i InputMediaPhoto) MediaType() string {
 	return "photo"
 }
 
-func (i InputMediaPhoto) fileParameters() map[string]*os.File {
+func (i *InputMediaPhoto) fileParameters() map[string]*os.File {
+	i.Media.needAttach = true
 	return map[string]*os.File{
 		"media": i.Media.File,
 	}
@@ -1710,11 +1717,13 @@ func (i InputMediaVideo) MediaType() string {
 	return "video"
 }
 
-func (i InputMediaVideo) fileParameters() map[string]*os.File {
+func (i *InputMediaVideo) fileParameters() map[string]*os.File {
 	fp := make(map[string]*os.File)
 
+	i.Media.needAttach = true
 	fp["media"] = i.Media.File
 	if i.Thumb != nil {
+		i.Thumb.needAttach = true
 		fp["thumb"] = i.Thumb.File
 	}
 
@@ -1765,11 +1774,13 @@ func (i InputMediaAnimation) MediaType() string {
 	return "animation"
 }
 
-func (i InputMediaAnimation) fileParameters() map[string]*os.File {
+func (i *InputMediaAnimation) fileParameters() map[string]*os.File {
 	fp := make(map[string]*os.File)
 
+	i.Media.needAttach = true
 	fp["media"] = i.Media.File
 	if i.Thumb != nil {
+		i.Thumb.needAttach = true
 		fp["thumb"] = i.Thumb.File
 	}
 
@@ -1818,11 +1829,13 @@ func (i InputMediaAudio) MediaType() string {
 	return "audio"
 }
 
-func (i InputMediaAudio) fileParameters() map[string]*os.File {
+func (i *InputMediaAudio) fileParameters() map[string]*os.File {
 	fp := make(map[string]*os.File)
 
+	i.Media.needAttach = true
 	fp["media"] = i.Media.File
 	if i.Thumb != nil {
+		i.Thumb.needAttach = true
 		fp["thumb"] = i.Thumb.File
 	}
 
@@ -1866,11 +1879,13 @@ func (i InputMediaDocument) MediaType() string {
 	return "document"
 }
 
-func (i InputMediaDocument) fileParameters() map[string]*os.File {
+func (i *InputMediaDocument) fileParameters() map[string]*os.File {
 	fp := make(map[string]*os.File)
 
+	i.Media.needAttach = true
 	fp["media"] = i.Media.File
 	if i.Thumb != nil {
+		i.Thumb.needAttach = true
 		fp["thumb"] = i.Thumb.File
 	}
 

@@ -806,8 +806,6 @@ func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 	return message, nil
 }
 
-// FIXME
-/*
 // SendMediaGroupParams - Represents parameters of sendMediaGroup method.
 type SendMediaGroupParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
@@ -829,17 +827,17 @@ type SendMediaGroupParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 }
 
-//func (p *SendMediaGroupParams) fileParameters() map[string]*os.File {
-//	fp := make(map[string]*os.File)
-//
-//	for i, m := range p.Media {
-//		for k, v := range m.fileParameters(){
-//			fp[fmt.Sprintf("media-%d-%s", i, k)] = v
-//		}
-//	}
-//
-//	return fp
-//}
+func (p *SendMediaGroupParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	for _, m := range p.Media {
+		for _, v := range m.fileParameters() {
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
 
 // SendMediaGroup - Use this method to send a group of photos, videos, documents or audios as an album.
 // Documents and audio files can be only grouped in an album with messages of the same type. On success, an
@@ -853,7 +851,6 @@ func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) ([]Message, error) {
 
 	return messages, nil
 }
-*/
 
 // SendLocationParams - Represents parameters of sendLocation method.
 type SendLocationParams struct {
