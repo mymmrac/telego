@@ -1463,20 +1463,12 @@ type ChatID struct {
 	Username string
 }
 
-func (c *ChatID) String() string {
-	if c.Username != "" {
-		return c.Username
-	}
-
-	return fmt.Sprintf("%d", c.ID)
-}
-
-func (c *ChatID) MarshalJSON() ([]byte, error) {
+func (c ChatID) MarshalJSON() ([]byte, error) {
 	if c.Username != "" {
 		return json.Marshal(c.Username)
 	}
 
-	return json.Marshal(fmt.Sprintf("%d", c.ID))
+	return json.Marshal(c.ID)
 }
 
 // BotCommandScopeChat - Represents the scope (#botcommandscope) of bot commands, covering a specific chat.
@@ -1553,12 +1545,12 @@ type InputFile struct {
 	needAttach bool
 }
 
-func (i *InputFile) MarshalJSON() ([]byte, error) {
+func (i InputFile) MarshalJSON() ([]byte, error) {
 	if i.File != nil {
 		if i.needAttach {
 			return json.Marshal(attachFile + i.File.Name())
 		}
-		return json.Marshal("")
+		return []byte{}, nil
 	}
 
 	if i.FileID != "" {

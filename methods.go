@@ -832,6 +832,9 @@ func (p *SendMediaGroupParams) fileParameters() map[string]*os.File {
 
 	for _, m := range p.Media {
 		for _, v := range m.fileParameters() {
+			if v == nil {
+				continue
+			}
 			fp[v.Name()] = v
 		}
 	}
@@ -2128,6 +2131,9 @@ func (p *EditMessageMediaParams) fileParameters() map[string]*os.File {
 	fp := make(map[string]*os.File)
 
 	for _, v := range p.Media.fileParameters() {
+		if v == nil {
+			continue
+		}
 		fp[v.Name()] = v
 	}
 

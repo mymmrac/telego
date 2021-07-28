@@ -28,6 +28,8 @@ const (
 	tokenRegexp = `^\d{9}:[\w-]{35}$` //nolint:gosec
 
 	attachFile = `attach://`
+
+	omitEmptySuffix = ",omitempty"
 )
 
 func validateToken(token string) bool {
@@ -273,7 +275,7 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 }
 
 func toParams(v interface{}) (map[string]string, error) {
-	val := reflect.ValueOf(v)
+	val := reflect.ValueOf(v).Elem()
 	if val.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("%s not a struct", val.Kind())
 	}
@@ -285,7 +287,18 @@ func toParams(v interface{}) (map[string]string, error) {
 		structField := typ.Field(i)
 		field := val.Field(i)
 
+		if field.IsZero() || (field.Kind() == reflect.Ptr && field.IsNil()) {
+			continue
+		}
+
+		if field.Kind() == reflect.Ptr || field.Kind() == reflect.Interface {
+			field = field.Elem()
+		}
+
 		key := structField.Tag.Get("json")
+		if strings.HasSuffix(key, omitEmptySuffix) {
+			key = key[:len(key)-len(omitEmptySuffix)]
+		}
 		value := field.Interface()
 
 		kind := field.Kind()
@@ -298,6 +311,7 @@ func toParams(v interface{}) (map[string]string, error) {
 			}
 
 			strVal := buf.String()
+			strVal = strVal[:len(strVal)-1] // remove "\n" from end of the string
 			if strVal == "" {
 				continue
 			}
