@@ -2,7 +2,7 @@ package telego
 
 import (
 	"bytes"
-	"encoding/json"
+	stdJson "encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -14,10 +14,11 @@ import (
 	"strings"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/sirupsen/logrus"
 )
 
-// TODO: Make use of https://github.com/json-iterator/go
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
 	defaultBotAPIServer = "https://api.telegram.org"
@@ -101,8 +102,8 @@ func (b *Bot) DebugMode(is bool) {
 }
 
 type apiResponse struct {
-	Ok     bool            `json:"ok"`
-	Result json.RawMessage `json:"result,omitempty"`
+	Ok     bool               `json:"ok"`
+	Result stdJson.RawMessage `json:"result,omitempty"`
 	APIError
 }
 

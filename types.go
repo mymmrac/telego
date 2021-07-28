@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 )
