@@ -272,29 +272,27 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	return nil
 }
 
-// TODO: Refactor (without json encoding)
-
 func toParams(v interface{}) (map[string]string, error) {
-	tmpBuf := bytes.Buffer{}
-	err := json.NewEncoder(&tmpBuf).Encode(v)
-	if err != nil {
-		return nil, fmt.Errorf("encoding json: %w", err)
+	val := reflect.ValueOf(v)
+	if val.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("%s not a struct", val.Kind())
 	}
-
-	var m map[string]interface{}
-	err = json.NewDecoder(&tmpBuf).Decode(&m)
-	if err != nil {
-		return nil, fmt.Errorf("decoding json: %w", err)
-	}
+	typ := val.Type()
 
 	params := make(map[string]string)
 
-	for key, value := range m {
-		kind := reflect.ValueOf(value).Kind()
+	for i := 0; i < val.NumField(); i++ {
+		structField := typ.Field(i)
+		field := val.Field(i)
+
+		key := structField.Tag.Get("json")
+		value := field.Interface()
+
+		kind := field.Kind()
 		if kind == reflect.Struct || kind == reflect.Slice || kind == reflect.Map {
 			buf := bytes.Buffer{}
 
-			err = json.NewEncoder(&buf).Encode(value)
+			err := json.NewEncoder(&buf).Encode(value)
 			if err != nil {
 				return nil, fmt.Errorf("encoding json: %w", err)
 			}
