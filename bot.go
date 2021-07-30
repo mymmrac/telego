@@ -44,10 +44,12 @@ var (
 
 // Bot - Represents telegram bot
 type Bot struct {
-	token  string
-	apiURL string
-	client *http.Client
-	log    *logrus.Logger
+	token          string
+	apiURL         string
+	client         *http.Client
+	stopChannel    chan struct{}
+	updateInterval time.Duration
+	log            *logrus.Logger
 }
 
 // NewBot - Creates new bot
@@ -64,10 +66,11 @@ func NewBot(token string) (*Bot, error) {
 	log.SetLevel(logrus.ErrorLevel)
 
 	return &Bot{
-		token:  token,
-		apiURL: defaultBotAPIServer,
-		client: http.DefaultClient,
-		log:    log,
+		token:          token,
+		apiURL:         defaultBotAPIServer,
+		client:         http.DefaultClient,
+		updateInterval: defaultUpdateInterval,
+		log:            log,
 	}, nil
 }
 
@@ -137,12 +140,12 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 	}
 
 	resp, err := b.client.Post(url, jsonContentType, buffer)
-	defer func() {
-		_ = resp.Body.Close()
-	}()
 	if err != nil {
 		return nil, fmt.Errorf("post request: %w", err)
 	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	apiResp := &apiResponse{}
 
@@ -201,12 +204,12 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 	}
 
 	resp, err := b.client.Post(url, writer.FormDataContentType(), buffer)
-	defer func() {
-		_ = resp.Body.Close()
-	}()
 	if err != nil {
 		return nil, fmt.Errorf("post request: %w", err)
 	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	apiResp := &apiResponse{}
 
