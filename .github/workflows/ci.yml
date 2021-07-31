@@ -1,16 +1,14 @@
 name: CI
-
-on:
+'on':
     push:
         branches:
             - main
     pull_request:
         branches:
             - main
-
 jobs:
-    setup:
-        name: Setup
+    golang:
+        name: Golang
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -19,16 +17,10 @@ jobs:
             - name: Set up Go
               uses: actions/setup-go@v2
               with:
-                go-version: 1.16
-                
-    linter:
-        name: Linter
-        needs: setup
-        runs-on: ubuntu-latest
-        steps:
+                  go-version: 1.16
+
             - name: Install linter
               run: make lint-install
 
             - name: Run linter
               run: make lint
-
