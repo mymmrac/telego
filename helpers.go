@@ -9,8 +9,8 @@ import (
 const (
 	updateChanBuffer = 100
 
-	defaultUpdateInterval = time.Second
-	retryTimeout          = time.Second * 3
+	defaultUpdateInterval = time.Second / 2 // 0.5s
+	retryTimeout          = time.Second * 3 // 3s
 )
 
 // TODO: Check if needed (GetUpdatesParams.Timeout?)
@@ -39,8 +39,10 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 
 			updates, err := b.GetUpdates(params)
 			if err != nil {
-				b.log.Error(err)
-				b.log.Infof("Retrying to get updates in %s", retryTimeout.String())
+				if b.printErrors {
+					fmt.Printf("%s Getting updates: %v\n", logStarting(errorMode), err)
+					fmt.Printf("%s Retrying to get updates in %s\n", logStarting(errorMode), retryTimeout.String())
+				}
 
 				time.Sleep(retryTimeout)
 				continue
@@ -63,8 +65,8 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string) {
 	go func() {
 		err := http.ListenAndServeTLS(address, certificateFile, keyFile, nil)
-		if err != nil {
-			b.log.Errorf("listening for webhook: %v", err)
+		if err != nil && b.printErrors {
+			fmt.Printf("%s Listening for webhook: %v\n", logStarting(errorMode), err)
 		}
 	}()
 }

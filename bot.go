@@ -15,7 +15,6 @@ import (
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/sirupsen/logrus"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -30,6 +29,16 @@ const (
 	attachFile = `attach://`
 
 	omitEmptySuffix = ",omitempty"
+
+	ansiReset  = "\u001B[0m"
+	ansiRed    = "\u001B[31m"
+	ansiYellow = "\u001B[33m"
+	ansiBlue   = "\u001B[34m"
+)
+
+var (
+	// ErrInvalidToken - Bot token is invalid according to token regexp
+	ErrInvalidToken = errors.New("invalid token")
 )
 
 func validateToken(token string) bool {
@@ -37,10 +46,23 @@ func validateToken(token string) bool {
 	return reg.MatchString(token)
 }
 
-var (
-	// ErrInvalidToken - Bot token is invalid according to token regexp
-	ErrInvalidToken = errors.New("invalid token")
+type logMode string
+
+const (
+	debugMode logMode = "DEBUG"
+	errorMode logMode = "ERROR"
 )
+
+func logStarting(mode logMode) string {
+	timeNow := ansiBlue + time.Now().Local().Format(time.UnixDate) + ansiReset
+	switch mode {
+	case debugMode:
+		return fmt.Sprintf("[%s] %sDEBUG%s", timeNow, ansiYellow, ansiReset)
+	case errorMode:
+		return fmt.Sprintf("[%s] %sERROR%s", timeNow, ansiRed, ansiReset)
+	}
+	return "LOG"
+}
 
 // Bot - Represents telegram bot
 type Bot struct {
@@ -49,7 +71,8 @@ type Bot struct {
 	client         *http.Client
 	stopChannel    chan struct{}
 	updateInterval time.Duration
-	log            *logrus.Logger
+	debugMode      bool
+	printErrors    bool
 }
 
 // NewBot - Creates new bot
@@ -58,20 +81,22 @@ func NewBot(token string) (*Bot, error) {
 		return nil, ErrInvalidToken
 	}
 
-	log := logrus.StandardLogger()
-	formatter := new(logrus.TextFormatter)
-	formatter.TimestampFormat = time.RFC1123
-	formatter.FullTimestamp = true
-	log.SetFormatter(formatter)
-	log.SetLevel(logrus.ErrorLevel)
-
 	return &Bot{
 		token:          token,
 		apiURL:         defaultBotAPIServer,
 		client:         http.DefaultClient,
 		updateInterval: defaultUpdateInterval,
-		log:            log,
+		debugMode:      false,
+		printErrors:    true,
 	}, nil
+}
+
+func (b *Bot) DebugMode(enabled bool) {
+	b.debugMode = enabled
+}
+
+func (b *Bot) PrintErrors(enabled bool) {
+	b.printErrors = enabled
 }
 
 func (b *Bot) SetToken(token string) error {
@@ -98,14 +123,6 @@ func (b *Bot) SetClient(client *http.Client) error {
 	return nil
 }
 
-func (b *Bot) DebugMode(is bool) {
-	if is {
-		b.log.SetLevel(logrus.DebugLevel)
-		return
-	}
-	b.log.SetLevel(logrus.ErrorLevel)
-}
-
 type apiResponse struct {
 	Ok     bool               `json:"ok"`
 	Result stdJson.RawMessage `json:"result,omitempty"`
@@ -113,7 +130,7 @@ type apiResponse struct {
 }
 
 func (a apiResponse) String() string {
-	return fmt.Sprintf("[OK: %t, ERR: %s]: %s", a.Ok, a.APIError.Error(), string(a.Result))
+	return fmt.Sprintf("Ok: %t, Err: {%v}, Result: %s", a.Ok, a.APIError, a.Result)
 }
 
 type APIError struct {
@@ -154,7 +171,9 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
 
-	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
+	if b.debugMode {
+		fmt.Printf("%s API response %s: %s\n", logStarting(debugMode), methodName, apiResp.String())
+	}
 
 	return apiResp, nil
 }
@@ -218,7 +237,9 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
 
-	b.log.Debug(apiResp.String())
+	if b.debugMode {
+		fmt.Printf("%s API response %s: %s\n", logStarting(debugMode), methodName, apiResp.String())
+	}
 
 	return apiResp, nil
 }

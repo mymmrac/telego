@@ -19,6 +19,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
 	bot.DebugMode(true)
 
 	_, err = bot.GetMe()
