@@ -3,3 +3,6 @@
 
 # VS Code folder
 .vscode
+
+# Generated fiels
+*.generated

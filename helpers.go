@@ -13,6 +13,8 @@ const (
 	retryTimeout          = time.Second * 3
 )
 
+// TODO: Check if needed (GetUpdatesParams.Timeout?)
+
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
 	b.updateInterval = interval
 }

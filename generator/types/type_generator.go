@@ -46,7 +46,7 @@ func main() {
 	typePatternReg := regexp.MustCompile(generator.RemoveNewline(typePattern))
 	fieldPatternReg := regexp.MustCompile(generator.RemoveNewline(fieldPattern))
 
-	file, err := os.Create("types_generated.go.bak")
+	file, err := os.Create("types_generated.go.generated")
 	if err != nil {
 		fmt.Println(err)
 		return
