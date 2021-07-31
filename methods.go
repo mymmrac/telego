@@ -1860,13 +1860,13 @@ type GetChatMemberParams struct {
 // GetChatMember - Use this method to get information about a member of a chat. Returns a ChatMember
 // (#chatmember) object on success.
 func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
-	var chatMemberData chatMemberData
-	err := b.performRequest("getChatMember", params, &chatMemberData)
+	var memberData chatMemberData
+	err := b.performRequest("getChatMember", params, &memberData)
 	if err != nil {
 		return nil, fmt.Errorf("getChatMember(): %w", err)
 	}
 
-	return chatMemberData.Data, nil
+	return memberData.Data, nil
 }
 
 // SetChatStickerSetParams - Represents parameters of setChatStickerSet method.

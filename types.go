@@ -622,7 +622,8 @@ type Contact struct {
 
 	// UserID - Optional. Contact's user identifier in Telegram. This number may have more than 32 significant
 	// bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at
-	// most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+	// most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing
+	// this identifier.
 	UserID int64 `json:"user_id,omitempty"`
 
 	// Vcard - Optional. Additional data about the contact in the form of a vCard (https://en.wikipedia.org/wiki/VCard)
@@ -1035,7 +1036,8 @@ type CallbackQuery struct {
 	// data in this field.
 	Data string `json:"data,omitempty"`
 
-	// GameShortName - Optional. Short name of a Game (#games) to be returned, serves as the unique identifier for the game
+	// GameShortName - Optional. Short name of a Game (#games) to be returned, serves as the unique identifier
+	// for the game
 	GameShortName string `json:"game_short_name,omitempty"`
 }
 
@@ -1598,8 +1600,10 @@ type InputMediaPhoto struct {
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 }
 
+const MediaTypePhoto = "photo"
+
 func (i *InputMediaPhoto) MediaType() string {
-	return "photo"
+	return MediaTypePhoto
 }
 
 func (i *InputMediaPhoto) fileParameters() map[string]*os.File {
@@ -1651,8 +1655,10 @@ type InputMediaVideo struct {
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 }
 
+const MediaTypeVideo = "video"
+
 func (i *InputMediaVideo) MediaType() string {
-	return "video"
+	return MediaTypeVideo
 }
 
 func (i *InputMediaVideo) fileParameters() map[string]*os.File {
@@ -1708,8 +1714,10 @@ type InputMediaAnimation struct {
 	Duration int `json:"duration,omitempty"`
 }
 
+const MediaTypeAnimation = "animation"
+
 func (i *InputMediaAnimation) MediaType() string {
-	return "animation"
+	return MediaTypeAnimation
 }
 
 func (i *InputMediaAnimation) fileParameters() map[string]*os.File {
@@ -1763,8 +1771,10 @@ type InputMediaAudio struct {
 	Title string `json:"title,omitempty"`
 }
 
+const MediaTypeAudio = "audio"
+
 func (i *InputMediaAudio) MediaType() string {
-	return "audio"
+	return MediaTypeAudio
 }
 
 func (i *InputMediaAudio) fileParameters() map[string]*os.File {
@@ -1813,8 +1823,10 @@ type InputMediaDocument struct {
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
 }
 
+const MediaTypeDocument = "document"
+
 func (i *InputMediaDocument) MediaType() string {
-	return "document"
+	return MediaTypeDocument
 }
 
 func (i *InputMediaDocument) fileParameters() map[string]*os.File {
@@ -1990,8 +2002,10 @@ type InlineQueryResultArticle struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+const ResultTypeArticle = "article"
+
 func (i *InlineQueryResultArticle) ResultType() string {
-	return "article"
+	return ResultTypeArticle
 }
 
 // InlineQueryResultPhoto - Represents a link to a photo. By default, this photo will be sent by the user with
@@ -2040,8 +2054,10 @@ type InlineQueryResultPhoto struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypePhoto = "photo"
+
 func (i *InlineQueryResultPhoto) ResultType() string {
-	return "photo"
+	return ResultTypePhoto
 }
 
 // InlineQueryResultGif - Represents a link to an animated GIF file. By default, this animated GIF file will be
@@ -2094,8 +2110,10 @@ type InlineQueryResultGif struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypeGif = "gif"
+
 func (i *InlineQueryResultGif) ResultType() string {
-	return "gif"
+	return ResultTypeGif
 }
 
 // InlineQueryResultMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without sound).
@@ -2148,8 +2166,10 @@ type InlineQueryResultMpeg4Gif struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypeMpeg4Gif = "mpeg4_gif"
+
 func (i *InlineQueryResultMpeg4Gif) ResultType() string {
-	return "mpeg4_gif"
+	return ResultTypeMpeg4Gif
 }
 
 // InlineQueryResultVideo - Represents a link to a page containing an embedded video player or a video file.
@@ -2205,8 +2225,10 @@ type InlineQueryResultVideo struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypeVideo = "video"
+
 func (i *InlineQueryResultVideo) ResultType() string {
-	return "video"
+	return ResultTypeVideo
 }
 
 // InlineQueryResultAudio - Represents a link to an MP3 audio file. By default, this audio file will be
@@ -2249,8 +2271,10 @@ type InlineQueryResultAudio struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypeAudio = "audio"
+
 func (i *InlineQueryResultAudio) ResultType() string {
-	return "audio"
+	return ResultTypeAudio
 }
 
 // InlineQueryResultVoice - Represents a link to a voice recording in an .OGG container encoded with OPUS.
@@ -2290,8 +2314,10 @@ type InlineQueryResultVoice struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypeVoice = "voice"
+
 func (i *InlineQueryResultVoice) ResultType() string {
-	return "voice"
+	return ResultTypeVoice
 }
 
 // InlineQueryResultDocument - Represents a link to a file. By default, this file will be sent by the user
@@ -2343,8 +2369,10 @@ type InlineQueryResultDocument struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+const ResultTypeDocument = "document"
+
 func (i *InlineQueryResultDocument) ResultType() string {
-	return "document"
+	return ResultTypeDocument
 }
 
 // InlineQueryResultLocation - Represents a location on a map. By default, the location will be sent by the user.
@@ -2396,8 +2424,10 @@ type InlineQueryResultLocation struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+const ResultTypeLocation = "location"
+
 func (i *InlineQueryResultLocation) ResultType() string {
-	return "location"
+	return ResultTypeLocation
 }
 
 // InlineQueryResultVenue - Represents a venue. By default, the venue will be sent by the user.
@@ -2451,8 +2481,10 @@ type InlineQueryResultVenue struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+const ResultTypeVenue = "venue"
+
 func (i *InlineQueryResultVenue) ResultType() string {
-	return "venue"
+	return ResultTypeVenue
 }
 
 // InlineQueryResultContact - Represents a contact with a phone number. By default,
@@ -2495,8 +2527,10 @@ type InlineQueryResultContact struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+const ResultTypeContact = "contact"
+
 func (i *InlineQueryResultContact) ResultType() string {
-	return "contact"
+	return ResultTypeContact
 }
 
 // InlineQueryResultGame - Represents a Game (#games).
@@ -2514,8 +2548,10 @@ type InlineQueryResultGame struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+const ResultTypeGame = "game"
+
 func (i *InlineQueryResultGame) ResultType() string {
-	return "game"
+	return ResultTypeGame
 }
 
 // InlineQueryResultCachedPhoto - Represents a link to a photo stored on the Telegram servers.
@@ -2556,7 +2592,7 @@ type InlineQueryResultCachedPhoto struct {
 }
 
 func (i *InlineQueryResultCachedPhoto) ResultType() string {
-	return "photo"
+	return ResultTypePhoto
 }
 
 // InlineQueryResultCachedGif - Represents a link to an animated GIF file stored on the Telegram servers.
@@ -2594,7 +2630,7 @@ type InlineQueryResultCachedGif struct {
 }
 
 func (i *InlineQueryResultCachedGif) ResultType() string {
-	return "gif"
+	return ResultTypeGif
 }
 
 // InlineQueryResultCachedMpeg4Gif - Represents a link to a video animation
@@ -2633,7 +2669,7 @@ type InlineQueryResultCachedMpeg4Gif struct {
 }
 
 func (i *InlineQueryResultCachedMpeg4Gif) ResultType() string {
-	return "mpeg4_gif"
+	return ResultTypeMpeg4Gif
 }
 
 // InlineQueryResultCachedSticker - Represents a link to a sticker stored on the Telegram servers.
@@ -2656,8 +2692,10 @@ type InlineQueryResultCachedSticker struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+const ResultTypeSticker = "sticker"
+
 func (i *InlineQueryResultCachedSticker) ResultType() string {
-	return "sticker"
+	return ResultTypeSticker
 }
 
 // InlineQueryResultCachedDocument - Represents a link to a file stored on the Telegram servers.
@@ -2698,7 +2736,7 @@ type InlineQueryResultCachedDocument struct {
 }
 
 func (i *InlineQueryResultCachedDocument) ResultType() string {
-	return "document"
+	return ResultTypeDocument
 }
 
 // InlineQueryResultCachedVideo - Represents a link to a video file stored on the Telegram servers.
@@ -2739,7 +2777,7 @@ type InlineQueryResultCachedVideo struct {
 }
 
 func (i *InlineQueryResultCachedVideo) ResultType() string {
-	return "video"
+	return ResultTypeVideo
 }
 
 // InlineQueryResultCachedVoice - Represents a link to a voice message stored on the Telegram servers.
@@ -2777,7 +2815,7 @@ type InlineQueryResultCachedVoice struct {
 }
 
 func (i *InlineQueryResultCachedVoice) ResultType() string {
-	return "voice"
+	return ResultTypeVoice
 }
 
 // InlineQueryResultCachedAudio - Represents a link to an MP3 audio file stored on the Telegram servers.
@@ -2812,7 +2850,7 @@ type InlineQueryResultCachedAudio struct {
 }
 
 func (i *InlineQueryResultCachedAudio) ResultType() string {
-	return "audio"
+	return ResultTypeAudio
 }
 
 // InputMessageContent - This object represents the content of a message to be sent as a result of an

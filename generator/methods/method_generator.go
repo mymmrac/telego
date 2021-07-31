@@ -60,9 +60,9 @@ func main() {
 		return
 	}
 	defer func() {
-		err := response.Body.Close()
-		if err != nil {
-			fmt.Println(err)
+		errClose := response.Body.Close()
+		if errClose != nil {
+			fmt.Println(errClose)
 			return
 		}
 	}()

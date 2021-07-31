@@ -1,69 +1,209 @@
-linters-settings:
-  dupl:
-    threshold: 100
-  funlen:
-    lines: 100
-    statements: 50
-  gci:
-    local-prefixes: github.com/mymmrac/softserve-tasks
-  goconst:
-    min-len: 2
-    min-occurrences: 2
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-    disabled-checks:
-      - dupImport # https://github.com/go-critic/go-critic/issues/845
-      - ifElseChain
-      - octalLiteral
-      - whyNoLint
-      - wrapperFunc
-  gocyclo:
-    min-complexity: 15
-  lll:
-    line-length: 120
-  misspell:
-    locale: US
-  nolintlint:
-    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
-    allow-unused: false # report any unused nolint directives
-    require-explanation: false # don't require an explanation for nolint directives
-    require-specific: false # don't require nolint directives to be specific about which linter is being skipped
+# options for analysis running
+run:
+    # which dirs to skip: they won't be analyzed;
+    # can use regexp here: generated.*, regexp is applied on full path;
+    # default value is empty list, but next dirs are always skipped independently
+    # from this option's value:
+    # vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+    skip-dirs:
+        - bin
+        - test
+
+# output configuration options
+output:
+    # sorts results by: filepath, line and column
+    sort-results: true
 
 linters:
-  # please, do not use `enable-all`: it's deprecated and will be removed soon.
-  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
-  disable-all: true
-  enable:
-    - gosimple
-    - govet
-    - ineffassign
-    - staticcheck
-    - bodyclose
-    - dupl
-    - exportloopref
-    - funlen
-    - gocognit
-    - goconst
-    - revive
-    - gocritic
-    - gocyclo
-    - goprintffuncname
-    - gosec
-    - prealloc
-    - stylecheck
-    - unconvert
-    - whitespace
-    - errorlint
-    - lll
-    - misspell
-    - nolintlint
+    # please, do not use `enable-all`: it's deprecated and will be removed soon.
+    # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
+    disable-all: true
+    enable:
+        - govet # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
+        - errcheck # Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases
+        - staticcheck # Staticcheck is a go vet on steroids, applying a ton of static analysis checks
+        - unused # Checks Go code for unused constants, variables, functions and types
+        - gosimple # Linter for Go source code that specializes in simplifying a code
+        - structcheck # Finds unused struct fields
+        - varcheck # Finds unused global variables and constants
+        - ineffassign # Detects when assignments to existing variables are not used
+        - deadcode # Finds unused code
+        - typecheck # Like the front-end of a Go compiler, parses and type-checks Go code
+        - nestif # Reports deeply nested if statements
+        - asciicheck # Simple linter to check that your code does not contain non-ASCII identifiers
+        - goimports # Goimports does everything that gofmt does. Additionally it checks unused imports
+        - misspell # Finds commonly misspelled English words in comments
+        - dupl # Tool for code clone detection
+        - lll # Reports long lines
+        - gocyclo # Computes and checks the cyclomatic complexity of functions
+        - gofmt # Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
+        - gosec # Inspects source code for security problems
+        - dogsled # Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())
+        - gochecknoinits # Checks that no init functions are present in Go code
+        - gocognit # Computes and checks the cognitive complexity of functions
+        - goconst # Finds repeated strings that could be replaced by a constant
+        - gomnd # An analyzer to detect magic numbers.
+        - nakedret #  Finds naked returns in functions greater than a specified function length
+        - unparam # Reports unused function parameters
+        - depguard # Go linter that checks if package imports are in a list of acceptable packages
+        - whitespace # Tool for detection of leading and trailing whitespace
+        - unconvert # Remove unnecessary type conversions
+        - rowserrcheck # checks whether Err of rows is checked successfully
+        - prealloc # Finds slice declarations that could potentially be preallocated
+        - gomodguard # Allow and block list linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations.
+        #        - godox # Tool for detection of FIXME, TODO and other comment keywords
+        - gocritic # The most opinionated Go source code linter
+        - funlen # Tool for detection of long functions
+        - gci # Gci control golang package import order and make it always deterministic.
+        - bodyclose # checks whether HTTP response body is closed successfully
+        - exportloopref # Checks for pointers to enclosing loop variables
+        - revive # Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.
+        - errorlint # Errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.
 
-run:
-  skip-dirs:
-    - bin
+        # To see a list of enabled/disabled by current configuration linters:
+        # golangci-lint linters
 
+# all available settings of specific linters
+linters-settings:
+    govet: # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments
+        # do not align with the format string
+        check-shadowing: true # report about shadowed variables
+        assign: true # check for useless assignments
+        atomic: true # check for common mistakes using the sync/atomic package
+        bools: true # check for common mistakes involving boolean operators
+        buildtag: true # check that +build tags are well-formed and correctly located
+        composites: true # check for unkeyed composite literals
+        copylocks: true # check for locks erroneously passed by value
+        httpresponse: true # check for mistakes using HTTP responses
+        loopclosure: true # check references to loop variables from within nested functions
+        lostcancel: true # check cancel func returned by context.WithCancel is called
+        nilfunc: true # check for useless comparisons between functions and nil
+        printf: true # check consistency of Printf format strings and arguments
+        stdmethods: true # check signature of methods of well-known interfaces
+        structtag: true # check that struct field tags conform to reflect.StructTag.Get
+        tests: true # check for common mistaken usages of tests and examples
+        unmarshal: true # report passing non-pointer or non-interface values to unmarshal
+        unreachable: true # check for unreachable code
+        unusedresult: true # check for unused results of calls to some functions
+    gocyclo:
+        # minimal code complexity to report, 30 by default (but we recommend 10-20)
+        min-complexity: 10 # TODO: Check if not too low (set 15)
+    dupl: # Tool for code clone detection
+        # tokens count to trigger issue, 150 by default
+        threshold: 150
+    misspell:
+        # Correct spellings using locale preferences for US or UK.
+        # Default is to use a neutral variety of English.
+        # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+        locale: US
+    nestif:
+        # minimal complexity of if statements to report, 5 by default
+        # 2 to prevent scary functions/method/etc with a ton of nested ifs
+        min-complexity: 5 # Sonarqube uses 5
+    dogsled:
+        # checks assignments with too many blank identifiers; default is 2
+        # 1 to prevent such work of art: _, _, value := functionCall()
+        max-blank-identifiers: 2
+    errcheck:
+        # report about not checking of errors in type assertions: `a := b.(MyStruct)`;
+        # default is false: such cases aren't reported by default.
+        check-type-assertions: true
+
+        # specify a path to a file containing a list of functions to be excluded.
+        # exclude:
+        # to be added
+    gocognit:
+        # minimal code complexity to report, 30 by default (but we recommend 10-20)
+        min-complexity: 15
+    goconst:
+        # minimal length of string constant, 3 by default
+        min-len: 3
+        # minimal occurrences count to trigger, 3 by default
+        min-occurrences: 3
+    gofmt:
+        # simplify code: gofmt with `-s` option, true by default
+        simplify: true
+    gomnd:
+        settings:
+            mnd:
+                # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+                checks:
+                    - argument
+                    - assign
+                    - case
+                    - condition
+                    - operation
+                    - return
+    lll:
+        # max line length, lines longer will be reported. Default is 120.
+        # '\t' is counted as 1 character by default, and can be changed with the tab-width option
+        line-length: 120
+        # tab width in spaces. Default to 1.
+        # tabulation - 4 spaces. the end.
+        tab-width: 4
+    nakedret:
+        # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
+        # decided to use 3 to exclude long functions with named returns which can be a potential source of many errors / bugs
+        max-func-lines: 3
+    unparam:
+        # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
+        # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
+        # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
+        # with golangci-lint call it on a directory with the changed file.
+        check-exported: false
+    unused:
+        # treat code as a program (not a library) and report unused exported identifiers; default is false.
+        # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
+        # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
+        # with golangci-lint call it on a directory with the changed file.
+        check-exported: false
+    deadcode:
+        # Include test files
+        test: true
+    staticcheck:
+        # Include tests in the analysis.
+        tests: true
+    depguard:
+        list-type: blacklist
+        include-go-root: false
+        packages:
+            - unsafe
+            - reflect
+            - https://github.com/afex/hystrix-go
+            - https://github.com/ContinuumLLC/platform-common-lib
+            - https://github.com/ContinuumLLC/Platform-Infrastructure-lib
+        packages-with-error-message:
+            # specify an error message to output when a blacklisted package is used
+            -   https://github.com/ContinuumLLC/platform-common-lib: "deprecated in github, use https://gitlab.connectwisedev.com/platform/platform-common-lib instead"
+            -   https://github:com/ContinuumLLC/Platform-Infrastructure-lib: "deprecated in github, use https://gitlab.connectwisedev.com/platform/Platform-Infrastructure-lib instead"
+            -   https://github.com/afex/hystrix-go: "use continuum fork instead: https://github.com/ContinuumLLC/hystrix-go"
+            -   reflect: "restricted in general but can be approved in some specific cases"
+    funlen:
+        lines: 150
+        statements: 50
+    gci:
+        local-prefixes: github.com/mymmrac/go-telegram-bot-api
+
+issues:
+    # Excluding configuration per-path, per-linter, per-text and per-source
+    #    exclude-rules:
+    #        - path: _test\.go
+    #          linters:
+    #              - gocyclo
+    #              - errcheck
+    #              - dupl
+    #              - gosec
+    #              - lll
+    #              - funlen
+    #        - linters:
+    #              - lll
+    #          source: "^//go:generate "
+    #        - path: config
+    #          linters:
+    #              - lll
+
+    # Independently from option `exclude` we use default exclude patterns,
+    # it can be disabled by this option. To list all
+    # excluded by default patterns execute `golangci-lint run --help`.
+    # Default value for this option is true.
+    exclude-use-default: false

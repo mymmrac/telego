@@ -245,10 +245,7 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 }
 
 func (b *Bot) performRequest(methodName string, parameters, v interface{}) error {
-	var (
-		resp *apiResponse
-		err  error
-	)
+	var resp *apiResponse
 
 	switch p := parameters.(type) {
 	case fileCompatible:
@@ -272,12 +269,14 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 				return fmt.Errorf("request multipart form data: %w", err)
 			}
 		} else {
+			var err error
 			resp, err = b.apiRequest(methodName, parameters)
 			if err != nil {
 				return fmt.Errorf("request: %w", err)
 			}
 		}
 	default:
+		var err error
 		resp, err = b.apiRequest(methodName, parameters)
 		if err != nil {
 			return fmt.Errorf("request: %w", err)
@@ -289,7 +288,7 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	}
 
 	if resp.Result != nil {
-		err = json.Unmarshal(resp.Result, &v)
+		err := json.Unmarshal(resp.Result, &v)
 		if err != nil {
 			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(v), err)
 		}
@@ -320,9 +319,7 @@ func toParams(v interface{}) (map[string]string, error) {
 		}
 
 		key := structField.Tag.Get("json")
-		if strings.HasSuffix(key, omitEmptySuffix) {
-			key = key[:len(key)-len(omitEmptySuffix)]
-		}
+		key = strings.TrimSuffix(key, omitEmptySuffix)
 		value := field.Interface()
 
 		kind := field.Kind()
