@@ -87,7 +87,7 @@ linters-settings:
         unusedresult: true # check for unused results of calls to some functions
     gocyclo:
         # minimal code complexity to report, 30 by default (but we recommend 10-20)
-        min-complexity: 10 # TODO: Check if not too low (set 15)
+        min-complexity: 15
     dupl: # Tool for code clone detection
         # tokens count to trigger issue, 150 by default
         threshold: 150
@@ -114,7 +114,7 @@ linters-settings:
         # to be added
     gocognit:
         # minimal code complexity to report, 30 by default (but we recommend 10-20)
-        min-complexity: 15
+        min-complexity: 20
     goconst:
         # minimal length of string constant, 3 by default
         min-len: 3

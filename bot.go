@@ -298,19 +298,19 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 }
 
 func toParams(v interface{}) (map[string]string, error) {
-	val := reflect.ValueOf(v).Elem()
-	if val.Kind() != reflect.Struct {
-		return nil, fmt.Errorf("%s not a struct", val.Kind())
+	paramsStruct := reflect.ValueOf(v).Elem()
+	if paramsStruct.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("%s not a struct", paramsStruct.Kind())
 	}
-	typ := val.Type()
+	paramsStructType := paramsStruct.Type()
 
 	params := make(map[string]string)
 
-	for i := 0; i < val.NumField(); i++ {
-		structField := typ.Field(i)
-		field := val.Field(i)
+	for i := 0; i < paramsStruct.NumField(); i++ {
+		structField := paramsStructType.Field(i)
+		field := paramsStruct.Field(i)
 
-		if field.IsZero() || (field.Kind() == reflect.Ptr && field.IsNil()) {
+		if field.IsZero() {
 			continue
 		}
 
@@ -318,34 +318,30 @@ func toParams(v interface{}) (map[string]string, error) {
 			field = field.Elem()
 		}
 
-		key := structField.Tag.Get("json")
-		key = strings.TrimSuffix(key, omitEmptySuffix)
 		value := field.Interface()
+		var stringValue string
 
-		kind := field.Kind()
-		if kind == reflect.Struct || kind == reflect.Slice || kind == reflect.Map {
+		switch field.Kind() {
+		case reflect.Struct, reflect.Slice:
 			buf := bytes.Buffer{}
 
-			err := json.NewEncoder(&buf).Encode(value)
-			if err != nil {
+			if err := json.NewEncoder(&buf).Encode(value); err != nil {
 				return nil, fmt.Errorf("encoding json: %w", err)
 			}
 
-			strVal := buf.String()
-			strVal = strVal[:len(strVal)-1] // remove "\n" from end of the string
-			if strVal == "" {
-				continue
-			}
-			params[key] = strVal
+			stringValue = buf.String()
+			stringValue = strings.TrimSuffix(stringValue, "\n")
+		default:
+			stringValue = fmt.Sprintf("%v", value)
+		}
 
+		if stringValue == "" {
 			continue
 		}
 
-		strVal := fmt.Sprintf("%v", value)
-		if strVal == "" {
-			continue
-		}
-		params[key] = strVal
+		key := structField.Tag.Get("json")
+		key = strings.TrimSuffix(key, omitEmptySuffix)
+		params[key] = stringValue
 	}
 
 	return params, nil
