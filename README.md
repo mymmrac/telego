@@ -1,4 +1,4 @@
-# Go Telegram bot API
+# Go Telegram Bot API
 
 [![CI Status](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
@@ -6,4 +6,227 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 
-Telegram Bot API library for Golang
+Telegram Bot API library for Golang with full [API](https://core.telegram.org/bots/api) implementation (one-to-one)
+
+The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
+have been represented in [`types.go`](https://github.com/mymmrac/go-telegram-bot-api/blob/main/types.go)
+and [`methods.go`](https://github.com/mymmrac/go-telegram-bot-api/blob/main/methods.go) files with mostly all
+documentation from telegram.
+
+> Note: `types.go` and `methods.go` was automatically [generated](https://github.com/mymmrac/go-telegram-bot-api/tree/main/generator) from [documentation](https://core.telegram.org/bots/api), and it's possible that they have errors or missing parts both in comments and actual code.
+> Fell free to report such things.
+
+## Examples
+
+How to get the library: `go get -u github.com/mymmrac/go-telegram-bot-api`
+
+> Note: All methods that have `(default: ...)` in comment isn't required for working bot, they were used just to show available configuration options.
+
+> Note: Error handling may be missing in examples, but I strongly recommend to handle all errors.
+
+### Basic setup
+
+For start, you need to create instance of your bot and specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+
+	telego "github.com/mymmrac/go-telegram-bot-api"
+)
+
+func main() {
+	botToken := os.Getenv("TOKEN")
+
+	// Create bot
+	bot, err := telego.NewBot(botToken)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	
+	// Change bot token (default: set by telego.NewBot(...))
+	_ = bot.SetToken("new bot token")
+
+	// Change bot API server URL (default: https://api.telegram.org)
+	_ = bot.SetAPIServer("new bot api server")
+
+	// Change http client (default: http.DefaultClient)
+	_ = bot.SetClient(http.DefaultClient)
+
+	// Enable printing debug information (default: false)
+	bot.DebugMode(true)
+
+	// Enable printing errors (default: true)
+	bot.PrintErrors(true)
+}
+```
+
+### Getting updates
+
+In order to receive updates you can use two methods: 
+- using long polling (`bot.GetUpdatesChan`)
+- using webhook (`bot.ListenForWebhook`)
+
+Let's start from long pulling (easier for local testing):
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+	"time"
+
+	telego "github.com/mymmrac/go-telegram-bot-api"
+)
+
+func main() {
+	botToken := os.Getenv("TOKEN")
+
+	bot, err := telego.NewBot(botToken)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	bot.DebugMode(true)
+
+	// Set interval of getting updates (default: 0.5s)
+	bot.SetUpdateInterval(time.Second / 2)
+
+	// Get updates channel
+	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+
+	// Stop reviving updates from updates channel
+	defer bot.StopGettingUpdates()
+
+	// Loop through all updates when they came
+	for update := range updates {
+		fmt.Println("====")
+		fmt.Printf("%#v\n", update)
+		fmt.Println("====")
+	}
+}
+```
+
+Webhook example: 
+
+> Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+
+	telego "github.com/mymmrac/go-telegram-bot-api"
+)
+
+func main() {
+	botToken := os.Getenv("TOKEN")
+
+	bot, err := telego.NewBot(botToken)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	bot.DebugMode(true)
+
+	// Setup a webhook
+	_ = bot.SetWebhook(&telego.SetWebhookParams{
+		URL:         "https://www.google.com:443/" + bot.Token(),
+		Certificate: &telego.InputFile{File: mustOpen("cert.pem")},
+	})
+
+	// Receive information about webhook
+	info, _ := bot.GetWebhookInfo()
+	fmt.Println()
+	fmt.Printf("%#v\n", info)
+	fmt.Println()
+
+	// Get updates channel from webhook
+	updates, _ := bot.ListenForWebhook("/" + bot.Token())
+
+	// Start server for receiving requests from telegram
+	bot.StartListeningForWebhook("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
+
+	// Loop through all updates when they came
+	for update := range updates {
+		fmt.Println("====")
+		fmt.Printf("%#v\n", update)
+		fmt.Println("====")
+	}
+}
+
+// Helper function to open file or panic
+func mustOpen(filename string) *os.File {
+	file, err := os.Open(filename)
+	if err != nil {
+		panic(err)
+	}
+	return file
+}
+```
+
+### Using Telegram methods
+
+All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be used by this library.
+They have same names and same parameters, parameters represented by struct with name: `<methodName>` + `Params`. 
+If method don't have required parameters `nil` value can be used as a parameter.
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+
+	telego "github.com/mymmrac/go-telegram-bot-api"
+)
+
+func main() {
+	botToken := os.Getenv("TOKEN")
+
+	bot, err := telego.NewBot(botToken)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	bot.DebugMode(true)
+
+	// Call method getMe
+	botUser, _ := bot.GetMe()
+	fmt.Println()
+	fmt.Printf("%#v\n", botUser)
+	fmt.Println()
+
+	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+	defer bot.StopGettingUpdates()
+
+	for update := range updates {
+		if update.Message != nil {
+			// Retrieve chat ID
+			chatID := update.Message.Chat.ID
+
+			// Call method sendMessage. Sends message to sender with same text (echo bot)
+			sentMessage, _ := bot.SendMessage(&telego.SendMessageParams{
+				ChatID: telego.ChatID{ID: chatID},
+				Text:   update.Message.Text,
+			})
+
+			fmt.Println()
+			fmt.Printf("%v\n", sentMessage)
+			fmt.Println()
+		}
+	}
+}
+
+```

@@ -51,6 +51,7 @@ type SetWebhookParams struct {
 
 	// Certificate - Optional. Upload your public key certificate so that the root certificate in use can be
 	// checked. See our self-signed guide (/bots/self-signed) for details.
+	// Please upload as File, sending a FileID or URL will not work.
 	Certificate *InputFile `json:"certificate,omitempty"`
 
 	// IPAddress - Optional. The fixed IP address which will be used to send webhook requests instead of the IP

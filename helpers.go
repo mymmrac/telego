@@ -13,7 +13,8 @@ const (
 	retryTimeout          = time.Second * 3 // 3s
 )
 
-// SetUpdateInterval - Sets interval of calling GetUpdates in GetUpdatesChan method
+// SetUpdateInterval - Sets interval of calling GetUpdates in GetUpdatesChan method. Ensures that between two calls
+// of GetUpdates will be at least specified time, but it could be longer.
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
 	b.updateInterval = interval
 }

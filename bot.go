@@ -110,6 +110,11 @@ func (b *Bot) SetToken(token string) error {
 	return nil
 }
 
+// Token - Returns bot token
+func (b *Bot) Token() string {
+	return b.token
+}
+
 // SetAPIServer - Sets bot API server
 func (b *Bot) SetAPIServer(apiURL string) error {
 	if apiURL == "" {
