@@ -1577,6 +1577,15 @@ type InputMedia interface {
 	fileCompatible
 }
 
+// Input media types
+const (
+	MediaTypePhoto     = "photo"
+	MediaTypeVideo     = "video"
+	MediaTypeAnimation = "animation"
+	MediaTypeAudio     = "audio"
+	MediaTypeDocument  = "document"
+)
+
 // InputMediaPhoto - Represents a photo to be sent.
 type InputMediaPhoto struct {
 	// Type - Type of the result, must be photo
@@ -1599,8 +1608,6 @@ type InputMediaPhoto struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 }
-
-const MediaTypePhoto = "photo"
 
 func (i *InputMediaPhoto) MediaType() string {
 	return MediaTypePhoto
@@ -1654,8 +1661,6 @@ type InputMediaVideo struct {
 	// SupportsStreaming - Optional. Pass True, if the uploaded video is suitable for streaming
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 }
-
-const MediaTypeVideo = "video"
 
 func (i *InputMediaVideo) MediaType() string {
 	return MediaTypeVideo
@@ -1714,8 +1719,6 @@ type InputMediaAnimation struct {
 	Duration int `json:"duration,omitempty"`
 }
 
-const MediaTypeAnimation = "animation"
-
 func (i *InputMediaAnimation) MediaType() string {
 	return MediaTypeAnimation
 }
@@ -1771,8 +1774,6 @@ type InputMediaAudio struct {
 	Title string `json:"title,omitempty"`
 }
 
-const MediaTypeAudio = "audio"
-
 func (i *InputMediaAudio) MediaType() string {
 	return MediaTypeAudio
 }
@@ -1822,8 +1823,6 @@ type InputMediaDocument struct {
 	// uploaded using multipart/form-data. Always true, if the document is sent as part of an album.
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
 }
-
-const MediaTypeDocument = "document"
 
 func (i *InputMediaDocument) MediaType() string {
 	return MediaTypeDocument
@@ -1966,6 +1965,23 @@ type InlineQueryResult interface {
 	ResultType() string
 }
 
+// Inline query result types
+const (
+	ResultTypeArticle  = "article"
+	ResultTypePhoto    = "photo"
+	ResultTypeGif      = "gif"
+	ResultTypeMpeg4Gif = "mpeg4_gif"
+	ResultTypeVideo    = "video"
+	ResultTypeAudio    = "audio"
+	ResultTypeVoice    = "voice"
+	ResultTypeDocument = "document"
+	ResultTypeLocation = "location"
+	ResultTypeVenue    = "venue"
+	ResultTypeContact  = "contact"
+	ResultTypeGame     = "game"
+	ResultTypeSticker  = "sticker"
+)
+
 // InlineQueryResultArticle - Represents a link to an article or web page.
 type InlineQueryResultArticle struct {
 	// Type - Type of the result, must be article
@@ -2001,8 +2017,6 @@ type InlineQueryResultArticle struct {
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
-
-const ResultTypeArticle = "article"
 
 func (i *InlineQueryResultArticle) ResultType() string {
 	return ResultTypeArticle
@@ -2053,8 +2067,6 @@ type InlineQueryResultPhoto struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
-
-const ResultTypePhoto = "photo"
 
 func (i *InlineQueryResultPhoto) ResultType() string {
 	return ResultTypePhoto
@@ -2110,8 +2122,6 @@ type InlineQueryResultGif struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
-const ResultTypeGif = "gif"
-
 func (i *InlineQueryResultGif) ResultType() string {
 	return ResultTypeGif
 }
@@ -2165,8 +2175,6 @@ type InlineQueryResultMpeg4Gif struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
-
-const ResultTypeMpeg4Gif = "mpeg4_gif"
 
 func (i *InlineQueryResultMpeg4Gif) ResultType() string {
 	return ResultTypeMpeg4Gif
@@ -2225,8 +2233,6 @@ type InlineQueryResultVideo struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
-const ResultTypeVideo = "video"
-
 func (i *InlineQueryResultVideo) ResultType() string {
 	return ResultTypeVideo
 }
@@ -2271,8 +2277,6 @@ type InlineQueryResultAudio struct {
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
 
-const ResultTypeAudio = "audio"
-
 func (i *InlineQueryResultAudio) ResultType() string {
 	return ResultTypeAudio
 }
@@ -2313,8 +2317,6 @@ type InlineQueryResultVoice struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice recording
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
-
-const ResultTypeVoice = "voice"
 
 func (i *InlineQueryResultVoice) ResultType() string {
 	return ResultTypeVoice
@@ -2369,8 +2371,6 @@ type InlineQueryResultDocument struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
-const ResultTypeDocument = "document"
-
 func (i *InlineQueryResultDocument) ResultType() string {
 	return ResultTypeDocument
 }
@@ -2423,8 +2423,6 @@ type InlineQueryResultLocation struct {
 	// ThumbHeight - Optional. Thumbnail height
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
-
-const ResultTypeLocation = "location"
 
 func (i *InlineQueryResultLocation) ResultType() string {
 	return ResultTypeLocation
@@ -2481,8 +2479,6 @@ type InlineQueryResultVenue struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
-const ResultTypeVenue = "venue"
-
 func (i *InlineQueryResultVenue) ResultType() string {
 	return ResultTypeVenue
 }
@@ -2527,8 +2523,6 @@ type InlineQueryResultContact struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
-const ResultTypeContact = "contact"
-
 func (i *InlineQueryResultContact) ResultType() string {
 	return ResultTypeContact
 }
@@ -2547,8 +2541,6 @@ type InlineQueryResultGame struct {
 	// ReplyMarkup - Optional. Inline keyboard (/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
-
-const ResultTypeGame = "game"
 
 func (i *InlineQueryResultGame) ResultType() string {
 	return ResultTypeGame
@@ -2691,8 +2683,6 @@ type InlineQueryResultCachedSticker struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the sticker
 	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
 }
-
-const ResultTypeSticker = "sticker"
 
 func (i *InlineQueryResultCachedSticker) ResultType() string {
 	return ResultTypeSticker

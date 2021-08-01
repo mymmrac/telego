@@ -91,14 +91,17 @@ func NewBot(token string) (*Bot, error) {
 	}, nil
 }
 
+// DebugMode - Enable/disable debug information
 func (b *Bot) DebugMode(enabled bool) {
 	b.debugMode = enabled
 }
 
+// PrintErrors - Enable/disable printing of errors
 func (b *Bot) PrintErrors(enabled bool) {
 	b.printErrors = enabled
 }
 
+// SetToken - Sets bot token
 func (b *Bot) SetToken(token string) error {
 	if !validateToken(token) {
 		return ErrInvalidToken
@@ -107,6 +110,7 @@ func (b *Bot) SetToken(token string) error {
 	return nil
 }
 
+// SetAPIServer - Sets bot API server
 func (b *Bot) SetAPIServer(apiURL string) error {
 	if apiURL == "" {
 		return errors.New("empty bot api server url")
@@ -115,6 +119,7 @@ func (b *Bot) SetAPIServer(apiURL string) error {
 	return nil
 }
 
+// SetClient - Sets http client to use
 func (b *Bot) SetClient(client *http.Client) error {
 	if client == nil {
 		return errors.New("nil http client")
@@ -133,6 +138,7 @@ func (a apiResponse) String() string {
 	return fmt.Sprintf("Ok: %t, Err: {%v}, Result: %s", a.Ok, a.APIError, a.Result)
 }
 
+// APIError - Represents error from telegram API
 type APIError struct {
 	Description string              `json:"description,omitempty"`
 	ErrorCode   int                 `json:"error_code,omitempty"`

@@ -13,16 +13,17 @@ const (
 	retryTimeout          = time.Second * 3 // 3s
 )
 
-// TODO: Check if needed (GetUpdatesParams.Timeout?)
-
+// SetUpdateInterval - Sets interval of calling GetUpdates in GetUpdatesChan method
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
 	b.updateInterval = interval
 }
 
+// StopGettingUpdates - Stop reviving updates from GetUpdatesChan method
 func (b *Bot) StopGettingUpdates() {
 	close(b.stopChannel)
 }
 
+// GetUpdatesChan - Receive updates in chan
 func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	b.stopChannel = make(chan struct{})
 	updatesChan := make(chan Update, updateChanBuffer)
@@ -62,6 +63,7 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	return updatesChan, nil
 }
 
+// StartListeningForWebhook - Start server for listening for webhook
 func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string) {
 	go func() {
 		err := http.ListenAndServeTLS(address, certificateFile, keyFile, nil)
@@ -71,6 +73,7 @@ func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string)
 	}()
 }
 
+// ListenForWebhook - Receive updates in chan from webhook
 func (b *Bot) ListenForWebhook(pattern string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
 
