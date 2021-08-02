@@ -1351,6 +1351,31 @@ type ChatMemberUpdated struct {
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
 }
 
+func (c *ChatMemberUpdated) UnmarshalJSON(bytes []byte) error {
+	var chatMemberUpdatedData struct {
+		Chat          Chat            `json:"chat"`
+		From          User            `json:"from"`
+		Date          int             `json:"date"`
+		OldChatMember chatMemberData  `json:"old_chat_member"`
+		NewChatMember chatMemberData  `json:"new_chat_member"`
+		InviteLink    *ChatInviteLink `json:"invite_link,omitempty"`
+	}
+
+	err := json.Unmarshal(bytes, &chatMemberUpdatedData)
+	if err != nil {
+		return err
+	}
+
+	c.Chat = chatMemberUpdatedData.Chat
+	c.From = chatMemberUpdatedData.From
+	c.Date = chatMemberUpdatedData.Date
+	c.OldChatMember = chatMemberUpdatedData.OldChatMember.Data
+	c.NewChatMember = chatMemberUpdatedData.NewChatMember.Data
+	c.InviteLink = chatMemberUpdatedData.InviteLink
+
+	return nil
+}
+
 // ChatPermissions - Describes actions that a non-administrator user is allowed to take in a chat.
 type ChatPermissions struct {
 	// CanSendMessages - Optional. True, if the user is allowed to send text messages, contacts, locations and venues
