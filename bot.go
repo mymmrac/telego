@@ -24,7 +24,7 @@ const (
 
 	jsonContentType = "application/json"
 
-	tokenRegexp = `^\d{9}:[\w-]{35}$` //nolint:gosec
+	tokenRegexp = `^\d{9,10}:[\w-]{35}$` //nolint:gosec
 
 	attachFile = `attach://`
 
