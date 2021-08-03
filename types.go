@@ -126,6 +126,14 @@ type User struct {
 	SupportsInlineQueries bool `json:"supports_inline_queries,omitempty"`
 }
 
+// Chat types
+const (
+	ChatTypePrivate    = "private"
+	ChatTypeGroup      = "group"
+	ChatTypeSupergroup = "supergroup"
+	ChatTypeChannel    = "channel"
+)
+
 // Chat - This object represents a chat.
 type Chat struct {
 	// ID - Unique identifier for this chat. This number may have more than 32 significant bits and some
@@ -1118,6 +1126,16 @@ type ChatMember interface {
 	MemberStatus() string
 }
 
+// ChatMember statuses
+const (
+	MemberStatusCreator       = "creator"
+	MemberStatusAdministrator = "administrator"
+	MemberStatusMember        = "member"
+	MemberStatusRestricted    = "restricted"
+	MemberStatusLeft          = "left"
+	MemberStatusKicked        = "kicked"
+)
+
 type chatMemberData struct {
 	Data ChatMember
 }
@@ -1133,27 +1151,27 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 	}
 
 	switch memberStatus.Status {
-	case "creator":
+	case MemberStatusCreator:
 		var cm *ChatMemberOwner
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
-	case "administrator":
+	case MemberStatusAdministrator:
 		var cm *ChatMemberAdministrator
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
-	case "member":
+	case MemberStatusMember:
 		var cm *ChatMemberMember
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
-	case "restricted":
+	case MemberStatusRestricted:
 		var cm *ChatMemberRestricted
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
-	case "left":
+	case MemberStatusLeft:
 		var cm *ChatMemberLeft
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
-	case "kicked":
+	case MemberStatusKicked:
 		var cm *ChatMemberBanned
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
@@ -1180,7 +1198,7 @@ type ChatMemberOwner struct {
 }
 
 func (c *ChatMemberOwner) MemberStatus() string {
-	return c.Status
+	return MemberStatusCreator
 }
 
 // ChatMemberAdministrator - Represents a chat member (#chatmember) that has some additional privileges.
@@ -1237,7 +1255,7 @@ type ChatMemberAdministrator struct {
 }
 
 func (c *ChatMemberAdministrator) MemberStatus() string {
-	return c.Status
+	return MemberStatusAdministrator
 }
 
 // ChatMemberMember - Represents a chat member (#chatmember) that has no additional privileges or restrictions.
@@ -1250,7 +1268,7 @@ type ChatMemberMember struct {
 }
 
 func (c *ChatMemberMember) MemberStatus() string {
-	return c.Status
+	return MemberStatusMember
 }
 
 // ChatMemberRestricted - Represents a chat member (#chatmember) that is under certain restrictions in the chat.
@@ -1295,7 +1313,7 @@ type ChatMemberRestricted struct {
 }
 
 func (c *ChatMemberRestricted) MemberStatus() string {
-	return c.Status
+	return MemberStatusRestricted
 }
 
 // ChatMemberLeft - Represents a chat member (#chatmember) that isn't currently a member of the chat,
@@ -1309,7 +1327,7 @@ type ChatMemberLeft struct {
 }
 
 func (c *ChatMemberLeft) MemberStatus() string {
-	return c.Status
+	return MemberStatusLeft
 }
 
 // ChatMemberBanned - Represents a chat member (#chatmember) that was banned in the chat and can't return to
@@ -1326,7 +1344,7 @@ type ChatMemberBanned struct {
 }
 
 func (c *ChatMemberBanned) MemberStatus() string {
-	return c.Status
+	return MemberStatusKicked
 }
 
 // ChatMemberUpdated - This object represents changes in the status of a chat member.

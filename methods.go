@@ -5,6 +5,23 @@ import (
 	"os"
 )
 
+// Update types you want your bot to receive
+const (
+	MessageUpdates            = "message"
+	EditedMessageUpdates      = "edited_message"
+	ChannelPostUpdates        = "channel_post"
+	EditedChannelPostUpdates  = "edited_channel_post"
+	InlineQueryUpdates        = "inline_query"
+	ChosenInlineResultUpdates = "chosen_inline_result"
+	CallbackQueryUpdates      = "callback_query"
+	ShippingQueryUpdates      = "shipping_query"
+	PreCheckoutQueryUpdates   = "pre_checkout_query"
+	PollUpdates               = "poll"
+	PollAnswerUpdates         = "poll_answer"
+	MyChatMemberUpdates       = "my_chat_member"
+	ChatMemberUpdates         = "chat_member"
+)
+
 // GetUpdatesParams - Represents parameters of getUpdates method.
 type GetUpdatesParams struct {
 	// Offset - Optional. Identifier of the first update to be returned. Must be greater by one than the highest
