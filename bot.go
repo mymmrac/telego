@@ -254,10 +254,6 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 	}
 
 	for field, value := range parameters {
-		if value == "" {
-			continue
-		}
-
 		wr, err := writer.CreateFormField(field)
 		if err != nil {
 			return nil, err
