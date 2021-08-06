@@ -53,15 +53,60 @@ const (
 	errorMode logMode = "ERROR"
 )
 
-func logStarting(mode logMode) string {
+type logger struct {
+	Out         io.Writer
+	DebugMode   bool
+	PrintErrors bool
+}
+
+func newLogger() *logger {
+	return &logger{
+		Out:         os.Stderr,
+		DebugMode:   false,
+		PrintErrors: true,
+	}
+}
+
+func (l *logger) prefix(mode logMode) string {
 	timeNow := ansiBlue + time.Now().Local().Format(time.UnixDate) + ansiReset
 	switch mode {
 	case debugMode:
-		return fmt.Sprintf("[%s] %sDEBUG%s", timeNow, ansiYellow, ansiReset)
+		return fmt.Sprintf("[%s] %sDEBUG%s ", timeNow, ansiYellow, ansiReset)
 	case errorMode:
-		return fmt.Sprintf("[%s] %sERROR%s", timeNow, ansiRed, ansiReset)
+		return fmt.Sprintf("[%s] %sERROR%s ", timeNow, ansiRed, ansiReset)
 	}
-	return "LOG"
+	return "LOGGING "
+}
+
+func (l *logger) log(mode logMode, text string) {
+	_, err := l.Out.Write([]byte(l.prefix(mode) + text))
+	if err != nil {
+		fmt.Printf("Logging error: %v\n", err)
+	}
+}
+
+func (l *logger) Debug(args ...interface{}) {
+	if l.DebugMode {
+		l.log(debugMode, fmt.Sprintln(args...))
+	}
+}
+
+func (l *logger) Debugf(format string, args ...interface{}) {
+	if l.DebugMode {
+		l.log(debugMode, fmt.Sprintf(format+"\n", args...))
+	}
+}
+
+func (l *logger) Error(args ...interface{}) {
+	if l.PrintErrors {
+		l.log(errorMode, fmt.Sprintln(args...))
+	}
+}
+
+func (l *logger) Errorf(format string, args ...interface{}) {
+	if l.PrintErrors {
+		l.log(errorMode, fmt.Sprintf(format+"\n", args...))
+	}
 }
 
 // Bot - Represents telegram bot
@@ -71,8 +116,7 @@ type Bot struct {
 	client         *http.Client
 	stopChannel    chan struct{}
 	updateInterval time.Duration
-	debugMode      bool
-	printErrors    bool
+	log            *logger
 }
 
 // NewBot - Creates new bot
@@ -86,19 +130,18 @@ func NewBot(token string) (*Bot, error) {
 		apiURL:         defaultBotAPIServer,
 		client:         http.DefaultClient,
 		updateInterval: defaultUpdateInterval,
-		debugMode:      false,
-		printErrors:    true,
+		log:            newLogger(),
 	}, nil
 }
 
 // DebugMode - Enable/disable debug information
 func (b *Bot) DebugMode(enabled bool) {
-	b.debugMode = enabled
+	b.log.DebugMode = enabled
 }
 
 // PrintErrors - Enable/disable printing of errors
 func (b *Bot) PrintErrors(enabled bool) {
-	b.printErrors = enabled
+	b.log.PrintErrors = enabled
 }
 
 // SetToken - Sets bot token
@@ -182,9 +225,7 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
 
-	if b.debugMode {
-		fmt.Printf("%s API response %s: %s\n", logStarting(debugMode), methodName, apiResp.String())
-	}
+	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
 
 	return apiResp, nil
 }
@@ -248,9 +289,7 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
 
-	if b.debugMode {
-		fmt.Printf("%s API response %s: %s\n", logStarting(debugMode), methodName, apiResp.String())
-	}
+	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
 
 	return apiResp, nil
 }

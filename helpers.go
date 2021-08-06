@@ -41,10 +41,8 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 
 			updates, err := b.GetUpdates(params)
 			if err != nil {
-				if b.printErrors {
-					fmt.Printf("%s Getting updates: %v\n", logStarting(errorMode), err)
-					fmt.Printf("%s Retrying to get updates in %s\n", logStarting(errorMode), retryTimeout.String())
-				}
+				b.log.Errorf("Getting updates: %v", err)
+				b.log.Errorf("Retrying to get updates in %s", retryTimeout.String())
 
 				time.Sleep(retryTimeout)
 				continue
@@ -68,8 +66,8 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string) {
 	go func() {
 		err := http.ListenAndServeTLS(address, certificateFile, keyFile, nil)
-		if err != nil && b.printErrors {
-			fmt.Printf("%s Listening for webhook: %v\n", logStarting(errorMode), err)
+		if err != nil {
+			b.log.Errorf("Listening for webhook: %v", err)
 		}
 	}()
 }
@@ -82,6 +80,8 @@ func (b *Bot) ListenForWebhook(pattern string) (chan Update, error) {
 		if r.Method != http.MethodPost {
 			err := fmt.Errorf("used invalid HTTP method: %q, required method: %q", r.Method, http.MethodPost)
 			respondWithError(w, err)
+
+			b.log.Errorf("Webhook invalid HTTP method: %q", r.Method)
 			return
 		}
 
@@ -89,6 +89,8 @@ func (b *Bot) ListenForWebhook(pattern string) (chan Update, error) {
 		err := json.NewDecoder(r.Body).Decode(&update)
 		if err != nil {
 			respondWithError(w, fmt.Errorf("decoding update: %w", err))
+
+			b.log.Errorf("Webhook decoding error: %v", err)
 			return
 		}
 

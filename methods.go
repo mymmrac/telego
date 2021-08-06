@@ -173,6 +173,13 @@ func (b *Bot) Close() error {
 	return nil
 }
 
+// Parse modes
+const (
+	ModeHTML       = "HTML"
+	ModeMarkdown   = "Markdown"
+	ModeMarkdownV2 = "MarkdownV2"
+)
+
 // SendMessageParams - Represents parameters of sendMessage method.
 type SendMessageParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format

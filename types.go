@@ -1124,6 +1124,7 @@ type ChatInviteLink struct {
 // ChatMemberBanned
 type ChatMember interface {
 	MemberStatus() string
+	MemberUser() User
 }
 
 // ChatMember statuses
@@ -1201,6 +1202,10 @@ func (c *ChatMemberOwner) MemberStatus() string {
 	return MemberStatusCreator
 }
 
+func (c *ChatMemberOwner) MemberUser() User {
+	return c.User
+}
+
 // ChatMemberAdministrator - Represents a chat member (#chatmember) that has some additional privileges.
 type ChatMemberAdministrator struct {
 	// Status - The member's status in the chat, always “administrator”
@@ -1258,6 +1263,10 @@ func (c *ChatMemberAdministrator) MemberStatus() string {
 	return MemberStatusAdministrator
 }
 
+func (c *ChatMemberAdministrator) MemberUser() User {
+	return c.User
+}
+
 // ChatMemberMember - Represents a chat member (#chatmember) that has no additional privileges or restrictions.
 type ChatMemberMember struct {
 	// Status - The member's status in the chat, always “member”
@@ -1269,6 +1278,10 @@ type ChatMemberMember struct {
 
 func (c *ChatMemberMember) MemberStatus() string {
 	return MemberStatusMember
+}
+
+func (c *ChatMemberMember) MemberUser() User {
+	return c.User
 }
 
 // ChatMemberRestricted - Represents a chat member (#chatmember) that is under certain restrictions in the chat.
@@ -1316,6 +1329,10 @@ func (c *ChatMemberRestricted) MemberStatus() string {
 	return MemberStatusRestricted
 }
 
+func (c *ChatMemberRestricted) MemberUser() User {
+	return c.User
+}
+
 // ChatMemberLeft - Represents a chat member (#chatmember) that isn't currently a member of the chat,
 // but may join it themselves.
 type ChatMemberLeft struct {
@@ -1328,6 +1345,10 @@ type ChatMemberLeft struct {
 
 func (c *ChatMemberLeft) MemberStatus() string {
 	return MemberStatusLeft
+}
+
+func (c *ChatMemberLeft) MemberUser() User {
+	return c.User
 }
 
 // ChatMemberBanned - Represents a chat member (#chatmember) that was banned in the chat and can't return to
@@ -1345,6 +1366,10 @@ type ChatMemberBanned struct {
 
 func (c *ChatMemberBanned) MemberStatus() string {
 	return MemberStatusKicked
+}
+
+func (c *ChatMemberBanned) MemberUser() User {
+	return c.User
 }
 
 // ChatMemberUpdated - This object represents changes in the status of a chat member.
