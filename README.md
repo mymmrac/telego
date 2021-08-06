@@ -7,9 +7,6 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 
-[comment]: <> ([![Telegram Chat]&#40;https://img.shields.io/static/v1?label=Chat&message=Join%20now&color=29a1d4&logo=telegram&#41;]&#40;https://t.me/telegoLibraryChat&#41;)
-[comment]: <> ([![Telegram Channel]&#40;https://img.shields.io/static/v1?label=Chennel&message=Join%20now&color=29a1d4&logo=telegram&#41;]&#40;https://t.me/telegoLibrary&#41;)
-
 Telegram Bot API library for Golang with full [API](https://core.telegram.org/bots/api) implementation (one-to-one)
 
 The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
@@ -27,6 +24,10 @@ How to get the library: `go get -u github.com/mymmrac/go-telegram-bot-api`
 > Note: All methods that have `(default: ...)` in comment isn't required for working bot, they were used just to show available configuration options.
 
 > Note: Error handling may be missing in examples, but I strongly recommend to handle all errors.
+
+More examples can be seen here:
+- [Sending files (documents, photos, media groups)](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/sending_fiels/main.go)
+- [Inline keyboard](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/inline_keyboard/main.go)
 
 ### Basic setup
 
