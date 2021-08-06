@@ -295,42 +295,9 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 }
 
 func (b *Bot) performRequest(methodName string, parameters, v interface{}) error {
-	var resp *apiResponse
-
-	switch p := parameters.(type) {
-	case fileCompatible:
-		fileParams := p.fileParameters()
-		isDirectFile := false
-		for _, file := range fileParams {
-			if file != nil {
-				isDirectFile = true
-				break
-			}
-		}
-
-		if isDirectFile {
-			params, err := toParams(parameters)
-			if err != nil {
-				return fmt.Errorf("get params: %w", err)
-			}
-
-			resp, err = b.apiRequestMultipartFormData(methodName, params, fileParams)
-			if err != nil {
-				return fmt.Errorf("request multipart form data: %w", err)
-			}
-		} else {
-			var err error
-			resp, err = b.apiRequest(methodName, parameters)
-			if err != nil {
-				return fmt.Errorf("request: %w", err)
-			}
-		}
-	default:
-		var err error
-		resp, err = b.apiRequest(methodName, parameters)
-		if err != nil {
-			return fmt.Errorf("request: %w", err)
-		}
+	resp, err := b.executeRequest(methodName, parameters)
+	if err != nil {
+		return fmt.Errorf("execute: %w", err)
 	}
 
 	if !resp.Ok {
@@ -338,13 +305,48 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	}
 
 	if resp.Result != nil {
-		err := json.Unmarshal(resp.Result, &v)
+		err = json.Unmarshal(resp.Result, &v)
 		if err != nil {
 			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(v), err)
 		}
 	}
 
 	return nil
+}
+
+func (b *Bot) executeRequest(methodName string, parameters interface{}) (*apiResponse, error) {
+	isDirectFile := false
+	var fileParams map[string]*os.File
+
+	p, ok := parameters.(fileCompatible)
+	if ok {
+		fileParams = p.fileParameters()
+		for _, file := range fileParams {
+			if file != nil {
+				isDirectFile = true
+				break
+			}
+		}
+	}
+
+	if isDirectFile {
+		params, err := toParams(parameters)
+		if err != nil {
+			return nil, fmt.Errorf("get params: %w", err)
+		}
+
+		resp, err := b.apiRequestMultipartFormData(methodName, params, fileParams)
+		if err != nil {
+			return nil, fmt.Errorf("request multipart form data: %w", err)
+		}
+		return resp, nil
+	}
+
+	resp, err := b.apiRequest(methodName, parameters)
+	if err != nil {
+		return nil, fmt.Errorf("request: %w", err)
+	}
+	return resp, nil
 }
 
 func toParams(v interface{}) (map[string]string, error) {

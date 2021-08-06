@@ -972,8 +972,6 @@ type EditMessageLiveLocationParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-// TODO: Test
-
 // EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
 // its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
 // (#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited Message
@@ -1006,8 +1004,6 @@ type StopMessageLiveLocationParams struct {
 	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
-
-// TODO: Test
 
 // StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
 // expires. On success, if the message was sent by the bot, the sent Message (#message) is returned, otherwise
