@@ -56,7 +56,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	
+
 	// Change bot token (default: set by telego.NewBot(...))
 	_ = bot.SetToken("new bot token")
 
@@ -66,11 +66,16 @@ func main() {
 	// Change http client (default: http.DefaultClient)
 	_ = bot.SetClient(http.DefaultClient)
 
-	// Enable printing debug information (default: false)
-	bot.DebugMode(true)
+	// Settings of default logger, enable printing debug information and errors (default: false, true)
+	bot.DefaultLogger(true, true)
 
-	// Enable printing errors (default: true)
-	bot.PrintErrors(true)
+	var myLogger telego.Logger
+	// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
+	bot.SetLogger(myLogger)
+
+	// Call method getMe
+	botUser, _ := bot.GetMe()
+	fmt.Printf("Bot user: %#v\n", botUser)
 }
 ```
 
@@ -102,7 +107,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Set interval of getting updates (default: 0.5s)
 	bot.SetUpdateInterval(time.Second / 2)
@@ -145,7 +150,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Setup a webhook
 	_ = bot.SetWebhook(&telego.SetWebhookParams{
@@ -208,7 +213,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
@@ -236,5 +241,4 @@ func main() {
 		}
 	}
 }
-
 ```
