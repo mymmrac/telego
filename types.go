@@ -670,6 +670,12 @@ type PollAnswer struct {
 	OptionIDs []int `json:"option_ids"`
 }
 
+// Poll types
+const (
+	PollTypeRegular = "regular"
+	PollTypeQuiz    = "quiz"
+)
+
 // Poll - This object contains information about a poll.
 type Poll struct {
 	// ID - Unique poll identifier

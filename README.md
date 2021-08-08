@@ -28,6 +28,7 @@ How to get the library: `go get -u github.com/mymmrac/go-telegram-bot-api`
 More examples can be seen here:
 - [Sending files (documents, photos, media groups)](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/sending_fiels/main.go)
 - [Inline keyboard](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/inline_keyboard/main.go)
+- [Keyboard](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/keyboard/main.go)
 
 ### Basic setup
 
