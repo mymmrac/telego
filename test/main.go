@@ -27,23 +27,50 @@ func main() {
 		return
 	}
 
-	updChan, err := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
-	defer bot.StopGettingUpdates()
-
-	for upd := range updChan {
-		fmt.Println(upd)
-
-		if upd.Message != nil {
-			_, err := bot.CopyMessage(&telego.CopyMessageParams{
-				ChatID:     telego.ChatID{ID: upd.Message.Chat.ID},
-				FromChatID: telego.ChatID{ID: upd.Message.Chat.ID},
-				MessageID:  upd.Message.MessageID,
-			})
-			if err != nil {
-				fmt.Println(err)
-			}
-		}
+	message := &telego.SendMessageParams{
+		ChatID: myID,
+		Text:   "Test",
+		ReplyMarkup: &telego.ReplyKeyboardMarkup{
+			Keyboard: [][]telego.KeyboardButton{
+				{
+					{
+						Text: "1",
+					},
+					{
+						Text: "2",
+					},
+				},
+				{
+					{
+						Text: "3",
+					},
+				},
+			},
+			ResizeKeyboard: true,
+			//OneTimeKeyboard:       true,
+			InputFieldPlaceholder: "Number?",
+		},
 	}
+
+	_, _ = bot.SendMessage(message)
+
+	//updChan, err := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+	//defer bot.StopGettingUpdates()
+	//
+	//for upd := range updChan {
+	//	fmt.Println(upd)
+	//
+	//	if upd.Message != nil {
+	//		_, err := bot.CopyMessage(&telego.CopyMessageParams{
+	//			ChatID:     telego.ChatID{ID: upd.Message.Chat.ID},
+	//			FromChatID: telego.ChatID{ID: upd.Message.Chat.ID},
+	//			MessageID:  upd.Message.MessageID,
+	//		})
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//	}
+	//}
 
 	//p := &telego.ExportChatInviteLinkParams{ChatID: groupID}
 	//link, err := bot.ExportChatInviteLink(p)

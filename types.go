@@ -813,7 +813,7 @@ type UserProfilePhotos struct {
 	TotalCount int `json:"total_count"`
 
 	// Photos - Requested profile pictures (in up to 4 sizes each)
-	Photos []PhotoSize `json:"photos"`
+	Photos [][]PhotoSize `json:"photos"`
 }
 
 // File - This object represents a file ready to be downloaded. The file can be downloaded via the
@@ -845,7 +845,7 @@ type ReplyMarkup interface {
 // reply options (see Introduction to bots (https://core.telegram.org/bots#keyboards) for details and examples).
 type ReplyKeyboardMarkup struct {
 	// Keyboard - Array of button rows, each represented by an Array of KeyboardButton (#keyboardbutton) objects
-	Keyboard []KeyboardButton `json:"keyboard"`
+	Keyboard [][]KeyboardButton `json:"keyboard"`
 
 	// ResizeKeyboard - Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make
 	// the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom
