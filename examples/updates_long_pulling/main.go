@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Set interval of getting updates (default: 0.5s)
 	bot.SetUpdateInterval(time.Second / 2)

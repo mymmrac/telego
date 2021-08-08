@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Document parameters
 	document := &telego.SendDocumentParams{

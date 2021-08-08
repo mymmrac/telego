@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Setup a webhook
 	_ = bot.SetWebhook(&telego.SetWebhookParams{

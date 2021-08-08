@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Keyboard parameters
 	keyboard := &telego.ReplyKeyboardMarkup{

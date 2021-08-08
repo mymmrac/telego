@@ -19,7 +19,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	_, err = bot.GetMe()
 	if err != nil {

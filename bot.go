@@ -46,69 +46,6 @@ func validateToken(token string) bool {
 	return reg.MatchString(token)
 }
 
-type logMode string
-
-const (
-	debugMode logMode = "DEBUG"
-	errorMode logMode = "ERROR"
-)
-
-type logger struct {
-	Out         io.Writer
-	DebugMode   bool
-	PrintErrors bool
-}
-
-func newLogger() *logger {
-	return &logger{
-		Out:         os.Stderr,
-		DebugMode:   false,
-		PrintErrors: true,
-	}
-}
-
-func (l *logger) prefix(mode logMode) string {
-	timeNow := ansiBlue + time.Now().Local().Format(time.UnixDate) + ansiReset
-	switch mode {
-	case debugMode:
-		return fmt.Sprintf("[%s] %sDEBUG%s ", timeNow, ansiYellow, ansiReset)
-	case errorMode:
-		return fmt.Sprintf("[%s] %sERROR%s ", timeNow, ansiRed, ansiReset)
-	}
-	return "LOGGING "
-}
-
-func (l *logger) log(mode logMode, text string) {
-	_, err := l.Out.Write([]byte(l.prefix(mode) + text))
-	if err != nil {
-		fmt.Printf("Logging error: %v\n", err)
-	}
-}
-
-func (l *logger) Debug(args ...interface{}) {
-	if l.DebugMode {
-		l.log(debugMode, fmt.Sprintln(args...))
-	}
-}
-
-func (l *logger) Debugf(format string, args ...interface{}) {
-	if l.DebugMode {
-		l.log(debugMode, fmt.Sprintf(format+"\n", args...))
-	}
-}
-
-func (l *logger) Error(args ...interface{}) {
-	if l.PrintErrors {
-		l.log(errorMode, fmt.Sprintln(args...))
-	}
-}
-
-func (l *logger) Errorf(format string, args ...interface{}) {
-	if l.PrintErrors {
-		l.log(errorMode, fmt.Sprintf(format+"\n", args...))
-	}
-}
-
 // Bot - Represents telegram bot
 type Bot struct {
 	token          string
@@ -116,7 +53,7 @@ type Bot struct {
 	client         *http.Client
 	stopChannel    chan struct{}
 	updateInterval time.Duration
-	log            *logger
+	log            Logger
 }
 
 // NewBot - Creates new bot
@@ -134,14 +71,19 @@ func NewBot(token string) (*Bot, error) {
 	}, nil
 }
 
-// DebugMode - Enable/disable debug information
-func (b *Bot) DebugMode(enabled bool) {
-	b.log.DebugMode = enabled
+// DefaultLogger - Setup default logger. Redefines existing logger
+func (b *Bot) DefaultLogger(debugMode, printErrors bool) {
+	log := &logger{
+		Out:         os.Stderr,
+		DebugMode:   debugMode,
+		PrintErrors: printErrors,
+	}
+	b.log = log
 }
 
-// PrintErrors - Enable/disable printing of errors
-func (b *Bot) PrintErrors(enabled bool) {
-	b.log.PrintErrors = enabled
+// SetLogger - Set logger
+func (b *Bot) SetLogger(log Logger) {
+	b.log = log
 }
 
 // SetToken - Sets bot token

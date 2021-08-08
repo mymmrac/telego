@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	bot.DebugMode(true)
+	bot.DefaultLogger(true, true)
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
