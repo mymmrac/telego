@@ -17,6 +17,8 @@ documentation from telegram.
 > Note: `types.go` and `methods.go` was automatically [generated](https://github.com/mymmrac/go-telegram-bot-api/tree/main/generator) from [documentation](https://core.telegram.org/bots/api), and it's possible that they have errors or missing parts both in comments and actual code.
 > Fell free to report such things.
 
+> Note: While library in unstable version (v0.x.x) some parts of examples may work only in the latest commit.
+
 ## Examples
 
 How to get the library: `go get -u github.com/mymmrac/go-telegram-bot-api`
