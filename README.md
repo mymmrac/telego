@@ -3,6 +3,8 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/go-telegram-bot-api#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/go-telegram-bot-api#section-readme)
 [![CI Status](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
+[![Telegram Bot API Version](https://img.shields.io/static/v1?label=Supported%20Telegram%20Bot%20API&message=v5.3&color=29a1d4&logo=telegram)](https://core.telegram.org/bots/api#june-25-2021)
+
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=bugs)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
