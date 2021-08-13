@@ -15,6 +15,7 @@ import (
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
+	"github.com/valyala/fasthttp"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -51,6 +52,7 @@ type Bot struct {
 	token          string
 	apiURL         string
 	client         *http.Client
+	fastClient     *fasthttp.Client
 	stopChannel    chan struct{}
 	updateInterval time.Duration
 	log            Logger
@@ -66,6 +68,7 @@ func NewBot(token string) (*Bot, error) {
 		token:          token,
 		apiURL:         defaultBotAPIServer,
 		client:         http.DefaultClient,
+		fastClient:     &fasthttp.Client{},
 		updateInterval: defaultUpdateInterval,
 		log:            newLogger(),
 	}, nil
@@ -152,17 +155,20 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 		return nil, fmt.Errorf("encode json: %w", err)
 	}
 
-	resp, err := b.client.Post(url, jsonContentType, buffer)
+	req := fasthttp.AcquireRequest()
+	req.SetRequestURI(url)
+	req.Header.SetContentType(jsonContentType)
+	req.Header.SetMethod(fasthttp.MethodPost)
+	req.SetBodyRaw(buffer.Bytes())
+
+	resp := fasthttp.AcquireResponse()
+	err = b.fastClient.Do(req, resp)
 	if err != nil {
-		return nil, fmt.Errorf("post request: %w", err)
+		return nil, fmt.Errorf("request: %w", err)
 	}
-	defer func() {
-		_ = resp.Body.Close()
-	}()
 
 	apiResp := &apiResponse{}
-
-	err = json.NewDecoder(resp.Body).Decode(apiResp)
+	err = json.Unmarshal(resp.Body(), apiResp)
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}

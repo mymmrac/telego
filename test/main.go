@@ -52,7 +52,8 @@ func main() {
 		},
 	}
 
-	_, _ = bot.SendMessage(message)
+	msg, _ := bot.SendMessage(message)
+	fmt.Println(msg)
 
 	//updChan, err := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
 	//defer bot.StopGettingUpdates()
