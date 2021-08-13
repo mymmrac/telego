@@ -114,6 +114,7 @@ func main() {
 	bot.DefaultLogger(true, true)
 
 	// Set interval of getting updates (default: 0.5s)
+	// If you want to get updates as fast as possible set to 0
 	bot.SetUpdateInterval(time.Second / 2)
 
 	// Get updates channel
