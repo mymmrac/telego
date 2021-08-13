@@ -1,4 +1,4 @@
-# Go Telegram Bot API
+# Telego | Go Telegram Bot API
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/go-telegram-bot-api#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/go-telegram-bot-api#section-readme)
 [![CI Status](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml)
@@ -9,7 +9,7 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 
-Telegram Bot API library for Golang with full [API](https://core.telegram.org/bots/api) implementation (one-to-one)
+Telego is Telegram Bot API library for Golang with full [API](https://core.telegram.org/bots/api) implementation (one-to-one)
 
 The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
 have been represented in [`types.go`](https://github.com/mymmrac/go-telegram-bot-api/blob/main/types.go)
@@ -20,6 +20,8 @@ documentation from telegram.
 > Fell free to report such things.
 
 > Note: While library in unstable version (v0.x.x) some parts of examples may work only in the latest commit.
+
+> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
 ## Examples
 
@@ -43,10 +45,10 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/valyala/fasthttp"
 )
 
 func main() {
@@ -65,8 +67,8 @@ func main() {
 	// Change bot API server URL (default: https://api.telegram.org)
 	_ = bot.SetAPIServer("new bot api server")
 
-	// Change http client (default: http.DefaultClient)
-	_ = bot.SetClient(http.DefaultClient)
+	// Change http client (default: &fasthttp.Client{})
+	_ = bot.SetClient(&fasthttp.Client{})
 
 	// Settings of default logger, enable printing debug information and errors (default: false, true)
 	bot.DefaultLogger(true, true)

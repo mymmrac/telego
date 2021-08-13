@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/valyala/fasthttp"
 )
 
 func main() {
@@ -24,8 +24,8 @@ func main() {
 	// Change bot API server URL (default: https://api.telegram.org)
 	_ = bot.SetAPIServer("new bot api server")
 
-	// Change http client (default: http.DefaultClient)
-	_ = bot.SetClient(http.DefaultClient)
+	// Change http client (default: &fasthttp.Client{})
+	_ = bot.SetClient(&fasthttp.Client{})
 
 	// Settings of default logger, enable printing debug information and errors (default: false, true)
 	bot.DefaultLogger(true, true)

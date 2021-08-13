@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 	"reflect"
 	"regexp"
@@ -51,8 +50,7 @@ func validateToken(token string) bool {
 type Bot struct {
 	token          string
 	apiURL         string
-	client         *http.Client
-	fastClient     *fasthttp.Client
+	client         *fasthttp.Client
 	stopChannel    chan struct{}
 	updateInterval time.Duration
 	log            Logger
@@ -67,8 +65,7 @@ func NewBot(token string) (*Bot, error) {
 	return &Bot{
 		token:          token,
 		apiURL:         defaultBotAPIServer,
-		client:         http.DefaultClient,
-		fastClient:     &fasthttp.Client{},
+		client:         &fasthttp.Client{},
 		updateInterval: defaultUpdateInterval,
 		log:            newLogger(),
 	}, nil
@@ -112,8 +109,8 @@ func (b *Bot) SetAPIServer(apiURL string) error {
 	return nil
 }
 
-// SetClient - Sets http client to use
-func (b *Bot) SetClient(client *http.Client) error {
+// SetClient - Sets fasthttp client to use
+func (b *Bot) SetClient(client *fasthttp.Client) error {
 	if client == nil {
 		return errors.New("nil http client")
 	}
@@ -162,7 +159,7 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 	req.SetBodyRaw(buffer.Bytes())
 
 	resp := fasthttp.AcquireResponse()
-	err = b.fastClient.Do(req, resp)
+	err = b.client.Do(req, resp)
 	if err != nil {
 		return nil, fmt.Errorf("request: %w", err)
 	}
@@ -230,7 +227,7 @@ func (b *Bot) apiRequestMultipartFormData(methodName string,
 	req.SetBodyRaw(buffer.Bytes())
 
 	resp := fasthttp.AcquireResponse()
-	err = b.fastClient.Do(req, resp)
+	err = b.client.Do(req, resp)
 	if err != nil {
 		return nil, fmt.Errorf("multipart request: %w", err)
 	}
