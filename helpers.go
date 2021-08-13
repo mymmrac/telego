@@ -113,7 +113,7 @@ func respondWithError(ctx *fasthttp.RequestCtx, err error) {
 	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
 
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)
-	ctx.SetContentType(jsonContentType)
+	ctx.SetContentType(contentTypeJSON)
 
 	_, _ = ctx.Write(errMsg)
 }

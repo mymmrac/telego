@@ -21,6 +21,11 @@ type logMode string
 const (
 	debugMode logMode = "DEBUG"
 	errorMode logMode = "ERROR"
+
+	ansiReset  = "\u001B[0m"
+	ansiRed    = "\u001B[31m"
+	ansiYellow = "\u001B[33m"
+	ansiBlue   = "\u001B[34m"
 )
 
 type logger struct {

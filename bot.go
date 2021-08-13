@@ -22,18 +22,13 @@ var json = jsoniter.ConfigCompatibleWithStandardLibrary
 const (
 	defaultBotAPIServer = "https://api.telegram.org"
 
-	jsonContentType = "application/json"
+	contentTypeJSON = "application/json"
 
 	tokenRegexp = `^\d{9,10}:[\w-]{35}$` //nolint:gosec
 
 	attachFile = `attach://`
 
 	omitEmptySuffix = ",omitempty"
-
-	ansiReset  = "\u001B[0m"
-	ansiRed    = "\u001B[31m"
-	ansiYellow = "\u001B[33m"
-	ansiBlue   = "\u001B[34m"
 )
 
 var (
@@ -144,111 +139,6 @@ func (a APIError) Error() string {
 	return fmt.Sprintf("%d %q", a.ErrorCode, a.Description)
 }
 
-func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiResponse, error) {
-	url := b.apiURL + "/bot" + b.token + "/" + methodName
-
-	buffer := &bytes.Buffer{}
-	err := json.NewEncoder(buffer).Encode(parameters)
-	if err != nil {
-		return nil, fmt.Errorf("encode json: %w", err)
-	}
-
-	req := fasthttp.AcquireRequest()
-	req.SetRequestURI(url)
-	req.Header.SetContentType(jsonContentType)
-	req.Header.SetMethod(fasthttp.MethodPost)
-	req.SetBodyRaw(buffer.Bytes())
-
-	resp := fasthttp.AcquireResponse()
-	err = b.client.Do(req, resp)
-	if err != nil {
-		return nil, fmt.Errorf("request: %w", err)
-	}
-
-	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
-		b.log.Errorf("Internal server error, status code: %d", statusCode)
-		return nil, fmt.Errorf("internal server error: %d", statusCode)
-	}
-
-	apiResp := &apiResponse{}
-	err = json.Unmarshal(resp.Body(), apiResp)
-	if err != nil {
-		return nil, fmt.Errorf("decode json: %w", err)
-	}
-
-	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
-
-	return apiResp, nil
-}
-
-func (b *Bot) apiRequestMultipartFormData(methodName string,
-	parameters map[string]string, fileParameters map[string]*os.File) (*apiResponse, error) {
-	url := b.apiURL + "/bot" + b.token + "/" + methodName
-
-	buffer := &bytes.Buffer{}
-	writer := multipart.NewWriter(buffer)
-
-	for field, file := range fileParameters {
-		if file == nil {
-			continue
-		}
-
-		wr, err := writer.CreateFormFile(field, file.Name())
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, file)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	for field, value := range parameters {
-		wr, err := writer.CreateFormField(field)
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, strings.NewReader(value))
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	err := writer.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	req := fasthttp.AcquireRequest()
-	req.SetRequestURI(url)
-	req.Header.SetContentType(writer.FormDataContentType())
-	req.Header.SetMethod(fasthttp.MethodPost)
-	req.SetBodyRaw(buffer.Bytes())
-
-	resp := fasthttp.AcquireResponse()
-	err = b.client.Do(req, resp)
-	if err != nil {
-		return nil, fmt.Errorf("multipart request: %w", err)
-	}
-
-	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
-		b.log.Errorf("Internal server error, status code: %d", statusCode)
-		return nil, fmt.Errorf("internal server error: %d", statusCode)
-	}
-
-	apiResp := &apiResponse{}
-	err = json.Unmarshal(resp.Body(), apiResp)
-	if err != nil {
-		return nil, fmt.Errorf("decode json: %w", err)
-	}
-
-	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
-
-	return apiResp, nil
-}
-
 func (b *Bot) performRequest(methodName string, parameters, v interface{}) error {
 	resp, err := b.executeRequest(methodName, parameters)
 	if err != nil {
@@ -302,6 +192,89 @@ func (b *Bot) executeRequest(methodName string, parameters interface{}) (*apiRes
 		return nil, fmt.Errorf("request: %w", err)
 	}
 	return resp, nil
+}
+
+func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiResponse, error) {
+	url := b.apiURL + "/bot" + b.token + "/" + methodName
+
+	buffer := &bytes.Buffer{}
+	err := json.NewEncoder(buffer).Encode(parameters)
+	if err != nil {
+		return nil, fmt.Errorf("encode json: %w", err)
+	}
+
+	return b.callAPI(methodName, url, contentTypeJSON, buffer)
+}
+
+func (b *Bot) apiRequestMultipartFormData(methodName string,
+	parameters map[string]string, fileParameters map[string]*os.File) (*apiResponse, error) {
+	url := b.apiURL + "/bot" + b.token + "/" + methodName
+
+	buffer := &bytes.Buffer{}
+	writer := multipart.NewWriter(buffer)
+
+	for field, file := range fileParameters {
+		if file == nil {
+			continue
+		}
+
+		wr, err := writer.CreateFormFile(field, file.Name())
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = io.Copy(wr, file)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	for field, value := range parameters {
+		wr, err := writer.CreateFormField(field)
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = io.Copy(wr, strings.NewReader(value))
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err := writer.Close()
+	if err != nil {
+		return nil, fmt.Errorf("closing writer: %w", err)
+	}
+
+	return b.callAPI(methodName, url, writer.FormDataContentType(), buffer)
+}
+
+func (b *Bot) callAPI(methodName, url, contentType string, buffer *bytes.Buffer) (*apiResponse, error) {
+	req := fasthttp.AcquireRequest()
+	req.SetRequestURI(url)
+	req.Header.SetContentType(contentType)
+	req.Header.SetMethod(fasthttp.MethodPost)
+	req.SetBodyRaw(buffer.Bytes())
+
+	resp := fasthttp.AcquireResponse()
+	err := b.client.Do(req, resp)
+	if err != nil {
+		return nil, fmt.Errorf("request: %w", err)
+	}
+
+	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
+		return nil, fmt.Errorf("internal server error: %d", statusCode)
+	}
+
+	apiResp := &apiResponse{}
+	err = json.Unmarshal(resp.Body(), apiResp)
+	if err != nil {
+		return nil, fmt.Errorf("decode json: %w", err)
+	}
+
+	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
+
+	return apiResp, nil
 }
 
 func toParams(v interface{}) (map[string]string, error) {
