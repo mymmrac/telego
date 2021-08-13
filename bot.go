@@ -167,7 +167,10 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 		return nil, fmt.Errorf("request: %w", err)
 	}
 
-	// TODO: Check response status code
+	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
+		b.log.Errorf("Internal server error, status code: %d", statusCode)
+		return nil, fmt.Errorf("internal server error: %d", statusCode)
+	}
 
 	apiResp := &apiResponse{}
 	err = json.Unmarshal(resp.Body(), apiResp)
@@ -180,7 +183,7 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 	return apiResp, nil
 }
 
-func (b Bot) apiRequestMultipartFormData(methodName string,
+func (b *Bot) apiRequestMultipartFormData(methodName string,
 	parameters map[string]string, fileParameters map[string]*os.File) (*apiResponse, error) {
 	url := b.apiURL + "/bot" + b.token + "/" + methodName
 
@@ -232,7 +235,10 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 		return nil, fmt.Errorf("multipart request: %w", err)
 	}
 
-	// TODO: Check response status code
+	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
+		b.log.Errorf("Internal server error, status code: %d", statusCode)
+		return nil, fmt.Errorf("internal server error: %d", statusCode)
+	}
 
 	apiResp := &apiResponse{}
 	err = json.Unmarshal(resp.Body(), apiResp)
