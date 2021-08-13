@@ -20,9 +20,7 @@ func main() {
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
-	fmt.Println()
-	fmt.Printf("%#v\n", botUser)
-	fmt.Println()
+	fmt.Printf("Bot User: %#v\n", botUser)
 
 	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
 	defer bot.StopGettingUpdates()
@@ -38,9 +36,7 @@ func main() {
 				Text:   update.Message.Text,
 			})
 
-			fmt.Println()
-			fmt.Printf("%v\n", sentMessage)
-			fmt.Println()
+			fmt.Printf("Sent Message: %v\n", sentMessage)
 		}
 	}
 }

@@ -30,8 +30,6 @@ func main() {
 
 	// Loop through all updates when they came
 	for update := range updates {
-		fmt.Println("====")
-		fmt.Printf("%#v\n", update)
-		fmt.Println("====")
+		fmt.Printf("Update: %#v\n", update)
 	}
 }

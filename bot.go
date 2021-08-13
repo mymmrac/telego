@@ -53,6 +53,7 @@ type Bot struct {
 	client         *fasthttp.Client
 	stopChannel    chan struct{}
 	updateInterval time.Duration
+	webhookHandler fasthttp.RequestHandler
 	log            Logger
 }
 

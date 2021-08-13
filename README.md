@@ -124,11 +124,10 @@ func main() {
 
 	// Loop through all updates when they came
 	for update := range updates {
-		fmt.Println("====")
-		fmt.Printf("%#v\n", update)
-		fmt.Println("====")
+		fmt.Printf("Update: %#v\n", update)
 	}
 }
+
 ```
 
 Webhook example: 
@@ -164,21 +163,17 @@ func main() {
 
 	// Receive information about webhook
 	info, _ := bot.GetWebhookInfo()
-	fmt.Println()
-	fmt.Printf("%#v\n", info)
-	fmt.Println()
-
-	// Get updates channel from webhook
-	updates, _ := bot.ListenForWebhook("/" + bot.Token())
+	fmt.Printf("Webhook Info: %#v\n", info)
 
 	// Start server for receiving requests from telegram
 	bot.StartListeningForWebhook("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
 
+	// Get updates channel from webhook. Note for one bot only one webhook allowed
+	updates, _ := bot.ListenForWebhook("/" + bot.Token())
+
 	// Loop through all updates when they came
 	for update := range updates {
-		fmt.Println("====")
-		fmt.Printf("%#v\n", update)
-		fmt.Println("====")
+		fmt.Printf("Update: %#v\n", update)
 	}
 }
 
@@ -221,9 +216,7 @@ func main() {
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
-	fmt.Println()
-	fmt.Printf("%#v\n", botUser)
-	fmt.Println()
+	fmt.Printf("Bot User: %#v\n", botUser)
 
 	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
 	defer bot.StopGettingUpdates()
@@ -239,10 +232,9 @@ func main() {
 				Text:   update.Message.Text,
 			})
 
-			fmt.Println()
-			fmt.Printf("%v\n", sentMessage)
-			fmt.Println()
+			fmt.Printf("Sent Message: %v\n", sentMessage)
 		}
 	}
 }
+
 ```

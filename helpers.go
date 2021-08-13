@@ -2,8 +2,9 @@ package telego
 
 import (
 	"fmt"
-	"net/http"
 	"time"
+
+	"github.com/valyala/fasthttp"
 )
 
 const (
@@ -65,7 +66,7 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 // StartListeningForWebhook - Start server for listening for webhook
 func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string) {
 	go func() {
-		err := http.ListenAndServeTLS(address, certificateFile, keyFile, nil)
+		err := fasthttp.ListenAndServeTLS(address, certificateFile, keyFile, b.webhookHandler)
 		if err != nil {
 			b.log.Errorf("Listening for webhook: %v", err)
 		}
@@ -73,22 +74,28 @@ func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string)
 }
 
 // ListenForWebhook - Receive updates in chan from webhook
-func (b *Bot) ListenForWebhook(pattern string) (chan Update, error) {
+func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
 
-	http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			err := fmt.Errorf("used invalid HTTP method: %q, required method: %q", r.Method, http.MethodPost)
-			respondWithError(w, err)
+	b.webhookHandler = func(ctx *fasthttp.RequestCtx) {
+		if string(ctx.Path()) != path {
+			ctx.SetStatusCode(fasthttp.StatusNotFound)
+			b.log.Errorf("Unknown path was used in webhook: %q", ctx.Path())
+			return
+		}
 
-			b.log.Errorf("Webhook invalid HTTP method: %q", r.Method)
+		if method := string(ctx.Method()); method != fasthttp.MethodPost {
+			err := fmt.Errorf("used invalid HTTP method: %q, required method: %q", method, fasthttp.MethodPost)
+			respondWithError(ctx, err)
+
+			b.log.Errorf("Webhook invalid HTTP method: %q", method)
 			return
 		}
 
 		var update Update
-		err := json.NewDecoder(r.Body).Decode(&update)
+		err := json.Unmarshal(ctx.PostBody(), &update)
 		if err != nil {
-			respondWithError(w, fmt.Errorf("decoding update: %w", err))
+			respondWithError(ctx, fmt.Errorf("decoding update: %w", err))
 
 			b.log.Errorf("Webhook decoding error: %v", err)
 			return
@@ -96,17 +103,17 @@ func (b *Bot) ListenForWebhook(pattern string) (chan Update, error) {
 
 		updatesChan <- update
 
-		w.WriteHeader(http.StatusOK)
-	})
+		ctx.SetStatusCode(fasthttp.StatusOK)
+	}
 
 	return updatesChan, nil
 }
 
-func respondWithError(w http.ResponseWriter, err error) {
+func respondWithError(ctx *fasthttp.RequestCtx, err error) {
 	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
 
-	w.WriteHeader(http.StatusBadRequest)
-	w.Header().Set("Content-Type", jsonContentType)
+	ctx.SetStatusCode(fasthttp.StatusBadRequest)
+	ctx.SetContentType(jsonContentType)
 
-	_, _ = w.Write(errMsg)
+	_, _ = ctx.Write(errMsg)
 }
