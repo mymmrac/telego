@@ -167,6 +167,8 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 		return nil, fmt.Errorf("request: %w", err)
 	}
 
+	// TODO: Check response status code
+
 	apiResp := &apiResponse{}
 	err = json.Unmarshal(resp.Body(), apiResp)
 	if err != nil {
@@ -218,17 +220,22 @@ func (b Bot) apiRequestMultipartFormData(methodName string,
 		return nil, err
 	}
 
-	resp, err := b.client.Post(url, writer.FormDataContentType(), buffer)
+	req := fasthttp.AcquireRequest()
+	req.SetRequestURI(url)
+	req.Header.SetContentType(writer.FormDataContentType())
+	req.Header.SetMethod(fasthttp.MethodPost)
+	req.SetBodyRaw(buffer.Bytes())
+
+	resp := fasthttp.AcquireResponse()
+	err = b.fastClient.Do(req, resp)
 	if err != nil {
-		return nil, fmt.Errorf("post request: %w", err)
+		return nil, fmt.Errorf("multipart request: %w", err)
 	}
-	defer func() {
-		_ = resp.Body.Close()
-	}()
+
+	// TODO: Check response status code
 
 	apiResp := &apiResponse{}
-
-	err = json.NewDecoder(resp.Body).Decode(apiResp)
+	err = json.Unmarshal(resp.Body(), apiResp)
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}

@@ -27,33 +27,33 @@ func main() {
 		return
 	}
 
-	message := &telego.SendMessageParams{
-		ChatID: myID,
-		Text:   "Test",
-		ReplyMarkup: &telego.ReplyKeyboardMarkup{
-			Keyboard: [][]telego.KeyboardButton{
-				{
-					{
-						Text: "1",
-					},
-					{
-						Text: "2",
-					},
-				},
-				{
-					{
-						Text: "3",
-					},
-				},
-			},
-			ResizeKeyboard: true,
-			//OneTimeKeyboard:       true,
-			InputFieldPlaceholder: "Number?",
-		},
-	}
-
-	msg, _ := bot.SendMessage(message)
-	fmt.Println(msg)
+	//message := &telego.SendMessageParams{
+	//	ChatID: myID,
+	//	Text:   "Test",
+	//	ReplyMarkup: &telego.ReplyKeyboardMarkup{
+	//		Keyboard: [][]telego.KeyboardButton{
+	//			{
+	//				{
+	//					Text: "1",
+	//				},
+	//				{
+	//					Text: "2",
+	//				},
+	//			},
+	//			{
+	//				{
+	//					Text: "3",
+	//				},
+	//			},
+	//		},
+	//		ResizeKeyboard: true,
+	//		//OneTimeKeyboard:       true,
+	//		InputFieldPlaceholder: "Number?",
+	//	},
+	//}
+	//
+	//msg, _ := bot.SendMessage(message)
+	//fmt.Println(msg)
 
 	//updChan, err := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
 	//defer bot.StopGettingUpdates()
@@ -172,26 +172,26 @@ func main() {
 	//	}
 	//}
 
-	//dp := &telego.SendDocumentParams{
-	//	ChatID: myID,
-	//	Document: telego.InputFile{File: mustOpen("doc.txt")},
-	//	//Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
-	//	//Caption:  "Hello world",
-	//	//ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
-	//	//	{
-	//	//		{
-	//	//			Text:         "Test",
-	//	//			CallbackData: "1",
-	//	//		},
-	//	//	},
-	//	//}},
-	//}
-	//msg, err := bot.SendDocument(dp)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	//fmt.Println(msg.Document)
+	dp := &telego.SendDocumentParams{
+		ChatID:   myID,
+		Document: telego.InputFile{File: mustOpen("doc.txt")},
+		//Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
+		//Caption:  "Hello world",
+		//ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
+		//	{
+		//		{
+		//			Text:         "Test",
+		//			CallbackData: "1",
+		//		},
+		//	},
+		//}},
+	}
+	msg, err := bot.SendDocument(dp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(msg.Document)
 }
 
 func mustOpen(filename string) *os.File {
