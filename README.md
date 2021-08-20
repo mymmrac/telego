@@ -3,38 +3,56 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/go-telegram-bot-api#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/go-telegram-bot-api#section-readme)
 [![CI Status](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
-[![Telegram Bot API Version](https://img.shields.io/static/v1?label=Supported%20Telegram%20Bot%20API&message=v5.3&color=29a1d4&logo=telegram)](https://core.telegram.org/bots/api#june-25-2021)
+[![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
+[![Telegram Chat](https://img.shields.io/static/v1?label=Discussion&message=chat&color=29a1d4&logo=telegram)](https://t.me/telegoLibrary)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=bugs)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
 
-Telego is Telegram Bot API library for Golang with full [API](https://core.telegram.org/bots/api) implementation (one-to-one)
+Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
 
-The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
-have been represented in [`types.go`](https://github.com/mymmrac/go-telegram-bot-api/blob/main/types.go)
-and [`methods.go`](https://github.com/mymmrac/go-telegram-bot-api/blob/main/methods.go) files with mostly all
-documentation from telegram.
+The goal of this library was to create API with same types and methods as actual telegram bot API. 
+Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from telegram.
 
-> Note: `types.go` and `methods.go` was automatically [generated](https://github.com/mymmrac/go-telegram-bot-api/tree/main/generator) from [documentation](https://core.telegram.org/bots/api), and it's possible that they have errors or missing parts both in comments and actual code.
+> Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](generator) from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and actual code.
 > Fell free to report such things.
 
 > Note: While library in unstable version (v0.x.x) some parts of examples may work only in the latest commit.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
-## Examples
+### ToDo List & Ideas
 
-How to get the library: `go get -u github.com/mymmrac/go-telegram-bot-api`
+- [ ] Refactor [generator](generator)
+- [ ] Add constants where possible
+- [ ] Review generated code & comments
+- [ ] Unit testing of:
+  - [ ] Core functionality
+  - [ ] Helper methods
+  - [ ] Methods & types
+- [ ] Add more examples
+- [ ] Create Wiki page
+- [ ] Publish stable version
+- [ ] Add library to official Telegram [examples](https://core.telegram.org/bots/samples#go)
+
+## Getting Started
+
+How to get the library: 
+```shell
+go get -u github.com/mymmrac/go-telegram-bot-api
+```
+
+Make sure you get the latest version to have all new features & fixes.
 
 > Note: All methods that have `(default: ...)` in comment isn't required for working bot, they were used just to show available configuration options.
 
-> Note: Error handling may be missing in examples, but I strongly recommend to handle all errors.
+> Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
 
 More examples can be seen here:
-- [Sending files (documents, photos, media groups)](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/sending_fiels/main.go)
-- [Inline keyboard](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/inline_keyboard/main.go)
-- [Keyboard](https://github.com/mymmrac/go-telegram-bot-api/blob/main/examples/keyboard/main.go)
+- [Sending files (documents, photos, media groups)](examples/sending_fiels/main.go)
+- [Inline keyboard](examples/inline_keyboard/main.go)
+- [Keyboard](examples/keyboard/main.go)
 
 ### Basic setup
 
@@ -133,8 +151,6 @@ func main() {
 
 Webhook example: 
 
-> Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
-
 ```go
 package main
 
@@ -188,9 +204,11 @@ func mustOpen(filename string) *os.File {
 }
 ```
 
+> Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
+
 ### Using Telegram methods
 
-All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be used by this library.
+All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be used by the library.
 They have same names and same parameters, parameters represented by struct with name: `<methodName>` + `Params`. 
 If method don't have required parameters `nil` value can be used as a parameter.
 
@@ -239,3 +257,24 @@ func main() {
 }
 
 ```
+
+## Contribution
+
+1. Fork repo
+2. Clone `git clone https://github.com/mymmrac/go-telegram-bot-api.git`
+3. Create new branch `git checkout -b my-new-feature`
+4. Make your changes, then add them `git add .`
+5. Commit `git commit -m "New feature added"`
+6. Push `git push origin my-new-feature`
+7. Create pull request
+
+> Note: Please try to use descriptive names for your changes, not just `fix` or `new stuff`.
+
+## License
+
+Telego is distributed under [MIT licence](LICENSE).
+
+[TelegramBotAPI]: https://core.telegram.org/bots/api
+
+[TelegramVersionBadge]: https://img.shields.io/static/v1?label=Supported%20Telegram%20Bot%20API&color=29a1d4&logo=telegram&message=v5.3
+[TelegramLastVersion]: https://core.telegram.org/bots/api#june-25-2021
