@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -46,61 +44,56 @@ func main() {
 	typePatternReg := regexp.MustCompile(generator.RemoveNewline(typePattern))
 	fieldPatternReg := regexp.MustCompile(generator.RemoveNewline(fieldPattern))
 
-	file, err := os.Create("types_generated.go.generated")
+	file, err := os.Create("types.go.generated")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	response, err := http.Get(generator.DocsURL)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer func() {
-		errClose := response.Body.Close()
-		if errClose != nil {
-			fmt.Println(errClose)
-			return
-		}
-	}()
-
-	bodyBytes, err := ioutil.ReadAll(response.Body)
+	body, err := generator.GetDocsText()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
+	_, _ = fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
 
-	body := generator.RemoveNewline(string(bodyBytes))
+	allTypes := typePatternReg.FindAllStringSubmatch(body, -1)
 
-	typeMatch := typePatternReg.FindAllStringSubmatch(body, -1)
+	for _, currentType := range allTypes {
+		typeName := currentType[1]
 
-	for _, typeMatched := range typeMatch {
-		typeName := typeMatched[1]
-		typeDescription := generator.RemoveTags(generator.CleanDescription(typeMatched[2]))
+		typeDescription := generator.RemoveTags(generator.CleanDescription(currentType[2]))
+		typeDescriptionLines := generator.FitLine(fmt.Sprintf("// %s - %s",
+			typeName, typeDescription), generator.MaxLineLen)
+		typeDescriptionFitted := strings.Join(typeDescriptionLines, "\n// ")
 
-		fmt.Fprintf(file, "// %s - %s\ntype %s struct {\n", typeName, typeDescription, typeName)
+		_, _ = fmt.Fprintf(file, "%s\ntype %s struct {\n", typeDescriptionFitted, typeName)
 
-		typeDefinitionTable := typeMatched[3]
-		fieldMatch := fieldPatternReg.FindAllStringSubmatch(typeDefinitionTable, -1)
+		typeDefinitionTable := currentType[3]
+		allFields := fieldPatternReg.FindAllStringSubmatch(typeDefinitionTable, -1)
 
-		for _, fieldMatched := range fieldMatch {
-			fieldName := fieldMatched[1]
-			fieldDescription := generator.RemoveTags(generator.CleanDescription(fieldMatched[3]))
+		for _, currentFiled := range allFields {
+			fieldName := currentFiled[1]
+			fieldNameCamelCase := generator.SnakeToCamelCase(fieldName, true)
+
+			fieldDescription := generator.RemoveTags(generator.CleanDescription(currentFiled[3]))
+			fieldDescriptionLines := generator.FitLine(fmt.Sprintf("\t// %s - %s",
+				fieldNameCamelCase, fieldDescription), generator.MaxLineLen)
+			fieldDescriptionFitted := strings.Join(fieldDescriptionLines, "\n\t// ")
+
 			isOptional := strings.HasPrefix(fieldDescription, "Optional.")
-			omitemptyStr := ""
+			omitempty := ""
 			if isOptional {
-				omitemptyStr = ",omitempty"
+				omitempty = generator.OmitemptySuffix
 			}
-			fieldType := generator.ConvertType(generator.RemoveTags(fieldMatched[2]), isOptional)
 
-			fmt.Fprintf(file, "\t// %s - %s\n\t%s %s `json:\"%s%s\"`\n\n",
-				generator.SnakeToCamelCase(fieldName, true), fieldDescription,
-				generator.SnakeToCamelCase(fieldName, true), fieldType, fieldName, omitemptyStr)
+			fieldType := generator.ConvertType(generator.RemoveTags(currentFiled[2]), isOptional)
+
+			_, _ = fmt.Fprintf(file, "%s\n\t%s %s `json:\"%s%s\"`\n\n",
+				fieldDescriptionFitted, fieldNameCamelCase, fieldType, fieldName, omitempty)
 		}
 
-		fmt.Fprintf(file, "}\n\n")
+		_, _ = fmt.Fprintf(file, "}\n\n")
 	}
 }

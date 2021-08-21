@@ -1,29 +1,47 @@
 package generator
 
 import (
+	"fmt"
 	"html"
+	"io/ioutil"
+	"net/http"
 	"regexp"
 	"strings"
 )
 
-const PackageName = "telego"
-const DocsURL = "https://core.telegram.org/bots/api"
-const MaxLineLen = 110
+const (
+	baseURL = "https://core.telegram.org"
+	docsURL = baseURL + "/bots/api"
+
+	PackageName = "telego"
+
+	MaxLineLen = 110
+
+	OmitemptySuffix = ",omitempty"
+)
 
 const (
-	URLPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
-	ImgPattern = `<img.*?alt="(.+?)".*?>`
+	urlPattern = `<a.*?href="(.+?)".*?>(.*?)</a>`
+	imgPattern = `<img.*?alt="(.+?)".*?>`
 
-	TagPattern         = `<.+?>(.+?)</.+?>`
-	UnclosedTagPattern = `<.+?>`
+	externalLinkPattern  = `--(http[s]:\/\/.+?)--`
+	linkOnPagePattern    = `--(#.+?)--`
+	linkNotOnPagePattern = `--(\/.+?)--`
+
+	tagPattern         = `<.+?>(.+?)</.+?>`
+	unclosedTagPattern = `<.+?>`
 )
 
 var (
-	URLPatternReg = regexp.MustCompile(URLPattern)
-	ImgPatternReg = regexp.MustCompile(ImgPattern)
+	urlReg = regexp.MustCompile(urlPattern)
+	imgReg = regexp.MustCompile(imgPattern)
 
-	TagPatternReg         = regexp.MustCompile(TagPattern)
-	UnclosedTagPatternReg = regexp.MustCompile(UnclosedTagPattern)
+	externalLinkReg  = regexp.MustCompile(externalLinkPattern)
+	linkOnPageReg    = regexp.MustCompile(linkOnPagePattern)
+	linkNotOnPageReg = regexp.MustCompile(linkNotOnPagePattern)
+
+	tagReg         = regexp.MustCompile(tagPattern)
+	unclosedTagReg = regexp.MustCompile(unclosedTagPattern)
 )
 
 func RemoveNewline(text string) string {
@@ -31,37 +49,45 @@ func RemoveNewline(text string) string {
 }
 
 func CleanDescription(text string) string {
-	return ImgPatternReg.ReplaceAllString(
-		URLPatternReg.ReplaceAllString(text, "$2 ($1)"), "$1")
+	return linkNotOnPageReg.ReplaceAllString(
+		linkOnPageReg.ReplaceAllString(
+			externalLinkReg.ReplaceAllString(
+				imgReg.ReplaceAllString(
+					urlReg.ReplaceAllString(
+						text, "$2 --$1--"),
+					"$1"),
+				"($1)"),
+			fmt.Sprintf("(%s$1)", docsURL)),
+		fmt.Sprintf("(%s$1)", baseURL))
 }
 
 func RemoveTags(text string) string {
 	return html.UnescapeString(
-		UnclosedTagPatternReg.ReplaceAllString(
-			TagPatternReg.ReplaceAllString(text, "$1"), ""))
+		unclosedTagReg.ReplaceAllString(
+			tagReg.ReplaceAllString(text, "$1"), ""))
 }
 
 func SnakeToCamelCase(text string, firstUpper bool) string {
 	nextUpper := firstUpper
-	sb := strings.Builder{}
-	sb.Grow(len(text))
-	for _, v := range []byte(text) {
-		if v == '_' {
+	result := strings.Builder{}
+	result.Grow(len(text))
+	for _, currentChar := range []byte(text) {
+		if currentChar == '_' {
 			nextUpper = true
 			continue
 		}
 
 		if nextUpper {
 			nextUpper = false
-			v += 'A'
-			v -= 'a'
-			sb.WriteByte(v)
+			currentChar += 'A'
+			currentChar -= 'a'
+			result.WriteByte(currentChar)
 		} else {
-			sb.WriteByte(v)
+			result.WriteByte(currentChar)
 		}
 	}
 
-	return sb.String()
+	return result.String()
 }
 
 func ConvertType(text string, isOptional bool) string {
@@ -78,7 +104,7 @@ func ConvertType(text string, isOptional bool) string {
 		return "ChatID"
 	default:
 		if strings.HasPrefix(text, "Array of ") {
-			return "[]" + ConvertType(strings.ReplaceAll(text, "Array of ", ""), false)
+			return "[]" + ConvertType(strings.Replace(text, "Array of ", "", 1), false)
 		}
 
 		if isOptional {
@@ -88,12 +114,12 @@ func ConvertType(text string, isOptional bool) string {
 	}
 }
 
-func FitLine(text string, lineLen int) []string {
+func FitLine(text string, maxLineLength int) []string {
 	words := strings.Split(text, " ")
 	result := make([]string, 0)
 	line := strings.Builder{}
 	for _, word := range words {
-		if line.Len()+len(word)+1 > lineLen {
+		if line.Len()+len(word)+1 > maxLineLength {
 			result = append(result, line.String())
 			line.Reset()
 		}
@@ -104,4 +130,22 @@ func FitLine(text string, lineLen int) []string {
 		result = append(result, line.String())
 	}
 	return result
+}
+
+func GetDocsText() (string, error) {
+	response, err := http.Get(docsURL)
+	if err != nil {
+		return "", err
+	}
+	defer func() {
+		_ = response.Body.Close()
+	}()
+
+	bodyBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+
+	body := RemoveNewline(string(bodyBytes))
+	return body, nil
 }

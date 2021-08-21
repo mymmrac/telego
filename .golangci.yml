@@ -6,7 +6,6 @@ run:
     # from this option's value:
     # vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
     skip-dirs:
-        - bin
         - test
 
 # output configuration options

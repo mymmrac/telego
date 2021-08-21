@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -48,85 +46,73 @@ func main() {
 	methodPatternReg := regexp.MustCompile(generator.RemoveNewline(methodPattern))
 	paramsPatternReg := regexp.MustCompile(generator.RemoveNewline(paramsPattern))
 
-	file, err := os.Create("methods_generated.go.generated")
+	file, err := os.Create("methods.go.generated")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	response, err := http.Get(generator.DocsURL)
+	body, err := generator.GetDocsText()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	defer func() {
-		errClose := response.Body.Close()
-		if errClose != nil {
-			fmt.Println(errClose)
-			return
-		}
-	}()
 
-	bodyBytes, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	body := generator.RemoveNewline(string(bodyBytes))
-	methodMatch := methodPatternReg.FindAllStringSubmatch(body, -1)
+	allMethods := methodPatternReg.FindAllStringSubmatch(body, -1)
 
-	fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
+	_, _ = fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
 
-	for _, methodMatched := range methodMatch {
-		methodName := methodMatched[1]
+	for _, currentMethod := range allMethods {
+		methodName := currentMethod[1]
 		funcName := strings.Title(methodName)
+
 		paramsStructName := funcName + "Params"
 
-		methodDescription := generator.RemoveTags(generator.CleanDescription(methodMatched[2]))
+		methodDescription := generator.RemoveTags(generator.CleanDescription(currentMethod[2]))
 		funcDescriptionLines := generator.FitLine(fmt.Sprintf("// %s - %s",
 			funcName, methodDescription), generator.MaxLineLen)
 		funcDescription := strings.Join(funcDescriptionLines, "\n// ")
 
-		paramsDefinitionTable := methodMatched[3]
-		paramsMatch := paramsPatternReg.FindAllStringSubmatch(paramsDefinitionTable, -1)
+		paramsDefinitionTable := currentMethod[3]
+		allParams := paramsPatternReg.FindAllStringSubmatch(paramsDefinitionTable, -1)
 
 		params := ""
 		paramsOrNil := "nil"
 
-		if len(paramsMatch) != 0 {
-			fmt.Fprintf(file, "// %s - Represents parameters of %s method.\ntype %s struct {\n",
+		if len(allParams) != 0 {
+			_, _ = fmt.Fprintf(file, "// %s - Represents parameters of %s method.\ntype %s struct {\n",
 				paramsStructName, methodName, paramsStructName)
 
-			for _, paramMatched := range paramsMatch {
-				paramName := paramMatched[1]
+			for _, currentParam := range allParams {
+				paramName := currentParam[1]
 				fieldName := generator.SnakeToCamelCase(paramName, true)
 
-				isOptional := paramMatched[3] == "Optional"
-				omitemptyStr := ""
-				optionalStr := ""
+				isOptional := currentParam[3] == "Optional"
+				omitempty := ""
+				optional := ""
 				if isOptional {
-					omitemptyStr = ",omitempty"
-					optionalStr = "Optional. "
+					omitempty = generator.OmitemptySuffix
+					optional = "Optional. "
 				}
 
-				paramDescription := generator.RemoveTags(generator.CleanDescription(paramMatched[4]))
+				paramDescription := generator.RemoveTags(generator.CleanDescription(currentParam[4]))
 				filedDescriptionLines := generator.FitLine(fmt.Sprintf("// %s - %s%s",
-					fieldName, optionalStr, paramDescription), generator.MaxLineLen)
+					fieldName, optional, paramDescription), generator.MaxLineLen)
 				fieldDescription := strings.Join(filedDescriptionLines, "\n\t// ")
 
-				fieldType := generator.ConvertType(generator.RemoveTags(paramMatched[2]), isOptional)
+				fieldType := generator.ConvertType(generator.RemoveTags(currentParam[2]), isOptional)
 
-				fmt.Fprintf(file, "\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
-					fieldDescription, fieldName, fieldType, paramName, omitemptyStr)
+				_, _ = fmt.Fprintf(file, "\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
+					fieldDescription, fieldName, fieldType, paramName, omitempty)
 			}
 
-			fmt.Fprintf(file, "}\n")
+			_, _ = fmt.Fprintf(file, "}\n")
 
 			params = fmt.Sprintf("params *%s", paramsStructName)
 			paramsOrNil = "params"
 		}
 
-		fmt.Fprintf(file, `
+		_, _ = fmt.Fprintf(file, `
 %s
 func (b *Bot) %s(%s) error {
 	err := b.performRequest("%s", %s, nil)
