@@ -108,7 +108,7 @@ func main() {
 					fieldDescription, fieldName, fieldType, paramName, omitempty))
 			}
 
-			_, _ = data.WriteString(fmt.Sprintf("}\n"))
+			_, _ = data.WriteString("}\n")
 
 			params = fmt.Sprintf("params *%s", paramsStructName)
 			paramsOrNil = "params"

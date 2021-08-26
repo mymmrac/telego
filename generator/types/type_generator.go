@@ -96,7 +96,7 @@ func main() {
 				fieldDescriptionFitted, fieldNameCamelCase, fieldType, fieldName, omitempty))
 		}
 
-		_, _ = data.WriteString(fmt.Sprintf("}\n\n"))
+		_, _ = data.WriteString("}\n\n")
 	}
 
 	dataString := data.String()

@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-// Update - This object (#available-types) represents an incoming update.At most one of the optional parameters
-// can be present in any given update.
+// Update - This object (https://core.telegram.org/bots/api#available-types) represents an incoming update.At
+// most one of the optional parameters can be present in any given update.
 type Update struct {
 	// UpdateID - The update's unique identifier. Update identifiers start from a certain positive number and
 	// increase sequentially. This ID becomes especially handy if you're using Webhooks
@@ -1044,9 +1044,9 @@ type LoginURL struct {
 // of the fields data or game_short_name will be present.
 //
 // NOTE: After the user presses a callback button, Telegram clients will display a progress bar until you call
-// answerCallbackQuery (#answercallbackquery). It is, therefore, necessary to react by calling
-// answerCallbackQuery (#answercallbackquery) even if no notification to the user is
-// needed (e.g., without specifying any of the optional parameters).
+// answerCallbackQuery (https://core.telegram.org/bots/api#answercallbackquery). It is, therefore, necessary to react
+// by calling answerCallbackQuery (https://core.telegram.org/bots/api#answercallbackquery) even if no notification to
+// the user is needed (e.g., without specifying any of the optional parameters).
 type CallbackQuery struct {
 	// ID - Unique identifier for this query
 	ID string `json:"id"`
