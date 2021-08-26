@@ -161,6 +161,8 @@ func main() {
 			returnEnd = returnVarName + ", "
 
 			returnNil = "nil, "
+
+			returnVarName = "&" + returnVarName
 		}
 
 		_, _ = data.WriteString(fmt.Sprintf(`
@@ -175,7 +177,7 @@ func (b *Bot) %s(%s) %s {%s
 }
 
 `,
-			funcDescription, funcName, params, returnFunc, returnVar, methodName, paramsOrNil, "&"+returnVarName,
+			funcDescription, funcName, params, returnFunc, returnVar, methodName, paramsOrNil, returnVarName,
 			returnNil, methodName, returnEnd))
 	}
 

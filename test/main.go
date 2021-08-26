@@ -115,19 +115,19 @@ func main() {
 	//	fmt.Println(m)
 	//}
 
-	err = bot.SetMyCommands(&telego.SetMyCommandsParams{
-		Commands: []telego.BotCommand{
-			{
-				Command:     "test",
-				Description: "Test OK",
-			},
-		},
-		Scope: &telego.BotCommandScopeAllGroupChats{Type: "all_group_chats"},
-	})
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	//err = bot.SetMyCommands(&telego.SetMyCommandsParams{
+	//	Commands: []telego.BotCommand{
+	//		{
+	//			Command:     "test",
+	//			Description: "Test OK",
+	//		},
+	//	},
+	//	Scope: &telego.BotCommandScopeAllGroupChats{Type: "all_group_chats"},
+	//})
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
 
 	//commands, err := bot.GetMyCommands(nil)
 	//if err != nil {
@@ -172,26 +172,26 @@ func main() {
 	//	}
 	//}
 
-	//dp := &telego.SendDocumentParams{
-	//	ChatID:   myID,
-	//	Document: telego.InputFile{File: mustOpen("doc.txt")},
-	//	//Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
-	//	//Caption:  "Hello world",
-	//	//ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
-	//	//	{
-	//	//		{
-	//	//			Text:         "Test",
-	//	//			CallbackData: "1",
-	//	//		},
-	//	//	},
-	//	//}},
-	//}
-	//msg, err := bot.SendDocument(dp)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	//fmt.Println(msg.Document)
+	dp := &telego.SendDocumentParams{
+		ChatID: myID,
+		//Document: telego.InputFile{File: mustOpen("doc.txt")},
+		Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
+		//Caption:  "Hello world",
+		//ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
+		//	{
+		//		{
+		//			Text:         "Test",
+		//			CallbackData: "1",
+		//		},
+		//	},
+		//}},
+	}
+	msg, err := bot.SendDocument(dp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(msg.Document)
 }
 
 func mustOpen(filename string) *os.File {

@@ -102,6 +102,11 @@ func ConvertType(text string, isOptional bool) string {
 		return "bool"
 	case "Integer or String":
 		return "ChatID"
+	case "InputFile or String":
+		if isOptional {
+			return "*InputFile"
+		}
+		return "InputFile"
 	default:
 		if strings.HasPrefix(text, "Array of ") {
 			return "[]" + ConvertType(strings.Replace(text, "Array of ", "", 1), false)

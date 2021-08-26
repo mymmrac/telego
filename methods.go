@@ -5,6 +5,33 @@ import (
 	"os"
 )
 
+// GetUpdatesParams - Represents parameters of getUpdates method.
+type GetUpdatesParams struct {
+	// Offset - Optional. Identifier of the first update to be returned. Must be greater by one than the highest
+	// among the identifiers of previously received updates. By default, updates starting with the earliest
+	// unconfirmed update are returned. An update is considered confirmed as soon as getUpdates
+	// (https://core.telegram.org/bots/api#getupdates) is called with an offset higher than its update_id. The
+	// negative offset can be specified to retrieve updates starting from -offset update from the end of the updates
+	// queue. All previous updates will forgotten.
+	Offset int `json:"offset,omitempty"`
+
+	// Limit - Optional. Limits the number of updates to be retrieved. Values between 1-100 are accepted.
+	// Defaults to 100.
+	Limit int `json:"limit,omitempty"`
+
+	// Timeout - Optional. Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should
+	// be positive, short polling should be used for testing purposes only.
+	Timeout int `json:"timeout,omitempty"`
+
+	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
+	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
+	// these types. See Update (https://core.telegram.org/bots/api#update) for a complete list of available update
+	// types. Specify an empty list to receive all update types except chat_member (default). If not specified, the
+	// previous setting will be used.Please note that this parameter doesn't affect updates created before the call
+	// to the getUpdates, so unwanted updates may be received for a short period of time.
+	AllowedUpdates []string `json:"allowed_updates,omitempty"`
+}
+
 // Update types you want your bot to receive
 const (
 	MessageUpdates            = "message"
@@ -22,35 +49,9 @@ const (
 	ChatMemberUpdates         = "chat_member"
 )
 
-// GetUpdatesParams - Represents parameters of getUpdates method.
-type GetUpdatesParams struct {
-	// Offset - Optional. Identifier of the first update to be returned. Must be greater by one than the highest
-	// among the identifiers of previously received updates. By default, updates starting with the earliest
-	// unconfirmed update are returned. An update is considered confirmed as soon as getUpdates (#getupdates) is
-	// called with an offset higher than its update_id. The negative offset can be specified to retrieve updates
-	// starting from -offset update from the end of the updates queue. All previous updates will forgotten.
-	Offset int `json:"offset,omitempty"`
-
-	// Limit - Optional. Limits the number of updates to be retrieved. Values between 1-100 are accepted.
-	// Defaults to 100.
-	Limit int `json:"limit,omitempty"`
-
-	// Timeout - Optional. Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should
-	// be positive, short polling should be used for testing purposes only.
-	Timeout int `json:"timeout,omitempty"`
-
-	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
-	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
-	// these types. See Update (#update) for a complete list of available update types. Specify an empty list to
-	// receive all update types except chat_member (default). If not specified, the previous setting will be
-	// used.Please note that this parameter doesn't affect updates created before the call to the getUpdates, so
-	// unwanted updates may be received for a short period of time.
-	AllowedUpdates []string `json:"allowed_updates,omitempty"`
-}
-
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki
-// (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). An Array of Update (#update) objects is
-// returned.
+// (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). An Array of Update
+// (https://core.telegram.org/bots/api#update) objects is returned.
 func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
 	var updates []Update
 	err := b.performRequest("getUpdates", params, &updates)
@@ -63,11 +64,11 @@ func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
 
 // SetWebhookParams - Represents parameters of setWebhook method.
 type SetWebhookParams struct {
-	// URL - HTTPS url to send updates to. Use an empty string to remove webhook integration
+	// URL - HTTPS URL to send updates to. Use an empty string to remove webhook integration
 	URL string `json:"url"`
 
 	// Certificate - Optional. Upload your public key certificate so that the root certificate in use can be
-	// checked. See our self-signed guide (/bots/self-signed) for details.
+	// checked. See our self-signed guide (https://core.telegram.org/bots/self-signed) for details.
 	// Please upload as File, sending a FileID or URL will not work.
 	Certificate *InputFile `json:"certificate,omitempty"`
 
@@ -82,20 +83,20 @@ type SetWebhookParams struct {
 
 	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
 	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
-	// these types. See Update (#update) for a complete list of available update types. Specify an empty list to
-	// receive all update types except chat_member (default). If not specified, the previous setting will be
-	// used.Please note that this parameter doesn't affect updates created before the call to the setWebhook, so
-	// unwanted updates may be received for a short period of time.
+	// these types. See Update (https://core.telegram.org/bots/api#update) for a complete list of available update
+	// types. Specify an empty list to receive all update types except chat_member (default). If not specified, the
+	// previous setting will be used.Please note that this parameter doesn't affect updates created before the call
+	// to the setWebhook, so unwanted updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
 
 	// DropPendingUpdates - Optional. Pass True to drop all pending updates
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
 }
 
-// SetWebhook - Use this method to specify a url and receive incoming updates via an outgoing webhook.
+// SetWebhook - Use this method to specify a URL and receive incoming updates via an outgoing webhook.
 // Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing
-// a JSON-serialized Update (#update). In case of an unsuccessful request, we will give up after a reasonable
-// amount of attempts. Returns True on success.
+// a JSON-serialized Update (https://core.telegram.org/bots/api#update). In case of an unsuccessful request, we
+// will give up after a reasonable amount of attempts. Returns True on success.
 func (b *Bot) SetWebhook(params *SetWebhookParams) error {
 	err := b.performRequest("setWebhook", params, nil)
 	if err != nil {
@@ -112,7 +113,7 @@ type DeleteWebhookParams struct {
 }
 
 // DeleteWebhook - Use this method to remove webhook integration if you decide to switch back to getUpdates
-// (#getupdates). Returns True on success.
+// (https://core.telegram.org/bots/api#getupdates). Returns True on success.
 func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
 	err := b.performRequest("deleteWebhook", params, nil)
 	if err != nil {
@@ -123,8 +124,8 @@ func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
 }
 
 // GetWebhookInfo - Use this method to get current webhook status. Requires no parameters. On success,
-// returns a WebhookInfo (#webhookinfo) object. If the bot is using getUpdates (#getupdates), will return an
-// object with the url field empty.
+// returns a WebhookInfo (https://core.telegram.org/bots/api#webhookinfo) object. If the bot is using getUpdates
+// (https://core.telegram.org/bots/api#getupdates), will return an object with the URL field empty.
 func (b *Bot) GetWebhookInfo() (*WebhookInfo, error) {
 	var webhookInfo *WebhookInfo
 	err := b.performRequest("getWebhookInfo", nil, &webhookInfo)
@@ -136,7 +137,7 @@ func (b *Bot) GetWebhookInfo() (*WebhookInfo, error) {
 }
 
 // GetMe - A simple method for testing your bot's auth token. Requires no parameters. Returns basic
-// information about the bot in form of a User (#user) object.
+// information about the bot in form of a User (https://core.telegram.org/bots/api#user) object.
 func (b *Bot) GetMe() (*User, error) {
 	var user *User
 	err := b.performRequest("getMe", nil, &user)
@@ -173,13 +174,6 @@ func (b *Bot) Close() error {
 	return nil
 }
 
-// Parse modes
-const (
-	ModeHTML       = "HTML"
-	ModeMarkdown   = "Markdown"
-	ModeMarkdownV2 = "MarkdownV2"
-)
-
 // SendMessageParams - Represents parameters of sendMessage method.
 type SendMessageParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
@@ -190,7 +184,7 @@ type SendMessageParams struct {
 	Text string `json:"text"`
 
 	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// Entities - Optional. List of special entities that appear in message text, which can be specified instead
@@ -218,7 +212,15 @@ type SendMessageParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendMessage - Use this method to send text messages. On success, the sent Message (#message) is returned.
+// Parse modes
+const (
+	ModeHTML       = "HTML"
+	ModeMarkdown   = "Markdown"
+	ModeMarkdownV2 = "MarkdownV2"
+)
+
+// SendMessage - Use this method to send text messages. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendMessage(params *SendMessageParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendMessage", params, &message)
@@ -248,7 +250,7 @@ type ForwardMessageParams struct {
 }
 
 // ForwardMessage - Use this method to forward messages of any kind. Service messages can't be forwarded. On
-// success, the sent Message (#message) is returned.
+// success, the sent Message (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) ForwardMessage(params *ForwardMessageParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("forwardMessage", params, &message)
@@ -277,7 +279,7 @@ type CopyMessageParams struct {
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the new caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the new caption, which can be
@@ -303,8 +305,9 @@ type CopyMessageParams struct {
 }
 
 // CopyMessage - Use this method to copy messages of any kind. Service messages and invoice messages can't be
-// copied. The method is analogous to the method forwardMessage (#forwardmessage), but the copied message
-// doesn't have a link to the original message. Returns the MessageID (#messageid) of the sent message on
+// copied. The method is analogous to the method forwardMessage
+// (https://core.telegram.org/bots/api#forwardmessage), but the copied message doesn't have a link to the
+// original message. Returns the MessageID (https://core.telegram.org/bots/api#messageid) of the sent message on
 // success.
 func (b *Bot) CopyMessage(params *CopyMessageParams) (*MessageID, error) {
 	var messageID *MessageID
@@ -326,7 +329,7 @@ type SendPhotoParams struct {
 	// (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new
 	// photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must
 	// not exceed 10000 in total. Width and height ratio must be at most 20. More info on Sending Files »
-	// (#sending-files)
+	// (https://core.telegram.org/bots/api#sending-files)
 	Photo InputFile `json:"photo"`
 
 	// Caption - Optional. Photo caption (may also be used when resending photos by file_id), 0-1024 characters
@@ -334,7 +337,7 @@ type SendPhotoParams struct {
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the photo caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -365,7 +368,8 @@ func (p *SendPhotoParams) fileParameters() map[string]*os.File {
 	}
 }
 
-// SendPhoto - Use this method to send photos. On success, the sent Message (#message) is returned.
+// SendPhoto - Use this method to send photos. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendPhoto(params *SendPhotoParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendPhoto", params, &message)
@@ -384,14 +388,15 @@ type SendAudioParams struct {
 
 	// Audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or
-	// upload a new one using multipart/form-data. More info on Sending Files » (#sending-files)
+	// upload a new one using multipart/form-data. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	Audio InputFile `json:"audio"`
 
 	// Caption - Optional. Audio caption, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the audio caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -412,7 +417,7 @@ type SendAudioParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (#sending-files)
+	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -445,8 +450,9 @@ func (p *SendAudioParams) fileParameters() map[string]*os.File {
 }
 
 // SendAudio - Use this method to send audio files, if you want Telegram clients to display them in the music
-// player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message (#message) is returned.
-// Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+// player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned. Bots can currently send audio files of up to 50 MB
+// in size, this limit may be changed in the future.
 // For sending voice messages, use the SendVoice (https://core.telegram.org/bots/api#sendvoice) method instead.
 func (b *Bot) SendAudio(params *SendAudioParams) (*Message, error) {
 	var message *Message
@@ -466,15 +472,15 @@ type SendDocumentParams struct {
 
 	// Document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
-	// using multipart/form-data. More info on Sending Files » (#sending-files)
-	Document InputFile `json:"document,omitempty"`
+	// using multipart/form-data. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Document InputFile `json:"document"`
 
 	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (#sending-files)
+	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Document caption (may also be used when resending documents by file_id), 0-1024
@@ -482,7 +488,7 @@ type SendDocumentParams struct {
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the document caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -522,8 +528,9 @@ func (p *SendDocumentParams) fileParameters() map[string]*os.File {
 	return fp
 }
 
-// SendDocument - Use this method to send general files. On success, the sent Message (#message) is returned.
-// Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+// SendDocument - Use this method to send general files. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned. Bots can currently send files of any type of up to
+// 50 MB in size, this limit may be changed in the future.
 func (b *Bot) SendDocument(params *SendDocumentParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendDocument", params, &message)
@@ -542,7 +549,8 @@ type SendVideoParams struct {
 
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
-	// video using multipart/form-data. More info on Sending Files » (#sending-files)
+	// video using multipart/form-data. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	Video InputFile `json:"video"`
 
 	// Duration - Optional. Duration of sent video in seconds
@@ -559,7 +567,7 @@ type SendVideoParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (#sending-files)
+	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Video caption (may also be used when resending videos by file_id), 0-1024 characters
@@ -567,7 +575,7 @@ type SendVideoParams struct {
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the video caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -607,8 +615,9 @@ func (p *SendVideoParams) fileParameters() map[string]*os.File {
 }
 
 // SendVideo - Use this method to send video files, Telegram clients support mp4 videos (other formats may be
-// sent as Document (#document)). On success, the sent Message (#message) is returned. Bots can currently send
-// video files of up to 50 MB in size, this limit may be changed in the future.
+// sent as Document (https://core.telegram.org/bots/api#document)). On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned. Bots can currently send video files of up to 50 MB
+// in size, this limit may be changed in the future.
 func (b *Bot) SendVideo(params *SendVideoParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVideo", params, &message)
@@ -627,7 +636,8 @@ type SendAnimationParams struct {
 
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
-	// upload a new animation using multipart/form-data. More info on Sending Files » (#sending-files)
+	// upload a new animation using multipart/form-data. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	Animation InputFile `json:"animation"`
 
 	// Duration - Optional. Duration of sent animation in seconds
@@ -644,7 +654,7 @@ type SendAnimationParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (#sending-files)
+	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Animation caption (may also be used when resending animation by file_id), 0-1024
@@ -652,7 +662,7 @@ type SendAnimationParams struct {
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the animation caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -689,8 +699,8 @@ func (p *SendAnimationParams) fileParameters() map[string]*os.File {
 }
 
 // SendAnimation - Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On
-// success, the sent Message (#message) is returned. Bots can currently send animation files of up to 50 MB in
-// size, this limit may be changed in the future.
+// success, the sent Message (https://core.telegram.org/bots/api#message) is returned. Bots can currently send
+// animation files of up to 50 MB in size, this limit may be changed in the future.
 func (b *Bot) SendAnimation(params *SendAnimationParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendAnimation", params, &message)
@@ -709,14 +719,14 @@ type SendVoiceParams struct {
 
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
-	// using multipart/form-data. More info on Sending Files » (#sending-files)
+	// using multipart/form-data. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Voice InputFile `json:"voice"`
 
 	// Caption - Optional. Voice message caption, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the voice message caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -752,8 +762,10 @@ func (p *SendVoiceParams) fileParameters() map[string]*os.File {
 
 // SendVoice - Use this method to send audio files, if you want Telegram clients to display the file as a
 // playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats
-// may be sent as Audio (#audio) or Document (#document)). On success, the sent Message (#message) is returned.
-// Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+// may be sent as Audio (https://core.telegram.org/bots/api#audio) or Document
+// (https://core.telegram.org/bots/api#document)). On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned. Bots can currently send voice messages of up to 50
+// MB in size, this limit may be changed in the future.
 func (b *Bot) SendVoice(params *SendVoiceParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVoice", params, &message)
@@ -772,7 +784,7 @@ type SendVideoNoteParams struct {
 
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More info on Sending Files »
-	// (#sending-files). Sending video notes by a URL is currently unsupported
+	// (https://core.telegram.org/bots/api#sending-files). Sending video notes by a URL is currently unsupported
 	VideoNote InputFile `json:"video_note"`
 
 	// Duration - Optional. Duration of sent video in seconds
@@ -786,7 +798,7 @@ type SendVideoNoteParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (#sending-files)
+	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -820,7 +832,7 @@ func (p *SendVideoNoteParams) fileParameters() map[string]*os.File {
 
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients
 // support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success,
-// the sent Message (#message) is returned.
+// the sent Message (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVideoNote", params, &message)
@@ -869,7 +881,7 @@ func (p *SendMediaGroupParams) fileParameters() map[string]*os.File {
 
 // SendMediaGroup - Use this method to send a group of photos, videos, documents or audios as an album.
 // Documents and audio files can be only grouped in an album with messages of the same type. On success, an
-// array of Messages (#message) that were sent is returned.
+// array of Messages (https://core.telegram.org/bots/api#message) that were sent is returned.
 func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) ([]Message, error) {
 	var messages []Message
 	err := b.performRequest("sendMediaGroup", params, &messages)
@@ -925,8 +937,8 @@ type SendLocationParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendLocation - Use this method to send point on the map. On success, the sent Message (#message) is
-// returned.
+// SendLocation - Use this method to send point on the map. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendLocation(params *SendLocationParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendLocation", params, &message)
@@ -974,8 +986,9 @@ type EditMessageLiveLocationParams struct {
 
 // EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
 // its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
-// (#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited Message
-// (#message) is returned, otherwise True is returned.
+// (https://core.telegram.org/bots/api#stopmessagelivelocation). On success, if the edited message is not an
+// inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True
+// is returned.
 func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("editMessageLiveLocation", params, &message)
@@ -1006,8 +1019,8 @@ type StopMessageLiveLocationParams struct {
 }
 
 // StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
-// expires. On success, if the message was sent by the bot, the sent Message (#message) is returned, otherwise
-// True is returned.
+// expires. On success, if the message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
 func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("stopMessageLiveLocation", params, &message)
@@ -1068,8 +1081,8 @@ type SendVenueParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendVenue - Use this method to send information about a venue. On success, the sent Message (#message) is
-// returned.
+// SendVenue - Use this method to send information about a venue. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendVenue(params *SendVenueParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVenue", params, &message)
@@ -1117,7 +1130,8 @@ type SendContactParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendContact - Use this method to send phone contacts. On success, the sent Message (#message) is returned.
+// SendContact - Use this method to send phone contacts. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendContact(params *SendContactParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendContact", params, &message)
@@ -1159,7 +1173,7 @@ type SendPollParams struct {
 	Explanation string `json:"explanation,omitempty"`
 
 	// ExplanationParseMode - Optional. Mode for parsing entities in the explanation. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ExplanationParseMode string `json:"explanation_parse_mode,omitempty"`
 
 	// ExplanationEntities - Optional. List of special entities that appear in the poll explanation, which can be
@@ -1196,7 +1210,8 @@ type SendPollParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendPoll - Use this method to send a native poll. On success, the sent Message (#message) is returned.
+// SendPoll - Use this method to send a native poll. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendPoll(params *SendPollParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendPoll", params, &message)
@@ -1238,7 +1253,7 @@ type SendDiceParams struct {
 }
 
 // SendDice - Use this method to send an animated emoji that will display a random value. On success, the
-// sent Message (#message) is returned.
+// sent Message (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendDice(params *SendDiceParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendDice", params, &message)
@@ -1256,10 +1271,13 @@ type SendChatActionParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
-	// for text messages (#sendmessage), upload_photo for photos (#sendphoto), record_video or upload_video for
-	// videos (#sendvideo), record_voice or upload_voice for voice notes (#sendvoice), upload_document for general
-	// files (#senddocument), find_location for location data (#sendlocation), record_video_note or
-	// upload_video_note for video notes (#sendvideonote).
+	// for text messages (https://core.telegram.org/bots/api#sendmessage), upload_photo for photos
+	// (https://core.telegram.org/bots/api#sendphoto), record_video or upload_video for videos
+	// (https://core.telegram.org/bots/api#sendvideo), record_voice or upload_voice for voice notes
+	// (https://core.telegram.org/bots/api#sendvoice), upload_document for general files
+	// (https://core.telegram.org/bots/api#senddocument), find_location for location data
+	// (https://core.telegram.org/bots/api#sendlocation), record_video_note or upload_video_note for video notes
+	// (https://core.telegram.org/bots/api#sendvideonote).
 	Action string `json:"action"`
 }
 
@@ -1291,7 +1309,7 @@ type GetUserProfilePhotosParams struct {
 }
 
 // GetUserProfilePhotos - Use this method to get a list of profile pictures for a user. Returns a
-// UserProfilePhotos (#userprofilephotos) object.
+// UserProfilePhotos (https://core.telegram.org/bots/api#userprofilephotos) object.
 func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) (*UserProfilePhotos, error) {
 	var userProfilePhotos *UserProfilePhotos
 	err := b.performRequest("getUserProfilePhotos", params, &userProfilePhotos)
@@ -1309,10 +1327,11 @@ type GetFileParams struct {
 }
 
 // GetFile - Use this method to get basic info about a file and prepare it for downloading. For the moment,
-// bots can download files of up to 20MB in size. On success, a File (#file) object is returned. The file can
-// then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is
-// taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link
-// expires, a new one can be requested by calling getFile (#getfile) again.
+// bots can download files of up to 20MB in size. On success, a File (https://core.telegram.org/bots/api#file)
+// object is returned. The file can then be downloaded via the link
+// https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is
+// guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested
+// by calling getFile (https://core.telegram.org/bots/api#getfile) again.
 func (b *Bot) GetFile(params *GetFileParams) (*File, error) {
 	var file *File
 	err := b.performRequest("getFile", params, &file)
@@ -1345,8 +1364,9 @@ type BanChatMemberParams struct {
 
 // BanChatMember - Use this method to ban a user in a group, a supergroup or a channel. In the case of
 // supergroups and channels, the user will not be able to return to the chat on their own using invite links,
-// etc., unless unbanned (#unbanchatmember) first. The bot must be an administrator in the chat for this to work
-// and must have the appropriate admin rights. Returns True on success.
+// etc., unless unbanned (https://core.telegram.org/bots/api#unbanchatmember) first. The bot must be an
+// administrator in the chat for this to work and must have the appropriate admin rights. Returns True on
+// success.
 func (b *Bot) BanChatMember(params *BanChatMemberParams) error {
 	err := b.performRequest("banChatMember", params, nil)
 	if err != nil {
@@ -1560,8 +1580,8 @@ type CreateChatInviteLinkParams struct {
 
 // CreateChatInviteLink - Use this method to create an additional invite link for a chat. The bot must be an
 // administrator in the chat for this to work and must have the appropriate admin rights. The link can be
-// revoked using the method revokeChatInviteLink (#revokechatinvitelink). Returns the new invite link as
-// ChatInviteLink (#chatinvitelink) object.
+// revoked using the method revokeChatInviteLink (https://core.telegram.org/bots/api#revokechatinvitelink).
+// Returns the new invite link as ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
 func (b *Bot) CreateChatInviteLink(params *CreateChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("createChatInviteLink", params, &chatInviteLink)
@@ -1591,7 +1611,7 @@ type EditChatInviteLinkParams struct {
 
 // EditChatInviteLink - Use this method to edit a non-primary invite link created by the bot. The bot must be
 // an administrator in the chat for this to work and must have the appropriate admin rights. Returns the edited
-// invite link as a ChatInviteLink (#chatinvitelink) object.
+// invite link as a ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
 func (b *Bot) EditChatInviteLink(params *EditChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("editChatInviteLink", params, &chatInviteLink)
@@ -1615,7 +1635,7 @@ type RevokeChatInviteLinkParams struct {
 // RevokeChatInviteLink - Use this method to revoke an invite link created by the bot. If the primary link is
 // revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work
 // and must have the appropriate admin rights. Returns the revoked invite link as ChatInviteLink
-// (#chatinvitelink) object.
+// (https://core.telegram.org/bots/api#chatinvitelink) object.
 func (b *Bot) RevokeChatInviteLink(params *RevokeChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("revokeChatInviteLink", params, &chatInviteLink)
@@ -1813,8 +1833,8 @@ type GetChatParams struct {
 }
 
 // GetChat - Use this method to get up to date information about the chat (current name of the user for
-// one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat (#chat) object
-// on success.
+// one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat
+// (https://core.telegram.org/bots/api#chat) object on success.
 func (b *Bot) GetChat(params *GetChatParams) (*Chat, error) {
 	var chat *Chat
 	err := b.performRequest("getChat", params, &chat)
@@ -1833,9 +1853,9 @@ type GetChatAdministratorsParams struct {
 }
 
 // GetChatAdministrators - Use this method to get a list of administrators in a chat. On success, returns an
-// Array of ChatMember (#chatmember) objects that contains information about all chat administrators except
-// other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator
-// will be returned.
+// Array of ChatMember (https://core.telegram.org/bots/api#chatmember) objects that contains information about
+// all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were
+// appointed, only the creator will be returned.
 func (b *Bot) GetChatAdministrators(params *GetChatAdministratorsParams) ([]ChatMember, error) {
 	var chatMembersData []chatMemberData
 	err := b.performRequest("getChatAdministrators", params, &chatMembersData)
@@ -1879,7 +1899,7 @@ type GetChatMemberParams struct {
 }
 
 // GetChatMember - Use this method to get information about a member of a chat. Returns a ChatMember
-// (#chatmember) object on success.
+// (https://core.telegram.org/bots/api#chatmember) object on success.
 func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
 	var memberData chatMemberData
 	err := b.performRequest("getChatMember", params, &memberData)
@@ -1902,8 +1922,8 @@ type SetChatStickerSetParams struct {
 
 // SetChatStickerSet - Use this method to set a new group sticker set for a supergroup. The bot must be an
 // administrator in the chat for this to work and must have the appropriate admin rights. Use the field
-// can_set_sticker_set optionally returned in getChat (#getchat) requests to check if the bot can use this
-// method. Returns True on success.
+// can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
+// check if the bot can use this method. Returns True on success.
 func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
 	err := b.performRequest("setChatStickerSet", params, nil)
 	if err != nil {
@@ -1922,8 +1942,8 @@ type DeleteChatStickerSetParams struct {
 
 // DeleteChatStickerSet - Use this method to delete a group sticker set from a supergroup. The bot must be an
 // administrator in the chat for this to work and must have the appropriate admin rights. Use the field
-// can_set_sticker_set optionally returned in getChat (#getchat) requests to check if the bot can use this
-// method. Returns True on success.
+// can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
+// check if the bot can use this method. Returns True on success.
 func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
 	err := b.performRequest("deleteChatStickerSet", params, nil)
 	if err != nil {
@@ -1946,10 +1966,11 @@ type AnswerCallbackQueryParams struct {
 	// of the chat screen. Defaults to false.
 	ShowAlert bool `json:"show_alert,omitempty"`
 
-	// URL - Optional. URL that will be opened by the user's client. If you have created a Game (#game) and
-	// accepted the conditions via @Botfather (https://t.me/botfather), specify the URL that opens your game —
-	// note that this will only work if the query comes from a callback_game (#inlinekeyboardbutton)
-	// button.Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
+	// URL - Optional. URL that will be opened by the user's client. If you have created a Game
+	// (https://core.telegram.org/bots/api#game) and accepted the conditions via @Botfather
+	// (https://t.me/botfather), specify the URL that opens your game — note that this will only work if the query
+	// comes from a callback_game (https://core.telegram.org/bots/api#inlinekeyboardbutton) button.Otherwise, you
+	// may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
 	URL string `json:"url,omitempty"`
 
 	// CacheTime - Optional. The maximum amount of time in seconds that the result of the callback query may be
@@ -1958,8 +1979,8 @@ type AnswerCallbackQueryParams struct {
 }
 
 // AnswerCallbackQuery - Use this method to send answers to callback queries sent from inline keyboards
-// (/bots#inline-keyboards-and-on-the-fly-updating). The answer will be displayed to the user as a notification
-// at the top of the chat screen or as an alert. On success, True is returned.
+// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). The answer will be displayed to
+// the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
 func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
 	err := b.performRequest("answerCallbackQuery", params, nil)
 	if err != nil {
@@ -1976,7 +1997,7 @@ type SetMyCommandsParams struct {
 	Commands []BotCommand `json:"commands"`
 
 	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are relevant.
-	// Defaults to BotCommandScopeDefault (#botcommandscopedefault).
+	// Defaults to BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault).
 	Scope BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, commands will be applied to all
@@ -1999,7 +2020,7 @@ func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
 // DeleteMyCommandsParams - Represents parameters of deleteMyCommands method.
 type DeleteMyCommandsParams struct {
 	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are relevant.
-	// Defaults to BotCommandScopeDefault (#botcommandscopedefault).
+	// Defaults to BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault).
 	Scope *BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, commands will be applied to all
@@ -2008,8 +2029,9 @@ type DeleteMyCommandsParams struct {
 }
 
 // DeleteMyCommands - Use this method to delete the list of the bot's commands for the given scope and user
-// language. After deletion, higher level commands (#determining-list-of-commands) will be shown to affected
-// users. Returns True on success.
+// language. After deletion, higher level commands
+// (https://core.telegram.org/bots/api#determining-list-of-commands) will be shown to affected users. Returns
+// True on success.
 func (b *Bot) DeleteMyCommands(params *DeleteMyCommandsParams) error {
 	err := b.performRequest("deleteMyCommands", params, nil)
 	if err != nil {
@@ -2022,7 +2044,7 @@ func (b *Bot) DeleteMyCommands(params *DeleteMyCommandsParams) error {
 // GetMyCommandsParams - Represents parameters of getMyCommands method.
 type GetMyCommandsParams struct {
 	// Scope - Optional. A JSON-serialized object, describing scope of users. Defaults to BotCommandScopeDefault
-	// (#botcommandscopedefault).
+	// (https://core.telegram.org/bots/api#botcommandscopedefault).
 	Scope *BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code or an empty string
@@ -2030,8 +2052,8 @@ type GetMyCommandsParams struct {
 }
 
 // GetMyCommands - Use this method to get the current list of the bot's commands for the given scope and user
-// language. Returns Array of BotCommand (#botcommand) on success. If commands aren't set, an empty list is
-// returned.
+// language. Returns Array of BotCommand (https://core.telegram.org/bots/api#botcommand) on success. If commands
+// aren't set, an empty list is returned.
 func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
 	var botCommands []BotCommand
 	err := b.performRequest("getMyCommands", params, &botCommands)
@@ -2059,7 +2081,7 @@ type EditMessageTextParams struct {
 	Text string `json:"text"`
 
 	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// Entities - Optional. List of special entities that appear in message text, which can be specified instead
@@ -2074,8 +2096,9 @@ type EditMessageTextParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-// EditMessageText - Use this method to edit text and game (#games) messages. On success, if the edited
-// message is not an inline message, the edited Message (#message) is returned, otherwise True is returned.
+// EditMessageText - Use this method to edit text and game (https://core.telegram.org/bots/api#games)
+// messages. On success, if the edited message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
 func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("editMessageText", params, &message)
@@ -2103,7 +2126,7 @@ type EditMessageCaptionParams struct {
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the message caption. See formatting options
-	// (#formatting-options) for more details.
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
@@ -2116,7 +2139,8 @@ type EditMessageCaptionParams struct {
 }
 
 // EditMessageCaption - Use this method to edit captions of messages. On success, if the edited message is
-// not an inline message, the edited Message (#message) is returned, otherwise True is returned.
+// not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise
+// True is returned.
 func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("editMessageCaption", params, &message)
@@ -2164,8 +2188,9 @@ func (p *EditMessageMediaParams) fileParameters() map[string]*os.File {
 // EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages. If a
 // message is part of a message album, then it can be edited only to an audio for audio albums, only to a
 // document for document albums and to a photo or a video otherwise. When an inline message is edited, a new
-// file can't be uploaded. Use a previously uploaded file via its file_id or specify a URL. On success, if the
-// edited message was sent by the bot, the edited Message (#message) is returned, otherwise True is returned.
+// file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the
+// edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
+// returned, otherwise True is returned.
 func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("editMessageMedia", params, &message)
@@ -2195,8 +2220,8 @@ type EditMessageReplyMarkupParams struct {
 }
 
 // EditMessageReplyMarkup - Use this method to edit only the reply markup of messages. On success, if the
-// edited message is not an inline message, the edited Message (#message) is returned, otherwise True is
-// returned.
+// edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
+// returned, otherwise True is returned.
 func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("editMessageReplyMarkup", params, &message)
@@ -2221,8 +2246,8 @@ type StopPollParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-// StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll (#poll)
-// with the final results is returned.
+// StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll
+// (https://core.telegram.org/bots/api#poll) is returned.
 func (b *Bot) StopPoll(params *StopPollParams) (*Poll, error) {
 	var poll *Poll
 	err := b.performRequest("stopPoll", params, &poll)
@@ -2267,7 +2292,8 @@ type SendStickerParams struct {
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a
-	// new one using multipart/form-data. More info on Sending Files » (#sending-files)
+	// new one using multipart/form-data. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	Sticker InputFile `json:"sticker"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -2295,8 +2321,8 @@ func (p *SendStickerParams) fileParameters() map[string]*os.File {
 }
 
 // SendSticker - Use this method to send static .WEBP or animated
-// (https://telegram.org/blog/animated-stickers) .TGS stickers. On success, the sent Message (#message) is
-// returned.
+// (https://telegram.org/blog/animated-stickers) .TGS stickers. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendSticker(params *SendStickerParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendSticker", params, &message)
@@ -2313,8 +2339,8 @@ type GetStickerSetParams struct {
 	Name string `json:"name"`
 }
 
-// GetStickerSet - Use this method to get a sticker set. On success, a StickerSet (#stickerset) object is
-// returned.
+// GetStickerSet - Use this method to get a sticker set. On success, a StickerSet
+// (https://core.telegram.org/bots/api#stickerset) object is returned.
 func (b *Bot) GetStickerSet(params *GetStickerSetParams) (*StickerSet, error) {
 	var stickerSet *StickerSet
 	err := b.performRequest("getStickerSet", params, &stickerSet)
@@ -2331,7 +2357,8 @@ type UploadStickerFileParams struct {
 	UserID int64 `json:"user_id"`
 
 	// PngSticker - PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed
-	// 512px, and either width or height must be exactly 512px. More info on Sending Files » (#sending-files)
+	// 512px, and either width or height must be exactly 512px. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	PngSticker InputFile `json:"png_sticker"`
 }
 
@@ -2343,7 +2370,7 @@ func (p *UploadStickerFileParams) fileParameters() map[string]*os.File {
 
 // UploadStickerFile - Use this method to upload a .PNG file with a sticker for later use in
 // createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File
-// (#file) on success.
+// (https://core.telegram.org/bots/api#file) on success.
 func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) (*File, error) {
 	var file *File
 	err := b.performRequest("uploadStickerFile", params, &file)
@@ -2370,7 +2397,8 @@ type CreateNewStickerSetParams struct {
 	// PngSticker - Optional. PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must
 	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
 	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
-	// Internet, or upload a new one using multipart/form-data. More info on Sending Files » (#sending-files)
+	// Internet, or upload a new one using multipart/form-data. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	PngSticker *InputFile `json:"png_sticker,omitempty"`
 
 	// TgsSticker - Optional. TGS animation with the sticker, uploaded using multipart/form-data. See
@@ -2424,7 +2452,8 @@ type AddStickerToSetParams struct {
 	// PngSticker - Optional. PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must
 	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
 	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
-	// Internet, or upload a new one using multipart/form-data. More info on Sending Files » (#sending-files)
+	// Internet, or upload a new one using multipart/form-data. More info on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	PngSticker *InputFile `json:"png_sticker,omitempty"`
 
 	// TgsSticker - Optional. TGS animation with the sticker, uploaded using multipart/form-data. See
@@ -2516,8 +2545,8 @@ type SetStickerSetThumbParams struct {
 	// (https://core.telegram.org/animated_stickers#technical-requirements) for animated sticker technical
 	// requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an
 	// HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using
-	// multipart/form-data. More info on Sending Files » (#sending-files). Animated sticker set thumbnail can't be
-	// uploaded via HTTP URL.
+	// multipart/form-data. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files).
+	// Animated sticker set thumbnail can't be uploaded via HTTP URL.
 	Thumb *InputFile `json:"thumb,omitempty"`
 }
 
@@ -2567,13 +2596,14 @@ type AnswerInlineQueryParams struct {
 	// user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
 	SwitchPmText string `json:"switch_pm_text,omitempty"`
 
-	// SwitchPmParameter - Optional. Deep-linking (/bots#deep-linking) parameter for the /start message sent to
-	// the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are
-	// allowed.Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube
-	// account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button
-	// above the results, or even before showing any. The user presses the button, switches to a private chat with
-	// the bot and, in doing so, passes a start parameter that instructs the bot to return an oauth link. Once done,
-	// the bot can offer a switch_inline (#inlinekeyboardmarkup) button so that the user can easily return to the
+	// SwitchPmParameter - Optional. Deep-linking (https://core.telegram.org/bots#deep-linking) parameter for the
+	// /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _
+	// and - are allowed.Example: An inline bot that sends YouTube videos can ask the user to connect the bot to
+	// their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube
+	// account' button above the results, or even before showing any. The user presses the button, switches to a
+	// private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an
+	// oauth link. Once done, the bot can offer a switch_inline
+	// (https://core.telegram.org/bots/api#inlinekeyboardmarkup) button so that the user can easily return to the
 	// chat where they wanted to use the bot's inline capabilities.
 	SwitchPmParameter string `json:"switch_pm_parameter,omitempty"`
 }
@@ -2609,7 +2639,7 @@ type SendInvoiceParams struct {
 	ProviderToken string `json:"provider_token"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
-	// (/bots/payments#supported-currencies)
+	// (https://core.telegram.org/bots/payments#supported-currencies)
 	Currency string `json:"currency"`
 
 	// Prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount,
@@ -2689,7 +2719,8 @@ type SendInvoiceParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendInvoice - Use this method to send invoices. On success, the sent Message (#message) is returned.
+// SendInvoice - Use this method to send invoices. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendInvoice(params *SendInvoiceParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendInvoice", params, &message)
@@ -2719,8 +2750,8 @@ type AnswerShippingQueryParams struct {
 }
 
 // AnswerShippingQuery - If you sent an invoice requesting a shipping address and the parameter is_flexible
-// was specified, the Bot API will send an Update (#update) with a shipping_query field to the bot. Use this
-// method to reply to shipping queries. On success, True is returned.
+// was specified, the Bot API will send an Update (https://core.telegram.org/bots/api#update) with a
+// shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned.
 func (b *Bot) AnswerShippingQuery(params *AnswerShippingQueryParams) error {
 	err := b.performRequest("answerShippingQuery", params, nil)
 	if err != nil {
@@ -2747,9 +2778,9 @@ type AnswerPreCheckoutQueryParams struct {
 }
 
 // AnswerPreCheckoutQuery - Once the user has confirmed their payment and shipping details, the Bot API sends
-// the final confirmation in the form of an Update (#update) with the field pre_checkout_query. Use this method
-// to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an
-// answer within 10 seconds after the pre-checkout query was sent.
+// the final confirmation in the form of an Update (https://core.telegram.org/bots/api#update) with the field
+// pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned.
+// Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
 func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error {
 	err := b.performRequest("answerPreCheckoutQuery", params, nil)
 	if err != nil {
@@ -2806,7 +2837,8 @@ type SendGameParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-// SendGame - Use this method to send a game. On success, the sent Message (#message) is returned.
+// SendGame - Use this method to send a game. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendGame(params *SendGameParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendGame", params, &message)
@@ -2844,9 +2876,10 @@ type SetGameScoreParams struct {
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 }
 
-// SetGameScore - Use this method to set the score of the specified user in a game. On success, if the
-// message was sent by the bot, returns the edited Message (#message), otherwise returns True. Returns an error,
-// if the new score is not greater than the user's current score in the chat and force is False.
+// SetGameScore - Use this method to set the score of the specified user in a game message. On success, if
+// the message is not an inline message, the Message (https://core.telegram.org/bots/api#message) is returned,
+// otherwise True is returned. Returns an error, if the new score is not greater than the user's current score
+// in the chat and force is False.
 func (b *Bot) SetGameScore(params *SetGameScoreParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("setGameScore", params, &message)
@@ -2859,7 +2892,7 @@ func (b *Bot) SetGameScore(params *SetGameScoreParams) (*Message, error) {
 
 // GetGameHighScoresParams - Represents parameters of getGameHighScores method.
 type GetGameHighScoresParams struct {
-	// UserID - Target user id
+	// UserID - Target user ID
 	UserID int64 `json:"user_id"`
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
@@ -2875,12 +2908,13 @@ type GetGameHighScoresParams struct {
 
 // GetGameHighScores - Use this method to get data for high score tables. Will return the score of the
 // specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore
-// (#gamehighscore) objects.
-func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) error {
-	err := b.performRequest("getGameHighScores", params, nil)
+// (https://core.telegram.org/bots/api#gamehighscore) objects.
+func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) ([]GameHighScore, error) {
+	var gameHighScores []GameHighScore
+	err := b.performRequest("getGameHighScores", params, &gameHighScores)
 	if err != nil {
-		return fmt.Errorf("getGameHighScores(): %w", err)
+		return nil, fmt.Errorf("getGameHighScores(): %w", err)
 	}
 
-	return nil
+	return gameHighScores, nil
 }
