@@ -41,7 +41,7 @@ const paramsPattern = `
 </tr>
 `
 
-//nolint:funlen
+//nolint:funlen,gocognit
 func main() {
 	methodPatternReg := regexp.MustCompile(generator.RemoveNewline(methodPattern))
 	paramsPatternReg := regexp.MustCompile(generator.RemoveNewline(paramsPattern))
@@ -175,7 +175,8 @@ func (b *Bot) %s(%s) %s {%s
 }
 
 `,
-			funcDescription, funcName, params, returnFunc, returnVar, methodName, paramsOrNil, "&"+returnVarName, returnNil, methodName, returnEnd))
+			funcDescription, funcName, params, returnFunc, returnVar, methodName, paramsOrNil, "&"+returnVarName,
+			returnNil, methodName, returnEnd))
 	}
 
 	dataString := data.String()
