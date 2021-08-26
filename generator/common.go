@@ -132,6 +132,16 @@ func FitLine(text string, maxLineLength int) []string {
 	return result
 }
 
+func UppercaseWords(text string) string {
+	text = strings.ReplaceAll(text, "Id ", "ID ")
+	text = strings.ReplaceAll(text, " id ", " ID ")
+
+	text = strings.ReplaceAll(text, "Url ", "URL ")
+	text = strings.ReplaceAll(text, " url ", " URL ")
+
+	return text
+}
+
 func GetDocsText() (string, error) {
 	response, err := http.Get(docsURL)
 	if err != nil {

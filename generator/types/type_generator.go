@@ -56,7 +56,9 @@ func main() {
 		return
 	}
 
-	_, _ = fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
+	data := strings.Builder{}
+
+	_, _ = data.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
 
 	allTypes := typePatternReg.FindAllStringSubmatch(body, -1)
 
@@ -68,7 +70,7 @@ func main() {
 			typeName, typeDescription), generator.MaxLineLen)
 		typeDescriptionFitted := strings.Join(typeDescriptionLines, "\n// ")
 
-		_, _ = fmt.Fprintf(file, "%s\ntype %s struct {\n", typeDescriptionFitted, typeName)
+		_, _ = data.WriteString(fmt.Sprintf("%s\ntype %s struct {\n", typeDescriptionFitted, typeName))
 
 		typeDefinitionTable := currentType[3]
 		allFields := fieldPatternReg.FindAllStringSubmatch(typeDefinitionTable, -1)
@@ -90,10 +92,14 @@ func main() {
 
 			fieldType := generator.ConvertType(generator.RemoveTags(currentFiled[2]), isOptional)
 
-			_, _ = fmt.Fprintf(file, "%s\n\t%s %s `json:\"%s%s\"`\n\n",
-				fieldDescriptionFitted, fieldNameCamelCase, fieldType, fieldName, omitempty)
+			_, _ = data.WriteString(fmt.Sprintf("%s\n\t%s %s `json:\"%s%s\"`\n\n",
+				fieldDescriptionFitted, fieldNameCamelCase, fieldType, fieldName, omitempty))
 		}
 
-		_, _ = fmt.Fprintf(file, "}\n\n")
+		_, _ = data.WriteString(fmt.Sprintf("}\n\n"))
 	}
+
+	dataString := data.String()
+	dataString = generator.UppercaseWords(dataString)
+	_, _ = file.WriteString(dataString)
 }

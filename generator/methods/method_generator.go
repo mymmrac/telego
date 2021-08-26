@@ -60,7 +60,9 @@ func main() {
 
 	allMethods := methodPatternReg.FindAllStringSubmatch(body, -1)
 
-	_, _ = fmt.Fprintf(file, "package %s\n\n", generator.PackageName)
+	data := strings.Builder{}
+
+	_, _ = data.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
 
 	for _, currentMethod := range allMethods {
 		methodName := currentMethod[1]
@@ -80,8 +82,8 @@ func main() {
 		paramsOrNil := "nil"
 
 		if len(allParams) != 0 {
-			_, _ = fmt.Fprintf(file, "// %s - Represents parameters of %s method.\ntype %s struct {\n",
-				paramsStructName, methodName, paramsStructName)
+			_, _ = data.WriteString(fmt.Sprintf("// %s - Represents parameters of %s method.\ntype %s struct {\n",
+				paramsStructName, methodName, paramsStructName))
 
 			for _, currentParam := range allParams {
 				paramName := currentParam[1]
@@ -102,17 +104,17 @@ func main() {
 
 				fieldType := generator.ConvertType(generator.RemoveTags(currentParam[2]), isOptional)
 
-				_, _ = fmt.Fprintf(file, "\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
-					fieldDescription, fieldName, fieldType, paramName, omitempty)
+				_, _ = data.WriteString(fmt.Sprintf("\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
+					fieldDescription, fieldName, fieldType, paramName, omitempty))
 			}
 
-			_, _ = fmt.Fprintf(file, "}\n")
+			_, _ = data.WriteString(fmt.Sprintf("}\n"))
 
 			params = fmt.Sprintf("params *%s", paramsStructName)
 			paramsOrNil = "params"
 		}
 
-		_, _ = fmt.Fprintf(file, `
+		_, _ = data.WriteString(fmt.Sprintf(`
 %s
 func (b *Bot) %s(%s) error {
 	err := b.performRequest("%s", %s, nil)
@@ -124,6 +126,10 @@ func (b *Bot) %s(%s) error {
 }
 
 `,
-			funcDescription, funcName, params, methodName, paramsOrNil, methodName)
+			funcDescription, funcName, params, methodName, paramsOrNil, methodName))
 	}
+
+	dataString := data.String()
+	dataString = generator.UppercaseWords(dataString)
+	_, _ = file.WriteString(dataString)
 }
