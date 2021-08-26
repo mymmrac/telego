@@ -62,6 +62,8 @@ func main() {
 
 	allTypes := typePatternReg.FindAllStringSubmatch(body, -1)
 
+	fmt.Println("Types count:", len(allTypes))
+
 	for _, currentType := range allTypes {
 		typeName := currentType[1]
 

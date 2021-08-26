@@ -59,6 +59,9 @@ func main() {
 	}
 
 	allMethods := methodPatternReg.FindAllStringSubmatch(body, -1)
+	returnValuesCount := 0
+
+	fmt.Println("Method count:", len(allMethods))
 
 	data := strings.Builder{}
 
@@ -71,6 +74,32 @@ func main() {
 		paramsStructName := funcName + "Params"
 
 		methodDescription := generator.RemoveTags(generator.CleanDescription(currentMethod[2]))
+		methodDescriptionWithoutTags := generator.RemoveTags(currentMethod[2])
+
+		returns := ""
+
+		returnsAfter := regexp.MustCompile(`[Rr]eturns [a-z ]*?((?:Array of |)[A-Z]\w+)`).
+			FindStringSubmatch(methodDescriptionWithoutTags)
+		if len(returnsAfter) != 0 {
+			returns = returnsAfter[1]
+			returnValuesCount++
+		}
+
+		returnsBefore := regexp.MustCompile(`((?:Array of |)[A-Z]\w+)[a-z ]*?returned`).
+			FindStringSubmatch(methodDescriptionWithoutTags)
+		if len(returnsBefore) != 0 {
+			returns = returnsBefore[1]
+			returnValuesCount++
+		}
+
+		returnType := ""
+		switch returns {
+		case "", "True", "error":
+		//	Do noting
+		default:
+			returnType = generator.ConvertType(returns, true)
+		}
+
 		funcDescriptionLines := generator.FitLine(fmt.Sprintf("// %s - %s",
 			funcName, methodDescription), generator.MaxLineLen)
 		funcDescription := strings.Join(funcDescriptionLines, "\n// ")
@@ -114,22 +143,44 @@ func main() {
 			paramsOrNil = "params"
 		}
 
+		returnFunc := "error"
+		returnVar := ""
+		returnVarName := "nil"
+		returnEnd := ""
+		returnNil := ""
+		if returnType != "" {
+			returnFunc = fmt.Sprintf("(%s, error)", returnType)
+
+			returnVarName = returnType[1:]
+			if strings.HasPrefix(returnVarName, "]") {
+				returnVarName = returnVarName[1:] + "s"
+			}
+			returnVarName = string(returnVarName[0]|('a'-'A')) + returnVarName[1:]
+
+			returnVar = fmt.Sprintf("\n\tvar %s %s", returnVarName, returnType)
+			returnEnd = returnVarName + ", "
+
+			returnNil = "nil, "
+		}
+
 		_, _ = data.WriteString(fmt.Sprintf(`
 %s
-func (b *Bot) %s(%s) error {
-	err := b.performRequest("%s", %s, nil)
+func (b *Bot) %s(%s) %s {%s
+	err := b.performRequest("%s", %s, %s)
 	if err != nil {
-		return fmt.Errorf("%s(): %%w", err)
+		return %sfmt.Errorf("%s(): %%w", err)
 	}
 
-	return nil
+	return %snil
 }
 
 `,
-			funcDescription, funcName, params, methodName, paramsOrNil, methodName))
+			funcDescription, funcName, params, returnFunc, returnVar, methodName, paramsOrNil, "&"+returnVarName, returnNil, methodName, returnEnd))
 	}
 
 	dataString := data.String()
 	dataString = generator.UppercaseWords(dataString)
 	_, _ = file.WriteString(dataString)
+
+	fmt.Println("Return values:", returnValuesCount)
 }

@@ -94,7 +94,7 @@ func ConvertType(text string, isOptional bool) string {
 	switch text {
 	case "String":
 		return "string"
-	case "Integer":
+	case "Integer", "Int":
 		return "int"
 	case "Float number", "Float":
 		return "float64"
