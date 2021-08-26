@@ -15,18 +15,13 @@ Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] im
 The goal of this library was to create API with same types and methods as actual telegram bot API. 
 Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from telegram.
 
-> Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](generator) from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and actual code.
-> Fell free to report such things.
-
-> Note: While library in unstable version (v0.x.x) some parts of examples may work only in the latest commit.
-
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
 ### ToDo List & Ideas
 
-- [ ] Refactor [generator](generator)
+- [X] Refactor [generator](generator)
 - [ ] Add constants where possible
-- [ ] Review generated code & comments
+- [X] Review generated code & comments
 - [ ] Unit testing of:
   - [ ] Core functionality
   - [ ] Helper methods
@@ -53,6 +48,9 @@ More examples can be seen here:
 - [Sending files (documents, photos, media groups)](examples/sending_fiels/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
+
+> Note: While library in unstable version (v0.x.x) some parts of examples may work only in the latest commit.
+
 
 ### Basic setup
 
@@ -211,6 +209,9 @@ func mustOpen(filename string) *os.File {
 All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be used by the library.
 They have same names and same parameters, parameters represented by struct with name: `<methodName>` + `Params`. 
 If method don't have required parameters `nil` value can be used as a parameter.
+
+> Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](generator) from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and actual code.
+> Fell free to report such things.
 
 ```go
 package main
