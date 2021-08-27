@@ -1252,6 +1252,16 @@ type SendDiceParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+// Dice emojis
+const (
+	EmojiDice        = "🎲"
+	EmojiDarts       = "🎯"
+	EmojiBowling     = "🎳"
+	EmojiBasketball  = "🏀"
+	EmojiSoccer      = "⚽"
+	EmojiSlotMachine = "🎰"
+)
+
 // SendDice - Use this method to send an animated emoji that will display a random value. On success, the
 // sent Message (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendDice(params *SendDiceParams) (*Message, error) {

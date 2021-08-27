@@ -20,7 +20,7 @@ Every type and method have been represented in [`types.go`](types.go) and [`meth
 ### ToDo List & Ideas
 
 - [X] Refactor [generator](generator)
-- [ ] Add constants where possible
+- [X] Add constants where possible
 - [X] Review generated code & comments
 - [ ] Unit testing of:
   - [ ] Core functionality

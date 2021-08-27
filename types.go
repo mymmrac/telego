@@ -2261,6 +2261,13 @@ func (i *InlineQueryResultGif) ResultType() string {
 	return ResultTypeGif
 }
 
+// ThumbMimeType types
+const (
+	ThumbMimeTypeImageJpeg = "image/jpeg"
+	ThumbMimeTypeImageGif  = "image/gif"
+	ThumbMimeTypeVideoMp4  = "video/mp4"
+)
+
 // InlineQueryResultMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without sound).
 // By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can
 // use input_message_content to send a message with the specified content instead of the animation.
