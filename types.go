@@ -862,6 +862,14 @@ type ReplyMarkup interface {
 	ReplyType() string
 }
 
+// ReplyMarkup types
+const (
+	MarkupTypeReplyKeyboard       = "ReplyKeyboardMarkup"
+	MarkupTypeReplyKeyboardRemove = "ReplyKeyboardRemove"
+	MarkupTypeInlineKeyboard      = "InlineKeyboardMarkup"
+	MarkupTypeForceReply          = "ForceReply"
+)
+
 // ReplyKeyboardMarkup - This object represents a custom keyboard (https://core.telegram.org/bots#keyboards)
 // with reply options (see Introduction to bots (https://core.telegram.org/bots#keyboards) for details and
 // examples).
@@ -894,7 +902,7 @@ type ReplyKeyboardMarkup struct {
 
 // ReplyType - Returns ReplyKeyboardMarkup type
 func (i *ReplyKeyboardMarkup) ReplyType() string {
-	return "ReplyKeyboardMarkup"
+	return MarkupTypeReplyKeyboard
 }
 
 // KeyboardButton - This object represents one button of the reply keyboard. For simple text buttons String
@@ -947,7 +955,7 @@ type ReplyKeyboardRemove struct {
 
 // ReplyType - Returns ReplyKeyboardRemove type
 func (i *ReplyKeyboardRemove) ReplyType() string {
-	return "ReplyKeyboardRemove"
+	return MarkupTypeReplyKeyboardRemove
 }
 
 // InlineKeyboardMarkup - This object represents an inline keyboard
@@ -961,7 +969,7 @@ type InlineKeyboardMarkup struct {
 
 // ReplyType - Returns InlineKeyboardMarkup type
 func (i *InlineKeyboardMarkup) ReplyType() string {
-	return "InlineKeyboardMarkup"
+	return MarkupTypeInlineKeyboard
 }
 
 // InlineKeyboardButton - This object represents one button of an inline keyboard. You must use exactly one
@@ -1097,7 +1105,7 @@ type ForceReply struct {
 
 // ReplyType - Returns ForceReply type
 func (i *ForceReply) ReplyType() string {
-	return "ForceReply"
+	return MarkupTypeForceReply
 }
 
 // ChatPhoto - This object represents a chat photo.
@@ -2191,7 +2199,7 @@ type InlineQueryResultPhoto struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultPhoto) ResultType() string {
@@ -2246,7 +2254,7 @@ type InlineQueryResultGif struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultGif) ResultType() string {
@@ -2301,7 +2309,7 @@ type InlineQueryResultMpeg4Gif struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultMpeg4Gif) ResultType() string {
@@ -2359,7 +2367,7 @@ type InlineQueryResultVideo struct {
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video. This field is
 	// required if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultVideo) ResultType() string {
@@ -2404,7 +2412,7 @@ type InlineQueryResultAudio struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the audio
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultAudio) ResultType() string {
@@ -2446,7 +2454,7 @@ type InlineQueryResultVoice struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice recording
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultVoice) ResultType() string {
@@ -2490,7 +2498,7 @@ type InlineQueryResultDocument struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
 	// ThumbURL - Optional. URL of the thumbnail (jpeg only) for the file
 	ThumbURL string `json:"thumb_url,omitempty"`
@@ -2545,7 +2553,7 @@ type InlineQueryResultLocation struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the location
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
 	// ThumbURL - Optional. URL of the thumbnail for the result
 	ThumbURL string `json:"thumb_url,omitempty"`
@@ -2602,7 +2610,7 @@ type InlineQueryResultVenue struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the venue
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
 	// ThumbURL - Optional. URL of the thumbnail for the result
 	ThumbURL string `json:"thumb_url,omitempty"`
@@ -2646,7 +2654,7 @@ type InlineQueryResultContact struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the contact
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
 	// ThumbURL - Optional. URL of the thumbnail for the result
 	ThumbURL string `json:"thumb_url,omitempty"`
@@ -2717,7 +2725,7 @@ type InlineQueryResultCachedPhoto struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedPhoto) ResultType() string {
@@ -2756,7 +2764,7 @@ type InlineQueryResultCachedGif struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedGif) ResultType() string {
@@ -2796,7 +2804,7 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedMpeg4Gif) ResultType() string {
@@ -2821,7 +2829,7 @@ type InlineQueryResultCachedSticker struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the sticker
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedSticker) ResultType() string {
@@ -2863,7 +2871,7 @@ type InlineQueryResultCachedDocument struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedDocument) ResultType() string {
@@ -2905,7 +2913,7 @@ type InlineQueryResultCachedVideo struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedVideo) ResultType() string {
@@ -2944,7 +2952,7 @@ type InlineQueryResultCachedVoice struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice message
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedVoice) ResultType() string {
@@ -2980,7 +2988,7 @@ type InlineQueryResultCachedAudio struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the audio
-	InputMessageContent *InputMessageContent `json:"input_message_content,omitempty"`
+	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
 func (i *InlineQueryResultCachedAudio) ResultType() string {
@@ -2997,6 +3005,15 @@ func (i *InlineQueryResultCachedAudio) ResultType() string {
 type InputMessageContent interface {
 	ContentType() string
 }
+
+// InputMessageContent types
+const (
+	ContentTypeText     = "InputTextMessage"
+	ContentTypeLocation = "InputLocationMessage"
+	ContentTypeVenue    = "InputVenueMessage"
+	ContentTypeContact  = "InputContactMessage"
+	ContentTypeInvoice  = "InputInvoiceMessage"
+)
 
 // InputTextMessageContent - Represents the content (https://core.telegram.org/bots/api#inputmessagecontent)
 // of a text message to be sent as the result of an inline query.
@@ -3017,7 +3034,7 @@ type InputTextMessageContent struct {
 }
 
 func (i *InputTextMessageContent) ContentType() string {
-	return "text"
+	return ContentTypeText
 }
 
 // InputLocationMessageContent - Represents the content
@@ -3044,6 +3061,10 @@ type InputLocationMessageContent struct {
 	// ProximityAlertRadius - Optional. For live locations, a maximum distance for proximity alerts about
 	// approaching another chat member, in meters. Must be between 1 and 100000 if specified.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
+}
+
+func (i *InputLocationMessageContent) ContentType() string {
+	return ContentTypeLocation
 }
 
 // InputVenueMessageContent - Represents the content (https://core.telegram.org/bots/api#inputmessagecontent)
@@ -3077,7 +3098,7 @@ type InputVenueMessageContent struct {
 }
 
 func (i *InputVenueMessageContent) ContentType() string {
-	return "venue"
+	return ContentTypeVenue
 }
 
 // InputContactMessageContent - Represents the content
@@ -3099,7 +3120,7 @@ type InputContactMessageContent struct {
 }
 
 func (i *InputContactMessageContent) ContentType() string {
-	return "contact"
+	return ContentTypeContact
 }
 
 // InputInvoiceMessageContent - Represents the content
@@ -3180,7 +3201,7 @@ type InputInvoiceMessageContent struct {
 }
 
 func (i *InputInvoiceMessageContent) ContentType() string {
-	return "invoice"
+	return ContentTypeInvoice
 }
 
 // ChosenInlineResult - Represents a result (https://core.telegram.org/bots/api#inlinequeryresult) of an
@@ -3474,6 +3495,19 @@ type PassportElementError interface {
 	ErrorSource() string
 }
 
+// PassportElementError sources
+const (
+	ErrorSourceDataField        = "data"
+	ErrorSourceFrontSide        = "front_side"
+	ErrorSourceReverseSide      = "reverse_side"
+	ErrorSourceSelfie           = "selfie"
+	ErrorSourceFile             = "file"
+	ErrorSourceFiles            = "files"
+	ErrorSourceTranslationFile  = "translation_file"
+	ErrorSourceTranslationFiles = "translation_files"
+	ErrorSourceUnspecified      = "unspecified"
+)
+
 // PassportElementErrorDataField - Represents an issue in one of the data fields that was provided by the
 // user. The error is considered resolved when the field's value changes.
 type PassportElementErrorDataField struct {
@@ -3495,7 +3529,7 @@ type PassportElementErrorDataField struct {
 }
 
 func (p *PassportElementErrorDataField) ErrorSource() string {
-	return "data"
+	return ErrorSourceDataField
 }
 
 // PassportElementErrorFrontSide - Represents an issue with the front side of a document. The error is
@@ -3516,7 +3550,7 @@ type PassportElementErrorFrontSide struct {
 }
 
 func (p *PassportElementErrorFrontSide) ErrorSource() string {
-	return "front_side"
+	return ErrorSourceFrontSide
 }
 
 // PassportElementErrorReverseSide - Represents an issue with the reverse side of a document. The error is
@@ -3537,7 +3571,7 @@ type PassportElementErrorReverseSide struct {
 }
 
 func (p *PassportElementErrorReverseSide) ErrorSource() string {
-	return "reverse_side"
+	return ErrorSourceReverseSide
 }
 
 // PassportElementErrorSelfie - Represents an issue with the selfie with a document. The error is considered
@@ -3558,7 +3592,7 @@ type PassportElementErrorSelfie struct {
 }
 
 func (p *PassportElementErrorSelfie) ErrorSource() string {
-	return "selfie"
+	return ErrorSourceSelfie
 }
 
 // PassportElementErrorFile - Represents an issue with a document scan. The error is considered resolved when
@@ -3579,7 +3613,7 @@ type PassportElementErrorFile struct {
 }
 
 func (p *PassportElementErrorFile) ErrorSource() string {
-	return "file"
+	return ErrorSourceFile
 }
 
 // PassportElementErrorFiles - Represents an issue with a list of scans. The error is considered resolved
@@ -3600,7 +3634,7 @@ type PassportElementErrorFiles struct {
 }
 
 func (p *PassportElementErrorFiles) ErrorSource() string {
-	return "files"
+	return ErrorSourceFiles
 }
 
 // PassportElementErrorTranslationFile - Represents an issue with one of the files that constitute the
@@ -3622,7 +3656,7 @@ type PassportElementErrorTranslationFile struct {
 }
 
 func (p *PassportElementErrorTranslationFile) ErrorSource() string {
-	return "translation_file"
+	return ErrorSourceTranslationFile
 }
 
 // PassportElementErrorTranslationFiles - Represents an issue with the translated version of a document. The
@@ -3644,7 +3678,7 @@ type PassportElementErrorTranslationFiles struct {
 }
 
 func (p *PassportElementErrorTranslationFiles) ErrorSource() string {
-	return "translation_files"
+	return ErrorSourceTranslationFiles
 }
 
 // PassportElementErrorUnspecified - Represents an issue in an unspecified place. The error is considered
@@ -3664,7 +3698,7 @@ type PassportElementErrorUnspecified struct {
 }
 
 func (p *PassportElementErrorUnspecified) ErrorSource() string {
-	return "unspecified"
+	return ErrorSourceUnspecified
 }
 
 // Game - This object represents a game. Use BotFather to create and edit games, their short names will act
