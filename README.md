@@ -19,6 +19,9 @@ Every type and method have been represented in [`types.go`](types.go) and [`meth
 
 ### ToDo List & Ideas
 
+<details>
+<summary>Click to show • hide</summary>
+
 - [X] Refactor [generator](generator)
 - [X] Add constants where possible
 - [X] Review generated code & comments
@@ -29,7 +32,9 @@ Every type and method have been represented in [`types.go`](types.go) and [`meth
 - [ ] Add more examples
 - [ ] Create Wiki page
 - [ ] Publish stable version
-- [ ] Add library to official Telegram [examples](https://core.telegram.org/bots/samples#go)
+- [ ] Add library to official [Telegram examples](https://core.telegram.org/bots/samples#go)
+	
+</details>
 
 ## Getting Started
 
