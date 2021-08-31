@@ -14,6 +14,8 @@ const (
 	retryTimeout          = time.Second * 3 // 3s
 )
 
+const listeningForWebhookErrMsg = "Listening for webhook: %v"
+
 // SetUpdateInterval - Sets interval of calling GetUpdates in GetUpdatesChan method. Ensures that between two calls
 // of GetUpdates will be at least specified time, but it could be longer.
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
@@ -68,7 +70,7 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 	go func() {
 		err := fasthttp.ListenAndServeTLS(address, certificateFile, keyFile, b.webhookHandler)
 		if err != nil {
-			b.log.Errorf("Listening for webhook: %v", err)
+			b.log.Errorf(listeningForWebhookErrMsg, err)
 		}
 	}()
 }
@@ -78,7 +80,7 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 	go func() {
 		err := fasthttp.ListenAndServeTLSEmbed(address, certificateData, keyData, b.webhookHandler)
 		if err != nil {
-			b.log.Errorf("Listening for webhook: %v", err)
+			b.log.Errorf(listeningForWebhookErrMsg, err)
 		}
 	}()
 }
@@ -88,7 +90,7 @@ func (b *Bot) StartListeningForWebhook(address string) {
 	go func() {
 		err := fasthttp.ListenAndServe(address, b.webhookHandler)
 		if err != nil {
-			b.log.Errorf("Listening for webhook: %v", err)
+			b.log.Errorf(listeningForWebhookErrMsg, err)
 		}
 	}()
 }
