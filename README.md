@@ -181,7 +181,7 @@ func main() {
 	fmt.Printf("Webhook Info: %#v\n", info)
 
 	// Start server for receiving requests from telegram
-	bot.StartListeningForWebhook("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
+	bot.StartListeningForWebhookTLS("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
 
 	// Get updates channel from webhook. Note for one bot only one webhook allowed
 	updates, _ := bot.ListenForWebhook("/" + bot.Token())

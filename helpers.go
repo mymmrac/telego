@@ -63,10 +63,30 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	return updatesChan, nil
 }
 
-// StartListeningForWebhook - Start server for listening for webhook
-func (b *Bot) StartListeningForWebhook(address, certificateFile, keyFile string) {
+// StartListeningForWebhookTLS - Start server with TLS for listening for webhook
+func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
 	go func() {
 		err := fasthttp.ListenAndServeTLS(address, certificateFile, keyFile, b.webhookHandler)
+		if err != nil {
+			b.log.Errorf("Listening for webhook: %v", err)
+		}
+	}()
+}
+
+// StartListeningForWebhookTLSEmbed - Start server with TLS (embed) for listening for webhook
+func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) {
+	go func() {
+		err := fasthttp.ListenAndServeTLSEmbed(address, certificateData, keyData, b.webhookHandler)
+		if err != nil {
+			b.log.Errorf("Listening for webhook: %v", err)
+		}
+	}()
+}
+
+// StartListeningForWebhook - Start server for listening for webhook
+func (b *Bot) StartListeningForWebhook(address string) {
+	go func() {
+		err := fasthttp.ListenAndServe(address, b.webhookHandler)
 		if err != nil {
 			b.log.Errorf("Listening for webhook: %v", err)
 		}
