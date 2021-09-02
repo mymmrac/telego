@@ -117,7 +117,7 @@ func (b *Bot) SetClient(client *fasthttp.Client) error {
 type apiResponse struct {
 	Ok     bool               `json:"ok"`
 	Result stdJson.RawMessage `json:"result,omitempty"`
-	APIError
+	*APIError
 }
 
 func (a apiResponse) String() string {
@@ -133,7 +133,7 @@ type APIError struct {
 
 func (a APIError) Error() string {
 	if a.Parameters != nil {
-		return fmt.Sprintf("%d %s migrate to chat id: %d, retry after: %d",
+		return fmt.Sprintf("%d %q migrate to chat id: %d, retry after: %d",
 			a.ErrorCode, a.Description, a.Parameters.MigrateToChatID, a.Parameters.RetryAfter)
 	}
 	return fmt.Sprintf("%d %q", a.ErrorCode, a.Description)
@@ -203,7 +203,14 @@ func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiRespons
 		return nil, fmt.Errorf("encode json: %w", err)
 	}
 
-	return b.callAPI(methodName, url, contentTypeJSON, buffer)
+	apiResp, err := b.callAPI(url, contentTypeJSON, buffer)
+	if err != nil {
+		b.log.Errorf("API call error: %v", err)
+		return nil, err
+	}
+
+	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
+	return apiResp, nil
 }
 
 func (b *Bot) apiRequestMultipartFormData(methodName string,
@@ -246,10 +253,17 @@ func (b *Bot) apiRequestMultipartFormData(methodName string,
 		return nil, fmt.Errorf("closing writer: %w", err)
 	}
 
-	return b.callAPI(methodName, url, writer.FormDataContentType(), buffer)
+	apiResp, err := b.callAPI(url, writer.FormDataContentType(), buffer)
+	if err != nil {
+		b.log.Errorf("API call error: %v", err)
+		return nil, err
+	}
+
+	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
+	return apiResp, nil
 }
 
-func (b *Bot) callAPI(methodName, url, contentType string, buffer *bytes.Buffer) (*apiResponse, error) {
+func (b *Bot) callAPI(url, contentType string, buffer *bytes.Buffer) (*apiResponse, error) {
 	req := fasthttp.AcquireRequest()
 	req.SetRequestURI(url)
 	req.Header.SetContentType(contentType)
@@ -271,8 +285,6 @@ func (b *Bot) callAPI(methodName, url, contentType string, buffer *bytes.Buffer)
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
-
-	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
 
 	return apiResp, nil
 }

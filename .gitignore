@@ -6,3 +6,6 @@
 
 # Generated fiels
 *.generated
+
+# Output fiels
+*.out
