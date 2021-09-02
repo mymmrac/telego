@@ -2,9 +2,10 @@ package telego
 
 import (
 	stdJson "encoding/json"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/valyala/fasthttp"
-	"testing"
 )
 
 const (
