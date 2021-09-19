@@ -156,7 +156,12 @@ func filesParameters(parameters interface{}) (files map[string]*os.File, hasFile
 
 // parseParameters - Parses parameter struct to key value structure
 func parseParameters(v interface{}) (map[string]string, error) {
-	paramsStruct := reflect.ValueOf(v).Elem()
+	valueOfV := reflect.ValueOf(v)
+	if valueOfV.Kind() != reflect.Ptr && valueOfV.Kind() != reflect.Interface {
+		return nil, fmt.Errorf("%s not a pointer or interface", valueOfV.Kind())
+	}
+
+	paramsStruct := valueOfV.Elem()
 	if paramsStruct.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("%s not a struct", paramsStruct.Kind())
 	}

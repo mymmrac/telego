@@ -1,7 +1,8 @@
 package telego
 
 import (
-	stdJson "encoding/json"
+	"errors"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,6 +12,8 @@ const (
 	testToken    = "1234567890:aaaabbbbaaaabbbbaaaabbbbaaaabbbbccc"
 	invalidToken = "abc"
 )
+
+var errTest = errors.New("error")
 
 func getBot(t *testing.T) *Bot {
 	bot, err := NewBot(testToken)
@@ -48,8 +51,8 @@ func Test_validateToken(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual := validateToken(tt.token)
-			assert.Equal(t, tt.isValid, actual)
+			isValid := validateToken(tt.token)
+			assert.Equal(t, tt.isValid, isValid)
 		})
 	}
 }
@@ -62,57 +65,27 @@ func TestNewBot(t *testing.T) {
 		assert.NotNil(t, bot)
 	})
 
+	t.Run("success with options", func(t *testing.T) {
+		bot, err := NewBot(testToken, func(_ *Bot) error { return nil })
+
+		assert.NoError(t, err)
+		assert.NotNil(t, bot)
+	})
+
 	t.Run("error", func(t *testing.T) {
 		bot, err := NewBot(invalidToken)
 
 		assert.Error(t, err)
 		assert.Nil(t, bot)
 	})
+
+	t.Run("error with options", func(t *testing.T) {
+		bot, err := NewBot(testToken, func(_ *Bot) error { return errTest })
+
+		assert.ErrorIs(t, err, errTest)
+		assert.Nil(t, bot)
+	})
 }
-
-// func TestBot_Logger(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	t.Run("default-logger", func(t *testing.T) {
-// 		assert.NotPanics(t, func() {
-// 			bot.DefaultLogger(true, true)
-// 		})
-// 	})
-//
-// 	t.Run("set-logger", func(t *testing.T) {
-// 		assert.NotPanics(t, func() {
-// 			var l Logger
-// 			bot.SetLogger(l)
-// 		})
-// 	})
-// }
-
-// func TestBot_SetToken(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	tests := []struct {
-// 		name  string
-// 		token string
-// 		err   error
-// 	}{
-// 		{
-// 			name:  "success",
-// 			token: testToken,
-// 			err:   nil,
-// 		},
-// 		{
-// 			name:  "error",
-// 			token: invalidToken,
-//			err:   ErrInvalidToken,
-//		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			actual := bot.SetToken(tt.token)
-// 			assert.Equal(t, tt.err, actual)
-// 		})
-// 	}
-// }
 
 func TestBot_Token(t *testing.T) {
 	bot := getBot(t)
@@ -120,117 +93,106 @@ func TestBot_Token(t *testing.T) {
 	assert.Equal(t, testToken, bot.Token())
 }
 
-// func TestBot_SetAPIServer(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	tests := []struct {
-// 		name  string
-// 		url   string
-// 		isErr bool
-// 	}{
-// 		{
-// 			name:  "success",
-// 			url:   defaultBotAPIServer,
-// 			isErr: false,
-// 		},
-// 		{
-// 			name:  "empty",
-// 			url:   "",
-// 			isErr: true,
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			actual := bot.SetAPIServer(tt.url)
-// 			if tt.isErr {
-// 				assert.Error(t, actual)
-// 				return
-// 			}
-// 			assert.NoError(t, actual)
-// 		})
-// 	}
-// }
+func Test_parseParameters(t *testing.T) {
+	n := 1
 
-// func TestBot_SetClient(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	tests := []struct {
-// 		name   string
-// 		client *fasthttp.Client
-// 		isErr  bool
-// 	}{
-// 		{
-// 			name:   "success",
-// 			client: &fasthttp.Client{},
-// 	 		isErr:  false,
-// 		},
-// 		{
-// 			name:   "error",
-// 			client: nil,
-// 			isErr:  true,
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			actual := bot.SetClient(tt.client)
-// 			if tt.isErr {
-// 				assert.Error(t, actual)
-// 				return
-// 			}
-// 			assert.NoError(t, actual)
-// 		})
-// 	}
-// }
-
-func Test_apiResponse_String_and_APIError_Error(t *testing.T) {
 	tests := []struct {
-		name string
-		resp apiResponse
-		text string
+		name             string
+		parameters       interface{}
+		parsedParameters map[string]string
+		isError          bool
 	}{
 		{
 			name: "success",
-			resp: apiResponse{
-				Ok:       true,
-				APIError: nil,
-				Result:   stdJson.RawMessage{},
+			parameters: &struct {
+				Empty  string `json:"empty,omitempty"`
+				Number int    `json:"number"`
+				Array  []int  `json:"array"`
+				Struct *struct {
+					N int `json:"n"`
+				} `json:"struct"`
+			}{
+				Number: 10,
+				Array:  []int{1, 2, 3},
+				Struct: &struct {
+					N int `json:"n"`
+				}{2},
 			},
-			text: "Ok: true, Err: {<nil>}, Result: ",
+			parsedParameters: map[string]string{
+				"number": "10",
+				"array":  "[1,2,3]",
+				"struct": "{\"n\":2}",
+			},
+			isError: false,
 		},
 		{
-			name: "error",
-			resp: apiResponse{
-				Ok: false,
-				APIError: &APIError{
-					Description: "bad request",
-					ErrorCode:   400,
-					Parameters:  nil,
-				},
-				Result: nil,
-			},
-			text: "Ok: false, Err: {400 \"bad request\"}, Result: ",
+			name: "error not pointer",
+			parameters: struct {
+				a int
+			}{},
+			parsedParameters: nil,
+			isError:          true,
 		},
 		{
-			name: "error with parameters",
-			resp: apiResponse{
-				Ok: false,
-				APIError: &APIError{
-					Description: "bad request",
-					ErrorCode:   400,
-					Parameters: &ResponseParameters{
-						MigrateToChatID: 1,
-						RetryAfter:      2,
-					},
-				},
-				Result: nil,
+			name:             "error not struct",
+			parameters:       &n,
+			parsedParameters: nil,
+			isError:          true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			parsedParameters, err := parseParameters(tt.parameters)
+			if tt.isError {
+				assert.Error(t, err)
+				assert.Nil(t, parsedParameters)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.parsedParameters, parsedParameters)
+		})
+	}
+}
+
+var testFile = &os.File{}
+
+type testStruct struct{}
+
+func (ts *testStruct) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"test": testFile,
+	}
+}
+
+func Test_filesParameters(t *testing.T) {
+	tests := []struct {
+		name       string
+		parameters interface{}
+		files      map[string]*os.File
+		hasFiles   bool
+	}{
+		{
+			name:       "with files",
+			parameters: &testStruct{},
+			files: map[string]*os.File{
+				"test": testFile,
 			},
-			text: "Ok: false, Err: {400 \"bad request\" migrate to chat id: 1, retry after: 2}, Result: ",
+			hasFiles: true,
+		},
+		{
+			name:       "no files",
+			parameters: 1,
+			files:      nil,
+			hasFiles:   false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual := tt.resp.String()
-			assert.Equal(t, tt.text, actual)
+			files, hasFiles := filesParameters(tt.parameters)
+			assert.Equal(t, tt.hasFiles, hasFiles)
+			assert.Equal(t, tt.files, files)
 		})
 	}
 }
