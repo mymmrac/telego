@@ -12,8 +12,9 @@
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
 
-The goal of this library was to create API with same types and methods as actual telegram bot API. 
-Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from telegram.
+The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
+have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
+telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
@@ -26,40 +27,41 @@ Every type and method have been represented in [`types.go`](types.go) and [`meth
 - [X] Add constants where possible
 - [X] Review generated code & comments
 - [ ] Unit testing of:
-  - [ ] Core functionality
-  - [ ] Helper methods
-  - [ ] Methods & types
+    - [ ] Core functionality
+    - [ ] Helper methods
+    - [ ] Methods & types
 - [ ] Add more examples
 - [ ] Create Wiki page
 - [ ] Publish stable version
 - [ ] Add library to official [Telegram examples](https://core.telegram.org/bots/samples#go)
-	
+
 </details>
 
 ## Getting Started
 
-How to get the library: 
+How to get the library:
+
 ```shell
 go get -u github.com/mymmrac/go-telegram-bot-api
 ```
 
 Make sure you get the latest version to have all new features & fixes.
 
-> Note: All methods that have `(default: ...)` in comment isn't required for working bot, they were used just to show available configuration options.
-
-> Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
-
 More examples can be seen here:
+
+- [Configuration](examples/configuration/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_fiels/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
 
-> Note: While library in unstable version (v0.x.x) some parts of examples may work only in the latest commit.
+> Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
 
+> Note: While library in unstable version (v0.x.x) some parts of examples may not work.
 
 ### Basic setup
 
-For start, you need to create instance of your bot and specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
+For start, you need to create instance of your bot and
+specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
 
 ```go
 package main
@@ -69,44 +71,34 @@ import (
 	"os"
 
 	telego "github.com/mymmrac/go-telegram-bot-api"
-	"github.com/valyala/fasthttp"
 )
 
 func main() {
+	// Get Bot token from environment variables
 	botToken := os.Getenv("TOKEN")
 
-	// Create bot
-	bot, err := telego.NewBot(botToken)
+	// Create bot and enable debugging info (more on configuration at /examples/configuration/main.go)
+	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// Change bot token (default: set by telego.NewBot(...))
-	_ = bot.SetToken("new bot token")
+	// Call method getMe (https://core.telegram.org/bots/api#getme)
+	botUser, err := bot.GetMe()
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
 
-	// Change bot API server URL (default: https://api.telegram.org)
-	_ = bot.SetAPIServer("new bot api server")
-
-	// Change http client (default: &fasthttp.Client{})
-	_ = bot.SetClient(&fasthttp.Client{})
-
-	// Settings of default logger, enable printing debug information and errors (default: false, true)
-	bot.DefaultLogger(true, true)
-
-	var myLogger telego.Logger
-	// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
-	bot.SetLogger(myLogger)
-
-	// Call method getMe
-	botUser, _ := bot.GetMe()
+	// Print Bot information
 	fmt.Printf("Bot user: %#v\n", botUser)
 }
 ```
 
 ### Getting updates
 
-In order to receive updates you can use two methods: 
+In order to receive updates you can use two methods:
+
 - using long polling (`bot.GetUpdatesChan`)
 - using webhook (`bot.ListenForWebhook`)
 
@@ -126,13 +118,11 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(botToken)
+	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	bot.DefaultLogger(true, true)
 
 	// Set interval of getting updates (default: 0.5s)
 	// If you want to get updates as fast as possible set to 0
@@ -149,10 +139,9 @@ func main() {
 		fmt.Printf("Update: %#v\n", update)
 	}
 }
-
 ```
 
-Webhook example: 
+Webhook example:
 
 ```go
 package main
@@ -167,15 +156,13 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(botToken)
+	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	bot.DefaultLogger(true, true)
-
-	// Setup a webhook
+	// Set up a webhook
 	_ = bot.SetWebhook(&telego.SetWebhookParams{
 		URL:         "https://www.google.com:443/" + bot.Token(),
 		Certificate: &telego.InputFile{File: mustOpen("cert.pem")},
@@ -211,9 +198,9 @@ func mustOpen(filename string) *os.File {
 
 ### Using Telegram methods
 
-All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be used by the library.
-They have same names and same parameters, parameters represented by struct with name: `<methodName>` + `Params`. 
-If method don't have required parameters `nil` value can be used as a parameter.
+All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be
+used by the library. They have same names and same parameters, parameters represented by struct with
+name: `<methodName>` + `Params`. If method don't have required parameters `nil` value can be used as a parameter.
 
 > Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](generator) from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and actual code.
 > Fell free to report such things.
@@ -283,4 +270,5 @@ Telego is distributed under [MIT licence](LICENSE).
 [TelegramBotAPI]: https://core.telegram.org/bots/api
 
 [TelegramVersionBadge]: https://img.shields.io/static/v1?label=Supported%20Telegram%20Bot%20API&color=29a1d4&logo=telegram&message=v5.3
+
 [TelegramLastVersion]: https://core.telegram.org/bots/api#june-25-2021
