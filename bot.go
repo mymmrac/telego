@@ -2,11 +2,8 @@ package telego
 
 import (
 	"bytes"
-	stdJson "encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"mime/multipart"
 	"os"
 	"reflect"
 	"regexp"
@@ -17,6 +14,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
+// json - Jsoniter replacement for json package
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
@@ -36,59 +34,50 @@ var (
 	ErrInvalidToken = errors.New("invalid token")
 )
 
+// validateToken - Validates if token matches format
 func validateToken(token string) bool {
 	reg := regexp.MustCompile(tokenRegexp)
 	return reg.MatchString(token)
 }
 
-// Bot - Represents telegram bot
+// Bot - Represents Telegram bot
 type Bot struct {
 	token          string
 	apiURL         string
-	client         *fasthttp.Client
-	stopChannel    chan struct{}
-	updateInterval time.Duration
-	webhookHandler fasthttp.RequestHandler
 	log            Logger
+	api            apiCaller
+	constructor    requestConstructor
+	updateInterval time.Duration
+
+	stopChannel    chan struct{}
+	webhookHandler fasthttp.RequestHandler
 }
 
-// NewBot - Creates new bot
-func NewBot(token string) (*Bot, error) {
+// BotOption - Represents option that can be applied to Bot
+type BotOption func(bot *Bot) error
+
+// NewBot - Creates new bot with given options. If no options specified default values are used
+func NewBot(token string, options ...BotOption) (*Bot, error) {
 	if !validateToken(token) {
 		return nil, ErrInvalidToken
 	}
 
-	return &Bot{
+	b := &Bot{
 		token:          token,
 		apiURL:         defaultBotAPIServer,
-		client:         &fasthttp.Client{},
-		updateInterval: defaultUpdateInterval,
 		log:            newLogger(),
-	}, nil
-}
-
-// DefaultLogger - Setup default logger. Redefines existing logger
-func (b *Bot) DefaultLogger(debugMode, printErrors bool) {
-	log := &logger{
-		Out:         os.Stderr,
-		DebugMode:   debugMode,
-		PrintErrors: printErrors,
+		api:            fasthttpAPICaller{Client: &fasthttp.Client{}},
+		constructor:    defaultConstructor{},
+		updateInterval: defaultUpdateInterval,
 	}
-	b.log = log
-}
 
-// SetLogger - Set logger
-func (b *Bot) SetLogger(log Logger) {
-	b.log = log
-}
-
-// SetToken - Sets bot token
-func (b *Bot) SetToken(token string) error {
-	if !validateToken(token) {
-		return ErrInvalidToken
+	for _, option := range options {
+		if err := option(b); err != nil {
+			return nil, fmt.Errorf("optins: %w", err)
+		}
 	}
-	b.token = token
-	return nil
+
+	return b, nil
 }
 
 // Token - Returns bot token
@@ -96,54 +85,14 @@ func (b *Bot) Token() string {
 	return b.token
 }
 
-// SetAPIServer - Sets bot API server
-func (b *Bot) SetAPIServer(apiURL string) error {
-	if apiURL == "" {
-		return errors.New("empty bot api server url")
-	}
-	b.apiURL = apiURL
-	return nil
-}
-
-// SetClient - Sets fasthttp client to use
-func (b *Bot) SetClient(client *fasthttp.Client) error {
-	if client == nil {
-		return errors.New("nil http client")
-	}
-	b.client = client
-	return nil
-}
-
-type apiResponse struct {
-	Ok     bool               `json:"ok"`
-	Result stdJson.RawMessage `json:"result,omitempty"`
-	*APIError
-}
-
-func (a apiResponse) String() string {
-	return fmt.Sprintf("Ok: %t, Err: {%v}, Result: %s", a.Ok, a.APIError, a.Result)
-}
-
-// APIError - Represents error from telegram API
-type APIError struct {
-	Description string              `json:"description,omitempty"`
-	ErrorCode   int                 `json:"error_code,omitempty"`
-	Parameters  *ResponseParameters `json:"parameters,omitempty"`
-}
-
-func (a APIError) Error() string {
-	if a.Parameters != nil {
-		return fmt.Sprintf("%d %q migrate to chat id: %d, retry after: %d",
-			a.ErrorCode, a.Description, a.Parameters.MigrateToChatID, a.Parameters.RetryAfter)
-	}
-	return fmt.Sprintf("%d %q", a.ErrorCode, a.Description)
-}
-
+// performRequest - Executes and parses response of method
 func (b *Bot) performRequest(methodName string, parameters, v interface{}) error {
-	resp, err := b.executeRequest(methodName, parameters)
+	resp, err := b.constructAndCallRequest(methodName, parameters)
 	if err != nil {
-		return fmt.Errorf("execute: %w", err)
+		b.log.Errorf("Execution error %s: %s", methodName, err)
+		return fmt.Errorf("internal execution: %w", err)
 	}
+	b.log.Debugf("API response %s: %s", methodName, resp.String())
 
 	if !resp.Ok {
 		return fmt.Errorf("api: %w", resp.APIError)
@@ -159,137 +108,54 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	return nil
 }
 
-func (b *Bot) executeRequest(methodName string, parameters interface{}) (*apiResponse, error) {
-	isDirectFile := false
-	var fileParams map[string]*os.File
+// constructAndCallRequest - Creates and executes request with parsing of parameters
+func (b *Bot) constructAndCallRequest(methodName string, parameters interface{}) (*apiResponse, error) {
+	filesParams, hasFiles := filesParameters(parameters)
+	var data *requestData
 
-	p, ok := parameters.(fileCompatible)
-	if ok {
-		fileParams = p.fileParameters()
-		for _, file := range fileParams {
+	if hasFiles {
+		parsedParameters, err := parseParameters(parameters)
+		if err != nil {
+			return nil, fmt.Errorf("parsing parameters: %w", err)
+		}
+
+		data, err = b.constructor.MultipartRequest(parsedParameters, filesParams)
+		if err != nil {
+			return nil, fmt.Errorf("multipart request: %w", err)
+		}
+	} else {
+		var err error
+		data, err = b.constructor.JSONRequest(parameters)
+		if err != nil {
+			return nil, fmt.Errorf("json request: %w", err)
+		}
+	}
+
+	url := b.apiURL + "/bot" + b.token + "/" + methodName
+	resp, err := b.api.Call(url, data)
+	if err != nil {
+		return nil, fmt.Errorf("request call: %w", err)
+	}
+
+	return resp, nil
+}
+
+// filesParameters - Gets all files from parameters
+func filesParameters(parameters interface{}) (files map[string]*os.File, hasFiles bool) {
+	if parametersWithFiles, ok := parameters.(fileCompatible); ok {
+		files = parametersWithFiles.fileParameters()
+		for _, file := range files {
 			if file != nil {
-				isDirectFile = true
+				hasFiles = true
 				break
 			}
 		}
 	}
-
-	if isDirectFile {
-		params, err := toParams(parameters)
-		if err != nil {
-			return nil, fmt.Errorf("get params: %w", err)
-		}
-
-		resp, err := b.apiRequestMultipartFormData(methodName, params, fileParams)
-		if err != nil {
-			return nil, fmt.Errorf("request multipart form data: %w", err)
-		}
-		return resp, nil
-	}
-
-	resp, err := b.apiRequest(methodName, parameters)
-	if err != nil {
-		return nil, fmt.Errorf("request: %w", err)
-	}
-	return resp, nil
+	return files, hasFiles
 }
 
-func (b *Bot) apiRequest(methodName string, parameters interface{}) (*apiResponse, error) {
-	url := b.apiURL + "/bot" + b.token + "/" + methodName
-
-	buffer := &bytes.Buffer{}
-	err := json.NewEncoder(buffer).Encode(parameters)
-	if err != nil {
-		return nil, fmt.Errorf("encode json: %w", err)
-	}
-
-	apiResp, err := b.callAPI(url, contentTypeJSON, buffer)
-	if err != nil {
-		b.log.Errorf("API call error: %v", err)
-		return nil, err
-	}
-
-	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
-	return apiResp, nil
-}
-
-func (b *Bot) apiRequestMultipartFormData(methodName string,
-	parameters map[string]string, fileParameters map[string]*os.File) (*apiResponse, error) {
-	url := b.apiURL + "/bot" + b.token + "/" + methodName
-
-	buffer := &bytes.Buffer{}
-	writer := multipart.NewWriter(buffer)
-
-	for field, file := range fileParameters {
-		if file == nil {
-			continue
-		}
-
-		wr, err := writer.CreateFormFile(field, file.Name())
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, file)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	for field, value := range parameters {
-		wr, err := writer.CreateFormField(field)
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, strings.NewReader(value))
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	err := writer.Close()
-	if err != nil {
-		return nil, fmt.Errorf("closing writer: %w", err)
-	}
-
-	apiResp, err := b.callAPI(url, writer.FormDataContentType(), buffer)
-	if err != nil {
-		b.log.Errorf("API call error: %v", err)
-		return nil, err
-	}
-
-	b.log.Debugf("API response %s: %s", methodName, apiResp.String())
-	return apiResp, nil
-}
-
-func (b *Bot) callAPI(url, contentType string, buffer *bytes.Buffer) (*apiResponse, error) {
-	req := fasthttp.AcquireRequest()
-	req.SetRequestURI(url)
-	req.Header.SetContentType(contentType)
-	req.Header.SetMethod(fasthttp.MethodPost)
-	req.SetBodyRaw(buffer.Bytes())
-
-	resp := fasthttp.AcquireResponse()
-	err := b.client.Do(req, resp)
-	if err != nil {
-		return nil, fmt.Errorf("request: %w", err)
-	}
-
-	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
-		return nil, fmt.Errorf("internal server error: %d", statusCode)
-	}
-
-	apiResp := &apiResponse{}
-	err = json.Unmarshal(resp.Body(), apiResp)
-	if err != nil {
-		return nil, fmt.Errorf("decode json: %w", err)
-	}
-
-	return apiResp, nil
-}
-
-func toParams(v interface{}) (map[string]string, error) {
+// parseParameters - Parses parameter struct to key value structure
+func parseParameters(v interface{}) (map[string]string, error) {
 	paramsStruct := reflect.ValueOf(v).Elem()
 	if paramsStruct.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("%s not a struct", paramsStruct.Kind())

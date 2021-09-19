@@ -10,15 +10,13 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(botToken)
+	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	bot.DefaultLogger(true, true)
-
-	// Setup a webhook
+	// Set up a webhook
 	_ = bot.SetWebhook(&telego.SetWebhookParams{
 		URL:         "https://www.google.com:443/" + bot.Token(),
 		Certificate: &telego.InputFile{File: mustOpen("cert.pem")},

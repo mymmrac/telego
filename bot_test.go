@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/valyala/fasthttp"
 )
 
 const (
@@ -71,49 +70,49 @@ func TestNewBot(t *testing.T) {
 	})
 }
 
-func TestBot_Logger(t *testing.T) {
-	bot := getBot(t)
+// func TestBot_Logger(t *testing.T) {
+// 	bot := getBot(t)
+//
+// 	t.Run("default-logger", func(t *testing.T) {
+// 		assert.NotPanics(t, func() {
+// 			bot.DefaultLogger(true, true)
+// 		})
+// 	})
+//
+// 	t.Run("set-logger", func(t *testing.T) {
+// 		assert.NotPanics(t, func() {
+// 			var l Logger
+// 			bot.SetLogger(l)
+// 		})
+// 	})
+// }
 
-	t.Run("default-logger", func(t *testing.T) {
-		assert.NotPanics(t, func() {
-			bot.DefaultLogger(true, true)
-		})
-	})
-
-	t.Run("set-logger", func(t *testing.T) {
-		assert.NotPanics(t, func() {
-			var l Logger
-			bot.SetLogger(l)
-		})
-	})
-}
-
-func TestBot_SetToken(t *testing.T) {
-	bot := getBot(t)
-
-	tests := []struct {
-		name  string
-		token string
-		err   error
-	}{
-		{
-			name:  "success",
-			token: testToken,
-			err:   nil,
-		},
-		{
-			name:  "error",
-			token: invalidToken,
-			err:   ErrInvalidToken,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			actual := bot.SetToken(tt.token)
-			assert.Equal(t, tt.err, actual)
-		})
-	}
-}
+// func TestBot_SetToken(t *testing.T) {
+// 	bot := getBot(t)
+//
+// 	tests := []struct {
+// 		name  string
+// 		token string
+// 		err   error
+// 	}{
+// 		{
+// 			name:  "success",
+// 			token: testToken,
+// 			err:   nil,
+// 		},
+// 		{
+// 			name:  "error",
+// 			token: invalidToken,
+//			err:   ErrInvalidToken,
+//		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			actual := bot.SetToken(tt.token)
+// 			assert.Equal(t, tt.err, actual)
+// 		})
+// 	}
+// }
 
 func TestBot_Token(t *testing.T) {
 	bot := getBot(t)
@@ -121,67 +120,67 @@ func TestBot_Token(t *testing.T) {
 	assert.Equal(t, testToken, bot.Token())
 }
 
-func TestBot_SetAPIServer(t *testing.T) {
-	bot := getBot(t)
+// func TestBot_SetAPIServer(t *testing.T) {
+// 	bot := getBot(t)
+//
+// 	tests := []struct {
+// 		name  string
+// 		url   string
+// 		isErr bool
+// 	}{
+// 		{
+// 			name:  "success",
+// 			url:   defaultBotAPIServer,
+// 			isErr: false,
+// 		},
+// 		{
+// 			name:  "empty",
+// 			url:   "",
+// 			isErr: true,
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			actual := bot.SetAPIServer(tt.url)
+// 			if tt.isErr {
+// 				assert.Error(t, actual)
+// 				return
+// 			}
+// 			assert.NoError(t, actual)
+// 		})
+// 	}
+// }
 
-	tests := []struct {
-		name  string
-		url   string
-		isErr bool
-	}{
-		{
-			name:  "success",
-			url:   defaultBotAPIServer,
-			isErr: false,
-		},
-		{
-			name:  "empty",
-			url:   "",
-			isErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			actual := bot.SetAPIServer(tt.url)
-			if tt.isErr {
-				assert.Error(t, actual)
-				return
-			}
-			assert.NoError(t, actual)
-		})
-	}
-}
-
-func TestBot_SetClient(t *testing.T) {
-	bot := getBot(t)
-
-	tests := []struct {
-		name   string
-		client *fasthttp.Client
-		isErr  bool
-	}{
-		{
-			name:   "success",
-			client: &fasthttp.Client{},
-			isErr:  false,
-		},
-		{
-			name:   "error",
-			client: nil,
-			isErr:  true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			actual := bot.SetClient(tt.client)
-			if tt.isErr {
-				assert.Error(t, actual)
-				return
-			}
-			assert.NoError(t, actual)
-		})
-	}
-}
+// func TestBot_SetClient(t *testing.T) {
+// 	bot := getBot(t)
+//
+// 	tests := []struct {
+// 		name   string
+// 		client *fasthttp.Client
+// 		isErr  bool
+// 	}{
+// 		{
+// 			name:   "success",
+// 			client: &fasthttp.Client{},
+// 	 		isErr:  false,
+// 		},
+// 		{
+// 			name:   "error",
+// 			client: nil,
+// 			isErr:  true,
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			actual := bot.SetClient(tt.client)
+// 			if tt.isErr {
+// 				assert.Error(t, actual)
+// 				return
+// 			}
+// 			assert.NoError(t, actual)
+// 		})
+// 	}
+// }
 
 func Test_apiResponse_String_and_APIError_Error(t *testing.T) {
 	tests := []struct {

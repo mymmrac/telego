@@ -13,13 +13,12 @@ var groupID = telego.ChatID{ID: -1001516926498}
 func main() {
 	testToken := os.Getenv("TEST_TOKEN")
 
-	bot, err := telego.NewBot(testToken)
+	bot, err := telego.NewBot(testToken,
+		telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	bot.DefaultLogger(true, true)
 
 	_, err = bot.GetMe()
 	if err != nil {
@@ -46,8 +45,8 @@ func main() {
 	//				},
 	//			},
 	//		},
-	//		ResizeKeyboard: true,
-	//		//OneTimeKeyboard:       true,
+	//		ResizeKeyboard:        true,
+	//		OneTimeKeyboard:       true,
 	//		InputFieldPlaceholder: "Number?",
 	//	},
 	//}
@@ -172,26 +171,26 @@ func main() {
 	//	}
 	//}
 
-	dp := &telego.SendDocumentParams{
-		ChatID: myID,
-		//Document: telego.InputFile{File: mustOpen("doc.txt")},
-		Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
-		//Caption:  "Hello world",
-		//ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
-		//	{
-		//		{
-		//			Text:         "Test",
-		//			CallbackData: "1",
-		//		},
-		//	},
-		//}},
-	}
-	msg, err := bot.SendDocument(dp)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(msg.Document)
+	//dp := &telego.SendDocumentParams{
+	//	ChatID: myID,
+	//	Document: telego.InputFile{File: mustOpen("doc.txt")},
+	//	//Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
+	//	//Caption:  "Hello world",
+	//	//ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
+	//	//	{
+	//	//		{
+	//	//			Text:         "Test",
+	//	//			CallbackData: "1",
+	//	//		},
+	//	//	},
+	//	//}},
+	//}
+	//msg, err := bot.SendDocument(dp)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//fmt.Println(msg.Document)
 }
 
 func mustOpen(filename string) *os.File {
