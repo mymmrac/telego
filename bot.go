@@ -177,15 +177,11 @@ func parseParameters(v interface{}) (map[string]string, error) {
 			continue
 		}
 
-		if field.Kind() == reflect.Ptr || field.Kind() == reflect.Interface {
-			field = field.Elem()
-		}
-
 		value := field.Interface()
 		var stringValue string
 
 		switch field.Kind() {
-		case reflect.Struct, reflect.Slice:
+		case reflect.Struct, reflect.Slice, reflect.Interface, reflect.Ptr:
 			buf := bytes.Buffer{}
 
 			if err := json.NewEncoder(&buf).Encode(value); err != nil {
@@ -196,10 +192,6 @@ func parseParameters(v interface{}) (map[string]string, error) {
 			stringValue = strings.TrimSuffix(stringValue, "\n")
 		default:
 			stringValue = fmt.Sprintf("%v", value)
-		}
-
-		if stringValue == "" {
-			continue
 		}
 
 		key := structField.Tag.Get("json")

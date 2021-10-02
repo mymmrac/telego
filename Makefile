@@ -10,4 +10,6 @@ test:
 cover: test
 	go tool cover -func cover.out
 
-.PHONY: test cover lint lint-install
+pre-commit: test lint
+
+.PHONY: lint-install lint test cover pre-commit
