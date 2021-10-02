@@ -7,6 +7,7 @@ run:
     # vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
     skip-dirs:
         - test
+        - generator
 
 # output configuration options
 output:
@@ -185,21 +186,11 @@ linters-settings:
 
 issues:
     # Excluding configuration per-path, per-linter, per-text and per-source
-    #    exclude-rules:
-    #        - path: _test\.go
-    #          linters:
-    #              - gocyclo
-    #              - errcheck
-    #              - dupl
-    #              - gosec
-    #              - lll
-    #              - funlen
-    #        - linters:
-    #              - lll
-    #          source: "^//go:generate "
-    #        - path: config
-    #          linters:
-    #              - lll
+    exclude-rules:
+        # Exclude lll issues for long lines with go:generate
+        -   linters:
+                - lll
+            source: "^//go:generate "
 
     # Independently from option `exclude` we use default exclude patterns,
     # it can be disabled by this option. To list all

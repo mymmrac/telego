@@ -10,7 +10,7 @@ import (
 var myID = telego.ChatID{ID: 331849104}
 var groupID = telego.ChatID{ID: -1001516926498}
 
-const testCase = 9
+const testCase = 2
 
 func main() {
 	testToken := os.Getenv("TOKEN")

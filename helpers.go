@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/go-telegram-bot-api/api"
 )
 
 const (
@@ -16,18 +18,18 @@ const (
 
 const listeningForWebhookErrMsg = "Listening for webhook: %v"
 
-// SetUpdateInterval - Sets interval of calling GetUpdates in GetUpdatesChan method. Ensures that between two calls
+// SetUpdateInterval sets interval of calling GetUpdates in GetUpdatesChan method. Ensures that between two calls
 // of GetUpdates will be at least specified time, but it could be longer.
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
 	b.updateInterval = interval
 }
 
-// StopGettingUpdates - Stop reviving updates from GetUpdatesChan method
+// StopGettingUpdates stop reviving updates from GetUpdatesChan method
 func (b *Bot) StopGettingUpdates() {
 	close(b.stopChannel)
 }
 
-// GetUpdatesChan - Receive updates in chan
+// GetUpdatesChan receive updates in chan
 func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	b.stopChannel = make(chan struct{})
 	updatesChan := make(chan Update, updateChanBuffer)
@@ -65,7 +67,7 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	return updatesChan, nil
 }
 
-// StartListeningForWebhookTLS - Start server with TLS for listening for webhook
+// StartListeningForWebhookTLS start server with TLS for listening for webhook
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
 	go func() {
 		err := fasthttp.ListenAndServeTLS(address, certificateFile, keyFile, b.webhookHandler)
@@ -75,7 +77,7 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 	}()
 }
 
-// StartListeningForWebhookTLSEmbed - Start server with TLS (embed) for listening for webhook
+// StartListeningForWebhookTLSEmbed start server with TLS (embed) for listening for webhook
 func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) {
 	go func() {
 		err := fasthttp.ListenAndServeTLSEmbed(address, certificateData, keyData, b.webhookHandler)
@@ -85,7 +87,7 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 	}()
 }
 
-// StartListeningForWebhook - Start server for listening for webhook
+// StartListeningForWebhook start server for listening for webhook
 func (b *Bot) StartListeningForWebhook(address string) {
 	go func() {
 		err := fasthttp.ListenAndServe(address, b.webhookHandler)
@@ -95,7 +97,7 @@ func (b *Bot) StartListeningForWebhook(address string) {
 	}()
 }
 
-// ListenForWebhook - Receive updates in chan from webhook
+// ListenForWebhook receive updates in chan from webhook
 func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
 
@@ -135,7 +137,7 @@ func respondWithError(ctx *fasthttp.RequestCtx, err error) {
 	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
 
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)
-	ctx.SetContentType(contentTypeJSON)
+	ctx.SetContentType(api.ContentTypeJSON)
 
 	_, _ = ctx.Write(errMsg)
 }

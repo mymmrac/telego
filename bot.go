@@ -12,15 +12,15 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/go-telegram-bot-api/api"
 )
 
-// json - Jsoniter replacement for json package
+// json jsoniter replacement for json package
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
 	defaultBotAPIServer = "https://api.telegram.org"
-
-	contentTypeJSON = "application/json"
 
 	tokenRegexp = `^\d{9,10}:[\w-]{35}$` //nolint:gosec
 
@@ -30,33 +30,33 @@ const (
 )
 
 var (
-	// ErrInvalidToken - Bot token is invalid according to token regexp
+	// ErrInvalidToken Bot token is invalid according to token regexp
 	ErrInvalidToken = errors.New("invalid token")
 )
 
-// validateToken - Validates if token matches format
+// validateToken validates if token matches format
 func validateToken(token string) bool {
 	reg := regexp.MustCompile(tokenRegexp)
 	return reg.MatchString(token)
 }
 
-// Bot - Represents Telegram bot
+// Bot represents Telegram bot
 type Bot struct {
 	token          string
 	apiURL         string
 	log            Logger
-	api            apiCaller
-	constructor    requestConstructor
+	api            api.Caller
+	constructor    api.RequestConstructor
 	updateInterval time.Duration
 
 	stopChannel    chan struct{}
 	webhookHandler fasthttp.RequestHandler
 }
 
-// BotOption - Represents option that can be applied to Bot
+// BotOption represents option that can be applied to Bot
 type BotOption func(bot *Bot) error
 
-// NewBot - Creates new bot with given options. If no options specified default values are used
+// NewBot creates new bot with given options. If no options specified default values are used
 func NewBot(token string, options ...BotOption) (*Bot, error) {
 	if !validateToken(token) {
 		return nil, ErrInvalidToken
@@ -66,8 +66,8 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		token:          token,
 		apiURL:         defaultBotAPIServer,
 		log:            newLogger(),
-		api:            fasthttpAPICaller{Client: &fasthttp.Client{}},
-		constructor:    defaultConstructor{},
+		api:            api.FasthttpAPICaller{Client: &fasthttp.Client{}},
+		constructor:    api.DefaultConstructor{},
 		updateInterval: defaultUpdateInterval,
 	}
 
@@ -80,12 +80,12 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 	return b, nil
 }
 
-// Token - Returns bot token
+// Token returns bot token
 func (b *Bot) Token() string {
 	return b.token
 }
 
-// performRequest - Executes and parses response of method
+// performRequest executes and parses response of method
 func (b *Bot) performRequest(methodName string, parameters, v interface{}) error {
 	resp, err := b.constructAndCallRequest(methodName, parameters)
 	if err != nil {
@@ -95,7 +95,7 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	b.log.Debugf("API response %s: %s", methodName, resp.String())
 
 	if !resp.Ok {
-		return fmt.Errorf("api: %w", resp.APIError)
+		return fmt.Errorf("api: %w", resp.Error)
 	}
 
 	if resp.Result != nil {
@@ -108,10 +108,10 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	return nil
 }
 
-// constructAndCallRequest - Creates and executes request with parsing of parameters
-func (b *Bot) constructAndCallRequest(methodName string, parameters interface{}) (*apiResponse, error) {
+// constructAndCallRequest creates and executes request with parsing of parameters
+func (b *Bot) constructAndCallRequest(methodName string, parameters interface{}) (*api.Response, error) {
 	filesParams, hasFiles := filesParameters(parameters)
-	var data *requestData
+	var data *api.RequestData
 
 	if hasFiles {
 		parsedParameters, err := parseParameters(parameters)
@@ -140,7 +140,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 	return resp, nil
 }
 
-// filesParameters - Gets all files from parameters
+// filesParameters gets all files from parameters
 func filesParameters(parameters interface{}) (files map[string]*os.File, hasFiles bool) {
 	if parametersWithFiles, ok := parameters.(fileCompatible); ok {
 		files = parametersWithFiles.fileParameters()
@@ -154,7 +154,7 @@ func filesParameters(parameters interface{}) (files map[string]*os.File, hasFile
 	return files, hasFiles
 }
 
-// parseParameters - Parses parameter struct to key value structure
+// parseParameters parses parameter struct to key value structure
 func parseParameters(v interface{}) (map[string]string, error) {
 	valueOfV := reflect.ValueOf(v)
 	if valueOfV.Kind() != reflect.Ptr && valueOfV.Kind() != reflect.Interface {

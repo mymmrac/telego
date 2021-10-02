@@ -70,7 +70,7 @@ type SetWebhookParams struct {
 	// Certificate - Optional. Upload your public key certificate so that the root certificate in use can be
 	// checked. See our self-signed guide (https://core.telegram.org/bots/self-signed) for details.
 	// Please upload as File, sending a FileID or URL will not work.
-	Certificate *InputFile `json:"certificate,omitempty"`
+	Certificate *InputFile `json:"certificate,omitempty"` // TODO: Implement fileCompatible
 
 	// IPAddress - Optional. The fixed IP address which will be used to send webhook requests instead of the IP
 	// address resolved through DNS

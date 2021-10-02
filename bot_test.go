@@ -1,26 +1,25 @@
 package telego
 
 import (
+	"bytes"
 	"errors"
 	"os"
 	"testing"
 
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/mymmrac/go-telegram-bot-api/api"
 )
 
 const (
-	testToken    = "1234567890:aaaabbbbaaaabbbbaaaabbbbaaaabbbbccc"
-	invalidToken = "abc"
+	token        = "1234567890:aaaabbbbaaaabbbbaaaabbbbaaaabbbbccc"
+	invalidToken = "invalid-token"
+
+	methodName = "testMethod"
 )
 
 var errTest = errors.New("error")
-
-func getBot(t *testing.T) *Bot {
-	bot, err := NewBot(testToken)
-	assert.NoError(t, err)
-
-	return bot
-}
 
 func Test_validateToken(t *testing.T) {
 	tests := []struct {
@@ -40,7 +39,7 @@ func Test_validateToken(t *testing.T) {
 		},
 		{
 			name:    "valid 1",
-			token:   testToken,
+			token:   token,
 			isValid: true,
 		},
 		{
@@ -59,14 +58,14 @@ func Test_validateToken(t *testing.T) {
 
 func TestNewBot(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		bot, err := NewBot(testToken)
+		bot, err := NewBot(token)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, bot)
 	})
 
 	t.Run("success with options", func(t *testing.T) {
-		bot, err := NewBot(testToken, func(_ *Bot) error { return nil })
+		bot, err := NewBot(token, func(_ *Bot) error { return nil })
 
 		assert.NoError(t, err)
 		assert.NotNil(t, bot)
@@ -80,7 +79,7 @@ func TestNewBot(t *testing.T) {
 	})
 
 	t.Run("error with options", func(t *testing.T) {
-		bot, err := NewBot(testToken, func(_ *Bot) error { return errTest })
+		bot, err := NewBot(token, func(_ *Bot) error { return errTest })
 
 		assert.ErrorIs(t, err, errTest)
 		assert.Nil(t, bot)
@@ -88,9 +87,10 @@ func TestNewBot(t *testing.T) {
 }
 
 func TestBot_Token(t *testing.T) {
-	bot := getBot(t)
+	bot, err := NewBot(token)
+	assert.NoError(t, err)
 
-	assert.Equal(t, testToken, bot.Token())
+	assert.Equal(t, token, bot.Token())
 }
 
 func Test_parseParameters(t *testing.T) {
@@ -195,4 +195,203 @@ func Test_filesParameters(t *testing.T) {
 			assert.Equal(t, tt.files, files)
 		})
 	}
+}
+
+type paramsWithFile struct {
+	N int `json:"n"`
+}
+
+func (p *paramsWithFile) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"test": {},
+	}
+}
+
+type notStructParamsWithFile string
+
+func (p *notStructParamsWithFile) fileParameters() map[string]*os.File {
+	return map[string]*os.File{
+		"test": {},
+	}
+}
+
+func TestBot_constructAndCallRequest(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mb := newMockedBot(ctrl)
+
+	params := struct {
+		N int `json:"n"`
+	}{
+		N: 1,
+	}
+
+	url := mb.Bot.apiURL + "/bot" + mb.Bot.token + "/" + methodName
+
+	expectedResp := &api.Response{
+		Ok: true,
+	}
+
+	paramsBytes, err := json.Marshal(params)
+	assert.NoError(t, err)
+
+	expectedData := &api.RequestData{
+		ContentType: api.ContentTypeJSON,
+		Buffer:      bytes.NewBuffer(paramsBytes),
+	}
+
+	t.Run("success json", func(t *testing.T) {
+		mb.MockRequestConstructor.EXPECT().
+			JSONRequest(params).
+			Return(expectedData, nil).
+			Times(1)
+
+		mb.MockAPICaller.EXPECT().
+			Call(url, expectedData).
+			Return(expectedResp, nil).
+			Times(1)
+
+		resp, err := mb.Bot.constructAndCallRequest(methodName, params)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResp, resp)
+	})
+
+	t.Run("error json", func(t *testing.T) {
+		mb.MockRequestConstructor.EXPECT().
+			JSONRequest(params).
+			Return(nil, errTest).
+			Times(1)
+
+		resp, err := mb.Bot.constructAndCallRequest(methodName, params)
+		assert.ErrorIs(t, err, errTest)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("success multipart", func(t *testing.T) {
+		paramsFile := &paramsWithFile{N: 1}
+		paramsMap := map[string]string{
+			"n": "1",
+		}
+
+		paramsBytesFile, err := json.Marshal(paramsFile)
+		assert.NoError(t, err)
+
+		expectedDataFile := &api.RequestData{
+			ContentType: api.ContentTypeJSON,
+			Buffer:      bytes.NewBuffer(paramsBytesFile),
+		}
+
+		mb.MockRequestConstructor.EXPECT().
+			MultipartRequest(paramsMap, gomock.Any()).
+			Return(expectedDataFile, nil).
+			Times(1)
+
+		mb.MockAPICaller.EXPECT().
+			Call(url, expectedDataFile).
+			Return(expectedResp, nil).
+			Times(1)
+
+		resp, err := mb.Bot.constructAndCallRequest(methodName, paramsFile)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResp, resp)
+	})
+
+	t.Run("error multipart", func(t *testing.T) {
+		paramsFile := &paramsWithFile{N: 1}
+		paramsMap := map[string]string{
+			"n": "1",
+		}
+
+		mb.MockRequestConstructor.EXPECT().
+			MultipartRequest(paramsMap, gomock.Any()).
+			Return(nil, errTest).
+			Times(1)
+
+		resp, err := mb.Bot.constructAndCallRequest(methodName, paramsFile)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error multipart params", func(t *testing.T) {
+		notStruct := notStructParamsWithFile("test")
+
+		resp, err := mb.Bot.constructAndCallRequest(methodName, &notStruct)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error call", func(t *testing.T) {
+		mb.MockRequestConstructor.EXPECT().
+			JSONRequest(params).
+			Return(expectedData, nil).
+			Times(1)
+
+		mb.MockAPICaller.EXPECT().
+			Call(url, expectedData).
+			Return(nil, errTest).
+			Times(1)
+
+		resp, err := mb.Bot.constructAndCallRequest(methodName, params)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+}
+
+func TestBot_performRequest(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mb := newMockedBot(ctrl)
+
+	params := struct {
+		N int `json:"n"`
+	}{
+		N: 1,
+	}
+
+	var result int
+
+	t.Run("success", func(t *testing.T) {
+		mb.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(&api.RequestData{}, nil).
+			Times(1)
+
+		mb.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(&api.Response{
+				Ok:     true,
+				Result: bytes.NewBufferString("1").Bytes(),
+				Error:  nil,
+			}, nil)
+
+		err := mb.Bot.performRequest(methodName, params, &result)
+		assert.NoError(t, err)
+		assert.Equal(t, 1, result)
+	})
+
+	t.Run("error not ok", func(t *testing.T) {
+		mb.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(&api.RequestData{}, nil).
+			Times(1)
+
+		mb.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(&api.Response{
+				Ok:     false,
+				Result: nil,
+				Error:  &api.Error{},
+			}, nil)
+
+		err := mb.Bot.performRequest(methodName, params, &result)
+		assert.Error(t, err)
+	})
+
+	t.Run("error construct and call", func(t *testing.T) {
+		mb.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest).
+			Times(1)
+
+		err := mb.Bot.performRequest(methodName, params, &result)
+		assert.Error(t, err)
+	})
 }

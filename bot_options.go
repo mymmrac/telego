@@ -5,17 +5,35 @@ import (
 	"os"
 
 	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/go-telegram-bot-api/api"
 )
 
-// FastHTTPClient - Sets fasthttp client to use. Redefines existing API caller
-func FastHTTPClient(client *fasthttp.Client) BotOption {
+// CustomAPICaller sets custom API caller to use
+func CustomAPICaller(caller api.Caller) BotOption {
 	return func(bot *Bot) error {
-		bot.api = fasthttpAPICaller{Client: client}
+		bot.api = caller
 		return nil
 	}
 }
 
-// DefaultLogger - Configure default logger. Redefines existing logger
+// FastHTTPClient sets fasthttp client to use
+func FastHTTPClient(client *fasthttp.Client) BotOption {
+	return func(bot *Bot) error {
+		bot.api = api.FasthttpAPICaller{Client: client}
+		return nil
+	}
+}
+
+// CustomRequestConstructor sets custom request constructor to use
+func CustomRequestConstructor(constructor api.RequestConstructor) BotOption {
+	return func(bot *Bot) error {
+		bot.constructor = constructor
+		return nil
+	}
+}
+
+// DefaultLogger configures default logger. Redefines existing logger
 func DefaultLogger(debugMode, printErrors bool) BotOption {
 	return func(bot *Bot) error {
 		log := &logger{
@@ -28,7 +46,7 @@ func DefaultLogger(debugMode, printErrors bool) BotOption {
 	}
 }
 
-// SetLogger - Set logger. Redefines existing logger
+// SetLogger sets logger to use
 func SetLogger(log Logger) BotOption {
 	return func(bot *Bot) error {
 		bot.log = log
@@ -36,7 +54,7 @@ func SetLogger(log Logger) BotOption {
 	}
 }
 
-// SetAPIServer - Sets bot API server URL
+// SetAPIServer sets bot API server URL to use
 func SetAPIServer(apiURL string) BotOption {
 	return func(bot *Bot) error {
 		if apiURL == "" {

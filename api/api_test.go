@@ -1,4 +1,4 @@
-package telego
+package api
 
 import (
 	stdJson "encoding/json"
@@ -10,23 +10,23 @@ import (
 func Test_apiResponse_String_and_APIError_Error(t *testing.T) {
 	tests := []struct {
 		name string
-		resp apiResponse
+		resp Response
 		text string
 	}{
 		{
 			name: "success",
-			resp: apiResponse{
-				Ok:       true,
-				APIError: nil,
-				Result:   stdJson.RawMessage{},
+			resp: Response{
+				Ok:     true,
+				Error:  nil,
+				Result: stdJson.RawMessage{},
 			},
 			text: "Ok: true, Err: {<nil>}, Result: ",
 		},
 		{
 			name: "error",
-			resp: apiResponse{
+			resp: Response{
 				Ok: false,
-				APIError: &APIError{
+				Error: &Error{
 					Description: "bad request",
 					ErrorCode:   400,
 					Parameters:  nil,
@@ -37,9 +37,9 @@ func Test_apiResponse_String_and_APIError_Error(t *testing.T) {
 		},
 		{
 			name: "error with parameters",
-			resp: apiResponse{
+			resp: Response{
 				Ok: false,
-				APIError: &APIError{
+				Error: &Error{
 					Description: "bad request",
 					ErrorCode:   400,
 					Parameters: &ResponseParameters{

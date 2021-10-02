@@ -79,7 +79,7 @@ type WebhookInfo struct {
 
 	// LastErrorDate - Optional. Unix time for the most recent error that happened when trying to deliver an
 	// update via webhook
-	LastErrorDate int `json:"last_error_date,omitempty"`
+	LastErrorDate int64 `json:"last_error_date,omitempty"`
 
 	// LastErrorMessage - Optional. Error message in human-readable format for the most recent error that
 	// happened when trying to deliver an update via webhook
@@ -226,7 +226,7 @@ type Message struct {
 	SenderChat *Chat `json:"sender_chat,omitempty"`
 
 	// Date - Date the message was sent in Unix time
-	Date int `json:"date"`
+	Date int64 `json:"date"`
 
 	// Chat - Conversation the message belongs to
 	Chat Chat `json:"chat"`
@@ -251,7 +251,7 @@ type Message struct {
 	ForwardSenderName string `json:"forward_sender_name,omitempty"`
 
 	// ForwardDate - Optional. For forwarded messages, date the original message was sent in Unix time
-	ForwardDate int `json:"forward_date,omitempty"`
+	ForwardDate int64 `json:"forward_date,omitempty"`
 
 	// ReplyToMessage - Optional. For replies, the original message. Note that the Message object in this field
 	// will not contain further reply_to_message fields even if it itself is a reply.
@@ -261,7 +261,7 @@ type Message struct {
 	ViaBot *User `json:"via_bot,omitempty"`
 
 	// EditDate - Optional. Date the message was last edited in Unix time
-	EditDate int `json:"edit_date,omitempty"`
+	EditDate int64 `json:"edit_date,omitempty"`
 
 	// MediaGroupID - Optional. The unique identifier of a media message group this message belongs to
 	MediaGroupID string `json:"media_group_id,omitempty"`
@@ -725,7 +725,7 @@ type Poll struct {
 	OpenPeriod int `json:"open_period,omitempty"`
 
 	// CloseDate - Optional. Point in time (Unix timestamp) when the poll will be automatically closed
-	CloseDate int `json:"close_date,omitempty"`
+	CloseDate int64 `json:"close_date,omitempty"`
 }
 
 // Poll types
@@ -808,7 +808,7 @@ type MessageAutoDeleteTimerChanged struct {
 type VoiceChatScheduled struct {
 	// StartDate - Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat
 	// administrator
-	StartDate int `json:"start_date"`
+	StartDate int64 `json:"start_date"`
 }
 
 // VoiceChatStarted - This object represents a service message about a voice chat started in the chat.
@@ -1143,7 +1143,7 @@ type ChatInviteLink struct {
 	IsRevoked bool `json:"is_revoked"`
 
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire or has been expired
-	ExpireDate int `json:"expire_date,omitempty"`
+	ExpireDate int64 `json:"expire_date,omitempty"`
 
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
@@ -1235,10 +1235,12 @@ type ChatMemberOwner struct {
 	CustomTitle string `json:"custom_title,omitempty"`
 }
 
+// MemberStatus returns ChatMember status
 func (c *ChatMemberOwner) MemberStatus() string {
 	return MemberStatusCreator
 }
 
+// MemberUser returns ChatMember User
 func (c *ChatMemberOwner) MemberUser() User {
 	return c.User
 }
@@ -1297,10 +1299,12 @@ type ChatMemberAdministrator struct {
 	CustomTitle string `json:"custom_title,omitempty"`
 }
 
+// MemberStatus returns ChatMember status
 func (c *ChatMemberAdministrator) MemberStatus() string {
 	return MemberStatusAdministrator
 }
 
+// MemberUser returns ChatMember User
 func (c *ChatMemberAdministrator) MemberUser() User {
 	return c.User
 }
@@ -1315,10 +1319,12 @@ type ChatMemberMember struct {
 	User User `json:"user"`
 }
 
+// MemberStatus returns ChatMember status
 func (c *ChatMemberMember) MemberStatus() string {
 	return MemberStatusMember
 }
 
+// MemberUser returns ChatMember User
 func (c *ChatMemberMember) MemberUser() User {
 	return c.User
 }
@@ -1363,13 +1369,15 @@ type ChatMemberRestricted struct {
 
 	// UntilDate - Date when restrictions will be lifted for this user; unix time. If 0, then the user is
 	// restricted forever
-	UntilDate int `json:"until_date"`
+	UntilDate int64 `json:"until_date"`
 }
 
+// MemberStatus returns ChatMember status
 func (c *ChatMemberRestricted) MemberStatus() string {
 	return MemberStatusRestricted
 }
 
+// MemberUser returns ChatMember User
 func (c *ChatMemberRestricted) MemberUser() User {
 	return c.User
 }
@@ -1384,10 +1392,12 @@ type ChatMemberLeft struct {
 	User User `json:"user"`
 }
 
+// MemberStatus returns ChatMember status
 func (c *ChatMemberLeft) MemberStatus() string {
 	return MemberStatusLeft
 }
 
+// MemberUser returns ChatMember User
 func (c *ChatMemberLeft) MemberUser() User {
 	return c.User
 }
@@ -1403,13 +1413,15 @@ type ChatMemberBanned struct {
 
 	// UntilDate - Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned
 	// forever
-	UntilDate int `json:"until_date"`
+	UntilDate int64 `json:"until_date"`
 }
 
+// MemberStatus returns ChatMember status
 func (c *ChatMemberBanned) MemberStatus() string {
 	return MemberStatusKicked
 }
 
+// MemberUser returns ChatMember User
 func (c *ChatMemberBanned) MemberUser() User {
 	return c.User
 }
@@ -1423,7 +1435,7 @@ type ChatMemberUpdated struct {
 	From User `json:"from"`
 
 	// Date - Date the change was done in Unix time
-	Date int `json:"date"`
+	Date int64 `json:"date"`
 
 	// OldChatMember - Previous information about the chat member
 	OldChatMember ChatMember `json:"old_chat_member"`
@@ -1436,11 +1448,12 @@ type ChatMemberUpdated struct {
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to ChatMemberUpdated
 func (c *ChatMemberUpdated) UnmarshalJSON(bytes []byte) error {
 	var chatMemberUpdatedData struct {
 		Chat          Chat            `json:"chat"`
 		From          User            `json:"from"`
-		Date          int             `json:"date"`
+		Date          int64           `json:"date"`
 		OldChatMember chatMemberData  `json:"old_chat_member"`
 		NewChatMember chatMemberData  `json:"new_chat_member"`
 		InviteLink    *ChatInviteLink `json:"invite_link,omitempty"`
@@ -1544,6 +1557,7 @@ type BotCommandScopeDefault struct {
 	Type string `json:"type"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeDefault) ScopeType() string {
 	return ScopeTypeDefault
 }
@@ -1555,6 +1569,7 @@ type BotCommandScopeAllPrivateChats struct {
 	Type string `json:"type"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeAllPrivateChats) ScopeType() string {
 	return ScopeTypeAllPrivateChats
 }
@@ -1566,6 +1581,7 @@ type BotCommandScopeAllGroupChats struct {
 	Type string `json:"type"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeAllGroupChats) ScopeType() string {
 	return ScopeTypeAllGroupChats
 }
@@ -1578,6 +1594,7 @@ type BotCommandScopeAllChatAdministrators struct {
 	Type string `json:"type"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeAllChatAdministrators) ScopeType() string {
 	return ScopeTypeAllChatAdministrators
 }
@@ -1588,6 +1605,7 @@ type ChatID struct {
 	Username string
 }
 
+// MarshalJSON returns JSON representation of ChatID
 func (c ChatID) MarshalJSON() ([]byte, error) {
 	if c.Username != "" {
 		return json.Marshal(c.Username)
@@ -1607,6 +1625,7 @@ type BotCommandScopeChat struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeChat) ScopeType() string {
 	return ScopeTypeChat
 }
@@ -1623,6 +1642,7 @@ type BotCommandScopeChatAdministrators struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeChatAdministrators) ScopeType() string {
 	return ScopeTypeChatAdministrators
 }
@@ -1641,21 +1661,9 @@ type BotCommandScopeChatMember struct {
 	UserID int `json:"user_id"`
 }
 
+// ScopeType returns BotCommandScope type
 func (b *BotCommandScopeChatMember) ScopeType() string {
 	return ScopeTypeChatMember
-}
-
-// ResponseParameters - Contains information about why a request was unsuccessful.
-type ResponseParameters struct {
-	// MigrateToChatID - Optional. The group has been migrated to a supergroup with the specified identifier.
-	// This number may have more than 32 significant bits and some programming languages may have difficulty/silent
-	// defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or
-	// double-precision float type are safe for storing this identifier.
-	MigrateToChatID int64 `json:"migrate_to_chat_id,omitempty"`
-
-	// RetryAfter - Optional. In case of exceeding flood control, the number of seconds left to wait before the
-	// request can be repeated
-	RetryAfter int `json:"retry_after,omitempty"`
 }
 
 // fileCompatible - Represents types that can be send as files
@@ -1672,6 +1680,7 @@ type InputFile struct {
 	needAttach bool
 }
 
+// MarshalJSON return JSON representation of InputFile
 func (i InputFile) MarshalJSON() ([]byte, error) {
 	if i.File != nil {
 		if i.needAttach {
@@ -1734,6 +1743,7 @@ type InputMediaPhoto struct {
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 }
 
+// MediaType return InputMedia type
 func (i *InputMediaPhoto) MediaType() string {
 	return MediaTypePhoto
 }
@@ -1788,6 +1798,7 @@ type InputMediaVideo struct {
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 }
 
+// MediaType return InputMedia type
 func (i *InputMediaVideo) MediaType() string {
 	return MediaTypeVideo
 }
@@ -1846,6 +1857,7 @@ type InputMediaAnimation struct {
 	Duration int `json:"duration,omitempty"`
 }
 
+// MediaType return InputMedia type
 func (i *InputMediaAnimation) MediaType() string {
 	return MediaTypeAnimation
 }
@@ -1903,6 +1915,7 @@ type InputMediaAudio struct {
 	Title string `json:"title,omitempty"`
 }
 
+// MediaType return InputMedia type
 func (i *InputMediaAudio) MediaType() string {
 	return MediaTypeAudio
 }
@@ -1955,6 +1968,7 @@ type InputMediaDocument struct {
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
 }
 
+// MediaType return InputMedia type
 func (i *InputMediaDocument) MediaType() string {
 	return MediaTypeDocument
 }
@@ -2151,6 +2165,7 @@ type InlineQueryResultArticle struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultArticle) ResultType() string {
 	return ResultTypeArticle
 }
@@ -2202,6 +2217,7 @@ type InlineQueryResultPhoto struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultPhoto) ResultType() string {
 	return ResultTypePhoto
 }
@@ -2257,6 +2273,7 @@ type InlineQueryResultGif struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultGif) ResultType() string {
 	return ResultTypeGif
 }
@@ -2319,6 +2336,7 @@ type InlineQueryResultMpeg4Gif struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultMpeg4Gif) ResultType() string {
 	return ResultTypeMpeg4Gif
 }
@@ -2377,6 +2395,7 @@ type InlineQueryResultVideo struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultVideo) ResultType() string {
 	return ResultTypeVideo
 }
@@ -2422,6 +2441,7 @@ type InlineQueryResultAudio struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultAudio) ResultType() string {
 	return ResultTypeAudio
 }
@@ -2464,6 +2484,7 @@ type InlineQueryResultVoice struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultVoice) ResultType() string {
 	return ResultTypeVoice
 }
@@ -2517,6 +2538,7 @@ type InlineQueryResultDocument struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultDocument) ResultType() string {
 	return ResultTypeDocument
 }
@@ -2572,6 +2594,7 @@ type InlineQueryResultLocation struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultLocation) ResultType() string {
 	return ResultTypeLocation
 }
@@ -2629,6 +2652,7 @@ type InlineQueryResultVenue struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultVenue) ResultType() string {
 	return ResultTypeVenue
 }
@@ -2673,6 +2697,7 @@ type InlineQueryResultContact struct {
 	ThumbHeight int `json:"thumb_height,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultContact) ResultType() string {
 	return ResultTypeContact
 }
@@ -2693,6 +2718,7 @@ type InlineQueryResultGame struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultGame) ResultType() string {
 	return ResultTypeGame
 }
@@ -2735,6 +2761,7 @@ type InlineQueryResultCachedPhoto struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedPhoto) ResultType() string {
 	return ResultTypePhoto
 }
@@ -2774,6 +2801,7 @@ type InlineQueryResultCachedGif struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedGif) ResultType() string {
 	return ResultTypeGif
 }
@@ -2814,6 +2842,7 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedMpeg4Gif) ResultType() string {
 	return ResultTypeMpeg4Gif
 }
@@ -2839,6 +2868,7 @@ type InlineQueryResultCachedSticker struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedSticker) ResultType() string {
 	return ResultTypeSticker
 }
@@ -2881,6 +2911,7 @@ type InlineQueryResultCachedDocument struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedDocument) ResultType() string {
 	return ResultTypeDocument
 }
@@ -2923,6 +2954,7 @@ type InlineQueryResultCachedVideo struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedVideo) ResultType() string {
 	return ResultTypeVideo
 }
@@ -2962,6 +2994,7 @@ type InlineQueryResultCachedVoice struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedVoice) ResultType() string {
 	return ResultTypeVoice
 }
@@ -2998,6 +3031,7 @@ type InlineQueryResultCachedAudio struct {
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 }
 
+// ResultType returns InlineQueryResult type
 func (i *InlineQueryResultCachedAudio) ResultType() string {
 	return ResultTypeAudio
 }
@@ -3040,6 +3074,7 @@ type InputTextMessageContent struct {
 	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
 }
 
+// ContentType returns InputMessageContent type
 func (i *InputTextMessageContent) ContentType() string {
 	return ContentTypeText
 }
@@ -3070,6 +3105,7 @@ type InputLocationMessageContent struct {
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 }
 
+// ContentType returns InputMessageContent type
 func (i *InputLocationMessageContent) ContentType() string {
 	return ContentTypeLocation
 }
@@ -3104,6 +3140,7 @@ type InputVenueMessageContent struct {
 	GooglePlaceType string `json:"google_place_type,omitempty"`
 }
 
+// ContentType returns InputMessageContent type
 func (i *InputVenueMessageContent) ContentType() string {
 	return ContentTypeVenue
 }
@@ -3126,6 +3163,7 @@ type InputContactMessageContent struct {
 	Vcard string `json:"vcard,omitempty"`
 }
 
+// ContentType returns InputMessageContent type
 func (i *InputContactMessageContent) ContentType() string {
 	return ContentTypeContact
 }
@@ -3207,6 +3245,7 @@ type InputInvoiceMessageContent struct {
 	IsFlexible bool `json:"is_flexible,omitempty"`
 }
 
+// ContentType returns InputMessageContent type
 func (i *InputInvoiceMessageContent) ContentType() string {
 	return ContentTypeInvoice
 }
@@ -3411,7 +3450,7 @@ type PassportFile struct {
 	FileSize int `json:"file_size"`
 
 	// FileDate - Unix time when the file was uploaded
-	FileDate int `json:"file_date"`
+	FileDate int64 `json:"file_date"`
 }
 
 // EncryptedPassportElement - Contains information about documents or other Telegram Passport elements shared
@@ -3535,6 +3574,7 @@ type PassportElementErrorDataField struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorDataField) ErrorSource() string {
 	return ErrorSourceDataField
 }
@@ -3556,6 +3596,7 @@ type PassportElementErrorFrontSide struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorFrontSide) ErrorSource() string {
 	return ErrorSourceFrontSide
 }
@@ -3577,6 +3618,7 @@ type PassportElementErrorReverseSide struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorReverseSide) ErrorSource() string {
 	return ErrorSourceReverseSide
 }
@@ -3598,6 +3640,7 @@ type PassportElementErrorSelfie struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorSelfie) ErrorSource() string {
 	return ErrorSourceSelfie
 }
@@ -3619,6 +3662,7 @@ type PassportElementErrorFile struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorFile) ErrorSource() string {
 	return ErrorSourceFile
 }
@@ -3640,6 +3684,7 @@ type PassportElementErrorFiles struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorFiles) ErrorSource() string {
 	return ErrorSourceFiles
 }
@@ -3662,6 +3707,7 @@ type PassportElementErrorTranslationFile struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorTranslationFile) ErrorSource() string {
 	return ErrorSourceTranslationFile
 }
@@ -3684,6 +3730,7 @@ type PassportElementErrorTranslationFiles struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorTranslationFiles) ErrorSource() string {
 	return ErrorSourceTranslationFiles
 }
@@ -3704,6 +3751,7 @@ type PassportElementErrorUnspecified struct {
 	Message string `json:"message"`
 }
 
+// ErrorSource returns PassportElementError source
 func (p *PassportElementErrorUnspecified) ErrorSource() string {
 	return ErrorSourceUnspecified
 }
