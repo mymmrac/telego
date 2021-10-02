@@ -70,7 +70,7 @@ type SetWebhookParams struct {
 	// Certificate - Optional. Upload your public key certificate so that the root certificate in use can be
 	// checked. See our self-signed guide (https://core.telegram.org/bots/self-signed) for details.
 	// Please upload as File, sending a FileID or URL will not work.
-	Certificate *InputFile `json:"certificate,omitempty"` // TODO: Implement fileCompatible
+	Certificate *InputFile `json:"certificate,omitempty"`
 
 	// IPAddress - Optional. The fixed IP address which will be used to send webhook requests instead of the IP
 	// address resolved through DNS
@@ -91,6 +91,16 @@ type SetWebhookParams struct {
 
 	// DropPendingUpdates - Optional. Pass True to drop all pending updates
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
+}
+
+func (s *SetWebhookParams) fileParameters() map[string]*os.File {
+	fp := make(map[string]*os.File)
+
+	if s.Certificate != nil {
+		fp["certificate"] = s.Certificate.File
+	}
+
+	return fp
 }
 
 // SetWebhook - Use this method to specify a URL and receive incoming updates via an outgoing webhook.
