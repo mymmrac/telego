@@ -42,7 +42,7 @@ telegram.
 How to get the library:
 
 ```shell
-go get -u github.com/mymmrac/go-telegram-bot-api
+go get -u github.com/mymmrac/go-telegram-bot-api@latest
 ```
 
 Make sure you get the latest version to have all new features & fixes.
