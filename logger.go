@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Logger - Represents logger used to debug or error information
+// Logger represents logger used to debug or error information
 type Logger interface {
 	Debug(args ...interface{})
 	Debugf(format string, args ...interface{})
