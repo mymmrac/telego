@@ -33,17 +33,17 @@ func Test_validateToken(t *testing.T) {
 			isValid: false,
 		},
 		{
-			name:    "not valid",
+			name:    "not_valid",
 			token:   invalidToken,
 			isValid: false,
 		},
 		{
-			name:    "valid 1",
+			name:    "valid_1",
 			token:   token,
 			isValid: true,
 		},
 		{
-			name:    "valid 2",
+			name:    "valid_2",
 			token:   "123456789:aaaabbbbaaaabbbbaaaabbbbaaaabbbbccc",
 			isValid: true,
 		},
@@ -64,7 +64,7 @@ func TestNewBot(t *testing.T) {
 		assert.NotNil(t, bot)
 	})
 
-	t.Run("success with options", func(t *testing.T) {
+	t.Run("success_with_options", func(t *testing.T) {
 		bot, err := NewBot(token, func(_ *Bot) error { return nil })
 
 		assert.NoError(t, err)
@@ -78,7 +78,7 @@ func TestNewBot(t *testing.T) {
 		assert.Nil(t, bot)
 	})
 
-	t.Run("error with options", func(t *testing.T) {
+	t.Run("error_with_options", func(t *testing.T) {
 		bot, err := NewBot(token, func(_ *Bot) error { return errTest })
 
 		assert.ErrorIs(t, err, errTest)
@@ -126,7 +126,7 @@ func Test_parseParameters(t *testing.T) {
 			isError: false,
 		},
 		{
-			name: "error not pointer",
+			name: "error_not_pointer",
 			parameters: struct {
 				a int
 			}{},
@@ -134,7 +134,7 @@ func Test_parseParameters(t *testing.T) {
 			isError:          true,
 		},
 		{
-			name:             "error not struct",
+			name:             "error_not_struct",
 			parameters:       &n,
 			parsedParameters: nil,
 			isError:          true,
@@ -174,7 +174,7 @@ func Test_filesParameters(t *testing.T) {
 		hasFiles   bool
 	}{
 		{
-			name:       "with files",
+			name:       "with_files",
 			parameters: &testStruct{},
 			files: map[string]*os.File{
 				"test": testFile,
@@ -182,7 +182,7 @@ func Test_filesParameters(t *testing.T) {
 			hasFiles: true,
 		},
 		{
-			name:       "no files",
+			name:       "no_files",
 			parameters: 1,
 			files:      nil,
 			hasFiles:   false,
@@ -239,7 +239,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		Buffer:      bytes.NewBuffer(paramsBytes),
 	}
 
-	t.Run("success json", func(t *testing.T) {
+	t.Run("success_json", func(t *testing.T) {
 		mb.MockRequestConstructor.EXPECT().
 			JSONRequest(params).
 			Return(expectedData, nil).
@@ -255,7 +255,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		assert.Equal(t, expectedResp, resp)
 	})
 
-	t.Run("error json", func(t *testing.T) {
+	t.Run("error_json", func(t *testing.T) {
 		mb.MockRequestConstructor.EXPECT().
 			JSONRequest(params).
 			Return(nil, errTest).
@@ -266,7 +266,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		assert.Nil(t, resp)
 	})
 
-	t.Run("success multipart", func(t *testing.T) {
+	t.Run("success_multipart", func(t *testing.T) {
 		paramsFile := &paramsWithFile{N: 1}
 		paramsMap := map[string]string{
 			"n": "1",
@@ -295,7 +295,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		assert.Equal(t, expectedResp, resp)
 	})
 
-	t.Run("error multipart", func(t *testing.T) {
+	t.Run("error_multipart", func(t *testing.T) {
 		paramsFile := &paramsWithFile{N: 1}
 		paramsMap := map[string]string{
 			"n": "1",
@@ -311,7 +311,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		assert.Nil(t, resp)
 	})
 
-	t.Run("error multipart params", func(t *testing.T) {
+	t.Run("error_multipart_params", func(t *testing.T) {
 		notStruct := notStructParamsWithFile("test")
 
 		resp, err := mb.Bot.constructAndCallRequest(methodName, &notStruct)
@@ -319,7 +319,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		assert.Nil(t, resp)
 	})
 
-	t.Run("error call", func(t *testing.T) {
+	t.Run("error_call", func(t *testing.T) {
 		mb.MockRequestConstructor.EXPECT().
 			JSONRequest(params).
 			Return(expectedData, nil).
@@ -367,7 +367,7 @@ func TestBot_performRequest(t *testing.T) {
 		assert.Equal(t, 1, result)
 	})
 
-	t.Run("error not ok", func(t *testing.T) {
+	t.Run("error_not_ok", func(t *testing.T) {
 		mb.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(&api.RequestData{}, nil).
@@ -385,7 +385,7 @@ func TestBot_performRequest(t *testing.T) {
 		assert.Error(t, err)
 	})
 
-	t.Run("error construct and call", func(t *testing.T) {
+	t.Run("error_construct_and_call", func(t *testing.T) {
 		mb.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest).

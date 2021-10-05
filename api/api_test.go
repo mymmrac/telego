@@ -42,7 +42,7 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 			text: "Ok: false, Err: {400 \"bad request\"}, Result: ",
 		},
 		{
-			name: "error with parameters",
+			name: "error_with_parameters",
 			resp: Response{
 				Ok: false,
 				Error: &Error{
