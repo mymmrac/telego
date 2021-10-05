@@ -8,7 +8,7 @@ name: CI
             - main
 jobs:
     golang-sonar:
-        name: Golang & Sonar Cloud
+        name: Golang & SonarCloud
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
