@@ -1,104 +1,102 @@
 package telego
 
 import (
+	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/go-telegram-bot-api/api"
 )
 
-func TestFastHTTPClient(t *testing.T) {
-	// type args struct {
-	// 	client *fasthttp.Client
-	// }
-	// tests := []struct {
-	// 	name string
-	// 	args args
-	// 	want BotOption
-	// }{
-	//
-	// }
-	// for _, tt := range tests {
-	// 	t.Run(tt.name, func(t *testing.T) {
-	// 		if got := FastHTTPClient(tt.args.client); !reflect.DeepEqual(got, tt.want) {
-	// 			t.Errorf("FastHTTPClient() = %v, want %v", got, tt.want)
-	// 		}
-	// 	})
-	// }
+type testCallerType struct{}
+
+func (c testCallerType) Call(_ string, _ *api.RequestData) (*api.Response, error) {
+	panic("implement me")
 }
 
-// func TestBot_Logger(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	t.Run("default-logger", func(t *testing.T) {
-// 		assert.NotPanics(t, func() {
-// 			bot.DefaultLogger(true, true)
-// 		})
-// 	})
-//
-// 	t.Run("set-logger", func(t *testing.T) {
-// 		assert.NotPanics(t, func() {
-// 			var l Logger
-// 			bot.SetLogger(l)
-// 		})
-// 	})
-// }
+func TestCustomAPICaller(t *testing.T) {
+	bot := &Bot{}
+	caller := testCallerType{}
 
-// func TestBot_SetAPIServer(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	tests := []struct {
-// 		name  string
-// 		url   string
-// 		isErr bool
-// 	}{
-// 		{
-// 			name:  "success",
-// 			url:   defaultBotAPIServer,
-// 			isErr: false,
-// 		},
-// 		{
-// 			name:  "empty",
-// 			url:   "",
-// 			isErr: true,
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			actual := bot.SetAPIServer(tt.url)
-// 			if tt.isErr {
-// 				assert.Error(t, actual)
-// 				return
-// 			}
-// 			assert.NoError(t, actual)
-// 		})
-// 	}
-// }
+	err := CustomAPICaller(caller)(bot)
+	assert.NoError(t, err)
+	assert.EqualValues(t, caller, bot.api)
+}
 
-// func TestBot_SetClient(t *testing.T) {
-// 	bot := getBot(t)
-//
-// 	tests := []struct {
-// 		name   string
-// 		client *fasthttp.Client
-// 		isErr  bool
-// 	}{
-// 		{
-// 			name:   "success",
-// 			client: &fasthttp.Client{},
-// 	 		isErr:  false,
-// 		},
-// 		{
-// 			name:   "error",
-// 			client: nil,
-// 			isErr:  true,
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			actual := bot.SetClient(tt.client)
-// 			if tt.isErr {
-// 				assert.Error(t, actual)
-// 				return
-// 			}
-// 			assert.NoError(t, actual)
-// 		})
-// 	}
-// }
+func TestFastHTTPClient(t *testing.T) {
+	bot := &Bot{}
+	client := &fasthttp.Client{}
+
+	err := FastHTTPClient(client)(bot)
+	assert.NoError(t, err)
+}
+
+type testConstructorType struct{}
+
+func (testConstructorType) JSONRequest(_ interface{}) (*api.RequestData, error) {
+	panic("implement me")
+}
+
+func (testConstructorType) MultipartRequest(_ map[string]string, _ map[string]*os.File) (*api.RequestData, error) {
+	panic("implement me")
+}
+
+func TestCustomRequestConstructor(t *testing.T) {
+	bot := &Bot{}
+	constructor := &testConstructorType{}
+
+	err := CustomRequestConstructor(constructor)(bot)
+	assert.NoError(t, err)
+	assert.EqualValues(t, constructor, bot.constructor)
+}
+
+func TestDefaultLogger(t *testing.T) {
+	bot := &Bot{}
+
+	err := DefaultLogger(true, true)(bot)
+	assert.NoError(t, err)
+}
+
+type testLoggerType struct{}
+
+func (testLoggerType) Debug(_ ...interface{}) {
+	panic("implement me")
+}
+
+func (testLoggerType) Debugf(_ string, _ ...interface{}) {
+	panic("implement me")
+}
+
+func (testLoggerType) Error(_ ...interface{}) {
+	panic("implement me")
+}
+
+func (testLoggerType) Errorf(_ string, _ ...interface{}) {
+	panic("implement me")
+}
+
+func TestSetLogger(t *testing.T) {
+	bot := &Bot{}
+	log := &testLoggerType{}
+
+	err := SetLogger(log)(bot)
+	assert.NoError(t, err)
+	assert.EqualValues(t, log, bot.log)
+}
+
+func TestSetAPIServer(t *testing.T) {
+	bot := &Bot{}
+
+	t.Run("success", func(t *testing.T) {
+		err := SetAPIServer("test")(bot)
+		assert.NoError(t, err)
+		assert.Equal(t, "test", bot.apiURL)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		err := SetAPIServer("")(bot)
+		assert.Error(t, err)
+	})
+}
