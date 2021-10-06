@@ -31,7 +31,7 @@ telegram.
 - [X] Add constants where possible
 - [X] Review generated code & comments
 - [ ] Unit testing of:
-    - [ ] Core functionality
+    - [X] Core functionality
     - [ ] Helper methods
     - [ ] Methods & types
 - [ ] Add more examples

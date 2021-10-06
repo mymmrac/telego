@@ -5,7 +5,6 @@
 package mock
 
 import (
-	os "os"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -51,7 +50,7 @@ func (mr *MockRequestConstructorMockRecorder) JSONRequest(arg0 interface{}) *gom
 }
 
 // MultipartRequest mocks base method.
-func (m *MockRequestConstructor) MultipartRequest(arg0 map[string]string, arg1 map[string]*os.File) (*api.RequestData, error) {
+func (m *MockRequestConstructor) MultipartRequest(arg0 map[string]string, arg1 map[string]api.NamedReader) (*api.RequestData, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "MultipartRequest", arg0, arg1)
 	ret0, _ := ret[0].(*api.RequestData)

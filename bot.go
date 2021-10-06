@@ -119,7 +119,13 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			return nil, fmt.Errorf("parsing parameters: %w", err)
 		}
 
-		data, err = b.constructor.MultipartRequest(parsedParameters, filesParams)
+		// TODO: Remove in future
+		nr := make(map[string]api.NamedReader)
+		for k, v := range filesParams {
+			nr[k] = v
+		}
+
+		data, err = b.constructor.MultipartRequest(parsedParameters, nr)
 		if err != nil {
 			return nil, fmt.Errorf("multipart request: %w", err)
 		}

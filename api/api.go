@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
-	"os"
 	"strings"
 
 	jsoniter "github.com/json-iterator/go"
@@ -75,10 +74,16 @@ type Caller interface {
 	Call(url string, data *RequestData) (*Response, error)
 }
 
+// NamedReader represents a way to send files (or other data)
+type NamedReader interface { // TODO: Allow use outside
+	io.Reader
+	Name() string
+}
+
 // RequestConstructor represents way to construct API request
 type RequestConstructor interface {
 	JSONRequest(parameters interface{}) (*RequestData, error)
-	MultipartRequest(parameters map[string]string, filesParameters map[string]*os.File) (*RequestData, error)
+	MultipartRequest(parameters map[string]string, filesParameters map[string]NamedReader) (*RequestData, error)
 }
 
 // FasthttpAPICaller fasthttp implementation of Caller
@@ -137,7 +142,7 @@ func (d DefaultConstructor) JSONRequest(parameters interface{}) (*RequestData, e
 
 // MultipartRequest is default implementation
 func (d DefaultConstructor) MultipartRequest(
-	parameters map[string]string, filesParameters map[string]*os.File) (*RequestData, error) {
+	parameters map[string]string, filesParameters map[string]NamedReader) (*RequestData, error) {
 	data := &RequestData{
 		Buffer: &bytes.Buffer{},
 	}

@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,7 +38,8 @@ func (testConstructorType) JSONRequest(_ interface{}) (*api.RequestData, error) 
 	panic("implement me")
 }
 
-func (testConstructorType) MultipartRequest(_ map[string]string, _ map[string]*os.File) (*api.RequestData, error) {
+func (testConstructorType) MultipartRequest(_ map[string]string, _ map[string]api.NamedReader,
+) (*api.RequestData, error) {
 	panic("implement me")
 }
 
