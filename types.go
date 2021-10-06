@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -1607,11 +1608,15 @@ type ChatID struct {
 
 // MarshalJSON returns JSON representation of ChatID
 func (c ChatID) MarshalJSON() ([]byte, error) {
+	if c.ID != 0 {
+		return json.Marshal(c.ID)
+	}
+
 	if c.Username != "" {
 		return json.Marshal(c.Username)
 	}
 
-	return json.Marshal(c.ID)
+	return nil, errors.New("chat ID and username are empty")
 }
 
 // BotCommandScopeChat - Represents the scope (https://core.telegram.org/bots/api#botcommandscope) of bot
@@ -1693,11 +1698,11 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 		return json.Marshal(i.FileID)
 	}
 
-	return json.Marshal(i.URL)
-}
+	if i.URL != "" {
+		return json.Marshal(i.URL)
+	}
 
-func (i *InputFile) String() string {
-	return fmt.Sprintf("{File: %v ID: %q URL: %q NeedAttach: %t}", i.File, i.FileID, i.URL, i.needAttach)
+	return nil, errors.New("file, file ID and URL are empty")
 }
 
 // InputMedia - This object represents the content of a media message to be sent. It should be one of:
