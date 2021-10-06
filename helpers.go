@@ -89,6 +89,7 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 
 // StartListeningForWebhook start server for listening for webhook
 func (b *Bot) StartListeningForWebhook(address string) {
+	// TODO: Use graceful shutdown
 	go func() {
 		err := fasthttp.ListenAndServe(address, b.webhookHandler)
 		if err != nil {
