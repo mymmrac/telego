@@ -3,7 +3,7 @@ package telego
 import (
 	"github.com/golang/mock/gomock"
 
-	mockAPI "github.com/mymmrac/go-telegram-bot-api/api/mock"
+	mockAPI "github.com/mymmrac/telego/api/mock"
 )
 
 type mockedBot struct {

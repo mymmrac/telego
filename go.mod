@@ -1,4 +1,4 @@
-module github.com/mymmrac/go-telegram-bot-api
+module github.com/mymmrac/telego
 
 go 1.16
 

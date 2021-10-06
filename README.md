@@ -46,7 +46,7 @@ telegram.
 How to get the library:
 
 ```shell
-go get -u github.com/mymmrac/go-telegram-bot-api@latest
+go get -u github.com/mymmrac/telego@latest
 ```
 
 Make sure you get the latest version to have all new features & fixes.
@@ -74,7 +74,7 @@ import (
 	"fmt"
 	"os"
 
-	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/mymmrac/telego"
 )
 
 func main() {
@@ -116,7 +116,7 @@ import (
 	"os"
 	"time"
 
-	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/mymmrac/telego"
 )
 
 func main() {
@@ -154,7 +154,7 @@ import (
 	"fmt"
 	"os"
 
-	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/mymmrac/telego"
 )
 
 func main() {
@@ -216,7 +216,7 @@ import (
 	"fmt"
 	"os"
 
-	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/mymmrac/telego"
 )
 
 func main() {

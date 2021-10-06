@@ -1,5 +1,5 @@
-//go:generate mockgen -package mock -destination=mock/caller.go github.com/mymmrac/go-telegram-bot-api/api Caller
-//go:generate mockgen -package mock -destination=mock/request-constructor.go github.com/mymmrac/go-telegram-bot-api/api RequestConstructor
+//go:generate mockgen -package mock -destination=mock/caller.go github.com/mymmrac/telego/api Caller
+//go:generate mockgen -package mock -destination=mock/request-constructor.go github.com/mymmrac/telego/api RequestConstructor
 
 package api
 

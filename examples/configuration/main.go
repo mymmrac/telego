@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/mymmrac/telego"
 	"github.com/valyala/fasthttp"
 )
 

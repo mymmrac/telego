@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	telego "github.com/mymmrac/go-telegram-bot-api"
+	"github.com/mymmrac/telego"
 )
 
 func main() {

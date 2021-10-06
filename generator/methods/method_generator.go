@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mymmrac/go-telegram-bot-api/generator"
+	"github.com/mymmrac/telego/generator"
 )
 
 const methodPattern = `

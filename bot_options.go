@@ -6,7 +6,7 @@ import (
 
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/go-telegram-bot-api/api"
+	"github.com/mymmrac/telego/api"
 )
 
 // CustomAPICaller sets custom API caller to use

@@ -13,7 +13,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/go-telegram-bot-api/api"
+	"github.com/mymmrac/telego/api"
 )
 
 // json jsoniter replacement for json package

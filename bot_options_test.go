@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/go-telegram-bot-api/api"
+	"github.com/mymmrac/telego/api"
 )
 
 type testCallerType struct{}
