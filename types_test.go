@@ -426,15 +426,15 @@ func TestInputFile_MarshalJSON(t *testing.T) {
 			jsonData: ``,
 			isError:  false,
 		},
-		//{ // TODO: Add after api.NamedReader implemented
-		//	name: "success_file_need_attach",
-		//	inputFile: InputFile{
-		//		File:       &os.File{},
-		//		needAttach: true,
-		//	},
-		//	jsonData: attachFile,
-		//	isError:  false,
-		//},
+		// { // TODO: Add after api.NamedReader implemented
+		// 	name: "success_file_need_attach",
+		// 	inputFile: InputFile{
+		// 		File:       &os.File{},
+		// 		needAttach: true,
+		// 	},
+		// 	jsonData: attachFile,
+		// 	isError:  false,
+		// },
 		{
 			name: "success_id",
 			inputFile: InputFile{

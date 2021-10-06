@@ -1,9 +1,10 @@
 package telego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBot_SetUpdateInterval(t *testing.T) {
