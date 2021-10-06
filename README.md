@@ -1,6 +1,6 @@
 # Telego | Go Telegram Bot API
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego#section-readme)
+[![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego)
 [![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
@@ -12,7 +12,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 
 <p align="center">
-  <img src="https://i.ibb.co/sChtxzh/Telego-long.png" alt="Telego logo" width="512">
+  <img src="https://i.ibb.co/sChtxzh/Telego-long.png" alt="Telego logo" width="512" style="border-radius: 12px;">
 </p>
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
