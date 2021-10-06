@@ -1,15 +1,15 @@
 # Telego | Go Telegram Bot API
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/go-telegram-bot-api#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/go-telegram-bot-api#section-readme)
-[![CI Status](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/go-telegram-bot-api/actions/workflows/ci.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
+[![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego#section-readme)
+[![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
 [![Telegram Chat](https://img.shields.io/static/v1?label=Discussion&message=chat&color=29a1d4&logo=telegram)](https://t.me/telegoLibrary)
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=coverage)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=bugs)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_go-telegram-bot-api&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_go-telegram-bot-api)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=coverage)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=bugs)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 
 <p align="center">
   <img src="https://i.ibb.co/sChtxzh/Telego-long.png" alt="Telego logo" width="512">
@@ -258,7 +258,7 @@ func main() {
 ## Contribution
 
 1. Fork repo
-2. Clone `git clone https://github.com/mymmrac/go-telegram-bot-api.git`
+2. Clone `git clone https://github.com/mymmrac/telego.git`
 3. Create new branch `git checkout -b my-new-feature`
 4. Make your changes, then add them `git add .`
 5. Commit `git commit -m "New feature added"`
