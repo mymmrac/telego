@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/mymmrac/telego/api"
 )
 
 // TODO: Check t.Parallel() with -parallel
@@ -483,4 +485,85 @@ func TestInputFile_MarshalJSON(t *testing.T) {
 			assert.Equal(t, tt.jsonData, string(data))
 		})
 	}
+}
+
+func TestInputMedia_fileParameters(t *testing.T) {
+	im := &InputMediaPhoto{
+		Media: InputFile{
+			File: testNamedReade{},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"media": testNamedReade{},
+	}, im.fileParameters())
+	assert.True(t, im.Media.needAttach)
+}
+
+func TestInputMediaVideo_fileParameters(t *testing.T) {
+	im := &InputMediaVideo{
+		Media: InputFile{
+			File: testNamedReade{},
+		},
+		Thumb: &InputFile{
+			File: testNamedReade{},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"media": testNamedReade{},
+		"thumb": testNamedReade{},
+	}, im.fileParameters())
+	assert.True(t, im.Media.needAttach)
+}
+
+func TestInputMediaAnimation_fileParameters(t *testing.T) {
+	im := &InputMediaAnimation{
+		Media: InputFile{
+			File: testNamedReade{},
+		},
+		Thumb: &InputFile{
+			File: testNamedReade{},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"media": testNamedReade{},
+		"thumb": testNamedReade{},
+	}, im.fileParameters())
+	assert.True(t, im.Media.needAttach)
+}
+
+func TestInputMediaAudio_fileParameters(t *testing.T) {
+	im := &InputMediaAudio{
+		Media: InputFile{
+			File: testNamedReade{},
+		},
+		Thumb: &InputFile{
+			File: testNamedReade{},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"media": testNamedReade{},
+		"thumb": testNamedReade{},
+	}, im.fileParameters())
+	assert.True(t, im.Media.needAttach)
+}
+
+func TestInputMediaDocument_fileParameters(t *testing.T) {
+	im := &InputMediaDocument{
+		Media: InputFile{
+			File: testNamedReade{},
+		},
+		Thumb: &InputFile{
+			File: testNamedReade{},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"media": testNamedReade{},
+		"thumb": testNamedReade{},
+	}, im.fileParameters())
+	assert.True(t, im.Media.needAttach)
 }

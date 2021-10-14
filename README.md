@@ -33,7 +33,8 @@ telegram.
 - [ ] Unit testing of:
     - [X] Core functionality
     - [ ] Helper methods
-    - [ ] Methods & types
+    - [ ] Methods
+    - [X] Types
 - [ ] Add more examples
 - [ ] Create Wiki page
 - [ ] Publish stable version
