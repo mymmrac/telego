@@ -202,5 +202,14 @@ func parseParameters(v interface{}) (map[string]string, error) {
 }
 
 func isNil(i interface{}) bool {
-	return i == nil || reflect.ValueOf(i).IsNil()
+	if i == nil {
+		return true
+	}
+
+	switch reflect.TypeOf(i).Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
+		return reflect.ValueOf(i).IsNil()
+	}
+
+	return false
 }

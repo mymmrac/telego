@@ -1695,15 +1695,15 @@ type InputFile struct {
 
 // MarshalJSON return JSON representation of InputFile
 func (i InputFile) MarshalJSON() ([]byte, error) {
-	if i.File != nil {
+	if i.FileID != "" {
+		return json.Marshal(i.FileID)
+	}
+
+	if !isNil(i.File) {
 		if i.needAttach {
 			return json.Marshal(attachFile + i.File.Name())
 		}
 		return []byte{}, nil
-	}
-
-	if i.FileID != "" {
-		return json.Marshal(i.FileID)
 	}
 
 	if i.URL != "" {

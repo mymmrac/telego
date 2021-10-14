@@ -7,6 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO: Check t.Parallel() with -parallel
+
 func TestReplyKeyboardMarkup_ReplyType(t *testing.T) {
 	assert.Equal(t, MarkupTypeReplyKeyboard, (&ReplyKeyboardMarkup{}).ReplyType())
 }
@@ -411,6 +413,17 @@ func TestChatID_MarshalJSON(t *testing.T) {
 	}
 }
 
+type testNamedReade struct {
+}
+
+func (t testNamedReade) Read(p []byte) (n int, err error) {
+	panic("implement me")
+}
+
+func (t testNamedReade) Name() string {
+	return "test"
+}
+
 func TestInputFile_MarshalJSON(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -426,15 +439,15 @@ func TestInputFile_MarshalJSON(t *testing.T) {
 			jsonData: ``,
 			isError:  false,
 		},
-		// { // TODO: Add after api.NamedReader implemented
-		// 	name: "success_file_need_attach",
-		// 	inputFile: InputFile{
-		// 		File:       &os.File{},
-		// 		needAttach: true,
-		// 	},
-		// 	jsonData: attachFile,
-		// 	isError:  false,
-		// },
+		{
+			name: "success_file_need_attach",
+			inputFile: InputFile{
+				File:       testNamedReade{},
+				needAttach: true,
+			},
+			jsonData: `"` + attachFile + `test"`,
+			isError:  false,
+		},
 		{
 			name: "success_id",
 			inputFile: InputFile{

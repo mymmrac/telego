@@ -76,7 +76,7 @@ type Caller interface {
 
 // NamedReader represents a way to send files (or other data).
 // Implemented by os.File.
-type NamedReader interface { // TODO: Allow use outside
+type NamedReader interface {
 	io.Reader
 	Name() string
 }
