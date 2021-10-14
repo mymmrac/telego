@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"os"
 	"reflect"
 	"regexp"
 	"strings"
@@ -119,13 +118,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			return nil, fmt.Errorf("parsing parameters: %w", err)
 		}
 
-		// TODO: Remove in future
-		nr := make(map[string]api.NamedReader)
-		for k, v := range filesParams {
-			nr[k] = v
-		}
-
-		data, err = b.constructor.MultipartRequest(parsedParameters, nr)
+		data, err = b.constructor.MultipartRequest(parsedParameters, filesParams)
 		if err != nil {
 			return nil, fmt.Errorf("multipart request: %w", err)
 		}
@@ -147,11 +140,11 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 }
 
 // filesParameters gets all files from parameters
-func filesParameters(parameters interface{}) (files map[string]*os.File, hasFiles bool) {
+func filesParameters(parameters interface{}) (files map[string]api.NamedReader, hasFiles bool) {
 	if parametersWithFiles, ok := parameters.(fileCompatible); ok {
 		files = parametersWithFiles.fileParameters()
 		for _, file := range files {
-			if file != nil {
+			if !isNil(file) {
 				hasFiles = true
 				break
 			}
@@ -206,4 +199,8 @@ func parseParameters(v interface{}) (map[string]string, error) {
 	}
 
 	return params, nil
+}
+
+func isNil(i interface{}) bool {
+	return i == nil || reflect.ValueOf(i).IsNil()
 }

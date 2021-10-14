@@ -10,7 +10,7 @@ import (
 var myID = telego.ChatID{ID: 331849104}
 var groupID = telego.ChatID{ID: -1001516926498}
 
-const testCase = 2
+const testCase = 10
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -182,9 +182,7 @@ func main() {
 	case 9:
 		dp := &telego.SendDocumentParams{
 			ChatID:   myID,
-			Document: telego.InputFile{File: mustOpen("doc.txt")},
-			//Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
-			//Caption:  "Hello world",
+			Document: telego.InputFile{FileID: "BQACAgIAAxkDAAMmYP_FFDZSpqgMsWpK0GCB3hQaI8MAApUPAALeHgABSHe5TRKuQ2NGIAQ"},
 			ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: [][]telego.InlineKeyboardButton{
 				{
 					{
@@ -193,6 +191,18 @@ func main() {
 					},
 				},
 			}},
+		}
+		msg, err := bot.SendDocument(dp)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(msg.Document)
+	case 10:
+		dp := &telego.SendDocumentParams{
+			ChatID:   myID,
+			Document: telego.InputFile{File: mustOpen("doc.txt")},
+			Caption:  "Hello world",
 		}
 		msg, err := bot.SendDocument(dp)
 		if err != nil {

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"os"
+
+	"github.com/mymmrac/telego/api"
 )
 
 // Update - This object (https://core.telegram.org/bots/api#available-types) represents an incoming update.At
@@ -1673,7 +1675,7 @@ func (b *BotCommandScopeChatMember) ScopeType() string {
 
 // fileCompatible - Represents types that can be send as files
 type fileCompatible interface {
-	fileParameters() map[string]*os.File
+	fileParameters() map[string]api.NamedReader
 }
 
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using
@@ -1753,9 +1755,9 @@ func (i *InputMediaPhoto) MediaType() string {
 	return MediaTypePhoto
 }
 
-func (i *InputMediaPhoto) fileParameters() map[string]*os.File {
+func (i *InputMediaPhoto) fileParameters() map[string]api.NamedReader {
 	i.Media.needAttach = true
-	return map[string]*os.File{
+	return map[string]api.NamedReader{
 		"media": i.Media.File,
 	}
 }
@@ -1808,8 +1810,8 @@ func (i *InputMediaVideo) MediaType() string {
 	return MediaTypeVideo
 }
 
-func (i *InputMediaVideo) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (i *InputMediaVideo) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
@@ -1867,8 +1869,8 @@ func (i *InputMediaAnimation) MediaType() string {
 	return MediaTypeAnimation
 }
 
-func (i *InputMediaAnimation) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (i *InputMediaAnimation) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
@@ -1925,8 +1927,8 @@ func (i *InputMediaAudio) MediaType() string {
 	return MediaTypeAudio
 }
 
-func (i *InputMediaAudio) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (i *InputMediaAudio) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
@@ -1978,8 +1980,8 @@ func (i *InputMediaDocument) MediaType() string {
 	return MediaTypeDocument
 }
 
-func (i *InputMediaDocument) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (i *InputMediaDocument) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File

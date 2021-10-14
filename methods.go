@@ -2,7 +2,8 @@ package telego
 
 import (
 	"fmt"
-	"os"
+
+	"github.com/mymmrac/telego/api"
 )
 
 // GetUpdatesParams - Represents parameters of getUpdates method.
@@ -93,8 +94,8 @@ type SetWebhookParams struct {
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
 }
 
-func (s *SetWebhookParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (s *SetWebhookParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	if s.Certificate != nil {
 		fp["certificate"] = s.Certificate.File
@@ -372,8 +373,8 @@ type SendPhotoParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendPhotoParams) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
+func (p *SendPhotoParams) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
 		"photo": p.Photo.File,
 	}
 }
@@ -448,8 +449,8 @@ type SendAudioParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendAudioParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SendAudioParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	fp["audio"] = p.Audio.File
 	if p.Thumb != nil {
@@ -527,8 +528,8 @@ type SendDocumentParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendDocumentParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SendDocumentParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	fp["document"] = p.Document.File
 	if p.Thumb != nil {
@@ -613,8 +614,8 @@ type SendVideoParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendVideoParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SendVideoParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	fp["video"] = p.Video.File
 	if p.Thumb != nil {
@@ -697,8 +698,8 @@ type SendAnimationParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendAnimationParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SendAnimationParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	fp["animation"] = p.Animation.File
 	if p.Thumb != nil {
@@ -764,8 +765,8 @@ type SendVoiceParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendVoiceParams) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
+func (p *SendVoiceParams) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
 		"voice": p.Voice.File,
 	}
 }
@@ -829,8 +830,8 @@ type SendVideoNoteParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendVideoNoteParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SendVideoNoteParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	fp["video_note"] = p.VideoNote.File
 	if p.Thumb != nil {
@@ -874,12 +875,12 @@ type SendMediaGroupParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 }
 
-func (p *SendMediaGroupParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SendMediaGroupParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	for _, m := range p.Media {
 		for _, v := range m.fileParameters() {
-			if v == nil {
+			if isNil(v) {
 				continue
 			}
 			fp[v.Name()] = v
@@ -1676,8 +1677,8 @@ type SetChatPhotoParams struct {
 	Photo InputFile `json:"photo"`
 }
 
-func (p *SetChatPhotoParams) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
+func (p *SetChatPhotoParams) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
 		"photo": p.Photo.File,
 	}
 }
@@ -2192,11 +2193,11 @@ type EditMessageMediaParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *EditMessageMediaParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *EditMessageMediaParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	for _, v := range p.Media.fileParameters() {
-		if v == nil {
+		if isNil(v) {
 			continue
 		}
 		fp[v.Name()] = v
@@ -2334,8 +2335,8 @@ type SendStickerParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendStickerParams) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
+func (p *SendStickerParams) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
 		"sticker": p.Sticker.File,
 	}
 }
@@ -2382,8 +2383,8 @@ type UploadStickerFileParams struct {
 	PngSticker InputFile `json:"png_sticker"`
 }
 
-func (p *UploadStickerFileParams) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
+func (p *UploadStickerFileParams) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
 		"png_sticker": p.PngSticker.File,
 	}
 }
@@ -2436,8 +2437,8 @@ type CreateNewStickerSetParams struct {
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
 }
 
-func (p *CreateNewStickerSetParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *CreateNewStickerSetParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	if p.PngSticker != nil {
 		fp["png_sticker"] = p.PngSticker.File
@@ -2488,8 +2489,8 @@ type AddStickerToSetParams struct {
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
 }
 
-func (p *AddStickerToSetParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *AddStickerToSetParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	if p.PngSticker != nil {
 		fp["png_sticker"] = p.PngSticker.File
@@ -2570,8 +2571,8 @@ type SetStickerSetThumbParams struct {
 	Thumb *InputFile `json:"thumb,omitempty"`
 }
 
-func (p *SetStickerSetThumbParams) fileParameters() map[string]*os.File {
-	fp := make(map[string]*os.File)
+func (p *SetStickerSetThumbParams) fileParameters() map[string]api.NamedReader {
+	fp := make(map[string]api.NamedReader)
 
 	if p.Thumb != nil {
 		fp["thumb"] = p.Thumb.File

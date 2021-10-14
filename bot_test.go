@@ -160,8 +160,8 @@ var testFile = &os.File{}
 
 type testStruct struct{}
 
-func (ts *testStruct) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
+func (ts *testStruct) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
 		"test": testFile,
 	}
 }
@@ -170,13 +170,13 @@ func Test_filesParameters(t *testing.T) {
 	tests := []struct {
 		name       string
 		parameters interface{}
-		files      map[string]*os.File
+		files      map[string]api.NamedReader
 		hasFiles   bool
 	}{
 		{
 			name:       "with_files",
 			parameters: &testStruct{},
-			files: map[string]*os.File{
+			files: map[string]api.NamedReader{
 				"test": testFile,
 			},
 			hasFiles: true,
@@ -201,17 +201,17 @@ type paramsWithFile struct {
 	N int `json:"n"`
 }
 
-func (p *paramsWithFile) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
-		"test": {},
+func (p *paramsWithFile) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
+		"test": &os.File{},
 	}
 }
 
 type notStructParamsWithFile string
 
-func (p *notStructParamsWithFile) fileParameters() map[string]*os.File {
-	return map[string]*os.File{
-		"test": {},
+func (p *notStructParamsWithFile) fileParameters() map[string]api.NamedReader {
+	return map[string]api.NamedReader{
+		"test": &os.File{},
 	}
 }
 
@@ -394,4 +394,37 @@ func TestBot_performRequest(t *testing.T) {
 		err := mb.Bot.performRequest(methodName, params, &result)
 		assert.Error(t, err)
 	})
+}
+
+func Test_isNil(t *testing.T) {
+	var n *int
+	a := 1
+	m := &a
+
+	tests := []struct {
+		name  string
+		i     interface{}
+		isNil bool
+	}{
+		{
+			name:  "nil",
+			i:     nil,
+			isNil: true,
+		},
+		{
+			name:  "nil_ptr",
+			i:     n,
+			isNil: true,
+		},
+		{
+			name:  "value",
+			i:     m,
+			isNil: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.isNil, isNil(tt.i))
+		})
+	}
 }
