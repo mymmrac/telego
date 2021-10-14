@@ -3,7 +3,6 @@ package telego
 import (
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/mymmrac/telego/api"
 )
@@ -1673,7 +1672,7 @@ func (b *BotCommandScopeChatMember) ScopeType() string {
 	return ScopeTypeChatMember
 }
 
-// fileCompatible - Represents types that can be send as files
+// fileCompatible - Represents types that can be sent as files
 type fileCompatible interface {
 	fileParameters() map[string]api.NamedReader
 }
@@ -1681,9 +1680,16 @@ type fileCompatible interface {
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using
 // multipart/form-data in the usual way that files are uploaded via the browser.
 type InputFile struct {
-	File       *os.File
-	FileID     string
-	URL        string
+	// File - Object that can be treated as file (has name and data to read).
+	// Implemented by os.File.
+	File api.NamedReader
+
+	// FileID - ID of file stored in Telegram
+	FileID string
+
+	// URL - URL to get file from
+	URL string
+
 	needAttach bool
 }
 

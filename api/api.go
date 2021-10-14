@@ -74,7 +74,8 @@ type Caller interface {
 	Call(url string, data *RequestData) (*Response, error)
 }
 
-// NamedReader represents a way to send files (or other data)
+// NamedReader represents a way to send files (or other data).
+// Implemented by os.File.
 type NamedReader interface { // TODO: Allow use outside
 	io.Reader
 	Name() string
