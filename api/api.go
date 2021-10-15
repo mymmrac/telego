@@ -31,7 +31,10 @@ type Response struct {
 }
 
 func (r Response) String() string {
-	return fmt.Sprintf("Ok: %t, Err: {%v}, Result: %s", r.Ok, r.Error, r.Result)
+	if r.Result == nil || len(r.Result) == 0 {
+		return fmt.Sprintf("Ok: %t, Err: [%v]", r.Ok, r.Error)
+	}
+	return fmt.Sprintf("Ok: %t, Err: [%v], Result: %s", r.Ok, r.Error, r.Result)
 }
 
 // Error represents error from telegram API
@@ -150,6 +153,7 @@ func (d DefaultConstructor) MultipartRequest(
 	writer := multipart.NewWriter(data.Buffer)
 
 	for field, file := range filesParameters {
+		// TODO: Check if additional check for nil need here
 		if file == nil {
 			continue
 		}

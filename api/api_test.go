@@ -27,9 +27,9 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 			resp: Response{
 				Ok:     true,
 				Error:  nil,
-				Result: stdJson.RawMessage{},
+				Result: stdJson.RawMessage(`{"test":true}`),
 			},
-			text: "Ok: true, Err: {<nil>}, Result: ",
+			text: `Ok: true, Err: [<nil>], Result: {"test":true}`,
 		},
 		{
 			name: "error",
@@ -42,7 +42,7 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 				},
 				Result: nil,
 			},
-			text: "Ok: false, Err: {400 \"bad request\"}, Result: ",
+			text: "Ok: false, Err: [400 \"bad request\"]",
 		},
 		{
 			name: "error_with_parameters",
@@ -58,7 +58,7 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 				},
 				Result: nil,
 			},
-			text: "Ok: false, Err: {400 \"bad request\" migrate to chat id: 1, retry after: 2}, Result: ",
+			text: "Ok: false, Err: [400 \"bad request\" migrate to chat id: 1, retry after: 2]",
 		},
 	}
 

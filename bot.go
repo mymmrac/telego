@@ -112,6 +112,8 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 	filesParams, hasFiles := filesParameters(parameters)
 	var data *api.RequestData
 
+	debugData := ""
+
 	if hasFiles {
 		parsedParameters, err := parseParameters(parameters)
 		if err != nil {
@@ -122,15 +124,29 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 		if err != nil {
 			return nil, fmt.Errorf("multipart request: %w", err)
 		}
+
+		// TODO: Refactor logging
+		debugI := 0
+		debugFiles := make([]string, len(filesParams))
+		for k, v := range filesParams {
+			debugFiles[debugI] = fmt.Sprintf("%q: %q", k, v.Name())
+			debugI++
+		}
+		debugJSON, _ := json.Marshal(parsedParameters)
+		debugData = fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", "))
 	} else {
 		var err error
 		data, err = b.constructor.JSONRequest(parameters)
 		if err != nil {
 			return nil, fmt.Errorf("json request: %w", err)
 		}
+
+		debugData = data.Buffer.String()
 	}
+	debugData = strings.TrimSuffix(debugData, "\n")
 
 	url := b.apiURL + "/bot" + b.token + "/" + methodName
+	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
 	resp, err := b.api.Call(url, data)
 	if err != nil {
 		return nil, fmt.Errorf("request call: %w", err)
@@ -154,6 +170,7 @@ func filesParameters(parameters interface{}) (files map[string]api.NamedReader, 
 }
 
 // parseParameters parses parameter struct to key value structure
+//nolint:gocognit
 func parseParameters(v interface{}) (map[string]string, error) {
 	valueOfV := reflect.ValueOf(v)
 	if valueOfV.Kind() != reflect.Ptr && valueOfV.Kind() != reflect.Interface {
@@ -189,6 +206,13 @@ func parseParameters(v interface{}) (map[string]string, error) {
 
 			stringValue = buf.String()
 			stringValue = strings.TrimSuffix(stringValue, "\n")
+			if len(stringValue) == 0 {
+				continue
+			}
+
+			if len(stringValue) >= 2 && stringValue[0] == '"' && stringValue[len(stringValue)-1] == '"' {
+				stringValue = stringValue[1 : len(stringValue)-1]
+			}
 		default:
 			stringValue = fmt.Sprintf("%v", value)
 		}

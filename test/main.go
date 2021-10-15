@@ -7,10 +7,13 @@ import (
 	"github.com/mymmrac/telego"
 )
 
-var myID = telego.ChatID{ID: 331849104}
-var groupID = telego.ChatID{ID: -1001516926498}
+var (
+	myID            = telego.ChatID{ID: 331849104}
+	groupID         = telego.ChatID{ID: -1001516926498}
+	channelUsername = telego.ChatID{Username: "@mymmrTest"}
+)
 
-const testCase = 10
+const testCase = 2
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -210,6 +213,29 @@ func main() {
 			return
 		}
 		fmt.Println(msg.Document)
+	case 11:
+		photo := &telego.SendPhotoParams{
+			ChatID:  channelUsername,
+			Photo:   telego.InputFile{File: mustOpen("img1.jpg")},
+			Caption: "https://test.ru/test_url",
+		}
+
+		msg, err := bot.SendPhoto(photo)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(msg)
+	case 12:
+		msg := &telego.SendMessageParams{
+			ChatID: channelUsername,
+			Text:   "Test msg",
+		}
+		_, err = bot.SendMessage(msg)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 }
 

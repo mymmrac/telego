@@ -27,3 +27,13 @@ func newMockedBot(ctrl *gomock.Controller) mockedBot {
 
 	return mb
 }
+
+type testNamedReade struct{}
+
+func (t testNamedReade) Read(p []byte) (n int, err error) {
+	panic("implement me")
+}
+
+func (t testNamedReade) Name() string {
+	return "test"
+}

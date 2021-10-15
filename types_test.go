@@ -415,17 +415,6 @@ func TestChatID_MarshalJSON(t *testing.T) {
 	}
 }
 
-type testNamedReade struct {
-}
-
-func (t testNamedReade) Read(p []byte) (n int, err error) {
-	panic("implement me")
-}
-
-func (t testNamedReade) Name() string {
-	return "test"
-}
-
 func TestInputFile_MarshalJSON(t *testing.T) {
 	tests := []struct {
 		name      string

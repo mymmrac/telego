@@ -3,7 +3,6 @@ package telego
 import (
 	"bytes"
 	"errors"
-	"os"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -156,13 +155,11 @@ func Test_parseParameters(t *testing.T) {
 	}
 }
 
-var testFile = &os.File{}
-
 type testStruct struct{}
 
 func (ts *testStruct) fileParameters() map[string]api.NamedReader {
 	return map[string]api.NamedReader{
-		"test": testFile,
+		"test": &testNamedReade{},
 	}
 }
 
@@ -177,7 +174,7 @@ func Test_filesParameters(t *testing.T) {
 			name:       "with_files",
 			parameters: &testStruct{},
 			files: map[string]api.NamedReader{
-				"test": testFile,
+				"test": &testNamedReade{},
 			},
 			hasFiles: true,
 		},
@@ -203,7 +200,7 @@ type paramsWithFile struct {
 
 func (p *paramsWithFile) fileParameters() map[string]api.NamedReader {
 	return map[string]api.NamedReader{
-		"test": &os.File{},
+		"test": &testNamedReade{},
 	}
 }
 
@@ -211,7 +208,7 @@ type notStructParamsWithFile string
 
 func (p *notStructParamsWithFile) fileParameters() map[string]api.NamedReader {
 	return map[string]api.NamedReader{
-		"test": &os.File{},
+		"test": &testNamedReade{},
 	}
 }
 
