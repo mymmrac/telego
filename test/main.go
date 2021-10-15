@@ -217,7 +217,7 @@ func main() {
 		photo := &telego.SendPhotoParams{
 			ChatID:  channelUsername,
 			Photo:   telego.InputFile{File: mustOpen("img1.jpg")},
-			Caption: "https://test.ru/test_url",
+			Caption: "https://test.ua/test_url",
 		}
 
 		msg, err := bot.SendPhoto(photo)
