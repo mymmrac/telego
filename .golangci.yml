@@ -169,15 +169,6 @@ linters-settings:
         packages:
             - unsafe
             - reflect
-            - https://github.com/afex/hystrix-go
-            - https://github.com/ContinuumLLC/platform-common-lib
-            - https://github.com/ContinuumLLC/Platform-Infrastructure-lib
-        packages-with-error-message:
-            # specify an error message to output when a blacklisted package is used
-            -   https://github.com/ContinuumLLC/platform-common-lib: "deprecated in github, use https://gitlab.connectwisedev.com/platform/platform-common-lib instead"
-            -   https://github:com/ContinuumLLC/Platform-Infrastructure-lib: "deprecated in github, use https://gitlab.connectwisedev.com/platform/Platform-Infrastructure-lib instead"
-            -   https://github.com/afex/hystrix-go: "use continuum fork instead: https://github.com/ContinuumLLC/hystrix-go"
-            -   reflect: "restricted in general but can be approved in some specific cases"
     funlen:
         lines: 150
         statements: 50
