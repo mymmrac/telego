@@ -9,8 +9,6 @@ import (
 	"github.com/mymmrac/telego/api"
 )
 
-// TODO: Check t.Parallel() with -parallel
-
 func TestReplyKeyboardMarkup_ReplyType(t *testing.T) {
 	assert.Equal(t, MarkupTypeReplyKeyboard, (&ReplyKeyboardMarkup{}).ReplyType())
 }

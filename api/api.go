@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"reflect"
 	"strings"
 
 	jsoniter "github.com/json-iterator/go"
@@ -153,8 +154,7 @@ func (d DefaultConstructor) MultipartRequest(
 	writer := multipart.NewWriter(data.Buffer)
 
 	for field, file := range filesParameters {
-		// TODO: Check if additional check for nil need here
-		if file == nil {
+		if isNil(file) {
 			continue
 		}
 
@@ -188,4 +188,17 @@ func (d DefaultConstructor) MultipartRequest(
 
 	data.ContentType = writer.FormDataContentType()
 	return data, nil
+}
+
+func isNil(i interface{}) bool {
+	if i == nil {
+		return true
+	}
+
+	switch reflect.TypeOf(i).Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
+		return reflect.ValueOf(i).IsNil()
+	}
+
+	return false
 }
