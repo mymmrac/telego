@@ -214,7 +214,7 @@ func (p *notStructParamsWithFile) fileParameters() map[string]api.NamedReader {
 
 func TestBot_constructAndCallRequest(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	mb := newMockedBot(ctrl)
+	m := newMockedBot(ctrl)
 
 	params := struct {
 		N int `json:"n"`
@@ -222,7 +222,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		N: 1,
 	}
 
-	url := mb.Bot.apiURL + "/bot" + mb.Bot.token + "/" + methodName
+	url := m.Bot.apiURL + "/bot" + m.Bot.token + "/" + methodName
 
 	expectedResp := &api.Response{
 		Ok: true,
@@ -237,28 +237,28 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 	}
 
 	t.Run("success_json", func(t *testing.T) {
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			JSONRequest(params).
 			Return(expectedData, nil).
 			Times(1)
 
-		mb.MockAPICaller.EXPECT().
+		m.MockAPICaller.EXPECT().
 			Call(url, expectedData).
 			Return(expectedResp, nil).
 			Times(1)
 
-		resp, err := mb.Bot.constructAndCallRequest(methodName, params)
+		resp, err := m.Bot.constructAndCallRequest(methodName, params)
 		assert.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
 
 	t.Run("error_json", func(t *testing.T) {
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			JSONRequest(params).
 			Return(nil, errTest).
 			Times(1)
 
-		resp, err := mb.Bot.constructAndCallRequest(methodName, params)
+		resp, err := m.Bot.constructAndCallRequest(methodName, params)
 		assert.ErrorIs(t, err, errTest)
 		assert.Nil(t, resp)
 	})
@@ -277,17 +277,17 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Buffer:      bytes.NewBuffer(paramsBytesFile),
 		}
 
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			MultipartRequest(paramsMap, gomock.Any()).
 			Return(expectedDataFile, nil).
 			Times(1)
 
-		mb.MockAPICaller.EXPECT().
+		m.MockAPICaller.EXPECT().
 			Call(url, expectedDataFile).
 			Return(expectedResp, nil).
 			Times(1)
 
-		resp, err := mb.Bot.constructAndCallRequest(methodName, paramsFile)
+		resp, err := m.Bot.constructAndCallRequest(methodName, paramsFile)
 		assert.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -298,12 +298,12 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			"n": "1",
 		}
 
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			MultipartRequest(paramsMap, gomock.Any()).
 			Return(nil, errTest).
 			Times(1)
 
-		resp, err := mb.Bot.constructAndCallRequest(methodName, paramsFile)
+		resp, err := m.Bot.constructAndCallRequest(methodName, paramsFile)
 		assert.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -311,23 +311,23 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 	t.Run("error_multipart_params", func(t *testing.T) {
 		notStruct := notStructParamsWithFile("test")
 
-		resp, err := mb.Bot.constructAndCallRequest(methodName, &notStruct)
+		resp, err := m.Bot.constructAndCallRequest(methodName, &notStruct)
 		assert.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_call", func(t *testing.T) {
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			JSONRequest(params).
 			Return(expectedData, nil).
 			Times(1)
 
-		mb.MockAPICaller.EXPECT().
+		m.MockAPICaller.EXPECT().
 			Call(url, expectedData).
 			Return(nil, errTest).
 			Times(1)
 
-		resp, err := mb.Bot.constructAndCallRequest(methodName, params)
+		resp, err := m.Bot.constructAndCallRequest(methodName, params)
 		assert.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -335,7 +335,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 
 func TestBot_performRequest(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	mb := newMockedBot(ctrl)
+	m := newMockedBot(ctrl)
 
 	params := struct {
 		N int `json:"n"`
@@ -346,12 +346,12 @@ func TestBot_performRequest(t *testing.T) {
 	var result int
 
 	t.Run("success", func(t *testing.T) {
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(&api.RequestData{}, nil).
 			Times(1)
 
-		mb.MockAPICaller.EXPECT().
+		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(&api.Response{
 				Ok:     true,
@@ -359,18 +359,18 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  nil,
 			}, nil)
 
-		err := mb.Bot.performRequest(methodName, params, &result)
+		err := m.Bot.performRequest(methodName, params, &result)
 		assert.NoError(t, err)
 		assert.Equal(t, 1, result)
 	})
 
 	t.Run("error_not_ok", func(t *testing.T) {
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(&api.RequestData{}, nil).
 			Times(1)
 
-		mb.MockAPICaller.EXPECT().
+		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(&api.Response{
 				Ok:     false,
@@ -378,17 +378,17 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  &api.Error{},
 			}, nil)
 
-		err := mb.Bot.performRequest(methodName, params, &result)
+		err := m.Bot.performRequest(methodName, params, &result)
 		assert.Error(t, err)
 	})
 
 	t.Run("error_construct_and_call", func(t *testing.T) {
-		mb.MockRequestConstructor.EXPECT().
+		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest).
 			Times(1)
 
-		err := mb.Bot.performRequest(methodName, params, &result)
+		err := m.Bot.performRequest(methodName, params, &result)
 		assert.Error(t, err)
 	})
 }

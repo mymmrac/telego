@@ -46,7 +46,13 @@ func main() {
 	methodPatternReg := regexp.MustCompile(generator.RemoveNewline(methodPattern))
 	paramsPatternReg := regexp.MustCompile(generator.RemoveNewline(paramsPattern))
 
-	file, err := os.Create("methods.go.generated")
+	methodsFile, err := os.Create("methods.go.generated")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	testsFile, err := os.Create("methods_test.go.generated")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -63,9 +69,11 @@ func main() {
 
 	fmt.Println("Method count:", len(allMethods))
 
-	data := strings.Builder{}
+	methodsData := strings.Builder{}
+	testsData := strings.Builder{}
 
-	_, _ = data.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
+	_, _ = methodsData.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
+	_, _ = testsData.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
 
 	for _, currentMethod := range allMethods {
 		methodName := currentMethod[1]
@@ -111,7 +119,7 @@ func main() {
 		paramsOrNil := "nil"
 
 		if len(allParams) != 0 {
-			_, _ = data.WriteString(fmt.Sprintf("// %s - Represents parameters of %s method.\ntype %s struct {\n",
+			_, _ = methodsData.WriteString(fmt.Sprintf("// %s - Represents parameters of %s method.\ntype %s struct {\n",
 				paramsStructName, methodName, paramsStructName))
 
 			for _, currentParam := range allParams {
@@ -133,11 +141,11 @@ func main() {
 
 				fieldType := generator.ConvertType(generator.RemoveTags(currentParam[2]), isOptional)
 
-				_, _ = data.WriteString(fmt.Sprintf("\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
+				_, _ = methodsData.WriteString(fmt.Sprintf("\t%s\n\t%s %s `json:\"%s%s\"`\n\n",
 					fieldDescription, fieldName, fieldType, paramName, omitempty))
 			}
 
-			_, _ = data.WriteString("}\n")
+			_, _ = methodsData.WriteString("}\n")
 
 			params = fmt.Sprintf("params *%s", paramsStructName)
 			paramsOrNil = "params"
@@ -165,7 +173,53 @@ func main() {
 			returnVarName = "&" + returnVarName
 		}
 
-		_, _ = data.WriteString(fmt.Sprintf(`
+		expectedData := ""
+		expectedAssert := ""
+		expectedAssertNil := ""
+		actualReturnVar := ""
+		if returnVarName != "nil" {
+			actualReturnVar = returnVarName[1:] + ", "
+			expectedVarName := "expected" + strings.ToUpper(returnVarName[1:2]) + returnVarName[2:]
+			expectedData = "\n\t\t" + expectedVarName + " := " + strings.Replace(returnType, "*", "&", 1) + "{}\n\t\tsetResult(t, " + expectedVarName + ")"
+			expectedAssert = fmt.Sprintf("\n\t\tassert.Equal(t, %s, %s)", expectedVarName, returnVarName[1:])
+			expectedAssertNil = fmt.Sprintf("\n\t\tassert.Nil(t, %s)", returnVarName[1:])
+		}
+
+		args := "nil"
+		if paramsOrNil == "nil" {
+			args = ""
+		}
+
+		_, _ = testsData.WriteString(fmt.Sprintf(`
+func TestBot_%s(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+		%s
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		%serr := m.Bot.%s(%s)
+		assert.NoError(t, err)%s
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		%serr := m.Bot.%s(%s)
+		assert.Error(t, err)%s
+	})
+}
+`, funcName, expectedData, actualReturnVar, funcName, args, expectedAssert, actualReturnVar, funcName, args, expectedAssertNil))
+
+		_, _ = methodsData.WriteString(fmt.Sprintf(`
 %s
 func (b *Bot) %s(%s) %s {%s
 	err := b.performRequest("%s", %s, %s)
@@ -181,9 +235,13 @@ func (b *Bot) %s(%s) %s {%s
 			returnNil, methodName, returnEnd))
 	}
 
-	dataString := data.String()
+	dataString := methodsData.String()
 	dataString = generator.UppercaseWords(dataString)
-	_, _ = file.WriteString(dataString)
+	_, _ = methodsFile.WriteString(dataString)
+
+	testDataString := testsData.String()
+	testDataString = generator.UppercaseWords(testDataString)
+	_, _ = testsFile.WriteString(testDataString)
 
 	fmt.Println("Return values:", returnValuesCount)
 }

@@ -139,6 +139,9 @@ func FitLine(text string, maxLineLength int) []string {
 
 func UppercaseWords(text string) string {
 	text = strings.ReplaceAll(text, "Id ", "ID ")
+	text = strings.ReplaceAll(text, "Id)", "ID)")
+	text = strings.ReplaceAll(text, "Id,", "ID,")
+	text = strings.ReplaceAll(text, "Id{", "ID{")
 	text = strings.ReplaceAll(text, " id ", " ID ")
 
 	text = strings.ReplaceAll(text, "Url ", "URL ")

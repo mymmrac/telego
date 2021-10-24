@@ -157,7 +157,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 
 // filesParameters gets all files from parameters
 func filesParameters(parameters interface{}) (files map[string]api.NamedReader, hasFiles bool) {
-	if parametersWithFiles, ok := parameters.(fileCompatible); ok {
+	if parametersWithFiles, ok := parameters.(fileCompatible); ok && !isNil(parameters) {
 		files = parametersWithFiles.fileParameters()
 		for _, file := range files {
 			if !isNil(file) {
