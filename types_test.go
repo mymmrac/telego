@@ -476,9 +476,7 @@ func TestInputFile_MarshalJSON(t *testing.T) {
 
 func TestInputMedia_fileParameters(t *testing.T) {
 	im := &InputMediaPhoto{
-		Media: InputFile{
-			File: testNamedReade{},
-		},
+		Media: testInputFile,
 	}
 
 	assert.Equal(t, map[string]api.NamedReader{
@@ -489,12 +487,8 @@ func TestInputMedia_fileParameters(t *testing.T) {
 
 func TestInputMediaVideo_fileParameters(t *testing.T) {
 	im := &InputMediaVideo{
-		Media: InputFile{
-			File: testNamedReade{},
-		},
-		Thumb: &InputFile{
-			File: testNamedReade{},
-		},
+		Media: testInputFile,
+		Thumb: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]api.NamedReader{
@@ -506,12 +500,8 @@ func TestInputMediaVideo_fileParameters(t *testing.T) {
 
 func TestInputMediaAnimation_fileParameters(t *testing.T) {
 	im := &InputMediaAnimation{
-		Media: InputFile{
-			File: testNamedReade{},
-		},
-		Thumb: &InputFile{
-			File: testNamedReade{},
-		},
+		Media: testInputFile,
+		Thumb: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]api.NamedReader{
@@ -523,12 +513,8 @@ func TestInputMediaAnimation_fileParameters(t *testing.T) {
 
 func TestInputMediaAudio_fileParameters(t *testing.T) {
 	im := &InputMediaAudio{
-		Media: InputFile{
-			File: testNamedReade{},
-		},
-		Thumb: &InputFile{
-			File: testNamedReade{},
-		},
+		Media: testInputFile,
+		Thumb: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]api.NamedReader{
@@ -540,12 +526,8 @@ func TestInputMediaAudio_fileParameters(t *testing.T) {
 
 func TestInputMediaDocument_fileParameters(t *testing.T) {
 	im := &InputMediaDocument{
-		Media: InputFile{
-			File: testNamedReade{},
-		},
-		Thumb: &InputFile{
-			File: testNamedReade{},
-		},
+		Media: testInputFile,
+		Thumb: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]api.NamedReader{

@@ -2325,3 +2325,189 @@ func TestBot_GetGameHighScores(t *testing.T) {
 		assert.Nil(t, gameHighScores)
 	})
 }
+
+func TestSetWebhookParams_fileParameters(t *testing.T) {
+	p := &SetWebhookParams{
+		Certificate: &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"certificate": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendPhotoParams_fileParameters(t *testing.T) {
+	p := &SendPhotoParams{
+		Photo: testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"photo": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendAudioParams_fileParameters(t *testing.T) {
+	p := &SendAudioParams{
+		Audio: testInputFile,
+		Thumb: &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"audio": testNamedReade{},
+		"thumb": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendDocumentParams_fileParameters(t *testing.T) {
+	p := &SendDocumentParams{
+		Document: testInputFile,
+		Thumb:    &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"document": testNamedReade{},
+		"thumb":    testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendVideoParams_fileParameters(t *testing.T) {
+	p := &SendVideoParams{
+		Video: testInputFile,
+		Thumb: &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"video": testNamedReade{},
+		"thumb": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendAnimationParams_fileParameters(t *testing.T) {
+	p := &SendAnimationParams{
+		Animation: testInputFile,
+		Thumb:     &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"animation": testNamedReade{},
+		"thumb":     testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendVoiceParams_fileParameters(t *testing.T) {
+	p := &SendVoiceParams{
+		Voice: testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"voice": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendVideoNoteParams_fileParameters(t *testing.T) {
+	p := &SendVideoNoteParams{
+		VideoNote: testInputFile,
+		Thumb:     &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"video_note": testNamedReade{},
+		"thumb":      testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendMediaGroupParams_fileParameters(t *testing.T) {
+	p := &SendMediaGroupParams{
+		Media: []InputMedia{
+			&InputMediaDocument{
+				Media: testInputFile,
+				Thumb: &testInputFile,
+			},
+			&InputMediaVideo{
+				Media: testInputFile,
+				Thumb: &InputFile{File: nil},
+			},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"test": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSetChatPhotoParams_fileParameters(t *testing.T) {
+	p := &SetChatPhotoParams{
+		Photo: testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"photo": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestEditMessageMediaParams_fileParameters(t *testing.T) {
+	p := &EditMessageMediaParams{
+		Media: &InputMediaVideo{
+			Media: testInputFile,
+			Thumb: &InputFile{File: nil},
+		},
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"test": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSendStickerParams_fileParameters(t *testing.T) {
+	p := &SendStickerParams{
+		Sticker: testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"sticker": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestUploadStickerFileParams_fileParameters(t *testing.T) {
+	p := &UploadStickerFileParams{
+		PngSticker: testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"png_sticker": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestCreateNewStickerSetParams_fileParameters(t *testing.T) {
+	p := &CreateNewStickerSetParams{
+		PngSticker: &testInputFile,
+		TgsSticker: &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"png_sticker": testNamedReade{},
+		"tgs_sticker": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestAddStickerToSetParams_fileParameters(t *testing.T) {
+	p := &AddStickerToSetParams{
+		PngSticker: &testInputFile,
+		TgsSticker: &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"png_sticker": testNamedReade{},
+		"tgs_sticker": testNamedReade{},
+	}, p.fileParameters())
+}
+
+func TestSetStickerSetThumbParams_fileParameters(t *testing.T) {
+	p := &SetStickerSetThumbParams{
+		Thumb: &testInputFile,
+	}
+
+	assert.Equal(t, map[string]api.NamedReader{
+		"thumb": testNamedReade{},
+	}, p.fileParameters())
+}

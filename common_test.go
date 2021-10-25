@@ -37,3 +37,7 @@ func (t testNamedReade) Read(p []byte) (n int, err error) {
 func (t testNamedReade) Name() string {
 	return "test"
 }
+
+var testInputFile = InputFile{
+	File: testNamedReade{},
+}
