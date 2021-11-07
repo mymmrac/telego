@@ -147,7 +147,7 @@ func (b *Bot) GetWebhookInfo() (*WebhookInfo, error) {
 	return webhookInfo, nil
 }
 
-// GetMe - A simple method for testing your bot's auth token. Requires no parameters. Returns basic
+// GetMe - A simple method for testing your bot's authentication token. Requires no parameters. Returns basic
 // information about the bot in form of a User (https://core.telegram.org/bots/api#user) object.
 func (b *Bot) GetMe() (*User, error) {
 	var user *User
@@ -198,8 +198,8 @@ type SendMessageParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// Entities - Optional. List of special entities that appear in message text, which can be specified instead
-	// of parse_mode
+	// Entities - Optional. A JSON-serialized list of special entities that appear in message text, which can be
+	// specified instead of parse_mode
 	Entities []MessageEntity `json:"entities,omitempty"`
 
 	// DisableWebPagePreview - Optional. Disables link previews for links in this message
@@ -293,8 +293,8 @@ type CopyMessageParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the new caption, which can be
-	// specified instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the new caption,
+	// which can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -351,8 +351,8 @@ type SendPhotoParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -410,8 +410,8 @@ type SendAudioParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Duration - Optional. Duration of the audio in seconds
@@ -502,8 +502,8 @@ type SendDocumentParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// DisableContentTypeDetection - Optional. Disables automatic server-side content type detection for files
@@ -589,8 +589,8 @@ type SendVideoParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// SupportsStreaming - Optional. Pass True, if the uploaded video is suitable for streaming
@@ -676,8 +676,8 @@ type SendAnimationParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -740,8 +740,8 @@ type SendVoiceParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// Duration - Optional. Duration of the voice message in seconds
@@ -1187,8 +1187,8 @@ type SendPollParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ExplanationParseMode string `json:"explanation_parse_mode,omitempty"`
 
-	// ExplanationEntities - Optional. List of special entities that appear in the poll explanation, which can be
-	// specified instead of parse_mode
+	// ExplanationEntities - Optional. A JSON-serialized list of special entities that appear in the poll
+	// explanation, which can be specified instead of parse_mode
 	ExplanationEntities []MessageEntity `json:"explanation_entities,omitempty"`
 
 	// OpenPeriod - Optional. Amount of time in seconds the poll will be active after creation, 5-600. Can't be
@@ -1291,16 +1291,32 @@ type SendChatActionParams struct {
 	// @channelusername)
 	ChatID ChatID `json:"chat_id"`
 
-	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
-	// for text messages (https://core.telegram.org/bots/api#sendmessage), upload_photo for photos
-	// (https://core.telegram.org/bots/api#sendphoto), record_video or upload_video for videos
-	// (https://core.telegram.org/bots/api#sendvideo), record_voice or upload_voice for voice notes
-	// (https://core.telegram.org/bots/api#sendvoice), upload_document for general files
-	// (https://core.telegram.org/bots/api#senddocument), find_location for location data
-	// (https://core.telegram.org/bots/api#sendlocation), record_video_note or upload_video_note for video notes
-	// (https://core.telegram.org/bots/api#sendvideonote).
+	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive:
+	// typing for text messages (https://core.telegram.org/bots/api#sendmessage),
+	// upload_photo for photos (https://core.telegram.org/bots/api#sendphoto),
+	// record_video or upload_video for videos (https://core.telegram.org/bots/api#sendvideo),
+	// record_voice or upload_voice for voice notes (https://core.telegram.org/bots/api#sendvoice),
+	// upload_document for general files (https://core.telegram.org/bots/api#senddocument),
+	// choose_sticker for stickers (https://core.telegram.org/bots/api#sendsticker),
+	// find_location for location data (https://core.telegram.org/bots/api#sendlocation),
+	// record_video_note or upload_video_note for video notes (https://core.telegram.org/bots/api#sendvideonote).
 	Action string `json:"action"`
 }
+
+// Chat actions
+const (
+	ChatActionTyping          = "typing"
+	ChatActionUploadPhoto     = "upload_photo"
+	ChatActionRecordVideo     = "record_video"
+	ChatActionUploadVideo     = "upload_video"
+	ChatActionRecordVoice     = "record_voice"
+	ChatActionUploadVoice     = "upload_voice"
+	ChatActionUploadDocument  = "upload_document"
+	ChatActionChooseSticker   = "choose_sticker"
+	ChatActionFindLocation    = "find_location"
+	ChatActionRecordVideoNote = "record_video_note"
+	ChatActionUploadVideoNote = "upload_video_note"
+)
 
 // SendChatAction - Use this method when you need to tell the user that something is happening on the bot's
 // side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear
@@ -1386,8 +1402,8 @@ type BanChatMemberParams struct {
 // BanChatMember - Use this method to ban a user in a group, a supergroup or a channel. In the case of
 // supergroups and channels, the user will not be able to return to the chat on their own using invite links,
 // etc., unless unbanned (https://core.telegram.org/bots/api#unbanchatmember) first. The bot must be an
-// administrator in the chat for this to work and must have the appropriate admin rights. Returns True on
-// success.
+// administrator in the chat for this to work and must have the appropriate administrator rights. Returns True
+// on success.
 func (b *Bot) BanChatMember(params *BanChatMemberParams) error {
 	err := b.performRequest("banChatMember", params, nil)
 	if err != nil {
@@ -1443,8 +1459,8 @@ type RestrictChatMemberParams struct {
 }
 
 // RestrictChatMember - Use this method to restrict a user in a supergroup. The bot must be an administrator
-// in the supergroup for this to work and must have the appropriate admin rights. Pass True for all permissions
-// to lift restrictions from a user. Returns True on success.
+// in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all
+// permissions to lift restrictions from a user. Returns True on success.
 func (b *Bot) RestrictChatMember(params *RestrictChatMemberParams) error {
 	err := b.performRequest("restrictChatMember", params, nil)
 	if err != nil {
@@ -1503,8 +1519,8 @@ type PromoteChatMemberParams struct {
 }
 
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
-// be an administrator in the chat for this to work and must have the appropriate admin rights. Pass False for
-// all boolean parameters to demote a user. Returns True on success.
+// be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass
+// False for all boolean parameters to demote a user. Returns True on success.
 func (b *Bot) PromoteChatMember(params *PromoteChatMemberParams) error {
 	err := b.performRequest("promoteChatMember", params, nil)
 	if err != nil {
@@ -1544,13 +1560,13 @@ type SetChatPermissionsParams struct {
 	// @supergroupusername)
 	ChatID ChatID `json:"chat_id"`
 
-	// Permissions - New default chat permissions
+	// Permissions - A JSON-serialized object for new default chat permissions
 	Permissions ChatPermissions `json:"permissions"`
 }
 
 // SetChatPermissions - Use this method to set default chat permissions for all members. The bot must be an
-// administrator in the group or a supergroup for this to work and must have the can_restrict_members admin
-// rights. Returns True on success.
+// administrator in the group or a supergroup for this to work and must have the can_restrict_members
+// administrator rights. Returns True on success.
 func (b *Bot) SetChatPermissions(params *SetChatPermissionsParams) error {
 	err := b.performRequest("setChatPermissions", params, nil)
 	if err != nil {
@@ -1569,7 +1585,7 @@ type ExportChatInviteLinkParams struct {
 
 // ExportChatInviteLink - Use this method to generate a new primary invite link for a chat; any previously
 // generated primary link is revoked. The bot must be an administrator in the chat for this to work and must
-// have the appropriate admin rights. Returns the new invite link as String on success.
+// have the appropriate administrator rights. Returns the new invite link as String on success.
 //
 // Note: Each administrator in a chat generates their own invite links. Bots can't use invite links generated by other
 // administrators. If you want your bot to work with invite links, it will need to generate its own link using
@@ -1591,17 +1607,24 @@ type CreateChatInviteLinkParams struct {
 	// @channelusername)
 	ChatID ChatID `json:"chat_id"`
 
+	// Name - Optional. Invite link name; 0-32 characters
+	Name string `json:"name,omitempty"`
+
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire
 	ExpireDate int `json:"expire_date,omitempty"`
 
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
 	MemberLimit int `json:"member_limit,omitempty"`
+
+	// CreatesJoinRequest - Optional. True, if users joining the chat via the link need to be approved by chat
+	// administrators. If True, member_limit can't be specified
+	CreatesJoinRequest bool `json:"creates_join_request,omitempty"`
 }
 
 // CreateChatInviteLink - Use this method to create an additional invite link for a chat. The bot must be an
-// administrator in the chat for this to work and must have the appropriate admin rights. The link can be
-// revoked using the method revokeChatInviteLink (https://core.telegram.org/bots/api#revokechatinvitelink).
+// administrator in the chat for this to work and must have the appropriate administrator rights. The link can
+// be revoked using the method revokeChatInviteLink (https://core.telegram.org/bots/api#revokechatinvitelink).
 // Returns the new invite link as ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
 func (b *Bot) CreateChatInviteLink(params *CreateChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
@@ -1622,17 +1645,24 @@ type EditChatInviteLinkParams struct {
 	// InviteLink - The invite link to edit
 	InviteLink string `json:"invite_link"`
 
+	// Name - Optional. Invite link name; 0-32 characters
+	Name string `json:"name,omitempty"`
+
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire
 	ExpireDate int `json:"expire_date,omitempty"`
 
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
 	MemberLimit int `json:"member_limit,omitempty"`
+
+	// CreatesJoinRequest - Optional. True, if users joining the chat via the link need to be approved by chat
+	// administrators. If True, member_limit can't be specified
+	CreatesJoinRequest bool `json:"creates_join_request,omitempty"`
 }
 
 // EditChatInviteLink - Use this method to edit a non-primary invite link created by the bot. The bot must be
-// an administrator in the chat for this to work and must have the appropriate admin rights. Returns the edited
-// invite link as a ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
+// an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the
+// edited invite link as a ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
 func (b *Bot) EditChatInviteLink(params *EditChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("editChatInviteLink", params, &chatInviteLink)
@@ -1655,7 +1685,7 @@ type RevokeChatInviteLinkParams struct {
 
 // RevokeChatInviteLink - Use this method to revoke an invite link created by the bot. If the primary link is
 // revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work
-// and must have the appropriate admin rights. Returns the revoked invite link as ChatInviteLink
+// and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink
 // (https://core.telegram.org/bots/api#chatinvitelink) object.
 func (b *Bot) RevokeChatInviteLink(params *RevokeChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
@@ -1665,6 +1695,48 @@ func (b *Bot) RevokeChatInviteLink(params *RevokeChatInviteLinkParams) (*ChatInv
 	}
 
 	return chatInviteLink, nil
+}
+
+// ApproveChatJoinRequestParams - Represents parameters of approveChatJoinRequest method.
+type ApproveChatJoinRequestParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channelusername)
+	ChatID ChatID `json:"chat_id"`
+
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+}
+
+// ApproveChatJoinRequest - Use this method to approve a chat join request. The bot must be an administrator
+// in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
+func (b *Bot) ApproveChatJoinRequest(params *ApproveChatJoinRequestParams) error {
+	err := b.performRequest("approveChatJoinRequest", params, nil)
+	if err != nil {
+		return fmt.Errorf("approveChatJoinRequest(): %w", err)
+	}
+
+	return nil
+}
+
+// DeclineChatJoinRequestParams - Represents parameters of declineChatJoinRequest method.
+type DeclineChatJoinRequestParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channelusername)
+	ChatID ChatID `json:"chat_id"`
+
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+}
+
+// DeclineChatJoinRequest - Use this method to decline a chat join request. The bot must be an administrator
+// in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
+func (b *Bot) DeclineChatJoinRequest(params *DeclineChatJoinRequestParams) error {
+	err := b.performRequest("declineChatJoinRequest", params, nil)
+	if err != nil {
+		return fmt.Errorf("declineChatJoinRequest(): %w", err)
+	}
+
+	return nil
 }
 
 // SetChatPhotoParams - Represents parameters of setChatPhoto method.
@@ -1685,7 +1757,7 @@ func (p *SetChatPhotoParams) fileParameters() map[string]api.NamedReader {
 
 // SetChatPhoto - Use this method to set a new profile photo for the chat. Photos can't be changed for
 // private chats. The bot must be an administrator in the chat for this to work and must have the appropriate
-// admin rights. Returns True on success.
+// administrator rights. Returns True on success.
 func (b *Bot) SetChatPhoto(params *SetChatPhotoParams) error {
 	err := b.performRequest("setChatPhoto", params, nil)
 	if err != nil {
@@ -1703,8 +1775,8 @@ type DeleteChatPhotoParams struct {
 }
 
 // DeleteChatPhoto - Use this method to delete a chat photo. Photos can't be changed for private chats. The
-// bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns
-// True on success.
+// bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
+// Returns True on success.
 func (b *Bot) DeleteChatPhoto(params *DeleteChatPhotoParams) error {
 	err := b.performRequest("deleteChatPhoto", params, nil)
 	if err != nil {
@@ -1725,8 +1797,8 @@ type SetChatTitleParams struct {
 }
 
 // SetChatTitle - Use this method to change the title of a chat. Titles can't be changed for private chats.
-// The bot must be an administrator in the chat for this to work and must have the appropriate admin rights.
-// Returns True on success.
+// The bot must be an administrator in the chat for this to work and must have the appropriate administrator
+// rights. Returns True on success.
 func (b *Bot) SetChatTitle(params *SetChatTitleParams) error {
 	err := b.performRequest("setChatTitle", params, nil)
 	if err != nil {
@@ -1747,8 +1819,8 @@ type SetChatDescriptionParams struct {
 }
 
 // SetChatDescription - Use this method to change the description of a group, a supergroup or a channel. The
-// bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns
-// True on success.
+// bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
+// Returns True on success.
 func (b *Bot) SetChatDescription(params *SetChatDescriptionParams) error {
 	err := b.performRequest("setChatDescription", params, nil)
 	if err != nil {
@@ -1774,8 +1846,8 @@ type PinChatMessageParams struct {
 
 // PinChatMessage - Use this method to add a message to the list of pinned messages in a chat. If the chat is
 // not a private chat, the bot must be an administrator in the chat for this to work and must have the
-// 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True
-// on success.
+// 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
+// channel. Returns True on success.
 func (b *Bot) PinChatMessage(params *PinChatMessageParams) error {
 	err := b.performRequest("pinChatMessage", params, nil)
 	if err != nil {
@@ -1798,8 +1870,8 @@ type UnpinChatMessageParams struct {
 
 // UnpinChatMessage - Use this method to remove a message from the list of pinned messages in a chat. If the
 // chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the
-// 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True
-// on success.
+// 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
+// channel. Returns True on success.
 func (b *Bot) UnpinChatMessage(params *UnpinChatMessageParams) error {
 	err := b.performRequest("unpinChatMessage", params, nil)
 	if err != nil {
@@ -1818,8 +1890,8 @@ type UnpinAllChatMessagesParams struct {
 
 // UnpinAllChatMessages - Use this method to clear the list of pinned messages in a chat. If the chat is not
 // a private chat, the bot must be an administrator in the chat for this to work and must have the
-// 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True
-// on success.
+// 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
+// channel. Returns True on success.
 func (b *Bot) UnpinAllChatMessages(params *UnpinAllChatMessagesParams) error {
 	err := b.performRequest("unpinAllChatMessages", params, nil)
 	if err != nil {
@@ -1942,7 +2014,7 @@ type SetChatStickerSetParams struct {
 }
 
 // SetChatStickerSet - Use this method to set a new group sticker set for a supergroup. The bot must be an
-// administrator in the chat for this to work and must have the appropriate admin rights. Use the field
+// administrator in the chat for this to work and must have the appropriate administrator rights. Use the field
 // can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
 // check if the bot can use this method. Returns True on success.
 func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
@@ -1962,7 +2034,7 @@ type DeleteChatStickerSetParams struct {
 }
 
 // DeleteChatStickerSet - Use this method to delete a group sticker set from a supergroup. The bot must be an
-// administrator in the chat for this to work and must have the appropriate admin rights. Use the field
+// administrator in the chat for this to work and must have the appropriate administrator rights. Use the field
 // can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
 // check if the bot can use this method. Returns True on success.
 func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
@@ -1983,7 +2055,7 @@ type AnswerCallbackQueryParams struct {
 	// characters
 	Text string `json:"text,omitempty"`
 
-	// ShowAlert - Optional. If true, an alert will be shown by the client instead of a notification at the top
+	// ShowAlert - Optional. If True, an alert will be shown by the client instead of a notification at the top
 	// of the chat screen. Defaults to false.
 	ShowAlert bool `json:"show_alert,omitempty"`
 
@@ -2105,8 +2177,8 @@ type EditMessageTextParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// Entities - Optional. List of special entities that appear in message text, which can be specified instead
-	// of parse_mode
+	// Entities - Optional. A JSON-serialized list of special entities that appear in message text, which can be
+	// specified instead of parse_mode
 	Entities []MessageEntity `json:"entities,omitempty"`
 
 	// DisableWebPagePreview - Optional. Disables link previews for links in this message
@@ -2150,8 +2222,8 @@ type EditMessageCaptionParams struct {
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
 	ParseMode string `json:"parse_mode,omitempty"`
 
-	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
-	// instead of parse_mode
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
@@ -2623,7 +2695,7 @@ type AnswerInlineQueryParams struct {
 	// their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube
 	// account' button above the results, or even before showing any. The user presses the button, switches to a
 	// private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an
-	// oauth link. Once done, the bot can offer a switch_inline
+	// OAuth link. Once done, the bot can offer a switch_inline
 	// (https://core.telegram.org/bots/api#inlinekeyboardmarkup) button so that the user can easily return to the
 	// chat where they wanted to use the bot's inline capabilities.
 	SwitchPmParameter string `json:"switch_pm_parameter,omitempty"`
