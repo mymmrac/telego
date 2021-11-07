@@ -63,6 +63,10 @@ type Update struct {
 	// the chat and must explicitly specify “chat_member” in the list of allowed_updates to receive these
 	// updates.
 	ChatMember *ChatMemberUpdated `json:"chat_member,omitempty"`
+
+	// ChatJoinRequest - Optional. A request to join the chat has been sent. The bot must have the
+	// can_invite_users administrator right in the chat to receive these updates.
+	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
 }
 
 // WebhookInfo - Contains information about the current status of a webhook.
@@ -179,7 +183,7 @@ type Chat struct {
 	Permissions *ChatPermissions `json:"permissions,omitempty"`
 
 	// SlowModeDelay - Optional. For supergroups, the minimum allowed delay between consecutive messages sent by
-	// each unpriviledged user. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// each unpriviledged user; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	SlowModeDelay int `json:"slow_mode_delay,omitempty"`
 
 	// MessageAutoDeleteTime - Optional. The time after which all messages sent to the chat will be
@@ -468,7 +472,7 @@ type PhotoSize struct {
 	// Height - Photo height
 	Height int `json:"height"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -499,7 +503,7 @@ type Animation struct {
 	// MimeType - Optional. MIME type of the file as defined by sender
 	MimeType string `json:"mime_type,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -527,7 +531,7 @@ type Audio struct {
 	// MimeType - Optional. MIME type of the file as defined by sender
 	MimeType string `json:"mime_type,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 
 	// Thumb - Optional. Thumbnail of the album cover to which the music file belongs
@@ -554,7 +558,7 @@ type Document struct {
 	// MimeType - Optional. MIME type of the file as defined by sender
 	MimeType string `json:"mime_type,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -585,7 +589,7 @@ type Video struct {
 	// MimeType - Optional. Mime type of a file as defined by sender
 	MimeType string `json:"mime_type,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -609,7 +613,7 @@ type VideoNote struct {
 	// Thumb - Optional. Video thumbnail
 	Thumb *PhotoSize `json:"thumb,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -628,7 +632,7 @@ type Voice struct {
 	// MimeType - Optional. MIME type of the file as defined by sender
 	MimeType string `json:"mime_type,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -748,7 +752,7 @@ type Location struct {
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
 
 	// LivePeriod - Optional. Time relative to the message sending date, during which the location can be
-	// updated, in seconds. For active live locations only.
+	// updated; in seconds. For active live locations only.
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// Heading - Optional. The direction in which user is moving, in degrees; 1-360. For active live locations
@@ -802,7 +806,7 @@ type ProximityAlertTriggered struct {
 // MessageAutoDeleteTimerChanged - This object represents a service message about a change in auto-delete
 // timer settings.
 type MessageAutoDeleteTimerChanged struct {
-	// MessageAutoDeleteTime - New auto-delete time for messages in the chat
+	// MessageAutoDeleteTime - New auto-delete time for messages in the chat; in seconds
 	MessageAutoDeleteTime int `json:"message_auto_delete_time"`
 }
 
@@ -819,7 +823,7 @@ type VoiceChatStarted struct{}
 
 // VoiceChatEnded - This object represents a service message about a voice chat ended in the chat.
 type VoiceChatEnded struct {
-	// Duration - Voice chat duration; in seconds
+	// Duration - Voice chat duration in seconds
 	Duration int `json:"duration"`
 }
 
@@ -851,7 +855,7 @@ type File struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// FileSize - Optional. File size, if known
+	// FileSize - Optional. File size in bytes, if known
 	FileSize int `json:"file_size,omitempty"`
 
 	// FilePath - Optional. File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
@@ -1138,11 +1142,18 @@ type ChatInviteLink struct {
 	// Creator - Creator of the link
 	Creator User `json:"creator"`
 
+	// CreatesJoinRequest - True, if users joining the chat via the link need to be approved by chat
+	// administrators
+	CreatesJoinRequest bool `json:"creates_join_request"`
+
 	// IsPrimary - True, if the link is primary
 	IsPrimary bool `json:"is_primary"`
 
 	// IsRevoked - True, if the link is revoked
 	IsRevoked bool `json:"is_revoked"`
+
+	// Name - Optional. Invite link name
+	Name string `json:"name,omitempty"`
 
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire or has been expired
 	ExpireDate int64 `json:"expire_date,omitempty"`
@@ -1150,6 +1161,9 @@ type ChatInviteLink struct {
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
 	MemberLimit int `json:"member_limit,omitempty"`
+
+	// PendingJoinRequestCount - Optional. Number of pending join requests created using this link
+	PendingJoinRequestCount int `json:"pending_join_request_count,omitempty"`
 }
 
 // ChatMember - This object contains information about one member of a chat. Currently, the following 6 types
@@ -1474,6 +1488,24 @@ func (c *ChatMemberUpdated) UnmarshalJSON(bytes []byte) error {
 	c.InviteLink = chatMemberUpdatedData.InviteLink
 
 	return nil
+}
+
+// ChatJoinRequest - Represents a join request sent to a chat.
+type ChatJoinRequest struct {
+	// Chat - Chat to which the request was sent
+	Chat Chat `json:"chat"`
+
+	// From - User that sent the join request
+	From User `json:"from"`
+
+	// Date - Date the request was sent in Unix time
+	Date int `json:"date"`
+
+	// Bio - Optional. Bio of the user.
+	Bio string `json:"bio,omitempty"`
+
+	// InviteLink - Optional. Chat invite link that was used by the user to send the join request
+	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
 }
 
 // ChatPermissions - Describes actions that a non-administrator user is allowed to take in a chat.
@@ -1804,7 +1836,7 @@ type InputMediaVideo struct {
 	// Height - Optional. Video height
 	Height int `json:"height,omitempty"`
 
-	// Duration - Optional. Video duration
+	// Duration - Optional. Video duration in seconds
 	Duration int `json:"duration,omitempty"`
 
 	// SupportsStreaming - Optional. Pass True, if the uploaded video is suitable for streaming
@@ -1866,7 +1898,7 @@ type InputMediaAnimation struct {
 	// Height - Optional. Animation height
 	Height int `json:"height,omitempty"`
 
-	// Duration - Optional. Animation duration
+	// Duration - Optional. Animation duration in seconds
 	Duration int `json:"duration,omitempty"`
 }
 
@@ -1977,7 +2009,7 @@ type InputMediaDocument struct {
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// DisableContentTypeDetection - Optional. Disables automatic server-side content type detection for files
-	// uploaded using multipart/form-data. Always true, if the document is sent as part of an album.
+	// uploaded using multipart/form-data. Always True, if the document is sent as part of an album.
 	DisableContentTypeDetection bool `json:"disable_content_type_detection,omitempty"`
 }
 
@@ -2029,7 +2061,7 @@ type Sticker struct {
 	// MaskPosition - Optional. For mask stickers, the position where the mask should be placed
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
 
-	// FileSize - Optional. File size
+	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
 
@@ -2193,7 +2225,7 @@ type InlineQueryResultPhoto struct {
 	// ID - Unique identifier for this result, 1-64 bytes
 	ID string `json:"id"`
 
-	// PhotoURL - A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
+	// PhotoURL - A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB
 	PhotoURL string `json:"photo_url"`
 
 	// ThumbURL - URL of the thumbnail for the photo
@@ -2254,7 +2286,7 @@ type InlineQueryResultGif struct {
 	// GifHeight - Optional. Height of the GIF
 	GifHeight int `json:"gif_height,omitempty"`
 
-	// GifDuration - Optional. Duration of the GIF
+	// GifDuration - Optional. Duration of the GIF in seconds
 	GifDuration int `json:"gif_duration,omitempty"`
 
 	// ThumbURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
@@ -2317,7 +2349,7 @@ type InlineQueryResultMpeg4Gif struct {
 	// Mpeg4Height - Optional. Video height
 	Mpeg4Height int `json:"mpeg4_height,omitempty"`
 
-	// Mpeg4Duration - Optional. Video duration
+	// Mpeg4Duration - Optional. Video duration in seconds
 	Mpeg4Duration int `json:"mpeg4_duration,omitempty"`
 
 	// ThumbURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
@@ -2370,7 +2402,7 @@ type InlineQueryResultVideo struct {
 	// MimeType - Mime type of the content of video url, “text/html” or “video/mp4”
 	MimeType string `json:"mime_type"`
 
-	// ThumbURL - URL of the thumbnail (jpeg only) for the video
+	// ThumbURL - URL of the thumbnail (JPEG only) for the video
 	ThumbURL string `json:"thumb_url"`
 
 	// Title - Title for the result
@@ -2541,7 +2573,7 @@ type InlineQueryResultDocument struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbURL - Optional. URL of the thumbnail (jpeg only) for the file
+	// ThumbURL - Optional. URL of the thumbnail (JPEG only) for the file
 	ThumbURL string `json:"thumb_url,omitempty"`
 
 	// ThumbWidth - Optional. Thumbnail width
@@ -3459,7 +3491,7 @@ type PassportFile struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// FileSize - File size
+	// FileSize - File size in bytes
 	FileSize int `json:"file_size"`
 
 	// FileDate - Unix time when the file was uploaded
