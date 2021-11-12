@@ -34,6 +34,10 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	b.stopChannel = make(chan struct{})
 	updatesChan := make(chan Update, updateChanBuffer)
 
+	if params == nil {
+		params = &GetUpdatesParams{}
+	}
+
 	go func() {
 		for {
 			select {
@@ -69,8 +73,9 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 
 // StartListeningForWebhookTLS start server with TLS for listening for webhook
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
+	b.stopChannel = make(chan struct{})
 	go func() {
-		err := fasthttp.ListenAndServeTLS(address, certificateFile, keyFile, b.webhookHandler)
+		err := b.server.ListenAndServeTLS(address, certificateFile, keyFile)
 		if err != nil {
 			b.log.Errorf(listeningForWebhookErrMsg, err)
 		}
@@ -79,8 +84,9 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 
 // StartListeningForWebhookTLSEmbed start server with TLS (embed) for listening for webhook
 func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) {
+	b.stopChannel = make(chan struct{})
 	go func() {
-		err := fasthttp.ListenAndServeTLSEmbed(address, certificateData, keyData, b.webhookHandler)
+		err := b.server.ListenAndServeTLSEmbed(address, certificateData, keyData)
 		if err != nil {
 			b.log.Errorf(listeningForWebhookErrMsg, err)
 		}
@@ -89,20 +95,26 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 
 // StartListeningForWebhook start server for listening for webhook
 func (b *Bot) StartListeningForWebhook(address string) {
-	// TODO: Use graceful shutdown
+	b.stopChannel = make(chan struct{})
 	go func() {
-		err := fasthttp.ListenAndServe(address, b.webhookHandler)
+		err := b.server.ListenAndServe(address)
 		if err != nil {
 			b.log.Errorf(listeningForWebhookErrMsg, err)
 		}
 	}()
 }
 
+// StopListeningForWebhook shutdown webhook server
+func (b *Bot) StopListeningForWebhook() error {
+	close(b.stopChannel)
+	return b.server.Shutdown()
+}
+
 // ListenForWebhook receive updates in chan from webhook
 func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
 
-	b.webhookHandler = func(ctx *fasthttp.RequestCtx) {
+	b.server.Handler = func(ctx *fasthttp.RequestCtx) {
 		if string(ctx.Path()) != path {
 			ctx.SetStatusCode(fasthttp.StatusNotFound)
 			b.log.Errorf("Unknown path was used in webhook: %q", ctx.Path())
@@ -111,7 +123,7 @@ func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 
 		if method := string(ctx.Method()); method != fasthttp.MethodPost {
 			err := fmt.Errorf("used invalid HTTP method: %q, required method: %q", method, fasthttp.MethodPost)
-			respondWithError(ctx, err)
+			b.respondWithError(ctx, err)
 
 			b.log.Errorf("Webhook invalid HTTP method: %q", method)
 			return
@@ -120,7 +132,7 @@ func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 		var update Update
 		err := json.Unmarshal(ctx.PostBody(), &update)
 		if err != nil {
-			respondWithError(ctx, fmt.Errorf("decoding update: %w", err))
+			b.respondWithError(ctx, fmt.Errorf("decoding update: %w", err))
 
 			b.log.Errorf("Webhook decoding error: %v", err)
 			return
@@ -131,14 +143,22 @@ func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 		ctx.SetStatusCode(fasthttp.StatusOK)
 	}
 
+	go func() {
+		<-b.stopChannel
+		close(updatesChan)
+	}()
+
 	return updatesChan, nil
 }
 
-func respondWithError(ctx *fasthttp.RequestCtx, err error) {
+func (b *Bot) respondWithError(ctx *fasthttp.RequestCtx, err error) {
 	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
 
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)
 	ctx.SetContentType(api.ContentTypeJSON)
 
-	_, _ = ctx.Write(errMsg)
+	_, err = ctx.Write(errMsg)
+	if err != nil {
+		b.log.Error("Writing HTTP:", err)
+	}
 }

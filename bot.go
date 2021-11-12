@@ -48,8 +48,8 @@ type Bot struct {
 	constructor    api.RequestConstructor
 	updateInterval time.Duration
 
-	stopChannel    chan struct{}
-	webhookHandler fasthttp.RequestHandler
+	stopChannel chan struct{}
+	server      *fasthttp.Server
 }
 
 // BotOption represents option that can be applied to Bot
@@ -68,6 +68,8 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		api:            api.FasthttpAPICaller{Client: &fasthttp.Client{}},
 		constructor:    api.DefaultConstructor{},
 		updateInterval: defaultUpdateInterval,
+
+		server: &fasthttp.Server{},
 	}
 
 	for _, option := range options {
