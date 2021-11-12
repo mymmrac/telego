@@ -78,7 +78,6 @@ func TestBot_StartListeningForWebhook(t *testing.T) {
 	assert.NotPanics(t, func() {
 		b.StartListeningForWebhook("127.0.0.1:3000")
 		time.Sleep(time.Millisecond * 10)
-		err = b.StopListeningForWebhook()
 		assert.NoError(t, err)
 	})
 
@@ -97,7 +96,6 @@ func TestBot_StartListeningForWebhookTLSEmbed(t *testing.T) {
 	assert.NotPanics(t, func() {
 		b.StartListeningForWebhookTLSEmbed("127.0.0.1:3000", c, k)
 		time.Sleep(time.Millisecond * 10)
-		err = b.StopListeningForWebhook()
 		assert.NoError(t, err)
 	})
 
@@ -113,7 +111,6 @@ func TestBot_StartListeningForWebhookTLS(t *testing.T) {
 	assert.NotPanics(t, func() {
 		b.StartListeningForWebhookTLS("127.0.0.1:3000", "", "")
 		time.Sleep(time.Millisecond * 10)
-		err = b.StopListeningForWebhook()
 		assert.NoError(t, err)
 	})
 }

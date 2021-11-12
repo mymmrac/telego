@@ -73,7 +73,6 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 
 // StartListeningForWebhookTLS start server with TLS for listening for webhook
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
-	b.stopChannel = make(chan struct{})
 	go func() {
 		err := b.server.ListenAndServeTLS(address, certificateFile, keyFile)
 		if err != nil {
@@ -84,7 +83,6 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 
 // StartListeningForWebhookTLSEmbed start server with TLS (embed) for listening for webhook
 func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) {
-	b.stopChannel = make(chan struct{})
 	go func() {
 		err := b.server.ListenAndServeTLSEmbed(address, certificateData, keyData)
 		if err != nil {
@@ -95,7 +93,6 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 
 // StartListeningForWebhook start server for listening for webhook
 func (b *Bot) StartListeningForWebhook(address string) {
-	b.stopChannel = make(chan struct{})
 	go func() {
 		err := b.server.ListenAndServe(address)
 		if err != nil {
@@ -113,6 +110,7 @@ func (b *Bot) StopListeningForWebhook() error {
 // ListenForWebhook receive updates in chan from webhook
 func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
+	b.stopChannel = make(chan struct{})
 
 	b.server.Handler = func(ctx *fasthttp.RequestCtx) {
 		if string(ctx.Path()) != path {
