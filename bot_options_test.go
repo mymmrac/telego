@@ -100,3 +100,11 @@ func TestSetAPIServer(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
+
+func TestSetWebhookServer(t *testing.T) {
+	bot := &Bot{}
+	server := &fasthttp.Server{}
+
+	err := SetWebhookServer(server)(bot)
+	assert.NoError(t, err)
+}

@@ -114,7 +114,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 	filesParams, hasFiles := filesParameters(parameters)
 	var data *api.RequestData
 
-	debugData := ""
+	debug := strings.Builder{}
 
 	if hasFiles {
 		parsedParameters, err := parseParameters(parameters)
@@ -127,15 +127,15 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			return nil, fmt.Errorf("multipart request: %w", err)
 		}
 
-		// TODO: Refactor logging
-		debugI := 0
+		i := 0
 		debugFiles := make([]string, len(filesParams))
 		for k, v := range filesParams {
-			debugFiles[debugI] = fmt.Sprintf("%q: %q", k, v.Name())
-			debugI++
+			debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
+			i++
 		}
 		debugJSON, _ := json.Marshal(parsedParameters)
-		debugData = fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", "))
+
+		debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 	} else {
 		var err error
 		data, err = b.constructor.JSONRequest(parameters)
@@ -143,12 +143,14 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			return nil, fmt.Errorf("json request: %w", err)
 		}
 
-		debugData = data.Buffer.String()
+		debug.WriteString(data.Buffer.String())
 	}
-	debugData = strings.TrimSuffix(debugData, "\n")
 
 	url := b.apiURL + "/bot" + b.token + "/" + methodName
+
+	debugData := strings.TrimSuffix(debug.String(), "\n")
 	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
+
 	resp, err := b.api.Call(url, data)
 	if err != nil {
 		return nil, fmt.Errorf("request call: %w", err)

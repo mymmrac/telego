@@ -99,7 +99,7 @@ type FasthttpAPICaller struct {
 // Call is fasthttp implementation
 func (a FasthttpAPICaller) Call(url string, data *RequestData) (*Response, error) {
 	req := fasthttp.AcquireRequest()
-	defer fasthttp.ReleaseRequest(req) // TODO: Reuse request & response
+	defer fasthttp.ReleaseRequest(req)
 
 	req.SetRequestURI(url)
 	req.Header.SetContentType(data.ContentType)
