@@ -17,7 +17,8 @@
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
 
-The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
+The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
+have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
@@ -83,7 +84,8 @@ func main() {
 	// Get Bot token from environment variables
 	botToken := os.Getenv("TOKEN")
 
-	// Create bot and enable debugging info (more on configuration at /examples/configuration/main.go)
+	// Create bot and enable debugging info
+	// (more on configuration at /examples/configuration/main.go)
 	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
@@ -105,8 +107,8 @@ func main() {
 
 In order to receive updates you can use two methods:
 
-- using long polling (`bot.GetUpdatesChan`)
-- using webhook (`bot.ListenForWebhook`)
+- using long polling (`bot.GetUpdatesViaLongPulling`)
+- using webhook (`bot.GetUpdatesViaWebhook`)
 
 Let's start from long pulling (easier for local testing):
 
@@ -130,15 +132,16 @@ func main() {
 		return
 	}
 
-	// Set interval of getting updates (default: 0.5s)
-	// If you want to get updates as fast as possible set to 0
+	// Optional. Set interval of getting updates (default: 0.5s).
+	// If you want to get updates as fast as possible set to 0,
+	// but webhook method is recommended for this.
 	bot.SetUpdateInterval(time.Second / 2)
 
 	// Get updates channel
-	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+	updates, _ := bot.GetUpdatesViaLongPulling(nil)
 
 	// Stop reviving updates from updates channel
-	defer bot.StopGettingUpdates()
+	defer bot.StopLongPulling()
 
 	// Loop through all updates when they came
 	for update := range updates {
@@ -168,35 +171,31 @@ func main() {
 		return
 	}
 
-	// Set up a webhook
+	// Set up a webhook on Telegram side
 	_ = bot.SetWebhook(&telego.SetWebhookParams{
-		URL:         "https://www.google.com:443/" + bot.Token(),
-		Certificate: &telego.InputFile{File: mustOpen("cert.pem")},
+		URL: "https://example.com/bot" + bot.Token(),
 	})
 
 	// Receive information about webhook
 	info, _ := bot.GetWebhookInfo()
 	fmt.Printf("Webhook Info: %#v\n", info)
 
-	// Start server for receiving requests from telegram
-	bot.StartListeningForWebhookTLS("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
+	// Get updates channel from webhook.
+	// Note: For one bot only one webhook allowed.
+	updates, _ := bot.GetUpdatesViaWebhook("/bot" + bot.Token())
 
-	// Get updates channel from webhook. Note for one bot only one webhook allowed
-	updates, _ := bot.ListenForWebhook("/" + bot.Token())
+	// Start server for receiving requests from Telegram
+	bot.StartListeningForWebhook("localhost:443")
+
+	// Stop reviving updates from updates channel and shutdown webhook server
+	defer func() {
+		_ = bot.StopWebhook()
+	}()
 
 	// Loop through all updates when they came
 	for update := range updates {
 		fmt.Printf("Update: %#v\n", update)
 	}
-}
-
-// Helper function to open file or panic
-func mustOpen(filename string) *os.File {
-	file, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	return file
 }
 ```
 
@@ -224,27 +223,26 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(botToken)
+	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	bot.DefaultLogger(true, true)
-
 	// Call method getMe
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %#v\n", botUser)
 
-	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
-	defer bot.StopGettingUpdates()
+	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	defer bot.StopLongPulling()
 
 	for update := range updates {
 		if update.Message != nil {
 			// Retrieve chat ID
 			chatID := update.Message.Chat.ID
 
-			// Call method sendMessage. Sends message to sender with same text (echo bot)
+			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
+			// Sends message to sender with same text (echo bot).
 			sentMessage, _ := bot.SendMessage(&telego.SendMessageParams{
 				ChatID: telego.ChatID{ID: chatID},
 				Text:   update.Message.Text,
@@ -254,7 +252,6 @@ func main() {
 		}
 	}
 }
-
 ```
 
 ## Contribution
