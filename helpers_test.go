@@ -47,7 +47,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.GetUpdatesChan(nil)
+			_, err := m.Bot.GetUpdatesViaLongPulling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 			m.Bot.StopGettingUpdates()
@@ -63,7 +63,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			Return(nil, errTest).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.GetUpdatesChan(nil)
+			_, err := m.Bot.GetUpdatesViaLongPulling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 			m.Bot.StopGettingUpdates()

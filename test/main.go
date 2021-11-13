@@ -65,7 +65,7 @@ func main() {
 		}
 		fmt.Println(msg)
 	case 2:
-		updChan, err := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+		updChan, err := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
 		if err != nil {
 			fmt.Println(err)
 			return

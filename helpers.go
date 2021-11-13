@@ -18,19 +18,14 @@ const (
 
 const listeningForWebhookErrMsg = "Listening for webhook: %v"
 
-// SetUpdateInterval sets interval of calling GetUpdates in GetUpdatesChan method. Ensures that between two calls
-// of GetUpdates will be at least specified time, but it could be longer.
+// SetUpdateInterval sets interval of calling GetUpdates in GetUpdatesViaLongPulling method. Ensures that between two
+// calls of GetUpdates will be at least specified time, but it could be longer.
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
 	b.updateInterval = interval
 }
 
-// StopGettingUpdates stop reviving updates from GetUpdatesChan method
-func (b *Bot) StopGettingUpdates() {
-	close(b.stopChannel)
-}
-
-// GetUpdatesChan receive updates in chan
-func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
+// GetUpdatesViaLongPulling receive updates in chan using GetUpdates method
+func (b *Bot) GetUpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, error) {
 	b.stopChannel = make(chan struct{})
 	updatesChan := make(chan Update, updateChanBuffer)
 
@@ -71,6 +66,11 @@ func (b *Bot) GetUpdatesChan(params *GetUpdatesParams) (chan Update, error) {
 	return updatesChan, nil
 }
 
+// StopGettingUpdates stop reviving updates from GetUpdatesViaLongPulling method
+func (b *Bot) StopGettingUpdates() {
+	close(b.stopChannel)
+}
+
 // StartListeningForWebhookTLS start server with TLS for listening for webhook
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
 	go func() {
@@ -101,14 +101,15 @@ func (b *Bot) StartListeningForWebhook(address string) {
 	}()
 }
 
-// StopListeningForWebhook shutdown webhook server
+// StopListeningForWebhook shutdown webhook server used in GetUpdatesViaWebhook method.
+// Note: should be called only after both GetUpdatesViaWebhook and StartListeningForWebhook, etc.
 func (b *Bot) StopListeningForWebhook() error {
 	close(b.stopChannel)
 	return b.server.Shutdown()
 }
 
-// ListenForWebhook receive updates in chan from webhook
-func (b *Bot) ListenForWebhook(path string) (chan Update, error) {
+// GetUpdatesViaWebhook receive updates in chan from webhook
+func (b *Bot) GetUpdatesViaWebhook(path string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
 	b.stopChannel = make(chan struct{})
 

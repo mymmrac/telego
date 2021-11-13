@@ -20,7 +20,7 @@ func main() {
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %#v\n", botUser)
 
-	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+	updates, _ := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
 	defer bot.StopGettingUpdates()
 
 	for update := range updates {

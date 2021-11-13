@@ -30,7 +30,7 @@ func main() {
 	bot.StartListeningForWebhookTLS("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
 
 	// Get updates channel from webhook. Note for one bot only one webhook allowed
-	updates, _ := bot.ListenForWebhook("/" + bot.Token())
+	updates, _ := bot.GetUpdatesViaWebhook("/" + bot.Token())
 
 	// Loop through all updates when they came
 	for update := range updates {

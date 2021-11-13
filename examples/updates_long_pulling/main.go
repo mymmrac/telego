@@ -22,7 +22,7 @@ func main() {
 	bot.SetUpdateInterval(time.Second / 2)
 
 	// Get updates channel
-	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+	updates, _ := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
 
 	// Stop reviving updates from updates channel
 	defer bot.StopGettingUpdates()

@@ -53,7 +53,7 @@ func main() {
 	// Sending message
 	_, _ = bot.SendMessage(message)
 
-	updates, _ := bot.GetUpdatesChan(&telego.GetUpdatesParams{})
+	updates, _ := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
 	defer bot.StopGettingUpdates()
 
 	// Receiving callback data

@@ -147,7 +147,7 @@ func main() {
 }
 ```
 
-Webhook example:
+Webhook example (recommended way):
 
 ```go
 package main
