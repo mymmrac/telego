@@ -31,9 +31,9 @@ telegram.
 - [X] Refactor [generator](generator)
 - [X] Add constants where possible
 - [X] Review generated code & comments
-- [ ] Unit testing of:
+- [X] Unit testing of:
     - [X] Core functionality
-    - [ ] Helper methods
+    - [X] Helper methods
     - [X] Methods
     - [X] Types
 - [ ] `New<Type>` helper funcs
