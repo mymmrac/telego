@@ -78,7 +78,6 @@ func TestBot_StartListeningForWebhook(t *testing.T) {
 	assert.NotPanics(t, func() {
 		b.StartListeningForWebhook("127.0.0.1:3000")
 		time.Sleep(time.Millisecond * 10)
-		assert.NoError(t, err)
 	})
 
 	assert.NotPanics(t, func() {
@@ -96,7 +95,6 @@ func TestBot_StartListeningForWebhookTLSEmbed(t *testing.T) {
 	assert.NotPanics(t, func() {
 		b.StartListeningForWebhookTLSEmbed("127.0.0.1:3000", c, k)
 		time.Sleep(time.Millisecond * 10)
-		assert.NoError(t, err)
 	})
 
 	assert.NotPanics(t, func() {
@@ -111,7 +109,6 @@ func TestBot_StartListeningForWebhookTLS(t *testing.T) {
 	assert.NotPanics(t, func() {
 		b.StartListeningForWebhookTLS("127.0.0.1:3000", "", "")
 		time.Sleep(time.Millisecond * 10)
-		assert.NoError(t, err)
 	})
 }
 
@@ -123,4 +120,36 @@ func TestBot_respondWithError(t *testing.T) {
 
 	b.respondWithError(ctx, errTest)
 	assert.Equal(t, fasthttp.StatusBadRequest, ctx.Response.StatusCode())
+}
+
+func TestBot_StopWebhook(t *testing.T) {
+	b, err := NewBot(token, DefaultLogger(false, false))
+	require.NoError(t, err)
+
+	b.stopChannel = make(chan struct{})
+	assert.NotPanics(t, func() {
+		err := b.StopWebhook()
+		assert.NoError(t, err)
+	})
+}
+
+func TestBot_GetUpdatesViaWebhook(t *testing.T) {
+	b, err := NewBot(token, DefaultLogger(false, false))
+	require.NoError(t, err)
+
+	_, err = b.GetUpdatesViaWebhook("/bot")
+	require.NoError(t, err)
+
+	assert.NotPanics(t, func() {
+		t.Run("invalid_path_error", func(t *testing.T) {
+			ctx := &fasthttp.RequestCtx{}
+			b.server.Handler(ctx)
+		})
+
+		t.Run("invalid_method_error", func(t *testing.T) {
+			ctx := &fasthttp.RequestCtx{}
+			ctx.Request.SetRequestURI("/bot")
+			b.server.Handler(ctx)
+		})
+	})
 }
