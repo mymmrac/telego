@@ -174,7 +174,6 @@ func filesParameters(parameters interface{}) (files map[string]api.NamedReader, 
 }
 
 // parseParameters parses parameter struct to key value structure
-//nolint:gocognit
 func parseParameters(v interface{}) (map[string]string, error) {
 	valueOfV := reflect.ValueOf(v)
 	if valueOfV.Kind() != reflect.Ptr && valueOfV.Kind() != reflect.Interface {
@@ -193,32 +192,12 @@ func parseParameters(v interface{}) (map[string]string, error) {
 		structField := paramsStructType.Field(i)
 		field := paramsStruct.Field(i)
 
-		if field.IsZero() {
-			continue
+		stringValue, ok, err := parseFiled(field)
+		if err != nil {
+			return nil, fmt.Errorf("parse field: %w", err)
 		}
-
-		value := field.Interface()
-		var stringValue string
-
-		switch field.Kind() {
-		case reflect.Struct, reflect.Slice, reflect.Interface, reflect.Ptr:
-			buf := bytes.Buffer{}
-
-			if err := json.NewEncoder(&buf).Encode(value); err != nil {
-				return nil, fmt.Errorf("encoding json: %w", err)
-			}
-
-			stringValue = buf.String()
-			stringValue = strings.TrimSuffix(stringValue, "\n")
-			if len(stringValue) == 0 {
-				continue
-			}
-
-			if len(stringValue) >= 2 && stringValue[0] == '"' && stringValue[len(stringValue)-1] == '"' {
-				stringValue = stringValue[1 : len(stringValue)-1]
-			}
-		default:
-			stringValue = fmt.Sprintf("%v", value)
+		if !ok {
+			continue
 		}
 
 		key := structField.Tag.Get("json")
@@ -227,6 +206,39 @@ func parseParameters(v interface{}) (map[string]string, error) {
 	}
 
 	return params, nil
+}
+
+// parseFiled parses struct field to string value
+func parseFiled(field reflect.Value) (string, bool, error) {
+	if field.IsZero() {
+		return "", false, nil
+	}
+
+	value := field.Interface()
+	var stringValue string
+
+	switch field.Kind() {
+	case reflect.Struct, reflect.Slice, reflect.Interface, reflect.Ptr:
+		buf := bytes.Buffer{}
+
+		if err := json.NewEncoder(&buf).Encode(value); err != nil {
+			return "", false, fmt.Errorf("encoding json: %w", err)
+		}
+
+		stringValue = buf.String()
+		stringValue = strings.TrimSuffix(stringValue, "\n")
+		if len(stringValue) == 0 {
+			return "", false, nil
+		}
+
+		if len(stringValue) >= 2 && stringValue[0] == '"' && stringValue[len(stringValue)-1] == '"' {
+			stringValue = stringValue[1 : len(stringValue)-1]
+		}
+	default:
+		stringValue = fmt.Sprintf("%v", value)
+	}
+
+	return stringValue, true, nil
 }
 
 func isNil(i interface{}) bool {
