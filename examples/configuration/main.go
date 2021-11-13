@@ -18,7 +18,7 @@ func main() {
 		// Change bot API server URL (default: https://api.telegram.org)
 		telego.SetAPIServer("new bot api server"),
 
-		// Change http client (default: &fasthttp.Client{})
+		// Change HTTP client (default: &fasthttp.Client{})
 		telego.FastHTTPClient(&fasthttp.Client{}),
 
 		// Configuration of default logger, enable printing debug information and errors (default: false, true)

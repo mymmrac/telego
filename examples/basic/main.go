@@ -11,7 +11,8 @@ func main() {
 	// Get Bot token from environment variables
 	botToken := os.Getenv("TOKEN")
 
-	// Create bot and enable debugging info (more on configuration at /examples/configuration/main.go)
+	// Create bot and enable debugging info
+	// (more on configuration at /examples/configuration/main.go)
 	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)

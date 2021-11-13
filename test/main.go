@@ -70,7 +70,7 @@ func main() {
 			fmt.Println(err)
 			return
 		}
-		defer bot.StopGettingUpdates()
+		defer bot.StopLongPulling()
 
 		for upd := range updChan {
 			fmt.Println(upd)

@@ -20,15 +20,16 @@ func main() {
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %#v\n", botUser)
 
-	updates, _ := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
-	defer bot.StopGettingUpdates()
+	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	defer bot.StopLongPulling()
 
 	for update := range updates {
 		if update.Message != nil {
 			// Retrieve chat ID
 			chatID := update.Message.Chat.ID
 
-			// Call method sendMessage. Sends message to sender with same text (echo bot)
+			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
+			// Sends message to sender with same text (echo bot).
 			sentMessage, _ := bot.SendMessage(&telego.SendMessageParams{
 				ChatID: telego.ChatID{ID: chatID},
 				Text:   update.Message.Text,

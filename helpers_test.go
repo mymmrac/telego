@@ -23,7 +23,7 @@ func TestBot_StopGettingUpdates(t *testing.T) {
 
 	bot.stopChannel = make(chan struct{})
 	assert.NotPanics(t, func() {
-		bot.StopGettingUpdates()
+		bot.StopLongPulling()
 	})
 }
 
@@ -50,7 +50,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			_, err := m.Bot.GetUpdatesViaLongPulling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopGettingUpdates()
+			m.Bot.StopLongPulling()
 			time.Sleep(time.Millisecond * 500)
 		})
 	})
@@ -66,7 +66,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			_, err := m.Bot.GetUpdatesViaLongPulling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopGettingUpdates()
+			m.Bot.StopLongPulling()
 		})
 	})
 }

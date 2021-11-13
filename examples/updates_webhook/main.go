@@ -16,33 +16,29 @@ func main() {
 		return
 	}
 
-	// Set up a webhook
+	// Set up a webhook on Telegram side
 	_ = bot.SetWebhook(&telego.SetWebhookParams{
-		URL:         "https://www.google.com:443/" + bot.Token(),
-		Certificate: &telego.InputFile{File: mustOpen("cert.pem")},
+		URL: "https://example.com/bot" + bot.Token(),
 	})
 
 	// Receive information about webhook
 	info, _ := bot.GetWebhookInfo()
 	fmt.Printf("Webhook Info: %#v\n", info)
 
-	// Start server for receiving requests from telegram
-	bot.StartListeningForWebhookTLS("0.0.0.0:443/"+bot.Token(), "cert.pem", "key.pem")
+	// Get updates channel from webhook.
+	// Note: For one bot only one webhook allowed.
+	updates, _ := bot.GetUpdatesViaWebhook("/bot" + bot.Token())
 
-	// Get updates channel from webhook. Note for one bot only one webhook allowed
-	updates, _ := bot.GetUpdatesViaWebhook("/" + bot.Token())
+	// Start server for receiving requests from Telegram
+	bot.StartListeningForWebhook("localhost:443")
+
+	// Stop reviving updates from updates channel and shutdown webhook server
+	defer func() {
+		_ = bot.StopWebhook()
+	}()
 
 	// Loop through all updates when they came
 	for update := range updates {
 		fmt.Printf("Update: %#v\n", update)
 	}
-}
-
-// Helper function to open file or panic
-func mustOpen(filename string) *os.File {
-	file, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	return file
 }

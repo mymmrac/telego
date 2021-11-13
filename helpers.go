@@ -66,8 +66,8 @@ func (b *Bot) GetUpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, e
 	return updatesChan, nil
 }
 
-// StopGettingUpdates stop reviving updates from GetUpdatesViaLongPulling method
-func (b *Bot) StopGettingUpdates() {
+// StopLongPulling stop reviving updates from GetUpdatesViaLongPulling method
+func (b *Bot) StopLongPulling() {
 	close(b.stopChannel)
 }
 
@@ -101,9 +101,9 @@ func (b *Bot) StartListeningForWebhook(address string) {
 	}()
 }
 
-// StopListeningForWebhook shutdown webhook server used in GetUpdatesViaWebhook method.
-// Note: should be called only after both GetUpdatesViaWebhook and StartListeningForWebhook, etc.
-func (b *Bot) StopListeningForWebhook() error {
+// StopWebhook shutdown webhook server used in GetUpdatesViaWebhook method.
+// Note: Should be called only after both GetUpdatesViaWebhook and StartListeningForWebhook, etc.
+func (b *Bot) StopWebhook() error {
 	close(b.stopChannel)
 	return b.server.Shutdown()
 }

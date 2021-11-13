@@ -17,15 +17,16 @@ func main() {
 		return
 	}
 
-	// Set interval of getting updates (default: 0.5s)
-	// If you want to get updates as fast as possible set to 0
+	// Optional. Set interval of getting updates (default: 0.5s).
+	// If you want to get updates as fast as possible set to 0,
+	// but webhook method is recommended for this.
 	bot.SetUpdateInterval(time.Second / 2)
 
 	// Get updates channel
-	updates, _ := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
+	updates, _ := bot.GetUpdatesViaLongPulling(nil)
 
 	// Stop reviving updates from updates channel
-	defer bot.StopGettingUpdates()
+	defer bot.StopLongPulling()
 
 	// Loop through all updates when they came
 	for update := range updates {
