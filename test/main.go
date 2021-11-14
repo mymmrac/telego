@@ -13,7 +13,7 @@ var (
 	channelUsername = telego.ChatID{Username: "@mymmrTest"}
 )
 
-const testCase = 2
+const testCase = 13
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -231,6 +231,35 @@ func main() {
 			ChatID: channelUsername,
 			Text:   "Test msg",
 		}
+		_, err = bot.SendMessage(msg)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	case 13:
+		msg := &telego.SendMessageParams{
+			ChatID: myID,
+			Text: `	case 12:
+		msg := &telego.SendMessageParams{
+			ChatID: channelUsername,
+			Text:   "Test msg",
+		}
+		_, err = bot.SendMessage(msg)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}`,
+		}
+
+		msg.Entities = []telego.MessageEntity{
+			{
+				Type:     telego.EntityTypePre,
+				Offset:   0,
+				Length:   len(msg.Text),
+				Language: "go",
+			},
+		}
+
 		_, err = bot.SendMessage(msg)
 		if err != nil {
 			fmt.Println(err)
