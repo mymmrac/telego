@@ -46,7 +46,7 @@ func TestChatMemberLeft_MemberStatus(t *testing.T) {
 }
 
 func TestChatMemberBanned_MemberStatus(t *testing.T) {
-	assert.Equal(t, MemberStatusKicked, (&ChatMemberBanned{}).MemberStatus())
+	assert.Equal(t, MemberStatusBanned, (&ChatMemberBanned{}).MemberStatus())
 }
 
 func TestBotCommandScopeDefault_ScopeType(t *testing.T) {
@@ -284,7 +284,7 @@ func Test_chatMemberData_UnmarshalJSON(t *testing.T) {
 			name: "success_kicked",
 			json: `{"status": "kicked"}`,
 			data: &ChatMemberBanned{
-				Status: MemberStatusKicked,
+				Status: MemberStatusBanned,
 			},
 			isError: false,
 		},

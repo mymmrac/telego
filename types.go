@@ -212,6 +212,7 @@ type Chat struct {
 
 // Chat types
 const (
+	ChatTypeSender     = "sender"
 	ChatTypePrivate    = "private"
 	ChatTypeGroup      = "group"
 	ChatTypeSupergroup = "supergroup"
@@ -455,6 +456,25 @@ type MessageEntity struct {
 	Language string `json:"language,omitempty"`
 }
 
+// MessageEntity types
+const (
+	EntityTypeMention       = "mention"
+	EntityTypeHashtag       = "hashtag"
+	EntityTypeCashtag       = "cashtag"
+	EntityTypeBotCommand    = "bot_command"
+	EntityTypeURL           = "url"
+	EntityTypeEmail         = "email"
+	EntityTypePhoneNumber   = "phone_number"
+	EntityTypeBold          = "bold"
+	EntityTypeItalic        = "italic"
+	EntityTypeUnderline     = "underline"
+	EntityTypeStrikethrough = "strikethrough"
+	EntityTypeCode          = "code"
+	EntityTypePre           = "pre"
+	EntityTypeTextLink      = "text_link"
+	EntityTypeTextMention   = "text_mention"
+)
+
 // PhotoSize - This object represents one size of a photo or a file
 // (https://core.telegram.org/bots/api#document) / sticker (https://core.telegram.org/bots/api#sticker)
 // thumbnail.
@@ -666,6 +686,16 @@ type Dice struct {
 	// and “⚽” base emoji, 1-64 for “🎰” base emoji
 	Value int `json:"value"`
 }
+
+// Dice emojis
+const (
+	EmojiDice        = "🎲"
+	EmojiDarts       = "🎯"
+	EmojiBowling     = "🎳"
+	EmojiBasketball  = "🏀"
+	EmojiSoccer      = "⚽"
+	EmojiSlotMachine = "🎰"
+)
 
 // PollOption - This object contains information about one answer option in a poll.
 type PollOption struct {
@@ -1186,7 +1216,7 @@ const (
 	MemberStatusMember        = "member"
 	MemberStatusRestricted    = "restricted"
 	MemberStatusLeft          = "left"
-	MemberStatusKicked        = "kicked"
+	MemberStatusBanned        = "kicked"
 )
 
 type chatMemberData struct {
@@ -1224,7 +1254,7 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 		var cm *ChatMemberLeft
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
-	case MemberStatusKicked:
+	case MemberStatusBanned:
 		var cm *ChatMemberBanned
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
@@ -1434,7 +1464,7 @@ type ChatMemberBanned struct {
 
 // MemberStatus returns ChatMember status
 func (c *ChatMemberBanned) MemberStatus() string {
-	return MemberStatusKicked
+	return MemberStatusBanned
 }
 
 // MemberUser returns ChatMember User
@@ -2105,6 +2135,14 @@ type MaskPosition struct {
 	Scale float64 `json:"scale"`
 }
 
+// MaskPosition points
+const (
+	PointForehead = "forehead"
+	PointEyes     = "eyes"
+	PointMouth    = "mouth"
+	PointChin     = "chin"
+)
+
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.
 type InlineQuery struct {
@@ -2325,9 +2363,12 @@ func (i *InlineQueryResultGif) ResultType() string {
 
 // ThumbMimeType types
 const (
-	ThumbMimeTypeImageJpeg = "image/jpeg"
-	ThumbMimeTypeImageGif  = "image/gif"
-	ThumbMimeTypeVideoMp4  = "video/mp4"
+	MimeTypeImageJpeg      = "image/jpeg"
+	MimeTypeImageGif       = "image/gif"
+	MimeTypeVideoMp4       = "video/mp4"
+	MimeTypeTextHTML       = "text/html"
+	MimeTypeApplicationPDF = "application/pdf"
+	MimeTypeApplicationZip = "application/zip"
 )
 
 // InlineQueryResultMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without sound).
@@ -3497,6 +3538,8 @@ type PassportFile struct {
 	// FileDate - Unix time when the file was uploaded
 	FileDate int64 `json:"file_date"`
 }
+
+// TODO: Add constants
 
 // EncryptedPassportElement - Contains information about documents or other Telegram Passport elements shared
 // with the bot by the user.
