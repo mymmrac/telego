@@ -289,7 +289,7 @@ Package contains couple methods for creating send parameters with all required p
 Or other useful methods like:
 
 - `ID(intID) => ChatID`
-- `File(namedReader) => telego.InputFile`
+- `File(namedReader) => InputFile`
 - ...
 
 Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](telegoutil/methods.go), and those that
