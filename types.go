@@ -3539,8 +3539,6 @@ type PassportFile struct {
 	FileDate int64 `json:"file_date"`
 }
 
-// TODO: Add constants
-
 // EncryptedPassportElement - Contains information about documents or other Telegram Passport elements shared
 // with the bot by the user.
 type EncryptedPassportElement struct {
@@ -3596,6 +3594,23 @@ type EncryptedPassportElement struct {
 	// (https://core.telegram.org/bots/api#passportelementerrorunspecified)
 	Hash string `json:"hash"`
 }
+
+// EncryptedPassportElement types
+const (
+	ElementTypePersonalDetails       = "personal_details"
+	ElementTypePassport              = "passport"
+	ElementTypeDriverLicense         = "driver_license"
+	ElementTypeIdentityCard          = "identity_card"
+	ElementTypeInternalPassport      = "internal_passport"
+	ElementTypeAddress               = "address"
+	ElementTypeUtilityBill           = "utility_bill"
+	ElementTypeBankStatement         = "bank_statement"
+	ElementTypeRentalAgreement       = "rental_agreement"
+	ElementTypePassportRegistration  = "passport_registration"
+	ElementTypeTemporaryRegistration = "temporary_registration"
+	ElementTypePhoneNumber           = "phone_number"
+	ElementTypeEmail                 = "email"
+)
 
 // EncryptedCredentials - Contains data required for decrypting and authenticating EncryptedPassportElement
 // (https://core.telegram.org/bots/api#encryptedpassportelement). See the Telegram Passport Documentation
@@ -3873,8 +3888,7 @@ type Game struct {
 
 // CallbackGame - A placeholder, currently holds no information. Use BotFather (https://t.me/botfather) to
 // set up your game.
-type CallbackGame struct {
-}
+type CallbackGame struct{}
 
 // GameHighScore - This object represents one row of the high scores table for a game.
 type GameHighScore struct {
