@@ -25,6 +25,7 @@ func (b *Bot) SetUpdateInterval(interval time.Duration) {
 }
 
 // GetUpdatesViaLongPulling receive updates in chan using GetUpdates method
+// Note: After you done with getting updates you should call StopLongPulling method
 func (b *Bot) GetUpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, error) {
 	b.stopChannel = make(chan struct{})
 	updatesChan := make(chan Update, updateChanBuffer)
@@ -71,7 +72,19 @@ func (b *Bot) StopLongPulling() {
 	close(b.stopChannel)
 }
 
+// StartListeningForWebhook start server for listening for webhook
+// Note: After you done with getting updates you should call StopWebhook method
+func (b *Bot) StartListeningForWebhook(address string) {
+	go func() {
+		err := b.server.ListenAndServe(address)
+		if err != nil {
+			b.log.Errorf(listeningForWebhookErrMsg, err)
+		}
+	}()
+}
+
 // StartListeningForWebhookTLS start server with TLS for listening for webhook
+// Note: After you done with getting updates you should call StopWebhook method
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
 	go func() {
 		err := b.server.ListenAndServeTLS(address, certificateFile, keyFile)
@@ -82,6 +95,7 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 }
 
 // StartListeningForWebhookTLSEmbed start server with TLS (embed) for listening for webhook
+// Note: After you done with getting updates you should call StopWebhook method
 func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) {
 	go func() {
 		err := b.server.ListenAndServeTLSEmbed(address, certificateData, keyData)
@@ -91,18 +105,8 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 	}()
 }
 
-// StartListeningForWebhook start server for listening for webhook
-func (b *Bot) StartListeningForWebhook(address string) {
-	go func() {
-		err := b.server.ListenAndServe(address)
-		if err != nil {
-			b.log.Errorf(listeningForWebhookErrMsg, err)
-		}
-	}()
-}
-
 // StopWebhook shutdown webhook server used in GetUpdatesViaWebhook method.
-// Note: Should be called only after both GetUpdatesViaWebhook and StartListeningForWebhook, etc.
+// Note: Should be called only after both GetUpdatesViaWebhook and StartListeningForWebhook... .
 func (b *Bot) StopWebhook() error {
 	close(b.stopChannel)
 	return b.server.Shutdown()

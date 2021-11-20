@@ -2050,7 +2050,7 @@ type AnswerCallbackQueryParams struct {
 	ShowAlert bool `json:"show_alert,omitempty"`
 
 	// URL - Optional. URL that will be opened by the user's client. If you have created a Game
-	// (https://core.telegram.org/bots/api#game) and accepted the conditions via @Botfather
+	// (https://core.telegram.org/bots/api#game) and accepted the conditions via @BotFather
 	// (https://t.me/botfather), specify the URL that opens your game — note that this will only work if the query
 	// comes from a callback_game (https://core.telegram.org/bots/api#inlinekeyboardbutton) button.Otherwise, you
 	// may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
@@ -2718,7 +2718,7 @@ type SendInvoiceParams struct {
 	// internal processes.
 	Payload string `json:"payload"`
 
-	// ProviderToken - Payments provider token, obtained via Botfather (https://t.me/botfather)
+	// ProviderToken - Payments provider token, obtained via BotFather (https://t.me/botfather)
 	ProviderToken string `json:"provider_token"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
@@ -2897,10 +2897,11 @@ func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
 // SendGameParams - Represents parameters of sendGame method.
 type SendGameParams struct {
 	// ChatID - Unique identifier for the target chat
+	// TODO: Check if it's actually int64 or telego.ChatID
 	ChatID int64 `json:"chat_id"`
 
 	// GameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games
-	// via Botfather (https://t.me/botfather).
+	// via BotFather (https://t.me/botfather).
 	GameShortName string `json:"game_short_name"`
 
 	// DisableNotification - Optional. Sends the message silently

@@ -3268,7 +3268,7 @@ type InputInvoiceMessageContent struct {
 	// internal processes.
 	Payload string `json:"payload"`
 
-	// ProviderToken - Payment provider token, obtained via Botfather (https://t.me/botfather)
+	// ProviderToken - Payment provider token, obtained via BotFather (https://t.me/botfather)
 	ProviderToken string `json:"provider_token"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
