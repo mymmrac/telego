@@ -5,8 +5,8 @@ import (
 	"github.com/mymmrac/telego/telegoapi"
 )
 
-// ChatID creates telego.ChatID from user ID
-func ChatID(id int64) telego.ChatID {
+// ID creates telego.ChatID from user's identifier
+func ID(id int64) telego.ChatID {
 	return telego.ChatID{ID: id}
 }
 

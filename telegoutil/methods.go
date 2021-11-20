@@ -138,7 +138,8 @@ func Sticker(id telego.ChatID, sticker telego.InputFile) *telego.SendStickerPara
 }
 
 // Invoice creates telego.SendInvoiceParams with required parameters
-func Invoice(id telego.ChatID, title, description, payload, providerToken, currency string, prices []telego.LabeledPrice) *telego.SendInvoiceParams {
+func Invoice(id telego.ChatID, title, description, payload, providerToken, currency string,
+	prices []telego.LabeledPrice) *telego.SendInvoiceParams {
 	return &telego.SendInvoiceParams{
 		ChatID:        id,
 		Title:         title,
