@@ -36,7 +36,7 @@ telegram.
     - [X] Helper methods
     - [X] Methods
     - [X] Types
-- [ ] `New<Type>` helper funcs
+- [X] Utility methods
 - [ ] Add more examples
 - [ ] Create Wiki page
 - [ ] Publish stable version
