@@ -2897,7 +2897,7 @@ func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
 // SendGameParams - Represents parameters of sendGame method.
 type SendGameParams struct {
 	// ChatID - Unique identifier for the target chat
-	// TODO: Check if it's actually int64 or telego.ChatID
+	// Note: Should be int64 not ChatID according to documentation (https://core.telegram.org/bots/api#sendgame)
 	ChatID int64 `json:"chat_id"`
 
 	// GameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games
