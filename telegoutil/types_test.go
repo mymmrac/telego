@@ -1,8 +1,9 @@
 package telegoutil
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type testNamedReade struct{}
@@ -22,13 +23,13 @@ func TestFile(t *testing.T) {
 }
 
 func TestFileByID(t *testing.T) {
-	fileID := "test"
+	fileID := "file"
 	f := FileByID(fileID)
 	assert.Equal(t, fileID, f.FileID)
 }
 
 func TestFileByURL(t *testing.T) {
-	url := "test"
+	url := "url"
 	f := FileByURL(url)
 	assert.Equal(t, url, f.URL)
 }
@@ -40,7 +41,7 @@ func TestID(t *testing.T) {
 }
 
 func TestUsername(t *testing.T) {
-	var username = "test"
+	var username = "username"
 	chatID := Username(username)
 	assert.Equal(t, username, chatID.Username)
 }
