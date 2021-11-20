@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
+	tg "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -30,10 +31,7 @@ func main() {
 
 			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
 			// Sends message to sender with same text (echo bot).
-			sentMessage, _ := bot.SendMessage(&telego.SendMessageParams{
-				ChatID: telego.ChatID{ID: chatID},
-				Text:   update.Message.Text,
-			})
+			sentMessage, _ := bot.SendMessage(tg.Message(tg.ID(chatID), update.Message.Text))
 
 			fmt.Printf("Sent Message: %v\n", sentMessage)
 		}

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
+	tg "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -18,17 +19,17 @@ func main() {
 
 	// Document parameters
 	document := &telego.SendDocumentParams{
-		ChatID:  telego.ChatID{ID: 1234567}, // Chat ID as Integer
+		ChatID:  tg.ID(1234567), // Chat ID as Integer
 		Caption: "My cool file from disk",
 
 		// Send using file from disk
-		Document: telego.InputFile{File: mustOpen("my_file.txt")},
+		Document: tg.File(mustOpen("my_file.txt")),
 
 		// Send using external URL
-		//Document: telego.InputFile{URL: "https://example.com/my_file.txt"},
+		//Document: tg.FileByURL("https://example.com/my_file.txt"),
 
 		// Send using file ID
-		//Document: telego.InputFile{FileID: "<file ID of your file>"},
+		//Document: tg.FileByID("<file ID of your file>"),
 	}
 
 	// Sending document
@@ -43,11 +44,11 @@ func main() {
 
 	// Photo parameters
 	photo := &telego.SendPhotoParams{
-		ChatID:  telego.ChatID{Username: "@my_cool_channel"}, // Chat ID as String (target username)
+		ChatID:  tg.Username("@my_cool_channel"), // Chat ID as String (target username)
 		Caption: "My cool photo",
 
 		// Send using file from disk
-		Photo: telego.InputFile{File: mustOpen("my_photo.png")},
+		Photo: tg.File(mustOpen("my_photo.png")),
 	}
 	// Sending photo
 	_, _ = bot.SendPhoto(photo)
@@ -56,21 +57,21 @@ func main() {
 
 	// Media group parameters
 	mediaGroup := &telego.SendMediaGroupParams{
-		ChatID: telego.ChatID{ID: 1234567},
+		ChatID: tg.ID(1234567),
 
 		// Specify slice of telego.InputMedia with media you want to send as a group
 		Media: []telego.InputMedia{
 			&telego.InputMediaPhoto{
 				Type:  telego.MediaTypePhoto,
-				Media: telego.InputFile{URL: "https://example.com/my_photo.png"},
+				Media: tg.FileByURL("https://example.com/my_photo.png"),
 			},
 			&telego.InputMediaPhoto{
 				Type:  telego.MediaTypePhoto,
-				Media: telego.InputFile{File: mustOpen("my_photo.png")},
+				Media: tg.File(mustOpen("my_photo.png")),
 			},
 			&telego.InputMediaPhoto{
 				Type:  telego.MediaTypePhoto,
-				Media: telego.InputFile{FileID: "<file ID of your photo>"},
+				Media: tg.FileByID("<file ID of your photo>"),
 			},
 		},
 	}
