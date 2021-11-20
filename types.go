@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/mymmrac/telego/api"
+	"github.com/mymmrac/telego/telegoapi"
 )
 
 // Update - This object (https://core.telegram.org/bots/api#available-types) represents an incoming update.At
@@ -1736,7 +1736,7 @@ func (b *BotCommandScopeChatMember) ScopeType() string {
 
 // fileCompatible - Represents types that can be sent as files
 type fileCompatible interface {
-	fileParameters() map[string]api.NamedReader
+	fileParameters() map[string]telegoapi.NamedReader
 }
 
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using
@@ -1744,7 +1744,7 @@ type fileCompatible interface {
 type InputFile struct {
 	// File - Object that can be treated as file (has name and data to read).
 	// Implemented by os.File.
-	File api.NamedReader
+	File telegoapi.NamedReader
 
 	// FileID - ID of file stored in Telegram
 	FileID string
@@ -1823,9 +1823,9 @@ func (i *InputMediaPhoto) MediaType() string {
 	return MediaTypePhoto
 }
 
-func (i *InputMediaPhoto) fileParameters() map[string]api.NamedReader {
+func (i *InputMediaPhoto) fileParameters() map[string]telegoapi.NamedReader {
 	i.Media.needAttach = true
-	return map[string]api.NamedReader{
+	return map[string]telegoapi.NamedReader{
 		"media": i.Media.File,
 	}
 }
@@ -1878,8 +1878,8 @@ func (i *InputMediaVideo) MediaType() string {
 	return MediaTypeVideo
 }
 
-func (i *InputMediaVideo) fileParameters() map[string]api.NamedReader {
-	fp := make(map[string]api.NamedReader)
+func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
@@ -1937,8 +1937,8 @@ func (i *InputMediaAnimation) MediaType() string {
 	return MediaTypeAnimation
 }
 
-func (i *InputMediaAnimation) fileParameters() map[string]api.NamedReader {
-	fp := make(map[string]api.NamedReader)
+func (i *InputMediaAnimation) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
@@ -1995,8 +1995,8 @@ func (i *InputMediaAudio) MediaType() string {
 	return MediaTypeAudio
 }
 
-func (i *InputMediaAudio) fileParameters() map[string]api.NamedReader {
-	fp := make(map[string]api.NamedReader)
+func (i *InputMediaAudio) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
@@ -2048,8 +2048,8 @@ func (i *InputMediaDocument) MediaType() string {
 	return MediaTypeDocument
 }
 
-func (i *InputMediaDocument) fileParameters() map[string]api.NamedReader {
-	fp := make(map[string]api.NamedReader)
+func (i *InputMediaDocument) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File

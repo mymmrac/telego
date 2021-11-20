@@ -1,7 +1,7 @@
-//go:generate mockgen -package mock -destination=mock/caller.go github.com/mymmrac/telego/api Caller
-//go:generate mockgen -package mock -destination=mock/request-constructor.go github.com/mymmrac/telego/api RequestConstructor
+//go:generate mockgen -package mock -destination=mock/caller.go github.com/mymmrac/telego/telegoapi Caller
+//go:generate mockgen -package mock -destination=mock/request_constructor.go github.com/mymmrac/telego/telegoapi RequestConstructor
 
-package api
+package telegoapi
 
 import (
 	"bytes"

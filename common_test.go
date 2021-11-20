@@ -3,7 +3,7 @@ package telego
 import (
 	"github.com/golang/mock/gomock"
 
-	mockAPI "github.com/mymmrac/telego/api/mock"
+	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
 )
 
 type mockedBot struct {
@@ -30,7 +30,7 @@ func newMockedBot(ctrl *gomock.Controller) mockedBot {
 
 type testNamedReade struct{}
 
-func (t testNamedReade) Read(p []byte) (n int, err error) {
+func (t testNamedReade) Read(_ []byte) (n int, err error) {
 	panic("implement me")
 }
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/api"
+	"github.com/mymmrac/telego/telegoapi"
 )
 
 const (
@@ -154,7 +154,7 @@ func (b *Bot) respondWithError(ctx *fasthttp.RequestCtx, err error) {
 	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
 
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)
-	ctx.SetContentType(api.ContentTypeJSON)
+	ctx.SetContentType(telegoapi.ContentTypeJSON)
 
 	_, err = ctx.Write(errMsg)
 	if err != nil {

@@ -12,7 +12,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/api"
+	"github.com/mymmrac/telego/telegoapi"
 )
 
 // json jsoniter replacement for json package
@@ -44,8 +44,8 @@ type Bot struct {
 	token          string
 	apiURL         string
 	log            Logger
-	api            api.Caller
-	constructor    api.RequestConstructor
+	api            telegoapi.Caller
+	constructor    telegoapi.RequestConstructor
 	updateInterval time.Duration
 
 	stopChannel chan struct{}
@@ -65,8 +65,8 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		token:          token,
 		apiURL:         defaultBotAPIServer,
 		log:            newLogger(),
-		api:            api.FasthttpAPICaller{Client: &fasthttp.Client{}},
-		constructor:    api.DefaultConstructor{},
+		api:            telegoapi.FasthttpAPICaller{Client: &fasthttp.Client{}},
+		constructor:    telegoapi.DefaultConstructor{},
 		updateInterval: defaultUpdateInterval,
 
 		server: &fasthttp.Server{},
@@ -110,9 +110,9 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 }
 
 // constructAndCallRequest creates and executes request with parsing of parameters
-func (b *Bot) constructAndCallRequest(methodName string, parameters interface{}) (*api.Response, error) {
+func (b *Bot) constructAndCallRequest(methodName string, parameters interface{}) (*telegoapi.Response, error) {
 	filesParams, hasFiles := filesParameters(parameters)
-	var data *api.RequestData
+	var data *telegoapi.RequestData
 
 	debug := strings.Builder{}
 
@@ -160,7 +160,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 }
 
 // filesParameters gets all files from parameters
-func filesParameters(parameters interface{}) (files map[string]api.NamedReader, hasFiles bool) {
+func filesParameters(parameters interface{}) (files map[string]telegoapi.NamedReader, hasFiles bool) {
 	if parametersWithFiles, ok := parameters.(fileCompatible); ok && !isNil(parameters) {
 		files = parametersWithFiles.fileParameters()
 		for _, file := range files {

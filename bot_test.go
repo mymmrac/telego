@@ -8,7 +8,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mymmrac/telego/api"
+	"github.com/mymmrac/telego/telegoapi"
 )
 
 const (
@@ -157,8 +157,8 @@ func Test_parseParameters(t *testing.T) {
 
 type testStruct struct{}
 
-func (ts *testStruct) fileParameters() map[string]api.NamedReader {
-	return map[string]api.NamedReader{
+func (ts *testStruct) fileParameters() map[string]telegoapi.NamedReader {
+	return map[string]telegoapi.NamedReader{
 		"test": &testNamedReade{},
 	}
 }
@@ -167,13 +167,13 @@ func Test_filesParameters(t *testing.T) {
 	tests := []struct {
 		name       string
 		parameters interface{}
-		files      map[string]api.NamedReader
+		files      map[string]telegoapi.NamedReader
 		hasFiles   bool
 	}{
 		{
 			name:       "with_files",
 			parameters: &testStruct{},
-			files: map[string]api.NamedReader{
+			files: map[string]telegoapi.NamedReader{
 				"test": &testNamedReade{},
 			},
 			hasFiles: true,
@@ -198,16 +198,16 @@ type paramsWithFile struct {
 	N int `json:"n"`
 }
 
-func (p *paramsWithFile) fileParameters() map[string]api.NamedReader {
-	return map[string]api.NamedReader{
+func (p *paramsWithFile) fileParameters() map[string]telegoapi.NamedReader {
+	return map[string]telegoapi.NamedReader{
 		"test": &testNamedReade{},
 	}
 }
 
 type notStructParamsWithFile string
 
-func (p *notStructParamsWithFile) fileParameters() map[string]api.NamedReader {
-	return map[string]api.NamedReader{
+func (p *notStructParamsWithFile) fileParameters() map[string]telegoapi.NamedReader {
+	return map[string]telegoapi.NamedReader{
 		"test": &testNamedReade{},
 	}
 }
@@ -224,15 +224,15 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 
 	url := m.Bot.apiURL + "/bot" + m.Bot.token + "/" + methodName
 
-	expectedResp := &api.Response{
+	expectedResp := &telegoapi.Response{
 		Ok: true,
 	}
 
 	paramsBytes, err := json.Marshal(params)
 	assert.NoError(t, err)
 
-	expectedData := &api.RequestData{
-		ContentType: api.ContentTypeJSON,
+	expectedData := &telegoapi.RequestData{
+		ContentType: telegoapi.ContentTypeJSON,
 		Buffer:      bytes.NewBuffer(paramsBytes),
 	}
 
@@ -272,8 +272,8 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		paramsBytesFile, err := json.Marshal(paramsFile)
 		assert.NoError(t, err)
 
-		expectedDataFile := &api.RequestData{
-			ContentType: api.ContentTypeJSON,
+		expectedDataFile := &telegoapi.RequestData{
+			ContentType: telegoapi.ContentTypeJSON,
 			Buffer:      bytes.NewBuffer(paramsBytesFile),
 		}
 
@@ -348,12 +348,12 @@ func TestBot_performRequest(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
-			Return(&api.RequestData{}, nil).
+			Return(&telegoapi.RequestData{}, nil).
 			Times(1)
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(&api.Response{
+			Return(&telegoapi.Response{
 				Ok:     true,
 				Result: bytes.NewBufferString("1").Bytes(),
 				Error:  nil,
@@ -367,15 +367,15 @@ func TestBot_performRequest(t *testing.T) {
 	t.Run("error_not_ok", func(t *testing.T) {
 		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
-			Return(&api.RequestData{}, nil).
+			Return(&telegoapi.RequestData{}, nil).
 			Times(1)
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(&api.Response{
+			Return(&telegoapi.Response{
 				Ok:     false,
 				Result: nil,
-				Error:  &api.Error{},
+				Error:  &telegoapi.Error{},
 			}, nil)
 
 		err := m.Bot.performRequest(methodName, params, &result)

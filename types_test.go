@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mymmrac/telego/api"
+	"github.com/mymmrac/telego/telegoapi"
 )
 
 func TestReplyKeyboardMarkup_ReplyType(t *testing.T) {
@@ -479,7 +479,7 @@ func TestInputMedia_fileParameters(t *testing.T) {
 		Media: testInputFile,
 	}
 
-	assert.Equal(t, map[string]api.NamedReader{
+	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"media": testNamedReade{},
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
@@ -491,7 +491,7 @@ func TestInputMediaVideo_fileParameters(t *testing.T) {
 		Thumb: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]api.NamedReader{
+	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"media": testNamedReade{},
 		"thumb": testNamedReade{},
 	}, im.fileParameters())
@@ -504,7 +504,7 @@ func TestInputMediaAnimation_fileParameters(t *testing.T) {
 		Thumb: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]api.NamedReader{
+	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"media": testNamedReade{},
 		"thumb": testNamedReade{},
 	}, im.fileParameters())
@@ -517,7 +517,7 @@ func TestInputMediaAudio_fileParameters(t *testing.T) {
 		Thumb: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]api.NamedReader{
+	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"media": testNamedReade{},
 		"thumb": testNamedReade{},
 	}, im.fileParameters())
@@ -530,7 +530,7 @@ func TestInputMediaDocument_fileParameters(t *testing.T) {
 		Thumb: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]api.NamedReader{
+	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"media": testNamedReade{},
 		"thumb": testNamedReade{},
 	}, im.fileParameters())
