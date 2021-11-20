@@ -1,4 +1,4 @@
-# Telego | Go Telegram Bot API
+# Telego • Go Telegram Bot API
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego)
 [![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yml)
@@ -22,6 +22,21 @@ have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) f
 telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
+
+### Table Of Content
+
+<details>
+<summary>Click to show • hide</summary>
+
+- [Getting Started](#getting-started)
+    - [Basic setup](#basic-setup)
+    - [Getting updates](#getting-updates)
+    - [Using Telegram methods](#using-telegram-methods)
+    - [Utility methods](#utility-methods)
+- [Contribution](#contribution)
+- [License](#license)
+
+</details>
 
 ### ToDo List & Ideas
 
@@ -49,7 +64,7 @@ telegram.
 How to get the library:
 
 ```shell
-go get -u github.com/mymmrac/telego@latest
+go get -u github.com/mymmrac/telego
 ```
 
 Make sure you get the latest version to have all new features & fixes.
@@ -218,6 +233,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
+	tg "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -243,16 +259,44 @@ func main() {
 
 			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
 			// Sends message to sender with same text (echo bot).
-			sentMessage, _ := bot.SendMessage(&telego.SendMessageParams{
-				ChatID: telego.ChatID{ID: chatID},
-				Text:   update.Message.Text,
-			})
+			sentMessage, _ := bot.SendMessage(tg.Message(tg.ID(chatID), update.Message.Text))
 
 			fmt.Printf("Sent Message: %v\n", sentMessage)
 		}
 	}
 }
 ```
+
+### Utility methods
+
+In Telego even though you have all [`types`](types.go) and [`methods`](methods.go) available, it's often not so
+convenient to use them directly. To solve this issues [`telegoutil`](telegoutil) package was created. It contains
+utility-helper function that will make your life a bit easier.
+
+I suggest including it with alias to get cleaner code:
+
+```go
+import tg "github.com/mymmrac/telego/telegoutil"
+```
+
+Package contains couple methods for creating send parameters with all required parameters like:
+
+- `Message(chatID, text) => SendMessageParams`
+- `Photo(chatID, photoFile) => SendPhotoParams`
+- `Location(chatID, latitude, longitude) => SendLocationParams`
+- ...
+
+Or other useful methods like:
+
+- `ID(intID) => ChatID`
+- `File(namedReader) => telego.InputFile`
+- ...
+
+Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](telegoutil/methods.go), and those that
+are related to [`types`](types.go) in [`telegoutil/types`](telegoutil/types.go).
+
+> Note: If you think that something can be added to [`telegoutil`](telegoutil) package
+> fill free to create an issue or pull request with desired changes.
 
 ## Contribution
 
