@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mymmrac/telego/generator"
+	"github.com/mymmrac/telego/internal/generator"
 )
 
 const methodPattern = `

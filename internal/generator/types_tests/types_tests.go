@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/mymmrac/telego/generator"
 	"io/ioutil"
 	"os"
 	"regexp"
+
+	"github.com/mymmrac/telego/internal/generator"
 )
 
 const funcPattern = `
