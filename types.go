@@ -1665,7 +1665,11 @@ func (b *BotCommandScopeAllChatAdministrators) ScopeType() string {
 
 // ChatID - Represents chat ID as int64 or string
 type ChatID struct {
-	ID       int64
+	// ID - Unique identifier for the target chat
+	ID int64
+
+	// Username - Channel or group username of the target chat (in the format @username)
+	// TODO: Check if works for regular groups or only super groups
 	Username string
 }
 
