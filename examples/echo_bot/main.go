@@ -1,3 +1,5 @@
+// This bot will send same messages as you sent to him.
+
 package main
 
 import (
