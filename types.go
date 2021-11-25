@@ -1669,7 +1669,7 @@ type ChatID struct {
 	ID int64
 
 	// Username - Channel or group username of the target chat (in the format @username)
-	// TODO: Check if works for regular groups or only super groups
+	// Note: User username can't be used here, you have to use integer chat ID
 	Username string
 }
 

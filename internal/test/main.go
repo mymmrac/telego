@@ -5,15 +5,18 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
+	tg "github.com/mymmrac/telego/telegoutil"
 )
 
 var (
-	myID            = telego.ChatID{ID: 331849104}
-	groupID         = telego.ChatID{ID: -1001516926498}
-	channelUsername = telego.ChatID{Username: "@mymmrTest"}
+	myID            = tg.ID(331849104)
+	groupID         = tg.ID(-1001516926498)
+	channelUsername = tg.Username("@mymmrTest")
+	groupUsername   = tg.Username("@botesup")
+	userUsername    = tg.Username("@mymmrac")
 )
 
-const testCase = 13
+const testCase = 14
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -261,6 +264,18 @@ func main() {
 		}
 
 		_, err = bot.SendMessage(msg)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	case 14:
+		_, err := bot.SendMessage(tg.Message(groupUsername, "Test 1"))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		_, err = bot.SendMessage(tg.Message(userUsername, "Test 2"))
 		if err != nil {
 			fmt.Println(err)
 			return
