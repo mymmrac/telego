@@ -1544,6 +1544,51 @@ func (b *Bot) SetChatAdministratorCustomTitle(params *SetChatAdministratorCustom
 	return nil
 }
 
+// BanChatSenderChatParams - Represents parameters of banChatSenderChat method.
+type BanChatSenderChatParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channelusername)
+	ChatID ChatID `json:"chat_id"`
+
+	// SenderChatID - Unique identifier of the target sender chat
+	SenderChatID int64 `json:"sender_chat_id"`
+}
+
+// BanChatSenderChat - Use this method to ban a channel chat in a supergroup or a channel. Until the chat is
+// unbanned (https://core.telegram.org/bots/api#unbanchatsenderchat), the owner of the banned chat won't be able
+// to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or
+// channel for this to work and must have the appropriate administrator rights. Returns True on success.
+func (b *Bot) BanChatSenderChat(params *BanChatSenderChatParams) error {
+	err := b.performRequest("banChatSenderChat", params, nil)
+	if err != nil {
+		return fmt.Errorf("banChatSenderChat(): %w", err)
+	}
+
+	return nil
+}
+
+// UnbanChatSenderChatParams - Represents parameters of unbanChatSenderChat method.
+type UnbanChatSenderChatParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channelusername)
+	ChatID ChatID `json:"chat_id"`
+
+	// SenderChatID - Unique identifier of the target sender chat
+	SenderChatID int64 `json:"sender_chat_id"`
+}
+
+// UnbanChatSenderChat - Use this method to unban a previously banned channel chat in a supergroup or
+// channel. The bot must be an administrator for this to work and must have the appropriate administrator
+// rights. Returns True on success.
+func (b *Bot) UnbanChatSenderChat(params *UnbanChatSenderChatParams) error {
+	err := b.performRequest("unbanChatSenderChat", params, nil)
+	if err != nil {
+		return fmt.Errorf("unbanChatSenderChat(): %w", err)
+	}
+
+	return nil
+}
+
 // SetChatPermissionsParams - Represents parameters of setChatPermissions method.
 type SetChatPermissionsParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
