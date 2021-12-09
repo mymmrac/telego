@@ -166,6 +166,11 @@ type Chat struct {
 	// (https://core.telegram.org/bots/api#getchat).
 	Bio string `json:"bio,omitempty"`
 
+	// HasPrivateForwards - Optional. True, if privacy settings of the other party in the private chat allows to
+	// use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	HasPrivateForwards bool `json:"has_private_forwards,omitempty"`
+
 	// Description - Optional. Description, for groups, supergroups and channel chats. Returned only in getChat
 	// (https://core.telegram.org/bots/api#getchat).
 	Description string `json:"description,omitempty"`
@@ -189,6 +194,10 @@ type Chat struct {
 	// MessageAutoDeleteTime - Optional. The time after which all messages sent to the chat will be
 	// automatically deleted; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	MessageAutoDeleteTime int `json:"message_auto_delete_time,omitempty"`
+
+	// HasProtectedContent - Optional. True, if messages from the chat can't be forwarded to other chats.
+	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	HasProtectedContent bool `json:"has_protected_content,omitempty"`
 
 	// StickerSetName - Optional. For supergroups, name of group sticker set. Returned only in getChat
 	// (https://core.telegram.org/bots/api#getchat).
@@ -260,6 +269,10 @@ type Message struct {
 	// ForwardDate - Optional. For forwarded messages, date the original message was sent in Unix time
 	ForwardDate int64 `json:"forward_date,omitempty"`
 
+	// IsAutomaticForward - Optional. True, if the message is a channel post that was automatically forwarded to
+	// the connected discussion group
+	IsAutomaticForward bool `json:"is_automatic_forward,omitempty"`
+
 	// ReplyToMessage - Optional. For replies, the original message. Note that the Message object in this field
 	// will not contain further reply_to_message fields even if it itself is a reply.
 	ReplyToMessage *Message `json:"reply_to_message,omitempty"`
@@ -269,6 +282,9 @@ type Message struct {
 
 	// EditDate - Optional. Date the message was last edited in Unix time
 	EditDate int64 `json:"edit_date,omitempty"`
+
+	// HasProtectedContent - Optional. True, if the message can't be forwarded
+	HasProtectedContent bool `json:"has_protected_content,omitempty"`
 
 	// MediaGroupID - Optional. The unique identifier of a media message group this message belongs to
 	MediaGroupID string `json:"media_group_id,omitempty"`
