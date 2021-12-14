@@ -16,7 +16,7 @@ func main() {
 	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
-		return
+		os.Exit(1)
 	}
 
 	// Call method getMe (https://core.telegram.org/bots/api#getme)

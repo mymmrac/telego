@@ -14,7 +14,7 @@ func main() {
 	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
-		return
+		os.Exit(1)
 	}
 
 	// Optional. Set interval of getting updates (default: 0.5s).
