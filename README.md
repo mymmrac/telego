@@ -72,10 +72,17 @@ Make sure you get the latest version to have all new features & fixes.
 
 More examples can be seen here:
 
+<details>
+<summary>Click to show • hide</summary>
+
 - [Configuration](examples/configuration/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_fiels/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
+- [Echo bot](examples/echo_bot/main.go)
+- [Inline query bot](examples/inline_query_bot/main.go)
+
+</details>
 
 > Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
 
