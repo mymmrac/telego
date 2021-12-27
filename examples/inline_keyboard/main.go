@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
-	tg "github.com/mymmrac/telego/telegoutil"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -46,7 +46,7 @@ func main() {
 
 	// Message parameters
 	message := &telego.SendMessageParams{
-		ChatID:      tg.ID(1234567),
+		ChatID:      tu.ID(1234567),
 		Text:        "My message",
 		ReplyMarkup: inlineKeyboard,
 	}

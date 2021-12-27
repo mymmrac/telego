@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
-	tg "github.com/mymmrac/telego/telegoutil"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 		// Check if update contains message
 		if update.Message != nil {
 			// Get chat ID from message
-			chatID := tg.ID(update.Message.Chat.ID)
+			chatID := tu.ID(update.Message.Chat.ID)
 
 			// Copy sent message back to user
 			_, _ = bot.CopyMessage(&telego.CopyMessageParams{

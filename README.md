@@ -45,7 +45,7 @@ telegram.
 <summary>Click to show • hide</summary>
 
 - [ ] Handlers package
-- [ ] Rename package alias `tg` to `tu`
+- [X] Rename package alias `tg` to `tu`
 - [ ] `Stopped() bool` func
 - [ ] Godoc for every package
 - [ ] Add more examples
@@ -236,7 +236,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
-	tg "github.com/mymmrac/telego/telegoutil"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -262,7 +262,7 @@ func main() {
 
 			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
 			// Sends message to sender with same text (echo bot).
-			sentMessage, _ := bot.SendMessage(tg.Message(tg.ID(chatID), update.Message.Text))
+			sentMessage, _ := bot.SendMessage(tu.Message(tu.ID(chatID), update.Message.Text))
 
 			fmt.Printf("Sent Message: %v\n", sentMessage)
 		}
@@ -279,7 +279,7 @@ utility-helper function that will make your life a bit easier.
 I suggest including it with alias to get cleaner code:
 
 ```go
-import tg "github.com/mymmrac/telego/telegoutil"
+import tu "github.com/mymmrac/telego/telegoutil"
 ```
 
 Package contains couple methods for creating send parameters with all required parameters like:

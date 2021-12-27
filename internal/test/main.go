@@ -6,15 +6,15 @@ import (
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
-	tg "github.com/mymmrac/telego/telegoutil"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 var (
-	myID            = tg.ID(331849104)
-	groupID         = tg.ID(-1001516926498)
-	channelUsername = tg.Username("@mymmrTest")
-	groupUsername   = tg.Username("@botesup")
-	userUsername    = tg.Username("@mymmrac")
+	myID            = tu.ID(331849104)
+	groupID         = tu.ID(-1001516926498)
+	channelUsername = tu.Username("@mymmrTest")
+	groupUsername   = tu.Username("@botesup")
+	userUsername    = tu.Username("@mymmrac")
 )
 
 const testCase = 16
@@ -270,13 +270,13 @@ func main() {
 			return
 		}
 	case 14:
-		_, err := bot.SendMessage(tg.Message(groupUsername, "Test 1"))
+		_, err := bot.SendMessage(tu.Message(groupUsername, "Test 1"))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		_, err = bot.SendMessage(tg.Message(userUsername, "Test 2"))
+		_, err = bot.SendMessage(tu.Message(userUsername, "Test 2"))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -314,7 +314,7 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			fmt.Println("ZERO")
-			_, _ = bot.SendMessage(tg.Message(tg.ID(update.Message.Chat.ID), fmt.Sprintf("Count is zero")))
+			_, _ = bot.SendMessage(tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is zero")))
 			count = 1
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count == 0
@@ -322,7 +322,7 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			fmt.Println("ONE")
-			_, _ = bot.SendMessage(tg.Message(tg.ID(update.Message.Chat.ID), fmt.Sprintf("Count is one")))
+			_, _ = bot.SendMessage(tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is one")))
 			count = 2
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count == 1
@@ -330,7 +330,7 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			fmt.Println("BIG")
-			_, _ = bot.SendMessage(tg.Message(tg.ID(update.Message.Chat.ID), fmt.Sprintf("Count is big: %d", count)))
+			_, _ = bot.SendMessage(tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is big: %d", count)))
 			count++
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count > 1
