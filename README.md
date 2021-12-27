@@ -44,15 +44,8 @@ telegram.
 <details>
 <summary>Click to show • hide</summary>
 
-- [X] Refactor [generator](internal/generator)
-- [X] Add constants where possible
-- [X] Review generated code & comments
-- [X] Unit testing of:
-    - [X] Core functionality
-    - [X] Helper methods
-    - [X] Methods
-    - [X] Types
-- [X] Utility methods
+- [ ] Handlers package
+- [ ] Godoc for every package
 - [ ] Add more examples
 - [ ] Create Wiki page
 - [ ] Publish stable version
