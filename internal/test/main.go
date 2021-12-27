@@ -17,7 +17,7 @@ var (
 	userUsername    = tg.Username("@mymmrac")
 )
 
-const testCase = 15
+const testCase = 16
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -300,6 +300,40 @@ func main() {
 			fmt.Println("====")
 		}, func(update telego.Update) bool {
 			return update.Message != nil && update.Message.Text == "OK"
+		})
+
+		bh.Start()
+	case 16:
+		updates, _ := bot.GetUpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh := th.NewBotHandler(bot, updates)
+		defer bh.Stop()
+
+		count := 0
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("ZERO")
+			_, _ = bot.SendMessage(tg.Message(tg.ID(update.Message.Chat.ID), fmt.Sprintf("Count is zero")))
+			count = 1
+		}, func(update telego.Update) bool {
+			return update.Message != nil && count == 0
+		})
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("ONE")
+			_, _ = bot.SendMessage(tg.Message(tg.ID(update.Message.Chat.ID), fmt.Sprintf("Count is one")))
+			count = 2
+		}, func(update telego.Update) bool {
+			return update.Message != nil && count == 1
+		})
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("BIG")
+			_, _ = bot.SendMessage(tg.Message(tg.ID(update.Message.Chat.ID), fmt.Sprintf("Count is big: %d", count)))
+			count++
+		}, func(update telego.Update) bool {
+			return update.Message != nil && count > 1
 		})
 
 		bh.Start()

@@ -47,18 +47,21 @@ func (h *BotHandler) Start() {
 		}
 
 		for _, ch := range h.handlers {
-			ok := true
-			for _, p := range ch.Predicates {
-				if !p(update) {
-					ok = false
-					break
+			ch := ch
+			go func() {
+				ok := true
+				for _, p := range ch.Predicates {
+					if !p(update) {
+						ok = false
+						break
+					}
 				}
-			}
-			if !ok {
-				continue
-			}
+				if !ok {
+					return
+				}
 
-			ch.Handler(h.bot, update)
+				ch.Handler(h.bot, update)
+			}()
 		}
 	}
 }
@@ -70,6 +73,7 @@ func (h *BotHandler) Stop() {
 }
 
 // Handle registers new handler
+// Note: All handlers processed in parallel and there is no guaranty on order of execution
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
 	if handler == nil {
 		panic("Telego: nil handlers not allowed")
