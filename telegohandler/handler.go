@@ -35,34 +35,35 @@ func NewBotHandler(bot *telego.Bot, updates chan telego.Update) *BotHandler {
 // Start starts handling of updates
 // Note: After you done with handling updates you should call Stop method
 func (h *BotHandler) Start() {
-	var update telego.Update
 	h.stop = make(chan struct{})
-
 	for {
 		select {
 		case <-h.stop:
 			return
-		case update = <-h.updates:
-			// Proceed with handling
+		case update := <-h.updates:
+			h.processUpdate(update)
 		}
+	}
+}
 
-		for _, ch := range h.handlers {
-			ch := ch
-			go func() {
-				ok := true
-				for _, p := range ch.Predicates {
-					if !p(update) {
-						ok = false
-						break
-					}
+// processUpdate handles update for all handlers in parallel
+func (h *BotHandler) processUpdate(update telego.Update) {
+	for _, ch := range h.handlers {
+		ch := ch
+		go func() {
+			ok := true
+			for _, p := range ch.Predicates {
+				if !p(update) {
+					ok = false
+					break
 				}
-				if !ok {
-					return
-				}
+			}
+			if !ok {
+				return
+			}
 
-				ch.Handler(h.bot, update)
-			}()
-		}
+			ch.Handler(h.bot, update)
+		}()
 	}
 }
 
