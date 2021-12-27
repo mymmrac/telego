@@ -17,7 +17,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 16
+const testCase = 17
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -335,6 +335,25 @@ func main() {
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count > 1
 		})
+
+		bh.Start()
+	case 17:
+		updates, _ := bot.GetUpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh := th.NewBotHandler(bot, updates)
+		defer bh.Stop()
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			matches := th.CommandRegexp.FindStringSubmatch(msg.Text)
+			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("%#v", matches)))
+		}, th.HasCommand())
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("Whaaat? %s", msg.Text)))
+		}, th.HasMassage(), th.Not(th.HasCommand()))
 
 		bh.Start()
 	}

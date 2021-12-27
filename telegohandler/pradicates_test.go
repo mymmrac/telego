@@ -44,6 +44,18 @@ func TestPredicates(t *testing.T) {
 			matches: false,
 		},
 		{
+			name:      "not_matches",
+			predicate: Not(func(update telego.Update) bool { return false }),
+			update:    telego.Update{},
+			matches:   true,
+		},
+		{
+			name:      "not_not_matches",
+			predicate: Not(func(update telego.Update) bool { return true }),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
 			name:      "has_massage_matches",
 			predicate: HasMassage(),
 			update:    telego.Update{Message: &telego.Message{}},

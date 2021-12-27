@@ -19,6 +19,13 @@ func Union(predicates ...Predicate) Predicate {
 	}
 }
 
+// Not is true if predicate is false
+func Not(predicate Predicate) Predicate {
+	return func(update telego.Update) bool {
+		return !predicate(update)
+	}
+}
+
 // HasMassage is true if message isn't nil
 func HasMassage() Predicate {
 	return func(update telego.Update) bool {
@@ -27,7 +34,7 @@ func HasMassage() Predicate {
 }
 
 // CommandRegexp matches to command and has match groups on command and arguments
-var CommandRegexp = regexp.MustCompile(`/(\w+) ?(.*)`)
+var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
 
 // HasCommand is true if message isn't nil, and it matches to command regexp
 func HasCommand() Predicate {
