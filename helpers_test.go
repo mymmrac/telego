@@ -21,7 +21,7 @@ func TestBot_SetUpdateInterval(t *testing.T) {
 func TestBot_StopGettingUpdates(t *testing.T) {
 	bot := &Bot{}
 
-	bot.stopChannel = make(chan struct{})
+	bot.stop = make(chan struct{})
 	assert.NotPanics(t, func() {
 		bot.StopLongPulling()
 	})
@@ -126,7 +126,7 @@ func TestBot_StopWebhook(t *testing.T) {
 	b, err := NewBot(token, DefaultLogger(false, false))
 	require.NoError(t, err)
 
-	b.stopChannel = make(chan struct{})
+	b.stop = make(chan struct{})
 	assert.NotPanics(t, func() {
 		err := b.StopWebhook()
 		assert.NoError(t, err)

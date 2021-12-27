@@ -1,7 +1,7 @@
 export PATH := $(PATH):$(shell go env GOPATH)/bin
 
 lint-install:
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.42.1
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 
 mock-install:
 	go install github.com/golang/mock/mockgen@v1.6.0

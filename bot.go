@@ -48,8 +48,8 @@ type Bot struct {
 	constructor    telegoapi.RequestConstructor
 	updateInterval time.Duration
 
-	stopChannel chan struct{}
-	server      *fasthttp.Server
+	stop   chan struct{}
+	server *fasthttp.Server
 }
 
 // BotOption represents option that can be applied to Bot

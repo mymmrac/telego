@@ -27,7 +27,7 @@ func (b *Bot) SetUpdateInterval(interval time.Duration) {
 // GetUpdatesViaLongPulling receive updates in chan using GetUpdates method
 // Note: After you done with getting updates you should call StopLongPulling method
 func (b *Bot) GetUpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, error) {
-	b.stopChannel = make(chan struct{})
+	b.stop = make(chan struct{})
 	updatesChan := make(chan Update, updateChanBuffer)
 
 	if params == nil {
@@ -37,7 +37,7 @@ func (b *Bot) GetUpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, e
 	go func() {
 		for {
 			select {
-			case <-b.stopChannel:
+			case <-b.stop:
 				close(updatesChan)
 				return
 			default:
@@ -69,7 +69,7 @@ func (b *Bot) GetUpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, e
 
 // StopLongPulling stop reviving updates from GetUpdatesViaLongPulling method
 func (b *Bot) StopLongPulling() {
-	close(b.stopChannel)
+	close(b.stop)
 }
 
 // StartListeningForWebhook start server for listening for webhook
@@ -108,14 +108,14 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 // StopWebhook shutdown webhook server used in GetUpdatesViaWebhook method.
 // Note: Should be called only after both GetUpdatesViaWebhook and StartListeningForWebhook... .
 func (b *Bot) StopWebhook() error {
-	close(b.stopChannel)
+	close(b.stop)
 	return b.server.Shutdown()
 }
 
 // GetUpdatesViaWebhook receive updates in chan from webhook
 func (b *Bot) GetUpdatesViaWebhook(path string) (chan Update, error) {
 	updatesChan := make(chan Update, updateChanBuffer)
-	b.stopChannel = make(chan struct{})
+	b.stop = make(chan struct{})
 
 	b.server.Handler = func(ctx *fasthttp.RequestCtx) {
 		if string(ctx.Path()) != path {
@@ -147,7 +147,7 @@ func (b *Bot) GetUpdatesViaWebhook(path string) (chan Update, error) {
 	}
 
 	go func() {
-		<-b.stopChannel
+		<-b.stop
 		close(updatesChan)
 	}()
 

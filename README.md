@@ -45,6 +45,8 @@ telegram.
 <summary>Click to show • hide</summary>
 
 - [ ] Handlers package
+- [ ] Rename package alias `tg` to `tu`
+- [ ] `Stopped() bool` func
 - [ ] Godoc for every package
 - [ ] Add more examples
 - [ ] Create Wiki page
