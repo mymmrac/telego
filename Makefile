@@ -19,6 +19,9 @@ test:
 cover: test
 	go tool cover -func cover.out
 
+race:
+	go test -race ./...
+
 pre-commit: test lint
 
 .PHONY: lint-install lint test cover pre-commit mock-install
