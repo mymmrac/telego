@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
+	th "github.com/mymmrac/telego/telegohandler"
 	tg "github.com/mymmrac/telego/telegoutil"
 )
 
@@ -16,7 +17,7 @@ var (
 	userUsername    = tg.Username("@mymmrac")
 )
 
-const testCase = 14
+const testCase = 15
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -280,6 +281,28 @@ func main() {
 			fmt.Println(err)
 			return
 		}
+	case 15:
+		updates, _ := bot.GetUpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh := th.NewBotHandler(bot, updates)
+		defer bh.Stop()
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			fmt.Println(update.Message.Text)
+		}, func(update telego.Update) bool {
+			return update.Message != nil
+		})
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("====")
+			fmt.Println(update.Message.Text)
+			fmt.Println("====")
+		}, func(update telego.Update) bool {
+			return update.Message != nil && update.Message.Text == "OK"
+		})
+
+		bh.Start()
 	}
 }
 
