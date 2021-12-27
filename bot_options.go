@@ -34,9 +34,8 @@ func CustomRequestConstructor(constructor telegoapi.RequestConstructor) BotOptio
 }
 
 // DefaultLogger configures default logger. Redefines existing logger.
-//
-// Note: Keep in mind that debug logs will include your bot token,
-// it's only safe to have them enabled in testing environment.
+// Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
+// testing environment.
 func DefaultLogger(debugMode, printErrors bool) BotOption {
 	return func(bot *Bot) error {
 		log := &logger{
@@ -50,9 +49,8 @@ func DefaultLogger(debugMode, printErrors bool) BotOption {
 }
 
 // SetLogger sets logger to use
-//
-// Note: Keep in mind that debug logs will include your bot token,
-// it's only safe to have them enabled in testing environment.
+// Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
+// testing environment.
 func SetLogger(log Logger) BotOption {
 	return func(bot *Bot) error {
 		bot.log = log
