@@ -64,6 +64,8 @@ func main() {
 
 	fmt.Println("Types count:", len(allTypes))
 
+	fieldsCount := 0
+
 	for _, currentType := range allTypes {
 		typeName := currentType[1]
 
@@ -76,6 +78,8 @@ func main() {
 
 		typeDefinitionTable := currentType[3]
 		allFields := fieldPatternReg.FindAllStringSubmatch(typeDefinitionTable, -1)
+
+		fieldsCount += len(allFields)
 
 		for _, currentFiled := range allFields {
 			fieldName := currentFiled[1]
@@ -100,6 +104,8 @@ func main() {
 
 		_, _ = data.WriteString("}\n\n")
 	}
+
+	fmt.Println("Fields count:", fieldsCount)
 
 	dataString := data.String()
 	dataString = generator.UppercaseWords(dataString)
