@@ -130,15 +130,15 @@ import (
 
 	fieldsCount := 0
 	for _, t := range types {
-		typeDescriptionLines := fitLine(fmt.Sprintf("// %s - %s", t.name, t.description))
-		data.WriteString(strings.Join(typeDescriptionLines, "\n// "))
+		typeDescription := fitTextToLine(fmt.Sprintf("%s - %s", t.name, t.description), "// ")
+		data.WriteString(typeDescription)
 
 		data.WriteString(fmt.Sprintf("\ntype %s struct {\n", t.name))
 
 		fieldsCount += len(t.fields)
 		for _, f := range t.fields {
-			fieldDescriptionLines := fitLine(fmt.Sprintf("\t// %s - %s", f.name, f.description))
-			data.WriteString(strings.Join(fieldDescriptionLines, "\n\t// "))
+			fieldDescription := fitTextToLine(fmt.Sprintf("%s - %s", f.name, f.description), "\t// ")
+			data.WriteString(fieldDescription)
 
 			omitempty := ""
 			if f.optional {

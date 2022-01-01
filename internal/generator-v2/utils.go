@@ -134,7 +134,7 @@ func removeHTML(text string) string {
 	return text
 }
 
-func fitLine(text string) []string {
+func splitTextToFitLine(text string) []string {
 	words := strings.Split(text, " ")
 	result := make([]string, 0)
 	line := strings.Builder{}
@@ -169,6 +169,11 @@ func fitLine(text string) []string {
 	}
 
 	return result
+}
+
+func fitTextToLine(text, delimiter string) string {
+	lines := splitTextToFitLine(delimiter + text)
+	return strings.Join(lines, "\n"+delimiter)
 }
 
 func trimSpaces(text string) string {
