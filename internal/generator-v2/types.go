@@ -118,7 +118,7 @@ func generateTypeFields(fieldDocs string) tgTypeFields {
 func writeTypes(file *os.File, types tgTypes) {
 	data := strings.Builder{}
 
-	info("Types: %d", len(types))
+	logInfo("Types: %d", len(types))
 
 	data.WriteString(fmt.Sprintf("package %s\n", packageName))
 	data.WriteString(`
@@ -153,7 +153,7 @@ import (
 		data.WriteString("}\n\n")
 	}
 
-	info("Type fields: %d", fieldsCount)
+	logInfo("Type fields: %d", fieldsCount)
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)

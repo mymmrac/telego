@@ -28,12 +28,12 @@ func init() {
 }
 
 func generateTypesTests() {
-	info("Reading types from: %s", typesFilename)
+	logInfo("Reading types from: %s", typesFilename)
 
 	typesBytes, err := ioutil.ReadFile(typesFilename)
 	exitOnErr(err)
 
-	info("Types length: %d", len(typesBytes))
+	logInfo("Types length: %d", len(typesBytes))
 
 	types := string(typesBytes)
 
@@ -55,7 +55,7 @@ func TestTypesInterfaces(t *testing.T) {
 
 	funcs := funcRegexp.FindAllStringSubmatch(types, -1)
 
-	info("Func count: %d", len(funcs))
+	logInfo("Func count: %d", len(funcs))
 
 	for _, f := range funcs {
 		funcType := f[1]
@@ -72,5 +72,4 @@ func TestTypesInterfaces(t *testing.T) {
 	exitOnErr(err)
 
 	formatFile(typesTestsFile.Name())
-	info("Done")
 }

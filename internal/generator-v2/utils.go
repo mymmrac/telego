@@ -72,13 +72,17 @@ func init() {
 	exitOnErr(err)
 }
 
-func info(format string, args ...interface{}) {
+func logInfo(format string, args ...interface{}) {
 	fmt.Printf("[INFO] "+format+"\n", args...)
+}
+
+func logError(format string, args ...interface{}) {
+	fmt.Printf("[ERROR] "+format+"\n", args...)
 }
 
 func exitOnErr(err error) {
 	if err != nil {
-		fmt.Printf("[ERROR] %s\n", err)
+		logError("%v", err)
 		os.Exit(1)
 	}
 }

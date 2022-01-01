@@ -24,4 +24,8 @@ race:
 
 pre-commit: test lint
 
-.PHONY: lint-install lint test cover pre-commit mock-install
+# Usage: make generator RUN="types types-tests methods"
+generator: ./internal/generator-v2
+	go run ./internal/generator-v2 $$RUN
+
+.PHONY: lint-install mock-install generate lint test cover race pre-commit generator
