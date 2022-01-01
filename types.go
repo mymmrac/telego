@@ -7,8 +7,8 @@ import (
 	"github.com/mymmrac/telego/telegoapi"
 )
 
-// Update - This object (https://core.telegram.org/bots/api#available-types) represents an incoming update.At
-// most one of the optional parameters can be present in any given update.
+// Update - This object (https://core.telegram.org/bots/api#available-types) represents an incoming update.
+// At most one of the optional parameters can be present in any given update.
 type Update struct {
 	// UpdateID - The update's unique identifier. Update identifiers start from a certain positive number and
 	// increase sequentially. This ID becomes especially handy if you're using Webhooks
@@ -233,12 +233,14 @@ type Message struct {
 	// MessageID - Unique message identifier inside this chat
 	MessageID int `json:"message_id"`
 
-	// From - Optional. Sender, empty for messages sent to channels
+	// From - Optional. Sender of the message; empty for messages sent to channels. For backward compatibility,
+	// the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
 	From *User `json:"from,omitempty"`
 
-	// SenderChat - Optional. Sender of the message, sent on behalf of a chat. The channel itself for channel
-	// messages. The supergroup itself for messages from anonymous group administrators. The linked channel for
-	// messages automatically forwarded to the discussion group
+	// SenderChat - Optional. Sender of the message, sent on behalf of a chat. For example, the channel itself
+	// for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel
+	// for messages automatically forwarded to the discussion group. For backward compatibility, the field from
+	// contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
 	SenderChat *Chat `json:"sender_chat,omitempty"`
 
 	// Date - Date the message was sent in Unix time
@@ -258,8 +260,8 @@ type Message struct {
 	// in the channel
 	ForwardFromMessageID int `json:"forward_from_message_id,omitempty"`
 
-	// ForwardSignature - Optional. For messages forwarded from channels, signature of the post author if
-	// present
+	// ForwardSignature - Optional. For forwarded messages that were originally sent in channels or by an
+	// anonymous chat administrator, signature of the message sender if present
 	ForwardSignature string `json:"forward_signature,omitempty"`
 
 	// ForwardSenderName - Optional. Sender's name for messages forwarded from users who disallow adding a link
@@ -448,12 +450,12 @@ type MessageID struct {
 // MessageEntity - This object represents one special entity in a text message. For example, hashtags,
 // usernames, URLs, etc.
 type MessageEntity struct {
-	// Type - Type of the entity. Can be “mention” (@username), “hashtag” (#hashtag), “cashtag”
-	// ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email”
+	// Type - Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag),
+	// “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email”
 	// (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic”
-	// (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “code”
-	// (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs),
-	// “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions))
+	// (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler”
+	// (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable
+	// text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions))
 	Type string `json:"type"`
 
 	// Offset - Offset in UTF-16 code units to the start of the entity
@@ -893,6 +895,7 @@ type UserProfilePhotos struct {
 // https://api.telegram.org/file/bot<token>/<file_path>. It is guaranteed that the link will be valid for at
 // least 1 hour. When the link expires, a new one can be requested by calling getFile
 // (https://core.telegram.org/bots/api#getfile).
+// Maximum file size to download is 20 MB
 type File struct {
 	// FileID - Identifier for this file, which can be used to download or reuse the file
 	FileID string `json:"file_id"`
@@ -946,9 +949,9 @@ type ReplyKeyboardMarkup struct {
 
 	// Selective - Optional. Use this parameter if you want to show the keyboard to specific users only.
 	// Targets: 1) users that are @mentioned in the text of the Message (https://core.telegram.org/bots/api#message)
-	// object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.Example:
-	// A user requests to change the bot's language, bot replies to the request with a keyboard to select the new
-	// language. Other users in the group don't see the keyboard.
+	// object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+	// Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select
+	// the new language. Other users in the group don't see the keyboard.
 	Selective bool `json:"selective,omitempty"`
 }
 
@@ -999,9 +1002,9 @@ type ReplyKeyboardRemove struct {
 
 	// Selective - Optional. Use this parameter if you want to remove the keyboard for specific users only.
 	// Targets: 1) users that are @mentioned in the text of the Message (https://core.telegram.org/bots/api#message)
-	// object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.Example:
-	// A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for
-	// that user, while still showing the keyboard with poll options to users who haven't voted yet.
+	// object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+	// Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the
+	// keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
 	Selective bool `json:"selective,omitempty"`
 }
 
@@ -1030,7 +1033,9 @@ type InlineKeyboardButton struct {
 	// Text - Label text on the button
 	Text string `json:"text"`
 
-	// URL - Optional. HTTP or tg:// URL to be opened when button is pressed
+	// URL - Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id>
+	// can be used to mention a user by their ID without using a username, if this is allowed by their privacy
+	// settings.
 	URL string `json:"url,omitempty"`
 
 	// LoginURL - Optional. An HTTP URL used to automatically authorize the user. Can be used as a replacement
@@ -1043,25 +1048,28 @@ type InlineKeyboardButton struct {
 
 	// SwitchInlineQuery - Optional. If set, pressing the button will prompt the user to select one of their
 	// chats, open that chat and insert the bot's username and the specified inline query in the input field. Can be
-	// empty, in which case just the bot's username will be inserted.Note: This offers an easy way for users to
-	// start using your bot in inline mode (https://core.telegram.org/bots/inline) when they are currently in a
-	// private chat with it. Especially useful when combined with switch_pm…
-	// (https://core.telegram.org/bots/api#answerinlinequery) actions – in this case the user will be
-	// automatically returned to the chat they switched from, skipping the chat selection screen.
+	// empty, in which case just the bot's username will be inserted.
+	// Note: This offers an easy way for users to start using your bot in inline mode
+	// (https://core.telegram.org/bots/inline) when they are currently in a private chat with it. Especially useful
+	// when combined with switch_pm… (https://core.telegram.org/bots/api#answerinlinequery) actions – in this
+	// case the user will be automatically returned to the chat they switched from, skipping the chat selection
+	// screen.
 	SwitchInlineQuery string `json:"switch_inline_query,omitempty"`
 
 	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and
 	// the specified inline query in the current chat's input field. Can be empty, in which case only the bot's
-	// username will be inserted.This offers a quick way for the user to open your bot in inline mode in the same
-	// chat – good for selecting something from multiple options.
+	// username will be inserted.
+	// This offers a quick way for the user to open your bot in inline mode in the same chat – good for selecting
+	// something from multiple options.
 	SwitchInlineQueryCurrentChat string `json:"switch_inline_query_current_chat,omitempty"`
 
-	// CallbackGame - Optional. Description of the game that will be launched when the user presses the
-	// button.NOTE: This type of button must always be the first button in the first row.
+	// CallbackGame - Optional. Description of the game that will be launched when the user presses the button.
+	// NOTE: This type of button must always be the first button in the first row.
 	CallbackGame *CallbackGame `json:"callback_game,omitempty"`
 
-	// Pay - Optional. Specify True, to send a Pay button (https://core.telegram.org/bots/api#payments).NOTE:
-	// This type of button must always be the first button in the first row.
+	// Pay - Optional. Specify True, to send a Pay button (https://core.telegram.org/bots/api#payments).
+	// NOTE: This type of button must always be the first button in the first row and can only be used in invoice
+	// messages.
 	Pay bool `json:"pay,omitempty"`
 }
 
@@ -1069,16 +1077,18 @@ type InlineKeyboardButton struct {
 // authorize a user. Serves as a great replacement for the Telegram Login Widget
 // (https://core.telegram.org/widgets/login) when the user is coming from Telegram. All the user needs to do is
 // tap/click a button and confirm that they want to log in:
-// Image: https://core.telegram.org/file/811140015/1734/8VZFkwWXalM.97872/6127fa62d8a0bf2b3c
-// Telegram apps support these buttons as of version 5.7.
-// Sample bot: @discussbot
+// TITLE (https://core.telegram.org/file/811140015/1734/8VZFkwWXalM.97872/6127fa62d8a0bf2b3c)
+// Telegram apps support these buttons as of version 5.7
+// (https://telegram.org/blog/privacy-discussions-web-bots#meet-seamless-web-bots).
+// Sample bot: @discussbot (https://t.me/discussbot)
 type LoginURL struct {
 	// URL - An HTTP URL to be opened with user authorization data added to the query string when the button is
 	// pressed. If the user refuses to provide authorization data, the original URL without information about the
 	// user will be opened. The data added is the same as described in Receiving authorization data
-	// (https://core.telegram.org/widgets/login#receiving-authorization-data).NOTE: You must always check the hash
-	// of the received data to verify the authentication and the integrity of the data as described in Checking
-	// authorization (https://core.telegram.org/widgets/login#checking-authorization).
+	// (https://core.telegram.org/widgets/login#receiving-authorization-data).
+	// NOTE: You must always check the hash of the received data to verify the authentication and the integrity of
+	// the data as described in Checking authorization
+	// (https://core.telegram.org/widgets/login#checking-authorization).
 	URL string `json:"url"`
 
 	// ForwardText - Optional. New text of the button in forwarded messages.
@@ -1102,11 +1112,6 @@ type LoginURL struct {
 // button was attached to a message sent via the bot (in inline mode
 // (https://core.telegram.org/bots/api#inline-mode)), the field inline_message_id will be present. Exactly one
 // of the fields data or game_short_name will be present.
-//
-// NOTE: After the user presses a callback button, Telegram clients will display a progress bar until you call
-// answerCallbackQuery (https://core.telegram.org/bots/api#answercallbackquery). It is, therefore, necessary to react
-// by calling answerCallbackQuery (https://core.telegram.org/bots/api#answercallbackquery) even if no notification to
-// the user is needed (e.g., without specifying any of the optional parameters).
 type CallbackQuery struct {
 	// ID - Unique identifier for this query
 	ID string `json:"id"`
@@ -1139,7 +1144,6 @@ type CallbackQuery struct {
 // the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful
 // if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode
 // (https://core.telegram.org/bots#privacy-mode).
-// Example: https://core.telegram.org/bots/api#forcereply
 type ForceReply struct {
 	// ForceReply - Shows reply interface to the user, as if they manually selected the bot's message and tapped
 	// 'Reply'
@@ -1214,12 +1218,12 @@ type ChatInviteLink struct {
 
 // ChatMember - This object contains information about one member of a chat. Currently, the following 6 types
 // of chat members are supported:
-// ChatMemberOwner
-// ChatMemberAdministrator
-// ChatMemberMember
-// ChatMemberRestricted
-// ChatMemberLeft
-// ChatMemberBanned
+// ChatMemberOwner (https://core.telegram.org/bots/api#chatmemberowner)
+// ChatMemberAdministrator (https://core.telegram.org/bots/api#chatmemberadministrator)
+// ChatMemberMember (https://core.telegram.org/bots/api#chatmembermember)
+// ChatMemberRestricted (https://core.telegram.org/bots/api#chatmemberrestricted)
+// ChatMemberLeft (https://core.telegram.org/bots/api#chatmemberleft)
+// ChatMemberBanned (https://core.telegram.org/bots/api#chatmemberbanned)
 type ChatMember interface {
 	MemberStatus() string
 	MemberUser() User
@@ -1545,7 +1549,7 @@ type ChatJoinRequest struct {
 	From User `json:"from"`
 
 	// Date - Date the request was sent in Unix time
-	Date int `json:"date"`
+	Date int64 `json:"date"`
 
 	// Bio - Optional. Bio of the user.
 	Bio string `json:"bio,omitempty"`
@@ -1597,23 +1601,24 @@ type ChatLocation struct {
 
 // BotCommand - This object represents a bot command.
 type BotCommand struct {
-	// Command - Text of the command, 1-32 characters. Can contain only lowercase English letters, digits and
+	// Command - Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and
 	// underscores.
 	Command string `json:"command"`
 
-	// Description - Description of the command, 3-256 characters.
+	// Description - Description of the command; 1-256 characters.
 	Description string `json:"description"`
 }
 
 // BotCommandScope - This object represents the scope to which bot commands are applied. Currently, the
 // following 7 scopes are supported:
-// BotCommandScopeDefault
-// BotCommandScopeAllPrivateChats
-// BotCommandScopeAllGroupChats
+// BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault)
+// BotCommandScopeAllPrivateChats (https://core.telegram.org/bots/api#botcommandscopeallprivatechats)
+// BotCommandScopeAllGroupChats (https://core.telegram.org/bots/api#botcommandscopeallgroupchats)
 // BotCommandScopeAllChatAdministrators
-// BotCommandScopeChat
-// BotCommandScopeChatAdministrators
-// BotCommandScopeChatMember
+// (https://core.telegram.org/bots/api#botcommandscopeallchatadministrators)
+// BotCommandScopeChat (https://core.telegram.org/bots/api#botcommandscopechat)
+// BotCommandScopeChatAdministrators (https://core.telegram.org/bots/api#botcommandscopechatadministrators)
+// BotCommandScopeChatMember (https://core.telegram.org/bots/api#botcommandscopechatmember)
 type BotCommandScope interface {
 	ScopeType() string
 }
@@ -1746,7 +1751,7 @@ type BotCommandScopeChatMember struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 }
 
 // ScopeType returns BotCommandScope type
@@ -1795,12 +1800,12 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 	return nil, errors.New("file, file ID and URL are empty")
 }
 
-// InputMedia - This object represents the content of a media message to be sent. It should be one of:
-// InputMediaAnimation
-// InputMediaDocument
-// InputMediaAudio
-// InputMediaPhoto
-// InputMediaVideo
+// InputMedia - This object represents the content of a media message to be sent. It should be one of
+// InputMediaAnimation (https://core.telegram.org/bots/api#inputmediaanimation)
+// InputMediaDocument (https://core.telegram.org/bots/api#inputmediadocument)
+// InputMediaAudio (https://core.telegram.org/bots/api#inputmediaaudio)
+// InputMediaPhoto (https://core.telegram.org/bots/api#inputmediaphoto)
+// InputMediaVideo (https://core.telegram.org/bots/api#inputmediavideo)
 type InputMedia interface {
 	MediaType() string
 	fileCompatible
@@ -2190,26 +2195,28 @@ type InlineQuery struct {
 
 // InlineQueryResult - This object represents one result of an inline query. Telegram clients currently
 // support results of the following 20 types:
-// InlineQueryResultCachedAudio
-// InlineQueryResultCachedDocument
-// InlineQueryResultCachedGif
-// InlineQueryResultCachedMpeg4Gif
-// InlineQueryResultCachedPhoto
-// InlineQueryResultCachedSticker
-// InlineQueryResultCachedVideo
-// InlineQueryResultCachedVoice
-// InlineQueryResultArticle
-// InlineQueryResultAudio
-// InlineQueryResultContact
-// InlineQueryResultGame
-// InlineQueryResultDocument
-// InlineQueryResultGif
-// InlineQueryResultLocation
-// InlineQueryResultMpeg4Gif
-// InlineQueryResultPhoto
-// InlineQueryResultVenue
-// InlineQueryResultVideo
-// InlineQueryResultVoice
+// InlineQueryResultCachedAudio (https://core.telegram.org/bots/api#inlinequeryresultcachedaudio)
+// InlineQueryResultCachedDocument (https://core.telegram.org/bots/api#inlinequeryresultcacheddocument)
+// InlineQueryResultCachedGif (https://core.telegram.org/bots/api#inlinequeryresultcachedgif)
+// InlineQueryResultCachedMpeg4Gif (https://core.telegram.org/bots/api#inlinequeryresultcachedmpeg4gif)
+// InlineQueryResultCachedPhoto (https://core.telegram.org/bots/api#inlinequeryresultcachedphoto)
+// InlineQueryResultCachedSticker (https://core.telegram.org/bots/api#inlinequeryresultcachedsticker)
+// InlineQueryResultCachedVideo (https://core.telegram.org/bots/api#inlinequeryresultcachedvideo)
+// InlineQueryResultCachedVoice (https://core.telegram.org/bots/api#inlinequeryresultcachedvoice)
+// InlineQueryResultArticle (https://core.telegram.org/bots/api#inlinequeryresultarticle)
+// InlineQueryResultAudio (https://core.telegram.org/bots/api#inlinequeryresultaudio)
+// InlineQueryResultContact (https://core.telegram.org/bots/api#inlinequeryresultcontact)
+// InlineQueryResultGame (https://core.telegram.org/bots/api#inlinequeryresultgame)
+// InlineQueryResultDocument (https://core.telegram.org/bots/api#inlinequeryresultdocument)
+// InlineQueryResultGif (https://core.telegram.org/bots/api#inlinequeryresultgif)
+// InlineQueryResultLocation (https://core.telegram.org/bots/api#inlinequeryresultlocation)
+// InlineQueryResultMpeg4Gif (https://core.telegram.org/bots/api#inlinequeryresultmpeg4gif)
+// InlineQueryResultPhoto (https://core.telegram.org/bots/api#inlinequeryresultphoto)
+// InlineQueryResultVenue (https://core.telegram.org/bots/api#inlinequeryresultvenue)
+// InlineQueryResultVideo (https://core.telegram.org/bots/api#inlinequeryresultvideo)
+// InlineQueryResultVoice (https://core.telegram.org/bots/api#inlinequeryresultvoice)
+// Note: All URLs passed in inline query results will be available to end users and therefore must be assumed to
+// be public.
 type InlineQueryResult interface {
 	ResultType() string
 }
@@ -2450,6 +2457,8 @@ func (i *InlineQueryResultMpeg4Gif) ResultType() string {
 // InlineQueryResultVideo - Represents a link to a page containing an embedded video player or a video file.
 // By default, this video file will be sent by the user with an optional caption. Alternatively, you can use
 // input_message_content to send a message with the specified content instead of the video.
+// If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you must replace its content
+// using input_message_content.
 type InlineQueryResultVideo struct {
 	// Type - Type of the result, must be video
 	Type string `json:"type"`
@@ -3144,11 +3153,11 @@ func (i *InlineQueryResultCachedAudio) ResultType() string {
 
 // InputMessageContent - This object represents the content of a message to be sent as a result of an inline
 // query. Telegram clients currently support the following 5 types:
-// InputTextMessageContent
-// InputLocationMessageContent
-// InputVenueMessageContent
-// InputContactMessageContent
-// InputInvoiceMessageContent
+// InputTextMessageContent (https://core.telegram.org/bots/api#inputtextmessagecontent)
+// InputLocationMessageContent (https://core.telegram.org/bots/api#inputlocationmessagecontent)
+// InputVenueMessageContent (https://core.telegram.org/bots/api#inputvenuemessagecontent)
+// InputContactMessageContent (https://core.telegram.org/bots/api#inputcontactmessagecontent)
+// InputInvoiceMessageContent (https://core.telegram.org/bots/api#inputinvoicemessagecontent)
 type InputMessageContent interface {
 	ContentType() string
 }
@@ -3651,15 +3660,16 @@ type EncryptedCredentials struct {
 
 // PassportElementError - This object represents an error in the Telegram Passport element which was
 // submitted that should be resolved by the user. It should be one of:
-// PassportElementErrorDataField
-// PassportElementErrorFrontSide
-// PassportElementErrorReverseSide
-// PassportElementErrorSelfie
-// PassportElementErrorFile
-// PassportElementErrorFiles
-// PassportElementErrorTranslationFile
+// PassportElementErrorDataField (https://core.telegram.org/bots/api#passportelementerrordatafield)
+// PassportElementErrorFrontSide (https://core.telegram.org/bots/api#passportelementerrorfrontside)
+// PassportElementErrorReverseSide (https://core.telegram.org/bots/api#passportelementerrorreverseside)
+// PassportElementErrorSelfie (https://core.telegram.org/bots/api#passportelementerrorselfie)
+// PassportElementErrorFile (https://core.telegram.org/bots/api#passportelementerrorfile)
+// PassportElementErrorFiles (https://core.telegram.org/bots/api#passportelementerrorfiles)
+// PassportElementErrorTranslationFile (https://core.telegram.org/bots/api#passportelementerrortranslationfile)
 // PassportElementErrorTranslationFiles
-// PassportElementErrorUnspecified
+// (https://core.telegram.org/bots/api#passportelementerrortranslationfiles)
+// PassportElementErrorUnspecified (https://core.telegram.org/bots/api#passportelementerrorunspecified)
 type PassportElementError interface {
 	ErrorSource() string
 }
