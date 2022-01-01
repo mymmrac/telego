@@ -9,227 +9,174 @@ import (
 	"github.com/mymmrac/telego/telegoapi"
 )
 
-func TestReplyKeyboardMarkup_ReplyType(t *testing.T) {
+//nolint:funlen
+func TestTypesInterfaces(t *testing.T) {
+	assert.Implements(t, (*ReplyMarkup)(nil), &ReplyKeyboardMarkup{})
 	assert.Equal(t, MarkupTypeReplyKeyboard, (&ReplyKeyboardMarkup{}).ReplyType())
-}
 
-func TestReplyKeyboardRemove_ReplyType(t *testing.T) {
+	assert.Implements(t, (*ReplyMarkup)(nil), &ReplyKeyboardRemove{})
 	assert.Equal(t, MarkupTypeReplyKeyboardRemove, (&ReplyKeyboardRemove{}).ReplyType())
-}
 
-func TestInlineKeyboardMarkup_ReplyType(t *testing.T) {
+	assert.Implements(t, (*ReplyMarkup)(nil), &InlineKeyboardMarkup{})
 	assert.Equal(t, MarkupTypeInlineKeyboard, (&InlineKeyboardMarkup{}).ReplyType())
-}
 
-func TestForceReply_ReplyType(t *testing.T) {
+	assert.Implements(t, (*ReplyMarkup)(nil), &ForceReply{})
 	assert.Equal(t, MarkupTypeForceReply, (&ForceReply{}).ReplyType())
-}
 
-func TestChatMemberOwner_MemberStatus(t *testing.T) {
+	assert.Implements(t, (*ChatMember)(nil), &ChatMemberOwner{})
 	assert.Equal(t, MemberStatusCreator, (&ChatMemberOwner{}).MemberStatus())
-}
 
-func TestChatMemberAdministrator_MemberStatus(t *testing.T) {
+	assert.Implements(t, (*ChatMember)(nil), &ChatMemberAdministrator{})
 	assert.Equal(t, MemberStatusAdministrator, (&ChatMemberAdministrator{}).MemberStatus())
-}
 
-func TestChatMemberMember_MemberStatus(t *testing.T) {
+	assert.Implements(t, (*ChatMember)(nil), &ChatMemberMember{})
 	assert.Equal(t, MemberStatusMember, (&ChatMemberMember{}).MemberStatus())
-}
 
-func TestChatMemberRestricted_MemberStatus(t *testing.T) {
+	assert.Implements(t, (*ChatMember)(nil), &ChatMemberRestricted{})
 	assert.Equal(t, MemberStatusRestricted, (&ChatMemberRestricted{}).MemberStatus())
-}
 
-func TestChatMemberLeft_MemberStatus(t *testing.T) {
+	assert.Implements(t, (*ChatMember)(nil), &ChatMemberLeft{})
 	assert.Equal(t, MemberStatusLeft, (&ChatMemberLeft{}).MemberStatus())
-}
 
-func TestChatMemberBanned_MemberStatus(t *testing.T) {
+	assert.Implements(t, (*ChatMember)(nil), &ChatMemberBanned{})
 	assert.Equal(t, MemberStatusBanned, (&ChatMemberBanned{}).MemberStatus())
-}
 
-func TestBotCommandScopeDefault_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeDefault{})
 	assert.Equal(t, ScopeTypeDefault, (&BotCommandScopeDefault{}).ScopeType())
-}
 
-func TestBotCommandScopeAllPrivateChats_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeAllPrivateChats{})
 	assert.Equal(t, ScopeTypeAllPrivateChats, (&BotCommandScopeAllPrivateChats{}).ScopeType())
-}
 
-func TestBotCommandScopeAllGroupChats_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeAllGroupChats{})
 	assert.Equal(t, ScopeTypeAllGroupChats, (&BotCommandScopeAllGroupChats{}).ScopeType())
-}
 
-func TestBotCommandScopeAllChatAdministrators_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeAllChatAdministrators{})
 	assert.Equal(t, ScopeTypeAllChatAdministrators, (&BotCommandScopeAllChatAdministrators{}).ScopeType())
-}
 
-func TestBotCommandScopeChat_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeChat{})
 	assert.Equal(t, ScopeTypeChat, (&BotCommandScopeChat{}).ScopeType())
-}
 
-func TestBotCommandScopeChatAdministrators_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeChatAdministrators{})
 	assert.Equal(t, ScopeTypeChatAdministrators, (&BotCommandScopeChatAdministrators{}).ScopeType())
-}
 
-func TestBotCommandScopeChatMember_ScopeType(t *testing.T) {
+	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeChatMember{})
 	assert.Equal(t, ScopeTypeChatMember, (&BotCommandScopeChatMember{}).ScopeType())
-}
 
-func TestInputMediaPhoto_MediaType(t *testing.T) {
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaPhoto{})
 	assert.Equal(t, MediaTypePhoto, (&InputMediaPhoto{}).MediaType())
-}
 
-func TestInputMediaVideo_MediaType(t *testing.T) {
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaVideo{})
 	assert.Equal(t, MediaTypeVideo, (&InputMediaVideo{}).MediaType())
-}
 
-func TestInputMediaAnimation_MediaType(t *testing.T) {
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaAnimation{})
 	assert.Equal(t, MediaTypeAnimation, (&InputMediaAnimation{}).MediaType())
-}
 
-func TestInputMediaAudio_MediaType(t *testing.T) {
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaAudio{})
 	assert.Equal(t, MediaTypeAudio, (&InputMediaAudio{}).MediaType())
-}
 
-func TestInputMediaDocument_MediaType(t *testing.T) {
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaDocument{})
 	assert.Equal(t, MediaTypeDocument, (&InputMediaDocument{}).MediaType())
-}
 
-func TestInlineQueryResultArticle_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultArticle{})
 	assert.Equal(t, ResultTypeArticle, (&InlineQueryResultArticle{}).ResultType())
-}
 
-func TestInlineQueryResultPhoto_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultPhoto{})
 	assert.Equal(t, ResultTypePhoto, (&InlineQueryResultPhoto{}).ResultType())
-}
 
-func TestInlineQueryResultGif_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultGif{})
 	assert.Equal(t, ResultTypeGif, (&InlineQueryResultGif{}).ResultType())
-}
 
-func TestInlineQueryResultMpeg4Gif_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultMpeg4Gif{})
 	assert.Equal(t, ResultTypeMpeg4Gif, (&InlineQueryResultMpeg4Gif{}).ResultType())
-}
 
-func TestInlineQueryResultVideo_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultVideo{})
 	assert.Equal(t, ResultTypeVideo, (&InlineQueryResultVideo{}).ResultType())
-}
 
-func TestInlineQueryResultAudio_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultAudio{})
 	assert.Equal(t, ResultTypeAudio, (&InlineQueryResultAudio{}).ResultType())
-}
 
-func TestInlineQueryResultVoice_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultVoice{})
 	assert.Equal(t, ResultTypeVoice, (&InlineQueryResultVoice{}).ResultType())
-}
 
-func TestInlineQueryResultDocument_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultDocument{})
 	assert.Equal(t, ResultTypeDocument, (&InlineQueryResultDocument{}).ResultType())
-}
 
-func TestInlineQueryResultLocation_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultLocation{})
 	assert.Equal(t, ResultTypeLocation, (&InlineQueryResultLocation{}).ResultType())
-}
 
-func TestInlineQueryResultVenue_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultVenue{})
 	assert.Equal(t, ResultTypeVenue, (&InlineQueryResultVenue{}).ResultType())
-}
 
-func TestInlineQueryResultContact_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultContact{})
 	assert.Equal(t, ResultTypeContact, (&InlineQueryResultContact{}).ResultType())
-}
 
-func TestInlineQueryResultGame_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultGame{})
 	assert.Equal(t, ResultTypeGame, (&InlineQueryResultGame{}).ResultType())
-}
 
-func TestInlineQueryResultCachedPhoto_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedPhoto{})
 	assert.Equal(t, ResultTypePhoto, (&InlineQueryResultCachedPhoto{}).ResultType())
-}
 
-func TestInlineQueryResultCachedGif_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedGif{})
 	assert.Equal(t, ResultTypeGif, (&InlineQueryResultCachedGif{}).ResultType())
-}
 
-func TestInlineQueryResultCachedMpeg4Gif_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedMpeg4Gif{})
 	assert.Equal(t, ResultTypeMpeg4Gif, (&InlineQueryResultCachedMpeg4Gif{}).ResultType())
-}
 
-func TestInlineQueryResultCachedSticker_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedSticker{})
 	assert.Equal(t, ResultTypeSticker, (&InlineQueryResultCachedSticker{}).ResultType())
-}
 
-func TestInlineQueryResultCachedDocument_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedDocument{})
 	assert.Equal(t, ResultTypeDocument, (&InlineQueryResultCachedDocument{}).ResultType())
-}
 
-func TestInlineQueryResultCachedVideo_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedVideo{})
 	assert.Equal(t, ResultTypeVideo, (&InlineQueryResultCachedVideo{}).ResultType())
-}
 
-func TestInlineQueryResultCachedVoice_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedVoice{})
 	assert.Equal(t, ResultTypeVoice, (&InlineQueryResultCachedVoice{}).ResultType())
-}
 
-func TestInlineQueryResultCachedAudio_ResultType(t *testing.T) {
+	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultCachedAudio{})
 	assert.Equal(t, ResultTypeAudio, (&InlineQueryResultCachedAudio{}).ResultType())
-}
 
-func TestInputTextMessageContent_ContentType(t *testing.T) {
+	assert.Implements(t, (*InputMessageContent)(nil), &InputTextMessageContent{})
 	assert.Equal(t, ContentTypeText, (&InputTextMessageContent{}).ContentType())
-}
 
-func TestInputLocationMessageContent_ContentType(t *testing.T) {
+	assert.Implements(t, (*InputMessageContent)(nil), &InputLocationMessageContent{})
 	assert.Equal(t, ContentTypeLocation, (&InputLocationMessageContent{}).ContentType())
-}
 
-func TestInputVenueMessageContent_ContentType(t *testing.T) {
+	assert.Implements(t, (*InputMessageContent)(nil), &InputVenueMessageContent{})
 	assert.Equal(t, ContentTypeVenue, (&InputVenueMessageContent{}).ContentType())
-}
 
-func TestInputContactMessageContent_ContentType(t *testing.T) {
+	assert.Implements(t, (*InputMessageContent)(nil), &InputContactMessageContent{})
 	assert.Equal(t, ContentTypeContact, (&InputContactMessageContent{}).ContentType())
-}
 
-func TestInputInvoiceMessageContent_ContentType(t *testing.T) {
+	assert.Implements(t, (*InputMessageContent)(nil), &InputInvoiceMessageContent{})
 	assert.Equal(t, ContentTypeInvoice, (&InputInvoiceMessageContent{}).ContentType())
-}
 
-func TestPassportElementErrorDataField_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorDataField{})
 	assert.Equal(t, ErrorSourceDataField, (&PassportElementErrorDataField{}).ErrorSource())
-}
 
-func TestPassportElementErrorFrontSide_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorFrontSide{})
 	assert.Equal(t, ErrorSourceFrontSide, (&PassportElementErrorFrontSide{}).ErrorSource())
-}
 
-func TestPassportElementErrorReverseSide_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorReverseSide{})
 	assert.Equal(t, ErrorSourceReverseSide, (&PassportElementErrorReverseSide{}).ErrorSource())
-}
 
-func TestPassportElementErrorSelfie_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorSelfie{})
 	assert.Equal(t, ErrorSourceSelfie, (&PassportElementErrorSelfie{}).ErrorSource())
-}
 
-func TestPassportElementErrorFile_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorFile{})
 	assert.Equal(t, ErrorSourceFile, (&PassportElementErrorFile{}).ErrorSource())
-}
 
-func TestPassportElementErrorFiles_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorFiles{})
 	assert.Equal(t, ErrorSourceFiles, (&PassportElementErrorFiles{}).ErrorSource())
-}
 
-func TestPassportElementErrorTranslationFile_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorTranslationFile{})
 	assert.Equal(t, ErrorSourceTranslationFile, (&PassportElementErrorTranslationFile{}).ErrorSource())
-}
 
-func TestPassportElementErrorTranslationFiles_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorTranslationFiles{})
 	assert.Equal(t, ErrorSourceTranslationFiles, (&PassportElementErrorTranslationFiles{}).ErrorSource())
-}
 
-func TestPassportElementErrorUnspecified_ErrorSource(t *testing.T) {
+	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorUnspecified{})
 	assert.Equal(t, ErrorSourceUnspecified, (&PassportElementErrorUnspecified{}).ErrorSource())
 }
 

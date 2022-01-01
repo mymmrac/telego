@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io"
 	"net/http"
 	"os"
@@ -16,12 +17,24 @@ const (
 	omitemptySuffix = ",omitempty"
 	optionalPrefix  = "Optional. "
 
-	packageName     = "telego"
-	typesFilename   = "./types.go.generated"
-	methodsFilename = "./methods.go.generated"
+	packageName              = "telego"
+	generatedTypesFilename   = "./types.go.generated"
+	generatedMethodsFilename = "./methods.go.generated"
 )
 
+var typeTests = flag.Bool("tt", false, "Generate tests for types")
+
 func main() {
+	flag.Parse()
+
+	if *typeTests {
+		generateTypesTests()
+	} else {
+		generateTypesAndMethods()
+	}
+}
+
+func generateTypesAndMethods() {
 	info("Reading docs...")
 	start := time.Now()
 	docs, err := docsText()
@@ -31,7 +44,7 @@ func main() {
 	info("Download docs in: %s", time.Since(start))
 
 	start = time.Now()
-	typesFile := openFile(typesFilename)
+	typesFile := openFile(generatedTypesFilename)
 	defer func() { _ = typesFile.Close() }()
 
 	types := generateTypes(docs)
@@ -41,7 +54,7 @@ func main() {
 	info("Generated types in: %s", time.Since(start))
 
 	//start = time.Now()
-	//methodsFile := openFile(methodsFilename)
+	//methodsFile := openFile(generatedMethodsFilename)
 	//defer func() { _ = methodsFile.Close() }()
 	//
 	//methods := generateMethods(docs)
