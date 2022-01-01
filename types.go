@@ -487,6 +487,7 @@ const (
 	EntityTypeItalic        = "italic"
 	EntityTypeUnderline     = "underline"
 	EntityTypeStrikethrough = "strikethrough"
+	EntityTypeSpoiler       = "spoiler"
 	EntityTypeCode          = "code"
 	EntityTypePre           = "pre"
 	EntityTypeTextLink      = "text_link"

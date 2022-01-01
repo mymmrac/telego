@@ -489,7 +489,7 @@ func TestConstants(t *testing.T) {
 		{ChatTypeSender, ChatTypePrivate, ChatTypeGroup, ChatTypeSupergroup, ChatTypeChannel},
 		{EntityTypeMention, EntityTypeHashtag, EntityTypeCashtag, EntityTypeBotCommand, EntityTypeURL, EntityTypeEmail,
 			EntityTypePhoneNumber, EntityTypeBold, EntityTypeItalic, EntityTypeUnderline, EntityTypeStrikethrough,
-			EntityTypeCode, EntityTypePre, EntityTypeTextLink, EntityTypeTextMention},
+			EntityTypeSpoiler, EntityTypeCode, EntityTypePre, EntityTypeTextLink, EntityTypeTextMention},
 		{EmojiDice, EmojiDarts, EmojiBowling, EmojiBasketball, EmojiSoccer, EmojiSlotMachine},
 		{PollTypeRegular, PollTypeQuiz},
 		{MarkupTypeReplyKeyboard, MarkupTypeReplyKeyboardRemove, MarkupTypeInlineKeyboard, MarkupTypeForceReply},
