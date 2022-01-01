@@ -536,3 +536,40 @@ func TestInputMediaDocument_fileParameters(t *testing.T) {
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
 }
+
+func TestConstants(t *testing.T) {
+	tests := [][]string{
+		{ChatTypeSender, ChatTypePrivate, ChatTypeGroup, ChatTypeSupergroup, ChatTypeChannel},
+		{EntityTypeMention, EntityTypeHashtag, EntityTypeCashtag, EntityTypeBotCommand, EntityTypeURL, EntityTypeEmail,
+			EntityTypePhoneNumber, EntityTypeBold, EntityTypeItalic, EntityTypeUnderline, EntityTypeStrikethrough,
+			EntityTypeCode, EntityTypePre, EntityTypeTextLink, EntityTypeTextMention},
+		{EmojiDice, EmojiDarts, EmojiBowling, EmojiBasketball, EmojiSoccer, EmojiSlotMachine},
+		{PollTypeRegular, PollTypeQuiz},
+		{MarkupTypeReplyKeyboard, MarkupTypeReplyKeyboardRemove, MarkupTypeInlineKeyboard, MarkupTypeForceReply},
+		{MemberStatusCreator, MemberStatusAdministrator, MemberStatusMember, MemberStatusRestricted, MemberStatusLeft,
+			MemberStatusBanned},
+		{ScopeTypeDefault, ScopeTypeAllPrivateChats, ScopeTypeAllGroupChats, ScopeTypeAllChatAdministrators,
+			ScopeTypeChat, ScopeTypeChatAdministrators, ScopeTypeChatMember},
+		{MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument},
+		{PointForehead, PointEyes, PointMouth, PointChin},
+		{ResultTypeArticle, ResultTypePhoto, ResultTypeGif, ResultTypeMpeg4Gif, ResultTypeVideo, ResultTypeAudio,
+			ResultTypeVoice, ResultTypeDocument, ResultTypeLocation, ResultTypeVenue, ResultTypeContact,
+			ResultTypeGame, ResultTypeSticker},
+		{MimeTypeImageJpeg, MimeTypeImageGif, MimeTypeVideoMp4, MimeTypeTextHTML, MimeTypeApplicationPDF,
+			MimeTypeApplicationZip},
+		{ContentTypeText, ContentTypeLocation, ContentTypeVenue, ContentTypeContact, ContentTypeInvoice},
+		{ElementTypePersonalDetails, ElementTypePassport, ElementTypeDriverLicense, ElementTypeIdentityCard,
+			ElementTypeInternalPassport, ElementTypeAddress, ElementTypeUtilityBill, ElementTypeBankStatement,
+			ElementTypeRentalAgreement, ElementTypePassportRegistration, ElementTypeTemporaryRegistration,
+			ElementTypePhoneNumber, ElementTypeEmail},
+		{ErrorSourceDataField, ErrorSourceFrontSide, ErrorSourceReverseSide, ErrorSourceSelfie, ErrorSourceFile,
+			ErrorSourceFiles, ErrorSourceTranslationFile, ErrorSourceTranslationFiles, ErrorSourceUnspecified},
+	}
+
+	for _, tt := range tests {
+		assert.True(t, len(tt) > 0)
+		for _, ct := range tt {
+			assert.True(t, len(ct) > 0)
+		}
+	}
+}
