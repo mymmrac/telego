@@ -68,6 +68,8 @@ const (
 	returnTypePattern2 = `((?:Array of |)[A-Z]\w+)[a-z ]*?returned`
 )
 
+const returnTypeNotFound = "NOT_FOUND"
+
 var (
 	methodRegexp          *regexp.Regexp
 	methodParameterRegexp *regexp.Regexp
@@ -104,6 +106,8 @@ func generateMethods(docs string) tgMethods {
 			returnType:  parseReturnType(methodGroup[2]),
 		}
 
+		methodSpecialCases(&method)
+
 		methods = append(methods, method)
 	}
 
@@ -124,36 +128,12 @@ func generateMethodParameters(parametersDocs string) tgMethodParameters {
 		parameter.optional = parameterGroup[3] == "Optional"
 		parameter.typ = parseType(parameterGroup[2], parameter.optional)
 
+		parameterSpecialCases(&parameter)
+
 		parameters = append(parameters, parameter)
 	}
 
 	return parameters
-}
-
-const returnTypeNotFound = "NOT_FOUND"
-
-func parseReturnType(methodDescription string) string {
-	methodDescription = removeHTML(methodDescription)
-	var returnType string
-
-	returns1 := returnTypeRegexp1.FindStringSubmatch(methodDescription)
-	if len(returns1) != 0 {
-		returnType = returns1[1]
-	}
-
-	returns2 := returnTypeRegexp2.FindStringSubmatch(methodDescription)
-	if len(returns2) != 0 {
-		returnType = returns2[1]
-	}
-
-	switch returnType {
-	case "":
-		return returnTypeNotFound
-	case "True", "error":
-		return ""
-	default:
-		return parseType(returnType, true)
-	}
 }
 
 func writeMethods(file *os.File, methods tgMethods) {
@@ -188,7 +168,12 @@ import (
 
 			parametersCount += len(m.parameters)
 			for _, p := range m.parameters {
-				parameterDescription := fitTextToLine(fmt.Sprintf("%s - %s", p.name, p.description), "\t// ")
+				optional := ""
+				if p.optional {
+					optional = optionalPrefix
+				}
+
+				parameterDescription := fitTextToLine(fmt.Sprintf("%s - %s%s", p.name, optional, p.description), "\t// ")
 				data.WriteString(parameterDescription)
 
 				omitempty := ""
@@ -235,16 +220,23 @@ import (
 
 		if hasReturnType {
 			data.WriteString(fmt.Sprintf("\tvar %s %s\n", returnVar, m.returnType))
-			data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, &%s)\n", m.name, returnVar))
-		} else {
-			data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, nil)\n", m.name))
-		}
 
-		data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"%s(): %%w\", err)\n\t}\n\n", m.name))
+			if len(m.parameters) > 0 {
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, &%s)\n", m.name, returnVar))
+			} else {
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, &%s)\n", m.name, returnVar))
+			}
 
-		if hasReturnType {
+			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"%s(): %%w\", err)\n\t}\n\n", m.name))
 			data.WriteString(fmt.Sprintf("\treturn %s, nil\n}\n\n", returnVar))
 		} else {
+			if len(m.parameters) > 0 {
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, nil)\n", m.name))
+			} else {
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, nil)\n", m.name))
+			}
+
+			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn fmt.Errorf(\"%s(): %%w\", err)\n\t}\n\n", m.name))
 			data.WriteString("\treturn nil\n}\n\n")
 		}
 	}
@@ -255,4 +247,46 @@ import (
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)
+}
+
+func methodSpecialCases(method *tgMethod) {
+	if method.returnType == "string" || method.returnType == "int" {
+		method.returnType = "*" + method.returnType
+	}
+}
+
+func parameterSpecialCases(parameter *tgMethodParameter) {
+	if parameter.typ == "*InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply" {
+		parameter.typ = "ReplyMarkup"
+	}
+
+	if parameter.typ == "[]InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo" {
+		parameter.typ = "[]InputMedia"
+	}
+}
+
+func parseReturnType(methodDescription string) string {
+	methodDescription = removeHTML(methodDescription)
+	var returnType string
+
+	returns1 := returnTypeRegexp1.FindStringSubmatch(methodDescription)
+	if len(returns1) != 0 {
+		returnType = returns1[1]
+	}
+
+	returns2 := returnTypeRegexp2.FindStringSubmatch(methodDescription)
+	if len(returns2) != 0 {
+		returnType = returns2[1]
+	}
+
+	switch returnType {
+	case "":
+		return returnTypeNotFound
+	case "True", "error":
+		return ""
+	case "Messages":
+		return "[]Message"
+	default:
+		return parseType(returnType, true)
+	}
 }
