@@ -28,8 +28,9 @@ type GetUpdatesParams struct {
 	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
 	// these types. See Update (https://core.telegram.org/bots/api#update) for a complete list of available update
 	// types. Specify an empty list to receive all update types except chat_member (default). If not specified, the
-	// previous setting will be used.Please note that this parameter doesn't affect updates created before the call
-	// to the getUpdates, so unwanted updates may be received for a short period of time.
+	// previous setting will be used.
+	// Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted
+	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
 }
 
@@ -86,8 +87,9 @@ type SetWebhookParams struct {
 	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
 	// these types. See Update (https://core.telegram.org/bots/api#update) for a complete list of available update
 	// types. Specify an empty list to receive all update types except chat_member (default). If not specified, the
-	// previous setting will be used.Please note that this parameter doesn't affect updates created before the call
-	// to the setWebhook, so unwanted updates may be received for a short period of time.
+	// previous setting will be used.
+	// Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted
+	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
 
 	// DropPendingUpdates - Optional. Pass True to drop all pending updates
@@ -108,6 +110,9 @@ func (s *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
 // Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing
 // a JSON-serialized Update (https://core.telegram.org/bots/api#update). In case of an unsuccessful request, we
 // will give up after a reasonable amount of attempts. Returns True on success.
+// If you'd like to make sure that the Webhook request comes from Telegram, we recommend using a secret path in
+// the URL, e.g. https://www.example.com/<token>. Since nobody else knows your bot's token, you can be pretty
+// sure it's us.
 func (b *Bot) SetWebhook(params *SetWebhookParams) error {
 	err := b.performRequest("setWebhook", params, nil)
 	if err != nil {
@@ -209,6 +214,9 @@ type SendMessageParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -256,6 +264,9 @@ type ForwardMessageParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the forwarded message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// MessageID - Message identifier in the chat specified in from_chat_id
 	MessageID int `json:"message_id"`
 }
@@ -285,8 +296,8 @@ type CopyMessageParams struct {
 	// MessageID - Message identifier in the chat specified in from_chat_id
 	MessageID int `json:"message_id"`
 
-	// Caption - Optional. New caption for media, 0-1024 characters after entities parsing. If not specified, the
-	// original caption is kept
+	// Caption - Optional. New caption for media, 0-1024 characters after entities parsing. If not specified,
+	// the original caption is kept
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the new caption. See formatting options
@@ -300,6 +311,9 @@ type CopyMessageParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -358,6 +372,9 @@ type SendPhotoParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -435,6 +452,9 @@ type SendAudioParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -464,7 +484,7 @@ func (p *SendAudioParams) fileParameters() map[string]telegoapi.NamedReader {
 // player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send audio files of up to 50 MB
 // in size, this limit may be changed in the future.
-// For sending voice messages, use the SendVoice (https://core.telegram.org/bots/api#sendvoice) method instead.
+// For sending voice messages, use the sendVoice (https://core.telegram.org/bots/api#sendvoice) method instead.
 func (b *Bot) SendAudio(params *SendAudioParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendAudio", params, &message)
@@ -513,6 +533,9 @@ type SendDocumentParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -600,6 +623,9 @@ type SendVideoParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -684,6 +710,9 @@ type SendAnimationParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -751,6 +780,9 @@ type SendVoiceParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -816,6 +848,9 @@ type SendVideoNoteParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -866,6 +901,9 @@ type SendMediaGroupParams struct {
 	// DisableNotification - Optional. Sends messages silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent messages from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the messages are a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -934,6 +972,9 @@ type SendLocationParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -969,8 +1010,8 @@ type EditMessageLiveLocationParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Latitude - Latitude of new location
@@ -1020,8 +1061,8 @@ type StopMessageLiveLocationParams struct {
 	// location to stop
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
@@ -1078,6 +1119,9 @@ type SendVenueParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -1126,6 +1170,9 @@ type SendContactParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -1197,7 +1244,7 @@ type SendPollParams struct {
 
 	// CloseDate - Optional. Point in time (Unix timestamp) when the poll will be automatically closed. Must be
 	// at least 5 and no more than 600 seconds in the future. Can't be used together with open_period.
-	CloseDate int `json:"close_date,omitempty"`
+	CloseDate int64 `json:"close_date,omitempty"`
 
 	// IsClosed - Optional. Pass True, if the poll needs to be immediately closed. This can be useful for poll
 	// preview.
@@ -1206,6 +1253,9 @@ type SendPollParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -1248,6 +1298,9 @@ type SendDiceParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -1311,7 +1364,12 @@ const (
 // SendChatAction - Use this method when you need to tell the user that something is happening on the bot's
 // side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear
 // its typing status). Returns True on success.
-// We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive.
+// Example: The ImageBot (https://t.me/imagebot) needs some time to process a request and upload the image.
+// Instead of sending a text message along the lines of “Retrieving image, please wait…”, the bot may use
+// sendChatAction (https://core.telegram.org/bots/api#sendchataction) with action = upload_photo. The user will
+// see a “sending photo” status for the bot.
+// We only recommend using this method when a response from the bot will take a noticeable amount of time to
+// arrive.
 func (b *Bot) SendChatAction(params *SendChatActionParams) error {
 	err := b.performRequest("sendChatAction", params, nil)
 	if err != nil {
@@ -1330,8 +1388,8 @@ type GetUserProfilePhotosParams struct {
 	// returned.
 	Offset int `json:"offset,omitempty"`
 
-	// Limit - Optional. Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults
-	// to 100.
+	// Limit - Optional. Limits the number of photos to be retrieved. Values between 1-100 are accepted.
+	// Defaults to 100.
 	Limit int `json:"limit,omitempty"`
 }
 
@@ -1381,7 +1439,7 @@ type BanChatMemberParams struct {
 	// UntilDate - Optional. Date when the user will be unbanned, unix time. If user is banned for more than 366
 	// days or less than 30 seconds from the current time they are considered to be banned forever. Applied for
 	// supergroups and channels only.
-	UntilDate int `json:"until_date,omitempty"`
+	UntilDate int64 `json:"until_date,omitempty"`
 
 	// RevokeMessages - Optional. Pass True to delete all messages from the chat for the user that is being
 	// removed. If False, the user will be able to see messages in the group that were sent before the user was
@@ -1442,10 +1500,10 @@ type RestrictChatMemberParams struct {
 	// Permissions - A JSON-serialized object for new user permissions
 	Permissions ChatPermissions `json:"permissions"`
 
-	// UntilDate - Optional. Date when restrictions will be lifted for the user, unix time. If user is restricted
-	// for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted
-	// forever
-	UntilDate int `json:"until_date,omitempty"`
+	// UntilDate - Optional. Date when restrictions will be lifted for the user, unix time. If user is
+	// restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be
+	// restricted forever
+	UntilDate int64 `json:"until_date,omitempty"`
 }
 
 // RestrictChatMember - Use this method to restrict a user in a supergroup. The bot must be an administrator
@@ -1621,11 +1679,6 @@ type ExportChatInviteLinkParams struct {
 // ExportChatInviteLink - Use this method to generate a new primary invite link for a chat; any previously
 // generated primary link is revoked. The bot must be an administrator in the chat for this to work and must
 // have the appropriate administrator rights. Returns the new invite link as String on success.
-//
-// Note: Each administrator in a chat generates their own invite links. Bots can't use invite links generated by other
-// administrators. If you want your bot to work with invite links, it will need to generate its own link using
-// exportChatInviteLink or by calling the getChat method. If your bot needs to generate a new primary invite link
-// replacing its previous one, use exportChatInviteLink again.
 func (b *Bot) ExportChatInviteLink(params *ExportChatInviteLinkParams) (*string, error) {
 	var inviteLink *string
 	err := b.performRequest("exportChatInviteLink", params, &inviteLink)
@@ -1646,7 +1699,7 @@ type CreateChatInviteLinkParams struct {
 	Name string `json:"name,omitempty"`
 
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire
-	ExpireDate int `json:"expire_date,omitempty"`
+	ExpireDate int64 `json:"expire_date,omitempty"`
 
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
@@ -1684,7 +1737,7 @@ type EditChatInviteLinkParams struct {
 	Name string `json:"name,omitempty"`
 
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire
-	ExpireDate int `json:"expire_date,omitempty"`
+	ExpireDate int64 `json:"expire_date,omitempty"`
 
 	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
@@ -2097,8 +2150,8 @@ type AnswerCallbackQueryParams struct {
 	// URL - Optional. URL that will be opened by the user's client. If you have created a Game
 	// (https://core.telegram.org/bots/api#game) and accepted the conditions via @BotFather
 	// (https://t.me/botfather), specify the URL that opens your game — note that this will only work if the query
-	// comes from a callback_game (https://core.telegram.org/bots/api#inlinekeyboardbutton) button.Otherwise, you
-	// may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
+	// comes from a callback_game (https://core.telegram.org/bots/api#inlinekeyboardbutton) button.
+	// Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
 	URL string `json:"url,omitempty"`
 
 	// CacheTime - Optional. The maximum amount of time in seconds that the result of the callback query may be
@@ -2109,6 +2162,9 @@ type AnswerCallbackQueryParams struct {
 // AnswerCallbackQuery - Use this method to send answers to callback queries sent from inline keyboards
 // (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). The answer will be displayed to
 // the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first
+// create a game for your bot via @BotFather (https://t.me/botfather) and accept the terms. Otherwise, you may
+// use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
 func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
 	err := b.performRequest("answerCallbackQuery", params, nil)
 	if err != nil {
@@ -2120,12 +2176,12 @@ func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
 
 // SetMyCommandsParams - Represents parameters of setMyCommands method.
 type SetMyCommandsParams struct {
-	// Commands - A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100
-	// commands can be specified.
+	// Commands - A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most
+	// 100 commands can be specified.
 	Commands []BotCommand `json:"commands"`
 
-	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are relevant.
-	// Defaults to BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault).
+	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are
+	// relevant. Defaults to BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault).
 	Scope BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, commands will be applied to all
@@ -2147,8 +2203,8 @@ func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
 
 // DeleteMyCommandsParams - Represents parameters of deleteMyCommands method.
 type DeleteMyCommandsParams struct {
-	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are relevant.
-	// Defaults to BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault).
+	// Scope - Optional. A JSON-serialized object, describing scope of users for which the commands are
+	// relevant. Defaults to BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault).
 	Scope BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, commands will be applied to all
@@ -2201,8 +2257,8 @@ type EditMessageTextParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Text - New text of the message, 1-4096 characters after entities parsing
@@ -2246,8 +2302,8 @@ type EditMessageCaptionParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Caption - Optional. New caption of the message, 0-1024 characters after entities parsing
@@ -2288,8 +2344,8 @@ type EditMessageMediaParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Media - A JSON-serialized object for a new media content of the message
@@ -2338,8 +2394,8 @@ type EditMessageReplyMarkupParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
@@ -2397,12 +2453,16 @@ type DeleteMessageParams struct {
 }
 
 // DeleteMessage - Use this method to delete a message, including service messages, with the following
-// limitations:- A message can only be deleted if it was sent less than 48 hours ago.- A dice message in a
-// private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in
-// private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted
-// can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a
-// group, it can delete any message there.- If the bot has can_delete_messages permission in a supergroup or a
-// channel, it can delete any message there.Returns True on success.
+// limitations:
+// - A message can only be deleted if it was sent less than 48 hours ago.
+// - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
+// - Bots can delete outgoing messages in private chats, groups, and supergroups.
+// - Bots can delete incoming messages in private chats.
+// - Bots granted can_post_messages permissions can delete outgoing messages in channels.
+// - If the bot is an administrator of a group, it can delete any message there.
+// - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message
+// there.
+// Returns True on success.
 func (b *Bot) DeleteMessage(params *DeleteMessageParams) error {
 	err := b.performRequest("deleteMessage", params, nil)
 	if err != nil {
@@ -2427,6 +2487,9 @@ type SendStickerParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -2724,20 +2787,20 @@ type AnswerInlineQueryParams struct {
 	// user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
 	SwitchPmText string `json:"switch_pm_text,omitempty"`
 
-	// SwitchPmParameter - Optional. Deep-linking (https://core.telegram.org/bots#deep-linking) parameter for the
-	// /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _
-	// and - are allowed.Example: An inline bot that sends YouTube videos can ask the user to connect the bot to
-	// their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube
-	// account' button above the results, or even before showing any. The user presses the button, switches to a
-	// private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an
-	// OAuth link. Once done, the bot can offer a switch_inline
-	// (https://core.telegram.org/bots/api#inlinekeyboardmarkup) button so that the user can easily return to the
-	// chat where they wanted to use the bot's inline capabilities.
+	// SwitchPmParameter - Optional. Deep-linking (https://core.telegram.org/bots#deep-linking) parameter for
+	// the /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9,
+	// _ and - are allowed.
+	// Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account
+	// to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above
+	// the results, or even before showing any. The user presses the button, switches to a private chat with the bot
+	// and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot
+	// can offer a switch_inline (https://core.telegram.org/bots/api#inlinekeyboardmarkup) button so that the user
+	// can easily return to the chat where they wanted to use the bot's inline capabilities.
 	SwitchPmParameter string `json:"switch_pm_parameter,omitempty"`
 }
 
-// AnswerInlineQuery - Use this method to send answers to an inline query. On success, True is returned.No
-// more than 50 results per query are allowed.
+// AnswerInlineQuery - Use this method to send answers to an inline query. On success, True is returned.
+// No more than 50 results per query are allowed.
 func (b *Bot) AnswerInlineQuery(params *AnswerInlineQueryParams) error {
 	err := b.performRequest("answerInlineQuery", params, nil)
 	if err != nil {
@@ -2780,9 +2843,10 @@ type SendInvoiceParams struct {
 	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
-	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest units
-	// of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested
-	// tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
+	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest
+	// units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The
+	// suggested tip amounts must be positive, passed in a strictly increased order and must not exceed
+	// max_tip_amount.
 	SuggestedTipAmounts []int `json:"suggested_tip_amounts,omitempty"`
 
 	// StartParameter - Optional. Unique deep-linking parameter. If left empty, forwarded copies of the sent
@@ -2834,6 +2898,9 @@ type SendInvoiceParams struct {
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
@@ -2868,7 +2935,8 @@ type AnswerShippingQueryParams struct {
 	// (for example, if delivery to the specified address is not possible)
 	Ok bool `json:"ok"`
 
-	// ShippingOptions - Optional. Required if ok is True. A JSON-serialized array of available shipping options.
+	// ShippingOptions - Optional. Required if ok is True. A JSON-serialized array of available shipping
+	// options.
 	ShippingOptions []ShippingOption `json:"shipping_options,omitempty"`
 
 	// ErrorMessage - Optional. Required if ok is False. Error message in human readable form that explains why
@@ -2930,6 +2998,10 @@ type SetPassportDataErrorsParams struct {
 // SetPassportDataErrors - Informs a user that some of the Telegram Passport elements they provided contains
 // errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents
 // of the field for which you returned the error must change). Returns True on success.
+// Use this if the data submitted by the user doesn't satisfy the standards your service requires for any
+// reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence
+// of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the
+// issues.
 func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
 	err := b.performRequest("setPassportDataErrors", params, nil)
 	if err != nil {
@@ -2952,6 +3024,9 @@ type SendGameParams struct {
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
 
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
@@ -3000,8 +3075,8 @@ type SetGameScoreParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 }
 
@@ -3030,14 +3105,17 @@ type GetGameHighScoresParams struct {
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
 	MessageID int `json:"message_id,omitempty"`
 
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the inline
-	// message
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 }
 
 // GetGameHighScores - Use this method to get data for high score tables. Will return the score of the
 // specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore
 // (https://core.telegram.org/bots/api#gamehighscore) objects.
+// This method will currently return scores for the target user, plus two of their closest neighbors on each
+// side. Will also return the top three users if the user and his neighbors are not among them. Please note that
+// this behavior is subject to change.
 func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) ([]GameHighScore, error) {
 	var gameHighScores []GameHighScore
 	err := b.performRequest("getGameHighScores", params, &gameHighScores)
