@@ -236,12 +236,14 @@ func parseType(text string, optional bool) string {
 func uppercaseWords(text string) string {
 	text = strings.ReplaceAll(text, "Id ", "ID ")
 	text = strings.ReplaceAll(text, "Id)", "ID)")
+	text = strings.ReplaceAll(text, "Ids", "IDs")
 	text = strings.ReplaceAll(text, "Id,", "ID,")
 	text = strings.ReplaceAll(text, "Id{", "ID{")
 	text = strings.ReplaceAll(text, " id ", " ID ")
 
 	text = strings.ReplaceAll(text, "Url ", "URL ")
 	text = strings.ReplaceAll(text, " url ", " URL ")
+	text = strings.ReplaceAll(text, " url's ", " URL's ")
 
 	return text
 }

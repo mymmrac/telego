@@ -107,6 +107,8 @@ func generateTypeFields(fieldDocs string) tgTypeFields {
 
 		field.typ = parseType(fieldGroup[2], field.optional)
 
+		fieldSpecialCases(&field)
+
 		fields = append(fields, field)
 	}
 
@@ -155,4 +157,19 @@ import (
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)
+}
+
+func fieldSpecialCases(field *tgTypeField) {
+	if strings.Contains(field.name, "Date") && field.typ == "int" {
+		field.typ = "int64"
+	}
+
+	if (strings.Contains(field.description, "64-bit integer") ||
+		strings.Contains(field.description, "64 bit integer")) && field.typ == "int" {
+		field.typ = "int64"
+	}
+
+	if field.name == "UserId" && field.typ == "int" {
+		field.typ = "int64"
+	}
 }
