@@ -106,9 +106,7 @@ func generateTypeFields(fieldDocs string) tgTypeFields {
 		}
 
 		field.typ = parseType(fieldGroup[2], field.optional)
-
 		fieldSpecialCases(&field)
-
 		fields = append(fields, field)
 	}
 
