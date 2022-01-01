@@ -263,6 +263,19 @@ func parameterSpecialCases(parameter *tgMethodParameter) {
 	if parameter.typ == "[]InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo" {
 		parameter.typ = "[]InputMedia"
 	}
+
+	if (parameter.name == "UserId" || parameter.name == "ChatId" || parameter.name == "SenderChatId") &&
+		parameter.typ == "int" {
+		parameter.typ = "int64"
+	}
+
+	if parameter.name == "Scope" && parameter.typ == "*BotCommandScope" {
+		parameter.typ = parameter.typ[1:]
+	}
+
+	if strings.Contains(parameter.name, "Date") && parameter.typ == "int" {
+		parameter.typ = "int64"
+	}
 }
 
 func parseReturnType(methodDescription string) string {
