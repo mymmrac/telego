@@ -484,7 +484,7 @@ func TestInputMediaDocument_fileParameters(t *testing.T) {
 	assert.True(t, im.Media.needAttach)
 }
 
-func TestConstants(t *testing.T) {
+func TestTypesConstants(t *testing.T) {
 	tests := [][]string{
 		{ChatTypeSender, ChatTypePrivate, ChatTypeGroup, ChatTypeSupergroup, ChatTypeChannel},
 		{EntityTypeMention, EntityTypeHashtag, EntityTypeCashtag, EntityTypeBotCommand, EntityTypeURL, EntityTypeEmail,
