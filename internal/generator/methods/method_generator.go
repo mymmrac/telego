@@ -75,6 +75,7 @@ func main() {
 	_, _ = methodsData.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
 	_, _ = testsData.WriteString(fmt.Sprintf("package %s\n\n", generator.PackageName))
 
+	methodsParameters := 0
 	for _, currentMethod := range allMethods {
 		methodName := currentMethod[1]
 		funcName := strings.Title(methodName)
@@ -118,6 +119,7 @@ func main() {
 		params := ""
 		paramsOrNil := "nil"
 
+		methodsParameters += len(allParams)
 		if len(allParams) != 0 {
 			_, _ = methodsData.WriteString(fmt.Sprintf("// %s - Represents parameters of %s method.\ntype %s struct {\n",
 				paramsStructName, methodName, paramsStructName))
@@ -244,4 +246,5 @@ func (b *Bot) %s(%s) %s {%s
 	_, _ = testsFile.WriteString(testDataString)
 
 	fmt.Println("Return values:", returnValuesCount)
+	fmt.Println("Method parameters:", methodsParameters)
 }

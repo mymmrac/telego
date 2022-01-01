@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 	"os"
@@ -118,6 +119,13 @@ func docsText() (string, error) {
 }
 
 func formatFile(filename string) {
-	err := exec.Command("gofmt", "-w", filename).Run()
-	exitOnErr(err)
+	buf := bytes.Buffer{}
+
+	cmd := exec.Command("gofmt", "-w", filename)
+	cmd.Stderr = &buf
+
+	if err := cmd.Run(); err != nil {
+		logError("Gofmt: %v\n%s", err, buf.String())
+		os.Exit(1)
+	}
 }

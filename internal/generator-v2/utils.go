@@ -256,3 +256,14 @@ func uppercaseWords(text string) string {
 
 	return text
 }
+
+func firstToLower(text string) string {
+	switch len(text) {
+	case 0:
+		return text
+	case 1:
+		return string(text[0] | ('a' - 'A'))
+	default:
+		return string(text[0]|('a'-'A')) + text[1:]
+	}
+}

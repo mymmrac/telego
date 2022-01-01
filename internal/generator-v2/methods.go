@@ -116,8 +116,8 @@ func generateMethodParameters(parametersDocs string) tgMethodParameters {
 	parameterGroups := methodParameterRegexp.FindAllStringSubmatch(parametersDocs, -1)
 	for _, parameterGroup := range parameterGroups {
 		parameter := tgMethodParameter{
-			name:          parameterGroup[1],
-			nameSnakeCase: snakeToCamelCase(parameterGroup[1]),
+			name:          snakeToCamelCase(parameterGroup[1]),
+			nameSnakeCase: parameterGroup[1],
 			description:   replaceHTML(parameterGroup[4]),
 		}
 
@@ -129,6 +129,8 @@ func generateMethodParameters(parametersDocs string) tgMethodParameters {
 
 	return parameters
 }
+
+const returnTypeNotFound = "NOT_FOUND"
 
 func parseReturnType(methodDescription string) string {
 	methodDescription = removeHTML(methodDescription)
@@ -145,7 +147,9 @@ func parseReturnType(methodDescription string) string {
 	}
 
 	switch returnType {
-	case "", "True", "error":
+	case "":
+		return returnTypeNotFound
+	case "True", "error":
 		return ""
 	default:
 		return parseType(returnType, true)
@@ -153,14 +157,102 @@ func parseReturnType(methodDescription string) string {
 }
 
 func writeMethods(file *os.File, methods tgMethods) {
-	for _, m := range methods {
-		fmt.Println(m.name, m.nameTitle, m.returnType)
-		fmt.Println(m.description)
+	data := strings.Builder{}
 
-		for _, p := range m.parameters {
-			fmt.Println(p)
+	logInfo("Methods: %d", len(methods))
+
+	data.WriteString(fmt.Sprintf("package %s\n", packageName))
+	data.WriteString(`
+import (
+	"fmt"
+
+	"github.com/mymmrac/telego/telegoapi"
+)
+`)
+
+	parametersCount := 0
+	returnsCount := 0
+	returnsNotFoundCount := 0
+	for _, m := range methods {
+		parametersStruct := m.nameTitle + "Params"
+		parametersArg := ""
+
+		if len(m.parameters) > 0 {
+			parametersArg = fmt.Sprintf("params *%s", parametersStruct)
+
+			parametersStructDescription := fitTextToLine(fmt.Sprintf("%s - Represents parameters of %s method.",
+				parametersStruct, m.name), "// ")
+			data.WriteString(parametersStructDescription)
+
+			data.WriteString(fmt.Sprintf("\ntype %s struct {\n", parametersStruct))
+
+			parametersCount += len(m.parameters)
+			for _, p := range m.parameters {
+				parameterDescription := fitTextToLine(fmt.Sprintf("%s - %s", p.name, p.description), "\t// ")
+				data.WriteString(parameterDescription)
+
+				omitempty := ""
+				if p.optional {
+					omitempty = omitemptySuffix
+				}
+
+				if strings.Contains(p.typ, " or ") || strings.Contains(p.typ, ",") {
+					data.WriteString(fmt.Sprintf("\n\t// TYPES: %s", p.typ))
+					p.typ = "INTERFACE"
+				}
+
+				data.WriteString(fmt.Sprintf("\n\t%s %s `json:\"%s%s\"`\n\n", p.name, p.typ, p.nameSnakeCase, omitempty))
+			}
+
+			data.WriteString("}\n\n")
 		}
 
-		fmt.Println()
+		methodDescription := fitTextToLine(fmt.Sprintf("%s - %s", m.nameTitle, m.description), "// ")
+		data.WriteString(methodDescription)
+
+		returnType := ""
+		hasReturnType := false
+		if m.returnType == returnTypeNotFound || m.returnType == "" {
+			returnType = "error"
+		} else {
+			returnType = fmt.Sprintf("(%s, error)", m.returnType)
+			hasReturnType = true
+
+			returnsCount++
+		}
+
+		if m.returnType == returnTypeNotFound {
+			returnsNotFoundCount++
+		}
+
+		data.WriteString(fmt.Sprintf("\nfunc (b *Bot) %s(%s) %s {\n", m.nameTitle, parametersArg, returnType))
+
+		returnVar := strings.TrimPrefix(m.returnType, "*")
+		if strings.HasPrefix(returnVar, "[]") {
+			returnVar = strings.TrimPrefix(returnVar, "[]") + "s"
+		}
+		returnVar = firstToLower(returnVar)
+
+		if hasReturnType {
+			data.WriteString(fmt.Sprintf("\tvar %s %s\n", returnVar, m.returnType))
+			data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, &%s)\n", m.name, returnVar))
+		} else {
+			data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, nil)\n", m.name))
+		}
+
+		data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"%s(): %%w\", err)\n\t}\n\n", m.name))
+
+		if hasReturnType {
+			data.WriteString(fmt.Sprintf("\treturn %s, nil\n}\n\n", returnVar))
+		} else {
+			data.WriteString("\treturn nil\n}\n\n")
+		}
 	}
+
+	logInfo("Method parameters: %d", parametersCount)
+	logInfo("Method returns: %d", returnsCount)
+	logInfo("Method returns not found: %d", returnsNotFoundCount)
+
+	_, err := file.WriteString(uppercaseWords(data.String()))
+	exitOnErr(err)
 }
