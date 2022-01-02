@@ -33,16 +33,6 @@ func HasMassage() Predicate {
 	}
 }
 
-// CommandRegexp matches to command and has match groups on command and arguments
-var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
-
-// HasCommand is true if message isn't nil, and it matches to command regexp
-func HasCommand() Predicate {
-	return func(update telego.Update) bool {
-		return update.Message != nil && CommandRegexp.MatchString(update.Message.Text)
-	}
-}
-
 // TextEqual is true if message isn't nil, and it's equal to specified text
 func TextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
@@ -58,8 +48,8 @@ func TextEqualFold(text string) Predicate {
 	}
 }
 
-// HasText is true if message isn't nil, and it contains specified text
-func HasText(text string) Predicate {
+// ContainsText is true if message isn't nil, and it contains specified text
+func ContainsText(text string) Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && strings.Contains(update.Message.Text, text)
 	}
@@ -85,3 +75,15 @@ func TextMatches(pattern *regexp.Regexp) Predicate {
 		return update.Message != nil && pattern.MatchString(update.Message.Text)
 	}
 }
+
+// CommandRegexp matches to command and has match groups on command and arguments
+var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
+
+// HasCommand is true if message isn't nil, and it matches to command regexp
+func HasCommand() Predicate {
+	return func(update telego.Update) bool {
+		return update.Message != nil && CommandRegexp.MatchString(update.Message.Text)
+	}
+}
+
+// TODO: CommandEqual, CommandEqualWithArgc, CommandEqualWithArgv (all with equal fold)

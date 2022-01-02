@@ -68,18 +68,6 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
-			name:      "has_command_matches",
-			predicate: HasCommand(),
-			update:    telego.Update{Message: &telego.Message{Text: command}},
-			matches:   true,
-		},
-		{
-			name:      "has_command_not_matches",
-			predicate: HasCommand(),
-			update:    telego.Update{Message: &telego.Message{Text: text}},
-			matches:   false,
-		},
-		{
 			name:      "text_equal_matches",
 			predicate: TextEqual(text),
 			update:    telego.Update{Message: &telego.Message{Text: text}},
@@ -104,14 +92,14 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
-			name:      "has_text_matches",
-			predicate: HasText(textPart),
+			name:      "contains_text_matches",
+			predicate: ContainsText(textPart),
 			update:    telego.Update{Message: &telego.Message{Text: text}},
 			matches:   true,
 		},
 		{
-			name:      "has_text_not_matches",
-			predicate: HasText(textPart),
+			name:      "contains_text_not_matches",
+			predicate: ContainsText(textPart),
 			update:    telego.Update{Message: &telego.Message{Text: command}},
 			matches:   false,
 		},
@@ -149,6 +137,18 @@ func TestPredicates(t *testing.T) {
 			name:      "text_matches_not_matches",
 			predicate: TextMatches(regexp.MustCompile(`^\w+ \w+$`)),
 			update:    telego.Update{Message: &telego.Message{Text: command}},
+			matches:   false,
+		},
+		{
+			name:      "has_command_matches",
+			predicate: HasCommand(),
+			update:    telego.Update{Message: &telego.Message{Text: command}},
+			matches:   true,
+		},
+		{
+			name:      "has_command_not_matches",
+			predicate: HasCommand(),
+			update:    telego.Update{Message: &telego.Message{Text: text}},
 			matches:   false,
 		},
 	}
