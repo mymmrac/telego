@@ -46,24 +46,22 @@ func (h *BotHandler) Start() {
 	}
 }
 
-// processUpdate handles update for all handlers in parallel
+// processUpdate checks all handlers and tries to process update in first matched handler
 func (h *BotHandler) processUpdate(update telego.Update) {
 	for _, ch := range h.handlers {
-		ch := ch
-		go func() {
-			ok := true
-			for _, p := range ch.Predicates {
-				if !p(update) {
-					ok = false
-					break
-				}
+		ok := true
+		for _, p := range ch.Predicates {
+			if !p(update) {
+				ok = false
+				break
 			}
-			if !ok {
-				return
-			}
+		}
+		if !ok {
+			continue
+		}
 
-			ch.Handler(h.bot, update)
-		}()
+		go ch.Handler(h.bot, update)
+		return
 	}
 }
 
@@ -73,8 +71,9 @@ func (h *BotHandler) Stop() {
 	close(h.stop)
 }
 
-// Handle registers new handler
-// Note: All handlers processed in parallel and there is no guaranty on order of execution
+// Handle registers new handler, update will be processed only by first matched handler, order of registration
+// determines order of matching handlers
+// Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
 	if handler == nil {
 		panic("Telego: nil handlers not allowed")

@@ -3,6 +3,7 @@ package telegohandler
 import (
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -12,6 +13,8 @@ import (
 
 const (
 	token = "1234567890:aaaabbbbaaaabbbbaaaabbbbaaaabbbbccc"
+
+	timeout = time.Second
 )
 
 func newBotHandler(t *testing.T) *BotHandler {
@@ -65,8 +68,11 @@ func TestBotHandler_Start(t *testing.T) {
 		h2++
 	})
 
+	timeoutSignal := time.After(timeout)
+	done := make(chan struct{})
+
 	assert.NotPanics(t, func() {
-		wg.Add(3)
+		wg.Add(2)
 
 		go bh.Start()
 		defer bh.Stop()
@@ -74,10 +80,18 @@ func TestBotHandler_Start(t *testing.T) {
 		updates <- telego.Update{}
 		updates <- telego.Update{UpdateID: 1}
 
-		wg.Wait()
+		go func() {
+			wg.Wait()
+			done <- struct{}{}
+		}()
 
-		assert.Equal(t, 1, h1)
-		assert.Equal(t, 2, h2)
+		select {
+		case <-timeoutSignal:
+			t.Fatal("Timeout")
+		case <-done:
+			assert.Equal(t, 1, h1)
+			assert.Equal(t, 1, h2)
+		}
 	})
 }
 
