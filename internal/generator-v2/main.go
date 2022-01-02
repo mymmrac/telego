@@ -26,6 +26,7 @@ const (
 	runTypesGeneration      = "types"
 	runTypesTestsGeneration = "types-tests"
 	runMethodsGeneration    = "methods"
+	// TODO: Methods test generator
 )
 
 func main() {
