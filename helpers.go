@@ -18,6 +18,8 @@ const (
 
 const listeningForWebhookErrMsg = "Listening for webhook: %v"
 
+// TODO: Stopped funcs
+
 // SetUpdateInterval sets interval of calling GetUpdates in GetUpdatesViaLongPulling method. Ensures that between two
 // calls of GetUpdates will be at least specified time, but it could be longer.
 func (b *Bot) SetUpdateInterval(interval time.Duration) {

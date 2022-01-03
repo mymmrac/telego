@@ -16,6 +16,8 @@ import (
 	"github.com/valyala/fasthttp/fasthttputil"
 )
 
+// TODO: Improve test coverage
+
 func Test_Response_String_and_Error_Error(t *testing.T) {
 	tests := []struct {
 		name string

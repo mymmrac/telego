@@ -1,8 +1,10 @@
 package telegohandler
 
-import (
-	"github.com/mymmrac/telego"
-)
+// TODO: Add godoc
+// TODO: Properly tests package
+// TODO: Add examples
+
+import "github.com/mymmrac/telego"
 
 // Handler handles update that came from bot
 type Handler func(bot *telego.Bot, update telego.Update)
@@ -64,6 +66,8 @@ func (h *BotHandler) processUpdate(update telego.Update) {
 		return
 	}
 }
+
+// TODO: Stopped func
 
 // Stop stops handling of updates
 // Note: Should be called only after Start method

@@ -1,5 +1,7 @@
 # Telego • Go Telegram Bot API
 
+[//]: # (TODO: [?] Move badges below logo and overview)
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego)
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
 <br>
@@ -14,6 +16,7 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 
+[//]: # (TODO: Move image into repo)
 <p align="center">
   <img src="https://i.ibb.co/sChtxzh/Telego-long.png" alt="Telego logo" width="512" style="border-radius: 12px;">
 </p>
@@ -24,9 +27,15 @@ The goal of this library was to create API with same types and methods as actual
 have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
 
+[//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
+
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
 ### Table Of Content
+
+[//]: # (TODO: Improve table of content)
+
+[//]: # (TODO: [?] Add emojies to headers)
 
 <details>
 <summary>Click to show • hide</summary>
@@ -41,23 +50,9 @@ telegram.
 
 </details>
 
-### ToDo List & Ideas
-
-<details>
-<summary>Click to show • hide</summary>
-
-- [ ] Handlers package
-- [X] Rename package alias `tg` to `tu`
-- [ ] `Stopped() bool` func
-- [ ] Godoc for every package
-- [ ] Add more examples
-- [ ] Create Wiki page
-- [ ] Publish stable version
-- [ ] Add library to official [Telegram examples](https://core.telegram.org/bots/samples#go)
-
-</details>
-
 ## Getting Started
+
+[//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
 
 How to get the library:
 
@@ -68,6 +63,9 @@ go get -u github.com/mymmrac/telego
 Make sure you get the latest version to have all new features & fixes.
 
 More examples can be seen here:
+
+[//]: # (TODO: Update this list)
+[//]: # (TODO: Update & verify all examples)
 
 <details>
 <summary>Click to show • hide</summary>
@@ -82,6 +80,8 @@ More examples can be seen here:
 </details>
 
 > Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
+
+[//]: # (TODO: Publish stable version and remove this)
 
 > Note: While library in unstable version (v0.x.x) some parts of examples may not work.
 
@@ -305,6 +305,8 @@ are related to [`types`](types.go) in [`telegoutil/types`](telegoutil/types.go).
 > fill free to create an issue or pull request with desired changes.
 
 ## Contribution
+
+[//]: # (TODO: Add contribution guidlenes and move this section there)
 
 1. Fork repo
 2. Clone `git clone https://github.com/mymmrac/telego.git`

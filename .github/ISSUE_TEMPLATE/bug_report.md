@@ -1,3 +1,5 @@
+[//]: # (TODO: Review and update if needed)
+
 ---
 name: Bug reports
 about: Create a report to help us improve

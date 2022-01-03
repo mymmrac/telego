@@ -3,6 +3,8 @@
 
 package telegoapi
 
+// TODO: Add godoc
+
 import (
 	"bytes"
 	stdJson "encoding/json"

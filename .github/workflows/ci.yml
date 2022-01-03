@@ -1,35 +1,39 @@
 name: CI
-'on':
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
-    golang-sonar:
-        name: Golang & SonarCloud
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  golang-sonar:
+    # TODO: [?] Split Go and SonarCloud
+    name: Golang & SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Set up Go
-              uses: actions/setup-go@v2
-              with:
-                  go-version: 1.16
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
 
-            - name: Run tests
-              run: make test
+      - name: Run tests
+        run: make test
 
-            - name: Install linter
-              run: make lint-install
+      # TODO: [?] Cache linter
+      - name: Install linter
+        run: make lint-install
 
-            - name: Run linter
-              run: make lint
+      - name: Run linter
+        run: make lint
 
-            - name: SonarCloud Scan
-              uses: SonarSource/sonarcloud-github-action@master
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
