@@ -1,5 +1,3 @@
-[//]: # (TODO: Review and update if needed)
-
 ---
 name: Feature request
 about: Suggest an idea for this project

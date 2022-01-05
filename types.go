@@ -220,6 +220,7 @@ type Chat struct {
 }
 
 // Chat types
+// TODO: [?] Typed constants (enum)
 const (
 	ChatTypeSender     = "sender"
 	ChatTypePrivate    = "private"
