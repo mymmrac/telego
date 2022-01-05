@@ -1,5 +1,5 @@
 name: "Bug Report"
-description: "Report bug and help improve this project"
+description: "Report a bug and help improve this project"
 labels:
   - bug
 assignees:
@@ -8,33 +8,34 @@ body:
   - type: markdown
     attributes:
       value: |
-        # Hello!
-        Pleace try to discribe your issue as good as you can and it will be fixed faster, thanks
+        # Hello stranger 👋
+        Please try to describe your issue as well as you can, and it will be fixed faster.
   - type: input
     attributes:
-      label: "Telego version"
+      label: "💬 Telego version"
       description: "Version of Telego that you use"
-      placeholder: "E.g. v0.3.2 or commit hash"
+      placeholder: "v0.3.2 or commit hash"
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "Issue description"
+      label: "👾 Issue description"
       description: "What happened?"
       placeholder: "When called ... happens ..."
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "Expected behaviour"
+      label: "⚡️ Expected behavior"
       description: "What was expected?"
       placeholder: "It should be ..."
   - type: textarea
     attributes:
-      label: "Code example"
-      description: "What code was used to reproduce issue?"
+      label: "🧐 Code example"
+      description: "What code was used to reproduce the issue?"
+      placeholder: "Cool code that unfortunately doesn't work properly ..."
       render: go
   - type: markdown
     attributes:
       value: |
-        ## Thank you for contributing to the project!
+        ## Thank you for contributing to the project 🙂
