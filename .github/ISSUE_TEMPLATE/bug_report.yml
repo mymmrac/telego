@@ -1,13 +1,15 @@
 name: "Bug Report"
-description: "Report bug ang help improve this project"
+description: "Report bug and help improve this project"
 labels:
   - bug
+assignees:
+  - mymmrac
 body:
   - type: markdown
     attributes:
       value: |
-        "# Hello!"
-        "Pleace try to discribe your issue as good as you can and it will be fixed faster, thanks"
+        # Hello!
+        Pleace try to discribe your issue as good as you can and it will be fixed faster, thanks
   - type: input
     attributes:
       label: "Telego version"
@@ -34,4 +36,5 @@ body:
       render: go
   - type: markdown
     attributes:
-      value: "## Thank you for contributing to the project!"
+      value: |
+        ## Thank you for contributing to the project!
