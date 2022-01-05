@@ -1,0 +1,37 @@
+name: "Bug Report"
+description: "Report bug ang help improve this project"
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        "# Hello!"
+        "Pleace try to discribe your issue as good as you can and it will be fixed faster, thanks"
+  - type: input
+    attributes:
+      label: "Telego version"
+      description: "Version of Telego that you use"
+      placeholder: "E.g. v0.3.2 or commit hash"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Issue description"
+      description: "What happened?"
+      placeholder: "When called ... happens ..."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Expected behaviour"
+      description: "What was expected?"
+      placeholder: "It should be ..."
+  - type: textarea
+    attributes:
+      label: "Code example"
+      description: "What code was used to reproduce issue?"
+      render: go
+  - type: markdown
+    attributes:
+      value: "## Thank you for contributing to the project!"
