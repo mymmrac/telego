@@ -1,0 +1,34 @@
+name: "Feature Request"
+description: "Request new feature and help improve this project"
+labels:
+  - enhancement
+assignees:
+  - mymmrac
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Hello stranger 👋
+        Please try to describe your new feature as well as you can, and it will be added faster.
+  - type: textarea
+    attributes:
+      label: "⭐️ Feature description"
+      description: "What new feature you want to see?"
+      placeholder: "Add ... in order to ..."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "🌈 Your view"
+      description: "How do you see this feature will be used and/or implemented?"
+      placeholder: "It should be like ..."
+  - type: textarea
+    attributes:
+      label: "🧐 Code example"
+      description: "You can provide code (or pseudocode) example"
+      placeholder: "Cool code that will work ..."
+      render: go
+  - type: markdown
+    attributes:
+      value: |
+        ## Thank you for contributing to the project 🙂
