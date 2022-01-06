@@ -16,9 +16,8 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 
-[//]: # (TODO: Move image into repo)
 <p align="center">
-  <img src="https://i.ibb.co/sChtxzh/Telego-long.png" alt="Telego logo" width="512" style="border-radius: 12px;">
+  <img src="docs/Telego-long.png" alt="Telego logo" width="512px" style="border-radius: 12px;">
 </p>
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
@@ -26,6 +25,8 @@ Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] im
 The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
 have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
+
+[//]: # (TODO: Add discussions)
 
 [//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
 
@@ -65,6 +66,7 @@ Make sure you get the latest version to have all new features & fixes.
 More examples can be seen here:
 
 [//]: # (TODO: Update this list)
+
 [//]: # (TODO: Update & verify all examples)
 
 <details>
@@ -306,17 +308,7 @@ are related to [`types`](types.go) in [`telegoutil/types`](telegoutil/types.go).
 
 ## Contribution
 
-[//]: # (TODO: Add contribution guidlenes and move this section there)
-
-1. Fork repo
-2. Clone `git clone https://github.com/mymmrac/telego.git`
-3. Create new branch `git checkout -b my-new-feature`
-4. Make your changes, then add them `git add .`
-5. Commit `git commit -m "New feature added"`
-6. Push `git push origin my-new-feature`
-7. Create pull request
-
-> Note: Please try to use descriptive names for your changes, not just `fix` or `new stuff`.
+Contribution guidelines listed [here](docs/CONTRIBUTING.md).
 
 ## License
 
