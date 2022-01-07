@@ -1,4 +1,5 @@
 name: "Bug Report"
+title: "👾 "
 description: "Report a bug and help improve this project"
 labels:
   - bug
