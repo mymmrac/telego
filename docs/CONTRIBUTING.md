@@ -37,6 +37,14 @@ Project divided into packages & folders with their own purpose and new contribut
 - `examples` - list of usage examples
 - `docs` - documentation and other useful assets
 
+### Always releasable
+
+The goal is to have `main` branch always "releasable", that means that while new functional is added or old is updated
+no changes should break existing code. If feature was working before update, after update it should work the same or 
+with expected changed behaviour.
+
+This is main reason why this project doesn't have `dev` branch.
+
 ## 🧐 How can I contribute?
 
 ### Reporting bugs
