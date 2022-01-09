@@ -15,20 +15,20 @@ func (c testCallerType) Call(_ string, _ *telegoapi.RequestData) (*telegoapi.Res
 	panic("implement me")
 }
 
-func TestCustomAPICaller(t *testing.T) {
+func TestWithAPICaller(t *testing.T) {
 	bot := &Bot{}
 	caller := testCallerType{}
 
-	err := CustomAPICaller(caller)(bot)
+	err := WithAPICaller(caller)(bot)
 	assert.NoError(t, err)
 	assert.EqualValues(t, caller, bot.api)
 }
 
-func TestFastHTTPClient(t *testing.T) {
+func TestWithFastHTTPClient(t *testing.T) {
 	bot := &Bot{}
 	client := &fasthttp.Client{}
 
-	err := FastHTTPClient(client)(bot)
+	err := WithFastHTTPClient(client)(bot)
 	assert.NoError(t, err)
 }
 
@@ -43,19 +43,26 @@ func (testConstructorType) MultipartRequest(_ map[string]string, _ map[string]te
 	panic("implement me")
 }
 
-func TestCustomRequestConstructor(t *testing.T) {
+func TestWithRequestConstructor(t *testing.T) {
 	bot := &Bot{}
 	constructor := &testConstructorType{}
 
-	err := CustomRequestConstructor(constructor)(bot)
+	err := WithRequestConstructor(constructor)(bot)
 	assert.NoError(t, err)
 	assert.EqualValues(t, constructor, bot.constructor)
 }
 
-func TestDefaultLogger(t *testing.T) {
+func TestWithDefaultLogger(t *testing.T) {
 	bot := &Bot{}
 
-	err := DefaultLogger(true, true)(bot)
+	err := WithDefaultLogger(true, true)(bot)
+	assert.NoError(t, err)
+}
+
+func TestWithDiscardLogger(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithDiscardLogger()(bot)
 	assert.NoError(t, err)
 }
 
@@ -77,34 +84,34 @@ func (testLoggerType) Errorf(_ string, _ ...interface{}) {
 	panic("implement me")
 }
 
-func TestSetLogger(t *testing.T) {
+func TestWithLogger(t *testing.T) {
 	bot := &Bot{}
 	log := &testLoggerType{}
 
-	err := SetLogger(log)(bot)
+	err := WithLogger(log)(bot)
 	assert.NoError(t, err)
 	assert.EqualValues(t, log, bot.log)
 }
 
-func TestSetAPIServer(t *testing.T) {
+func TestWithAPIServer(t *testing.T) {
 	bot := &Bot{}
 
 	t.Run("success", func(t *testing.T) {
-		err := SetAPIServer("test")(bot)
+		err := WithAPIServer("test")(bot)
 		assert.NoError(t, err)
 		assert.Equal(t, "test", bot.apiURL)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := SetAPIServer("")(bot)
+		err := WithAPIServer("")(bot)
 		assert.Error(t, err)
 	})
 }
 
-func TestSetWebhookServer(t *testing.T) {
+func TestWithWebhookServer(t *testing.T) {
 	bot := &Bot{}
 	server := &fasthttp.Server{}
 
-	err := SetWebhookServer(server)(bot)
+	err := WithWebhookServer(server)(bot)
 	assert.NoError(t, err)
 }

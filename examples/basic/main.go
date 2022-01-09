@@ -13,7 +13,7 @@ func main() {
 
 	// Create bot and enable debugging info
 	// (more on configuration at /examples/configuration/main.go)
-	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
+	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

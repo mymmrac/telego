@@ -40,9 +40,9 @@ func newMockedBot(ctrl *gomock.Controller) mockedBot {
 	}
 
 	bot, _ := NewBot(token,
-		CustomAPICaller(mb.MockAPICaller),
-		CustomRequestConstructor(mb.MockRequestConstructor),
-		DefaultLogger(false, false))
+		WithAPICaller(mb.MockAPICaller),
+		WithRequestConstructor(mb.MockRequestConstructor),
+		WithDiscardLogger())
 
 	mb.Bot = bot
 

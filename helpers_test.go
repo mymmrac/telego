@@ -72,7 +72,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 }
 
 func TestBot_StartListeningForWebhook(t *testing.T) {
-	b, err := NewBot(token, DefaultLogger(false, false))
+	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
 
 	assert.NotPanics(t, func() {
@@ -86,7 +86,7 @@ func TestBot_StartListeningForWebhook(t *testing.T) {
 }
 
 func TestBot_StartListeningForWebhookTLSEmbed(t *testing.T) {
-	b, err := NewBot(token, DefaultLogger(false, false))
+	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
 
 	c, k, err := fasthttp.GenerateTestCertificate("127.0.0.1")
@@ -103,7 +103,7 @@ func TestBot_StartListeningForWebhookTLSEmbed(t *testing.T) {
 }
 
 func TestBot_StartListeningForWebhookTLS(t *testing.T) {
-	b, err := NewBot(token, DefaultLogger(false, false))
+	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
 
 	assert.NotPanics(t, func() {
@@ -113,7 +113,7 @@ func TestBot_StartListeningForWebhookTLS(t *testing.T) {
 }
 
 func TestBot_respondWithError(t *testing.T) {
-	b, err := NewBot(token, DefaultLogger(false, false))
+	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
 
 	ctx := &fasthttp.RequestCtx{}
@@ -123,7 +123,7 @@ func TestBot_respondWithError(t *testing.T) {
 }
 
 func TestBot_StopWebhook(t *testing.T) {
-	b, err := NewBot(token, DefaultLogger(false, false))
+	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
 
 	b.stop = make(chan struct{})
@@ -134,7 +134,7 @@ func TestBot_StopWebhook(t *testing.T) {
 }
 
 func TestBot_GetUpdatesViaWebhook(t *testing.T) {
-	b, err := NewBot(token, DefaultLogger(false, false))
+	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
 
 	_, err = b.UpdatesViaWebhook("/bot")

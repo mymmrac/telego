@@ -23,7 +23,7 @@ func main() {
 	testToken := os.Getenv("TOKEN")
 
 	bot, err := telego.NewBot(testToken,
-		telego.DefaultLogger(true, true))
+		telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return

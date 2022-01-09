@@ -16,16 +16,16 @@ func main() {
 	// Create bot
 	bot, err := telego.NewBot(botToken,
 		// Change bot API server URL (default: https://api.telegram.org)
-		telego.SetAPIServer("new bot api server"),
+		telego.WithAPIServer("new bot api server"),
 
 		// Change HTTP client (default: &fasthttp.Client{})
-		telego.FastHTTPClient(&fasthttp.Client{}),
+		telego.WithFastHTTPClient(&fasthttp.Client{}),
 
 		// Configuration of default logger, enable printing debug information and errors (default: false, true)
-		telego.DefaultLogger(true, true),
+		telego.WithDefaultLogger(true, true),
 
 		// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
-		telego.SetLogger(myLogger),
+		telego.WithLogger(myLogger),
 	)
 	if err != nil {
 		fmt.Println(err)

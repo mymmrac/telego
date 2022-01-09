@@ -9,34 +9,34 @@ import (
 	"github.com/mymmrac/telego/telegoapi"
 )
 
-// CustomAPICaller sets custom API caller to use
-func CustomAPICaller(caller telegoapi.Caller) BotOption {
+// WithAPICaller sets custom API caller to use
+func WithAPICaller(caller telegoapi.Caller) BotOption {
 	return func(bot *Bot) error {
 		bot.api = caller
 		return nil
 	}
 }
 
-// FastHTTPClient sets fasthttp client to use
-func FastHTTPClient(client *fasthttp.Client) BotOption {
+// WithFastHTTPClient sets fasthttp client to use
+func WithFastHTTPClient(client *fasthttp.Client) BotOption {
 	return func(bot *Bot) error {
 		bot.api = telegoapi.FasthttpAPICaller{Client: client}
 		return nil
 	}
 }
 
-// CustomRequestConstructor sets custom request constructor to use
-func CustomRequestConstructor(constructor telegoapi.RequestConstructor) BotOption {
+// WithRequestConstructor sets custom request constructor to use
+func WithRequestConstructor(constructor telegoapi.RequestConstructor) BotOption {
 	return func(bot *Bot) error {
 		bot.constructor = constructor
 		return nil
 	}
 }
 
-// DefaultLogger configures default logger. Redefines existing logger.
+// WithDefaultLogger configures default logger. Redefines existing logger.
 // Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
 // testing environment.
-func DefaultLogger(debugMode, printErrors bool) BotOption {
+func WithDefaultLogger(debugMode, printErrors bool) BotOption {
 	return func(bot *Bot) error {
 		log := &logger{
 			Out:         os.Stderr,
@@ -48,18 +48,23 @@ func DefaultLogger(debugMode, printErrors bool) BotOption {
 	}
 }
 
-// SetLogger sets logger to use
+// WithDiscardLogger configures discard logger. Alias to default logger with disabled logs. Redefines existing logger.
+func WithDiscardLogger() BotOption {
+	return WithDefaultLogger(false, false)
+}
+
+// WithLogger sets logger to use
 // Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
 // testing environment.
-func SetLogger(log Logger) BotOption {
+func WithLogger(log Logger) BotOption {
 	return func(bot *Bot) error {
 		bot.log = log
 		return nil
 	}
 }
 
-// SetAPIServer sets bot API server URL to use
-func SetAPIServer(apiURL string) BotOption {
+// WithAPIServer sets bot API server URL to use
+func WithAPIServer(apiURL string) BotOption {
 	return func(bot *Bot) error {
 		if apiURL == "" {
 			return errors.New("empty bot api server url")
@@ -70,8 +75,8 @@ func SetAPIServer(apiURL string) BotOption {
 	}
 }
 
-// SetWebhookServer sets bot HTTP server used for listening for webhook
-func SetWebhookServer(server *fasthttp.Server) BotOption {
+// WithWebhookServer sets bot HTTP server used for listening for webhook
+func WithWebhookServer(server *fasthttp.Server) BotOption {
 	return func(bot *Bot) error {
 		bot.server = server
 		return nil
