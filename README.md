@@ -34,13 +34,13 @@ telegram.
 <details>
 <summary>Click to show • hide</summary>
 
-- [⚡️ Getting Started](#getting-started)
-    - [🧩 Basic setup](#basic-setup)
-    - [📩 Getting updates](#getting-updates)
-    - [🪁 Using Telegram methods](#using-telegram-methods)
-    - [🧼 Utility methods](#utility-methods)
-- [🎨 Contribution](#contribution)
-- [🔐 License](#license)
+- [⚡️ Getting Started](#-getting-started)
+    - [🧩 Basic setup](#-basic-setup)
+    - [📩 Getting updates](#-getting-updates)
+    - [🪁 Using Telegram methods](#-using-telegram-methods)
+    - [🧼 Utility methods](#-utility-methods)
+- [🎨 Contribution](#-contribution)
+- [🔐 License](#-license)
 
 </details>
 
