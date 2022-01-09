@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -18,8 +19,6 @@ const (
 
 const listeningForWebhookErrMsg = "Listening for webhook: %v"
 
-// TODO: Stopped funcs
-
 // SetUpdateInterval sets interval of calling GetUpdates in UpdatesViaLongPulling method. Ensures that between two
 // calls of GetUpdates will be at least specified time, but it could be longer.
 func (b *Bot) SetUpdateInterval(interval time.Duration) {
@@ -30,6 +29,7 @@ func (b *Bot) SetUpdateInterval(interval time.Duration) {
 // Note: After you done with getting updates you should call StopLongPulling method
 func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, error) {
 	b.stop = make(chan struct{})
+	b.startedLongPulling = true
 	updatesChan := make(chan Update, updateChanBuffer)
 
 	if params == nil {
@@ -69,14 +69,23 @@ func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, erro
 	return updatesChan, nil
 }
 
+// IsRunningLongPulling tells if UpdatesViaLongPulling is running
+func (b *Bot) IsRunningLongPulling() bool {
+	return b.startedLongPulling
+}
+
 // StopLongPulling stop reviving updates from UpdatesViaLongPulling method
 func (b *Bot) StopLongPulling() {
-	close(b.stop)
+	if b.startedLongPulling {
+		b.startedLongPulling = false
+		close(b.stop)
+	}
 }
 
 // StartListeningForWebhook start server for listening for webhook
 // Note: After you done with getting updates you should call StopWebhook method
 func (b *Bot) StartListeningForWebhook(address string) {
+	b.startedWebhook = true
 	go func() {
 		err := b.server.ListenAndServe(address)
 		if err != nil {
@@ -88,6 +97,7 @@ func (b *Bot) StartListeningForWebhook(address string) {
 // StartListeningForWebhookTLS start server with TLS for listening for webhook
 // Note: After you done with getting updates you should call StopWebhook method
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) {
+	b.startedWebhook = true
 	go func() {
 		err := b.server.ListenAndServeTLS(address, certificateFile, keyFile)
 		if err != nil {
@@ -99,6 +109,7 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 // StartListeningForWebhookTLSEmbed start server with TLS (embed) for listening for webhook
 // Note: After you done with getting updates you should call StopWebhook method
 func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) {
+	b.startedWebhook = true
 	go func() {
 		err := b.server.ListenAndServeTLSEmbed(address, certificateData, keyData)
 		if err != nil {
@@ -107,15 +118,28 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 	}()
 }
 
-// StopWebhook shutdown webhook server used in UpdatesViaWebhook method.
-// Note: Should be called only after both UpdatesViaWebhook and StartListeningForWebhook... .
+// IsRunningWebhook tells if StartListeningForWebhook... is running
+func (b *Bot) IsRunningWebhook() bool {
+	return b.startedWebhook
+}
+
+// StopWebhook shutdown webhook server used in UpdatesViaWebhook method
+// Note: Should be called only after both UpdatesViaWebhook and StartListeningForWebhook...
 func (b *Bot) StopWebhook() error {
-	close(b.stop)
-	return b.server.Shutdown()
+	if b.startedWebhook {
+		b.startedWebhook = false
+		close(b.stop)
+		return b.server.Shutdown()
+	}
+	return nil
 }
 
 // UpdatesViaWebhook receive updates in chan from webhook
 func (b *Bot) UpdatesViaWebhook(path string) (chan Update, error) {
+	if b.startedWebhook {
+		return nil, errors.New("calling UpdatesViaWebhook after starting webhook is not allowed")
+	}
+
 	updatesChan := make(chan Update, updateChanBuffer)
 	b.stop = make(chan struct{})
 

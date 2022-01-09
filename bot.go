@@ -48,7 +48,10 @@ type Bot struct {
 	constructor    telegoapi.RequestConstructor
 	updateInterval time.Duration
 
-	stop   chan struct{}
+	stop               chan struct{}
+	startedLongPulling bool
+	startedWebhook     bool
+
 	server *fasthttp.Server
 }
 
