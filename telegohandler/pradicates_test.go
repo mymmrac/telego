@@ -167,6 +167,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "command_equal_no_massage",
+			predicate: CommandEqual(commandName),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "command_equal_no_command",
+			predicate: CommandEqual(commandName),
+			update:    telego.Update{Message: &telego.Message{Text: text}},
+			matches:   false,
+		},
+		{
 			name:      "command_equal_with_argc_matches",
 			predicate: CommandEqualWithArgc(commandName, 2),
 			update:    telego.Update{Message: &telego.Message{Text: command1}},
@@ -179,6 +191,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "command_equal_with_argc_no_massage",
+			predicate: CommandEqualWithArgc(commandName, 0),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "command_equal_with_argc_no_command",
+			predicate: CommandEqualWithArgc(commandName, 0),
+			update:    telego.Update{Message: &telego.Message{Text: text}},
+			matches:   false,
+		},
+		{
 			name:      "command_equal_with_argv_matches",
 			predicate: CommandEqualWithArgv(commandName, "abc", "123"),
 			update:    telego.Update{Message: &telego.Message{Text: command1}},
@@ -188,6 +212,18 @@ func TestPredicates(t *testing.T) {
 			name:      "command_equal_with_argv_not_matches",
 			predicate: CommandEqualWithArgv(commandName, "abc", "abc"),
 			update:    telego.Update{Message: &telego.Message{Text: command1}},
+			matches:   false,
+		},
+		{
+			name:      "command_equal_with_argv_no_massage",
+			predicate: CommandEqualWithArgv(commandName),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "command_equal_with_argv_no_command",
+			predicate: CommandEqualWithArgv(commandName),
+			update:    telego.Update{Message: &telego.Message{Text: text}},
 			matches:   false,
 		},
 	}
