@@ -153,3 +153,61 @@ func TestBot_GetUpdatesViaWebhook(t *testing.T) {
 		})
 	})
 }
+
+func TestBot_IsRunningLongPulling(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("stopped", func(t *testing.T) {
+		assert.False(t, m.Bot.IsRunningLongPulling())
+	})
+
+	t.Run("running", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil).AnyTimes()
+
+		setResult(t, []Update{})
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil).AnyTimes()
+
+		_, err := m.Bot.UpdatesViaLongPulling(nil)
+		require.NoError(t, err)
+
+		assert.True(t, m.Bot.IsRunningLongPulling())
+
+		m.Bot.StopLongPulling()
+		assert.False(t, m.Bot.IsRunningLongPulling())
+	})
+}
+
+func TestBot_IsRunningWebhook(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("stopped", func(t *testing.T) {
+		assert.False(t, m.Bot.IsRunningWebhook())
+	})
+
+	t.Run("running", func(t *testing.T) {
+		_, err := m.Bot.UpdatesViaWebhook("/bot")
+		require.NoError(t, err)
+
+		m.Bot.StartListeningForWebhook("127.0.0.1:3000")
+
+		assert.True(t, m.Bot.IsRunningWebhook())
+
+		err = m.Bot.StopWebhook()
+		assert.NoError(t, err)
+
+		assert.False(t, m.Bot.IsRunningWebhook())
+	})
+
+	t.Run("running order error", func(t *testing.T) {
+		m.Bot.StartListeningForWebhook("127.0.0.1:3000")
+
+		_, err := m.Bot.UpdatesViaWebhook("/bot")
+		assert.Error(t, err)
+	})
+}

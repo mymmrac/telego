@@ -10,23 +10,6 @@ import (
 	"github.com/mymmrac/telego/telegoapi"
 )
 
-var (
-	data = &telegoapi.RequestData{}
-	resp = &telegoapi.Response{
-		Ok: true,
-	}
-
-	expectedMessage = &Message{
-		MessageID: 1,
-	}
-)
-
-func setResult(t *testing.T, v interface{}) {
-	bytesData, err := json.Marshal(v)
-	assert.NoError(t, err)
-	resp.Result = bytesData
-}
-
 func TestBot_GetUpdates(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)

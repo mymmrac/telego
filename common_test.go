@@ -2,9 +2,29 @@ package telego
 
 import (
 	"github.com/golang/mock/gomock"
+	"github.com/mymmrac/telego/telegoapi"
+	"github.com/stretchr/testify/assert"
+	"testing"
 
 	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
 )
+
+var (
+	data = &telegoapi.RequestData{}
+	resp = &telegoapi.Response{
+		Ok: true,
+	}
+
+	expectedMessage = &Message{
+		MessageID: 1,
+	}
+)
+
+func setResult(t *testing.T, v interface{}) {
+	bytesData, err := json.Marshal(v)
+	assert.NoError(t, err)
+	resp.Result = bytesData
+}
 
 type mockedBot struct {
 	MockAPICaller          *mockAPI.MockCaller
