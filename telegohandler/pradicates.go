@@ -86,4 +86,54 @@ func HasCommand() Predicate {
 	}
 }
 
-// TODO: CommandEqual, CommandEqualWithArgc, CommandEqualWithArgv (all with equal fold)
+const commandLen = 2
+
+// CommandEqual is true if message isn't nil, and it contains specified command
+func CommandEqual(command string) Predicate {
+	return func(update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
+		if len(matches) < commandLen {
+			return false
+		}
+
+		return strings.EqualFold(matches[1], command)
+	}
+}
+
+const commandWithArgsLen = 3
+
+// CommandEqualWithArgc is true if message isn't nil, and it contains specified command with number of args
+func CommandEqualWithArgc(command string, argc int) Predicate {
+	return func(update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
+		if len(matches) < commandWithArgsLen {
+			return false
+		}
+
+		return strings.EqualFold(matches[1], command) && len(strings.Split(matches[2], " ")) == argc
+	}
+}
+
+// CommandEqualWithArgv is true if message isn't nil, and it contains specified command and args
+func CommandEqualWithArgv(command string, argv ...string) Predicate {
+	return func(update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
+		if len(matches) < commandWithArgsLen {
+			return false
+		}
+
+		return strings.EqualFold(matches[1], command) && matches[2] == strings.Join(argv, " ")
+	}
+}
