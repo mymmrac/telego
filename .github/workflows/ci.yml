@@ -10,6 +10,7 @@ on:
 
 jobs:
   lint:
+    name: Linter
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,7 +30,6 @@ jobs:
           version: v1.43.0
 
   test-sonar-cloud:
-    # TODO: [?] Split Go and SonarCloud
     name: Tests & SonarCloud
     runs-on: ubuntu-latest
     steps:
