@@ -1,7 +1,5 @@
 # Telego • Go Telegram Bot API
 
-[//]: # (TODO: [?] Move badges below logo and overview)
-
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego)
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
 <br>
@@ -31,26 +29,22 @@ telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
-### Table Of Content
-
-[//]: # (TODO: Improve table of content)
-
-[//]: # (TODO: [?] Add emojies to headers)
+### 📋 Table Of Content
 
 <details>
 <summary>Click to show • hide</summary>
 
-- [Getting Started](#getting-started)
-    - [Basic setup](#basic-setup)
-    - [Getting updates](#getting-updates)
-    - [Using Telegram methods](#using-telegram-methods)
-    - [Utility methods](#utility-methods)
-- [Contribution](#contribution)
-- [License](#license)
+- [⚡️ Getting Started](#getting-started)
+    - [🧩 Basic setup](#basic-setup)
+    - [📩 Getting updates](#getting-updates)
+    - [🪁 Using Telegram methods](#using-telegram-methods)
+    - [🧼 Utility methods](#utility-methods)
+- [🎨 Contribution](#contribution)
+- [🔐 License](#license)
 
 </details>
 
-## Getting Started
+## ⚡️ Getting Started
 
 [//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
 [//]: # (https://gohugo.io/hosting-and-deployment/hosting-on-github)
@@ -88,7 +82,7 @@ More examples can be seen here:
 
 > Note: While library in unstable version (v0.x.x) some parts of examples may not work.
 
-### Basic setup
+### 🧩 Basic setup
 
 For start, you need to create instance of your bot and
 specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
@@ -126,7 +120,7 @@ func main() {
 }
 ```
 
-### Getting updates
+### 📩 Getting updates
 
 In order to receive updates you can use two methods:
 
@@ -224,7 +218,7 @@ func main() {
 
 > Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
 
-### Using Telegram methods
+### 🪁 Using Telegram methods
 
 All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be
 used by the library. They have same names and same parameters, parameters represented by struct with
@@ -276,7 +270,7 @@ func main() {
 }
 ```
 
-### Utility methods
+### 🧼 Utility methods
 
 In Telego even though you have all [`types`](types.go) and [`methods`](methods.go) available, it's often not so
 convenient to use them directly. To solve this issues [`telegoutil`](telegoutil) package was created. It contains
@@ -307,11 +301,11 @@ are related to [`types`](types.go) in [`telegoutil/types`](telegoutil/types.go).
 > Note: If you think that something can be added to [`telegoutil`](telegoutil) package
 > fill free to create an issue or pull request with desired changes.
 
-## Contribution
+## 🎨 Contribution
 
 Contribution guidelines listed [here](docs/CONTRIBUTING.md).
 
-## License
+## 🔐 License
 
 Telego is distributed under [MIT licence](LICENSE).
 
