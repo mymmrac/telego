@@ -17,7 +17,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 17
+const testCase = 18
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -308,7 +308,6 @@ func main() {
 		defer bot.StopLongPulling()
 
 		bh := th.NewBotHandler(bot, updates)
-		defer bh.Stop()
 
 		count := 0
 
@@ -337,12 +336,12 @@ func main() {
 		})
 
 		bh.Start()
+		defer bh.Stop()
 	case 17:
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
 		bh := th.NewBotHandler(bot, updates)
-		defer bh.Stop()
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
@@ -356,6 +355,52 @@ func main() {
 		}, th.HasMassage(), th.Not(th.HasCommand()))
 
 		bh.Start()
+		defer bh.Stop()
+	case 18:
+		updates, _ := bot.UpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh := th.NewBotHandler(bot, updates)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Running test"))
+		}, th.CommandEqualWithArgv("run", "test"))
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Running update"))
+		}, th.CommandEqualWithArgv("run", "update"))
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			m := tu.Message(tu.ID(msg.Chat.ID), "Run usage:\n```/run test```\n```/run update```")
+			m.ParseMode = telego.ModeMarkdownV2
+			_, _ = bot.SendMessage(m)
+		}, th.Union(
+			th.CommandEqualWithArgc("run", 0),
+			th.CommandEqualWithArgv("help", "run"),
+		))
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			m := tu.Message(tu.ID(msg.Chat.ID), "Unknown subcommand\nRun usage:\n```/run test```\n```/run update```")
+			m.ParseMode = telego.ModeMarkdownV2
+			_, _ = bot.SendMessage(m)
+		}, th.CommandEqual("run"))
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Help: /run"))
+		}, th.CommandEqual("help"))
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			msg := update.Message
+			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Unknown command, use: /run"))
+		}, th.HasCommand())
+
+		bh.Start()
+		defer bh.Stop()
 	}
 }
 

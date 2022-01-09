@@ -79,14 +79,15 @@ func TextMatches(pattern *regexp.Regexp) Predicate {
 // CommandRegexp matches to command and has match groups on command and arguments
 var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
 
+// CommandMatchGroupsLen represents length of match groups of CommandRegexp
+const CommandMatchGroupsLen = 3
+
 // HasCommand is true if message isn't nil, and it matches to command regexp
 func HasCommand() Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && CommandRegexp.MatchString(update.Message.Text)
 	}
 }
-
-const commandLen = 2
 
 // CommandEqual is true if message isn't nil, and it contains specified command
 func CommandEqual(command string) Predicate {
@@ -96,15 +97,13 @@ func CommandEqual(command string) Predicate {
 		}
 
 		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
-		if len(matches) < commandLen {
+		if len(matches) != CommandMatchGroupsLen {
 			return false
 		}
 
 		return strings.EqualFold(matches[1], command)
 	}
 }
-
-const commandWithArgsLen = 3
 
 // CommandEqualWithArgc is true if message isn't nil, and it contains specified command with number of args
 func CommandEqualWithArgc(command string, argc int) Predicate {
@@ -114,11 +113,12 @@ func CommandEqualWithArgc(command string, argc int) Predicate {
 		}
 
 		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
-		if len(matches) < commandWithArgsLen {
+		if len(matches) != CommandMatchGroupsLen {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command) && len(strings.Split(matches[2], " ")) == argc
+		return strings.EqualFold(matches[1], command) &&
+			(argc == 0 && matches[2] == "" || len(strings.Split(matches[2], " ")) == argc)
 	}
 }
 
@@ -130,10 +130,11 @@ func CommandEqualWithArgv(command string, argv ...string) Predicate {
 		}
 
 		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
-		if len(matches) < commandWithArgsLen {
+		if len(matches) != CommandMatchGroupsLen {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command) && matches[2] == strings.Join(argv, " ")
+		return strings.EqualFold(matches[1], command) &&
+			(len(argv) == 0 && matches[2] == "" || matches[2] == strings.Join(argv, " "))
 	}
 }

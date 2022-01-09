@@ -86,7 +86,8 @@ func (h *BotHandler) Stop() {
 
 // Handle registers new handler, update will be processed only by first matched handler, order of registration
 // determines order of matching handlers
-// Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates
+// Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates also, keep
+// in mind that predicates checked sequentially
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
 	if handler == nil {
 		panic("Telego: nil handlers not allowed")
