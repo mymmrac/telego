@@ -6,6 +6,7 @@
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
 <br>
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
+[![Dis](https://img.shields.io/github/discussions/mymmrac/telego?color=58a6ff&label=Discussions&logo=github)](https://github.com/mymmrac/telego/discussions)
 [![Telegram Chat](https://img.shields.io/static/v1?label=Discussion&message=chat&color=29a1d4&logo=telegram)](https://t.me/telegoLibrary)
 
 [![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yml)
@@ -25,8 +26,6 @@ Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] im
 The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
 have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
-
-[//]: # (TODO: Add discussions)
 
 [//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
 
@@ -54,6 +53,8 @@ telegram.
 ## Getting Started
 
 [//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
+[//]: # (https://gohugo.io/hosting-and-deployment/hosting-on-github)
+[//]: # (https://themes.gohugo.io/themes/hugo-whisper-theme)
 
 How to get the library:
 
