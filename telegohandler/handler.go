@@ -22,7 +22,9 @@ type BotHandler struct {
 	bot      *telego.Bot
 	updates  chan telego.Update
 	handlers []conditionalHandler
-	stop     chan struct{}
+
+	stop    chan struct{}
+	running bool
 }
 
 // NewBotHandler creates new bot handler
@@ -38,6 +40,7 @@ func NewBotHandler(bot *telego.Bot, updates chan telego.Update) *BotHandler {
 // Note: After you done with handling updates you should call Stop method
 func (h *BotHandler) Start() {
 	h.stop = make(chan struct{})
+	h.running = true
 	for {
 		select {
 		case <-h.stop:
@@ -67,12 +70,18 @@ func (h *BotHandler) processUpdate(update telego.Update) {
 	}
 }
 
-// TODO: Stopped func
+// IsRunning tells if Start is running
+func (h *BotHandler) IsRunning() bool {
+	return h.running
+}
 
 // Stop stops handling of updates
 // Note: Should be called only after Start method
 func (h *BotHandler) Stop() {
-	close(h.stop)
+	if h.running {
+		h.running = false
+		close(h.stop)
+	}
 }
 
 // Handle registers new handler, update will be processed only by first matched handler, order of registration

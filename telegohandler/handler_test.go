@@ -97,13 +97,7 @@ func TestBotHandler_Start(t *testing.T) {
 
 func TestBotHandler_Stop(t *testing.T) {
 	bh := newBotHandler(t)
-
-	assert.Panics(t, func() {
-		bh.Stop()
-	})
-
 	bh.stop = make(chan struct{})
-
 	assert.NotPanics(t, func() {
 		bh.Stop()
 	})
@@ -146,5 +140,22 @@ func TestBotHandler_Handle(t *testing.T) {
 		assert.NotNil(t, bh.handlers[0].Predicates)
 
 		bh.handlers = make([]conditionalHandler, 0)
+	})
+}
+
+func TestBotHandler_IsRunning(t *testing.T) {
+	bh := newBotHandler(t)
+
+	t.Run("stopped", func(t *testing.T) {
+		assert.False(t, bh.IsRunning())
+	})
+
+	t.Run("running", func(t *testing.T) {
+		go bh.Start()
+		time.Sleep(time.Millisecond * 10)
+		assert.True(t, bh.IsRunning())
+
+		bh.Stop()
+		assert.False(t, bh.IsRunning())
 	})
 }

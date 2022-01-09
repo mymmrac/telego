@@ -1,11 +1,12 @@
 package telego
 
 import (
-	"github.com/golang/mock/gomock"
-	"github.com/mymmrac/telego/telegoapi"
-	"github.com/stretchr/testify/assert"
 	"testing"
 
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/mymmrac/telego/telegoapi"
 	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
 )
 
