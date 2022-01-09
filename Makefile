@@ -1,10 +1,8 @@
 export PATH := $(PATH):$(shell go env GOPATH)/bin
 
-# TODO: Check if used latest version
 lint-install:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 
-# TODO: Check if used latest version
 mock-install:
 	go install github.com/golang/mock/mockgen@v1.6.0
 
