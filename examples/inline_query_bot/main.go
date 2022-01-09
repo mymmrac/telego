@@ -16,7 +16,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPulling(nil)
 	defer bot.StopLongPulling()
 
 	for update := range updates {

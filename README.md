@@ -129,8 +129,8 @@ func main() {
 
 In order to receive updates you can use two methods:
 
-- using long polling (`bot.GetUpdatesViaLongPulling`)
-- using webhook (`bot.GetUpdatesViaWebhook`)
+- using long polling (`bot.UpdatesViaLongPulling`)
+- using webhook (`bot.UpdatesViaWebhook`)
 
 Let's start from long pulling (easier for local testing):
 
@@ -160,7 +160,7 @@ func main() {
 	bot.SetUpdateInterval(time.Second / 2)
 
 	// Get updates channel
-	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPulling(nil)
 
 	// Stop reviving updates from updates channel
 	defer bot.StopLongPulling()
@@ -204,7 +204,7 @@ func main() {
 
 	// Get updates channel from webhook.
 	// Note: For one bot only one webhook allowed.
-	updates, _ := bot.GetUpdatesViaWebhook("/bot" + bot.Token())
+	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
 
 	// Start server for receiving requests from Telegram
 	bot.StartListeningForWebhook("localhost:443")
@@ -257,7 +257,7 @@ func main() {
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %#v\n", botUser)
 
-	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPulling(nil)
 	defer bot.StopLongPulling()
 
 	for update := range updates {

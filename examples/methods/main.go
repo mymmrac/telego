@@ -21,7 +21,7 @@ func main() {
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %#v\n", botUser)
 
-	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPulling(nil)
 	defer bot.StopLongPulling()
 
 	for update := range updates {

@@ -27,7 +27,7 @@ func main() {
 
 	// Get updates channel from webhook.
 	// Note: For one bot only one webhook allowed.
-	updates, _ := bot.GetUpdatesViaWebhook("/bot" + bot.Token())
+	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
 
 	// Start server for receiving requests from Telegram
 	bot.StartListeningForWebhook("localhost:443")

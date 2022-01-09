@@ -23,7 +23,7 @@ func main() {
 	bot.SetUpdateInterval(time.Second / 2)
 
 	// Get updates channel
-	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPulling(nil)
 
 	// Stop reviving updates from updates channel
 	defer bot.StopLongPulling()

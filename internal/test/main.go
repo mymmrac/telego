@@ -69,7 +69,7 @@ func main() {
 		}
 		fmt.Println(msg)
 	case 2:
-		updChan, err := bot.GetUpdatesViaLongPulling(&telego.GetUpdatesParams{})
+		updChan, err := bot.UpdatesViaLongPulling(&telego.GetUpdatesParams{})
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -282,7 +282,7 @@ func main() {
 			return
 		}
 	case 15:
-		updates, _ := bot.GetUpdatesViaLongPulling(nil)
+		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
 		bh := th.NewBotHandler(bot, updates)
@@ -304,7 +304,7 @@ func main() {
 
 		bh.Start()
 	case 16:
-		updates, _ := bot.GetUpdatesViaLongPulling(nil)
+		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
 		bh := th.NewBotHandler(bot, updates)
@@ -338,7 +338,7 @@ func main() {
 
 		bh.Start()
 	case 17:
-		updates, _ := bot.GetUpdatesViaLongPulling(nil)
+		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
 		bh := th.NewBotHandler(bot, updates)

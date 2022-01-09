@@ -47,7 +47,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.GetUpdatesViaLongPulling(nil)
+			_, err := m.Bot.UpdatesViaLongPulling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 			m.Bot.StopLongPulling()
@@ -63,7 +63,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			Return(nil, errTest).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.GetUpdatesViaLongPulling(nil)
+			_, err := m.Bot.UpdatesViaLongPulling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 			m.Bot.StopLongPulling()
@@ -137,7 +137,7 @@ func TestBot_GetUpdatesViaWebhook(t *testing.T) {
 	b, err := NewBot(token, DefaultLogger(false, false))
 	require.NoError(t, err)
 
-	_, err = b.GetUpdatesViaWebhook("/bot")
+	_, err = b.UpdatesViaWebhook("/bot")
 	require.NoError(t, err)
 
 	assert.NotPanics(t, func() {

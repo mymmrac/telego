@@ -54,7 +54,7 @@ func main() {
 	// Sending message
 	_, _ = bot.SendMessage(message)
 
-	updates, _ := bot.GetUpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPulling(nil)
 	defer bot.StopLongPulling()
 
 	// Receiving callback data
