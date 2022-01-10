@@ -12,7 +12,7 @@ var (
 	id   = telego.ChatID{ID: 123}
 	file = telego.InputFile{FileID: "123"}
 
-	text  = "test"
+	text1 = "test"
 	text2 = "test2"
 	text3 = "test3"
 	text4 = "test4"
@@ -27,7 +27,7 @@ var (
 
 	prices = []telego.LabeledPrice{
 		{
-			Label:  text,
+			Label:  text1,
 			Amount: 123,
 		},
 	}
@@ -53,22 +53,22 @@ func TestAudio(t *testing.T) {
 }
 
 func TestChatAction(t *testing.T) {
-	c := ChatAction(id, text)
+	c := ChatAction(id, text1)
 	assert.Equal(t, id, c.ChatID)
-	assert.Equal(t, text, c.Action)
+	assert.Equal(t, text1, c.Action)
 }
 
 func TestContact(t *testing.T) {
-	c := Contact(id, text, text2)
+	c := Contact(id, text1, text2)
 	assert.Equal(t, id, c.ChatID)
-	assert.Equal(t, text, c.PhoneNumber)
+	assert.Equal(t, text1, c.PhoneNumber)
 	assert.Equal(t, text2, c.FirstName)
 }
 
 func TestDice(t *testing.T) {
-	d := Dice(id, text)
+	d := Dice(id, text1)
 	assert.Equal(t, id, d.ChatID)
-	assert.Equal(t, text, d.Emoji)
+	assert.Equal(t, text1, d.Emoji)
 }
 
 func TestDocument(t *testing.T) {
@@ -78,15 +78,15 @@ func TestDocument(t *testing.T) {
 }
 
 func TestGame(t *testing.T) {
-	g := Game(id.ID, text)
+	g := Game(id.ID, text1)
 	assert.Equal(t, id.ID, g.ChatID)
-	assert.Equal(t, text, g.GameShortName)
+	assert.Equal(t, text1, g.GameShortName)
 }
 
 func TestInvoice(t *testing.T) {
-	i := Invoice(id, text, text2, text3, text4, text5, prices)
+	i := Invoice(id, text1, text2, text3, text4, text5, prices)
 	assert.Equal(t, id, i.ChatID)
-	assert.Equal(t, text, i.Title)
+	assert.Equal(t, text1, i.Title)
 	assert.Equal(t, text2, i.Description)
 	assert.Equal(t, text3, i.Payload)
 	assert.Equal(t, text4, i.ProviderToken)
@@ -108,9 +108,9 @@ func TestMediaGroup(t *testing.T) {
 }
 
 func TestMessage(t *testing.T) {
-	m := Message(id, text)
+	m := Message(id, text1)
 	assert.Equal(t, id, m.ChatID)
-	assert.Equal(t, text, m.Text)
+	assert.Equal(t, text1, m.Text)
 }
 
 func TestPhoto(t *testing.T) {
@@ -120,9 +120,9 @@ func TestPhoto(t *testing.T) {
 }
 
 func TestPoll(t *testing.T) {
-	p := Poll(id, text, texts)
+	p := Poll(id, text1, texts)
 	assert.Equal(t, id, p.ChatID)
-	assert.Equal(t, text, p.Question)
+	assert.Equal(t, text1, p.Question)
 	assert.Equal(t, texts, p.Options)
 }
 
@@ -133,11 +133,11 @@ func TestSticker(t *testing.T) {
 }
 
 func TestVenue(t *testing.T) {
-	v := Venue(id, float, float2, text, text2)
+	v := Venue(id, float, float2, text1, text2)
 	assert.Equal(t, id, v.ChatID)
 	assert.Equal(t, float, v.Latitude)
 	assert.Equal(t, float2, v.Longitude)
-	assert.Equal(t, text, v.Title)
+	assert.Equal(t, text1, v.Title)
 	assert.Equal(t, text2, v.Address)
 }
 
