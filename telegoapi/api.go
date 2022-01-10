@@ -83,7 +83,6 @@ type Caller interface {
 // NamedReader represents a way to send files (or other data).
 // Implemented by os.File.
 // Note: Name method should return unique names for all files sent in one request.
-// TODO: Add utility method for creation of named readers (io.Reader, name string) -> NamedReader
 type NamedReader interface {
 	io.Reader
 	Name() string
