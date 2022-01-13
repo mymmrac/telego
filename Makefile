@@ -1,4 +1,6 @@
 export PATH := $(PATH):$(shell go env GOPATH)/bin
+# TODO: Document all targets, create `help` target
+# TODO: Add "how to run" to contribution guidelines
 
 lint-install:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
