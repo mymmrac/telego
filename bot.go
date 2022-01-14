@@ -28,10 +28,8 @@ const (
 	omitEmptySuffix = ",omitempty"
 )
 
-var (
-	// ErrInvalidToken Bot token is invalid according to token regexp
-	ErrInvalidToken = errors.New("invalid token")
-)
+// ErrInvalidToken Bot token is invalid according to token regexp
+var ErrInvalidToken = errors.New("invalid token")
 
 // validateToken validates if token matches format
 func validateToken(token string) bool {
