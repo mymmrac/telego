@@ -27,9 +27,11 @@ race:
 
 pre-commit: test lint
 
-# TODO: Remove generator and fully replace it with generator-v2
 # Usage: make generator RUN="types types-tests methods methods-tests"
-generator: ./internal/generator-v2
-	go run ./internal/generator-v2 $$RUN
+generator: ./internal/generator
+	go run ./internal/generator $$RUN
 
-.PHONY: lint-install mock-install generate lint test cover race pre-commit generator
+generator-clean-up:
+	rm *.generated
+
+.PHONY: lint-install mock-install generate lint test cover race pre-commit generator generator-clean-up

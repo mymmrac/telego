@@ -224,7 +224,6 @@ All Telegram Bot API methods described in [documentation](https://core.telegram.
 used by the library. They have same names and same parameters, parameters represented by struct with
 name: `<methodName>` + `Params`. If method don't have required parameters `nil` value can be used as a parameter.
 
-[//]: # (TODO: Update to generator v2)
 > Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](internal/generator) from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and actual code.
 > Fell free to report such things.
 
