@@ -1,6 +1,5 @@
 # Adds $GOPATH/bit to $PATH
 export PATH := $(PATH):$(shell go env GOPATH)/bin
-# TODO: Add "how to run" to contribution guidelines
 
 help: ## Display this help message
 	@echo "Usage:\n"

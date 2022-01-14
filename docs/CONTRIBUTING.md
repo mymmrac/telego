@@ -40,7 +40,7 @@ Project divided into packages & folders with their own purpose and new contribut
 ### Always releasable
 
 The goal is to have `main` branch always "releasable", that means that while new functional is added or old is updated
-no changes should break existing code. If feature was working before update, after update it should work the same or 
+no changes should break existing code. If feature was working before update, after update it should work the same or
 with expected changed behaviour.
 
 This is main reason why this project doesn't have `dev` branch.
@@ -81,6 +81,17 @@ How to contribute step by step:
 5. Commit `git commit -m "New feature added"`
 6. Push `git push origin my-new-feature`
 7. Create pull request in Telego repo
+
+How to run tests & linter locally:
+
+- Run tests: `make test`
+- Run linter: `make lint`
+    - Install linter: `make lint-install`
+
+
+- Run both tests and linter: `make pre-commit`
+
+To see full usage of [Makefile](../Makefile) use: `make help` or just `make`.
 
 ## 🎨 Style guidelines
 
