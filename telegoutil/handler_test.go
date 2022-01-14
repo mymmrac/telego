@@ -34,8 +34,10 @@ func TestParseCommand(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		name, args := ParseCommand(tt.text)
-		assert.Equal(t, tt.commandName, name)
-		assert.Equal(t, tt.args, args)
+		t.Run(tt.name, func(t *testing.T) {
+			name, args := ParseCommand(tt.text)
+			assert.Equal(t, tt.commandName, name)
+			assert.Equal(t, tt.args, args)
+		})
 	}
 }
