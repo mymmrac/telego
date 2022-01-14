@@ -118,8 +118,8 @@ func writeTypes(file *os.File, types tgTypes) {
 
 	logInfo("Types: %d", len(types))
 
-	data.WriteString(fmt.Sprintf("package %s\n", packageName))
-	data.WriteString(`
+	data.WriteString(`package telego
+
 import (
 	"errors"
 	"fmt"

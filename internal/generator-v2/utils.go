@@ -272,3 +272,14 @@ func firstToLower(text string) string {
 		return string(text[0]|('a'-'A')) + text[1:]
 	}
 }
+
+func firstToUpper(text string) string {
+	switch len(text) {
+	case 0:
+		return text
+	case 1:
+		return string(text[0] & ('a' - 'A' ^ 0xff))
+	default:
+		return string(text[0]&('a'-'A'^0xff)) + text[1:]
+	}
+}

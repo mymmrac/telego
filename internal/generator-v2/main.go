@@ -17,16 +17,15 @@ const (
 	omitemptySuffix = ",omitempty"
 	optionalPrefix  = "Optional. "
 
-	packageName              = "telego"
 	generatedTypesFilename   = "./types.go.generated"
 	generatedMethodsFilename = "./methods.go.generated"
 )
 
 const (
-	runTypesGeneration      = "types"
-	runTypesTestsGeneration = "types-tests"
-	runMethodsGeneration    = "methods"
-	// TODO: Methods test generator
+	runTypesGeneration        = "types"
+	runTypesTestsGeneration   = "types-tests"
+	runMethodsGeneration      = "methods"
+	runMethodsTestsGeneration = "methods-tests"
 )
 
 func main() {
@@ -36,17 +35,13 @@ func main() {
 	}
 	args := os.Args[1:]
 
-	var docs string
+	sr := sharedResources{}
 
 	for _, arg := range args {
 		logInfo("==== %s ====", arg)
 		switch arg {
 		case runTypesGeneration:
-			if docs == "" {
-				docs = readDocs()
-			} else {
-				logInfo("Reusing docs")
-			}
+			docs := sr.Docs()
 
 			start := time.Now()
 			typesFile := openFile(generatedTypesFilename)
@@ -58,16 +53,12 @@ func main() {
 			formatFile(typesFile.Name())
 			logInfo("Generated types in: %s", time.Since(start))
 		case runMethodsGeneration:
-			if docs == "" {
-				docs = readDocs()
-			} else {
-				logInfo("Reusing docs")
-			}
+			docs := sr.Docs()
 
 			start := time.Now()
 			methodsFile := openFile(generatedMethodsFilename)
 
-			methods := generateMethods(docs)
+			methods := sr.Methods(docs)
 			writeMethods(methodsFile, methods)
 			_ = methodsFile.Close()
 
@@ -77,12 +68,44 @@ func main() {
 			start := time.Now()
 			generateTypesTests()
 			logInfo("Generated types tests in: %s", time.Since(start))
+		case runMethodsTestsGeneration:
+			docs := sr.Docs()
+			methods := sr.Methods(docs)
+
+			start := time.Now()
+			generateMethodsTests(methods)
+			logInfo("Generated methods tests in: %s", time.Since(start))
 		default:
 			logError("Unknown generation arg: %q", arg)
 			os.Exit(1)
 		}
 	}
-	logInfo("Done")
+
+	logInfo("==== end ====")
+	logInfo("Generation successful")
+}
+
+type sharedResources struct {
+	docs    string
+	methods tgMethods
+}
+
+func (r *sharedResources) Docs() string {
+	if r.docs == "" {
+		r.docs = readDocs()
+	} else {
+		logInfo("Reusing docs")
+	}
+	return r.docs
+}
+
+func (r *sharedResources) Methods(docs string) tgMethods {
+	if r.methods == nil {
+		r.methods = generateMethods(docs)
+	} else {
+		logInfo("Reusing methods")
+	}
+	return r.methods
 }
 
 func openFile(filename string) *os.File {

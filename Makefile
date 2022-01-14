@@ -28,7 +28,7 @@ race:
 pre-commit: test lint
 
 # TODO: Remove generator and fully replace it with generator-v2
-# Usage: make generator RUN="types types-tests methods"
+# Usage: make generator RUN="types types-tests methods methods-tests"
 generator: ./internal/generator-v2
 	go run ./internal/generator-v2 $$RUN
 

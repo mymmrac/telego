@@ -25,6 +25,10 @@ type tgMethod struct {
 	returnType  string
 }
 
+func (m tgMethod) hasReturnValue() bool {
+	return m.returnType != returnTypeNotFound && m.returnType != ""
+}
+
 type tgMethods []tgMethod
 
 const methodPattern = `
@@ -141,8 +145,8 @@ func writeMethods(file *os.File, methods tgMethods) {
 
 	logInfo("Methods: %d", len(methods))
 
-	data.WriteString(fmt.Sprintf("package %s\n", packageName))
-	data.WriteString(`
+	data.WriteString(`package telego
+
 import (
 	"fmt"
 
@@ -197,7 +201,7 @@ import (
 
 		returnType := ""
 		hasReturnType := false
-		if m.returnType == returnTypeNotFound || m.returnType == "" {
+		if !m.hasReturnValue() {
 			returnType = "error"
 		} else {
 			returnType = fmt.Sprintf("(%s, error)", m.returnType)
@@ -212,11 +216,7 @@ import (
 
 		data.WriteString(fmt.Sprintf("\nfunc (b *Bot) %s(%s) %s {\n", m.nameTitle, parametersArg, returnType))
 
-		returnVar := strings.TrimPrefix(m.returnType, "*")
-		if strings.HasPrefix(returnVar, "[]") {
-			returnVar = strings.TrimPrefix(returnVar, "[]") + "s"
-		}
-		returnVar = firstToLower(returnVar)
+		returnVar := returnTypeToVar(m.returnType)
 
 		if hasReturnType {
 			data.WriteString(fmt.Sprintf("\tvar %s %s\n", returnVar, m.returnType))
@@ -302,4 +302,12 @@ func parseReturnType(methodDescription string) string {
 	default:
 		return parseType(returnType, true)
 	}
+}
+
+func returnTypeToVar(returnType string) string {
+	returnVar := strings.TrimPrefix(returnType, "*")
+	if strings.HasPrefix(returnVar, "[]") {
+		returnVar = strings.TrimPrefix(returnVar, "[]") + "s"
+	}
+	return firstToLower(returnVar)
 }

@@ -28,7 +28,7 @@ func init() {
 }
 
 func generateTypesTests() {
-	logInfo("Reading types from: %s", typesFilename)
+	logInfo("Reading types from: %q", typesFilename)
 
 	typesBytes, err := ioutil.ReadFile(typesFilename)
 	exitOnErr(err)
@@ -42,7 +42,7 @@ func generateTypesTests() {
 
 	data := strings.Builder{}
 
-	data.WriteString(fmt.Sprintf(`package %s
+	data.WriteString(`package telego
 
 import (
 	"testing"
@@ -51,7 +51,7 @@ import (
 )
 
 func TestTypesInterfaces(t *testing.T) {
-`, packageName))
+`)
 
 	funcs := funcRegexp.FindAllStringSubmatch(types, -1)
 
