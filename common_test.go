@@ -22,6 +22,8 @@ var (
 )
 
 func setResult(t *testing.T, v interface{}) {
+	t.Helper()
+
 	bytesData, err := json.Marshal(v)
 	assert.NoError(t, err)
 	resp.Result = bytesData
