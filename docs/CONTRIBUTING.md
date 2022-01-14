@@ -26,14 +26,11 @@ Project divided into packages & folders with their own purpose and new contribut
 - `telegoapi` - core methods for communication with Telegram
 - `telegoutil` - utility methods for quality of life improvements (other packages should not depend on this one)
 - `telegohandler` - methods for handling updates in a way similar to `net/http`
-
-
-- `internal/generator-v2` - a mechanism that is responsible for the generation of code from Telegram docs
-- `internal/generator` - old (and crappy) version of generator
+---
+- `internal/generator` - a mechanism that is responsible for the generation of code from Telegram docs
 - `internal/test` - tests of different parts of the library (should not be considered as proper code, used only for
   basic proof work)
-
-
+---
 - `examples` - list of usage examples
 - `docs` - documentation and other useful assets
 
@@ -87,8 +84,7 @@ How to run tests & linter locally:
 - Run tests: `make test`
 - Run linter: `make lint`
     - Install linter: `make lint-install`
-
-
+---
 - Run both tests and linter: `make pre-commit`
 
 To see full usage of [Makefile](../Makefile) use: `make help` or just `make`.
