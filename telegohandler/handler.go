@@ -4,7 +4,11 @@ package telegohandler
 // TODO: Properly tests package
 // TODO: Add examples
 
-import "github.com/mymmrac/telego"
+import (
+	"sync"
+
+	"github.com/mymmrac/telego"
+)
 
 // Handler handles update that came from bot
 type Handler func(bot *telego.Bot, update telego.Update)
@@ -25,6 +29,7 @@ type BotHandler struct {
 
 	stop    chan struct{}
 	running bool
+	mutex   sync.Mutex
 }
 
 // NewBotHandler creates new bot handler
@@ -40,7 +45,11 @@ func NewBotHandler(bot *telego.Bot, updates chan telego.Update) *BotHandler {
 // Note: After you done with handling updates you should call Stop method
 func (h *BotHandler) Start() {
 	h.stop = make(chan struct{})
+
+	h.mutex.Lock()
 	h.running = true
+	h.mutex.Unlock()
+
 	for {
 		select {
 		case <-h.stop:
@@ -72,12 +81,18 @@ func (h *BotHandler) processUpdate(update telego.Update) {
 
 // IsRunning tells if Start is running
 func (h *BotHandler) IsRunning() bool {
+	h.mutex.Lock()
+	defer h.mutex.Unlock()
+
 	return h.running
 }
 
 // Stop stops handling of updates
 // Note: Should be called only after Start method
 func (h *BotHandler) Stop() {
+	h.mutex.Lock()
+	defer h.mutex.Unlock()
+
 	if h.running {
 		h.running = false
 		close(h.stop)

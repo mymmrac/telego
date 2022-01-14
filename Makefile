@@ -27,7 +27,6 @@ test: ## Run tests
 cover: test ## Run tests & show coverage
 	go tool cover -func cover.out
 
-# TODO: Fix data race
 race: ## Run tests with race flag
 	go test -race ./...
 
