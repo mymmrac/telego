@@ -184,8 +184,7 @@ func (d DefaultConstructor) MultipartRequest(
 		}
 	}
 
-	err := writer.Close()
-	if err != nil {
+	if err := writer.Close(); err != nil {
 		return nil, fmt.Errorf("closing writer: %w", err)
 	}
 
