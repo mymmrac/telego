@@ -41,6 +41,7 @@ func newMockedBot(ctrl *gomock.Controller) mockedBot {
 		MockRequestConstructor: mockAPI.NewMockRequestConstructor(ctrl),
 	}
 
+	//nolint:errcheck
 	bot, _ := NewBot(token,
 		WithAPICaller(mb.MockAPICaller),
 		WithRequestConstructor(mb.MockRequestConstructor),

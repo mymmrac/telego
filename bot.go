@@ -134,6 +134,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
 			i++
 		}
+		//nolint:errcheck
 		debugJSON, _ := json.Marshal(parsedParameters)
 
 		debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
