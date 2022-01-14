@@ -84,7 +84,6 @@ How to run tests & linter locally:
 - Run tests: `make test`
 - Run linter: `make lint`
     - Install linter: `make lint-install`
----
 - Run both tests and linter: `make pre-commit`
 
 To see full usage of [Makefile](../Makefile) use: `make help` or just `make`.
