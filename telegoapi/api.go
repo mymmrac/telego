@@ -3,8 +3,6 @@
 
 package telegoapi
 
-// TODO: Add godoc
-
 import (
 	"bytes"
 	stdJson "encoding/json"
@@ -184,8 +182,7 @@ func (d DefaultConstructor) MultipartRequest(
 		}
 	}
 
-	err := writer.Close()
-	if err != nil {
+	if err := writer.Close(); err != nil {
 		return nil, fmt.Errorf("closing writer: %w", err)
 	}
 
@@ -201,7 +198,7 @@ func isNil(i interface{}) bool {
 	switch reflect.TypeOf(i).Kind() {
 	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
 		return reflect.ValueOf(i).IsNil()
+	default:
+		return false
 	}
-
-	return false
 }

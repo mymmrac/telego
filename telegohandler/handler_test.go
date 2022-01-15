@@ -18,6 +18,8 @@ const (
 )
 
 func newBotHandler(t *testing.T) *BotHandler {
+	t.Helper()
+
 	bot, err := telego.NewBot(token)
 	require.NoError(t, err)
 

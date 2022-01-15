@@ -22,6 +22,8 @@ var (
 )
 
 func setResult(t *testing.T, v interface{}) {
+	t.Helper()
+
 	bytesData, err := json.Marshal(v)
 	assert.NoError(t, err)
 	resp.Result = bytesData
@@ -39,6 +41,7 @@ func newMockedBot(ctrl *gomock.Controller) mockedBot {
 		MockRequestConstructor: mockAPI.NewMockRequestConstructor(ctrl),
 	}
 
+	//nolint:errcheck
 	bot, _ := NewBot(token,
 		WithAPICaller(mb.MockAPICaller),
 		WithRequestConstructor(mb.MockRequestConstructor),

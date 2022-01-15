@@ -2605,13 +2605,19 @@ func TestSetStickerSetThumbParams_fileParameters(t *testing.T) {
 
 func TestMethodsConstants(t *testing.T) {
 	tests := [][]string{
-		{MessageUpdates, EditedMessageUpdates, ChannelPostUpdates, EditedChannelPostUpdates, InlineQueryUpdates,
+		{
+			MessageUpdates, EditedMessageUpdates, ChannelPostUpdates, EditedChannelPostUpdates, InlineQueryUpdates,
 			ChosenInlineResultUpdates, CallbackQueryUpdates, ShippingQueryUpdates, PreCheckoutQueryUpdates,
-			PollUpdates, PollAnswerUpdates, MyChatMemberUpdates, ChatMemberUpdates},
-		{ModeHTML, ModeMarkdown, ModeMarkdownV2},
-		{ChatActionTyping, ChatActionUploadPhoto, ChatActionRecordVideo, ChatActionUploadVideo, ChatActionRecordVoice,
-			ChatActionUploadVoice, ChatActionUploadDocument, ChatActionChooseSticker, ChatActionFindLocation,
-			ChatActionRecordVideoNote, ChatActionUploadVideoNote},
+			PollUpdates, PollAnswerUpdates, MyChatMemberUpdates, ChatMemberUpdates,
+		},
+		{
+			ModeHTML, ModeMarkdown, ModeMarkdownV2,
+		},
+		{
+			ChatActionTyping, ChatActionUploadPhoto, ChatActionRecordVideo, ChatActionUploadVideo,
+			ChatActionRecordVoice, ChatActionUploadVoice, ChatActionUploadDocument, ChatActionChooseSticker,
+			ChatActionFindLocation, ChatActionRecordVideoNote, ChatActionUploadVideoNote,
+		},
 	}
 
 	for _, tt := range tests {

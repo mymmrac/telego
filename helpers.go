@@ -181,6 +181,7 @@ func (b *Bot) UpdatesViaWebhook(path string) (chan Update, error) {
 }
 
 func (b *Bot) respondWithError(ctx *fasthttp.RequestCtx, err error) {
+	//nolint:errcheck
 	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
 
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)

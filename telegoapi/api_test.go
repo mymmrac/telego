@@ -86,7 +86,7 @@ func (s *Server) Handle(ctx *fasthttp.RequestCtx) {
 	ctx.SetStatusCode(http.StatusOK)
 }
 
-func newTestClient(t *testing.T) (client *fasthttp.Client, teardown func()) {
+func TestFasthttpAPICaller_Call(t *testing.T) {
 	ln := fasthttputil.NewInmemoryListener()
 
 	api := &Server{
@@ -102,21 +102,16 @@ func newTestClient(t *testing.T) (client *fasthttp.Client, teardown func()) {
 		}
 	}()
 
-	teardown = func() {
+	teardown := func() {
 		assert.NoError(t, ln.Close())
 	}
 
-	client = &fasthttp.Client{
+	client := &fasthttp.Client{
 		Dial: func(addr string) (net.Conn, error) {
 			return ln.Dial()
 		},
 	}
 
-	return client, teardown
-}
-
-func TestFasthttpAPICaller_Call(t *testing.T) {
-	client, teardown := newTestClient(t)
 	defer teardown()
 
 	caller := FasthttpAPICaller{Client: client}

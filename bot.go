@@ -28,10 +28,8 @@ const (
 	omitEmptySuffix = ",omitempty"
 )
 
-var (
-	// ErrInvalidToken Bot token is invalid according to token regexp
-	ErrInvalidToken = errors.New("invalid token")
-)
+// ErrInvalidToken Bot token is invalid according to token regexp
+var ErrInvalidToken = errors.New("invalid token")
 
 // validateToken validates if token matches format
 func validateToken(token string) bool {
@@ -136,6 +134,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
 			i++
 		}
+		//nolint:errcheck
 		debugJSON, _ := json.Marshal(parsedParameters)
 
 		debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
@@ -252,7 +251,7 @@ func isNil(i interface{}) bool {
 	switch reflect.TypeOf(i).Kind() {
 	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
 		return reflect.ValueOf(i).IsNil()
+	default:
+		return false
 	}
-
-	return false
 }

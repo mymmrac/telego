@@ -41,7 +41,7 @@ func TestID(t *testing.T) {
 }
 
 func TestUsername(t *testing.T) {
-	var username = "username"
+	username := "username"
 	chatID := Username(username)
 	assert.Equal(t, username, chatID.Username)
 }
