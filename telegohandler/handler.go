@@ -1,6 +1,5 @@
 package telegohandler
 
-// TODO: Add godoc
 // TODO: Properly tests package
 // TODO: Add examples
 

@@ -1,7 +1,5 @@
 package telegoutil
 
-// TODO: Add godoc
-
 import (
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegoapi"
