@@ -2,21 +2,15 @@
 export PATH := $(PATH):$(shell go env GOPATH)/bin
 
 help: ## Display this help message
-	@echo "Usage:\n"
-	@grep -E "^[a-zA-Z_-]+:.*? ## .+$$" $(MAKEFILE_LIST) | sort \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-
-lint-install: ## Install golangci-lint
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
-
-mock-install: ## Install mockgen
-	go install github.com/golang/mock/mockgen@v1.6.0
-
-generate: ## Generate (used for mock generation)
-	go generate ./...
+	@echo "Usage:"
+	@grep -E "^[a-zA-Z_-]+:.*? ## .+$$" $(MAKEFILE_LIST) \
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-24s\033[0m %s\n", $$1, $$2}'
 
 lint: ## Run golangci-lint
 	golangci-lint run
+
+lint-install: ## Install golangci-lint
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 
 test: ## Run tests
 	go test -coverprofile cover.out \
@@ -28,7 +22,16 @@ cover: test ## Run tests & show coverage
 race: ## Run tests with race flag
 	go test -race ./...
 
-pre-commit: test lint ## Run tests & linter
+build-examples: ## Build examples into bin folder
+	go build -o bin/ ./examples/*
+
+pre-commit: test lint build-examples ## Run tests, linter and build examples
+
+generate: ## Generate (used for mock generation)
+	go generate ./...
+
+mock-install: ## Install mockgen
+	go install github.com/golang/mock/mockgen@v1.6.0
 
 generator: ./internal/generator ## Run generation, example: make generator RUN="types types-tests methods methods-tests"
 	go run ./internal/generator $$RUN
@@ -36,7 +39,5 @@ generator: ./internal/generator ## Run generation, example: make generator RUN="
 generator-clean-up: ## Remove generated files
 	rm *.generated
 
-build-examples: ## Build examples into bin folder
-	go build -o bin/ ./examples/*
-
-.PHONY: help lint-install mock-install generate lint test cover race pre-commit generator generator-clean-up build-examples
+.PHONY: help lint lint-install test cover race build-examples pre-commit generate mock-install generator \
+generator-clean-up
