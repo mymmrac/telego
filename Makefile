@@ -18,7 +18,6 @@ generate: ## Generate (used for mock generation)
 lint: ## Run golangci-lint
 	golangci-lint run
 
-# TODO: [?] Test examples
 test: ## Run tests
 	go test -coverprofile cover.out \
 	$(shell go list ./... | grep -v /examples/ | grep -v /test | grep -v /internal/ | grep -v /mock)
@@ -37,4 +36,7 @@ generator: ./internal/generator ## Run generation, example: make generator RUN="
 generator-clean-up: ## Remove generated files
 	rm *.generated
 
-.PHONY: lint-install mock-install generate lint test cover race pre-commit generator generator-clean-up help
+build-examples: ## Build examples into bin folder
+	go build -o bin/ ./examples/*
+
+.PHONY: help lint-install mock-install generate lint test cover race pre-commit generator generator-clean-up build-examples

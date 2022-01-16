@@ -68,7 +68,7 @@ More examples can be seen here:
 <summary>Click to show • hide</summary>
 
 - [Configuration](examples/configuration/main.go)
-- [Sending files (documents, photos, media groups)](examples/sending_fiels/main.go)
+- [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
 - [Echo bot](examples/echo_bot/main.go)

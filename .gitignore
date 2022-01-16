@@ -9,3 +9,6 @@
 
 # Output fiels
 *.out
+
+# Binaries
+bin
