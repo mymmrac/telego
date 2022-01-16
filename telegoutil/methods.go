@@ -2,8 +2,6 @@ package telegoutil
 
 import "github.com/mymmrac/telego"
 
-// TODO: Add examples of usage
-
 // Message creates telego.SendMessageParams with required parameters
 func Message(id telego.ChatID, text string) *telego.SendMessageParams {
 	return &telego.SendMessageParams{

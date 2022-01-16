@@ -73,12 +73,13 @@ More examples can be seen here:
 - [Keyboard](examples/keyboard/main.go)
 - [Echo bot](examples/echo_bot/main.go)
 - [Inline query bot](examples/inline_query_bot/main.go)
+- [Utility methods](examples/utility_methods/main.go)
 
 </details>
 
 > Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
 
-[//]: # (TODO: Publish stable version and remove this)
+[//]: # (TODO: Remove this in stable version)
 
 > Note: While library in unstable version (v0.x.x) some parts of examples may not work.
 
