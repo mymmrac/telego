@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mymmrac/telego"
 	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/telego"
 )
 
 func main() {

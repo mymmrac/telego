@@ -26,10 +26,10 @@ func main() {
 		Document: tu.File(mustOpen("my_file.txt")),
 
 		// Send using external URL
-		//Document: tu.FileByURL("https://example.com/my_file.txt"),
+		// Document: tu.FileByURL("https://example.com/my_file.txt"),
 
 		// Send using file ID
-		//Document: tu.FileByID("<file ID of your file>"),
+		// Document: tu.FileByID("<file ID of your file>"),
 	}
 
 	// Sending document
