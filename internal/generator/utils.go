@@ -26,51 +26,21 @@ const (
 )
 
 var (
-	linkRegexp *regexp.Regexp
+	linkRegexp = regexp.MustCompile(linkPattern)
 
-	externalURLRegexp *regexp.Regexp
-	internalURLRegexp *regexp.Regexp
-	anchorURLRegexp   *regexp.Regexp
+	externalURLRegexp = regexp.MustCompile(externalURLPattern)
+	internalURLRegexp = regexp.MustCompile(internalURLPattern)
+	anchorURLRegexp   = regexp.MustCompile(anchorURLPattern)
 
-	imageRegexp *regexp.Regexp
+	imageRegexp = regexp.MustCompile(imagePattern)
 
-	tagRegexp   *regexp.Regexp
-	tagNlRegexp *regexp.Regexp
+	tagRegexp   = regexp.MustCompile(tagPattern)
+	tagNlRegexp = regexp.MustCompile(tagNlPattern)
 
-	tagElemRegexp *regexp.Regexp
+	tagElemRegexp = regexp.MustCompile(tagElemPattern)
 
-	multiSpaceRegexp *regexp.Regexp
+	multiSpaceRegexp = regexp.MustCompile(multiSpacePattern)
 )
-
-func init() {
-	var err error
-	linkRegexp, err = regexp.Compile(linkPattern)
-	exitOnErr(err)
-
-	externalURLRegexp, err = regexp.Compile(externalURLPattern)
-	exitOnErr(err)
-
-	internalURLRegexp, err = regexp.Compile(internalURLPattern)
-	exitOnErr(err)
-
-	anchorURLRegexp, err = regexp.Compile(anchorURLPattern)
-	exitOnErr(err)
-
-	imageRegexp, err = regexp.Compile(imagePattern)
-	exitOnErr(err)
-
-	tagNlRegexp, err = regexp.Compile(tagNlPattern)
-	exitOnErr(err)
-
-	tagRegexp, err = regexp.Compile(tagPattern)
-	exitOnErr(err)
-
-	tagElemRegexp, err = regexp.Compile(tagElemPattern)
-	exitOnErr(err)
-
-	multiSpaceRegexp, err = regexp.Compile(multiSpacePattern)
-	exitOnErr(err)
-}
 
 func logInfo(format string, args ...interface{}) {
 	fmt.Printf("[INFO] "+format+"\n", args...)

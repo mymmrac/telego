@@ -19,13 +19,7 @@ const (
 	generatedTypesTestsFilename = "types_test.go.generated"
 )
 
-var funcRegexp *regexp.Regexp
-
-func init() {
-	var err error
-	funcRegexp, err = regexp.Compile(funcPattern)
-	exitOnErr(err)
-}
+var funcRegexp = regexp.MustCompile(funcPattern)
 
 func generateTypesTests() {
 	logInfo("Reading types from: %q", typesFilename)
