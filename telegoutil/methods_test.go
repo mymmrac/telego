@@ -84,7 +84,7 @@ func TestGame(t *testing.T) {
 }
 
 func TestInvoice(t *testing.T) {
-	i := Invoice(id, text1, text2, text3, text4, text5, prices)
+	i := Invoice(id, text1, text2, text3, text4, text5, prices...)
 	assert.Equal(t, id, i.ChatID)
 	assert.Equal(t, text1, i.Title)
 	assert.Equal(t, text2, i.Description)
@@ -102,7 +102,7 @@ func TestLocation(t *testing.T) {
 }
 
 func TestMediaGroup(t *testing.T) {
-	m := MediaGroup(id, mediaGroups)
+	m := MediaGroup(id, mediaGroups...)
 	assert.Equal(t, id, m.ChatID)
 	assert.Equal(t, mediaGroups, m.Media)
 }
@@ -120,7 +120,7 @@ func TestPhoto(t *testing.T) {
 }
 
 func TestPoll(t *testing.T) {
-	p := Poll(id, text1, texts)
+	p := Poll(id, text1, texts...)
 	assert.Equal(t, id, p.ChatID)
 	assert.Equal(t, text1, p.Question)
 	assert.Equal(t, texts, p.Options)
