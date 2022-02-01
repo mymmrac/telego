@@ -60,41 +60,32 @@ const typeFieldPattern = `
 `
 
 var (
-	typeRegexp      *regexp.Regexp
-	typeFieldRegexp *regexp.Regexp
+	typeRegexp      = regexp.MustCompile(preparePattern(typePattern))
+	typeFieldRegexp = regexp.MustCompile(preparePattern(typeFieldPattern))
 )
 
-func init() {
-	var err error
-	typeRegexp, err = regexp.Compile(preparePattern(typePattern))
-	exitOnErr(err)
-
-	typeFieldRegexp, err = regexp.Compile(preparePattern(typeFieldPattern))
-	exitOnErr(err)
-}
-
 func generateTypes(docs string) tgTypes {
-	var types tgTypes
-
 	typeGroups := typeRegexp.FindAllStringSubmatch(docs, -1)
-	for _, typeGroup := range typeGroups {
+	types := make(tgTypes, len(typeGroups))
+
+	for i, typeGroup := range typeGroups {
 		typ := tgType{
 			name:        typeGroup[1],
 			description: replaceHTML(typeGroup[2]),
 			fields:      generateTypeFields(typeGroup[3]),
 		}
 
-		types = append(types, typ)
+		types[i] = typ
 	}
 
 	return types
 }
 
 func generateTypeFields(fieldDocs string) tgTypeFields {
-	var fields tgTypeFields
-
 	fieldGroups := typeFieldRegexp.FindAllStringSubmatch(fieldDocs, -1)
-	for _, fieldGroup := range fieldGroups {
+	fields := make(tgTypeFields, len(fieldGroups))
+
+	for i, fieldGroup := range fieldGroups {
 		field := tgTypeField{
 			name:          snakeToCamelCase(fieldGroup[1]),
 			nameSnakeCase: fieldGroup[1],
@@ -107,7 +98,8 @@ func generateTypeFields(fieldDocs string) tgTypeFields {
 
 		field.typ = parseType(fieldGroup[2], field.optional)
 		fieldSpecialCases(&field)
-		fields = append(fields, field)
+
+		fields[i] = field
 	}
 
 	return fields
