@@ -75,33 +75,18 @@ const (
 const returnTypeNotFound = "NOT_FOUND"
 
 var (
-	methodRegexp          *regexp.Regexp
-	methodParameterRegexp *regexp.Regexp
+	methodRegexp          = regexp.MustCompile(preparePattern(methodPattern))
+	methodParameterRegexp = regexp.MustCompile(preparePattern(methodParameterPattern))
 
-	returnTypeRegexp1 *regexp.Regexp
-	returnTypeRegexp2 *regexp.Regexp
+	returnTypeRegexp1 = regexp.MustCompile(returnTypePattern1)
+	returnTypeRegexp2 = regexp.MustCompile(returnTypePattern2)
 )
 
-func init() {
-	var err error
-	methodRegexp, err = regexp.Compile(preparePattern(methodPattern))
-	exitOnErr(err)
-
-	methodParameterRegexp, err = regexp.Compile(preparePattern(methodParameterPattern))
-	exitOnErr(err)
-
-	returnTypeRegexp1, err = regexp.Compile(returnTypePattern1)
-	exitOnErr(err)
-
-	returnTypeRegexp2, err = regexp.Compile(returnTypePattern2)
-	exitOnErr(err)
-}
-
 func generateMethods(docs string) tgMethods {
-	var methods tgMethods
-
 	methodGroups := methodRegexp.FindAllStringSubmatch(docs, -1)
-	for _, methodGroup := range methodGroups {
+	methods := make(tgMethods, len(methodGroups))
+
+	for i, methodGroup := range methodGroups {
 		method := tgMethod{
 			name:        methodGroup[1],
 			nameTitle:   strings.Title(methodGroup[1]),
@@ -112,17 +97,17 @@ func generateMethods(docs string) tgMethods {
 
 		methodSpecialCases(&method)
 
-		methods = append(methods, method)
+		methods[i] = method
 	}
 
 	return methods
 }
 
 func generateMethodParameters(parametersDocs string) tgMethodParameters {
-	var parameters tgMethodParameters
-
 	parameterGroups := methodParameterRegexp.FindAllStringSubmatch(parametersDocs, -1)
-	for _, parameterGroup := range parameterGroups {
+	parameters := make(tgMethodParameters, len(parameterGroups))
+
+	for i, parameterGroup := range parameterGroups {
 		parameter := tgMethodParameter{
 			name:          snakeToCamelCase(parameterGroup[1]),
 			nameSnakeCase: parameterGroup[1],
@@ -134,7 +119,7 @@ func generateMethodParameters(parametersDocs string) tgMethodParameters {
 
 		parameterSpecialCases(&parameter)
 
-		parameters = append(parameters, parameter)
+		parameters[i] = parameter
 	}
 
 	return parameters
@@ -199,7 +184,7 @@ import (
 		methodDescription := fitTextToLine(fmt.Sprintf("%s - %s", m.nameTitle, m.description), "// ")
 		data.WriteString(methodDescription)
 
-		returnType := ""
+		var returnType string
 		hasReturnType := false
 		if !m.hasReturnValue() {
 			returnType = "error"
