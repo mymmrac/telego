@@ -2105,6 +2105,10 @@ type Sticker struct {
 	// IsAnimated - True, if the sticker is animated (https://telegram.org/blog/animated-stickers)
 	IsAnimated bool `json:"is_animated"`
 
+	// IsVideo - True, if the sticker is a video sticker
+	// (https://telegram.org/blog/video-stickers-better-reactions)
+	IsVideo bool `json:"is_video"`
+
 	// Thumb - Optional. Sticker thumbnail in the .WEBP or .JPG format
 	Thumb *PhotoSize `json:"thumb,omitempty"`
 
@@ -2133,13 +2137,17 @@ type StickerSet struct {
 	// (https://telegram.org/blog/animated-stickers)
 	IsAnimated bool `json:"is_animated"`
 
+	// IsVideo - True, if the sticker set contains video stickers
+	// (https://telegram.org/blog/video-stickers-better-reactions)
+	IsVideo bool `json:"is_video"`
+
 	// ContainsMasks - True, if the sticker set contains masks
 	ContainsMasks bool `json:"contains_masks"`
 
 	// Stickers - List of all set stickers
 	Stickers []Sticker `json:"stickers"`
 
-	// Thumb - Optional. Sticker set thumbnail in the .WEBP or .TGS format
+	// Thumb - Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
 	Thumb *PhotoSize `json:"thumb,omitempty"`
 }
 
