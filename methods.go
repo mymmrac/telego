@@ -96,11 +96,11 @@ type SetWebhookParams struct {
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
 }
 
-func (s *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
+func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
-	if s.Certificate != nil {
-		fp["certificate"] = s.Certificate.File
+	if p.Certificate != nil {
+		fp["certificate"] = p.Certificate.File
 	}
 
 	return fp
@@ -229,12 +229,6 @@ type SendMessageParams struct {
 	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
 	// the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
-}
-
-// WithReplyMarkup adds reply markup
-func (p *SendMessageParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendMessageParams {
-	p.ReplyMarkup = replyMarkup
-	return p
 }
 
 // Parse modes

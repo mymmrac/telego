@@ -22,10 +22,11 @@ const (
 )
 
 const (
-	runTypesGeneration        = "types"
-	runTypesTestsGeneration   = "types-tests"
-	runMethodsGeneration      = "methods"
-	runMethodsTestsGeneration = "methods-tests"
+	runTypesGeneration          = "types"
+	runTypesTestsGeneration     = "types-tests"
+	runMethodsGeneration        = "methods"
+	runMethodsTestsGeneration   = "methods-tests"
+	runMethodsSettersGeneration = "methods-setters"
 )
 
 func main() {
@@ -75,6 +76,17 @@ func main() {
 			start := time.Now()
 			generateMethodsTests(methods)
 			logInfo("Generated methods tests in: %s", time.Since(start))
+		case runMethodsSettersGeneration:
+			start := time.Now()
+
+			methodsSettersFile := openFile(generatedMethodsSettersFilename)
+
+			methodsSetters := generateMethodsSetters()
+			writeMethodsSetters(methodsSettersFile, methodsSetters)
+			_ = methodsSettersFile.Close()
+
+			formatFile(methodsSettersFile.Name())
+			logInfo("Generated methods setters in: %s", time.Since(start))
 		default:
 			logError("Unknown generation arg: %q", arg)
 			os.Exit(1)
