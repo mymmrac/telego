@@ -231,6 +231,12 @@ type SendMessageParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+// WithReplyMarkup adds reply markup
+func (p *SendMessageParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendMessageParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
 // Parse modes
 const (
 	ModeHTML       = "HTML"
