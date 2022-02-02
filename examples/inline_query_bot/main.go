@@ -33,19 +33,17 @@ func main() {
 				tu.ResultArticle(
 					"hello",
 					"Hello",
-					&telego.InputTextMessageContent{ // Hello message with inline query
-						ParseMode:   telego.ModeMarkdownV2,
-						MessageText: fmt.Sprintf("Hello %s\n\nYour query:\n```%#+v```", name, iq),
-					},
+					tu.TextMessage( // Hello message with inline query
+						fmt.Sprintf("Hello %s\n\nYour query:\n```%#+v```", name, iq),
+					).WithParseMode(telego.ModeMarkdownV2),
 				).WithDescription(fmt.Sprintf("Query: %q", iq.Query)),
 
 				tu.ResultArticle(
 					"bey",
 					"Bye",
-					&telego.InputTextMessageContent{ // Bye message with inline query
-						ParseMode:   telego.ModeMarkdownV2,
-						MessageText: fmt.Sprintf("Bye %s\n\nYour query:\n```%#+v```", name, iq),
-					},
+					tu.TextMessage( // Bye message with inline query
+						fmt.Sprintf("Bye %s\n\nYour query:\n```%#+v```", name, iq),
+					).WithParseMode(telego.ModeMarkdownV2),
 				).WithDescription(fmt.Sprintf("Query: %q", iq.Query)),
 			).WithIsPersonal())
 		}

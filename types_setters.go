@@ -103,6 +103,216 @@ func (i InlineKeyboardButton) WithPay() InlineKeyboardButton {
 	return i
 }
 
+// WithMedia adds media parameter
+func (i *InputMediaPhoto) WithMedia(media InputFile) *InputMediaPhoto {
+	i.Media = media
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaPhoto) WithCaption(caption string) *InputMediaPhoto {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaPhoto) WithParseMode(parseMode string) *InputMediaPhoto {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaPhoto) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaPhoto {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaVideo) WithMedia(media InputFile) *InputMediaVideo {
+	i.Media = media
+	return i
+}
+
+// WithThumb adds thumb parameter
+func (i *InputMediaVideo) WithThumb(thumb *InputFile) *InputMediaVideo {
+	i.Thumb = thumb
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaVideo) WithCaption(caption string) *InputMediaVideo {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaVideo) WithParseMode(parseMode string) *InputMediaVideo {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaVideo) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaVideo {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithWidth adds width parameter
+func (i *InputMediaVideo) WithWidth(width int) *InputMediaVideo {
+	i.Width = width
+	return i
+}
+
+// WithHeight adds height parameter
+func (i *InputMediaVideo) WithHeight(height int) *InputMediaVideo {
+	i.Height = height
+	return i
+}
+
+// WithDuration adds duration parameter
+func (i *InputMediaVideo) WithDuration(duration int) *InputMediaVideo {
+	i.Duration = duration
+	return i
+}
+
+// WithSupportsStreaming adds supports streaming parameter
+func (i *InputMediaVideo) WithSupportsStreaming() *InputMediaVideo {
+	i.SupportsStreaming = true
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaAnimation) WithMedia(media InputFile) *InputMediaAnimation {
+	i.Media = media
+	return i
+}
+
+// WithThumb adds thumb parameter
+func (i *InputMediaAnimation) WithThumb(thumb *InputFile) *InputMediaAnimation {
+	i.Thumb = thumb
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaAnimation) WithCaption(caption string) *InputMediaAnimation {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaAnimation) WithParseMode(parseMode string) *InputMediaAnimation {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaAnimation) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaAnimation {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithWidth adds width parameter
+func (i *InputMediaAnimation) WithWidth(width int) *InputMediaAnimation {
+	i.Width = width
+	return i
+}
+
+// WithHeight adds height parameter
+func (i *InputMediaAnimation) WithHeight(height int) *InputMediaAnimation {
+	i.Height = height
+	return i
+}
+
+// WithDuration adds duration parameter
+func (i *InputMediaAnimation) WithDuration(duration int) *InputMediaAnimation {
+	i.Duration = duration
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaAudio) WithMedia(media InputFile) *InputMediaAudio {
+	i.Media = media
+	return i
+}
+
+// WithThumb adds thumb parameter
+func (i *InputMediaAudio) WithThumb(thumb *InputFile) *InputMediaAudio {
+	i.Thumb = thumb
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaAudio) WithCaption(caption string) *InputMediaAudio {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaAudio) WithParseMode(parseMode string) *InputMediaAudio {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaAudio) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaAudio {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithDuration adds duration parameter
+func (i *InputMediaAudio) WithDuration(duration int) *InputMediaAudio {
+	i.Duration = duration
+	return i
+}
+
+// WithPerformer adds performer parameter
+func (i *InputMediaAudio) WithPerformer(performer string) *InputMediaAudio {
+	i.Performer = performer
+	return i
+}
+
+// WithTitle adds title parameter
+func (i *InputMediaAudio) WithTitle(title string) *InputMediaAudio {
+	i.Title = title
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaDocument) WithMedia(media InputFile) *InputMediaDocument {
+	i.Media = media
+	return i
+}
+
+// WithThumb adds thumb parameter
+func (i *InputMediaDocument) WithThumb(thumb *InputFile) *InputMediaDocument {
+	i.Thumb = thumb
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaDocument) WithCaption(caption string) *InputMediaDocument {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaDocument) WithParseMode(parseMode string) *InputMediaDocument {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaDocument) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaDocument {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithDisableContentTypeDetection adds disable content type detection parameter
+func (i *InputMediaDocument) WithDisableContentTypeDetection() *InputMediaDocument {
+	i.DisableContentTypeDetection = true
+	return i
+}
+
 // WithID adds ID parameter
 func (i *InlineQueryResultArticle) WithID(iD string) *InlineQueryResultArticle {
 	i.ID = iD
@@ -1296,5 +1506,229 @@ func (i *InlineQueryResultCachedAudio) WithReplyMarkup(replyMarkup *InlineKeyboa
 func (i *InlineQueryResultCachedAudio) WithInputMessageContent(inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedAudio {
 	i.InputMessageContent = inputMessageContent
+	return i
+}
+
+// WithMessageText adds message text parameter
+func (i *InputTextMessageContent) WithMessageText(messageText string) *InputTextMessageContent {
+	i.MessageText = messageText
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputTextMessageContent) WithParseMode(parseMode string) *InputTextMessageContent {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithEntities adds entities parameter
+func (i *InputTextMessageContent) WithEntities(entities ...MessageEntity) *InputTextMessageContent {
+	i.Entities = entities
+	return i
+}
+
+// WithDisableWebPagePreview adds disable web page preview parameter
+func (i *InputTextMessageContent) WithDisableWebPagePreview() *InputTextMessageContent {
+	i.DisableWebPagePreview = true
+	return i
+}
+
+// WithLivePeriod adds live period parameter
+func (i *InputLocationMessageContent) WithLivePeriod(livePeriod int) *InputLocationMessageContent {
+	i.LivePeriod = livePeriod
+	return i
+}
+
+// WithHeading adds heading parameter
+func (i *InputLocationMessageContent) WithHeading(heading int) *InputLocationMessageContent {
+	i.Heading = heading
+	return i
+}
+
+// WithProximityAlertRadius adds proximity alert radius parameter
+func (i *InputLocationMessageContent) WithProximityAlertRadius(proximityAlertRadius int,
+) *InputLocationMessageContent {
+	i.ProximityAlertRadius = proximityAlertRadius
+	return i
+}
+
+// WithTitle adds title parameter
+func (i *InputVenueMessageContent) WithTitle(title string) *InputVenueMessageContent {
+	i.Title = title
+	return i
+}
+
+// WithAddress adds address parameter
+func (i *InputVenueMessageContent) WithAddress(address string) *InputVenueMessageContent {
+	i.Address = address
+	return i
+}
+
+// WithFoursquareID adds foursquare ID parameter
+func (i *InputVenueMessageContent) WithFoursquareID(foursquareID string) *InputVenueMessageContent {
+	i.FoursquareID = foursquareID
+	return i
+}
+
+// WithFoursquareType adds foursquare type parameter
+func (i *InputVenueMessageContent) WithFoursquareType(foursquareType string) *InputVenueMessageContent {
+	i.FoursquareType = foursquareType
+	return i
+}
+
+// WithGooglePlaceID adds google place ID parameter
+func (i *InputVenueMessageContent) WithGooglePlaceID(googlePlaceID string) *InputVenueMessageContent {
+	i.GooglePlaceID = googlePlaceID
+	return i
+}
+
+// WithGooglePlaceType adds google place type parameter
+func (i *InputVenueMessageContent) WithGooglePlaceType(googlePlaceType string) *InputVenueMessageContent {
+	i.GooglePlaceType = googlePlaceType
+	return i
+}
+
+// WithPhoneNumber adds phone number parameter
+func (i *InputContactMessageContent) WithPhoneNumber(phoneNumber string) *InputContactMessageContent {
+	i.PhoneNumber = phoneNumber
+	return i
+}
+
+// WithFirstName adds first name parameter
+func (i *InputContactMessageContent) WithFirstName(firstName string) *InputContactMessageContent {
+	i.FirstName = firstName
+	return i
+}
+
+// WithLastName adds last name parameter
+func (i *InputContactMessageContent) WithLastName(lastName string) *InputContactMessageContent {
+	i.LastName = lastName
+	return i
+}
+
+// WithVcard adds vcard parameter
+func (i *InputContactMessageContent) WithVcard(vcard string) *InputContactMessageContent {
+	i.Vcard = vcard
+	return i
+}
+
+// WithTitle adds title parameter
+func (i *InputInvoiceMessageContent) WithTitle(title string) *InputInvoiceMessageContent {
+	i.Title = title
+	return i
+}
+
+// WithDescription adds description parameter
+func (i *InputInvoiceMessageContent) WithDescription(description string) *InputInvoiceMessageContent {
+	i.Description = description
+	return i
+}
+
+// WithPayload adds payload parameter
+func (i *InputInvoiceMessageContent) WithPayload(payload string) *InputInvoiceMessageContent {
+	i.Payload = payload
+	return i
+}
+
+// WithProviderToken adds provider token parameter
+func (i *InputInvoiceMessageContent) WithProviderToken(providerToken string) *InputInvoiceMessageContent {
+	i.ProviderToken = providerToken
+	return i
+}
+
+// WithCurrency adds currency parameter
+func (i *InputInvoiceMessageContent) WithCurrency(currency string) *InputInvoiceMessageContent {
+	i.Currency = currency
+	return i
+}
+
+// WithPrices adds prices parameter
+func (i *InputInvoiceMessageContent) WithPrices(prices ...LabeledPrice) *InputInvoiceMessageContent {
+	i.Prices = prices
+	return i
+}
+
+// WithMaxTipAmount adds max tip amount parameter
+func (i *InputInvoiceMessageContent) WithMaxTipAmount(maxTipAmount int) *InputInvoiceMessageContent {
+	i.MaxTipAmount = maxTipAmount
+	return i
+}
+
+// WithSuggestedTipAmounts adds suggested tip amounts parameter
+func (i *InputInvoiceMessageContent) WithSuggestedTipAmounts(suggestedTipAmounts ...int,
+) *InputInvoiceMessageContent {
+	i.SuggestedTipAmounts = suggestedTipAmounts
+	return i
+}
+
+// WithProviderData adds provider data parameter
+func (i *InputInvoiceMessageContent) WithProviderData(providerData string) *InputInvoiceMessageContent {
+	i.ProviderData = providerData
+	return i
+}
+
+// WithPhotoURL adds photo URL parameter
+func (i *InputInvoiceMessageContent) WithPhotoURL(photoURL string) *InputInvoiceMessageContent {
+	i.PhotoURL = photoURL
+	return i
+}
+
+// WithPhotoSize adds photo size parameter
+func (i *InputInvoiceMessageContent) WithPhotoSize(photoSize int) *InputInvoiceMessageContent {
+	i.PhotoSize = photoSize
+	return i
+}
+
+// WithPhotoWidth adds photo width parameter
+func (i *InputInvoiceMessageContent) WithPhotoWidth(photoWidth int) *InputInvoiceMessageContent {
+	i.PhotoWidth = photoWidth
+	return i
+}
+
+// WithPhotoHeight adds photo height parameter
+func (i *InputInvoiceMessageContent) WithPhotoHeight(photoHeight int) *InputInvoiceMessageContent {
+	i.PhotoHeight = photoHeight
+	return i
+}
+
+// WithNeedName adds need name parameter
+func (i *InputInvoiceMessageContent) WithNeedName() *InputInvoiceMessageContent {
+	i.NeedName = true
+	return i
+}
+
+// WithNeedPhoneNumber adds need phone number parameter
+func (i *InputInvoiceMessageContent) WithNeedPhoneNumber() *InputInvoiceMessageContent {
+	i.NeedPhoneNumber = true
+	return i
+}
+
+// WithNeedEmail adds need email parameter
+func (i *InputInvoiceMessageContent) WithNeedEmail() *InputInvoiceMessageContent {
+	i.NeedEmail = true
+	return i
+}
+
+// WithNeedShippingAddress adds need shipping address parameter
+func (i *InputInvoiceMessageContent) WithNeedShippingAddress() *InputInvoiceMessageContent {
+	i.NeedShippingAddress = true
+	return i
+}
+
+// WithSendPhoneNumberToProvider adds send phone number to provider parameter
+func (i *InputInvoiceMessageContent) WithSendPhoneNumberToProvider() *InputInvoiceMessageContent {
+	i.SendPhoneNumberToProvider = true
+	return i
+}
+
+// WithSendEmailToProvider adds send email to provider parameter
+func (i *InputInvoiceMessageContent) WithSendEmailToProvider() *InputInvoiceMessageContent {
+	i.SendEmailToProvider = true
+	return i
+}
+
+// WithIsFlexible adds is flexible parameter
+func (i *InputInvoiceMessageContent) WithIsFlexible() *InputInvoiceMessageContent {
+	i.IsFlexible = true
 	return i
 }

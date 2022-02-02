@@ -63,6 +63,18 @@ var typeStructsSetters = []string{
 	"InlineQueryResultVenue",
 	"InlineQueryResultVideo",
 	"InlineQueryResultVoice",
+
+	"InputMediaAnimation",
+	"InputMediaDocument",
+	"InputMediaAudio",
+	"InputMediaPhoto",
+	"InputMediaVideo",
+
+	"InputTextMessageContent",
+	"InputLocationMessageContent",
+	"InputVenueMessageContent",
+	"InputContactMessageContent",
+	"InputInvoiceMessageContent",
 }
 
 var typeStructsNoPointerSetters = []string{

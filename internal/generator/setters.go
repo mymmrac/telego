@@ -57,7 +57,9 @@ func generateSetters(typesData string, desiredStructs []string) tgSetters {
 				fieldType:          fieldsGroup[2],
 			}
 
-			if strings.HasPrefix(setter.structType, "InlineQueryResult") && setter.fieldName == "Type" {
+			if (strings.HasPrefix(setter.structType, "InlineQueryResult") ||
+				strings.HasPrefix(setter.structType, "InputMedia")) &&
+				setter.fieldName == "Type" {
 				continue
 			}
 

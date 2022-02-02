@@ -290,3 +290,89 @@ func ResultVoice(id, voiceURL, title string) *telego.InlineQueryResultVoice {
 		Title:    title,
 	}
 }
+
+// TextMessage creates telego.InputTextMessageContent with required fields
+func TextMessage(messageText string) *telego.InputTextMessageContent {
+	return &telego.InputTextMessageContent{
+		MessageText: messageText,
+	}
+}
+
+// LocationMessage creates telego.InputLocationMessageContent with required fields
+func LocationMessage(latitude, longitude float64) *telego.InputLocationMessageContent {
+	return &telego.InputLocationMessageContent{
+		Latitude:  latitude,
+		Longitude: longitude,
+	}
+}
+
+// VenueMessage creates telego.InputVenueMessageContent with required fields
+func VenueMessage(latitude, longitude float64, title, address string) *telego.InputVenueMessageContent {
+	return &telego.InputVenueMessageContent{
+		Latitude:  latitude,
+		Longitude: longitude,
+		Title:     title,
+		Address:   address,
+	}
+}
+
+// ContactMessage creates telego.InputContactMessageContent with required fields
+func ContactMessage(phoneNumber, firstName string) *telego.InputContactMessageContent {
+	return &telego.InputContactMessageContent{
+		PhoneNumber: phoneNumber,
+		FirstName:   firstName,
+	}
+}
+
+// InvoiceMessage creates telego.InputInvoiceMessageContent with required fields
+func InvoiceMessage(title, description, payload, providerToken, currency string, prices ...telego.LabeledPrice,
+) *telego.InputInvoiceMessageContent {
+	return &telego.InputInvoiceMessageContent{
+		Title:         title,
+		Description:   description,
+		Payload:       payload,
+		ProviderToken: providerToken,
+		Currency:      currency,
+		Prices:        prices,
+	}
+}
+
+// MediaAnimation creates telego.InputMediaAnimation with required fields
+func MediaAnimation(media telego.InputFile) *telego.InputMediaAnimation {
+	return &telego.InputMediaAnimation{
+		Type:  telego.MediaTypeAnimation,
+		Media: media,
+	}
+}
+
+// MediaDocument creates telego.InputMediaDocument with required fields
+func MediaDocument(media telego.InputFile) *telego.InputMediaDocument {
+	return &telego.InputMediaDocument{
+		Type:  telego.MediaTypeDocument,
+		Media: media,
+	}
+}
+
+// MediaAudio creates telego.InputMediaAudio with required fields
+func MediaAudio(media telego.InputFile) *telego.InputMediaAudio {
+	return &telego.InputMediaAudio{
+		Type:  telego.MediaTypeAudio,
+		Media: media,
+	}
+}
+
+// MediaPhoto creates telego.InputMediaPhoto with required fields
+func MediaPhoto(media telego.InputFile) *telego.InputMediaPhoto {
+	return &telego.InputMediaPhoto{
+		Type:  telego.MediaTypePhoto,
+		Media: media,
+	}
+}
+
+// MediaVideo creates telego.InputMediaVideo with required fields
+func MediaVideo(media telego.InputFile) *telego.InputMediaVideo {
+	return &telego.InputMediaVideo{
+		Type:  telego.MediaTypeVideo,
+		Media: media,
+	}
+}
