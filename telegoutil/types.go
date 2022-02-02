@@ -376,3 +376,148 @@ func MediaVideo(media telego.InputFile) *telego.InputMediaVideo {
 		Media: media,
 	}
 }
+
+// ScopeDefault creates telego.BotCommandScopeDefault with required fields
+func ScopeDefault() *telego.BotCommandScopeDefault {
+	return &telego.BotCommandScopeDefault{
+		Type: telego.ScopeTypeDefault,
+	}
+}
+
+// ScopeAllPrivateChats creates telego.BotCommandScopeAllPrivateChats with required fields
+func ScopeAllPrivateChats() *telego.BotCommandScopeAllPrivateChats {
+	return &telego.BotCommandScopeAllPrivateChats{
+		Type: telego.ScopeTypeAllPrivateChats,
+	}
+}
+
+// ScopeAllGroupChats creates telego.BotCommandScopeAllGroupChats with required fields
+func ScopeAllGroupChats() *telego.BotCommandScopeAllGroupChats {
+	return &telego.BotCommandScopeAllGroupChats{
+		Type: telego.ScopeTypeAllGroupChats,
+	}
+}
+
+// ScopeAllChatAdministrators creates telego.BotCommandScopeAllChatAdministrators with required fields
+func ScopeAllChatAdministrators() *telego.BotCommandScopeAllChatAdministrators {
+	return &telego.BotCommandScopeAllChatAdministrators{
+		Type: telego.ScopeTypeAllChatAdministrators,
+	}
+}
+
+// ScopeChat creates telego.BotCommandScopeChat with required fields
+func ScopeChat(chatID telego.ChatID) *telego.BotCommandScopeChat {
+	return &telego.BotCommandScopeChat{
+		Type:   telego.ScopeTypeChat,
+		ChatID: chatID,
+	}
+}
+
+// ScopeChatAdministrators creates telego.BotCommandScopeChatAdministrators with required fields
+func ScopeChatAdministrators(chatID telego.ChatID) *telego.BotCommandScopeChatAdministrators {
+	return &telego.BotCommandScopeChatAdministrators{
+		Type:   telego.ScopeTypeChatAdministrators,
+		ChatID: chatID,
+	}
+}
+
+// ScopeChatMember creates telego.BotCommandScopeChatMember with required fields
+func ScopeChatMember(chatID telego.ChatID, userID int64) *telego.BotCommandScopeChatMember {
+	return &telego.BotCommandScopeChatMember{
+		Type:   telego.ScopeTypeChatMember,
+		ChatID: chatID,
+		UserID: userID,
+	}
+}
+
+// ErrorDataField creates telego.PassportElementErrorDataField with required fields
+func ErrorDataField(sourceType, message, fieldName, dataHash string) *telego.PassportElementErrorDataField {
+	return &telego.PassportElementErrorDataField{
+		Source:    telego.ErrorSourceDataField,
+		Type:      sourceType,
+		FieldName: fieldName,
+		DataHash:  dataHash,
+		Message:   message,
+	}
+}
+
+// ErrorFrontSide creates telego.PassportElementErrorFrontSide with required fields
+func ErrorFrontSide(sourceType, message, fileHash string) *telego.PassportElementErrorFrontSide {
+	return &telego.PassportElementErrorFrontSide{
+		Source:   telego.ErrorSourceFrontSide,
+		Type:     sourceType,
+		FileHash: fileHash,
+		Message:  message,
+	}
+}
+
+// ErrorReverseSide creates telego.PassportElementErrorReverseSide with required fields
+func ErrorReverseSide(sourceType, message, fileHash string) *telego.PassportElementErrorReverseSide {
+	return &telego.PassportElementErrorReverseSide{
+		Source:   telego.ErrorSourceReverseSide,
+		Type:     sourceType,
+		FileHash: fileHash,
+		Message:  message,
+	}
+}
+
+// ErrorSelfie creates telego.PassportElementErrorSelfie with required fields
+func ErrorSelfie(sourceType, message, fileHash string) *telego.PassportElementErrorSelfie {
+	return &telego.PassportElementErrorSelfie{
+		Source:   telego.ErrorSourceSelfie,
+		Type:     sourceType,
+		FileHash: fileHash,
+		Message:  message,
+	}
+}
+
+// ErrorFile creates telego.PassportElementErrorFile with required fields
+func ErrorFile(sourceType, message, fileHash string) *telego.PassportElementErrorFile {
+	return &telego.PassportElementErrorFile{
+		Source:   telego.ErrorSourceFile,
+		Type:     sourceType,
+		FileHash: fileHash,
+		Message:  message,
+	}
+}
+
+// ErrorFiles creates telego.PassportElementErrorFiles with required fields
+func ErrorFiles(sourceType, message string, fileHashes ...string) *telego.PassportElementErrorFiles {
+	return &telego.PassportElementErrorFiles{
+		Source:     telego.ErrorSourceFiles,
+		Type:       sourceType,
+		FileHashes: fileHashes,
+		Message:    message,
+	}
+}
+
+// ErrorTranslationFile creates telego.PassportElementErrorTranslationFile with required fields
+func ErrorTranslationFile(sourceType, message, fileHash string) *telego.PassportElementErrorTranslationFile {
+	return &telego.PassportElementErrorTranslationFile{
+		Source:   telego.ErrorSourceTranslationFile,
+		Type:     sourceType,
+		FileHash: fileHash,
+		Message:  message,
+	}
+}
+
+// ErrorTranslationFiles creates telego.PassportElementErrorTranslationFiles with required fields
+func ErrorTranslationFiles(sourceType, message string, fileHashes ...string,
+) *telego.PassportElementErrorTranslationFiles {
+	return &telego.PassportElementErrorTranslationFiles{
+		Source:     telego.ErrorSourceTranslationFiles,
+		Type:       sourceType,
+		FileHashes: fileHashes,
+		Message:    message,
+	}
+}
+
+// ErrorUnspecified creates telego.PassportElementErrorUnspecified with required fields
+func ErrorUnspecified(sourceType, message, elementHash string) *telego.PassportElementErrorUnspecified {
+	return &telego.PassportElementErrorUnspecified{
+		Source:      telego.ErrorSourceUnspecified,
+		Type:        sourceType,
+		ElementHash: elementHash,
+		Message:     message,
+	}
+}
