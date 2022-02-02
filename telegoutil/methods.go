@@ -158,3 +158,20 @@ func Game(id int64, gameShortName string) *telego.SendGameParams {
 		GameShortName: gameShortName,
 	}
 }
+
+// CopyMessage creates telego.CopyMessageParams with required parameters
+func CopyMessage(id telego.ChatID, fromID telego.ChatID, messageID int) *telego.CopyMessageParams {
+	return &telego.CopyMessageParams{
+		ChatID:     id,
+		FromChatID: fromID,
+		MessageID:  messageID,
+	}
+}
+
+// InlineQuery creates telego.AnswerInlineQueryParams with required parameters
+func InlineQuery(inlineQueryID string, results ...telego.InlineQueryResult) *telego.AnswerInlineQueryParams {
+	return &telego.AnswerInlineQueryParams{
+		InlineQueryID: inlineQueryID,
+		Results:       results,
+	}
+}

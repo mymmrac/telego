@@ -18,38 +18,23 @@ func main() {
 	}
 
 	// Inline keyboard parameters
-	inlineKeyboard := &telego.InlineKeyboardMarkup{
-		InlineKeyboard: [][]telego.InlineKeyboardButton{
-			// Row 1
-			{
-				// Column 1
-				telego.InlineKeyboardButton{
-					Text:         "Callback data button 1",
-					CallbackData: "callback_1",
-				},
-				// Column 2
-				telego.InlineKeyboardButton{
-					Text:         "Callback data button 2",
-					CallbackData: "callback_2",
-				},
-			},
-			// Row 2
-			{
-				// Column 1
-				telego.InlineKeyboardButton{
-					Text: "URL button",
-					URL:  "https://example.com",
-				},
-			},
-		},
-	}
+	inlineKeyboard := tu.InlineKeyboard(
+		tu.InlineKeyboardRow( // Row 1
+			tu.InlineKeyboardButton("Callback data button 1"). // Column 1
+										WithCallbackData("callback_1"),
+			tu.InlineKeyboardButton("Callback data button 2"). // Column 2
+										WithCallbackData("callback_2"),
+		),
+		tu.InlineKeyboardRow( // Row 2
+			tu.InlineKeyboardButton("URL button").WithURL("https://example.com"), // Column 1
+		),
+	)
 
 	// Message parameters
-	message := &telego.SendMessageParams{
-		ChatID:      tu.ID(1234567),
-		Text:        "My message",
-		ReplyMarkup: inlineKeyboard,
-	}
+	message := tu.Message(
+		tu.ID(1234567),
+		"My message",
+	).WithReplyMarkup(inlineKeyboard)
 
 	// Sending message
 	_, _ = bot.SendMessage(message)

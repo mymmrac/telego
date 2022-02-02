@@ -69,3 +69,224 @@ func PollTypeRegular() *telego.KeyboardButtonPollType {
 func PollTypeQuiz() *telego.KeyboardButtonPollType {
 	return &telego.KeyboardButtonPollType{Type: telego.PollTypeQuiz}
 }
+
+// InlineKeyboard creates telego.InlineKeyboardMarkup from slice of keyboard buttons
+func InlineKeyboard(rows ...[]telego.InlineKeyboardButton) *telego.InlineKeyboardMarkup {
+	return &telego.InlineKeyboardMarkup{
+		InlineKeyboard: rows,
+	}
+}
+
+// InlineKeyboardRow creates slice of telego.InlineKeyboardButton
+func InlineKeyboardRow(buttons ...telego.InlineKeyboardButton) []telego.InlineKeyboardButton {
+	return buttons
+}
+
+// InlineKeyboardButton creates telego.InlineKeyboardButton with required fields
+func InlineKeyboardButton(text string) telego.InlineKeyboardButton {
+	return telego.InlineKeyboardButton{
+		Text: text,
+	}
+}
+
+// ResultCachedAudio creates telego.InlineQueryResultCachedAudio with required fields
+func ResultCachedAudio(id, audioFileID string) *telego.InlineQueryResultCachedAudio {
+	return &telego.InlineQueryResultCachedAudio{
+		Type:        telego.ResultTypeAudio,
+		ID:          id,
+		AudioFileID: audioFileID,
+	}
+}
+
+// ResultCachedDocument creates telego.InlineQueryResultCachedDocument with required fields
+func ResultCachedDocument(id, title, documentFileID string) *telego.InlineQueryResultCachedDocument {
+	return &telego.InlineQueryResultCachedDocument{
+		Type:           telego.ResultTypeDocument,
+		ID:             id,
+		Title:          title,
+		DocumentFileID: documentFileID,
+	}
+}
+
+// ResultCachedGif creates telego.InlineQueryResultCachedGif with required fields
+func ResultCachedGif(id, gifFileID string) *telego.InlineQueryResultCachedGif {
+	return &telego.InlineQueryResultCachedGif{
+		Type:      telego.ResultTypeGif,
+		ID:        id,
+		GifFileID: gifFileID,
+	}
+}
+
+// ResultCachedMpeg4Gif creates telego.InlineQueryResultCachedMpeg4Gif with required fields
+func ResultCachedMpeg4Gif(id, mpeg4FileID string) *telego.InlineQueryResultCachedMpeg4Gif {
+	return &telego.InlineQueryResultCachedMpeg4Gif{
+		Type:        telego.ResultTypeMpeg4Gif,
+		ID:          id,
+		Mpeg4FileID: mpeg4FileID,
+	}
+}
+
+// ResultCachedPhoto creates telego.InlineQueryResultCachedPhoto with required fields
+func ResultCachedPhoto(id, photoFileID string) *telego.InlineQueryResultCachedPhoto {
+	return &telego.InlineQueryResultCachedPhoto{
+		Type:        telego.ResultTypePhoto,
+		ID:          id,
+		PhotoFileID: photoFileID,
+	}
+}
+
+// ResultCachedSticker creates telego.InlineQueryResultCachedSticker with required fields
+func ResultCachedSticker(id, stickerFileID string) *telego.InlineQueryResultCachedSticker {
+	return &telego.InlineQueryResultCachedSticker{
+		Type:          telego.ResultTypeSticker,
+		ID:            id,
+		StickerFileID: stickerFileID,
+	}
+}
+
+// ResultCachedVideo creates telego.InlineQueryResultCachedVideo with required fields
+func ResultCachedVideo(id, videoFileID, title string) *telego.InlineQueryResultCachedVideo {
+	return &telego.InlineQueryResultCachedVideo{
+		Type:        telego.ResultTypeVideo,
+		ID:          id,
+		VideoFileID: videoFileID,
+		Title:       title,
+	}
+}
+
+// ResultCachedVoice creates telego.InlineQueryResultCachedVoice with required fields
+func ResultCachedVoice(id, voiceFileID, title string) *telego.InlineQueryResultCachedVoice {
+	return &telego.InlineQueryResultCachedVoice{
+		Type:        telego.ResultTypeVoice,
+		ID:          id,
+		VoiceFileID: voiceFileID,
+		Title:       title,
+	}
+}
+
+// ResultArticle creates telego.InlineQueryResultArticle with required fields
+func ResultArticle(id, title string, inputMessageContent telego.InputMessageContent,
+) *telego.InlineQueryResultArticle {
+	return &telego.InlineQueryResultArticle{
+		Type:                telego.ResultTypeArticle,
+		ID:                  id,
+		Title:               title,
+		InputMessageContent: inputMessageContent,
+	}
+}
+
+// ResultAudio creates telego.InlineQueryResultAudio with required fields
+func ResultAudio(id, audioURL, title string) *telego.InlineQueryResultAudio {
+	return &telego.InlineQueryResultAudio{
+		Type:     telego.ResultTypeAudio,
+		ID:       id,
+		AudioURL: audioURL,
+		Title:    title,
+	}
+}
+
+// ResultContact creates telego.InlineQueryResultContact with required fields
+func ResultContact(id, phoneNumber, firstName string) *telego.InlineQueryResultContact {
+	return &telego.InlineQueryResultContact{
+		Type:        telego.ResultTypeContact,
+		ID:          id,
+		PhoneNumber: phoneNumber,
+		FirstName:   firstName,
+	}
+}
+
+// ResultGame creates telego.InlineQueryResultGame with required fields
+func ResultGame(id, gameShortName string) *telego.InlineQueryResultGame {
+	return &telego.InlineQueryResultGame{
+		Type:          telego.ResultTypeGame,
+		ID:            id,
+		GameShortName: gameShortName,
+	}
+}
+
+// ResultDocument creates telego.InlineQueryResultDocument with required fields
+func ResultDocument(id, title, documentURL, mimeType string) *telego.InlineQueryResultDocument {
+	return &telego.InlineQueryResultDocument{
+		Type:        telego.ResultTypeDocument,
+		ID:          id,
+		Title:       title,
+		DocumentURL: documentURL,
+		MimeType:    mimeType,
+	}
+}
+
+// ResultGif creates telego.InlineQueryResultGif with required fields
+func ResultGif(id, gifURL, thumbURL string) *telego.InlineQueryResultGif {
+	return &telego.InlineQueryResultGif{
+		Type:     telego.ResultTypeGif,
+		ID:       id,
+		GifURL:   gifURL,
+		ThumbURL: thumbURL,
+	}
+}
+
+// ResultLocation creates telego.InlineQueryResultLocation with required fields
+func ResultLocation(id string, latitude, longitude float64, title string) *telego.InlineQueryResultLocation {
+	return &telego.InlineQueryResultLocation{
+		Type:      telego.ResultTypeLocation,
+		ID:        id,
+		Latitude:  latitude,
+		Longitude: longitude,
+		Title:     title,
+	}
+}
+
+// ResultMpeg4Gif creates telego.InlineQueryResultMpeg4Gif with required fields
+func ResultMpeg4Gif(id, mpeg4URL, thumbURL string) *telego.InlineQueryResultMpeg4Gif {
+	return &telego.InlineQueryResultMpeg4Gif{
+		Type:     telego.ResultTypeMpeg4Gif,
+		ID:       id,
+		Mpeg4URL: mpeg4URL,
+		ThumbURL: thumbURL,
+	}
+}
+
+// ResultPhoto creates telego.InlineQueryResultPhoto with required fields
+func ResultPhoto(id, photoURL, thumbURL string) *telego.InlineQueryResultPhoto {
+	return &telego.InlineQueryResultPhoto{
+		Type:     telego.ResultTypePhoto,
+		ID:       id,
+		PhotoURL: photoURL,
+		ThumbURL: thumbURL,
+	}
+}
+
+// ResultVenue creates telego.InlineQueryResultVenue with required fields
+func ResultVenue(id string, latitude, longitude float64, title, address string,
+) *telego.InlineQueryResultVenue {
+	return &telego.InlineQueryResultVenue{
+		Type:      telego.ResultTypeVenue,
+		ID:        id,
+		Latitude:  latitude,
+		Longitude: longitude,
+		Title:     title,
+		Address:   address,
+	}
+}
+
+// ResultVideo creates telego.InlineQueryResultVideo with required fields
+func ResultVideo(id, videoURL, mimeType, thumbURL, title string) *telego.InlineQueryResultVideo {
+	return &telego.InlineQueryResultVideo{
+		Type:     telego.ResultTypeVideo,
+		ID:       id,
+		VideoURL: videoURL,
+		MimeType: mimeType,
+		ThumbURL: thumbURL,
+		Title:    title,
+	}
+}
+
+// ResultVoice creates telego.InlineQueryResultVoice with required fields
+func ResultVoice(id, voiceURL, title string) *telego.InlineQueryResultVoice {
+	return &telego.InlineQueryResultVoice{
+		Type:     telego.ResultTypeVoice,
+		ID:       id,
+		VoiceURL: voiceURL,
+		Title:    title,
+	}
+}

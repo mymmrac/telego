@@ -28,9 +28,10 @@ func main() {
 	_, _ = bot.SendMessage(tu.Message(tu.Username("@user"), "World"))
 
 	// Create message and change optional parameters
-	msg := tu.Message(chatID, "Hello World")
-	msg.DisableNotification = true
-	msg.ProtectContent = true
+	msg := tu.Message(chatID, "Hello World").
+		WithReplyToMessageID(1234).
+		WithDisableNotification().
+		WithProtectContent()
 	_, _ = bot.SendMessage(msg)
 
 	var file *os.File // Used just for example (not valid in real use)
