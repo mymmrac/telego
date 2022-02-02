@@ -54,6 +54,25 @@ func (k KeyboardButton) WithRequestPoll(requestPoll *KeyboardButtonPollType) Key
 	return k
 }
 
+// WithRemoveKeyboard adds remove keyboard parameter
+func (r *ReplyKeyboardRemove) WithRemoveKeyboard() *ReplyKeyboardRemove {
+	r.RemoveKeyboard = true
+	return r
+}
+
+// WithSelective adds selective parameter
+func (r *ReplyKeyboardRemove) WithSelective() *ReplyKeyboardRemove {
+	r.Selective = true
+	return r
+}
+
+// WithInlineKeyboard adds inline keyboard parameter
+func (i *InlineKeyboardMarkup) WithInlineKeyboard(inlineKeyboard ...[]InlineKeyboardButton,
+) *InlineKeyboardMarkup {
+	i.InlineKeyboard = inlineKeyboard
+	return i
+}
+
 // WithText adds text parameter
 func (i InlineKeyboardButton) WithText(text string) InlineKeyboardButton {
 	i.Text = text
@@ -101,6 +120,24 @@ func (i InlineKeyboardButton) WithCallbackGame(callbackGame *CallbackGame) Inlin
 func (i InlineKeyboardButton) WithPay() InlineKeyboardButton {
 	i.Pay = true
 	return i
+}
+
+// WithForceReply adds force reply parameter
+func (f *ForceReply) WithForceReply() *ForceReply {
+	f.ForceReply = true
+	return f
+}
+
+// WithInputFieldPlaceholder adds input field placeholder parameter
+func (f *ForceReply) WithInputFieldPlaceholder(inputFieldPlaceholder string) *ForceReply {
+	f.InputFieldPlaceholder = inputFieldPlaceholder
+	return f
+}
+
+// WithSelective adds selective parameter
+func (f *ForceReply) WithSelective() *ForceReply {
+	f.Selective = true
+	return f
 }
 
 // WithMedia adds media parameter

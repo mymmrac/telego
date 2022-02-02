@@ -40,6 +40,9 @@ const (
 
 var typeStructsSetters = []string{
 	"ReplyKeyboardMarkup",
+	"ForceReply",
+	"ReplyKeyboardRemove",
+	"InlineKeyboardMarkup",
 	"KeyboardButton",
 	"InlineKeyboardButton",
 
