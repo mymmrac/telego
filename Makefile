@@ -33,7 +33,8 @@ generate: ## Generate (used for mock generation)
 mock-install: ## Install mockgen
 	go install github.com/golang/mock/mockgen@v1.6.0
 
-generator: ./internal/generator ## Run generation, example: make generator RUN="types types-tests methods methods-tests methods-setters"
+# Example: make generator RUN="types types-tests methods methods-tests methods-setters types-setters"
+generator: ./internal/generator ## Run generation
 	go run ./internal/generator $$RUN
 
 generator-clean-up: ## Remove generated files

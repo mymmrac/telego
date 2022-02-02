@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"regexp"
 	"strings"
 )
@@ -13,24 +12,9 @@ func \(\w* \*(\w*)\) (\w*)\(\) string {
 }
 `
 
-const (
-	typesFilename = "./types.go"
-
-	generatedTypesTestsFilename = "types_test.go.generated"
-)
-
 var funcRegexp = regexp.MustCompile(funcPattern)
 
-func generateTypesTests() {
-	logInfo("Reading types from: %q", typesFilename)
-
-	typesBytes, err := ioutil.ReadFile(typesFilename)
-	exitOnErr(err)
-
-	logInfo("Types length: %d", len(typesBytes))
-
-	types := string(typesBytes)
-
+func generateTypesTests(types string) {
 	typesTestsFile := openFile(generatedTypesTestsFilename)
 	defer func() { _ = typesTestsFile.Close() }()
 
@@ -62,7 +46,7 @@ func TestTypesInterfaces(t *testing.T) {
 
 	data.WriteString("}\n")
 
-	_, err = typesTestsFile.WriteString(data.String())
+	_, err := typesTestsFile.WriteString(data.String())
 	exitOnErr(err)
 
 	formatFile(typesTestsFile.Name())

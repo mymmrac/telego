@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -17,17 +18,57 @@ const (
 	omitemptySuffix = ",omitempty"
 	optionalPrefix  = "Optional. "
 
-	generatedTypesFilename   = "./types.go.generated"
-	generatedMethodsFilename = "./methods.go.generated"
+	typesFilename   = "./types.go"
+	methodsFilename = "./methods.go"
+
+	generatedTypesFilename          = "./types.go.generated"
+	generatedTypesTestsFilename     = "./types_test.go.generated"
+	generatedTypesSettersFilename   = "./types_setters.go.generated"
+	generatedMethodsFilename        = "./methods.go.generated"
+	generatedMethodsTestsFilename   = "./methods_test.go.generated"
+	generatedMethodsSettersFilename = "./methods_setters.go.generated"
 )
 
 const (
 	runTypesGeneration          = "types"
 	runTypesTestsGeneration     = "types-tests"
+	runTypesSettersGeneration   = "types-setters"
 	runMethodsGeneration        = "methods"
 	runMethodsTestsGeneration   = "methods-tests"
 	runMethodsSettersGeneration = "methods-setters"
 )
+
+var typeStructsSetters = []string{
+	"ReplyKeyboardMarkup",
+	"KeyboardButton",
+	"InlineKeyboardButton",
+
+	"InlineQueryResultCachedAudio",
+	"InlineQueryResultCachedDocument",
+	"InlineQueryResultCachedGif",
+	"InlineQueryResultCachedMpeg4Gif",
+	"InlineQueryResultCachedPhoto",
+	"InlineQueryResultCachedSticker",
+	"InlineQueryResultCachedVideo",
+	"InlineQueryResultCachedVoice",
+	"InlineQueryResultArticle",
+	"InlineQueryResultAudio",
+	"InlineQueryResultContact",
+	"InlineQueryResultGame",
+	"InlineQueryResultDocument",
+	"InlineQueryResultGif",
+	"InlineQueryResultLocation",
+	"InlineQueryResultMpeg4Gif",
+	"InlineQueryResultPhoto",
+	"InlineQueryResultVenue",
+	"InlineQueryResultVideo",
+	"InlineQueryResultVoice",
+}
+
+var typeStructsNoPointerSetters = []string{
+	"KeyboardButton",
+	"InlineKeyboardButton",
+}
 
 func main() {
 	if len(os.Args) <= 1 {
@@ -67,7 +108,9 @@ func main() {
 			logInfo("Generated methods in: %s", time.Since(start))
 		case runTypesTestsGeneration:
 			start := time.Now()
-			generateTypesTests()
+			types := sr.TypesData()
+
+			generateTypesTests(types)
 			logInfo("Generated types tests in: %s", time.Since(start))
 		case runMethodsTestsGeneration:
 			docs := sr.Docs()
@@ -79,14 +122,34 @@ func main() {
 		case runMethodsSettersGeneration:
 			start := time.Now()
 
+			logInfo("Reading methods from: %q", methodsFilename)
+			methodsBytes, err := ioutil.ReadFile(methodsFilename)
+			exitOnErr(err)
+
+			logInfo("Methods length: %d", len(methodsBytes))
+			methods := removeNl(string(methodsBytes))
+
 			methodsSettersFile := openFile(generatedMethodsSettersFilename)
 
-			methodsSetters := generateMethodsSetters()
-			writeMethodsSetters(methodsSettersFile, methodsSetters)
+			methodsSetters := generateSetters(methods, nil)
+			writeSetters(methodsSettersFile, methodsSetters, true, nil)
 			_ = methodsSettersFile.Close()
 
 			formatFile(methodsSettersFile.Name())
 			logInfo("Generated methods setters in: %s", time.Since(start))
+		case runTypesSettersGeneration:
+			start := time.Now()
+
+			types := removeNl(sr.TypesData())
+
+			typesSettersFile := openFile(generatedTypesSettersFilename)
+
+			typesSetters := generateSetters(types, typeStructsSetters)
+			writeSetters(typesSettersFile, typesSetters, false, typeStructsNoPointerSetters)
+			_ = typesSettersFile.Close()
+
+			formatFile(typesSettersFile.Name())
+			logInfo("Generated types setters in: %s", time.Since(start))
 		default:
 			logError("Unknown generation arg: %q", arg)
 			os.Exit(1)
@@ -100,6 +163,8 @@ func main() {
 type sharedResources struct {
 	docs    string
 	methods tgMethods
+
+	typesData string
 }
 
 func (r *sharedResources) Docs() string {
@@ -118,6 +183,23 @@ func (r *sharedResources) Methods(docs string) tgMethods {
 		logInfo("Reusing methods")
 	}
 	return r.methods
+}
+
+func (r *sharedResources) TypesData() string {
+	if r.typesData == "" {
+		logInfo("Reading types from: %q", typesFilename)
+
+		typesBytes, err := ioutil.ReadFile(typesFilename)
+		exitOnErr(err)
+
+		logInfo("Types length: %d", len(typesBytes))
+
+		r.typesData = string(typesBytes)
+	} else {
+		logInfo("Reusing types data")
+	}
+
+	return r.typesData
 }
 
 func openFile(filename string) *os.File {
