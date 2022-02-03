@@ -135,24 +135,19 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
 	case "ChatPermissions":
 		return "ChatPermissions{CanSendMessages: true}"
+	case "InputMessageContent":
+		return "&InputTextMessageContent{}"
+	case "*CallbackGame":
+		return "&CallbackGame{}"
+	case "*LoginURL":
+		return fmt.Sprintf("&LoginURL{URL: \"%s\"}", setter.fieldName)
+	case "[][]InlineKeyboardButton":
+		return "[][]InlineKeyboardButton{{}}"
+	case "*KeyboardButtonPollType":
+		return fmt.Sprintf("&KeyboardButtonPollType{Type: \"%s\"}", setter.fieldName)
+	case "[][]KeyboardButton":
+		return "[][]KeyboardButton{{}}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
 }
-
-/*
-func TestGetUpdatesParams_Setters(t *testing.T) {
-	g := (&GetUpdatesParams{}).
-		WithOffset(1).
-		WithLimit(2).
-		WithTimeout(3).
-		WithAllowedUpdates("AllowedUpdates")
-
-	assert.Equal(t, &GetUpdatesParams{
-		Offset:         1,
-		Limit:          2,
-		Timeout:        3,
-		AllowedUpdates: []string{"AllowedUpdates"},
-	}, g)
-}
-*/

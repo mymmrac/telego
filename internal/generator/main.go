@@ -24,6 +24,7 @@ const (
 	generatedTypesFilename               = "./types.go.generated"
 	generatedTypesTestsFilename          = "./types_test.go.generated"
 	generatedTypesSettersFilename        = "./types_setters.go.generated"
+	generatedTypesSettersTestsFilename   = "./types_setters_test.go.generated"
 	generatedMethodsFilename             = "./methods.go.generated"
 	generatedMethodsTestsFilename        = "./methods_test.go.generated"
 	generatedMethodsSettersFilename      = "./methods_setters.go.generated"
@@ -34,6 +35,7 @@ const (
 	runTypesGeneration               = "types"
 	runTypesTestsGeneration          = "types-tests"
 	runTypesSettersGeneration        = "types-setters"
+	runTypesSettersTestsGeneration   = "types-setters-tests"
 	runMethodsGeneration             = "methods"
 	runMethodsTestsGeneration        = "methods-tests"
 	runMethodsSettersGeneration      = "methods-setters"
@@ -147,14 +149,22 @@ func main() {
 			formatFile(methodsSettersTestsFile.Name())
 		case runTypesSettersGeneration:
 			types := removeNl(sr.TypesData())
+			typesSetters := sr.TypesSetters(types)
 
 			typesSettersFile := openFile(generatedTypesSettersFilename)
-
-			typesSetters := generateSetters(types, typeStructsSetters)
 			writeSetters(typesSettersFile, typesSetters, false, typeStructsNoPointerSetters)
 			_ = typesSettersFile.Close()
 
 			formatFile(typesSettersFile.Name())
+		case runTypesSettersTestsGeneration:
+			types := removeNl(sr.TypesData())
+			typesSetters := sr.TypesSetters(types)
+
+			typesSettersTestsFile := openFile(generatedTypesSettersTestsFilename)
+			writeSettersTests(typesSettersTestsFile, typesSetters, typeStructsNoPointerSetters)
+			_ = typesSettersTestsFile.Close()
+
+			formatFile(typesSettersTestsFile.Name())
 		default:
 			logError("Unknown generation arg: %q", arg)
 			os.Exit(1)
@@ -174,6 +184,7 @@ type sharedResources struct {
 	typesData string
 
 	methodsSetters tgSetters
+	typesSetters   tgSetters
 }
 
 func (r *sharedResources) Docs() string {
@@ -226,6 +237,16 @@ func (r *sharedResources) MethodsSetters() tgSetters {
 	}
 
 	return r.methodsSetters
+}
+
+func (r *sharedResources) TypesSetters(types string) tgSetters {
+	if r.typesSetters == nil {
+		r.typesSetters = generateSetters(types, typeStructsSetters)
+	} else {
+		logInfo("Reusing types setters")
+	}
+
+	return r.typesSetters
 }
 
 func openFile(filename string) *os.File {
