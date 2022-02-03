@@ -7,12 +7,16 @@ import (
 
 // ID creates telego.ChatID from user's identifier
 func ID(id int64) telego.ChatID {
-	return telego.ChatID{ID: id}
+	return telego.ChatID{
+		ID: id,
+	}
 }
 
 // Username creates telego.ChatID from username
 func Username(username string) telego.ChatID {
-	return telego.ChatID{Username: username}
+	return telego.ChatID{
+		Username: username,
+	}
 }
 
 // File creates telego.InputFile from telegoapi.NamedReader
@@ -62,12 +66,16 @@ func PollTypeAny() *telego.KeyboardButtonPollType {
 
 // PollTypeRegular creates telego.KeyboardButtonPollType with type regular
 func PollTypeRegular() *telego.KeyboardButtonPollType {
-	return &telego.KeyboardButtonPollType{Type: telego.PollTypeRegular}
+	return &telego.KeyboardButtonPollType{
+		Type: telego.PollTypeRegular,
+	}
 }
 
 // PollTypeQuiz creates telego.KeyboardButtonPollType with type quiz
 func PollTypeQuiz() *telego.KeyboardButtonPollType {
-	return &telego.KeyboardButtonPollType{Type: telego.PollTypeQuiz}
+	return &telego.KeyboardButtonPollType{
+		Type: telego.PollTypeQuiz,
+	}
 }
 
 // InlineKeyboard creates telego.InlineKeyboardMarkup from slice of keyboard buttons

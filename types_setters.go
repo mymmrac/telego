@@ -67,8 +67,7 @@ func (r *ReplyKeyboardRemove) WithSelective() *ReplyKeyboardRemove {
 }
 
 // WithInlineKeyboard adds inline keyboard parameter
-func (i *InlineKeyboardMarkup) WithInlineKeyboard(inlineKeyboard ...[]InlineKeyboardButton,
-) *InlineKeyboardMarkup {
+func (i *InlineKeyboardMarkup) WithInlineKeyboard(inlineKeyboard ...[]InlineKeyboardButton) *InlineKeyboardMarkup {
 	i.InlineKeyboard = inlineKeyboard
 	return i
 }
@@ -370,8 +369,7 @@ func (i *InlineQueryResultArticle) WithInputMessageContent(inputMessageContent I
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultArticle) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *InlineQueryResultArticle {
+func (i *InlineQueryResultArticle) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *InlineQueryResultArticle {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
@@ -467,8 +465,7 @@ func (i *InlineQueryResultPhoto) WithParseMode(parseMode string) *InlineQueryRes
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultPhoto) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultPhoto {
+func (i *InlineQueryResultPhoto) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultPhoto {
 	i.CaptionEntities = captionEntities
 	return i
 }
@@ -559,8 +556,7 @@ func (i *InlineQueryResultGif) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultGif) WithInputMessageContent(inputMessageContent InputMessageContent,
-) *InlineQueryResultGif {
+func (i *InlineQueryResultGif) WithInputMessageContent(inputMessageContent InputMessageContent) *InlineQueryResultGif {
 	i.InputMessageContent = inputMessageContent
 	return i
 }
@@ -626,15 +622,13 @@ func (i *InlineQueryResultMpeg4Gif) WithParseMode(parseMode string) *InlineQuery
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultMpeg4Gif) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultMpeg4Gif {
+func (i *InlineQueryResultMpeg4Gif) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultMpeg4Gif {
 	i.CaptionEntities = captionEntities
 	return i
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultMpeg4Gif) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *InlineQueryResultMpeg4Gif {
+func (i *InlineQueryResultMpeg4Gif) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *InlineQueryResultMpeg4Gif {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
@@ -689,8 +683,7 @@ func (i *InlineQueryResultVideo) WithParseMode(parseMode string) *InlineQueryRes
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultVideo) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultVideo {
+func (i *InlineQueryResultVideo) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultVideo {
 	i.CaptionEntities = captionEntities
 	return i
 }
@@ -763,8 +756,7 @@ func (i *InlineQueryResultAudio) WithParseMode(parseMode string) *InlineQueryRes
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultAudio) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultAudio {
+func (i *InlineQueryResultAudio) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultAudio {
 	i.CaptionEntities = captionEntities
 	return i
 }
@@ -825,8 +817,7 @@ func (i *InlineQueryResultVoice) WithParseMode(parseMode string) *InlineQueryRes
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultVoice) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultVoice {
+func (i *InlineQueryResultVoice) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultVoice {
 	i.CaptionEntities = captionEntities
 	return i
 }
@@ -875,8 +866,7 @@ func (i *InlineQueryResultDocument) WithParseMode(parseMode string) *InlineQuery
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultDocument) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultDocument {
+func (i *InlineQueryResultDocument) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultDocument {
 	i.CaptionEntities = captionEntities
 	return i
 }
@@ -900,8 +890,7 @@ func (i *InlineQueryResultDocument) WithDescription(description string) *InlineQ
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultDocument) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *InlineQueryResultDocument {
+func (i *InlineQueryResultDocument) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *InlineQueryResultDocument {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
@@ -956,15 +945,13 @@ func (i *InlineQueryResultLocation) WithHeading(heading int) *InlineQueryResultL
 }
 
 // WithProximityAlertRadius adds proximity alert radius parameter
-func (i *InlineQueryResultLocation) WithProximityAlertRadius(proximityAlertRadius int,
-) *InlineQueryResultLocation {
+func (i *InlineQueryResultLocation) WithProximityAlertRadius(proximityAlertRadius int) *InlineQueryResultLocation {
 	i.ProximityAlertRadius = proximityAlertRadius
 	return i
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultLocation) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *InlineQueryResultLocation {
+func (i *InlineQueryResultLocation) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *InlineQueryResultLocation {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
@@ -1098,8 +1085,7 @@ func (i *InlineQueryResultContact) WithVcard(vcard string) *InlineQueryResultCon
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultContact) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *InlineQueryResultContact {
+func (i *InlineQueryResultContact) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *InlineQueryResultContact {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
@@ -1235,15 +1221,13 @@ func (i *InlineQueryResultCachedGif) WithParseMode(parseMode string) *InlineQuer
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedGif) WithCaptionEntities(captionEntities ...MessageEntity,
-) *InlineQueryResultCachedGif {
+func (i *InlineQueryResultCachedGif) WithCaptionEntities(captionEntities ...MessageEntity) *InlineQueryResultCachedGif {
 	i.CaptionEntities = captionEntities
 	return i
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedGif) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *InlineQueryResultCachedGif {
+func (i *InlineQueryResultCachedGif) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *InlineQueryResultCachedGif {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
@@ -1262,8 +1246,7 @@ func (i *InlineQueryResultCachedMpeg4Gif) WithID(iD string) *InlineQueryResultCa
 }
 
 // WithMpeg4FileID adds mpeg4 file ID parameter
-func (i *InlineQueryResultCachedMpeg4Gif) WithMpeg4FileID(mpeg4FileID string,
-) *InlineQueryResultCachedMpeg4Gif {
+func (i *InlineQueryResultCachedMpeg4Gif) WithMpeg4FileID(mpeg4FileID string) *InlineQueryResultCachedMpeg4Gif {
 	i.Mpeg4FileID = mpeg4FileID
 	return i
 }
@@ -1314,8 +1297,7 @@ func (i *InlineQueryResultCachedSticker) WithID(iD string) *InlineQueryResultCac
 }
 
 // WithStickerFileID adds sticker file ID parameter
-func (i *InlineQueryResultCachedSticker) WithStickerFileID(stickerFileID string,
-) *InlineQueryResultCachedSticker {
+func (i *InlineQueryResultCachedSticker) WithStickerFileID(stickerFileID string) *InlineQueryResultCachedSticker {
 	i.StickerFileID = stickerFileID
 	return i
 }
@@ -1347,15 +1329,13 @@ func (i *InlineQueryResultCachedDocument) WithTitle(title string) *InlineQueryRe
 }
 
 // WithDocumentFileID adds document file ID parameter
-func (i *InlineQueryResultCachedDocument) WithDocumentFileID(documentFileID string,
-) *InlineQueryResultCachedDocument {
+func (i *InlineQueryResultCachedDocument) WithDocumentFileID(documentFileID string) *InlineQueryResultCachedDocument {
 	i.DocumentFileID = documentFileID
 	return i
 }
 
 // WithDescription adds description parameter
-func (i *InlineQueryResultCachedDocument) WithDescription(description string,
-) *InlineQueryResultCachedDocument {
+func (i *InlineQueryResultCachedDocument) WithDescription(description string) *InlineQueryResultCachedDocument {
 	i.Description = description
 	return i
 }
@@ -1583,8 +1563,7 @@ func (i *InputLocationMessageContent) WithHeading(heading int) *InputLocationMes
 }
 
 // WithProximityAlertRadius adds proximity alert radius parameter
-func (i *InputLocationMessageContent) WithProximityAlertRadius(proximityAlertRadius int,
-) *InputLocationMessageContent {
+func (i *InputLocationMessageContent) WithProximityAlertRadius(proximityAlertRadius int) *InputLocationMessageContent {
 	i.ProximityAlertRadius = proximityAlertRadius
 	return i
 }
@@ -1692,8 +1671,7 @@ func (i *InputInvoiceMessageContent) WithMaxTipAmount(maxTipAmount int) *InputIn
 }
 
 // WithSuggestedTipAmounts adds suggested tip amounts parameter
-func (i *InputInvoiceMessageContent) WithSuggestedTipAmounts(suggestedTipAmounts ...int,
-) *InputInvoiceMessageContent {
+func (i *InputInvoiceMessageContent) WithSuggestedTipAmounts(suggestedTipAmounts ...int) *InputInvoiceMessageContent {
 	i.SuggestedTipAmounts = suggestedTipAmounts
 	return i
 }

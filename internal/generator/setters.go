@@ -119,7 +119,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 			s = strings.ReplaceAll(s, "*"+setter.structType, setter.structType)
 		}
 
-		if len(s) > maxLineLen {
+		if len(s) > maxLineLen+11 {
 			s = strings.Replace(s, ") *", ",\n) *", 1)
 		}
 
