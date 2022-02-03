@@ -109,31 +109,32 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "[]MessageEntity":
 		return fmt.Sprintf("[]MessageEntity{{Type: \"%s\"}}", setter.fieldName)
 	case "ReplyMarkup":
-		return "&ReplyKeyboardRemove{}"
+		return "&ReplyKeyboardRemove{RemoveKeyboard: true}"
 	case "[]InputMedia":
-		return "[]InputMedia{&InputMediaAnimation{}}"
+		return fmt.Sprintf("[]InputMedia{&InputMediaAnimation{Type: \"%s\"}}", setter.fieldName)
 	case "[]BotCommand":
 		return fmt.Sprintf("[]BotCommand{{Command: \"%s\"}}", setter.fieldName)
 	case "BotCommandScope":
-		return "&BotCommandScopeDefault{}"
+		return fmt.Sprintf("&BotCommandScopeDefault{Type: \"%s\"}", setter.fieldName)
 	case "*InlineKeyboardMarkup":
-		return "&InlineKeyboardMarkup{}"
+		return "&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}"
 	case "[]InlineQueryResult":
-		return "[]InlineQueryResult{&InlineQueryResultArticle{}}"
+		return fmt.Sprintf("[]InlineQueryResult{&InlineQueryResultArticle{Type: \"%s\"}}", setter.fieldName)
 	case "[]LabeledPrice":
-		return "[]LabeledPrice{}"
+		return fmt.Sprintf("[]LabeledPrice{{Label: \"%s\"}}", setter.fieldName)
 	case "[]int":
-		return "[]int{}"
+		*counter++
+		return fmt.Sprintf("[]int{%d}", *counter)
 	case "[]ShippingOption":
-		return "[]ShippingOption{}"
+		return fmt.Sprintf("[]ShippingOption{{ID: \"%s\"}}", setter.fieldName)
 	case "[]PassportElementError":
-		return "[]PassportElementError{}"
+		return "[]PassportElementError{&PassportElementErrorDataField{}}"
 	case "*MaskPosition":
-		return "&MaskPosition{}"
+		return fmt.Sprintf("&MaskPosition{Point: \"%s\"}", setter.fieldName)
 	case "InputMedia":
-		return "&InputMediaAnimation{}"
+		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
 	case "ChatPermissions":
-		return "ChatPermissions{}"
+		return "ChatPermissions{CanSendMessages: true}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
