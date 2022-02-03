@@ -257,6 +257,7 @@ func TestInlineQueryResultPhoto_Setters(t *testing.T) {
 	}, i)
 }
 
+//nolint:dupl
 func TestInlineQueryResultGif_Setters(t *testing.T) {
 	i := (&InlineQueryResultGif{}).
 		WithID("ID").
@@ -290,6 +291,7 @@ func TestInlineQueryResultGif_Setters(t *testing.T) {
 	}, i)
 }
 
+//nolint:dupl
 func TestInlineQueryResultMpeg4Gif_Setters(t *testing.T) {
 	i := (&InlineQueryResultMpeg4Gif{}).
 		WithID("ID").
