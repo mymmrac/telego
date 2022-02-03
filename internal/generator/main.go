@@ -21,21 +21,23 @@ const (
 	typesFilename   = "./types.go"
 	methodsFilename = "./methods.go"
 
-	generatedTypesFilename          = "./types.go.generated"
-	generatedTypesTestsFilename     = "./types_test.go.generated"
-	generatedTypesSettersFilename   = "./types_setters.go.generated"
-	generatedMethodsFilename        = "./methods.go.generated"
-	generatedMethodsTestsFilename   = "./methods_test.go.generated"
-	generatedMethodsSettersFilename = "./methods_setters.go.generated"
+	generatedTypesFilename               = "./types.go.generated"
+	generatedTypesTestsFilename          = "./types_test.go.generated"
+	generatedTypesSettersFilename        = "./types_setters.go.generated"
+	generatedMethodsFilename             = "./methods.go.generated"
+	generatedMethodsTestsFilename        = "./methods_test.go.generated"
+	generatedMethodsSettersFilename      = "./methods_setters.go.generated"
+	generatedMethodsSettersTestsFilename = "./methods_setters_test.go.generated"
 )
 
 const (
-	runTypesGeneration          = "types"
-	runTypesTestsGeneration     = "types-tests"
-	runTypesSettersGeneration   = "types-setters"
-	runMethodsGeneration        = "methods"
-	runMethodsTestsGeneration   = "methods-tests"
-	runMethodsSettersGeneration = "methods-setters"
+	runTypesGeneration               = "types"
+	runTypesTestsGeneration          = "types-tests"
+	runTypesSettersGeneration        = "types-setters"
+	runMethodsGeneration             = "methods"
+	runMethodsTestsGeneration        = "methods-tests"
+	runMethodsSettersGeneration      = "methods-setters"
+	runMethodsSettersTestsGeneration = "methods-setters-tests"
 )
 
 var typeStructsSetters = []string{
@@ -96,11 +98,11 @@ func main() {
 
 	for _, arg := range args {
 		logInfo("==== %s ====", arg)
+		start := time.Now()
 		switch arg {
 		case runTypesGeneration:
 			docs := sr.Docs()
 
-			start := time.Now()
 			typesFile := openFile(generatedTypesFilename)
 
 			types := generateTypes(docs)
@@ -108,11 +110,9 @@ func main() {
 			_ = typesFile.Close()
 
 			formatFile(typesFile.Name())
-			logInfo("Generated types in: %s", time.Since(start))
 		case runMethodsGeneration:
 			docs := sr.Docs()
 
-			start := time.Now()
 			methodsFile := openFile(generatedMethodsFilename)
 
 			methods := sr.Methods(docs)
@@ -120,41 +120,32 @@ func main() {
 			_ = methodsFile.Close()
 
 			formatFile(methodsFile.Name())
-			logInfo("Generated methods in: %s", time.Since(start))
 		case runTypesTestsGeneration:
-			start := time.Now()
 			types := sr.TypesData()
 
 			generateTypesTests(types)
-			logInfo("Generated types tests in: %s", time.Since(start))
 		case runMethodsTestsGeneration:
 			docs := sr.Docs()
 			methods := sr.Methods(docs)
 
-			start := time.Now()
 			generateMethodsTests(methods)
-			logInfo("Generated methods tests in: %s", time.Since(start))
 		case runMethodsSettersGeneration:
-			start := time.Now()
-
-			logInfo("Reading methods from: %q", methodsFilename)
-			methodsBytes, err := ioutil.ReadFile(methodsFilename)
-			exitOnErr(err)
-
-			logInfo("Methods length: %d", len(methodsBytes))
-			methods := removeNl(string(methodsBytes))
+			methodsSetters := sr.MethodsSetters()
 
 			methodsSettersFile := openFile(generatedMethodsSettersFilename)
-
-			methodsSetters := generateSetters(methods, nil)
 			writeSetters(methodsSettersFile, methodsSetters, true, nil)
 			_ = methodsSettersFile.Close()
 
 			formatFile(methodsSettersFile.Name())
-			logInfo("Generated methods setters in: %s", time.Since(start))
-		case runTypesSettersGeneration:
-			start := time.Now()
+		case runMethodsSettersTestsGeneration:
+			methodsSetters := sr.MethodsSetters()
 
+			methodsSettersTestsFile := openFile(generatedMethodsSettersTestsFilename)
+			writeSettersTests(methodsSettersTestsFile, methodsSetters, nil)
+			_ = methodsSettersTestsFile.Close()
+
+			formatFile(methodsSettersTestsFile.Name())
+		case runTypesSettersGeneration:
 			types := removeNl(sr.TypesData())
 
 			typesSettersFile := openFile(generatedTypesSettersFilename)
@@ -164,11 +155,12 @@ func main() {
 			_ = typesSettersFile.Close()
 
 			formatFile(typesSettersFile.Name())
-			logInfo("Generated types setters in: %s", time.Since(start))
 		default:
 			logError("Unknown generation arg: %q", arg)
 			os.Exit(1)
 		}
+
+		logInfo("Generated %s in: %s\n", arg, time.Since(start))
 	}
 
 	logInfo("==== end ====")
@@ -180,6 +172,8 @@ type sharedResources struct {
 	methods tgMethods
 
 	typesData string
+
+	methodsSetters tgSetters
 }
 
 func (r *sharedResources) Docs() string {
@@ -215,6 +209,23 @@ func (r *sharedResources) TypesData() string {
 	}
 
 	return r.typesData
+}
+
+func (r *sharedResources) MethodsSetters() tgSetters {
+	if r.methodsSetters == nil {
+		logInfo("Reading methods from: %q", methodsFilename)
+		methodsBytes, err := ioutil.ReadFile(methodsFilename)
+		exitOnErr(err)
+
+		logInfo("Methods length: %d", len(methodsBytes))
+		methods := removeNl(string(methodsBytes))
+
+		r.methodsSetters = generateSetters(methods, nil)
+	} else {
+		logInfo("Reusing methods setters")
+	}
+
+	return r.methodsSetters
 }
 
 func openFile(filename string) *os.File {
