@@ -160,7 +160,7 @@ func Game(id int64, gameShortName string) *telego.SendGameParams {
 }
 
 // CopyMessage creates telego.CopyMessageParams with required parameters
-func CopyMessage(id telego.ChatID, fromID telego.ChatID, messageID int) *telego.CopyMessageParams {
+func CopyMessage(id, fromID telego.ChatID, messageID int) *telego.CopyMessageParams {
 	return &telego.CopyMessageParams{
 		ChatID:     id,
 		FromChatID: fromID,
