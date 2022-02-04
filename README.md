@@ -39,6 +39,7 @@ telegram.
     - [📩 Getting updates](#-getting-updates)
     - [🪁 Using Telegram methods](#-using-telegram-methods)
     - [🧼 Utility methods](#-utility-methods)
+    - [🦾 Helper `With...` methods](#-helper-with-methods)
 - [🎨 Contribution](#-contribution)
 - [🔐 License](#-license)
 
@@ -47,7 +48,9 @@ telegram.
 ## ⚡️ Getting Started
 
 [//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
+
 [//]: # (https://gohugo.io/hosting-and-deployment/hosting-on-github)
+
 [//]: # (https://themes.gohugo.io/themes/hugo-whisper-theme)
 
 How to get the library:
@@ -262,7 +265,12 @@ func main() {
 
 			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
 			// Sends message to sender with same text (echo bot).
-			sentMessage, _ := bot.SendMessage(tu.Message(tu.ID(chatID), update.Message.Text))
+			sentMessage, _ := bot.SendMessage(
+				tu.Message(
+					tu.ID(chatID),
+					update.Message.Text,
+				),
+			)
 
 			fmt.Printf("Sent Message: %v\n", sentMessage)
 		}
@@ -295,11 +303,56 @@ Or other useful methods like:
 - `File(namedReader) => InputFile`
 - ...
 
-Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](telegoutil/methods.go), and those that
-are related to [`types`](types.go) in [`telegoutil/types`](telegoutil/types.go).
+Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](telegoutil/methods.go), for
+[`types`](types.go) in [`telegoutil/types`](telegoutil/types.go), for [`handlers`](telegohandler/handler.go) in
+[`telegoutil/handler`](telegoutil/handler.go), for [`api`](telegoapi/api.go) in [`telegoutil/api`](telegoutil/api.go).
 
 > Note: If you think that something can be added to [`telegoutil`](telegoutil) package
 > fill free to create an issue or pull request with desired changes.
+
+### 🦾 Helper `With...` methods
+
+Creating method parameters is sometimes bulky and not convenient, so you can use `with` methods in combination with
+`utility` methods.
+
+Here is a simple example of creating a message with a keyboard that has 4 buttons with different parameters.
+
+```go
+package main
+
+import (
+	"github.com/mymmrac/telego"
+	tu "github.com/mymmrac/telego/telegoutil"
+)
+
+func main() {
+	// ... initializing bot
+
+	// Creating keyboard
+	keyboard := tu.Keyboard(
+		tu.KeyboardRow( // Row 1
+			tu.KeyboardButton("Button"), // Column 1
+			tu.KeyboardButton("Poll Regular"). // Column 2
+				WithRequestPoll(tu.PollTypeRegular()), // <- `with` method
+		),
+		tu.KeyboardRow( // Row 2
+			tu.KeyboardButton("Contact").WithRequestContact(),   // Column 1, <- `with` method 
+			tu.KeyboardButton("Location").WithRequestLocation(), // Column 2, <- `with` method 
+		),
+	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something") // <- multiple `with` methods 
+
+	// Creating message
+	msg := tu.Message(
+		tu.ID(123),
+		"Hello World",
+	).WithReplyMarkup(keyboard).WithProtectContent() // <- multiple `with` method 
+
+	bot.SendMessage(msg)
+}
+```
+
+Those methods allow you to modify values without directly accessing them, also as you saw `with` methods can be staked
+one to another in order to update multiple values.
 
 ## 🎨 Contribution
 

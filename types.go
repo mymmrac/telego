@@ -957,7 +957,7 @@ type ReplyKeyboardMarkup struct {
 }
 
 // ReplyType - Returns ReplyKeyboardMarkup type
-func (i *ReplyKeyboardMarkup) ReplyType() string {
+func (r *ReplyKeyboardMarkup) ReplyType() string {
 	return MarkupTypeReplyKeyboard
 }
 
@@ -1010,7 +1010,7 @@ type ReplyKeyboardRemove struct {
 }
 
 // ReplyType - Returns ReplyKeyboardRemove type
-func (i *ReplyKeyboardRemove) ReplyType() string {
+func (r *ReplyKeyboardRemove) ReplyType() string {
 	return MarkupTypeReplyKeyboardRemove
 }
 
@@ -1161,7 +1161,7 @@ type ForceReply struct {
 }
 
 // ReplyType - Returns ForceReply type
-func (i *ForceReply) ReplyType() string {
+func (f *ForceReply) ReplyType() string {
 	return MarkupTypeForceReply
 }
 

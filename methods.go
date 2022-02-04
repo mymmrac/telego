@@ -96,11 +96,11 @@ type SetWebhookParams struct {
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
 }
 
-func (s *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
+func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
-	if s.Certificate != nil {
-		fp["certificate"] = s.Certificate.File
+	if p.Certificate != nil {
+		fp["certificate"] = p.Certificate.File
 	}
 
 	return fp

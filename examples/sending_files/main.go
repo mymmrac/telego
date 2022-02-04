@@ -18,19 +18,19 @@ func main() {
 	}
 
 	// Document parameters
-	document := &telego.SendDocumentParams{
-		ChatID:  tu.ID(1234567), // Chat ID as Integer
-		Caption: "My cool file from disk",
+	document := tu.Document(
+		// Chat ID as Integer
+		tu.ID(1234567),
 
 		// Send using file from disk
-		Document: tu.File(mustOpen("my_file.txt")),
+		tu.File(mustOpen("my_file.txt")),
 
 		// Send using external URL
-		// Document: tu.FileByURL("https://example.com/my_file.txt"),
+		// tu.FileByURL("https://example.com/my_file.txt"),
 
 		// Send using file ID
-		// Document: tu.FileByID("<file ID of your file>"),
-	}
+		// tu.FileByID("<file ID of your file>"),
+	).WithCaption("My cool file from disk")
 
 	// Sending document
 	msg, err := bot.SendDocument(document)
@@ -43,38 +43,30 @@ func main() {
 	// =========================================== //
 
 	// Photo parameters
-	photo := &telego.SendPhotoParams{
-		ChatID:  tu.Username("@my_cool_channel"), // Chat ID as String (target username)
-		Caption: "My cool photo",
+	photo := tu.Photo(
+		// Chat ID as String (target username)
+		tu.Username("@my_cool_channel"),
 
 		// Send using file from disk
-		Photo: tu.File(mustOpen("my_photo.png")),
-	}
+		tu.File(mustOpen("my_photo.png")),
+	).WithCaption("My cool photo")
+
 	// Sending photo
 	_, _ = bot.SendPhoto(photo)
 
 	// =========================================== //
 
 	// Media group parameters
-	mediaGroup := &telego.SendMediaGroupParams{
-		ChatID: tu.ID(1234567),
+	mediaGroup := tu.MediaGroup(
+		tu.ID(1234567),
 
 		// Specify slice of telego.InputMedia with media you want to send as a group
-		Media: []telego.InputMedia{
-			&telego.InputMediaPhoto{
-				Type:  telego.MediaTypePhoto,
-				Media: tu.FileByURL("https://example.com/my_photo.png"),
-			},
-			&telego.InputMediaPhoto{
-				Type:  telego.MediaTypePhoto,
-				Media: tu.File(mustOpen("my_photo.png")),
-			},
-			&telego.InputMediaPhoto{
-				Type:  telego.MediaTypePhoto,
-				Media: tu.FileByID("<file ID of your photo>"),
-			},
-		},
-	}
+		tu.MediaPhoto(tu.File(mustOpen("my_photo.png"))),
+
+		tu.MediaPhoto(tu.FileByID("<file ID of your photo>")),
+
+		tu.MediaPhoto(tu.FileByURL("https://example.com/my_photo.png")),
+	)
 
 	// Sending media group
 	_, _ = bot.SendMediaGroup(mediaGroup)

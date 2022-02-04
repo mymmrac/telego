@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/mymmrac/telego"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 func main() {
@@ -26,32 +27,25 @@ func main() {
 			name := iq.From.FirstName
 
 			// Answer inline query request
-			_ = bot.AnswerInlineQuery(&telego.AnswerInlineQueryParams{
-				InlineQueryID: iq.ID, // Answer with query ID that we received
-				IsPersonal:    true,
-				Results: []telego.InlineQueryResult{ // Provide list of results
-					&telego.InlineQueryResultArticle{
-						Type:        telego.ResultTypeArticle,
-						ID:          "hello", // Unique result ID
-						Title:       "Hello",
-						Description: fmt.Sprintf("Query: %q", iq.Query),
-						InputMessageContent: &telego.InputTextMessageContent{ // Hello message with inline query
-							ParseMode:   telego.ModeMarkdownV2,
-							MessageText: fmt.Sprintf("Hello %s\n\nYour query:\n```%#+v```", name, iq),
-						},
-					},
-					&telego.InlineQueryResultArticle{
-						Type:        telego.ResultTypeArticle,
-						ID:          "bey", // Unique result ID
-						Title:       "Bye",
-						Description: fmt.Sprintf("Query: %q", iq.Query),
-						InputMessageContent: &telego.InputTextMessageContent{ // Bye message with inline query
-							ParseMode:   telego.ModeMarkdownV2,
-							MessageText: fmt.Sprintf("Bye %s\n\nYour query:\n```%#+v```", name, iq),
-						},
-					},
-				},
-			})
+			_ = bot.AnswerInlineQuery(tu.InlineQuery(
+				iq.ID,
+
+				tu.ResultArticle(
+					"hello",
+					"Hello",
+					tu.TextMessage( // Hello message with inline query
+						fmt.Sprintf("Hello %s\n\nYour query:\n```%#+v```", name, iq),
+					).WithParseMode(telego.ModeMarkdownV2),
+				).WithDescription(fmt.Sprintf("Query: %q", iq.Query)),
+
+				tu.ResultArticle(
+					"bey",
+					"Bye",
+					tu.TextMessage( // Bye message with inline query
+						fmt.Sprintf("Bye %s\n\nYour query:\n```%#+v```", name, iq),
+					).WithParseMode(telego.ModeMarkdownV2),
+				).WithDescription(fmt.Sprintf("Query: %q", iq.Query)),
+			).WithIsPersonal())
 		}
 	}
 }

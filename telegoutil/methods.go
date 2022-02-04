@@ -67,7 +67,7 @@ func VideoNote(id telego.ChatID, videoNote telego.InputFile) *telego.SendVideoNo
 }
 
 // MediaGroup creates telego.SendMediaGroupParams with required parameters
-func MediaGroup(id telego.ChatID, mediaGroups []telego.InputMedia) *telego.SendMediaGroupParams {
+func MediaGroup(id telego.ChatID, mediaGroups ...telego.InputMedia) *telego.SendMediaGroupParams {
 	return &telego.SendMediaGroupParams{
 		ChatID: id,
 		Media:  mediaGroups,
@@ -104,7 +104,7 @@ func Contact(id telego.ChatID, phoneNumber, firstName string) *telego.SendContac
 }
 
 // Poll creates telego.SendPollParams with required parameters
-func Poll(id telego.ChatID, question string, options []string) *telego.SendPollParams {
+func Poll(id telego.ChatID, question string, options ...string) *telego.SendPollParams {
 	return &telego.SendPollParams{
 		ChatID:   id,
 		Question: question,
@@ -139,7 +139,7 @@ func Sticker(id telego.ChatID, sticker telego.InputFile) *telego.SendStickerPara
 
 // Invoice creates telego.SendInvoiceParams with required parameters
 func Invoice(id telego.ChatID, title, description, payload, providerToken, currency string,
-	prices []telego.LabeledPrice) *telego.SendInvoiceParams {
+	prices ...telego.LabeledPrice) *telego.SendInvoiceParams {
 	return &telego.SendInvoiceParams{
 		ChatID:        id,
 		Title:         title,
@@ -156,5 +156,22 @@ func Game(id int64, gameShortName string) *telego.SendGameParams {
 	return &telego.SendGameParams{
 		ChatID:        id,
 		GameShortName: gameShortName,
+	}
+}
+
+// CopyMessage creates telego.CopyMessageParams with required parameters
+func CopyMessage(id, fromID telego.ChatID, messageID int) *telego.CopyMessageParams {
+	return &telego.CopyMessageParams{
+		ChatID:     id,
+		FromChatID: fromID,
+		MessageID:  messageID,
+	}
+}
+
+// InlineQuery creates telego.AnswerInlineQueryParams with required parameters
+func InlineQuery(inlineQueryID string, results ...telego.InlineQueryResult) *telego.AnswerInlineQueryParams {
+	return &telego.AnswerInlineQueryParams{
+		InlineQueryID: inlineQueryID,
+		Results:       results,
 	}
 }

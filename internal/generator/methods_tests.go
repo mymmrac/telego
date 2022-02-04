@@ -5,10 +5,6 @@ import (
 	"strings"
 )
 
-const (
-	generatedMethodsTestsFilename = "methods_test.go.generated"
-)
-
 func generateMethodsTests(methods tgMethods) {
 	methodsTestsFile := openFile(generatedMethodsTestsFilename)
 	defer func() { _ = methodsTestsFile.Close() }()

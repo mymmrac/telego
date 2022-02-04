@@ -34,11 +34,13 @@ func main() {
 			chatID := tu.ID(update.Message.Chat.ID)
 
 			// Copy sent message back to user
-			_, _ = bot.CopyMessage(&telego.CopyMessageParams{
-				ChatID:     chatID,
-				FromChatID: chatID,
-				MessageID:  update.Message.MessageID,
-			})
+			_, _ = bot.CopyMessage(
+				tu.CopyMessage(
+					chatID,
+					chatID,
+					update.Message.MessageID,
+				),
+			)
 		}
 	}
 }

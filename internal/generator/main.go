@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -17,16 +18,76 @@ const (
 	omitemptySuffix = ",omitempty"
 	optionalPrefix  = "Optional. "
 
-	generatedTypesFilename   = "./types.go.generated"
-	generatedMethodsFilename = "./methods.go.generated"
+	typesFilename   = "./types.go"
+	methodsFilename = "./methods.go"
+
+	generatedTypesFilename               = "./types.go.generated"
+	generatedTypesTestsFilename          = "./types_test.go.generated"
+	generatedTypesSettersFilename        = "./types_setters.go.generated"
+	generatedTypesSettersTestsFilename   = "./types_setters_test.go.generated"
+	generatedMethodsFilename             = "./methods.go.generated"
+	generatedMethodsTestsFilename        = "./methods_test.go.generated"
+	generatedMethodsSettersFilename      = "./methods_setters.go.generated"
+	generatedMethodsSettersTestsFilename = "./methods_setters_test.go.generated"
 )
 
 const (
-	runTypesGeneration        = "types"
-	runTypesTestsGeneration   = "types-tests"
-	runMethodsGeneration      = "methods"
-	runMethodsTestsGeneration = "methods-tests"
+	runTypesGeneration               = "types"
+	runTypesTestsGeneration          = "types-tests"
+	runTypesSettersGeneration        = "types-setters"
+	runTypesSettersTestsGeneration   = "types-setters-tests"
+	runMethodsGeneration             = "methods"
+	runMethodsTestsGeneration        = "methods-tests"
+	runMethodsSettersGeneration      = "methods-setters"
+	runMethodsSettersTestsGeneration = "methods-setters-tests"
 )
+
+var typeStructsSetters = []string{
+	"ReplyKeyboardMarkup",
+	"ForceReply",
+	"ReplyKeyboardRemove",
+	"InlineKeyboardMarkup",
+	"KeyboardButton",
+	"InlineKeyboardButton",
+
+	"InlineQueryResultCachedAudio",
+	"InlineQueryResultCachedDocument",
+	"InlineQueryResultCachedGif",
+	"InlineQueryResultCachedMpeg4Gif",
+	"InlineQueryResultCachedPhoto",
+	"InlineQueryResultCachedSticker",
+	"InlineQueryResultCachedVideo",
+	"InlineQueryResultCachedVoice",
+	"InlineQueryResultArticle",
+	"InlineQueryResultAudio",
+	"InlineQueryResultContact",
+	"InlineQueryResultGame",
+	"InlineQueryResultDocument",
+	"InlineQueryResultGif",
+	"InlineQueryResultLocation",
+	"InlineQueryResultMpeg4Gif",
+	"InlineQueryResultPhoto",
+	"InlineQueryResultVenue",
+	"InlineQueryResultVideo",
+	"InlineQueryResultVoice",
+
+	"InputMediaAnimation",
+	"InputMediaDocument",
+	"InputMediaAudio",
+	"InputMediaPhoto",
+	"InputMediaVideo",
+
+	"InputTextMessageContent",
+	"InputLocationMessageContent",
+	"InputVenueMessageContent",
+	"InputContactMessageContent",
+	"InputInvoiceMessageContent",
+}
+
+var typeStructsNoPointerSetters = []string{
+	"KeyboardButton",
+	"InlineKeyboardButton",
+}
 
 func main() {
 	if len(os.Args) <= 1 {
@@ -39,11 +100,11 @@ func main() {
 
 	for _, arg := range args {
 		logInfo("==== %s ====", arg)
+		start := time.Now()
 		switch arg {
 		case runTypesGeneration:
 			docs := sr.Docs()
 
-			start := time.Now()
 			typesFile := openFile(generatedTypesFilename)
 
 			types := generateTypes(docs)
@@ -51,11 +112,9 @@ func main() {
 			_ = typesFile.Close()
 
 			formatFile(typesFile.Name())
-			logInfo("Generated types in: %s", time.Since(start))
 		case runMethodsGeneration:
 			docs := sr.Docs()
 
-			start := time.Now()
 			methodsFile := openFile(generatedMethodsFilename)
 
 			methods := sr.Methods(docs)
@@ -63,22 +122,55 @@ func main() {
 			_ = methodsFile.Close()
 
 			formatFile(methodsFile.Name())
-			logInfo("Generated methods in: %s", time.Since(start))
 		case runTypesTestsGeneration:
-			start := time.Now()
-			generateTypesTests()
-			logInfo("Generated types tests in: %s", time.Since(start))
+			types := sr.TypesData()
+
+			generateTypesTests(types)
 		case runMethodsTestsGeneration:
 			docs := sr.Docs()
 			methods := sr.Methods(docs)
 
-			start := time.Now()
 			generateMethodsTests(methods)
-			logInfo("Generated methods tests in: %s", time.Since(start))
+		case runMethodsSettersGeneration:
+			methodsSetters := sr.MethodsSetters()
+
+			methodsSettersFile := openFile(generatedMethodsSettersFilename)
+			writeSetters(methodsSettersFile, methodsSetters, true, nil)
+			_ = methodsSettersFile.Close()
+
+			formatFile(methodsSettersFile.Name())
+		case runMethodsSettersTestsGeneration:
+			methodsSetters := sr.MethodsSetters()
+
+			methodsSettersTestsFile := openFile(generatedMethodsSettersTestsFilename)
+			writeSettersTests(methodsSettersTestsFile, methodsSetters, nil)
+			_ = methodsSettersTestsFile.Close()
+
+			formatFile(methodsSettersTestsFile.Name())
+		case runTypesSettersGeneration:
+			types := removeNl(sr.TypesData())
+			typesSetters := sr.TypesSetters(types)
+
+			typesSettersFile := openFile(generatedTypesSettersFilename)
+			writeSetters(typesSettersFile, typesSetters, false, typeStructsNoPointerSetters)
+			_ = typesSettersFile.Close()
+
+			formatFile(typesSettersFile.Name())
+		case runTypesSettersTestsGeneration:
+			types := removeNl(sr.TypesData())
+			typesSetters := sr.TypesSetters(types)
+
+			typesSettersTestsFile := openFile(generatedTypesSettersTestsFilename)
+			writeSettersTests(typesSettersTestsFile, typesSetters, typeStructsNoPointerSetters)
+			_ = typesSettersTestsFile.Close()
+
+			formatFile(typesSettersTestsFile.Name())
 		default:
 			logError("Unknown generation arg: %q", arg)
 			os.Exit(1)
 		}
+
+		logInfo("Generated %s in: %s\n", arg, time.Since(start))
 	}
 
 	logInfo("==== end ====")
@@ -88,6 +180,11 @@ func main() {
 type sharedResources struct {
 	docs    string
 	methods tgMethods
+
+	typesData string
+
+	methodsSetters tgSetters
+	typesSetters   tgSetters
 }
 
 func (r *sharedResources) Docs() string {
@@ -106,6 +203,50 @@ func (r *sharedResources) Methods(docs string) tgMethods {
 		logInfo("Reusing methods")
 	}
 	return r.methods
+}
+
+func (r *sharedResources) TypesData() string {
+	if r.typesData == "" {
+		logInfo("Reading types from: %q", typesFilename)
+
+		typesBytes, err := ioutil.ReadFile(typesFilename)
+		exitOnErr(err)
+
+		logInfo("Types length: %d", len(typesBytes))
+
+		r.typesData = string(typesBytes)
+	} else {
+		logInfo("Reusing types data")
+	}
+
+	return r.typesData
+}
+
+func (r *sharedResources) MethodsSetters() tgSetters {
+	if r.methodsSetters == nil {
+		logInfo("Reading methods from: %q", methodsFilename)
+		methodsBytes, err := ioutil.ReadFile(methodsFilename)
+		exitOnErr(err)
+
+		logInfo("Methods length: %d", len(methodsBytes))
+		methods := removeNl(string(methodsBytes))
+
+		r.methodsSetters = generateSetters(methods, nil)
+	} else {
+		logInfo("Reusing methods setters")
+	}
+
+	return r.methodsSetters
+}
+
+func (r *sharedResources) TypesSetters(types string) tgSetters {
+	if r.typesSetters == nil {
+		r.typesSetters = generateSetters(types, typeStructsSetters)
+	} else {
+		logInfo("Reusing types setters")
+	}
+
+	return r.typesSetters
 }
 
 func openFile(filename string) *os.File {

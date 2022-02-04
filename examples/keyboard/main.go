@@ -18,61 +18,27 @@ func main() {
 	}
 
 	// Keyboard parameters
-	keyboard := &telego.ReplyKeyboardMarkup{
-		Keyboard: [][]telego.KeyboardButton{
-			// Row 1
-			{
-				// Column 1
-				{
-					Text: "Button 1",
-				},
-				// Column 2
-				{
-					Text: "Button 2",
-				},
-			},
-			// Row 2
-			{
-				// Column 1
-				{
-					Text:           "Contact",
-					RequestContact: true,
-				},
-				// Column 2
-				{
-					Text:            "Location",
-					RequestLocation: true,
-				},
-			},
-			// Row 3
-			{
-				// Column 1
-				{
-					Text:        "Poll",
-					RequestPoll: &telego.KeyboardButtonPollType{},
-				},
-				// Column 2
-				{
-					Text:        "Poll Regular",
-					RequestPoll: &telego.KeyboardButtonPollType{Type: telego.PollTypeRegular},
-				},
-				// Column 3
-				{
-					Text:        "Poll Quiz",
-					RequestPoll: &telego.KeyboardButtonPollType{Type: telego.PollTypeQuiz},
-				},
-			},
-		},
-		ResizeKeyboard:        true,
-		InputFieldPlaceholder: "Select something",
-	}
+	keyboard := tu.Keyboard(
+		tu.KeyboardRow( // Row 1
+			tu.KeyboardButton("Button 1"), // Column 1
+			tu.KeyboardButton("Button 2"), // Column 2
+		),
+		tu.KeyboardRow( // Row 2
+			tu.KeyboardButton("Contact").WithRequestContact(),   // Column 1
+			tu.KeyboardButton("Location").WithRequestLocation(), // Column 2
+		),
+		tu.KeyboardRow( // Row 3
+			tu.KeyboardButton("Poll Any").WithRequestPoll(tu.PollTypeAny()),         // Column 1
+			tu.KeyboardButton("Poll Regular").WithRequestPoll(tu.PollTypeRegular()), // Column 2
+			tu.KeyboardButton("Poll Quiz").WithRequestPoll(tu.PollTypeQuiz()),       // Column 3
+		),
+	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something")
 
 	// Message parameters
-	message := &telego.SendMessageParams{
-		ChatID:      tu.ID(1234567),
-		Text:        "My message",
-		ReplyMarkup: keyboard,
-	}
+	message := tu.Message(
+		tu.ID(1234567),
+		"My message",
+	).WithReplyMarkup(keyboard)
 
 	// Sending message
 	_, _ = bot.SendMessage(message)
