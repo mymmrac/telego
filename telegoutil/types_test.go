@@ -36,8 +36,8 @@ func TestFileByURL(t *testing.T) {
 }
 
 func TestID(t *testing.T) {
-	i := ID(int641)
-	assert.Equal(t, int641, i.ID)
+	i := ID(number2)
+	assert.Equal(t, number2, i.ID)
 }
 
 func TestUsername(t *testing.T) {
@@ -301,11 +301,11 @@ func TestResultGif(t *testing.T) {
 }
 
 func TestResultLocation(t *testing.T) {
-	r := ResultLocation(text1, float1, float2, text2)
+	r := ResultLocation(text1, latitude, longitude, text2)
 	assert.Equal(t, telego.ResultTypeLocation, r.Type)
 	assert.Equal(t, text1, r.ID)
-	assert.Equal(t, float1, r.Latitude)
-	assert.Equal(t, float2, r.Longitude)
+	assert.Equal(t, latitude, r.Latitude)
+	assert.Equal(t, longitude, r.Longitude)
 	assert.Equal(t, text2, r.Title)
 }
 
@@ -326,11 +326,11 @@ func TestResultPhoto(t *testing.T) {
 }
 
 func TestResultVenue(t *testing.T) {
-	r := ResultVenue(text1, float1, float2, text2, text3)
+	r := ResultVenue(text1, latitude, longitude, text2, text3)
 	assert.Equal(t, telego.ResultTypeVenue, r.Type)
 	assert.Equal(t, text1, r.ID)
-	assert.Equal(t, float1, r.Latitude)
-	assert.Equal(t, float2, r.Longitude)
+	assert.Equal(t, latitude, r.Latitude)
+	assert.Equal(t, longitude, r.Longitude)
 	assert.Equal(t, text2, r.Title)
 	assert.Equal(t, text3, r.Address)
 }
@@ -381,10 +381,10 @@ func TestScopeChatAdministrators(t *testing.T) {
 }
 
 func TestScopeChatMember(t *testing.T) {
-	s := ScopeChatMember(id1, int641)
+	s := ScopeChatMember(id1, number2)
 	assert.Equal(t, telego.ScopeTypeChatMember, s.Type)
 	assert.Equal(t, id1, s.ChatID)
-	assert.Equal(t, int641, s.UserID)
+	assert.Equal(t, number2, s.UserID)
 }
 
 func TestScopeDefault(t *testing.T) {
@@ -398,17 +398,17 @@ func TestTextMessage(t *testing.T) {
 }
 
 func TestVenueMessage(t *testing.T) {
-	m := VenueMessage(float1, float2, text1, text2)
-	assert.Equal(t, float1, m.Latitude)
-	assert.Equal(t, float2, m.Longitude)
+	m := VenueMessage(latitude, longitude, text1, text2)
+	assert.Equal(t, latitude, m.Latitude)
+	assert.Equal(t, longitude, m.Longitude)
 	assert.Equal(t, text1, m.Title)
 	assert.Equal(t, text2, m.Address)
 }
 
 func TestLocationMessage(t *testing.T) {
-	m := LocationMessage(float1, float2)
-	assert.Equal(t, float1, m.Latitude)
-	assert.Equal(t, float2, m.Longitude)
+	m := LocationMessage(latitude, longitude)
+	assert.Equal(t, latitude, m.Latitude)
+	assert.Equal(t, longitude, m.Longitude)
 }
 
 func TestContactMessage(t *testing.T) {

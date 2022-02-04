@@ -23,17 +23,16 @@ var (
 		text2, text3,
 	}
 
-	float1 = 123.0
-	float2 = 321.0
+	latitude  = 123.0
+	longitude = 321.0
 
-	int1 = 123
-
-	int641 int64 = 1234
+	number1       = 123
+	number2 int64 = 1234
 
 	prices = []telego.LabeledPrice{
 		{
 			Label:  text1,
-			Amount: int1,
+			Amount: number1,
 		},
 	}
 
@@ -100,10 +99,10 @@ func TestInvoice(t *testing.T) {
 }
 
 func TestLocation(t *testing.T) {
-	l := Location(id1, float1, float2)
+	l := Location(id1, latitude, longitude)
 	assert.Equal(t, id1, l.ChatID)
-	assert.Equal(t, float1, l.Latitude)
-	assert.Equal(t, float2, l.Longitude)
+	assert.Equal(t, latitude, l.Latitude)
+	assert.Equal(t, longitude, l.Longitude)
 }
 
 func TestMediaGroup(t *testing.T) {
@@ -138,10 +137,10 @@ func TestSticker(t *testing.T) {
 }
 
 func TestVenue(t *testing.T) {
-	v := Venue(id1, float1, float2, text1, text2)
+	v := Venue(id1, latitude, longitude, text1, text2)
 	assert.Equal(t, id1, v.ChatID)
-	assert.Equal(t, float1, v.Latitude)
-	assert.Equal(t, float2, v.Longitude)
+	assert.Equal(t, latitude, v.Latitude)
+	assert.Equal(t, longitude, v.Longitude)
 	assert.Equal(t, text1, v.Title)
 	assert.Equal(t, text2, v.Address)
 }
@@ -165,10 +164,10 @@ func TestVoice(t *testing.T) {
 }
 
 func TestCopyMessage(t *testing.T) {
-	c := CopyMessage(id1, id2, int1)
+	c := CopyMessage(id1, id2, number1)
 	assert.Equal(t, id1, c.ChatID)
 	assert.Equal(t, id2, c.FromChatID)
-	assert.Equal(t, int1, c.MessageID)
+	assert.Equal(t, number1, c.MessageID)
 }
 
 func TestInlineQuery(t *testing.T) {
