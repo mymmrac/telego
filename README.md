@@ -336,16 +336,16 @@ func main() {
 				WithRequestPoll(tu.PollTypeRegular()), // <- `with` method
 		),
 		tu.KeyboardRow( // Row 2
-			tu.KeyboardButton("Contact").WithRequestContact(),   // Column 1, <- `with` method
-			tu.KeyboardButton("Location").WithRequestLocation(), // Column 2, <- `with` method
+			tu.KeyboardButton("Contact").WithRequestContact(),   // Column 1, <- `with` method 
+			tu.KeyboardButton("Location").WithRequestLocation(), // Column 2, <- `with` method 
 		),
-	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something") // <- multiple `with` methods
+	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something") // <- multiple `with` methods 
 
 	// Creating message
 	msg := tu.Message(
 		tu.ID(123),
 		"Hello World",
-	).WithReplyMarkup(keyboard).WithProtectContent() // multiple <- `with` method
+	).WithReplyMarkup(keyboard).WithProtectContent() // <- multiple `with` method 
 
 	bot.SendMessage(msg)
 }
