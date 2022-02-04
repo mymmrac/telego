@@ -20,7 +20,7 @@ cover: test ## Run tests & show coverage
 	go tool cover -func cover.out
 
 race: ## Run tests with race flag
-	go test -race ./...
+	go test -race -count=1 ./...
 
 build-examples: ## Build examples into bin folder
 	go build -o bin/ ./examples/*

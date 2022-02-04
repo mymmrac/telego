@@ -28,6 +28,8 @@ var (
 
 	int1 = 123
 
+	int641 int64 = 1234
+
 	prices = []telego.LabeledPrice{
 		{
 			Label:  text1,
