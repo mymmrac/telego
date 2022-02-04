@@ -39,7 +39,7 @@ telegram.
     - [📩 Getting updates](#-getting-updates)
     - [🪁 Using Telegram methods](#-using-telegram-methods)
     - [🧼 Utility methods](#-utility-methods)
-    - [🦾 Helper `With...` methods](#helper-with-methods)
+    - [🦾 Helper `With...` methods](#-helper-with-methods)
 - [🎨 Contribution](#-contribution)
 - [🔐 License](#-license)
 
