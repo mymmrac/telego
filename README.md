@@ -74,6 +74,7 @@ More examples can be seen here:
 - [Updates (webhook)](examples/updates_webhook/main.go)
 - [Utility methods](examples/utility_methods/main.go)
 - [Bot handlers](examples/handler/main.go)
+- [Bot more handlers (custom)](examples/handler_custom/main.go)
 - [Echo bot](examples/echo_bot/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
@@ -373,6 +374,15 @@ One update will only match to the first handler whose predicates are satisfied, 
 handler registration (it's useful to first specify most specific predicates and then more general). 
 
 Also, all handlers (but not their predicates) are processed in parallel.
+
+I suggest including it with alias to get cleaner code:
+
+```go
+import th "github.com/mymmrac/telego/telegohandler"
+```
+
+Here is example of using handlers with long pulling updates. You can see full list of available predicates 
+in [`telegohandler/pradicates`](telegohandler/pradicates.go), or define your own.
 
 ```go
 package main
