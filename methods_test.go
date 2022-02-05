@@ -2571,25 +2571,29 @@ func TestUploadStickerFileParams_fileParameters(t *testing.T) {
 
 func TestCreateNewStickerSetParams_fileParameters(t *testing.T) {
 	p := &CreateNewStickerSetParams{
-		PngSticker: &testInputFile,
-		TgsSticker: &testInputFile,
+		PngSticker:  &testInputFile,
+		TgsSticker:  &testInputFile,
+		WebmSticker: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"png_sticker": testNamedReade{},
-		"tgs_sticker": testNamedReade{},
+		"png_sticker":  testNamedReade{},
+		"tgs_sticker":  testNamedReade{},
+		"webm_sticker": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestAddStickerToSetParams_fileParameters(t *testing.T) {
 	p := &AddStickerToSetParams{
-		PngSticker: &testInputFile,
-		TgsSticker: &testInputFile,
+		PngSticker:  &testInputFile,
+		TgsSticker:  &testInputFile,
+		WebmSticker: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"png_sticker": testNamedReade{},
-		"tgs_sticker": testNamedReade{},
+		"png_sticker":  testNamedReade{},
+		"tgs_sticker":  testNamedReade{},
+		"webm_sticker": testNamedReade{},
 	}, p.fileParameters())
 }
 

@@ -16,8 +16,6 @@ import (
 	"github.com/valyala/fasthttp/fasthttputil"
 )
 
-// TODO: Improve test coverage
-
 func Test_Response_String_and_Error_Error(t *testing.T) {
 	tests := []struct {
 		name string
@@ -60,7 +58,7 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 				},
 				Result: nil,
 			},
-			text: "Ok: false, Err: [400 \"bad request\" migrate to chat id: 1, retry after: 2]",
+			text: "Ok: false, Err: [400 \"bad request\", migrate to chat ID: 1, retry after: 2]",
 		},
 	}
 
@@ -72,24 +70,32 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 	}
 }
 
-type Server struct {
+type server struct {
 	t *testing.T
 }
 
-func (s *Server) Handle(ctx *fasthttp.RequestCtx) {
+func (s *server) Handle(ctx *fasthttp.RequestCtx) {
 	assert.True(s.t, ctx.IsPost())
 	assert.Equal(s.t, ContentTypeJSON, string(ctx.Request.Header.ContentType()))
 
-	_, err := ctx.WriteString("{\"ok\": true}")
-	assert.NoError(s.t, err)
-
-	ctx.SetStatusCode(http.StatusOK)
+	switch string(ctx.Path()) {
+	case "/500":
+		ctx.SetStatusCode(http.StatusInternalServerError)
+	case "/json_err":
+		ctx.SetStatusCode(http.StatusOK)
+		_, err := ctx.WriteString("abc")
+		assert.NoError(s.t, err)
+	default:
+		ctx.SetStatusCode(http.StatusOK)
+		_, err := ctx.WriteString("{\"ok\": true}")
+		assert.NoError(s.t, err)
+	}
 }
 
 func TestFasthttpAPICaller_Call(t *testing.T) {
 	ln := fasthttputil.NewInmemoryListener()
 
-	api := &Server{
+	api := &server{
 		t: t,
 	}
 	srv := fasthttp.Server{
@@ -121,9 +127,29 @@ func TestFasthttpAPICaller_Call(t *testing.T) {
 		Buffer:      bytes.NewBufferString("test"),
 	}
 
-	resp, err := caller.Call("http://localhost", data)
-	require.NoError(t, err)
-	assert.True(t, resp.Ok)
+	t.Run("success", func(t *testing.T) {
+		resp, err := caller.Call("http://localhost", data)
+		require.NoError(t, err)
+		assert.True(t, resp.Ok)
+	})
+
+	t.Run("error_fasthttp_do_request", func(t *testing.T) {
+		resp, err := caller.Call("abc", data)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error_500", func(t *testing.T) {
+		resp, err := caller.Call("http://localhost/500", data)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error_json", func(t *testing.T) {
+		resp, err := caller.Call("http://localhost/json_err", data)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
 }
 
 func TestDefaultConstructor_JSONRequest(t *testing.T) {
@@ -202,6 +228,7 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 			},
 			filesParameters: map[string]NamedReader{
 				"testFile": newTestFile("Hello World", "testF"),
+				"nilFile":  nil,
 			},
 			contentType: "multipart/form-data; boundary=",
 			data: []string{
@@ -227,6 +254,45 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 			for _, expectedData := range tt.data {
 				assert.Contains(t, data.Buffer.String(), expectedData)
 			}
+		})
+	}
+}
+
+func Test_isNil(t *testing.T) {
+	var nr NamedReader
+	var ns interface{}
+	var s []int
+	ns = s
+
+	tests := []struct {
+		name  string
+		value interface{}
+		isNil bool
+	}{
+		{
+			name:  "nil",
+			value: nil,
+			isNil: true,
+		},
+		{
+			name:  "not_nil",
+			value: true,
+			isNil: false,
+		},
+		{
+			name:  "nil_interface",
+			value: nr,
+			isNil: true,
+		},
+		{
+			name:  "nil_value_interface",
+			value: ns,
+			isNil: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.isNil, isNil(tt.value))
 		})
 	}
 }

@@ -1,7 +1,5 @@
 package telegohandler
 
-// TODO: Properly tests package
-
 import (
 	"sync"
 
