@@ -34,13 +34,13 @@ telegram.
 <details>
 <summary>Click to show • hide</summary>
 
-- [⚡️ Getting Started](#-getting-started)
+- [⚡️ Getting Started](#%EF%B8%8F-getting-started)
     - [🧩 Basic setup](#-basic-setup)
     - [📩 Getting updates](#-getting-updates)
     - [🪁 Using Telegram methods](#-using-telegram-methods)
     - [🧼 Utility methods](#-utility-methods)
     - [🦾 Helper `With...` methods](#-helper-with-methods)
-    - [⛅️ Bot handlers](#-bot-handlers)
+    - [⛅️ Bot handlers](#%EF%B8%8F-bot-handlers)
 - [🎨 Contribution](#-contribution)
 - [🔐 License](#-license)
 
@@ -86,6 +86,8 @@ More examples can be seen here:
 
 ### 🧩 Basic setup
 
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
+
 For start, you need to create instance of your bot and
 specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
 
@@ -123,6 +125,8 @@ func main() {
 ```
 
 ### 📩 Getting updates
+
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
 
 In order to receive updates you can use two methods:
 
@@ -222,6 +226,8 @@ func main() {
 
 ### 🪁 Using Telegram methods
 
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
+
 All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be
 used by the library. They have same names and same parameters, parameters represented by struct with
 name: `<methodName>` + `Params`. If method don't have required parameters `nil` value can be used as a parameter.
@@ -277,6 +283,8 @@ func main() {
 ```
 
 ### 🧼 Utility methods
+
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
 
 In Telego even though you have all [`types`](types.go) and [`methods`](methods.go) available, it's often not so
 convenient to use them directly. To solve this issues [`telegoutil`](telegoutil) package was created. It contains
@@ -354,10 +362,15 @@ one to another in order to update multiple values.
 
 ### ⛅️ Bot handlers
 
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
+
 Processing updates just in for loop is not the most pleasing thing to do, so Telego provides `net/http` like handlers,
-but instead of the path, you provide predicates. One update will only match to the first handler whose predicates are
-satisfied, predicates checked in order of handler registration (it's useful to first specify most specific predicates
-and then more general). Also, all handlers (but not their predicates) are processed in parallel.
+but instead of the path, you provide predicates. 
+
+One update will only match to the first handler whose predicates are satisfied, predicates checked in order of 
+handler registration (it's useful to first specify most specific predicates and then more general). 
+
+Also, all handlers (but not their predicates) are processed in parallel.
 
 ```go
 package main
