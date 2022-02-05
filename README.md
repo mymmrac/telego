@@ -318,6 +318,8 @@ Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](
 
 ### 🦾 Helper `With...` methods
 
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
+
 Creating method parameters is sometimes bulky and not convenient, so you can use `with` methods in combination with
 `utility` methods.
 
