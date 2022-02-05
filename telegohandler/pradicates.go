@@ -26,8 +26,8 @@ func Not(predicate Predicate) Predicate {
 	}
 }
 
-// HasMassage is true if message isn't nil
-func HasMassage() Predicate {
+// AnyMassage is true if message isn't nil
+func AnyMassage() Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil
 	}
@@ -48,22 +48,22 @@ func TextEqualFold(text string) Predicate {
 	}
 }
 
-// ContainsText is true if message isn't nil, and it contains specified text
-func ContainsText(text string) Predicate {
+// TextContains is true if message isn't nil, and it contains specified text
+func TextContains(text string) Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && strings.Contains(update.Message.Text, text)
 	}
 }
 
-// HasPrefix is true if message isn't nil, and it has specified prefix
-func HasPrefix(prefix string) Predicate {
+// TextPrefix is true if message isn't nil, and it has specified prefix
+func TextPrefix(prefix string) Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && strings.HasPrefix(update.Message.Text, prefix)
 	}
 }
 
-// HasSuffix is true if message isn't nil, and it has specified suffix
-func HasSuffix(suffix string) Predicate {
+// TextSuffix is true if message isn't nil, and it has specified suffix
+func TextSuffix(suffix string) Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && strings.HasSuffix(update.Message.Text, suffix)
 	}
@@ -82,8 +82,8 @@ var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
 // CommandMatchGroupsLen represents length of match groups of CommandRegexp
 const CommandMatchGroupsLen = 3
 
-// HasCommand is true if message isn't nil, and it matches to command regexp
-func HasCommand() Predicate {
+// AnyCommand is true if message isn't nil, and it matches to command regexp
+func AnyCommand() Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && CommandRegexp.MatchString(update.Message.Text)
 	}
@@ -105,8 +105,8 @@ func CommandEqual(command string) Predicate {
 	}
 }
 
-// CommandEqualWithArgc is true if message isn't nil, and it contains specified command with number of args
-func CommandEqualWithArgc(command string, argc int) Predicate {
+// CommandEqualArgc is true if message isn't nil, and it contains specified command with number of args
+func CommandEqualArgc(command string, argc int) Predicate {
 	return func(update telego.Update) bool {
 		if update.Message == nil {
 			return false
@@ -122,8 +122,8 @@ func CommandEqualWithArgc(command string, argc int) Predicate {
 	}
 }
 
-// CommandEqualWithArgv is true if message isn't nil, and it contains specified command and args
-func CommandEqualWithArgv(command string, argv ...string) Predicate {
+// CommandEqualArgv is true if message isn't nil, and it contains specified command and args
+func CommandEqualArgv(command string, argv ...string) Predicate {
 	return func(update telego.Update) bool {
 		if update.Message == nil {
 			return false

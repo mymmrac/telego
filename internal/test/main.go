@@ -347,12 +347,12 @@ func main() {
 			msg := update.Message
 			matches := th.CommandRegexp.FindStringSubmatch(msg.Text)
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("%#v", matches)))
-		}, th.HasCommand())
+		}, th.AnyCommand())
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("Whaaat? %s", msg.Text)))
-		}, th.HasMassage(), th.Not(th.HasCommand()))
+		}, th.AnyMassage(), th.Not(th.AnyCommand()))
 
 		bh.Start()
 		defer bh.Stop()
@@ -365,12 +365,12 @@ func main() {
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Running test"))
-		}, th.CommandEqualWithArgv("run", "test"))
+		}, th.CommandEqualArgv("run", "test"))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Running update"))
-		}, th.CommandEqualWithArgv("run", "update"))
+		}, th.CommandEqualArgv("run", "update"))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
@@ -378,8 +378,8 @@ func main() {
 			m.ParseMode = telego.ModeMarkdownV2
 			_, _ = bot.SendMessage(m)
 		}, th.Union(
-			th.CommandEqualWithArgc("run", 0),
-			th.CommandEqualWithArgv("help", "run"),
+			th.CommandEqualArgc("run", 0),
+			th.CommandEqualArgv("help", "run"),
 		))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
@@ -397,7 +397,7 @@ func main() {
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Unknown command, use: /run"))
-		}, th.HasCommand())
+		}, th.AnyCommand())
 
 		bh.Start()
 		defer bh.Stop()
