@@ -40,6 +40,7 @@ telegram.
     - [🪁 Using Telegram methods](#-using-telegram-methods)
     - [🧼 Utility methods](#-utility-methods)
     - [🦾 Helper `With...` methods](#-helper-with-methods)
+    - [⛅️ Bot handlers](#-bot-handlers)
 - [🎨 Contribution](#-contribution)
 - [🔐 License](#-license)
 
@@ -63,28 +64,25 @@ Make sure you get the latest version to have all new features & fixes.
 
 More examples can be seen here:
 
-[//]: # (TODO: Update this list)
-
-[//]: # (TODO: Update & verify all examples)
-
 <details>
 <summary>Click to show • hide</summary>
 
+- [Basic](examples/basic/main.go)
 - [Configuration](examples/configuration/main.go)
+- [Methods](examples/methods/main.go)
+- [Updates (long pulling)](examples/updates_long_pulling/main.go)
+- [Updates (webhook)](examples/updates_webhook/main.go)
+- [Utility methods](examples/utility_methods/main.go)
+- [Bot handlers](examples/handler/main.go)
+- [Echo bot](examples/echo_bot/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
-- [Echo bot](examples/echo_bot/main.go)
 - [Inline query bot](examples/inline_query_bot/main.go)
-- [Utility methods](examples/utility_methods/main.go)
 
 </details>
 
 > Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
-
-[//]: # (TODO: Remove this in stable version)
-
-> Note: While library in unstable version (v0.x.x) some parts of examples may not work.
 
 ### 🧩 Basic setup
 
@@ -353,6 +351,69 @@ func main() {
 
 Those methods allow you to modify values without directly accessing them, also as you saw `with` methods can be staked
 one to another in order to update multiple values.
+
+### ⛅️ Bot handlers
+
+Processing updates just in for loop is not the most pleasing thing to do, so Telego provides `net/http` like handlers,
+but instead of the path, you provide predicates. One update will only match to the first handler whose predicates are
+satisfied, predicates checked in order of handler registration (it's useful to first specify most specific predicates
+and then more general). Also, all handlers (but not their predicates) are processed in parallel.
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/mymmrac/telego"
+	th "github.com/mymmrac/telego/telegohandler"
+	tu "github.com/mymmrac/telego/telegoutil"
+)
+
+func main() {
+	botToken := os.Getenv("TOKEN")
+
+	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// Get updates channel
+	updates, _ := bot.UpdatesViaLongPulling(nil)
+	defer bot.StopLongPulling()
+
+	// Create bot handler and specify from where to get updates
+	bh := th.NewBotHandler(bot, updates)
+
+	// Register new handler with match on command `/start`
+	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		// Send message
+		_, _ = bot.SendMessage(tu.Message(
+			tu.ID(update.Message.Chat.ID),
+			fmt.Sprintf("Hello %s!", update.Message.From.FirstName),
+		))
+	}, th.CommandEqual("start"))
+
+	// Register new handler with match on any command
+	// Handlers will match only once and in order of registration, so this handler will be called on any command except
+	// `/start` command
+	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		// Send message
+		_, _ = bot.SendMessage(tu.Message(
+			tu.ID(update.Message.Chat.ID),
+			"Unknown command, use /start",
+		))
+	}, th.AnyCommand())
+
+	// Start handling updates
+	bh.Start()
+
+	// Stop handling updates
+	defer bh.Stop()
+}
+```
 
 ## 🎨 Contribution
 
