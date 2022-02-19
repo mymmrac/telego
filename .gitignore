@@ -1,5 +1,6 @@
 # IDEA folder
 .idea
+.DS_Store
 
 # VS Code folder
 .vscode
