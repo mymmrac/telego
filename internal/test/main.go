@@ -17,7 +17,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 18
+const testCase = 19
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -399,6 +399,23 @@ func main() {
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Unknown command, use: /run"))
 		}, th.AnyCommand())
 
+		bh.Start()
+		defer bh.Stop()
+	case 19:
+		updates, _ := bot.UpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh := th.NewBotHandler(bot, updates)
+
+		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+			_, _ = bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Hmm?"))
+		}, th.TextEqual("Hmm"))
+
+		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+			_, _ = bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Hello"))
+		})
+
+		// TODO: Add example for graceful shutdown
 		bh.Start()
 		defer bh.Stop()
 	}
