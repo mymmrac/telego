@@ -29,6 +29,10 @@ telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
+[//]: # (TODO: Use GFM shortcuts for emojis)
+
+[//]: # (TODO: Rename files with .yml to .yaml)
+
 ### 📋 Table Of Content
 
 <details>
@@ -368,10 +372,10 @@ one to another in order to update multiple values.
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
 Processing updates just in for loop is not the most pleasing thing to do, so Telego provides `net/http` like handlers,
-but instead of the path, you provide predicates. 
+but instead of the path, you provide predicates.
 
-One update will only match to the first handler whose predicates are satisfied, predicates checked in order of 
-handler registration (it's useful to first specify most specific predicates and then more general). 
+One update will only match to the first handler whose predicates are satisfied, predicates checked in order of handler
+registration (it's useful to first specify most specific predicates and then more general).
 
 Also, all handlers (but not their predicates) are processed in parallel.
 
@@ -381,7 +385,7 @@ I suggest including it with alias to get cleaner code:
 import th "github.com/mymmrac/telego/telegohandler"
 ```
 
-Here is example of using handlers with long pulling updates. You can see full list of available predicates 
+Here is example of using handlers with long pulling updates. You can see full list of available predicates
 in [`telegohandler/pradicates`](telegohandler/pradicates.go), or define your own.
 
 ```go
