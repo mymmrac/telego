@@ -29,9 +29,11 @@ telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
-[//]: # (TODO: Use GFM shortcuts for emojis)
+[//]: # (TODO: Use GFM shortcuts for emojis in README, CONTRIBUTING, issue and PR templates, labels)
 
 [//]: # (TODO: Rename files with .yml to .yaml)
+
+[//]: # (TODO: Check CI schedule jobs [cron])
 
 ### 📋 Table Of Content
 

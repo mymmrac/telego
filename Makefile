@@ -10,7 +10,7 @@ lint: ## Run golangci-lint
 	golangci-lint run
 
 lint-install: ## Install golangci-lint
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0 # TODO: Update linter version
 
 test: ## Run tests
 	go test -coverprofile cover.out \

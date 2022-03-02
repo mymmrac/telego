@@ -1,14 +1,12 @@
-# IDEA folder
+# IDE folders
 .idea
 .DS_Store
-
-# VS Code folder
 .vscode
 
-# Generated fiels
+# Generated files
 *.generated
 
-# Output fiels
+# Output files
 *.out
 
 # Binaries
