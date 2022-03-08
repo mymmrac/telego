@@ -29,8 +29,6 @@ telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
-[//]: # (TODO: Check CI schedule jobs [cron])
-
 ### :clipboard: Table Of Content
 
 <details>
