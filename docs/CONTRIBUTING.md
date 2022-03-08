@@ -1,15 +1,15 @@
-# ✨ Contributing to Telego
+# :sparkles: Contributing to Telego
 
-Hello stranger 👋
+Hello stranger :wave:
 
 > Thanks for taking the time to contribute to this project and improve it.
-> I really appreciate this. 🙂
+> I really appreciate this. :slightly_smiling_face:
 
 The following is a set of guidelines for contributing to Telego. These are mostly guidelines, not rules, but still, it
 will be great if you followed them. If you feel that something should be changed in this document (or in any other place
 of the project) fill free to propose those changes in issue or pull request.
 
-## 🤨 What should I know before I get started?
+## :raised_eyebrow: What should I know before I get started?
 
 ### Main idea of Telego
 
@@ -26,11 +26,15 @@ Project divided into packages & folders with their own purpose and new contribut
 - `telegoapi` - core methods for communication with Telegram
 - `telegoutil` - utility methods for quality of life improvements (other packages should not depend on this one)
 - `telegohandler` - methods for handling updates in a way similar to `net/http`
+
 ---
+
 - `internal/generator` - a mechanism that is responsible for the generation of code from Telegram docs
 - `internal/test` - tests of different parts of the library (should not be considered as proper code, used only for
   basic proof work)
+
 ---
+
 - `examples` - list of usage examples
 - `docs` - documentation and other useful assets
 
@@ -42,7 +46,7 @@ with expected changed behaviour.
 
 This is main reason why this project doesn't have `dev` branch.
 
-## 🧐 How can I contribute?
+## :monocle_face: How can I contribute?
 
 ### Reporting bugs
 
@@ -88,7 +92,7 @@ How to run tests & linter locally:
 
 To see full usage of [Makefile](../Makefile) use: `make help` or just `make`.
 
-## 🎨 Style guidelines
+## :art: Style guidelines
 
 ### Commit messages
 

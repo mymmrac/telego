@@ -29,30 +29,28 @@ telegram.
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
 
-[//]: # (TODO: Use GFM shortcuts for emojis in README, CONTRIBUTING, issue and PR templates, labels)
-
 [//]: # (TODO: Rename files with .yml to .yaml)
 
 [//]: # (TODO: Check CI schedule jobs [cron])
 
-### 📋 Table Of Content
+### :clipboard: Table Of Content
 
 <details>
 <summary>Click to show • hide</summary>
 
-- [⚡️ Getting Started](#%EF%B8%8F-getting-started)
-    - [🧩 Basic setup](#-basic-setup)
-    - [📩 Getting updates](#-getting-updates)
-    - [🪁 Using Telegram methods](#-using-telegram-methods)
-    - [🧼 Utility methods](#-utility-methods)
-    - [🦾 Helper `With...` methods](#-helper-with-methods)
-    - [⛅️ Bot handlers](#%EF%B8%8F-bot-handlers)
-- [🎨 Contribution](#-contribution)
-- [🔐 License](#-license)
+- [:zap: Getting Started](#zap-getting-started)
+    - [:jigsaw: Basic setup](#jigsaw-basic-setup)
+    - [:envelope_with_arrow: Getting updates](#envelope_with_arrow-getting-updates)
+    - [:kite: Using Telegram methods](#kite-using-telegram-methods)
+    - [:soap: Utility methods](#soap-utility-methods)
+    - [:mechanical_arm: Helper `With...` methods](#mechanical_arm-helper-with-methods)
+    - [:sun_behind_large_cloud: Bot handlers](#sun_behind_large_cloud-bot-handlers)
+- [:art: Contribution](#art-contribution)
+- [:closed_lock_with_key: License](#closed_lock_with_key-license)
 
 </details>
 
-## ⚡️ Getting Started
+## :zap: Getting Started
 
 [//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
 
@@ -91,7 +89,7 @@ More examples can be seen here:
 
 > Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
 
-### 🧩 Basic setup
+### :jigsaw: Basic setup
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
@@ -131,7 +129,7 @@ func main() {
 }
 ```
 
-### 📩 Getting updates
+### :envelope_with_arrow: Getting updates
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
@@ -231,7 +229,7 @@ func main() {
 
 > Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
 
-### 🪁 Using Telegram methods
+### :kite: Using Telegram methods
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
@@ -289,7 +287,7 @@ func main() {
 }
 ```
 
-### 🧼 Utility methods
+### :soap: Utility methods
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
@@ -323,7 +321,7 @@ Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](
 > Note: If you think that something can be added to [`telegoutil`](telegoutil) package
 > fill free to create an issue or pull request with desired changes.
 
-### 🦾 Helper `With...` methods
+### :mechanical_arm: Helper `With...` methods
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
@@ -369,7 +367,7 @@ func main() {
 Those methods allow you to modify values without directly accessing them, also as you saw `with` methods can be staked
 one to another in order to update multiple values.
 
-### ⛅️ Bot handlers
+### :sun_behind_large_cloud: Bot handlers
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
@@ -446,11 +444,11 @@ func main() {
 }
 ```
 
-## 🎨 Contribution
+## :art: Contribution
 
 Contribution guidelines listed [here](docs/CONTRIBUTING.md).
 
-## 🔐 License
+## :closed_lock_with_key: License
 
 Telego is distributed under [MIT licence](LICENSE).
 

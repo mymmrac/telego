@@ -1,13 +1,13 @@
-# 💬 Description
+# :speech_balloon: Description
 
-> ⚠️ Please include a summary of the change, if it was related to the issue specify it and also, include relevant
+> :warning: Please include a summary of the change, if it was related to the issue specify it and also, include relevant
 > motivation and context.
 
 ...
 
-## 🧐 Type of change
+## :monocle_face: Type of change
 
-> ⚠️ Please select options that are relevant, and delete others.
+> :warning: Please select options that are relevant, and delete others.
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -15,9 +15,9 @@
 - [ ] Documentation update (changes in comments, .md files or other docs)
 - [ ] Test update (changes in existing test cases)
 
-# 📋 Checklist
+# :clipboard: Checklist
 
-> ⚠️ Please make sure to check all tasks.
+> :warning: Please make sure to check all tasks.
 
 - [ ] My code follows the [style guidelines](../docs/CONTRIBUTING.md#-style-guidelines) of this project
 - [ ] I have performed a self-review of my own code

@@ -1,15 +1,15 @@
-name: "Bug Report"
-title: "👾 "
+name: "👾 Bug Report"
+title: "👾"
 description: "Report a bug and help improve this project"
 labels:
-  - bug
+  - ":space_invader: Bug"
 assignees:
   - mymmrac
 body:
   - type: markdown
     attributes:
       value: |
-        # Hello stranger 👋
+        # Hello stranger :wave:
         Please try to describe your issue as well as you can, and it will be fixed faster.
   - type: input
     attributes:
@@ -35,8 +35,8 @@ body:
       label: "🧐 Code example"
       description: "What code was used to reproduce the issue?"
       placeholder: "Cool code that unfortunately doesn't work properly ..."
-      render: go
+      render: Go
   - type: markdown
     attributes:
       value: |
-        ## Thank you for contributing to the project 🙂
+        ## Thank you for contributing to the project :slightly_smiling_face:

@@ -1,15 +1,15 @@
-name: "Feature Request"
-title: "⭐️ "
+name: "⭐️ Feature Request"
+title: "⭐️"
 description: "Request new feature and help improve this project"
 labels:
-  - enhancement
+  - ":fire: Enhancement"
 assignees:
   - mymmrac
 body:
   - type: markdown
     attributes:
       value: |
-        # Hello stranger 👋
+        # Hello stranger :wave:
         Please try to describe your new feature as well as you can, and it will be added faster.
   - type: textarea
     attributes:
@@ -28,8 +28,8 @@ body:
       label: "🧐 Code example"
       description: "You can provide code (or pseudocode) example"
       placeholder: "Cool code that will work ..."
-      render: go
+      render: Go
   - type: markdown
     attributes:
       value: |
-        ## Thank you for contributing to the project 🙂
+        ## Thank you for contributing to the project :slightly_smiling_face:

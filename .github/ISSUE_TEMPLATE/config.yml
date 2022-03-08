@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Telegram Bot API
+  - name: 📄 Telegram Bot API
     url: https://core.telegram.org/bots/api
     about: "Telegram documentation of Bot API"
-  - name: Telegram Bot Fundamentals
+  - name: 🧩 Telegram Bot Fundamentals
     url: https://core.telegram.org/bots
     about: "Bots: An introduction for developers"
