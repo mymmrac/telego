@@ -129,7 +129,10 @@ linters-settings:
     lines: 120
     statements: 40
   gci: # Gci control golang package import order and make it always deterministic.
-    local-prefixes: github.com/mymmrac/telego
+    sections:
+      - standard
+      - default
+      - prefix(github.com/mymmrac/telego)
   exhaustive: # check exhaustiveness of enum switch statements
     # Presence of "default" case in switch statements satisfies exhaustiveness,
     # even if all enum members are not listed

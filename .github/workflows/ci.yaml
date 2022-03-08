@@ -27,7 +27,7 @@ jobs:
       - name: Golangci Lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.43.0
+          version: latest
 
   test-sonar-cloud:
     name: Tests & SonarCloud
