@@ -7,7 +7,7 @@
 [![Dis](https://img.shields.io/github/discussions/mymmrac/telego?color=58a6ff&label=Discussions&logo=github)](https://github.com/mymmrac/telego/discussions)
 [![Telegram Chat](https://img.shields.io/static/v1?label=Discussion&message=chat&color=29a1d4&logo=telegram)](https://t.me/telegoLibrary)
 
-[![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yml)
+[![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yaml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 [![Go Report](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=flat)](https://goreportcard.com/report/github.com/mymmrac/telego)
 <br>
@@ -28,8 +28,6 @@ telegram.
 [//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
-
-[//]: # (TODO: Rename files with .yml to .yaml)
 
 [//]: # (TODO: Check CI schedule jobs [cron])
 
