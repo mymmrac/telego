@@ -352,7 +352,7 @@ func main() {
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("Whaaat? %s", msg.Text)))
-		}, th.AnyMassage(), th.Not(th.AnyCommand()))
+		}, th.AnyMessage(), th.Not(th.AnyCommand()))
 
 		bh.Start()
 		defer bh.Stop()

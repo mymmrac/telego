@@ -28,7 +28,7 @@ func main() {
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		fmt.Println("Update with message text `Hmm?` or any other, but without message.")
 	}, th.Union(
-		th.Not(th.AnyMassage()), // Matches to any not message update
+		th.Not(th.AnyMessage()), // Matches to any not message update
 		th.TextEqual("Hmm?"),    // Matches to message update with text `Hmm?`
 	))
 
@@ -36,7 +36,7 @@ func main() {
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		fmt.Println("Update with message which text is longer then 7 chars.")
 	},
-		th.AnyMassage(), // Matches to any message update
+		th.AnyMessage(), // Matches to any message update
 		func(update telego.Update) bool { // Matches to message update with text longer then 7
 			return len(update.Message.Text) > 7
 		},
@@ -45,11 +45,7 @@ func main() {
 	// Register handler with commands and specific args
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		fmt.Println("Update with command `start` without args or `help` with any args")
-	}, th.Union(
-		th.CommandEqualArgc("start", 0),     // Matches only to `/start`
-		th.CommandEqualArgv("how", "works"), // Matches only to `/how works`
-		th.CommandEqual("help"),             // Matches to `/help` with any args
-	))
+	}, th.TextContains("one"), th.TextPrefix("two"), th.TextSuffix("three"))
 
 	// Start handling updates
 	bh.Start()

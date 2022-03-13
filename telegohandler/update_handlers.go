@@ -9,7 +9,7 @@ type MessageHandler func(bot *telego.Bot, message telego.Message)
 func (h *BotHandler) HandleMessage(handler MessageHandler, predicates ...Predicate) {
 	h.Handle(func(bot *telego.Bot, update telego.Update) {
 		handler(bot, *update.Message)
-	}, append([]Predicate{AnyMassage()}, predicates...)...)
+	}, append([]Predicate{AnyMessage()}, predicates...)...)
 }
 
 // TODO: Add more handlers

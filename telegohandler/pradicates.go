@@ -26,8 +26,8 @@ func Not(predicate Predicate) Predicate {
 	}
 }
 
-// AnyMassage is true if message isn't nil
-func AnyMassage() Predicate {
+// AnyMessage is true if message isn't nil
+func AnyMessage() Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil
 	}
