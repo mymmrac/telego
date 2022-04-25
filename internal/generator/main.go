@@ -1,7 +1,5 @@
 package main
 
-// TODO: Add README explaining what happens during generation
-
 import (
 	"bytes"
 	"io"
