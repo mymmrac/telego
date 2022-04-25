@@ -147,8 +147,9 @@ func (d DefaultConstructor) JSONRequest(parameters interface{}) (*RequestData, e
 }
 
 // MultipartRequest is default implementation
-func (d DefaultConstructor) MultipartRequest(
-	parameters map[string]string, filesParameters map[string]NamedReader) (*RequestData, error) {
+func (d DefaultConstructor) MultipartRequest(parameters map[string]string, filesParameters map[string]NamedReader) (
+	*RequestData, error,
+) {
 	data := &RequestData{
 		Buffer: &bytes.Buffer{},
 	}

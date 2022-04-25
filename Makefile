@@ -31,7 +31,7 @@ generate: ## Generate (used for mock generation)
 	go generate ./...
 
 mock-install: ## Install mockgen
-	go install github.com/golang/mock/mockgen@v1.6.0
+	go install github.com/golang/mock/mockgen@latest
 
 generator: ./internal/generator ## Run specific generation
 	go run ./internal/generator $$RUN
