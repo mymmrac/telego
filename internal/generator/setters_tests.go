@@ -147,6 +147,10 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return fmt.Sprintf("&KeyboardButtonPollType{Type: \"%s\"}", setter.fieldName)
 	case "[][]KeyboardButton":
 		return "[][]KeyboardButton{{}}"
+	case "WebAppInfo":
+		return "WebAppInfo{}"
+	case "*WebAppInfo":
+		return "&WebAppInfo{}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

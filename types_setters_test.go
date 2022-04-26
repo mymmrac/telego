@@ -28,13 +28,15 @@ func TestKeyboardButton_Setters(t *testing.T) {
 		WithText("Text").
 		WithRequestContact().
 		WithRequestLocation().
-		WithRequestPoll(&KeyboardButtonPollType{Type: "RequestPoll"})
+		WithRequestPoll(&KeyboardButtonPollType{Type: "RequestPoll"}).
+		WithWebApp(&WebAppInfo{})
 
 	assert.Equal(t, KeyboardButton{
 		Text:            "Text",
 		RequestContact:  true,
 		RequestLocation: true,
 		RequestPoll:     &KeyboardButtonPollType{Type: "RequestPoll"},
+		WebApp:          &WebAppInfo{},
 	}, k)
 }
 
@@ -62,8 +64,9 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 	i := (InlineKeyboardButton{}).
 		WithText("Text").
 		WithURL("URL").
-		WithLoginURL(&LoginURL{URL: "LoginURL"}).
 		WithCallbackData("CallbackData").
+		WithWebApp(&WebAppInfo{}).
+		WithLoginURL(&LoginURL{URL: "LoginURL"}).
 		WithSwitchInlineQuery("SwitchInlineQuery").
 		WithSwitchInlineQueryCurrentChat("SwitchInlineQueryCurrentChat").
 		WithCallbackGame(&CallbackGame{}).
@@ -72,8 +75,9 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 	assert.Equal(t, InlineKeyboardButton{
 		Text:                         "Text",
 		URL:                          "URL",
-		LoginURL:                     &LoginURL{URL: "LoginURL"},
 		CallbackData:                 "CallbackData",
+		WebApp:                       &WebAppInfo{},
+		LoginURL:                     &LoginURL{URL: "LoginURL"},
 		SwitchInlineQuery:            "SwitchInlineQuery",
 		SwitchInlineQueryCurrentChat: "SwitchInlineQueryCurrentChat",
 		CallbackGame:                 &CallbackGame{},
@@ -92,6 +96,17 @@ func TestForceReply_Setters(t *testing.T) {
 		InputFieldPlaceholder: "InputFieldPlaceholder",
 		Selective:             true,
 	}, f)
+}
+
+func TestMenuButtonWebApp_Setters(t *testing.T) {
+	m := (&MenuButtonWebApp{}).
+		WithText("Text").
+		WithWebApp(WebAppInfo{})
+
+	assert.Equal(t, &MenuButtonWebApp{
+		Text:   "Text",
+		WebApp: WebAppInfo{},
+	}, m)
 }
 
 func TestInputMediaPhoto_Setters(t *testing.T) {

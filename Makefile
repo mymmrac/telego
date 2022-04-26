@@ -37,8 +37,8 @@ generator: ./internal/generator ## Run specific generation
 	go run ./internal/generator $$RUN
 
 generator-all: ./internal/generator ## Run all generation
-	go run ./internal/generator types types-tests types-setters methods methods-tests methods-setters \
- 		types-setters-tests
+	go run ./internal/generator types types-tests types-setters types-setters-tests methods methods-tests \
+		methods-setters methods-setters-tests
 
 generator-clean-up: ## Remove generated files
 	rm *.generated

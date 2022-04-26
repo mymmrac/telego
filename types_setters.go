@@ -54,6 +54,12 @@ func (k KeyboardButton) WithRequestPoll(requestPoll *KeyboardButtonPollType) Key
 	return k
 }
 
+// WithWebApp adds web app parameter
+func (k KeyboardButton) WithWebApp(webApp *WebAppInfo) KeyboardButton {
+	k.WebApp = webApp
+	return k
+}
+
 // WithRemoveKeyboard adds remove keyboard parameter
 func (r *ReplyKeyboardRemove) WithRemoveKeyboard() *ReplyKeyboardRemove {
 	r.RemoveKeyboard = true
@@ -84,15 +90,21 @@ func (i InlineKeyboardButton) WithURL(url string) InlineKeyboardButton {
 	return i
 }
 
-// WithLoginURL adds login URL parameter
-func (i InlineKeyboardButton) WithLoginURL(loginURL *LoginURL) InlineKeyboardButton {
-	i.LoginURL = loginURL
-	return i
-}
-
 // WithCallbackData adds callback data parameter
 func (i InlineKeyboardButton) WithCallbackData(callbackData string) InlineKeyboardButton {
 	i.CallbackData = callbackData
+	return i
+}
+
+// WithWebApp adds web app parameter
+func (i InlineKeyboardButton) WithWebApp(webApp *WebAppInfo) InlineKeyboardButton {
+	i.WebApp = webApp
+	return i
+}
+
+// WithLoginURL adds login URL parameter
+func (i InlineKeyboardButton) WithLoginURL(loginURL *LoginURL) InlineKeyboardButton {
+	i.LoginURL = loginURL
 	return i
 }
 
@@ -137,6 +149,18 @@ func (f *ForceReply) WithInputFieldPlaceholder(inputFieldPlaceholder string) *Fo
 func (f *ForceReply) WithSelective() *ForceReply {
 	f.Selective = true
 	return f
+}
+
+// WithText adds text parameter
+func (m *MenuButtonWebApp) WithText(text string) *MenuButtonWebApp {
+	m.Text = text
+	return m
+}
+
+// WithWebApp adds web app parameter
+func (m *MenuButtonWebApp) WithWebApp(webApp WebAppInfo) *MenuButtonWebApp {
+	m.WebApp = webApp
+	return m
 }
 
 // WithMedia adds media parameter
