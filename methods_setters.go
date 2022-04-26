@@ -1269,8 +1269,8 @@ func (p *PromoteChatMemberParams) WithCanDeleteMessages() *PromoteChatMemberPara
 	return p
 }
 
-// WithCanManageVoiceChats adds can manage voice chats parameter
-func (p *PromoteChatMemberParams) WithCanManageVoiceChats() *PromoteChatMemberParams {
+// WithCanManageVideoChats adds can manage video chats parameter
+func (p *PromoteChatMemberParams) WithCanManageVideoChats() *PromoteChatMemberParams {
 	p.CanManageVideoChats = true
 	return p
 }
@@ -1621,6 +1621,31 @@ func (p *GetMyCommandsParams) WithScope(scope BotCommandScope) *GetMyCommandsPar
 // WithLanguageCode adds language code parameter
 func (p *GetMyCommandsParams) WithLanguageCode(languageCode string) *GetMyCommandsParams {
 	p.LanguageCode = languageCode
+	return p
+}
+
+// WithMenuButton adds menu button parameter
+func (p *SetChatMenuButtonParams) WithMenuButton(menuButton MenuButton) *SetChatMenuButtonParams {
+	p.MenuButton = menuButton
+	return p
+}
+
+// WithRights adds rights parameter
+func (p *SetMyDefaultAdministratorRightsParams) WithRights(rights *ChatAdministratorRights,
+) *SetMyDefaultAdministratorRightsParams {
+	p.Rights = rights
+	return p
+}
+
+// WithForChannels adds for channels parameter
+func (p *SetMyDefaultAdministratorRightsParams) WithForChannels() *SetMyDefaultAdministratorRightsParams {
+	p.ForChannels = true
+	return p
+}
+
+// WithForChannels adds for channels parameter
+func (p *GetMyDefaultAdministratorRightsParams) WithForChannels() *GetMyDefaultAdministratorRightsParams {
+	p.ForChannels = true
 	return p
 }
 
@@ -2006,6 +2031,18 @@ func (p *AnswerInlineQueryParams) WithSwitchPmText(switchPmText string) *AnswerI
 // WithSwitchPmParameter adds switch pm parameter parameter
 func (p *AnswerInlineQueryParams) WithSwitchPmParameter(switchPmParameter string) *AnswerInlineQueryParams {
 	p.SwitchPmParameter = switchPmParameter
+	return p
+}
+
+// WithWebAppQueryID adds web app query ID parameter
+func (p *AnswerWebAppQueryParams) WithWebAppQueryID(webAppQueryID string) *AnswerWebAppQueryParams {
+	p.WebAppQueryID = webAppQueryID
+	return p
+}
+
+// WithResult adds result parameter
+func (p *AnswerWebAppQueryParams) WithResult(result InlineQueryResult) *AnswerWebAppQueryParams {
+	p.Result = result
 	return p
 }
 

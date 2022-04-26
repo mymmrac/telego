@@ -613,7 +613,7 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		WithCanPostMessages().
 		WithCanEditMessages().
 		WithCanDeleteMessages().
-		WithCanManageVoiceChats().
+		WithCanManageVideoChats().
 		WithCanRestrictMembers().
 		WithCanPromoteMembers().
 		WithCanChangeInfo().
@@ -938,6 +938,35 @@ func TestGetMyCommandsParams_Setters(t *testing.T) {
 	}, g)
 }
 
+func TestSetChatMenuButtonParams_Setters(t *testing.T) {
+	s := (&SetChatMenuButtonParams{}).
+		WithMenuButton(&MenuButtonCommands{Type: "MenuButton"})
+
+	assert.Equal(t, &SetChatMenuButtonParams{
+		MenuButton: &MenuButtonCommands{Type: "MenuButton"},
+	}, s)
+}
+
+func TestSetMyDefaultAdministratorRightsParams_Setters(t *testing.T) {
+	s := (&SetMyDefaultAdministratorRightsParams{}).
+		WithRights(&ChatAdministratorRights{IsAnonymous: true}).
+		WithForChannels()
+
+	assert.Equal(t, &SetMyDefaultAdministratorRightsParams{
+		Rights:      &ChatAdministratorRights{IsAnonymous: true},
+		ForChannels: true,
+	}, s)
+}
+
+func TestGetMyDefaultAdministratorRightsParams_Setters(t *testing.T) {
+	g := (&GetMyDefaultAdministratorRightsParams{}).
+		WithForChannels()
+
+	assert.Equal(t, &GetMyDefaultAdministratorRightsParams{
+		ForChannels: true,
+	}, g)
+}
+
 func TestEditMessageTextParams_Setters(t *testing.T) {
 	e := (&EditMessageTextParams{}).
 		WithChatID(ChatID{ID: 1}).
@@ -1171,9 +1200,20 @@ func TestAnswerInlineQueryParams_Setters(t *testing.T) {
 	}, a)
 }
 
+func TestAnswerWebAppQueryParams_Setters(t *testing.T) {
+	a := (&AnswerWebAppQueryParams{}).
+		WithWebAppQueryID("WebAppQueryID").
+		WithResult(&InlineQueryResultArticle{Type: "Results"})
+
+	assert.Equal(t, &AnswerWebAppQueryParams{
+		WebAppQueryID: "WebAppQueryID",
+		Result:        &InlineQueryResultArticle{Type: "Results"},
+	}, a)
+}
+
 func TestSendInvoiceParams_Setters(t *testing.T) {
 	s := (&SendInvoiceParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 1}).
 		WithTitle("Title").
 		WithDescription("Description").
 		WithPayload("Payload").
@@ -1202,7 +1242,7 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &SendInvoiceParams{
-		ChatID:                    ChatID{ID: 2},
+		ChatID:                    ChatID{ID: 1},
 		Title:                     "Title",
 		Description:               "Description",
 		Payload:                   "Payload",
