@@ -33,14 +33,14 @@ func AnyMessage() Predicate {
 	}
 }
 
-// TextEqual is true if message isn't nil, and it's equal to specified text
+// TextEqual is true if message isn't nil, and its equal to specified text
 func TextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && update.Message.Text == text
 	}
 }
 
-// TextEqualFold is true if message isn't nil, and it's equal fold (more general form of case-insensitivity) to
+// TextEqualFold is true if message isn't nil, and its equal fold (more general form of case-insensitivity equal) to
 // specified text
 func TextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
@@ -136,5 +136,62 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 
 		return strings.EqualFold(matches[1], command) &&
 			(len(argv) == 0 && matches[2] == "" || matches[2] == strings.Join(argv, " "))
+	}
+}
+
+// AnyCallbackQuery is true if callback query isn't nil
+func AnyCallbackQuery() Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil
+	}
+}
+
+// AnyCallbackQueryWithMessage is true if callback query and its message isn't nil
+func AnyCallbackQueryWithMessage() Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && update.CallbackQuery.Message != nil
+	}
+}
+
+// CallbackDataEqual is true if callback query isn't nil, and its data equal to specified text
+func CallbackDataEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && update.CallbackQuery.Data == text
+	}
+}
+
+// CallbackDataEqualFold is true if callback query isn't nil, and its data equal fold (more general form of
+// case-insensitivity equal) to specified text
+func CallbackDataEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && strings.EqualFold(update.CallbackQuery.Data, text)
+	}
+}
+
+// CallbackDataContains is true if callback query isn't nil, and its data contains specified text
+func CallbackDataContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && strings.Contains(update.CallbackQuery.Data, text)
+	}
+}
+
+// CallbackDataPrefix is true if callback query isn't nil, and its data has specified prefix
+func CallbackDataPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && strings.HasPrefix(update.CallbackQuery.Data, prefix)
+	}
+}
+
+// CallbackDataSuffix is true if callback query isn't nil, and its data has specified suffix
+func CallbackDataSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && strings.HasSuffix(update.CallbackQuery.Data, suffix)
+	}
+}
+
+// CallbackDataMatches is true if callback query isn't nil, and its data matches specified regexp
+func CallbackDataMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return update.CallbackQuery != nil && pattern.MatchString(update.CallbackQuery.Data)
 	}
 }

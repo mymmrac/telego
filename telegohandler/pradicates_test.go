@@ -226,6 +226,102 @@ func TestPredicates(t *testing.T) {
 			update:    telego.Update{Message: &telego.Message{Text: text}},
 			matches:   false,
 		},
+		{
+			name:      "any_callback_query_matches",
+			predicate: AnyCallbackQuery(),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{}},
+			matches:   true,
+		},
+		{
+			name:      "any_callback_query_not_matches",
+			predicate: AnyCallbackQuery(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "any_callback_query_with_message_matches",
+			predicate: AnyCallbackQueryWithMessage(),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Message: &telego.Message{}}},
+			matches:   true,
+		},
+		{
+			name:      "any_callback_query_with_message_not_matches",
+			predicate: AnyCallbackQueryWithMessage(),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{}},
+			matches:   false,
+		},
+		{
+			name:      "callback_data_equal_matches",
+			predicate: CallbackDataEqual(text),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: text}},
+			matches:   true,
+		},
+		{
+			name:      "callback_data_equal_not_matches",
+			predicate: CallbackDataEqual(text),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: textLower}},
+			matches:   false,
+		},
+		{
+			name:      "callback_data_equal_fold_matches",
+			predicate: CallbackDataEqualFold(text),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: textLower}},
+			matches:   true,
+		},
+		{
+			name:      "callback_data_equal_fold_not_matches",
+			predicate: CallbackDataEqualFold(text),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: command1}},
+			matches:   false,
+		},
+		{
+			name:      "callback_data_contains_matches",
+			predicate: CallbackDataContains(textPart),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: text}},
+			matches:   true,
+		},
+		{
+			name:      "callback_data_contains_not_matches",
+			predicate: CallbackDataContains(textPart),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: command1}},
+			matches:   false,
+		},
+		{
+			name:      "callback_data_prefix_matches",
+			predicate: CallbackDataPrefix(textPrefix),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: text}},
+			matches:   true,
+		},
+		{
+			name:      "callback_data_prefix_not_matches",
+			predicate: CallbackDataPrefix(textPrefix),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: command1}},
+			matches:   false,
+		},
+		{
+			name:      "callback_data_suffix_matches",
+			predicate: CallbackDataSuffix(textSuffix),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: text}},
+			matches:   true,
+		},
+		{
+			name:      "callback_data_suffix_not_matches",
+			predicate: CallbackDataSuffix(textSuffix),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: command1}},
+			matches:   false,
+		},
+		{
+			name:      "callback_data_matches_matches",
+			predicate: CallbackDataMatches(regexp.MustCompile(`^\w+ \w+$`)),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: text}},
+			matches:   true,
+		},
+		{
+			name:      "callback_data_matches_not_matches",
+			predicate: CallbackDataMatches(regexp.MustCompile(`^\w+ \w+$`)),
+			update:    telego.Update{CallbackQuery: &telego.CallbackQuery{Data: command1}},
+			matches:   false,
+		},
 	}
 
 	for _, tt := range tests {
