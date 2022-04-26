@@ -11,6 +11,8 @@ import (
 )
 
 func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
+	t.Helper()
+
 	wg.Add(1)
 
 	timeoutSignal := time.After(timeout)
@@ -32,6 +34,8 @@ func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
 }
 
 func testHandlerSetup(t *testing.T, bh *BotHandler) {
+	t.Helper()
+
 	require.Equal(t, 1, len(bh.handlers))
 	require.NotNil(t, bh.handlers[0].Handler)
 	require.NotNil(t, bh.handlers[0].Predicates)
