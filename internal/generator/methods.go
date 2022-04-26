@@ -89,7 +89,7 @@ func generateMethods(docs string) tgMethods {
 	methodGroups := methodRegexp.FindAllStringSubmatch(docs, -1)
 	methods := make(tgMethods, len(methodGroups))
 
-	cs := cases.Title(language.English)
+	cs := cases.Title(language.English, cases.NoLower)
 
 	for i, methodGroup := range methodGroups {
 		method := tgMethod{

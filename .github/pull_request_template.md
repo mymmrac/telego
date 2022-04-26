@@ -19,7 +19,7 @@
 
 > :warning: Please make sure to check all tasks.
 
-- [ ] My code follows the [style guidelines](../docs/CONTRIBUTING.md#-style-guidelines) of this project
+- [ ] My code follows the [style guidelines](../docs/CONTRIBUTING.md#art-style-guidelines) of this project
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation

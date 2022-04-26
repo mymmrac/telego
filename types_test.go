@@ -581,6 +581,9 @@ func TestTypesConstants(t *testing.T) {
 			ScopeTypeChat, ScopeTypeChatAdministrators, ScopeTypeChatMember,
 		},
 		{
+			ButtonTypeCommands, ButtonTypeWebApp, ButtonTypeDefault,
+		},
+		{
 			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,
 		},
 		{
