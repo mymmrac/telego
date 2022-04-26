@@ -62,6 +62,15 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeChatMember{})
 	assert.Equal(t, ScopeTypeChatMember, (&BotCommandScopeChatMember{}).ScopeType())
 
+	assert.Implements(t, (*MenuButton)(nil), &MenuButtonCommands{})
+	assert.Equal(t, ButtonTypeCommands, (&MenuButtonCommands{}).ButtonType())
+
+	assert.Implements(t, (*MenuButton)(nil), &MenuButtonWebApp{})
+	assert.Equal(t, ButtonTypeWebApp, (&MenuButtonWebApp{}).ButtonType())
+
+	assert.Implements(t, (*MenuButton)(nil), &MenuButtonDefault{})
+	assert.Equal(t, ButtonTypeDefault, (&MenuButtonDefault{}).ButtonType())
+
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaPhoto{})
 	assert.Equal(t, MediaTypePhoto, (&InputMediaPhoto{}).MediaType())
 
