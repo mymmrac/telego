@@ -324,6 +324,12 @@ func TestChatID_MarshalJSON(t *testing.T) {
 		isError  bool
 	}{
 		{
+			name:     "empty",
+			chatID:   ChatID{},
+			jsonData: "",
+			isError:  false,
+		},
+		{
 			name: "success_id",
 			chatID: ChatID{
 				ID: 123,
@@ -338,12 +344,6 @@ func TestChatID_MarshalJSON(t *testing.T) {
 			},
 			jsonData: `"test"`,
 			isError:  false,
-		},
-		{
-			name:     "error",
-			chatID:   ChatID{},
-			jsonData: "",
-			isError:  true,
 		},
 	}
 	for _, tt := range tests {

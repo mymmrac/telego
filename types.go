@@ -1705,7 +1705,7 @@ func (c ChatID) MarshalJSON() ([]byte, error) {
 		return json.Marshal(c.Username)
 	}
 
-	return nil, errors.New("chat ID and username are empty")
+	return []byte{}, nil
 }
 
 // BotCommandScopeChat - Represents the scope (https://core.telegram.org/bots/api#botcommandscope) of bot
