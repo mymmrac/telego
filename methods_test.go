@@ -1774,6 +1774,126 @@ func TestBot_GetMyCommands(t *testing.T) {
 	})
 }
 
+func TestBot_SetChatMenuButton(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		err := m.Bot.SetChatMenuButton(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetChatMenuButton(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_GetChatMenuButton(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedMenuButton := &MenuButtonCommands{
+			Type: ButtonTypeCommands,
+		}
+		setResult(t, expectedMenuButton)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		menuButton, err := m.Bot.GetChatMenuButton(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedMenuButton, menuButton)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		menuButton, err := m.Bot.GetChatMenuButton(nil)
+		assert.Error(t, err)
+		assert.Nil(t, menuButton)
+	})
+}
+
+func TestBot_SetMyDefaultAdministratorRights(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		err := m.Bot.SetMyDefaultAdministratorRights(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetMyDefaultAdministratorRights(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_GetMyDefaultAdministratorRights(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedChatAdministratorRights := &ChatAdministratorRights{
+			IsAnonymous: true,
+		}
+		setResult(t, expectedChatAdministratorRights)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedChatAdministratorRights, chatAdministratorRights)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(nil)
+		assert.Error(t, err)
+		assert.Nil(t, chatAdministratorRights)
+	})
+}
+
 func TestBot_EditMessageText(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2209,6 +2329,39 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 
 		err := m.Bot.AnswerInlineQuery(nil)
 		assert.Error(t, err)
+	})
+}
+
+func TestBot_AnswerWebAppQuery(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedSentWebAppMessage := &SentWebAppMessage{
+			InlineMessageID: "InlineMessageID",
+		}
+		setResult(t, expectedSentWebAppMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedSentWebAppMessage, sentWebAppMessage)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(nil)
+		assert.Error(t, err)
+		assert.Nil(t, sentWebAppMessage)
 	})
 }
 

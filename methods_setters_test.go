@@ -627,7 +627,7 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		CanPostMessages:     true,
 		CanEditMessages:     true,
 		CanDeleteMessages:   true,
-		CanManageVoiceChats: true,
+		CanManageVideoChats: true,
 		CanRestrictMembers:  true,
 		CanPromoteMembers:   true,
 		CanChangeInfo:       true,

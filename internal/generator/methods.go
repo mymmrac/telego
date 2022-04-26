@@ -5,6 +5,9 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type tgMethodParameter struct {
@@ -86,10 +89,12 @@ func generateMethods(docs string) tgMethods {
 	methodGroups := methodRegexp.FindAllStringSubmatch(docs, -1)
 	methods := make(tgMethods, len(methodGroups))
 
+	cs := cases.Title(language.English)
+
 	for i, methodGroup := range methodGroups {
 		method := tgMethod{
 			name:        methodGroup[1],
-			nameTitle:   strings.Title(methodGroup[1]),
+			nameTitle:   cs.String(methodGroup[1]),
 			description: replaceHTML(methodGroup[2]),
 			parameters:  generateMethodParameters(methodGroup[3]),
 			returnType:  parseReturnType(methodGroup[2]),
@@ -255,6 +260,10 @@ func parameterSpecialCases(parameter *tgMethodParameter) {
 	}
 
 	if parameter.name == "Scope" && parameter.typ == "*BotCommandScope" {
+		parameter.typ = parameter.typ[1:]
+	}
+
+	if parameter.name == "MenuButton" && parameter.typ == "*MenuButton" {
 		parameter.typ = parameter.typ[1:]
 	}
 

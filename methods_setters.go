@@ -1271,7 +1271,7 @@ func (p *PromoteChatMemberParams) WithCanDeleteMessages() *PromoteChatMemberPara
 
 // WithCanManageVoiceChats adds can manage voice chats parameter
 func (p *PromoteChatMemberParams) WithCanManageVoiceChats() *PromoteChatMemberParams {
-	p.CanManageVoiceChats = true
+	p.CanManageVideoChats = true
 	return p
 }
 

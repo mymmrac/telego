@@ -325,6 +325,65 @@ func TestChatMemberUpdated_UnmarshalJSON(t *testing.T) {
 	})
 }
 
+func Test_menuButtonData_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    MenuButton
+		isError bool
+	}{
+		{
+			name: "success_commands",
+			json: `{"type": "commands"}`,
+			data: &MenuButtonCommands{
+				Type: ButtonTypeCommands,
+			},
+			isError: false,
+		},
+		{
+			name: "success_web_app",
+			json: `{"type": "web_app"}`,
+			data: &MenuButtonWebApp{
+				Type: ButtonTypeWebApp,
+			},
+			isError: false,
+		},
+		{
+			name: "success_default",
+			json: `{"type": "default"}`,
+			data: &MenuButtonDefault{
+				Type: ButtonTypeDefault,
+			},
+			isError: false,
+		},
+		{
+			name:    "error_unknown_type",
+			json:    `{"type": "test type"}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_type",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := &menuButtonData{}
+			err := m.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				assert.Error(t, err)
+				assert.Nil(t, m.Data)
+				return
+			}
+			assert.NoError(t, err)
+			assert.EqualValues(t, tt.data, m.Data)
+		})
+	}
+}
+
 func TestChatID_MarshalJSON(t *testing.T) {
 	tests := []struct {
 		name     string

@@ -1854,6 +1854,40 @@ const (
 	ButtonTypeDefault  = "default"
 )
 
+type menuButtonData struct {
+	Data MenuButton
+}
+
+func (m *menuButtonData) UnmarshalJSON(bytes []byte) error {
+	var buttonType struct {
+		Type string `json:"type"`
+	}
+
+	err := json.Unmarshal(bytes, &buttonType)
+	if err != nil {
+		return err
+	}
+
+	switch buttonType.Type {
+	case ButtonTypeCommands:
+		var mb *MenuButtonCommands
+		err = json.Unmarshal(bytes, &mb)
+		m.Data = mb
+	case ButtonTypeWebApp:
+		var mb *MenuButtonWebApp
+		err = json.Unmarshal(bytes, &mb)
+		m.Data = mb
+	case ButtonTypeDefault:
+		var mb *MenuButtonDefault
+		err = json.Unmarshal(bytes, &mb)
+		m.Data = mb
+	default:
+		return fmt.Errorf("unknown menu button type: %q", buttonType.Type)
+	}
+
+	return err
+}
+
 // MenuButtonCommands - Represents a menu button, which opens the bot's list of commands.
 type MenuButtonCommands struct {
 	// Type - Type of the button, must be commands
