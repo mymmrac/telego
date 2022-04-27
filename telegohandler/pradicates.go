@@ -139,6 +139,56 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 	}
 }
 
+// AnyEditedMessage is true if edited message isn't nil
+func AnyEditedMessage() Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil
+	}
+}
+
+// EditedTextEqual is true if edited message isn't nil, and its equal to specified text
+func EditedTextEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil && update.EditedMessage.Text == text
+	}
+}
+
+// EditedTextEqualFold is true if edited message isn't nil, and its equal fold (more general form of case-insensitivity
+// equal) to specified text
+func EditedTextEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil && strings.EqualFold(update.EditedMessage.Text, text)
+	}
+}
+
+// EditedTextContains is true if edited message isn't nil, and it contains specified text
+func EditedTextContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil && strings.Contains(update.EditedMessage.Text, text)
+	}
+}
+
+// EditedTextPrefix is true if edited message isn't nil, and it has specified prefix
+func EditedTextPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil && strings.HasPrefix(update.EditedMessage.Text, prefix)
+	}
+}
+
+// EditedTextSuffix is true if edited message isn't nil, and it has specified suffix
+func EditedTextSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil && strings.HasSuffix(update.EditedMessage.Text, suffix)
+	}
+}
+
+// EditedTextMatches is true if edited message isn't nil, and it matches specified regexp
+func EditedTextMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return update.EditedMessage != nil && pattern.MatchString(update.EditedMessage.Text)
+	}
+}
+
 // AnyCallbackQuery is true if callback query isn't nil
 func AnyCallbackQuery() Predicate {
 	return func(update telego.Update) bool {

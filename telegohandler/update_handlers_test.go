@@ -58,6 +58,22 @@ func TestBotHandler_HandleMessage(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleEditedMessage(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(bot *telego.Bot, message telego.Message) { wg.Done() })
+
+	bh.HandleEditedMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{EditedMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 	bh := newBotHandler(t)
 

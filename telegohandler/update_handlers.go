@@ -12,6 +12,13 @@ func (h *BotHandler) HandleMessage(handler MessageHandler, predicates ...Predica
 	}, append([]Predicate{AnyMessage()}, predicates...)...)
 }
 
+// HandleEditedMessage same as Handle, but assumes that the update contains an edited message
+func (h *BotHandler) HandleEditedMessage(handler MessageHandler, predicates ...Predicate) {
+	h.Handle(func(bot *telego.Bot, update telego.Update) {
+		handler(bot, *update.EditedMessage)
+	}, append([]Predicate{AnyEditedMessage()}, predicates...)...)
+}
+
 // CallbackQueryHandler handles callback queries that came from bot
 type CallbackQueryHandler func(bot *telego.Bot, message telego.CallbackQuery)
 
