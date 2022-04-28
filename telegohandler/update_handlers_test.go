@@ -106,6 +106,22 @@ func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleInlineQuery(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := InlineQueryHandler(func(bot *telego.Bot, query telego.InlineQuery) { wg.Done() })
+
+	bh.HandleInlineQuery(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{InlineQuery: &telego.InlineQuery{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 	bh := newBotHandler(t)
 

@@ -33,6 +33,16 @@ func (h *BotHandler) HandleEditedChannelPost(handler MessageHandler, predicates 
 	}, append([]Predicate{AnyEditedChannelPost()}, predicates...)...)
 }
 
+// InlineQueryHandler handles inline queries that came from bot
+type InlineQueryHandler func(bot *telego.Bot, message telego.InlineQuery)
+
+// HandleInlineQuery same as Handle, but assumes that the update contains an inline query
+func (h *BotHandler) HandleInlineQuery(handler InlineQueryHandler, predicates ...Predicate) {
+	h.Handle(func(bot *telego.Bot, update telego.Update) {
+		handler(bot, *update.InlineQuery)
+	}, append([]Predicate{AnyInlineQuery()}, predicates...)...)
+}
+
 // CallbackQueryHandler handles callback queries that came from bot
 type CallbackQueryHandler func(bot *telego.Bot, message telego.CallbackQuery)
 

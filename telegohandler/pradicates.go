@@ -317,6 +317,56 @@ func EditedPostTextMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
+// AnyInlineQuery is true if inline query isn't nil
+func AnyInlineQuery() Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil
+	}
+}
+
+// InlineQueryEqual is true if inline query isn't nil, and its query equal to specified text
+func InlineQueryEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil && update.InlineQuery.Query == text
+	}
+}
+
+// InlineQueryEqualFold is true if inline query isn't nil, and its query equal fold (more general form of
+// case-insensitivity equal) to specified text
+func InlineQueryEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil && strings.EqualFold(update.InlineQuery.Query, text)
+	}
+}
+
+// InlineQueryContains is true if inline query isn't nil, and its query contains specified text
+func InlineQueryContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil && strings.Contains(update.InlineQuery.Query, text)
+	}
+}
+
+// InlineQueryPrefix is true if inline query isn't nil, and its query has specified prefix
+func InlineQueryPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil && strings.HasPrefix(update.InlineQuery.Query, prefix)
+	}
+}
+
+// InlineQuerySuffix is true if inline query isn't nil, and its query has specified suffix
+func InlineQuerySuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil && strings.HasSuffix(update.InlineQuery.Query, suffix)
+	}
+}
+
+// InlineQueryMatches is true if inline query isn't nil, and its query matches specified regexp
+func InlineQueryMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return update.InlineQuery != nil && pattern.MatchString(update.InlineQuery.Query)
+	}
+}
+
 // AnyCallbackQuery is true if callback query isn't nil
 func AnyCallbackQuery() Predicate {
 	return func(update telego.Update) bool {
