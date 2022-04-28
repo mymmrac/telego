@@ -217,6 +217,56 @@ func EditedTextMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
+// AnyChannelPost is true if channel post isn't nil
+func AnyChannelPost() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassage(update.ChannelPost)
+	}
+}
+
+// PostTextEqual is true if channel post isn't nil, and its equal to specified text
+func PostTextEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return textEqual(update.ChannelPost, text)
+	}
+}
+
+// PostTextEqualFold is true if channel post isn't nil, and its equal fold (more general form of case-insensitivity
+// equal) to specified text
+func PostTextEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return textEqualFold(update.ChannelPost, text)
+	}
+}
+
+// PostTextContains is true if channel post isn't nil, and it contains specified text
+func PostTextContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return textContains(update.ChannelPost, text)
+	}
+}
+
+// PostTextPrefix is true if channel post isn't nil, and it has specified prefix
+func PostTextPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return textPrefix(update.ChannelPost, prefix)
+	}
+}
+
+// PostTextSuffix is true if channel post isn't nil, and it has specified suffix
+func PostTextSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return textSuffix(update.ChannelPost, suffix)
+	}
+}
+
+// PostTextMatches is true if channel post isn't nil, and it matches specified regexp
+func PostTextMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return textMatches(update.ChannelPost, pattern)
+	}
+}
+
 // AnyCallbackQuery is true if callback query isn't nil
 func AnyCallbackQuery() Predicate {
 	return func(update telego.Update) bool {
