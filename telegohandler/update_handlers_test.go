@@ -122,6 +122,22 @@ func TestBotHandler_HandleInlineQuery(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleChosenInlineResult(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := ChosenInlineResultHandler(func(bot *telego.Bot, query telego.ChosenInlineResult) { wg.Done() })
+
+	bh.HandleChosenInlineResult(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{ChosenInlineResult: &telego.ChosenInlineResult{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 	bh := newBotHandler(t)
 
@@ -133,6 +149,118 @@ func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 
 	updates := make(chan telego.Update, 1)
 	updates <- telego.Update{CallbackQuery: &telego.CallbackQuery{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleShippingQuery(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := ShippingQueryHandler(func(bot *telego.Bot, query telego.ShippingQuery) { wg.Done() })
+
+	bh.HandleShippingQuery(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{ShippingQuery: &telego.ShippingQuery{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := PreCheckoutQueryHandler(func(bot *telego.Bot, query telego.PreCheckoutQuery) { wg.Done() })
+
+	bh.HandlePreCheckoutQuery(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{PreCheckoutQuery: &telego.PreCheckoutQuery{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandlePoll(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := PollHandler(func(bot *telego.Bot, poll telego.Poll) { wg.Done() })
+
+	bh.HandlePoll(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{Poll: &telego.Poll{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandlePollAnswer(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := PollAnswerHandler(func(bot *telego.Bot, pollAnswer telego.PollAnswer) { wg.Done() })
+
+	bh.HandlePollAnswer(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{PollAnswer: &telego.PollAnswer{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleMyChatMember(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := ChatMemberUpdatedHandler(func(bot *telego.Bot, chatMember telego.ChatMemberUpdated) { wg.Done() })
+
+	bh.HandleMyChatMemberUpdated(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{MyChatMember: &telego.ChatMemberUpdated{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleChatMember(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := ChatMemberUpdatedHandler(func(bot *telego.Bot, chatMember telego.ChatMemberUpdated) { wg.Done() })
+
+	bh.HandleChatMemberUpdated(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{ChatMember: &telego.ChatMemberUpdated{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleChatJoinRequest(t *testing.T) {
+	bh := newBotHandler(t)
+
+	wg := &sync.WaitGroup{}
+	handler := ChatJoinRequestHandler(func(bot *telego.Bot, chatJoinRequest telego.ChatJoinRequest) { wg.Done() })
+
+	bh.HandleChatJoinRequest(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{ChatJoinRequest: &telego.ChatJoinRequest{}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)

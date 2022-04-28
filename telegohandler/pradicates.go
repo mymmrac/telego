@@ -367,6 +367,13 @@ func InlineQueryMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
+// AnyChosenInlineResult is true if chosen inline result isn't nil
+func AnyChosenInlineResult() Predicate {
+	return func(update telego.Update) bool {
+		return update.ChosenInlineResult != nil
+	}
+}
+
 // AnyCallbackQuery is true if callback query isn't nil
 func AnyCallbackQuery() Predicate {
 	return func(update telego.Update) bool {
@@ -421,5 +428,54 @@ func CallbackDataSuffix(suffix string) Predicate {
 func CallbackDataMatches(pattern *regexp.Regexp) Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil && pattern.MatchString(update.CallbackQuery.Data)
+	}
+}
+
+// AnyShippingQuery is true if shipping query isn't nil
+func AnyShippingQuery() Predicate {
+	return func(update telego.Update) bool {
+		return update.ShippingQuery != nil
+	}
+}
+
+// AnyPreCheckoutQuery is true if pre checkout query isn't nil
+func AnyPreCheckoutQuery() Predicate {
+	return func(update telego.Update) bool {
+		return update.PreCheckoutQuery != nil
+	}
+}
+
+// AnyPoll is true if poll isn't nil
+func AnyPoll() Predicate {
+	return func(update telego.Update) bool {
+		return update.Poll != nil
+	}
+}
+
+// AnyPollAnswer is true if poll answer isn't nil
+func AnyPollAnswer() Predicate {
+	return func(update telego.Update) bool {
+		return update.PollAnswer != nil
+	}
+}
+
+// AnyMyChatMember is true if my chat member isn't nil
+func AnyMyChatMember() Predicate {
+	return func(update telego.Update) bool {
+		return update.MyChatMember != nil
+	}
+}
+
+// AnyChatMember is true if chat member isn't nil
+func AnyChatMember() Predicate {
+	return func(update telego.Update) bool {
+		return update.ChatMember != nil
+	}
+}
+
+// AnyChatJoinRequest is true if chat join request isn't nil
+func AnyChatJoinRequest() Predicate {
+	return func(update telego.Update) bool {
+		return update.ChatJoinRequest != nil
 	}
 }
