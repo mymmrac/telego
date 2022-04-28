@@ -26,53 +26,81 @@ func Not(predicate Predicate) Predicate {
 	}
 }
 
+func anyMassage(message *telego.Message) bool {
+	return message != nil
+}
+
 // AnyMessage is true if message isn't nil
 func AnyMessage() Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil
+		return anyMassage(update.Message)
 	}
+}
+
+func textEqual(message *telego.Message, text string) bool {
+	return message != nil && message.Text == text
 }
 
 // TextEqual is true if message isn't nil, and its equal to specified text
 func TextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil && update.Message.Text == text
+		return textEqual(update.Message, text)
 	}
+}
+
+func textEqualFold(message *telego.Message, text string) bool {
+	return message != nil && strings.EqualFold(message.Text, text)
 }
 
 // TextEqualFold is true if message isn't nil, and its equal fold (more general form of case-insensitivity equal) to
 // specified text
 func TextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil && strings.EqualFold(update.Message.Text, text)
+		return textEqualFold(update.Message, text)
 	}
+}
+
+func textContains(message *telego.Message, text string) bool {
+	return message != nil && strings.Contains(message.Text, text)
 }
 
 // TextContains is true if message isn't nil, and it contains specified text
 func TextContains(text string) Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil && strings.Contains(update.Message.Text, text)
+		return textContains(update.Message, text)
 	}
+}
+
+func textPrefix(message *telego.Message, prefix string) bool {
+	return message != nil && strings.HasPrefix(message.Text, prefix)
 }
 
 // TextPrefix is true if message isn't nil, and it has specified prefix
 func TextPrefix(prefix string) Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil && strings.HasPrefix(update.Message.Text, prefix)
+		return textPrefix(update.Message, prefix)
 	}
+}
+
+func textSuffix(message *telego.Message, suffix string) bool {
+	return message != nil && strings.HasSuffix(message.Text, suffix)
 }
 
 // TextSuffix is true if message isn't nil, and it has specified suffix
 func TextSuffix(suffix string) Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil && strings.HasSuffix(update.Message.Text, suffix)
+		return textSuffix(update.Message, suffix)
 	}
+}
+
+func textMatches(message *telego.Message, pattern *regexp.Regexp) bool {
+	return message != nil && pattern.MatchString(message.Text)
 }
 
 // TextMatches is true if message isn't nil, and it matches specified regexp
 func TextMatches(pattern *regexp.Regexp) Predicate {
 	return func(update telego.Update) bool {
-		return update.Message != nil && pattern.MatchString(update.Message.Text)
+		return textMatches(update.Message, pattern)
 	}
 }
 
@@ -142,14 +170,14 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 // AnyEditedMessage is true if edited message isn't nil
 func AnyEditedMessage() Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil
+		return anyMassage(update.EditedMessage)
 	}
 }
 
 // EditedTextEqual is true if edited message isn't nil, and its equal to specified text
 func EditedTextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil && update.EditedMessage.Text == text
+		return textEqual(update.EditedMessage, text)
 	}
 }
 
@@ -157,35 +185,35 @@ func EditedTextEqual(text string) Predicate {
 // equal) to specified text
 func EditedTextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil && strings.EqualFold(update.EditedMessage.Text, text)
+		return textEqualFold(update.EditedMessage, text)
 	}
 }
 
 // EditedTextContains is true if edited message isn't nil, and it contains specified text
 func EditedTextContains(text string) Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil && strings.Contains(update.EditedMessage.Text, text)
+		return textContains(update.EditedMessage, text)
 	}
 }
 
 // EditedTextPrefix is true if edited message isn't nil, and it has specified prefix
 func EditedTextPrefix(prefix string) Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil && strings.HasPrefix(update.EditedMessage.Text, prefix)
+		return textPrefix(update.EditedMessage, prefix)
 	}
 }
 
 // EditedTextSuffix is true if edited message isn't nil, and it has specified suffix
 func EditedTextSuffix(suffix string) Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil && strings.HasSuffix(update.EditedMessage.Text, suffix)
+		return textSuffix(update.EditedMessage, suffix)
 	}
 }
 
 // EditedTextMatches is true if edited message isn't nil, and it matches specified regexp
 func EditedTextMatches(pattern *regexp.Regexp) Predicate {
 	return func(update telego.Update) bool {
-		return update.EditedMessage != nil && pattern.MatchString(update.EditedMessage.Text)
+		return textMatches(update.EditedMessage, pattern)
 	}
 }
 
