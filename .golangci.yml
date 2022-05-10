@@ -19,7 +19,9 @@ output:
 linters:
   enable-all: true
   disable:
+    - execinquery # execinquery is a linter about query string checker in Query function which reads your Go src files and warning it finds
     - exhaustivestruct # Checks if all struct's fields are initialized
+    - exhaustruct # Checks if all structure fields are initialized
     - forbidigo # Forbids identifiers
     - gochecknoglobals # check that no global variables exist
     - godot # Check if comments end in a period
@@ -30,6 +32,7 @@ linters:
     - ireturn # Accept Interfaces, Return Concrete Types
     - maligned # Tool to detect Go structs that would take less memory if their fields were sorted
     - nlreturn # nlreturn checks for a new line before return and branch statements to increase code clarity
+    - nonamedreturns # Reports all named returns
     - paralleltest # paralleltest detects missing usage of t.Parallel() method in your Go test
     - scopelint # Scopelint checks for unpinned variables in go programs
     - tagliatelle # Checks the struct tags.

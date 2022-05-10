@@ -12,6 +12,9 @@ lint: ## Run golangci-lint
 lint-install: ## Install golangci-lint
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
+lint-list: ## Run golangci-lint linters (print enabled & disabled linters)
+	golangci-lint linters
+
 test: ## Run tests
 	go test -coverprofile cover.out \
 	$(shell go list ./... | grep -v /examples/ | grep -v /test | grep -v /internal/ | grep -v /mock)
