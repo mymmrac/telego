@@ -27,7 +27,8 @@ telegram.
 
 [//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
 
-> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and [jsoniter](https://github.com/json-iterator/go) instead of `encoding/json`.
+> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and 
+> [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
 
 ### :clipboard: Table Of Content
 
@@ -49,10 +50,6 @@ telegram.
 ## :zap: Getting Started
 
 [//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
-
-[//]: # (https://gohugo.io/hosting-and-deployment/hosting-on-github)
-
-[//]: # (https://themes.gohugo.io/themes/hugo-whisper-theme)
 
 How to get the library:
 
@@ -233,8 +230,9 @@ All Telegram Bot API methods described in [documentation](https://core.telegram.
 used by the library. They have same names and same parameters, parameters represented by struct with
 name: `<methodName>` + `Params`. If method don't have required parameters `nil` value can be used as a parameter.
 
-> Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](internal/generator) from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and actual code.
-> Fell free to report such things.
+> Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](internal/generator)
+> from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and
+> actual code. Feel free to report such things.
 
 ```go
 package main

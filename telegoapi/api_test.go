@@ -2,7 +2,6 @@ package telegoapi
 
 import (
 	"bytes"
-	stdJson "encoding/json"
 	"fmt"
 	"io"
 	"net"
@@ -10,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
@@ -27,7 +27,7 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 			resp: Response{
 				Ok:     true,
 				Error:  nil,
-				Result: stdJson.RawMessage(`{"test":true}`),
+				Result: json.RawMessage(`{"test":true}`),
 			},
 			text: `Ok: true, Err: [<nil>], Result: {"test":true}`,
 		},

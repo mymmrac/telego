@@ -5,14 +5,13 @@ package telegoapi
 
 import (
 	"bytes"
-	stdJson "encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"reflect"
 	"strings"
 
-	jsoniter "github.com/json-iterator/go"
+	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
 )
 
@@ -21,13 +20,10 @@ const (
 	ContentTypeJSON = "application/json"
 )
 
-// json jsoniter replacement for json package
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
-
 // Response represents response returned by Telegram API
 type Response struct {
-	Ok     bool               `json:"ok"`
-	Result stdJson.RawMessage `json:"result,omitempty"`
+	Ok     bool            `json:"ok"`
+	Result json.RawMessage `json:"result,omitempty"`
 	*Error
 }
 

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/goccy/go-json"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 

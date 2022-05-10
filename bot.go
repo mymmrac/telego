@@ -9,14 +9,11 @@ import (
 	"strings"
 	"time"
 
-	jsoniter "github.com/json-iterator/go"
+	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
 
 	"github.com/mymmrac/telego/telegoapi"
 )
-
-// json jsoniter replacement for json package
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
 	defaultBotAPIServer = "https://api.telegram.org"
