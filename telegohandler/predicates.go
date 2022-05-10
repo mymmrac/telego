@@ -37,6 +37,8 @@ func AnyMessage() Predicate {
 	}
 }
 
+// TODO: Add AnyMessageText predicate
+
 func textEqual(message *telego.Message, text string) bool {
 	return message != nil && message.Text == text
 }
