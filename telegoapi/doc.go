@@ -9,7 +9,7 @@ Caller interface represents the general logic of sending requests to API and rec
 Telego provides only valyala/fasthttp implementation, but your own can be defined and specified via telego.BotOption's.
 
 RequestConstructor interface represents a general way of constructing RequestData used in Caller. Currently, Telego
-provides an only default implementation that uses json-iterator/go instead of encoding/json and std mime/multipart
+provides an only default implementation that uses goccy/go-json instead of encoding/json and std mime/multipart
 package.
 
 NamedReader interface represents a general way of sending files that are provided to RequestConstructor. As io.Reader
