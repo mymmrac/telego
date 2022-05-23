@@ -191,7 +191,7 @@ func parseParameters(v interface{}) (map[string]string, error) {
 		structField := paramsStructType.Field(i)
 		field := paramsStruct.Field(i)
 
-		stringValue, ok, err := parseFiled(field)
+		stringValue, ok, err := parseField(field)
 		if err != nil {
 			return nil, fmt.Errorf("parse field: %w", err)
 		}
@@ -207,8 +207,8 @@ func parseParameters(v interface{}) (map[string]string, error) {
 	return params, nil
 }
 
-// parseFiled parses struct field to string value
-func parseFiled(field reflect.Value) (string, bool, error) {
+// parseField parses struct field to string value
+func parseField(field reflect.Value) (string, bool, error) {
 	if field.IsZero() {
 		return "", false, nil
 	}

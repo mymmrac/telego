@@ -10,7 +10,7 @@ import (
 type tgSetter struct {
 	structType         string
 	fieldName          string
-	filedSnakeCaseName string
+	fieldSnakeCaseName string
 	fieldType          string
 }
 
@@ -53,7 +53,7 @@ func generateSetters(typesData string, desiredStructs []string) tgSetters {
 			setter := tgSetter{
 				structType:         structType,
 				fieldName:          fieldsGroup[1],
-				filedSnakeCaseName: fieldsGroup[3],
+				fieldSnakeCaseName: fieldsGroup[3],
 				fieldType:          fieldsGroup[2],
 			}
 
@@ -91,7 +91,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 	for _, setter := range setters {
 		data.WriteString(fmt.Sprintf("// With%s adds %s parameter\n", setter.fieldName,
-			strings.ReplaceAll(setter.filedSnakeCaseName, "_", " ")))
+			strings.ReplaceAll(setter.fieldSnakeCaseName, "_", " ")))
 
 		setterSpecialCase(&setter)
 
