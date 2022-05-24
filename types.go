@@ -1783,7 +1783,7 @@ func (c ChatID) MarshalJSON() ([]byte, error) {
 		return json.Marshal(c.Username)
 	}
 
-	return []byte{}, nil
+	return []byte(`""`), nil
 }
 
 // BotCommandScopeChat - Represents the scope (https://core.telegram.org/bots/api#botcommandscope) of bot
@@ -1959,15 +1959,15 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 		return json.Marshal(i.FileID)
 	}
 
+	if i.URL != "" {
+		return json.Marshal(i.URL)
+	}
+
 	if !isNil(i.File) {
 		if i.needAttach {
 			return json.Marshal(attachFile + i.File.Name())
 		}
-		return []byte{}, nil
-	}
-
-	if i.URL != "" {
-		return json.Marshal(i.URL)
+		return []byte(`""`), nil
 	}
 
 	return nil, errors.New("file, file ID and URL are empty")

@@ -395,7 +395,7 @@ func TestChatID_MarshalJSON(t *testing.T) {
 		{
 			name:     "empty",
 			chatID:   ChatID{},
-			jsonData: "",
+			jsonData: `""`,
 			isError:  false,
 		},
 		{
@@ -441,7 +441,7 @@ func TestInputFile_MarshalJSON(t *testing.T) {
 			inputFile: InputFile{
 				File: &os.File{},
 			},
-			jsonData: ``,
+			jsonData: `""`,
 			isError:  false,
 		},
 		{
