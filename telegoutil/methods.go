@@ -113,7 +113,7 @@ func Poll(id telego.ChatID, question string, options ...string) *telego.SendPoll
 }
 
 // Dice creates telego.SendDiceParams with required parameters
-// Note: Emoji isn't required, but most likely you would what to specify it
+// Note: Emoji isn't required, but most likely you would what to specify it, you can use telego.EmojiDice or etc.
 func Dice(id telego.ChatID, emoji string) *telego.SendDiceParams {
 	return &telego.SendDiceParams{
 		ChatID: id,

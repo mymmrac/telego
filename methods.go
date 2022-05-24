@@ -2370,6 +2370,12 @@ type EditMessageTextParams struct {
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
 func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
 	var message *Message
+	/*
+		TODO: Fix bug when editing inline message (test case 21)
+
+		[Tue May 24 17:04:12 EEST 2022] DEBUG API response editMessageText: Ok: true, Err: [<nil>], Result: true
+		editMessageText(): unmarshal to **telego.Message: invalid character 't' looking for beginning of value
+	*/
 	err := b.performRequest("editMessageText", params, &message)
 	if err != nil {
 		return nil, fmt.Errorf("editMessageText(): %w", err)
