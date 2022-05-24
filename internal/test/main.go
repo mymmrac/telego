@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
@@ -17,7 +18,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 19
+const testCase = 21
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -418,6 +419,117 @@ func main() {
 		// TODO: Add example for graceful shutdown
 		bh.Start()
 		defer bh.Stop()
+	case 20:
+		img := tu.File(mustOpen("img1.jpg"))
+		img2 := tu.File(mustOpen("img2.jpg"))
+		audio := tu.File(mustOpen("kitten.mp3"))
+		voice := tu.File(mustOpen("kitten.ogg"))
+		doc := tu.File(mustOpen("doc.txt"))
+		video := tu.File(mustOpen("sample.mp4"))
+		note := tu.File(mustOpen("note.mp4"))
+		gif := tu.File(mustOpen("cat.mp4"))
+
+		_, err = bot.SendMessage(tu.Message(myID, "Test"))
+		assert(err == nil, err)
+
+		_, err = bot.SendPhoto(tu.Photo(myID, img))
+		assert(err == nil, err)
+
+		_, err = bot.SendAudio(tu.Audio(myID, audio))
+		assert(err == nil, err)
+
+		_, err = bot.SendDocument(tu.Document(myID, doc))
+		assert(err == nil, err)
+
+		time.Sleep(time.Second * 3)
+
+		_, err = bot.SendVideo(tu.Video(myID, video))
+		assert(err == nil, err)
+
+		_, err = bot.SendAnimation(tu.Animation(myID, gif))
+		assert(err == nil, err)
+
+		_, err = bot.SendVoice(tu.Voice(myID, voice))
+		assert(err == nil, err)
+
+		_, err = bot.SendVideoNote(tu.VideoNote(myID, note))
+		assert(err == nil, err)
+
+		time.Sleep(time.Second * 3)
+
+		img = tu.File(mustOpen("img1.jpg"))
+		img2 = tu.File(mustOpen("img2.jpg"))
+
+		_, err = bot.SendMediaGroup(tu.MediaGroup(myID, tu.MediaPhoto(img), tu.MediaPhoto(img2)))
+		assert(err == nil, err)
+
+		_, err = bot.SendLocation(tu.Location(myID, 42, 24))
+		assert(err == nil, err)
+
+		_, err = bot.SendVenue(tu.Venue(myID, 42, 24, "The Thing", "Things str."))
+		assert(err == nil, err)
+
+		_, err = bot.SendContact(tu.Contact(myID, "+424242", "The 42"))
+		assert(err == nil, err)
+
+		time.Sleep(time.Second * 3)
+
+		_, err = bot.SendPoll(tu.Poll(myID, "42?", "42", "24"))
+		assert(err == nil, err)
+
+		_, err = bot.SendDice(tu.Dice(myID, telego.EmojiBasketball))
+		assert(err == nil, err)
+
+		err = bot.SendChatAction(tu.ChatAction(myID, telego.ChatActionTyping))
+		assert(err == nil, err)
+	case 21:
+		bot.SetUpdateInterval(time.Second)
+		updates, _ := bot.UpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh := th.NewBotHandler(bot, updates)
+
+		bh.HandleInlineQuery(func(bot *telego.Bot, query telego.InlineQuery) {
+			err = bot.AnswerInlineQuery(&telego.AnswerInlineQueryParams{
+				InlineQueryID: query.ID,
+				Results: []telego.InlineQueryResult{
+					&telego.InlineQueryResultArticle{
+						Type:                telego.ResultTypeArticle,
+						ID:                  "1",
+						Title:               "Hmm",
+						InputMessageContent: tu.TextMessage("Hmm"),
+						ReplyMarkup: tu.InlineKeyboard(tu.InlineKeyboardRow(
+							tu.InlineKeyboardButton("GG?").WithCallbackData("ok"),
+						)),
+					},
+				},
+			})
+			assert(err == nil, err)
+		})
+
+		bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
+			_, err = bot.EditMessageText(&telego.EditMessageTextParams{
+				Text:            "GG?",
+				InlineMessageID: query.InlineMessageID,
+			})
+			assert(err == nil, err)
+
+			err = bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
+				CallbackQueryID: query.ID,
+				Text:            "OK",
+			})
+			assert(err == nil, err)
+		})
+
+		defer bh.Stop()
+		bh.Start()
+	}
+}
+
+func assert(ok bool, args ...interface{}) {
+	if !ok {
+		fmt.Println(args...)
+		os.Exit(1)
 	}
 }
 
@@ -428,5 +540,3 @@ func mustOpen(filename string) *os.File {
 	}
 	return file
 }
-
-// TODO: Remove this file
