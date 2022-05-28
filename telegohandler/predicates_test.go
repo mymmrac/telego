@@ -71,6 +71,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_message_with_text_matches",
+			predicate: AnyMessageWithText(),
+			update:    telego.Update{Message: &telego.Message{Text: testText}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_text_not_matches",
+			predicate: AnyMessageWithText(),
+			update:    telego.Update{Message: &telego.Message{}},
+			matches:   false,
+		},
+		{
 			name:      "text_equal_matches",
 			predicate: TextEqual(testText),
 			update:    telego.Update{Message: &telego.Message{Text: testText}},
@@ -239,6 +251,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_edited_message_with_text_matches",
+			predicate: AnyEditedMessageWithText(),
+			update:    telego.Update{EditedMessage: &telego.Message{Text: testText}},
+			matches:   true,
+		},
+		{
+			name:      "any_edited_message_with_text_not_matches",
+			predicate: AnyEditedMessageWithText(),
+			update:    telego.Update{EditedMessage: &telego.Message{}},
+			matches:   false,
+		},
+		{
 			name:      "edited_text_equal_matches",
 			predicate: EditedTextEqual(testText),
 			update:    telego.Update{EditedMessage: &telego.Message{Text: testText}},
@@ -323,6 +347,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_channel_post_with_text_matches",
+			predicate: AnyChannelPostWithText(),
+			update:    telego.Update{ChannelPost: &telego.Message{Text: testText}},
+			matches:   true,
+		},
+		{
+			name:      "any_channel_post_with_text_not_matches",
+			predicate: AnyChannelPostWithText(),
+			update:    telego.Update{ChannelPost: &telego.Message{}},
+			matches:   false,
+		},
+		{
 			name:      "post_text_equal_matches",
 			predicate: PostTextEqual(testText),
 			update:    telego.Update{ChannelPost: &telego.Message{Text: testText}},
@@ -404,6 +440,18 @@ func TestPredicates(t *testing.T) {
 			name:      "any_edited_channel_post_not_matches",
 			predicate: AnyEditedChannelPost(),
 			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "any_edited_channel_post_with_text_matches",
+			predicate: AnyEditedChannelPostWithText(),
+			update:    telego.Update{EditedChannelPost: &telego.Message{Text: testText}},
+			matches:   true,
+		},
+		{
+			name:      "any_edited_channel_post_with_text_not_matches",
+			predicate: AnyEditedChannelPostWithText(),
+			update:    telego.Update{EditedChannelPost: &telego.Message{}},
 			matches:   false,
 		},
 		{

@@ -37,7 +37,16 @@ func AnyMessage() Predicate {
 	}
 }
 
-// TODO: Add AnyMessageText predicate
+func anyMassageWithText(message *telego.Message) bool {
+	return message != nil && message.Text != ""
+}
+
+// AnyMessageWithText is true if message isn't nil and its text not empty
+func AnyMessageWithText() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithText(update.Message)
+	}
+}
 
 func textEqual(message *telego.Message, text string) bool {
 	return message != nil && message.Text == text
@@ -176,6 +185,13 @@ func AnyEditedMessage() Predicate {
 	}
 }
 
+// AnyEditedMessageWithText is true if edited message isn't nil and its text not empty
+func AnyEditedMessageWithText() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithText(update.EditedMessage)
+	}
+}
+
 // EditedTextEqual is true if edited message isn't nil, and its text equal to specified text
 func EditedTextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
@@ -226,6 +242,13 @@ func AnyChannelPost() Predicate {
 	}
 }
 
+// AnyChannelPostWithText is true if channel post isn't nil and its text not empty
+func AnyChannelPostWithText() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithText(update.ChannelPost)
+	}
+}
+
 // PostTextEqual is true if channel post isn't nil, and its text equal to specified text
 func PostTextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
@@ -273,6 +296,13 @@ func PostTextMatches(pattern *regexp.Regexp) Predicate {
 func AnyEditedChannelPost() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassage(update.EditedChannelPost)
+	}
+}
+
+// AnyEditedChannelPostWithText is true if edited channel post isn't nil and its text not empty
+func AnyEditedChannelPostWithText() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithText(update.EditedChannelPost)
 	}
 }
 
