@@ -22,7 +22,7 @@ func main() {
 	defer bot.StopLongPulling()
 
 	// Create bot handler and specify from where to get updates
-	bh := th.NewBotHandler(bot, updates)
+	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Register handler with union predicate and not predicate
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {

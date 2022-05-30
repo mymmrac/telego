@@ -72,7 +72,7 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 
 	for _, option := range options {
 		if err := option(b); err != nil {
-			return nil, fmt.Errorf("optins: %w", err)
+			return nil, fmt.Errorf("options: %w", err)
 		}
 	}
 

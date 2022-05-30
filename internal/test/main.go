@@ -286,7 +286,7 @@ func main() {
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
-		bh := th.NewBotHandler(bot, updates)
+		bh, _ := th.NewBotHandler(bot, updates)
 		defer bh.Stop()
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
@@ -308,7 +308,7 @@ func main() {
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
-		bh := th.NewBotHandler(bot, updates)
+		bh, _ := th.NewBotHandler(bot, updates)
 
 		count := 0
 
@@ -342,7 +342,7 @@ func main() {
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
-		bh := th.NewBotHandler(bot, updates)
+		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
@@ -361,7 +361,7 @@ func main() {
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
-		bh := th.NewBotHandler(bot, updates)
+		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
@@ -406,7 +406,7 @@ func main() {
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
-		bh := th.NewBotHandler(bot, updates)
+		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 			_, _ = bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Hmm?"))
@@ -487,7 +487,7 @@ func main() {
 		updates, _ := bot.UpdatesViaLongPulling(nil)
 		defer bot.StopLongPulling()
 
-		bh := th.NewBotHandler(bot, updates)
+		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.HandleInlineQuery(func(bot *telego.Bot, query telego.InlineQuery) {
 			err = bot.AnswerInlineQuery(&telego.AnswerInlineQueryParams{

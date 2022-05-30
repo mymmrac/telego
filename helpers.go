@@ -22,7 +22,7 @@ const listeningForWebhookErrMsg = "Listening for webhook: %v"
 
 // SetUpdateInterval sets interval of calling GetUpdates in UpdatesViaLongPulling method. Ensures that between two
 // calls of GetUpdates will be at least specified time, but it could be longer.
-func (b *Bot) SetUpdateInterval(interval time.Duration) {
+func (b *Bot) SetUpdateInterval(interval time.Duration) { // TODO: Add bot option for this
 	b.updateInterval = interval
 }
 
@@ -30,7 +30,7 @@ func (b *Bot) SetUpdateInterval(interval time.Duration) {
 // Note: After you done with getting updates you should call StopLongPulling method
 func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, error) {
 	b.stop = make(chan struct{})
-	b.startedLongPulling = true
+	b.startedLongPulling = true // TODO: Add mutex
 	updatesChan := make(chan Update, updateChanBuffer)
 
 	if params == nil {
@@ -76,7 +76,7 @@ func (b *Bot) IsRunningLongPulling() bool {
 }
 
 // StopLongPulling stop reviving updates from UpdatesViaLongPulling method
-func (b *Bot) StopLongPulling() {
+func (b *Bot) StopLongPulling() { // TODO: [?] Graceful shutdown
 	if b.startedLongPulling {
 		b.startedLongPulling = false
 		close(b.stop)
@@ -86,7 +86,7 @@ func (b *Bot) StopLongPulling() {
 // StartListeningForWebhook start server for listening for webhook
 // Note: After you done with getting updates you should call StopWebhook method
 func (b *Bot) StartListeningForWebhook(address string) {
-	b.startedWebhook = true
+	b.startedWebhook = true // TODO: Add mutex
 	go func() {
 		err := b.server.ListenAndServe(address)
 		if err != nil {
@@ -126,7 +126,7 @@ func (b *Bot) IsRunningWebhook() bool {
 
 // StopWebhook shutdown webhook server used in UpdatesViaWebhook method
 // Note: Should be called only after both UpdatesViaWebhook and StartListeningForWebhook...
-func (b *Bot) StopWebhook() error {
+func (b *Bot) StopWebhook() error { // TODO: [?] Graceful shutdown
 	if b.startedWebhook {
 		b.startedWebhook = false
 		close(b.stop)

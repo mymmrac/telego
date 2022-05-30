@@ -1,6 +1,7 @@
 package telegohandler
 
 import (
+	"errors"
 	"sync"
 	"testing"
 	"time"
@@ -14,8 +15,12 @@ import (
 const (
 	token = "1234567890:aaaabbbbaaaabbbbaaaabbbbaaaabbbbccc"
 
-	timeout = time.Second
+	timeout      = time.Second
+	smallTimeout = time.Millisecond * 10
+	hugeTimeout  = time.Hour
 )
+
+var errTest = errors.New("error")
 
 func newBotHandler(t *testing.T) *BotHandler {
 	t.Helper()
@@ -25,7 +30,9 @@ func newBotHandler(t *testing.T) *BotHandler {
 
 	updates := make(chan telego.Update)
 
-	return NewBotHandler(bot, updates)
+	bh, err := NewBotHandler(bot, updates)
+	require.NoError(t, err)
+	return bh
 }
 
 func TestNewBotHandler(t *testing.T) {
@@ -34,11 +41,34 @@ func TestNewBotHandler(t *testing.T) {
 
 	updates := make(chan telego.Update)
 
-	bh := NewBotHandler(bot, updates)
-	assert.Equal(t, bot, bh.bot)
-	assert.Equal(t, updates, bh.updates)
-	assert.Equal(t, []conditionalHandler{}, bh.handlers)
-	assert.Nil(t, bh.stop)
+	var bh *BotHandler
+
+	t.Run("success", func(t *testing.T) {
+		bh, err = NewBotHandler(bot, updates)
+		require.NoError(t, err)
+
+		assert.Equal(t, bot, bh.bot)
+		assert.EqualValues(t, updates, bh.updates)
+		assert.Equal(t, []conditionalHandler{}, bh.handlers)
+		assert.Nil(t, bh.stop)
+	})
+
+	t.Run("success_with_options", func(t *testing.T) {
+		bh, err = NewBotHandler(bot, updates, func(_ *BotHandler) error { return nil })
+		require.NoError(t, err)
+
+		assert.Equal(t, bot, bh.bot)
+		assert.EqualValues(t, updates, bh.updates)
+		assert.Equal(t, []conditionalHandler{}, bh.handlers)
+		assert.Nil(t, bh.stop)
+	})
+
+	t.Run("error_with_options", func(t *testing.T) {
+		bh, err = NewBotHandler(bot, updates, func(_ *BotHandler) error { return errTest })
+
+		assert.ErrorIs(t, err, errTest)
+		assert.Nil(t, bh)
+	})
 }
 
 func TestBotHandler_Start(t *testing.T) {
@@ -47,17 +77,15 @@ func TestBotHandler_Start(t *testing.T) {
 
 	updates := make(chan telego.Update)
 
-	bh := NewBotHandler(bot, updates)
+	bh, err := NewBotHandler(bot, updates)
+	require.NoError(t, err)
 
-	mutex := sync.Mutex{}
 	wg := sync.WaitGroup{}
 	h1 := 0
 	h2 := 0
 
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		defer wg.Done()
-		mutex.Lock()
-		defer mutex.Unlock()
 		h1++
 	}, func(update telego.Update) bool {
 		return update.UpdateID == 1
@@ -65,8 +93,6 @@ func TestBotHandler_Start(t *testing.T) {
 
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		defer wg.Done()
-		mutex.Lock()
-		defer mutex.Unlock()
 		h2++
 	})
 
@@ -98,10 +124,79 @@ func TestBotHandler_Start(t *testing.T) {
 }
 
 func TestBotHandler_Stop(t *testing.T) {
-	bh := newBotHandler(t)
-	bh.stop = make(chan struct{})
-	assert.NotPanics(t, func() {
-		bh.Stop()
+	t.Run("basic", func(t *testing.T) {
+		bh := newBotHandler(t)
+		bh.stop = make(chan struct{})
+		assert.NotPanics(t, func() {
+			bh.Stop()
+		})
+	})
+
+	t.Run("with_timeout", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update)
+
+		bh, err := NewBotHandler(bot, updates, WithStopTimeout(smallTimeout))
+		require.NoError(t, err)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			time.Sleep(hugeTimeout)
+			t.Fatal("timeout didn't worked")
+		})
+
+		timeoutSignal := time.After(timeout)
+		done := make(chan struct{})
+
+		assert.NotPanics(t, func() {
+			go bh.Start()
+
+			updates <- telego.Update{}
+
+			go func() {
+				bh.Stop()
+				done <- struct{}{}
+			}()
+
+			select {
+			case <-timeoutSignal:
+				t.Fatal("Timeout")
+			case <-done:
+			}
+		})
+	})
+
+	t.Run("without_timeout", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update)
+
+		bh, err := NewBotHandler(bot, updates, WithStopTimeout(hugeTimeout))
+		require.NoError(t, err)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {})
+
+		timeoutSignal := time.After(timeout)
+		done := make(chan struct{})
+
+		assert.NotPanics(t, func() {
+			go bh.Start()
+
+			updates <- telego.Update{}
+
+			go func() {
+				bh.Stop()
+				done <- struct{}{}
+			}()
+
+			select {
+			case <-timeoutSignal:
+				t.Fatal("Timeout")
+			case <-done:
+			}
+		})
 	})
 }
 
@@ -154,7 +249,7 @@ func TestBotHandler_IsRunning(t *testing.T) {
 
 	t.Run("running", func(t *testing.T) {
 		go bh.Start()
-		time.Sleep(time.Millisecond * 10)
+		time.Sleep(smallTimeout)
 		assert.True(t, bh.IsRunning())
 
 		bh.Stop()
