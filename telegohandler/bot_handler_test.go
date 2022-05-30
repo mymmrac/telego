@@ -151,6 +151,9 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
+			for !bh.IsRunning() {
+				// Wait for handler to start
+			}
 
 			updates <- telego.Update{}
 
@@ -183,6 +186,9 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
+			for !bh.IsRunning() {
+				// Wait for handler to start
+			}
 
 			updates <- telego.Update{}
 
@@ -196,6 +202,31 @@ func TestBotHandler_Stop(t *testing.T) {
 				t.Fatal("Timeout")
 			case <-done:
 			}
+		})
+	})
+
+	t.Run("stop_checked", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update, 1)
+
+		bh, err := NewBotHandler(bot, updates)
+		require.NoError(t, err)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			t.Fatal("handled after stop")
+		})
+
+		assert.NotPanics(t, func() {
+			go bh.Start()
+			for !bh.IsRunning() {
+				// Wait for handler to start
+			}
+
+			bh.Stop()
+
+			updates <- telego.Update{}
 		})
 	})
 }
