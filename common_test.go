@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/goccy/go-json"
@@ -12,6 +13,8 @@ import (
 )
 
 var (
+	mutex sync.Mutex
+
 	data = &telegoapi.RequestData{}
 	resp = &telegoapi.Response{
 		Ok: true,
@@ -24,6 +27,8 @@ var (
 
 func setResult(t *testing.T, v interface{}) {
 	t.Helper()
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	bytesData, err := json.Marshal(v)
 	assert.NoError(t, err)
