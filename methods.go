@@ -78,9 +78,9 @@ type SetWebhookParams struct {
 	// address resolved through DNS
 	IPAddress string `json:"ip_address,omitempty"`
 
-	// MaxConnections - Optional. Maximum allowed number of simultaneous HTTPS connections to the webhook for
-	// update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot's server, and higher
-	// values to increase your bot's throughput.
+	// MaxConnections - Optional. The maximum allowed number of simultaneous HTTPS connections to the webhook
+	// for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot's server, and
+	// higher values to increase your bot's throughput.
 	MaxConnections int `json:"max_connections,omitempty"`
 
 	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
@@ -94,6 +94,11 @@ type SetWebhookParams struct {
 
 	// DropPendingUpdates - Optional. Pass True to drop all pending updates
 	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
+
+	// SecretToken - Optional. A secret token to be sent in a header “X-Telegram-Bot-Api-Secret-Token” in
+	// every webhook request, 1-256 characters. Only characters A-Z, a-z, 0-9, _ and - are allowed. The header is
+	// useful to ensure that the request comes from a webhook set by you.
+	SecretToken string `json:"secret_token,omitempty"`
 }
 
 func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
@@ -107,12 +112,12 @@ func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
 }
 
 // SetWebhook - Use this method to specify a URL and receive incoming updates via an outgoing webhook.
-// Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing
+// Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing
 // a JSON-serialized Update (https://core.telegram.org/bots/api#update). In case of an unsuccessful request, we
 // will give up after a reasonable amount of attempts. Returns True on success.
-// If you'd like to make sure that the Webhook request comes from Telegram, we recommend using a secret path in
-// the URL, e.g. https://www.example.com/<token>. Since nobody else knows your bot's token, you can be pretty
-// sure it's us.
+// If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter
+// secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the
+// secret token as content.
 func (b *Bot) SetWebhook(params *SetWebhookParams) error {
 	err := b.performRequest("setWebhook", params, nil)
 	if err != nil {
@@ -353,7 +358,7 @@ type SendPhotoParams struct {
 	// Photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new
 	// photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must
-	// not exceed 10000 in total. Width and height ratio must be at most 20. More info on Sending Files »
+	// not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	Photo InputFile `json:"photo"`
 
@@ -416,7 +421,7 @@ type SendAudioParams struct {
 
 	// Audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or
-	// upload a new one using multipart/form-data. More info on Sending Files »
+	// upload a new one using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	Audio InputFile `json:"audio"`
 
@@ -445,7 +450,7 @@ type SendAudioParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -503,7 +508,8 @@ type SendDocumentParams struct {
 
 	// Document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
-	// using multipart/form-data. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	Document InputFile `json:"document"`
 
 	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
@@ -511,7 +517,7 @@ type SendDocumentParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Document caption (may also be used when resending documents by file_id), 0-1024
@@ -583,7 +589,7 @@ type SendVideoParams struct {
 
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
-	// video using multipart/form-data. More info on Sending Files »
+	// video using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	Video InputFile `json:"video"`
 
@@ -601,7 +607,7 @@ type SendVideoParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Video caption (may also be used when resending videos by file_id), 0-1024 characters
@@ -651,8 +657,8 @@ func (p *SendVideoParams) fileParameters() map[string]telegoapi.NamedReader {
 	return fp
 }
 
-// SendVideo - Use this method to send video files, Telegram clients support mp4 videos (other formats may be
-// sent as Document (https://core.telegram.org/bots/api#document)). On success, the sent Message
+// SendVideo - Use this method to send video files, Telegram clients support MPEG4 videos (other formats may
+// be sent as Document (https://core.telegram.org/bots/api#document)). On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send video files of up to 50 MB
 // in size, this limit may be changed in the future.
 func (b *Bot) SendVideo(params *SendVideoParams) (*Message, error) {
@@ -673,7 +679,7 @@ type SendAnimationParams struct {
 
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
-	// upload a new animation using multipart/form-data. More info on Sending Files »
+	// upload a new animation using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	Animation InputFile `json:"animation"`
 
@@ -691,7 +697,7 @@ type SendAnimationParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// Caption - Optional. Animation caption (may also be used when resending animation by file_id), 0-1024
@@ -759,7 +765,8 @@ type SendVoiceParams struct {
 
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
-	// using multipart/form-data. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
 	Voice InputFile `json:"voice"`
 
 	// Caption - Optional. Voice message caption, 0-1024 characters after entities parsing
@@ -826,7 +833,7 @@ type SendVideoNoteParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
-	// servers (recommended) or upload a new video using multipart/form-data. More info on Sending Files »
+	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files). Sending video notes by a URL is currently unsupported
 	VideoNote InputFile `json:"video_note"`
 
@@ -841,7 +848,7 @@ type SendVideoNoteParams struct {
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
-	// <file_attach_name>. More info on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumb *InputFile `json:"thumb,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -877,8 +884,8 @@ func (p *SendVideoNoteParams) fileParameters() map[string]telegoapi.NamedReader 
 }
 
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients
-// support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success,
-// the sent Message (https://core.telegram.org/bots/api#message) is returned.
+// support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On
+// success, the sent Message (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVideoNote", params, &message)
@@ -1027,7 +1034,7 @@ type EditMessageLiveLocationParams struct {
 	// specified.
 	Heading int `json:"heading,omitempty"`
 
-	// ProximityAlertRadius - Optional. Maximum distance for proximity alerts about approaching another chat
+	// ProximityAlertRadius - Optional. The maximum distance for proximity alerts about approaching another chat
 	// member, in meters. Must be between 1 and 100000 if specified.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 
@@ -1407,13 +1414,13 @@ func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) (*UserPro
 
 // GetFileParams - Represents parameters of getFile method.
 type GetFileParams struct {
-	// FileID - File identifier to get info about
+	// FileID - File identifier to get information about
 	FileID string `json:"file_id"`
 }
 
-// GetFile - Use this method to get basic info about a file and prepare it for downloading. For the moment,
-// bots can download files of up to 20MB in size. On success, a File (https://core.telegram.org/bots/api#file)
-// object is returned. The file can then be downloaded via the link
+// GetFile - Use this method to get basic information about a file and prepare it for downloading. For the
+// moment, bots can download files of up to 20MB in size. On success, a File
+// (https://core.telegram.org/bots/api#file) object is returned. The file can then be downloaded via the link
 // https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is
 // guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested
 // by calling getFile (https://core.telegram.org/bots/api#getfile) again.
@@ -1491,7 +1498,7 @@ func (b *Bot) UnbanChatMember(params *UnbanChatMemberParams) error {
 // RestrictChatMemberParams - Represents parameters of restrictChatMember method.
 type RestrictChatMemberParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroupusername)
+	// @supergroup_username)
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
@@ -1581,7 +1588,7 @@ func (b *Bot) PromoteChatMember(params *PromoteChatMemberParams) error {
 // SetChatAdministratorCustomTitleParams - Represents parameters of setChatAdministratorCustomTitle method.
 type SetChatAdministratorCustomTitleParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroupusername)
+	// @supergroup_username)
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user
@@ -1650,7 +1657,7 @@ func (b *Bot) UnbanChatSenderChat(params *UnbanChatSenderChatParams) error {
 // SetChatPermissionsParams - Represents parameters of setChatPermissions method.
 type SetChatPermissionsParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroupusername)
+	// @supergroup_username)
 	ChatID ChatID `json:"chat_id"`
 
 	// Permissions - A JSON-serialized object for new default chat permissions
@@ -1701,7 +1708,7 @@ type CreateChatInviteLinkParams struct {
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire
 	ExpireDate int64 `json:"expire_date,omitempty"`
 
-	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
+	// MemberLimit - Optional. The maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
 	MemberLimit int `json:"member_limit,omitempty"`
 
@@ -1739,7 +1746,7 @@ type EditChatInviteLinkParams struct {
 	// ExpireDate - Optional. Point in time (Unix timestamp) when the link will expire
 	ExpireDate int64 `json:"expire_date,omitempty"`
 
-	// MemberLimit - Optional. Maximum number of users that can be members of the chat simultaneously after
+	// MemberLimit - Optional. The maximum number of users that can be members of the chat simultaneously after
 	// joining the chat via this invite link; 1-99999
 	MemberLimit int `json:"member_limit,omitempty"`
 
@@ -2094,7 +2101,7 @@ func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
 // SetChatStickerSetParams - Represents parameters of setChatStickerSet method.
 type SetChatStickerSetParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroupusername)
+	// @supergroup_username)
 	ChatID ChatID `json:"chat_id"`
 
 	// StickerSetName - Name of the sticker set to be set as the group sticker set
@@ -2117,7 +2124,7 @@ func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
 // DeleteChatStickerSetParams - Represents parameters of deleteChatStickerSet method.
 type DeleteChatStickerSetParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroupusername)
+	// @supergroup_username)
 	ChatID ChatID `json:"chat_id"`
 }
 
@@ -2149,7 +2156,7 @@ type AnswerCallbackQueryParams struct {
 
 	// URL - Optional. URL that will be opened by the user's client. If you have created a Game
 	// (https://core.telegram.org/bots/api#game) and accepted the conditions via @BotFather
-	// (https://t.me/botfather), specify the URL that opens your game — note that this will only work if the query
+	// (https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query
 	// comes from a callback_game (https://core.telegram.org/bots/api#inlinekeyboardbutton) button.
 	// Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
 	URL string `json:"url,omitempty"`
@@ -2254,7 +2261,7 @@ type SetChatMenuButtonParams struct {
 	// button will be changed
 	ChatID int64 `json:"chat_id,omitempty"`
 
-	// MenuButton - Optional. A JSON-serialized object for the new bot's menu button. Defaults to
+	// MenuButton - Optional. A JSON-serialized object for the bot's new menu button. Defaults to
 	// MenuButtonDefault (https://core.telegram.org/bots/api#menubuttondefault)
 	MenuButton MenuButton `json:"menu_button,omitempty"`
 }
@@ -2571,7 +2578,7 @@ type SendStickerParams struct {
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a
-	// new one using multipart/form-data. More info on Sending Files »
+	// new one using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	Sticker InputFile `json:"sticker"`
 
@@ -2639,7 +2646,7 @@ type UploadStickerFileParams struct {
 	UserID int64 `json:"user_id"`
 
 	// PngSticker - PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed
-	// 512px, and either width or height must be exactly 512px. More info on Sending Files »
+	// 512px, and either width or height must be exactly 512px. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	PngSticker InputFile `json:"png_sticker"`
 }
@@ -2669,7 +2676,7 @@ type CreateNewStickerSetParams struct {
 	UserID int64 `json:"user_id"`
 
 	// Name - Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only
-	// english letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and
+	// English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and
 	// must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters.
 	Name string `json:"name"`
 
@@ -2679,7 +2686,7 @@ type CreateNewStickerSetParams struct {
 	// PngSticker - Optional. PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must
 	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
 	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
-	// Internet, or upload a new one using multipart/form-data. More info on Sending Files »
+	// Internet, or upload a new one using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	PngSticker *InputFile `json:"png_sticker,omitempty"`
 
@@ -2742,7 +2749,7 @@ type AddStickerToSetParams struct {
 	// PngSticker - Optional. PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must
 	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
 	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
-	// Internet, or upload a new one using multipart/form-data. More info on Sending Files »
+	// Internet, or upload a new one using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files)
 	PngSticker *InputFile `json:"png_sticker,omitempty"`
 
@@ -2845,9 +2852,9 @@ type SetStickerSetThumbParams struct {
 	// https://core.telegram.org/stickers#video-sticker-requirements
 	// (https://core.telegram.org/stickers#video-sticker-requirements) for video sticker technical requirements.
 	// Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a
-	// String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More info
-	// on Sending Files » (https://core.telegram.org/bots/api#sending-files). Animated sticker set thumbnails can't
-	// be uploaded via HTTP URL.
+	// String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More
+	// information on Sending Files » (https://core.telegram.org/bots/api#sending-files). Animated sticker set
+	// thumbnails can't be uploaded via HTTP URL.
 	Thumb *InputFile `json:"thumb,omitempty"`
 }
 
@@ -2960,7 +2967,7 @@ type SendInvoiceParams struct {
 	// internal processes.
 	Payload string `json:"payload"`
 
-	// ProviderToken - Payments provider token, obtained via BotFather (https://t.me/botfather)
+	// ProviderToken - Payment provider token, obtained via @BotFather (https://t.me/botfather)
 	ProviderToken string `json:"provider_token"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
@@ -2989,7 +2996,7 @@ type SendInvoiceParams struct {
 	// the bot (instead of a Pay button), with the value used as the start parameter
 	StartParameter string `json:"start_parameter,omitempty"`
 
-	// ProviderData - Optional. A JSON-serialized data about the invoice, which will be shared with the payment
+	// ProviderData - Optional. JSON-serialized data about the invoice, which will be shared with the payment
 	// provider. A detailed description of required fields should be provided by the payment provider.
 	ProviderData string `json:"provider_data,omitempty"`
 
@@ -2997,7 +3004,7 @@ type SendInvoiceParams struct {
 	// image for a service. People like it better when they see what they are paying for.
 	PhotoURL string `json:"photo_url,omitempty"`
 
-	// PhotoSize - Optional. Photo size
+	// PhotoSize - Optional. Photo size in bytes
 	PhotoSize int `json:"photo_size,omitempty"`
 
 	// PhotoWidth - Optional. Photo width
@@ -3019,10 +3026,10 @@ type SendInvoiceParams struct {
 	// order
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True, if user's phone number should be sent to provider
+	// SendPhoneNumberToProvider - Optional. Pass True, if the user's phone number should be sent to provider
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True, if user's email address should be sent to provider
+	// SendEmailToProvider - Optional. Pass True, if the user's email address should be sent to provider
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
 	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
@@ -3058,6 +3065,94 @@ func (b *Bot) SendInvoice(params *SendInvoiceParams) (*Message, error) {
 	}
 
 	return message, nil
+}
+
+// CreateInvoiceLinkParams - Represents parameters of createInvoiceLink method.
+type CreateInvoiceLinkParams struct {
+	// Title - Product name, 1-32 characters
+	Title string `json:"title"`
+
+	// Description - Product description, 1-255 characters
+	Description string `json:"description"`
+
+	// Payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your
+	// internal processes.
+	Payload string `json:"payload"`
+
+	// ProviderToken - Payment provider token, obtained via BotFather (https://t.me/botfather)
+	ProviderToken string `json:"provider_token"`
+
+	// Currency - Three-letter ISO 4217 currency code, see more on currencies
+	// (https://core.telegram.org/bots/payments#supported-currencies)
+	Currency string `json:"currency"`
+
+	// Prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount,
+	// delivery cost, delivery tax, bonus, etc.)
+	Prices []LabeledPrice `json:"prices"`
+
+	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency
+	// (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the
+	// exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the
+	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+	MaxTipAmount int `json:"max_tip_amount,omitempty"`
+
+	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest
+	// units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The
+	// suggested tip amounts must be positive, passed in a strictly increased order and must not exceed
+	// max_tip_amount.
+	SuggestedTipAmounts []int `json:"suggested_tip_amounts,omitempty"`
+
+	// ProviderData - Optional. JSON-serialized data about the invoice, which will be shared with the payment
+	// provider. A detailed description of required fields should be provided by the payment provider.
+	ProviderData string `json:"provider_data,omitempty"`
+
+	// PhotoURL - Optional. URL of the product photo for the invoice. Can be a photo of the goods or a marketing
+	// image for a service.
+	PhotoURL string `json:"photo_url,omitempty"`
+
+	// PhotoSize - Optional. Photo size in bytes
+	PhotoSize int `json:"photo_size,omitempty"`
+
+	// PhotoWidth - Optional. Photo width
+	PhotoWidth int `json:"photo_width,omitempty"`
+
+	// PhotoHeight - Optional. Photo height
+	PhotoHeight int `json:"photo_height,omitempty"`
+
+	// NeedName - Optional. Pass True, if you require the user's full name to complete the order
+	NeedName bool `json:"need_name,omitempty"`
+
+	// NeedPhoneNumber - Optional. Pass True, if you require the user's phone number to complete the order
+	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
+
+	// NeedEmail - Optional. Pass True, if you require the user's email address to complete the order
+	NeedEmail bool `json:"need_email,omitempty"`
+
+	// NeedShippingAddress - Optional. Pass True, if you require the user's shipping address to complete the
+	// order
+	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
+
+	// SendPhoneNumberToProvider - Optional. Pass True, if the user's phone number should be sent to the
+	// provider
+	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
+
+	// SendEmailToProvider - Optional. Pass True, if the user's email address should be sent to the provider
+	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
+
+	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
+	IsFlexible bool `json:"is_flexible,omitempty"`
+}
+
+// CreateInvoiceLink - Use this method to create a link for an invoice. Returns the created invoice link as
+// String on success.
+func (b *Bot) CreateInvoiceLink(params *CreateInvoiceLinkParams) (*string, error) {
+	var invoiceLink *string
+	err := b.performRequest("createInvoiceLink", params, &invoiceLink)
+	if err != nil {
+		return nil, fmt.Errorf("createInvoiceLink(): %w", err)
+	}
+
+	return invoiceLink, nil
 }
 
 // AnswerShippingQueryParams - Represents parameters of answerShippingQuery method.
@@ -3152,7 +3247,7 @@ type SendGameParams struct {
 	ChatID int64 `json:"chat_id"`
 
 	// GameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games
-	// via BotFather (https://t.me/botfather).
+	// via @BotFather (https://t.me/botfather).
 	GameShortName string `json:"game_short_name"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -3248,8 +3343,8 @@ type GetGameHighScoresParams struct {
 // specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore
 // (https://core.telegram.org/bots/api#gamehighscore) objects.
 // This method will currently return scores for the target user, plus two of their closest neighbors on each
-// side. Will also return the top three users if the user and his neighbors are not among them. Please note that
-// this behavior is subject to change.
+// side. Will also return the top three users if the user and their neighbors are not among them. Please note
+// that this behavior is subject to change.
 func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) ([]GameHighScore, error) {
 	var gameHighScores []GameHighScore
 	err := b.performRequest("getGameHighScores", params, &gameHighScores)

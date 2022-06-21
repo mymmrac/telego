@@ -1083,7 +1083,7 @@ func TestBot_ExportChatInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		expectedInviteLink := ""
+		expectedInviteLink := "InviteLink"
 		setResult(t, expectedInviteLink)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
@@ -2392,6 +2392,37 @@ func TestBot_SendInvoice(t *testing.T) {
 		message, err := m.Bot.SendInvoice(nil)
 		assert.Error(t, err)
 		assert.Nil(t, message)
+	})
+}
+
+func TestBot_CreateInvoiceLink(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedInvoiceLink := "InvoiceLink"
+		setResult(t, expectedInvoiceLink)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		invoiceLink, err := m.Bot.CreateInvoiceLink(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, &expectedInvoiceLink, invoiceLink)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		invoiceLink, err := m.Bot.CreateInvoiceLink(nil)
+		assert.Error(t, err)
+		assert.Nil(t, invoiceLink)
 	})
 }
 
