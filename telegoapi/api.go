@@ -50,7 +50,7 @@ func (a Error) Error() string {
 	return fmt.Sprintf("%d %q", a.ErrorCode, a.Description)
 }
 
-// ResponseParameters - Contains information about why a request was unsuccessful.
+// ResponseParameters - Describes why a request was unsuccessful.
 type ResponseParameters struct {
 	// MigrateToChatID - Optional. The group has been migrated to a supergroup with the specified identifier.
 	// This number may have more than 32 significant bits and some programming languages may have difficulty/silent
