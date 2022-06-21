@@ -116,6 +116,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/goccy/go-json"
+
 	"github.com/mymmrac/telego/telegoapi"
 )
 `)
@@ -125,7 +127,11 @@ import (
 		typeDescription := fitTextToLine(fmt.Sprintf("%s - %s", t.name, t.description), "// ")
 		data.WriteString(typeDescription)
 
-		data.WriteString(fmt.Sprintf("\ntype %s struct {\n", t.name))
+		data.WriteString(fmt.Sprintf("\ntype %s struct {", t.name))
+
+		if len(t.fields) > 0 {
+			data.WriteString("\n")
+		}
 
 		fieldsCount += len(t.fields)
 		for _, f := range t.fields {
@@ -161,5 +167,13 @@ func fieldSpecialCases(field *tgTypeField) {
 
 	if field.name == "UserId" && field.typ == "int" {
 		field.typ = "int64"
+	}
+
+	if field.name == "Media" && field.typ == "string" {
+		field.typ = "InputFile"
+	}
+
+	if field.name == "InputMessageContent" && field.typ == "*InputMessageContent" {
+		field.typ = "InputMessageContent"
 	}
 }

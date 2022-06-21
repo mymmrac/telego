@@ -232,6 +232,7 @@ func uppercaseWords(text string) string {
 	text = strings.ReplaceAll(text, "Botfather", "BotFather")
 
 	text = strings.ReplaceAll(text, "@channelusername", "@channel_username")
+	text = strings.ReplaceAll(text, "@supergroupusername", "@supergroup_username")
 
 	text = strings.ReplaceAll(text, "uRL", "url")
 	text = strings.ReplaceAll(text, "iPAddress", "ipAddress")

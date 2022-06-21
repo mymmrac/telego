@@ -287,7 +287,7 @@ func docsText() (string, error) {
 func formatFile(filename string) {
 	buf := bytes.Buffer{}
 
-	cmd := exec.Command("gofmt", "-w", filename)
+	cmd := exec.Command("goimports", "-w", filename)
 	cmd.Stderr = &buf
 
 	if err := cmd.Run(); err != nil {
