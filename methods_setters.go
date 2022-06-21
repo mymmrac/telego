@@ -60,6 +60,12 @@ func (p *SetWebhookParams) WithDropPendingUpdates() *SetWebhookParams {
 	return p
 }
 
+// WithSecretToken adds secret token parameter
+func (p *SetWebhookParams) WithSecretToken(secretToken string) *SetWebhookParams {
+	p.SecretToken = secretToken
+	return p
+}
+
 // WithDropPendingUpdates adds drop pending updates parameter
 func (p *DeleteWebhookParams) WithDropPendingUpdates() *DeleteWebhookParams {
 	p.DropPendingUpdates = true
@@ -2205,6 +2211,126 @@ func (p *SendInvoiceParams) WithAllowSendingWithoutReply() *SendInvoiceParams {
 // WithReplyMarkup adds reply markup parameter
 func (p *SendInvoiceParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *SendInvoiceParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithTitle adds title parameter
+func (p *CreateInvoiceLinkParams) WithTitle(title string) *CreateInvoiceLinkParams {
+	p.Title = title
+	return p
+}
+
+// WithDescription adds description parameter
+func (p *CreateInvoiceLinkParams) WithDescription(description string) *CreateInvoiceLinkParams {
+	p.Description = description
+	return p
+}
+
+// WithPayload adds payload parameter
+func (p *CreateInvoiceLinkParams) WithPayload(payload string) *CreateInvoiceLinkParams {
+	p.Payload = payload
+	return p
+}
+
+// WithProviderToken adds provider token parameter
+func (p *CreateInvoiceLinkParams) WithProviderToken(providerToken string) *CreateInvoiceLinkParams {
+	p.ProviderToken = providerToken
+	return p
+}
+
+// WithCurrency adds currency parameter
+func (p *CreateInvoiceLinkParams) WithCurrency(currency string) *CreateInvoiceLinkParams {
+	p.Currency = currency
+	return p
+}
+
+// WithPrices adds prices parameter
+func (p *CreateInvoiceLinkParams) WithPrices(prices ...LabeledPrice) *CreateInvoiceLinkParams {
+	p.Prices = prices
+	return p
+}
+
+// WithMaxTipAmount adds max tip amount parameter
+func (p *CreateInvoiceLinkParams) WithMaxTipAmount(maxTipAmount int) *CreateInvoiceLinkParams {
+	p.MaxTipAmount = maxTipAmount
+	return p
+}
+
+// WithSuggestedTipAmounts adds suggested tip amounts parameter
+func (p *CreateInvoiceLinkParams) WithSuggestedTipAmounts(suggestedTipAmounts ...int) *CreateInvoiceLinkParams {
+	p.SuggestedTipAmounts = suggestedTipAmounts
+	return p
+}
+
+// WithProviderData adds provider data parameter
+func (p *CreateInvoiceLinkParams) WithProviderData(providerData string) *CreateInvoiceLinkParams {
+	p.ProviderData = providerData
+	return p
+}
+
+// WithPhotoURL adds photo URL parameter
+func (p *CreateInvoiceLinkParams) WithPhotoURL(photoURL string) *CreateInvoiceLinkParams {
+	p.PhotoURL = photoURL
+	return p
+}
+
+// WithPhotoSize adds photo size parameter
+func (p *CreateInvoiceLinkParams) WithPhotoSize(photoSize int) *CreateInvoiceLinkParams {
+	p.PhotoSize = photoSize
+	return p
+}
+
+// WithPhotoWidth adds photo width parameter
+func (p *CreateInvoiceLinkParams) WithPhotoWidth(photoWidth int) *CreateInvoiceLinkParams {
+	p.PhotoWidth = photoWidth
+	return p
+}
+
+// WithPhotoHeight adds photo height parameter
+func (p *CreateInvoiceLinkParams) WithPhotoHeight(photoHeight int) *CreateInvoiceLinkParams {
+	p.PhotoHeight = photoHeight
+	return p
+}
+
+// WithNeedName adds need name parameter
+func (p *CreateInvoiceLinkParams) WithNeedName() *CreateInvoiceLinkParams {
+	p.NeedName = true
+	return p
+}
+
+// WithNeedPhoneNumber adds need phone number parameter
+func (p *CreateInvoiceLinkParams) WithNeedPhoneNumber() *CreateInvoiceLinkParams {
+	p.NeedPhoneNumber = true
+	return p
+}
+
+// WithNeedEmail adds need email parameter
+func (p *CreateInvoiceLinkParams) WithNeedEmail() *CreateInvoiceLinkParams {
+	p.NeedEmail = true
+	return p
+}
+
+// WithNeedShippingAddress adds need shipping address parameter
+func (p *CreateInvoiceLinkParams) WithNeedShippingAddress() *CreateInvoiceLinkParams {
+	p.NeedShippingAddress = true
+	return p
+}
+
+// WithSendPhoneNumberToProvider adds send phone number to provider parameter
+func (p *CreateInvoiceLinkParams) WithSendPhoneNumberToProvider() *CreateInvoiceLinkParams {
+	p.SendPhoneNumberToProvider = true
+	return p
+}
+
+// WithSendEmailToProvider adds send email to provider parameter
+func (p *CreateInvoiceLinkParams) WithSendEmailToProvider() *CreateInvoiceLinkParams {
+	p.SendEmailToProvider = true
+	return p
+}
+
+// WithIsFlexible adds is flexible parameter
+func (p *CreateInvoiceLinkParams) WithIsFlexible() *CreateInvoiceLinkParams {
+	p.IsFlexible = true
 	return p
 }
 

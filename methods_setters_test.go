@@ -28,7 +28,8 @@ func TestSetWebhookParams_Setters(t *testing.T) {
 		WithIPAddress("IPAddress").
 		WithMaxConnections(1).
 		WithAllowedUpdates([]string{"AllowedUpdates"}...).
-		WithDropPendingUpdates()
+		WithDropPendingUpdates().
+		WithSecretToken("SecretToken")
 
 	assert.Equal(t, &SetWebhookParams{
 		URL:                "URL",
@@ -37,6 +38,7 @@ func TestSetWebhookParams_Setters(t *testing.T) {
 		MaxConnections:     1,
 		AllowedUpdates:     []string{"AllowedUpdates"},
 		DropPendingUpdates: true,
+		SecretToken:        "SecretToken",
 	}, s)
 }
 
@@ -1203,11 +1205,11 @@ func TestAnswerInlineQueryParams_Setters(t *testing.T) {
 func TestAnswerWebAppQueryParams_Setters(t *testing.T) {
 	a := (&AnswerWebAppQueryParams{}).
 		WithWebAppQueryID("WebAppQueryID").
-		WithResult(&InlineQueryResultArticle{Type: "Results"})
+		WithResult(&InlineQueryResultArticle{Type: "Result"})
 
 	assert.Equal(t, &AnswerWebAppQueryParams{
 		WebAppQueryID: "WebAppQueryID",
-		Result:        &InlineQueryResultArticle{Type: "Results"},
+		Result:        &InlineQueryResultArticle{Type: "Result"},
 	}, a)
 }
 
@@ -1270,6 +1272,53 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 		AllowSendingWithoutReply:  true,
 		ReplyMarkup:               &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, s)
+}
+
+func TestCreateInvoiceLinkParams_Setters(t *testing.T) {
+	c := (&CreateInvoiceLinkParams{}).
+		WithTitle("Title").
+		WithDescription("Description").
+		WithPayload("Payload").
+		WithProviderToken("ProviderToken").
+		WithCurrency("Currency").
+		WithPrices([]LabeledPrice{{Label: "Prices"}}...).
+		WithMaxTipAmount(1).
+		WithSuggestedTipAmounts([]int{2}...).
+		WithProviderData("ProviderData").
+		WithPhotoURL("PhotoURL").
+		WithPhotoSize(3).
+		WithPhotoWidth(4).
+		WithPhotoHeight(5).
+		WithNeedName().
+		WithNeedPhoneNumber().
+		WithNeedEmail().
+		WithNeedShippingAddress().
+		WithSendPhoneNumberToProvider().
+		WithSendEmailToProvider().
+		WithIsFlexible()
+
+	assert.Equal(t, &CreateInvoiceLinkParams{
+		Title:                     "Title",
+		Description:               "Description",
+		Payload:                   "Payload",
+		ProviderToken:             "ProviderToken",
+		Currency:                  "Currency",
+		Prices:                    []LabeledPrice{{Label: "Prices"}},
+		MaxTipAmount:              1,
+		SuggestedTipAmounts:       []int{2},
+		ProviderData:              "ProviderData",
+		PhotoURL:                  "PhotoURL",
+		PhotoSize:                 3,
+		PhotoWidth:                4,
+		PhotoHeight:               5,
+		NeedName:                  true,
+		NeedPhoneNumber:           true,
+		NeedEmail:                 true,
+		NeedShippingAddress:       true,
+		SendPhoneNumberToProvider: true,
+		SendEmailToProvider:       true,
+		IsFlexible:                true,
+	}, c)
 }
 
 func TestAnswerShippingQueryParams_Setters(t *testing.T) {

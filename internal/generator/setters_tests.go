@@ -151,6 +151,12 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "WebAppInfo{}"
 	case "*WebAppInfo":
 		return "&WebAppInfo{}"
+	case "MenuButton":
+		return fmt.Sprintf("&MenuButtonCommands{Type: \"%s\"}", setter.fieldName)
+	case "*ChatAdministratorRights":
+		return "&ChatAdministratorRights{IsAnonymous: true}"
+	case "InlineQueryResult":
+		return fmt.Sprintf("&InlineQueryResultArticle{Type: \"%s\"}", setter.fieldName)
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
