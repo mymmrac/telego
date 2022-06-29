@@ -27,7 +27,7 @@ telegram.
 
 [//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
 
-> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and 
+> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and
 > [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
 
 ### :clipboard: Table Of Content
@@ -105,7 +105,8 @@ func main() {
 
 	// Create bot and enable debugging info
 	// (more on configuration at /examples/configuration/main.go)
-	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
+	// Note: Please keep in mind that default logger exposes your bot token, use in development only
+	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -147,7 +148,8 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
+	// Note: Please keep in mind that default logger exposes your bot token, use in development only
+	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -185,7 +187,7 @@ import (
 
 func main() {
 	botToken := os.Getenv("TOKEN")
-	
+
 	// Note: Please keep in mind that default logger exposes your bot token, use in development only
 	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
@@ -249,7 +251,8 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(botToken, telego.DefaultLogger(true, true))
+	// Note: Please keep in mind that default logger exposes your bot token, use in development only
+	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -398,6 +401,7 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
+	// Note: Please keep in mind that default logger exposes your bot token, use in development only
 	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)

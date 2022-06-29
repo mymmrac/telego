@@ -123,6 +123,7 @@ func TestBotHandler_Start(t *testing.T) {
 	})
 }
 
+// TODO: Fix race conditions
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		bh := newBotHandler(t)

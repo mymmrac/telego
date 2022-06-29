@@ -23,6 +23,7 @@ func main() {
 		telego.WithFastHTTPClient(&fasthttp.Client{}),
 
 		// Configuration of default logger, enable printing debug information and errors (default: false, true)
+		// Note: Please keep in mind that default logger exposes your bot token, use in development only
 		telego.WithDefaultLogger(true, true),
 
 		// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
