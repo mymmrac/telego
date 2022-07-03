@@ -18,7 +18,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 21
+const testCase = 23
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -520,6 +520,66 @@ func main() {
 			})
 			assert(err == nil, err)
 		})
+
+		defer bh.Stop()
+		bh.Start()
+	case 22:
+		updates, _ := bot.UpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh, _ := th.NewBotHandler(bot, updates)
+
+		auth := func(update telego.Update) bool {
+			var userID int64
+
+			if update.Message != nil && update.Message.From != nil {
+				userID = update.Message.From.ID
+			}
+
+			if update.CallbackQuery != nil {
+				userID = update.CallbackQuery.From.ID
+			}
+
+			if userID == 0 {
+				return false
+			}
+
+			if userID == 1234 {
+				return true
+			}
+
+			return false
+		}
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			// DO AUTHORIZED STUFF...
+		}, auth)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			// DO NOT AUTHORIZED STUFF...
+		}, th.Not(auth))
+
+		defer bh.Stop()
+		bh.Start()
+	case 23:
+		updates, _ := bot.UpdatesViaLongPulling(nil)
+		defer bot.StopLongPulling()
+
+		bh, _ := th.NewBotHandler(bot, updates)
+
+		ok := false
+		middleware := func(update telego.Update) bool {
+			return ok
+		}
+
+		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+			ok = true
+			fmt.Println("SET OK")
+		}, th.CommandEqual("ok"))
+
+		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+			fmt.Println("OK")
+		}, middleware)
 
 		defer bh.Stop()
 		bh.Start()
