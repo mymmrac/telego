@@ -14,16 +14,11 @@ type Handler func(bot *telego.Bot, update telego.Update)
 // Predicate allows filtering updates for handlers
 type Predicate func(update telego.Update) bool
 
-type conditionalHandler struct {
-	Handler    Handler
-	Predicates []Predicate
-}
-
 // BotHandler represents bot handler that can handle updated matching by predicates
 type BotHandler struct {
 	bot      *telego.Bot
 	updates  <-chan telego.Update
-	handlers []conditionalHandler
+	handlers []*conditionalHandler
 
 	running        bool
 	stop           chan struct{}
@@ -40,7 +35,7 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 	bh := &BotHandler{
 		bot:      bot,
 		updates:  updates,
-		handlers: make([]conditionalHandler, 0),
+		handlers: make([]*conditionalHandler, 0),
 	}
 
 	for _, option := range options {
@@ -53,8 +48,15 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 }
 
 // Start starts handling of updates
-// Note: After you done with handling updates you should call Stop method, because stopping updates chan will do nothing
+// Note: After you done with handling updates you should call Stop method,
+// because stopping updates chan will do nothing.
+// Calling Start() multiple times after the first one does nothing.
 func (h *BotHandler) Start() {
+	h.runningLock.RLock()
+	if h.running {
+		return
+	}
+	h.runningLock.RUnlock()
 	h.runningLock.Lock()
 	h.stop = make(chan struct{})
 	h.running = true
@@ -77,17 +79,9 @@ func (h *BotHandler) Start() {
 // processUpdate checks all handlers and tries to process update in first matched handler
 func (h *BotHandler) processUpdate(update telego.Update) {
 	for _, ch := range h.handlers {
-		ok := true
-		for _, p := range ch.Predicates {
-			if !p(update) {
-				ok = false
-				break
-			}
-		}
-		if !ok {
+		if !ch.match(update) {
 			continue
 		}
-
 		h.handledUpdates.Add(1)
 		go func() {
 			ch.Handler(h.bot, update)
@@ -147,7 +141,7 @@ func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
 		}
 	}
 
-	h.handlers = append(h.handlers, conditionalHandler{
+	h.handlers = append(h.handlers, &conditionalHandler{
 		Handler:    handler,
 		Predicates: predicates,
 	})
