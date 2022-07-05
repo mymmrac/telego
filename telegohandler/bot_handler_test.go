@@ -49,7 +49,7 @@ func TestNewBotHandler(t *testing.T) {
 
 		assert.Equal(t, bot, bh.bot)
 		assert.EqualValues(t, updates, bh.updates)
-		assert.Equal(t, []conditionalHandler{}, bh.handlers)
+		assert.Equal(t, []*conditionalHandler{}, bh.handlers)
 		assert.Nil(t, bh.stop)
 	})
 
@@ -59,7 +59,7 @@ func TestNewBotHandler(t *testing.T) {
 
 		assert.Equal(t, bot, bh.bot)
 		assert.EqualValues(t, updates, bh.updates)
-		assert.Equal(t, []conditionalHandler{}, bh.handlers)
+		assert.Equal(t, []*conditionalHandler{}, bh.handlers)
 		assert.Nil(t, bh.stop)
 	})
 
@@ -256,7 +256,7 @@ func TestBotHandler_Handle(t *testing.T) {
 		assert.NotNil(t, bh.handlers[0].Handler)
 		assert.Nil(t, bh.handlers[0].Predicates)
 
-		bh.handlers = make([]conditionalHandler, 0)
+		bh.handlers = make([]*conditionalHandler, 0)
 	})
 
 	predicate := Predicate(func(update telego.Update) bool { return false })
@@ -268,7 +268,7 @@ func TestBotHandler_Handle(t *testing.T) {
 		assert.NotNil(t, bh.handlers[0].Handler)
 		assert.NotNil(t, bh.handlers[0].Predicates)
 
-		bh.handlers = make([]conditionalHandler, 0)
+		bh.handlers = make([]*conditionalHandler, 0)
 	})
 }
 
