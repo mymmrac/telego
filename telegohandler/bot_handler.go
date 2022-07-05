@@ -71,7 +71,7 @@ func (h *BotHandler) Start() {
 			h.handledUpdates.Done()
 			return
 		case update := <-h.updates:
-			h.processUpdate(update)
+			h.processUpdate(update) // TODO: Add example & docs for usage, order of handlers
 		}
 	}
 }
