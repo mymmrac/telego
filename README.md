@@ -25,8 +25,6 @@ The goal of this library was to create API with same types and methods as actual
 have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
 
-[//]: # (TODO: Add library to official Telegram examples https://core.telegram.org/bots/samples#go)
-
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and
 > [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
 
