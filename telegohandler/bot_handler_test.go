@@ -103,6 +103,11 @@ func TestBotHandler_Start(t *testing.T) {
 		wg.Add(2)
 
 		go bh.Start()
+
+		// Check if multiple Start calls does nothing
+		time.Sleep(smallTimeout)
+		bh.Start()
+
 		defer bh.Stop()
 
 		updates <- telego.Update{}

@@ -45,6 +45,8 @@ func testHandlerSetup(t *testing.T, bh *BotHandler) {
 func TestBotHandler_HandleMessage(t *testing.T) {
 	bh := newBotHandler(t)
 
+	require.Panics(t, func() { bh.HandleMessage(nil) })
+
 	wg := &sync.WaitGroup{}
 	handler := MessageHandler(func(bot *telego.Bot, message telego.Message) { wg.Done() })
 
@@ -60,6 +62,8 @@ func TestBotHandler_HandleMessage(t *testing.T) {
 
 func TestBotHandler_HandleEditedMessage(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleEditedMessage(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := MessageHandler(func(bot *telego.Bot, message telego.Message) { wg.Done() })
@@ -77,6 +81,8 @@ func TestBotHandler_HandleEditedMessage(t *testing.T) {
 func TestBotHandler_HandleChannelPost(t *testing.T) {
 	bh := newBotHandler(t)
 
+	require.Panics(t, func() { bh.HandleChannelPost(nil) })
+
 	wg := &sync.WaitGroup{}
 	handler := MessageHandler(func(bot *telego.Bot, message telego.Message) { wg.Done() })
 
@@ -92,6 +98,8 @@ func TestBotHandler_HandleChannelPost(t *testing.T) {
 
 func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleEditedChannelPost(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := MessageHandler(func(bot *telego.Bot, message telego.Message) { wg.Done() })
@@ -109,6 +117,8 @@ func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 func TestBotHandler_HandleInlineQuery(t *testing.T) {
 	bh := newBotHandler(t)
 
+	require.Panics(t, func() { bh.HandleInlineQuery(nil) })
+
 	wg := &sync.WaitGroup{}
 	handler := InlineQueryHandler(func(bot *telego.Bot, query telego.InlineQuery) { wg.Done() })
 
@@ -124,6 +134,8 @@ func TestBotHandler_HandleInlineQuery(t *testing.T) {
 
 func TestBotHandler_HandleChosenInlineResult(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleChosenInlineResult(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ChosenInlineResultHandler(func(bot *telego.Bot, query telego.ChosenInlineResult) { wg.Done() })
@@ -141,6 +153,8 @@ func TestBotHandler_HandleChosenInlineResult(t *testing.T) {
 func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 	bh := newBotHandler(t)
 
+	require.Panics(t, func() { bh.HandleCallbackQuery(nil) })
+
 	wg := &sync.WaitGroup{}
 	handler := CallbackQueryHandler(func(bot *telego.Bot, query telego.CallbackQuery) { wg.Done() })
 
@@ -156,6 +170,8 @@ func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 
 func TestBotHandler_HandleShippingQuery(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleShippingQuery(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ShippingQueryHandler(func(bot *telego.Bot, query telego.ShippingQuery) { wg.Done() })
@@ -173,6 +189,8 @@ func TestBotHandler_HandleShippingQuery(t *testing.T) {
 func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
 	bh := newBotHandler(t)
 
+	require.Panics(t, func() { bh.HandlePreCheckoutQuery(nil) })
+
 	wg := &sync.WaitGroup{}
 	handler := PreCheckoutQueryHandler(func(bot *telego.Bot, query telego.PreCheckoutQuery) { wg.Done() })
 
@@ -188,6 +206,8 @@ func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
 
 func TestBotHandler_HandlePoll(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandlePoll(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := PollHandler(func(bot *telego.Bot, poll telego.Poll) { wg.Done() })
@@ -205,6 +225,8 @@ func TestBotHandler_HandlePoll(t *testing.T) {
 func TestBotHandler_HandlePollAnswer(t *testing.T) {
 	bh := newBotHandler(t)
 
+	require.Panics(t, func() { bh.HandlePollAnswer(nil) })
+
 	wg := &sync.WaitGroup{}
 	handler := PollAnswerHandler(func(bot *telego.Bot, pollAnswer telego.PollAnswer) { wg.Done() })
 
@@ -218,8 +240,10 @@ func TestBotHandler_HandlePollAnswer(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
-func TestBotHandler_HandleMyChatMember(t *testing.T) {
+func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleMyChatMemberUpdated(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ChatMemberUpdatedHandler(func(bot *telego.Bot, chatMember telego.ChatMemberUpdated) { wg.Done() })
@@ -234,8 +258,10 @@ func TestBotHandler_HandleMyChatMember(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
-func TestBotHandler_HandleChatMember(t *testing.T) {
+func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleChatMemberUpdated(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ChatMemberUpdatedHandler(func(bot *telego.Bot, chatMember telego.ChatMemberUpdated) { wg.Done() })
@@ -252,6 +278,8 @@ func TestBotHandler_HandleChatMember(t *testing.T) {
 
 func TestBotHandler_HandleChatJoinRequest(t *testing.T) {
 	bh := newBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleChatJoinRequest(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ChatJoinRequestHandler(func(bot *telego.Bot, chatJoinRequest telego.ChatJoinRequest) { wg.Done() })

@@ -54,9 +54,11 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 func (h *BotHandler) Start() {
 	h.runningLock.RLock()
 	if h.running {
+		h.runningLock.RUnlock()
 		return
 	}
 	h.runningLock.RUnlock()
+
 	h.runningLock.Lock()
 	h.stop = make(chan struct{})
 	h.running = true
@@ -82,11 +84,13 @@ func (h *BotHandler) processUpdate(update telego.Update) {
 		if !ch.match(update) {
 			continue
 		}
+
 		h.handledUpdates.Add(1)
 		go func() {
 			ch.Handler(h.bot, update)
 			h.handledUpdates.Done()
 		}()
+
 		return
 	}
 }
