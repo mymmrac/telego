@@ -62,10 +62,9 @@ func (h *BotHandler) Start() {
 	h.runningLock.Lock()
 	h.stop = make(chan struct{})
 	h.running = true
-	h.runningLock.Unlock()
-
 	// Prevents calling Wait before single Add call
 	h.handledUpdates.Add(1)
+	h.runningLock.Unlock()
 
 	for {
 		select {
