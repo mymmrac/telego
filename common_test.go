@@ -1,22 +1,19 @@
 package telego
 
 import (
-	"sync"
 	"testing"
 
 	"github.com/goccy/go-json"
 	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/mymmrac/telego/telegoapi"
 	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
 )
 
 var (
-	mutex sync.Mutex
-
-	data = &telegoapi.RequestData{}
-	resp = &telegoapi.Response{
+	data      = &telegoapi.RequestData{}
+	emptyResp = &telegoapi.Response{
 		Ok: true,
 	}
 
@@ -25,14 +22,15 @@ var (
 	}
 )
 
-func setResult(t *testing.T, v interface{}) {
+func telegoResponse(t *testing.T, v interface{}) *telegoapi.Response {
 	t.Helper()
-	mutex.Lock()
-	defer mutex.Unlock()
 
 	bytesData, err := json.Marshal(v)
-	assert.NoError(t, err)
-	resp.Result = bytesData
+	require.NoError(t, err)
+	return &telegoapi.Response{
+		Ok:     true,
+		Result: bytesData,
+	}
 }
 
 type mockedBot struct {

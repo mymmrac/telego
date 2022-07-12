@@ -41,7 +41,7 @@ func TestBot_GetUpdatesChan(t *testing.T) {
 			{UpdateID: 1},
 			{UpdateID: 2},
 		}
-		setResult(t, expectedUpdates)
+		resp := telegoResponse(t, expectedUpdates)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil).MinTimes(1)
@@ -167,7 +167,7 @@ func TestBot_IsRunningLongPulling(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil).AnyTimes()
 
-		setResult(t, []Update{})
+		resp := telegoResponse(t, []Update{})
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil).AnyTimes()

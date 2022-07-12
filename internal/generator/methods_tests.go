@@ -35,6 +35,7 @@ import (
 			Return(data, nil)
 `)
 
+		respVar := "emptyResp"
 		actualVar := returnTypeToVar(m.returnType)
 		expectedVar := fmt.Sprintf("expected%s", firstToUpper(actualVar))
 		if m.hasReturnValue() {
@@ -45,7 +46,8 @@ import (
 				data.WriteString(fmt.Sprintf("\n\t\t%s := %s", expectedVar, expectedData))
 			}
 
-			data.WriteString(fmt.Sprintf("\n\t\tsetResult(t, %s)", expectedVar))
+			respVar = "resp"
+			data.WriteString(fmt.Sprintf("\n\t\tresp := telegoResponse(t, %s)", expectedVar))
 		}
 
 		parameters := ""
@@ -56,7 +58,7 @@ import (
 		data.WriteString(`
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)`)
+			Return(` + respVar + `, nil)`)
 		data.WriteString("\n\n")
 
 		if m.hasReturnValue() {

@@ -23,7 +23,7 @@ func TestBot_GetUpdates(t *testing.T) {
 			{UpdateID: 1},
 			{UpdateID: 2},
 		}
-		setResult(t, expectedUpdates)
+		resp := telegoResponse(t, expectedUpdates)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -55,7 +55,7 @@ func TestBot_SetWebhook(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetWebhook(nil)
 		assert.NoError(t, err)
@@ -82,7 +82,7 @@ func TestBot_DeleteWebhook(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteWebhook(nil)
 		assert.NoError(t, err)
@@ -110,7 +110,7 @@ func TestBot_GetWebhookInfo(t *testing.T) {
 		expectedWebhookInfo := &WebhookInfo{
 			URL: "test",
 		}
-		setResult(t, expectedWebhookInfo)
+		resp := telegoResponse(t, expectedWebhookInfo)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -143,7 +143,7 @@ func TestBot_GetMe(t *testing.T) {
 		expectedUser := &User{
 			ID: 1,
 		}
-		setResult(t, expectedUser)
+		resp := telegoResponse(t, expectedUser)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -175,7 +175,7 @@ func TestBot_LogOut(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.LogOut()
 		assert.NoError(t, err)
@@ -202,7 +202,7 @@ func TestBot_Close(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.Close()
 		assert.NoError(t, err)
@@ -227,7 +227,7 @@ func TestBot_SendMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -257,7 +257,7 @@ func TestBot_ForwardMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -290,7 +290,7 @@ func TestBot_CopyMessage(t *testing.T) {
 		expectedMessageID := &MessageID{
 			MessageID: 1,
 		}
-		setResult(t, expectedMessageID)
+		resp := telegoResponse(t, expectedMessageID)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -320,7 +320,7 @@ func TestBot_SendPhoto(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -350,7 +350,7 @@ func TestBot_SendAudio(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -380,7 +380,7 @@ func TestBot_SendDocument(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -410,7 +410,7 @@ func TestBot_SendVideo(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -440,7 +440,7 @@ func TestBot_SendAnimation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -470,7 +470,7 @@ func TestBot_SendVoice(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -500,7 +500,7 @@ func TestBot_SendVideoNote(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -534,7 +534,7 @@ func TestBot_SendMediaGroup(t *testing.T) {
 			{MessageID: 1},
 			{MessageID: 2},
 		}
-		setResult(t, expectedMessages)
+		resp := telegoResponse(t, expectedMessages)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -564,7 +564,7 @@ func TestBot_SendLocation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -594,7 +594,7 @@ func TestBot_EditMessageLiveLocation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -624,7 +624,7 @@ func TestBot_StopMessageLiveLocation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -654,7 +654,7 @@ func TestBot_SendVenue(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -684,7 +684,7 @@ func TestBot_SendContact(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -714,7 +714,7 @@ func TestBot_SendPoll(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -744,7 +744,7 @@ func TestBot_SendDice(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -776,7 +776,7 @@ func TestBot_SendChatAction(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SendChatAction(nil)
 		assert.NoError(t, err)
@@ -804,7 +804,7 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 		expectedUserProfilePhotos := &UserProfilePhotos{
 			TotalCount: 1,
 		}
-		setResult(t, expectedUserProfilePhotos)
+		resp := telegoResponse(t, expectedUserProfilePhotos)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -837,7 +837,7 @@ func TestBot_GetFile(t *testing.T) {
 		expectedFile := &File{
 			FileID: "test",
 		}
-		setResult(t, expectedFile)
+		resp := telegoResponse(t, expectedFile)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -869,7 +869,7 @@ func TestBot_BanChatMember(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.BanChatMember(nil)
 		assert.NoError(t, err)
@@ -896,7 +896,7 @@ func TestBot_UnbanChatMember(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.UnbanChatMember(nil)
 		assert.NoError(t, err)
@@ -923,7 +923,7 @@ func TestBot_RestrictChatMember(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.RestrictChatMember(nil)
 		assert.NoError(t, err)
@@ -950,7 +950,7 @@ func TestBot_PromoteChatMember(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.PromoteChatMember(nil)
 		assert.NoError(t, err)
@@ -977,7 +977,7 @@ func TestBot_SetChatAdministratorCustomTitle(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatAdministratorCustomTitle(nil)
 		assert.NoError(t, err)
@@ -1004,7 +1004,7 @@ func TestBot_BanChatSenderChat(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.BanChatSenderChat(nil)
 		assert.NoError(t, err)
@@ -1031,7 +1031,7 @@ func TestBot_UnbanChatSenderChat(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.UnbanChatSenderChat(nil)
 		assert.NoError(t, err)
@@ -1058,7 +1058,7 @@ func TestBot_SetChatPermissions(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatPermissions(nil)
 		assert.NoError(t, err)
@@ -1084,7 +1084,7 @@ func TestBot_ExportChatInviteLink(t *testing.T) {
 			Return(data, nil)
 
 		expectedInviteLink := "InviteLink"
-		setResult(t, expectedInviteLink)
+		resp := telegoResponse(t, expectedInviteLink)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1117,7 +1117,7 @@ func TestBot_CreateChatInviteLink(t *testing.T) {
 		expectedChatInviteLink := &ChatInviteLink{
 			InviteLink: "test",
 		}
-		setResult(t, expectedChatInviteLink)
+		resp := telegoResponse(t, expectedChatInviteLink)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1150,7 +1150,7 @@ func TestBot_EditChatInviteLink(t *testing.T) {
 		expectedChatInviteLink := &ChatInviteLink{
 			InviteLink: "test",
 		}
-		setResult(t, expectedChatInviteLink)
+		resp := telegoResponse(t, expectedChatInviteLink)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1183,7 +1183,7 @@ func TestBot_RevokeChatInviteLink(t *testing.T) {
 		expectedChatInviteLink := &ChatInviteLink{
 			InviteLink: "test",
 		}
-		setResult(t, expectedChatInviteLink)
+		resp := telegoResponse(t, expectedChatInviteLink)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1215,7 +1215,7 @@ func TestBot_ApproveChatJoinRequest(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.ApproveChatJoinRequest(nil)
 		assert.NoError(t, err)
@@ -1242,7 +1242,7 @@ func TestBot_DeclineChatJoinRequest(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeclineChatJoinRequest(nil)
 		assert.NoError(t, err)
@@ -1269,7 +1269,7 @@ func TestBot_SetChatPhoto(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatPhoto(nil)
 		assert.NoError(t, err)
@@ -1296,7 +1296,7 @@ func TestBot_DeleteChatPhoto(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteChatPhoto(nil)
 		assert.NoError(t, err)
@@ -1323,7 +1323,7 @@ func TestBot_SetChatTitle(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatTitle(nil)
 		assert.NoError(t, err)
@@ -1350,7 +1350,7 @@ func TestBot_SetChatDescription(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatDescription(nil)
 		assert.NoError(t, err)
@@ -1377,7 +1377,7 @@ func TestBot_PinChatMessage(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.PinChatMessage(nil)
 		assert.NoError(t, err)
@@ -1404,7 +1404,7 @@ func TestBot_UnpinChatMessage(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.UnpinChatMessage(nil)
 		assert.NoError(t, err)
@@ -1431,7 +1431,7 @@ func TestBot_UnpinAllChatMessages(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.UnpinAllChatMessages(nil)
 		assert.NoError(t, err)
@@ -1458,7 +1458,7 @@ func TestBot_LeaveChat(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.LeaveChat(nil)
 		assert.NoError(t, err)
@@ -1486,7 +1486,7 @@ func TestBot_GetChat(t *testing.T) {
 		expectedChat := &Chat{
 			ID: 1,
 		}
-		setResult(t, expectedChat)
+		resp := telegoResponse(t, expectedChat)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1520,7 +1520,7 @@ func TestBot_GetChatAdministrators(t *testing.T) {
 			&ChatMemberOwner{Status: MemberStatusCreator},
 			&ChatMemberMember{Status: MemberStatusMember},
 		}
-		setResult(t, expectedChatMembers)
+		resp := telegoResponse(t, expectedChatMembers)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1551,7 +1551,7 @@ func TestBot_GetChatMemberCount(t *testing.T) {
 			Return(data, nil)
 
 		expectedChatMemberCount := 1
-		setResult(t, expectedChatMemberCount)
+		resp := telegoResponse(t, expectedChatMemberCount)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1584,7 +1584,7 @@ func TestBot_GetChatMember(t *testing.T) {
 		expectedChatMember := &ChatMemberOwner{
 			Status: MemberStatusCreator,
 		}
-		setResult(t, expectedChatMember)
+		resp := telegoResponse(t, expectedChatMember)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1616,7 +1616,7 @@ func TestBot_SetChatStickerSet(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatStickerSet(nil)
 		assert.NoError(t, err)
@@ -1643,7 +1643,7 @@ func TestBot_DeleteChatStickerSet(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteChatStickerSet(nil)
 		assert.NoError(t, err)
@@ -1670,7 +1670,7 @@ func TestBot_AnswerCallbackQuery(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerCallbackQuery(nil)
 		assert.NoError(t, err)
@@ -1697,7 +1697,7 @@ func TestBot_SetMyCommands(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyCommands(nil)
 		assert.NoError(t, err)
@@ -1724,7 +1724,7 @@ func TestBot_DeleteMyCommands(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteMyCommands(nil)
 		assert.NoError(t, err)
@@ -1753,7 +1753,7 @@ func TestBot_GetMyCommands(t *testing.T) {
 			{Command: "test 1"},
 			{Command: "test 2"},
 		}
-		setResult(t, expectedBotCommands)
+		resp := telegoResponse(t, expectedBotCommands)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1785,7 +1785,7 @@ func TestBot_SetChatMenuButton(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatMenuButton(nil)
 		assert.NoError(t, err)
@@ -1813,7 +1813,7 @@ func TestBot_GetChatMenuButton(t *testing.T) {
 		expectedMenuButton := &MenuButtonCommands{
 			Type: ButtonTypeCommands,
 		}
-		setResult(t, expectedMenuButton)
+		resp := telegoResponse(t, expectedMenuButton)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1845,7 +1845,7 @@ func TestBot_SetMyDefaultAdministratorRights(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyDefaultAdministratorRights(nil)
 		assert.NoError(t, err)
@@ -1873,7 +1873,7 @@ func TestBot_GetMyDefaultAdministratorRights(t *testing.T) {
 		expectedChatAdministratorRights := &ChatAdministratorRights{
 			IsAnonymous: true,
 		}
-		setResult(t, expectedChatAdministratorRights)
+		resp := telegoResponse(t, expectedChatAdministratorRights)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1903,7 +1903,7 @@ func TestBot_EditMessageText(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1933,7 +1933,7 @@ func TestBot_EditMessageCaption(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1963,7 +1963,7 @@ func TestBot_EditMessageMedia(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -1993,7 +1993,7 @@ func TestBot_EditMessageReplyMarkup(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2026,7 +2026,7 @@ func TestBot_StopPoll(t *testing.T) {
 		expectedPoll := &Poll{
 			ID: "test",
 		}
-		setResult(t, expectedPoll)
+		resp := telegoResponse(t, expectedPoll)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2058,7 +2058,7 @@ func TestBot_DeleteMessage(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteMessage(nil)
 		assert.NoError(t, err)
@@ -2083,7 +2083,7 @@ func TestBot_SendSticker(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2116,7 +2116,7 @@ func TestBot_GetStickerSet(t *testing.T) {
 		expectedStickerSet := &StickerSet{
 			Name: "test",
 		}
-		setResult(t, expectedStickerSet)
+		resp := telegoResponse(t, expectedStickerSet)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2149,7 +2149,7 @@ func TestBot_UploadStickerFile(t *testing.T) {
 		expectedFile := &File{
 			FileID: "test",
 		}
-		setResult(t, expectedFile)
+		resp := telegoResponse(t, expectedFile)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2181,7 +2181,7 @@ func TestBot_CreateNewStickerSet(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.CreateNewStickerSet(nil)
 		assert.NoError(t, err)
@@ -2208,7 +2208,7 @@ func TestBot_AddStickerToSet(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.AddStickerToSet(nil)
 		assert.NoError(t, err)
@@ -2235,7 +2235,7 @@ func TestBot_SetStickerPositionInSet(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerPositionInSet(nil)
 		assert.NoError(t, err)
@@ -2262,7 +2262,7 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteStickerFromSet(nil)
 		assert.NoError(t, err)
@@ -2289,7 +2289,7 @@ func TestBot_SetStickerSetThumb(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerSetThumb(nil)
 		assert.NoError(t, err)
@@ -2316,7 +2316,7 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerInlineQuery(nil)
 		assert.NoError(t, err)
@@ -2344,7 +2344,7 @@ func TestBot_AnswerWebAppQuery(t *testing.T) {
 		expectedSentWebAppMessage := &SentWebAppMessage{
 			InlineMessageID: "InlineMessageID",
 		}
-		setResult(t, expectedSentWebAppMessage)
+		resp := telegoResponse(t, expectedSentWebAppMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2374,7 +2374,7 @@ func TestBot_SendInvoice(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2405,7 +2405,7 @@ func TestBot_CreateInvoiceLink(t *testing.T) {
 			Return(data, nil)
 
 		expectedInvoiceLink := "InvoiceLink"
-		setResult(t, expectedInvoiceLink)
+		resp := telegoResponse(t, expectedInvoiceLink)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2437,7 +2437,7 @@ func TestBot_AnswerShippingQuery(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerShippingQuery(nil)
 		assert.NoError(t, err)
@@ -2464,7 +2464,7 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerPreCheckoutQuery(nil)
 		assert.NoError(t, err)
@@ -2491,7 +2491,7 @@ func TestBot_SetPassportDataErrors(t *testing.T) {
 
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
+			Return(emptyResp, nil)
 
 		err := m.Bot.SetPassportDataErrors(nil)
 		assert.NoError(t, err)
@@ -2516,7 +2516,7 @@ func TestBot_SendGame(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2546,7 +2546,7 @@ func TestBot_SetGameScore(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		setResult(t, expectedMessage)
+		resp := telegoResponse(t, expectedMessage)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
@@ -2580,7 +2580,7 @@ func TestBot_GetGameHighScores(t *testing.T) {
 			{Score: 1},
 			{Score: 2},
 		}
-		setResult(t, expectedGameHighScores)
+		resp := telegoResponse(t, expectedGameHighScores)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
