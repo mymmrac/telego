@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -56,6 +57,16 @@ func TestWithDefaultLogger(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithDefaultLogger(true, true)(bot)
+	assert.NoError(t, err)
+}
+
+func TestWithExtendedDefaultLogger(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithExtendedDefaultLogger(true, true, nil)(bot)
+	assert.NoError(t, err)
+
+	err = WithExtendedDefaultLogger(true, true, strings.NewReplacer("old", "new"))(bot)
 	assert.NoError(t, err)
 }
 

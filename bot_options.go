@@ -3,6 +3,7 @@ package telego
 import (
 	"errors"
 	"os"
+	"strings"
 
 	"github.com/valyala/fasthttp"
 
@@ -34,14 +35,31 @@ func WithRequestConstructor(constructor telegoapi.RequestConstructor) BotOption 
 }
 
 // WithDefaultLogger configures default logger. Redefines existing logger.
-// Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
-// testing environment.
+// Note: Default logger will hide your bot token, but it still may log sensitive information, it's only safe to use
+// default logger in testing environment.
 func WithDefaultLogger(debugMode, printErrors bool) BotOption {
 	return func(bot *Bot) error {
 		log := &logger{
 			Out:         os.Stderr,
 			DebugMode:   debugMode,
 			PrintErrors: printErrors,
+			Replacer:    defaultReplacer(bot.Token()),
+		}
+		bot.log = log
+		return nil
+	}
+}
+
+// WithExtendedDefaultLogger configures default logger, replacer can be nil. Redefines existing logger.
+// Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
+// testing environment, or hide sensitive information (like bot token) yourself.
+func WithExtendedDefaultLogger(debugMode, printErrors bool, replacer *strings.Replacer) BotOption {
+	return func(bot *Bot) error {
+		log := &logger{
+			Out:         os.Stderr,
+			DebugMode:   debugMode,
+			PrintErrors: printErrors,
+			Replacer:    replacer,
 		}
 		bot.log = log
 		return nil
@@ -53,9 +71,9 @@ func WithDiscardLogger() BotOption {
 	return WithDefaultLogger(false, false)
 }
 
-// WithLogger sets logger to use
+// WithLogger sets logger to use. Redefines existing logger.
 // Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
-// testing environment.
+// testing environment, or hide sensitive information (like bot token) yourself.
 func WithLogger(log Logger) BotOption {
 	return func(bot *Bot) error {
 		bot.log = log

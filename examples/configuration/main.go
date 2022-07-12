@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/valyala/fasthttp"
 
@@ -23,10 +24,17 @@ func main() {
 		telego.WithFastHTTPClient(&fasthttp.Client{}),
 
 		// Configuration of default logger, enable printing debug information and errors (default: false, true)
-		// Note: Please keep in mind that default logger exposes your bot token, use in development only
+		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
 		telego.WithDefaultLogger(true, true),
 
+		// Extended configuration of default logger, enable printing debug information, errors and set replacer
+		// (default: false, true, default replacer of bot token)
+		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
+		telego.WithExtendedDefaultLogger(true, true, strings.NewReplacer("old", "new")),
+
 		// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
+		// Note: Please keep in mind that logger may expose sensitive information, use in development only or configure
+		// it not to leak unwanted content
 		telego.WithLogger(myLogger),
 	)
 	if err != nil {

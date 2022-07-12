@@ -3,6 +3,7 @@ package telego
 import (
 	"bytes"
 	"os"
+	"strings"
 	"sync"
 	"testing"
 
@@ -12,6 +13,7 @@ import (
 const (
 	data1  = "test"
 	data2  = "ok"
+	data3  = "hello"
 	format = "%s %s"
 )
 
@@ -90,10 +92,22 @@ func Test_logger_Errorf(t *testing.T) {
 	})
 }
 
-func Test_newLogger(t *testing.T) {
-	l := newLogger()
+func Test_logger_replacer(t *testing.T) {
+	l, b := testLogger()
+
+	l.DebugMode = true
+	l.Replacer = strings.NewReplacer(data1, data3)
+	l.Debug(data1, data2)
+	assert.NotContains(t, b.String(), data1)
+	assert.Contains(t, b.String(), data2)
+	assert.Contains(t, b.String(), data3)
+}
+
+func Test_newDefaultLogger(t *testing.T) {
+	l := newDefaultLogger("token")
 
 	assert.Equal(t, os.Stderr, l.Out)
 	assert.False(t, l.DebugMode)
 	assert.True(t, l.PrintErrors)
+	assert.NotNil(t, l.Replacer)
 }

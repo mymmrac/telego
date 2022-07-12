@@ -10,7 +10,7 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
-	// Note: Please keep in mind that default logger exposes your bot token, use in development only
+	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
 	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)

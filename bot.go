@@ -53,7 +53,9 @@ type Bot struct {
 // BotOption represents option that can be applied to Bot
 type BotOption func(bot *Bot) error
 
-// NewBot creates new bot with given options. If no options specified default values are used
+// NewBot creates new bot with given options. If no options specified default values are used.
+// Note: Default logger (that logs only errors if not configured) will hide your bot token, but it still may log
+// sensitive information, it's only safe to use default logger in testing environment.
 func NewBot(token string, options ...BotOption) (*Bot, error) {
 	if !validateToken(token) {
 		return nil, ErrInvalidToken
@@ -62,7 +64,7 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 	b := &Bot{
 		token:          token,
 		apiURL:         defaultBotAPIServer,
-		log:            newLogger(),
+		log:            newDefaultLogger(token),
 		api:            telegoapi.FasthttpAPICaller{Client: &fasthttp.Client{}},
 		constructor:    telegoapi.DefaultConstructor{},
 		updateInterval: defaultUpdateInterval,

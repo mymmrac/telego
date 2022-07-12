@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -32,14 +33,17 @@ type logger struct {
 	Out         io.Writer
 	DebugMode   bool
 	PrintErrors bool
-	mutex       sync.Mutex
+	Replacer    *strings.Replacer
+
+	mutex sync.Mutex
 }
 
-func newLogger() *logger {
+func newDefaultLogger(token string) *logger {
 	return &logger{
 		Out:         os.Stderr,
 		DebugMode:   false,
 		PrintErrors: true,
+		Replacer:    defaultReplacer(token),
 	}
 }
 
@@ -57,6 +61,11 @@ func (l *logger) prefix(mode logMode) string {
 func (l *logger) log(mode logMode, text string) {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
+
+	if l.Replacer != nil {
+		text = l.Replacer.Replace(text)
+	}
+
 	_, err := l.Out.Write([]byte(l.prefix(mode) + text))
 	if err != nil {
 		fmt.Printf("Logging error: %v\n", err)
@@ -85,4 +94,11 @@ func (l *logger) Errorf(format string, args ...interface{}) {
 	if l.PrintErrors {
 		l.log(errorMode, fmt.Sprintf(format+"\n", args...))
 	}
+}
+
+// DefaultLoggerTokenReplacement used to replace bot token in logs when using default logger
+const DefaultLoggerTokenReplacement = "BOT_TOKEN"
+
+func defaultReplacer(token string) *strings.Replacer {
+	return strings.NewReplacer(token, DefaultLoggerTokenReplacement)
 }
