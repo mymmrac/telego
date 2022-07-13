@@ -341,22 +341,22 @@ func main() {
 	// Creating keyboard
 	keyboard := tu.Keyboard(
 		tu.KeyboardRow( // Row 1
-		    // Column 1
+			// Column 1
 			tu.KeyboardButton("Button"),
 
-            // Column 2, `with` method
+			// Column 2, `with` method
 			tu.KeyboardButton("Poll Regular").
 				WithRequestPoll(tu.PollTypeRegular()),
 		),
 		tu.KeyboardRow( // Row 2
-            // Column 1, `with` method 
+			// Column 1, `with` method 
 			tu.KeyboardButton("Contact").WithRequestContact(),
-			
-            // Column 2, `with` method 
+
+			// Column 2, `with` method 
 			tu.KeyboardButton("Location").WithRequestLocation(),
 		),
 	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something")
-    // Multiple `with` methods can be chained
+	// Multiple `with` methods can be chained
 
 	// Creating message
 	msg := tu.Message(
