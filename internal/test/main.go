@@ -18,13 +18,13 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 23
+const testCase = 24
 
 func main() {
 	testToken := os.Getenv("TOKEN")
 
 	bot, err := telego.NewBot(testToken,
-		telego.WithDefaultLogger(true, true))
+		telego.WithDefaultLogger(false, true))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -79,6 +79,7 @@ func main() {
 
 		for upd := range updChan {
 			fmt.Println(upd)
+			fmt.Println(bot.IsRunningLongPulling())
 
 			if upd.Message != nil {
 				_, err := bot.CopyMessage(&telego.CopyMessageParams{
@@ -483,8 +484,7 @@ func main() {
 		err = bot.SendChatAction(tu.ChatAction(myID, telego.ChatActionTyping))
 		assert(err == nil, err)
 	case 21:
-		bot.SetUpdateInterval(time.Second)
-		updates, _ := bot.UpdatesViaLongPulling(nil)
+		updates, _ := bot.UpdatesViaLongPulling(nil, telego.WithLongPullingUpdateInterval(time.Second))
 		defer bot.StopLongPulling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
@@ -583,6 +583,20 @@ func main() {
 
 		defer bh.Stop()
 		bh.Start()
+	case 24:
+		updates, err := bot.UpdatesViaLongPulling(nil)
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningLongPulling())
+		time.Sleep(time.Second * 10)
+
+		fmt.Println(bot.IsRunningLongPulling())
+		bot.StopLongPulling()
+		fmt.Println(bot.IsRunningLongPulling())
+
+		for upd := range updates {
+			fmt.Println(upd)
+		}
 	}
 }
 

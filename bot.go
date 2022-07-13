@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
@@ -36,16 +35,16 @@ func validateToken(token string) bool {
 
 // Bot represents Telegram bot
 type Bot struct {
-	token          string
-	apiURL         string
-	log            Logger
-	api            telegoapi.Caller
-	constructor    telegoapi.RequestConstructor
-	updateInterval time.Duration
+	token       string
+	apiURL      string
+	log         Logger
+	api         telegoapi.Caller
+	constructor telegoapi.RequestConstructor
 
-	stop               chan struct{}
-	startedLongPulling bool
-	startedWebhook     bool
+	stop           chan struct{}
+	startedWebhook bool
+
+	longPullingContext *longPullingContext
 
 	server *fasthttp.Server
 }
@@ -62,12 +61,11 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 	}
 
 	b := &Bot{
-		token:          token,
-		apiURL:         defaultBotAPIServer,
-		log:            newDefaultLogger(token),
-		api:            telegoapi.FasthttpAPICaller{Client: &fasthttp.Client{}},
-		constructor:    telegoapi.DefaultConstructor{},
-		updateInterval: defaultUpdateInterval,
+		token:       token,
+		apiURL:      defaultBotAPIServer,
+		log:         newDefaultLogger(token),
+		api:         telegoapi.FasthttpAPICaller{Client: &fasthttp.Client{}},
+		constructor: telegoapi.DefaultConstructor{},
 
 		server: &fasthttp.Server{},
 	}

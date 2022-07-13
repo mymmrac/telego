@@ -15,7 +15,7 @@ Also, all generated code has same description as in Telegram docs, so there is a
 still, be careful as it is not a full copy of docs due to text only limitation).
 
 Telego was also created to simplify work with Telegram API, so some additional methods for more convenient usage
-located in helpers.go and telegoutil package.
+located in helpers_long_pulling.go and helpers_webhook.go and telegoutil package.
 
 When you are working with things like chat ID which can be an integer or string Telego provides combined types:
 

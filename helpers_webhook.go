@@ -3,7 +3,6 @@ package telego
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
@@ -12,76 +11,10 @@ import (
 )
 
 const (
-	updateChanBuffer = 100
+	defaultWebhookUpdateChanBuffer = 100 // Limited by number of updates in single Bot.GetUpdates() call
 
-	defaultUpdateInterval = time.Second / 2 // 0.5s
-	retryTimeout          = time.Second * 3 // 3s
+	listeningForWebhookErrMsg = "Listening for webhook: %v"
 )
-
-const listeningForWebhookErrMsg = "Listening for webhook: %v"
-
-// SetUpdateInterval sets interval of calling GetUpdates in UpdatesViaLongPulling method. Ensures that between two
-// calls of GetUpdates will be at least specified time, but it could be longer.
-func (b *Bot) SetUpdateInterval(interval time.Duration) { // TODO: Add bot option for this
-	b.updateInterval = interval
-}
-
-// UpdatesViaLongPulling receive updates in chan using GetUpdates method
-// Note: After you done with getting updates you should call StopLongPulling method
-func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams) (chan Update, error) {
-	b.stop = make(chan struct{})
-	b.startedLongPulling = true // TODO: Add mutex
-	updatesChan := make(chan Update, updateChanBuffer)
-
-	if params == nil {
-		params = &GetUpdatesParams{}
-	}
-
-	go func() {
-		for {
-			select {
-			case <-b.stop:
-				close(updatesChan)
-				return
-			default:
-				// Continue getting updates
-			}
-
-			updates, err := b.GetUpdates(params)
-			if err != nil {
-				b.log.Errorf("Getting updates: %v", err)
-				b.log.Errorf("Retrying to get updates in %s", retryTimeout.String())
-
-				time.Sleep(retryTimeout)
-				continue
-			}
-
-			for _, update := range updates {
-				if update.UpdateID >= params.Offset {
-					params.Offset = update.UpdateID + 1
-					updatesChan <- update
-				}
-			}
-
-			time.Sleep(b.updateInterval)
-		}
-	}()
-
-	return updatesChan, nil
-}
-
-// IsRunningLongPulling tells if UpdatesViaLongPulling is running
-func (b *Bot) IsRunningLongPulling() bool {
-	return b.startedLongPulling
-}
-
-// StopLongPulling stop reviving updates from UpdatesViaLongPulling method
-func (b *Bot) StopLongPulling() { // TODO: [?] Graceful shutdown
-	if b.startedLongPulling {
-		b.startedLongPulling = false
-		close(b.stop)
-	}
-}
 
 // StartListeningForWebhook start server for listening for webhook
 // Note: After you done with getting updates you should call StopWebhook method
@@ -141,7 +74,7 @@ func (b *Bot) UpdatesViaWebhook(path string) (chan Update, error) {
 		return nil, errors.New("calling UpdatesViaWebhook after starting webhook is not allowed")
 	}
 
-	updatesChan := make(chan Update, updateChanBuffer)
+	updatesChan := make(chan Update, defaultWebhookUpdateChanBuffer)
 	b.stop = make(chan struct{})
 
 	b.server.Handler = func(ctx *fasthttp.RequestCtx) {
@@ -152,10 +85,10 @@ func (b *Bot) UpdatesViaWebhook(path string) (chan Update, error) {
 		}
 
 		if method := string(ctx.Method()); method != fasthttp.MethodPost {
-			err := fmt.Errorf("used invalid HTTP method: %q, required method: %q", method, fasthttp.MethodPost)
+			err := fmt.Errorf("unexpected HTTP method, expected: %q, got: %q", fasthttp.MethodPost, method)
 			b.respondWithError(ctx, err)
 
-			b.log.Errorf("Webhook invalid HTTP method: %q", method)
+			b.log.Errorf("Webhook unexpected HTTP method, expected: %q, got: %q", fasthttp.MethodPost, method)
 			return
 		}
 

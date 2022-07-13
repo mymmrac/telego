@@ -15,7 +15,7 @@ func main() {
 
 	var myLogger telego.Logger // Used just for example (not valid in real use)
 
-	// Create bot
+	// Create bot, all options are optional
 	bot, err := telego.NewBot(botToken,
 		// Change bot API server URL (default: https://api.telegram.org)
 		telego.WithAPIServer("new bot api server"),

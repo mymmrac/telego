@@ -156,12 +156,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Optional. Set interval of getting updates (default: 0.5s).
-	// If you want to get updates as fast as possible set to 0,
-	// but webhook method is recommended for this.
-	bot.SetUpdateInterval(time.Second / 2)
-
 	// Get updates channel
+	// (more on configuration at /examples/updates_long_pulling/main.go)
 	updates, _ := bot.UpdatesViaLongPulling(nil)
 
 	// Stop reviving updates from updates channel

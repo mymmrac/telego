@@ -21,8 +21,8 @@ type BotHandler struct {
 	handlers []*conditionalHandler
 
 	running        bool
-	stop           chan struct{}
 	runningLock    sync.RWMutex
+	stop           chan struct{}
 	handledUpdates sync.WaitGroup
 	stopTimeout    time.Duration
 }
@@ -48,9 +48,9 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 }
 
 // Start starts handling of updates
-// Note: After you done with handling updates you should call Stop method,
-// because stopping updates chan will do nothing.
 // Calling Start() multiple times after the first one does nothing.
+// Note: After you done with handling updates you should call Stop() method, because stopping updates chan will do
+// nothing.
 func (h *BotHandler) Start() {
 	h.runningLock.RLock()
 	if h.running {
@@ -104,7 +104,8 @@ func (h *BotHandler) IsRunning() bool {
 
 // Stop stops handling of updates, will block until all updates has been processes or on timeout. If timeout set to 0,
 // bot handler will not wait for all handlers to done processing.
-// Note: Calling before Start does nothing
+// Calling Stop() multiple times does nothing.
+// Note: Calling before Start() does nothing.
 func (h *BotHandler) Stop() {
 	h.runningLock.Lock()
 	defer h.runningLock.Unlock()

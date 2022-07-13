@@ -18,13 +18,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Optional. Set interval of getting updates (default: 0.5s).
-	// If you want to get updates as fast as possible set to 0,
-	// but webhook method is recommended for this.
-	bot.SetUpdateInterval(time.Second / 2)
+	// Get updates channel, all options are optional
+	updates, _ := bot.UpdatesViaLongPulling(nil,
+		// Set interval of getting updates (default: 0.5s).
+		// If you want to get updates as fast as possible set to 0, but webhook method is recommended for this.
+		telego.WithLongPullingUpdateInterval(time.Second/2),
 
-	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+		// Set retry timeout that will be used if an error occurs (default 3s)
+		telego.WithLongPullingRetryTimeout(time.Second*3),
+
+		// Set chan buffer (default 100)
+		telego.WithLongPullingBuffer(100),
+	)
 
 	// Stop reviving updates from updates channel
 	defer bot.StopLongPulling()

@@ -10,67 +10,6 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-func TestBot_SetUpdateInterval(t *testing.T) {
-	bot := &Bot{}
-	ui := time.Second
-
-	bot.SetUpdateInterval(ui)
-	assert.Equal(t, ui, bot.updateInterval)
-}
-
-func TestBot_StopGettingUpdates(t *testing.T) {
-	bot := &Bot{}
-
-	bot.stop = make(chan struct{})
-	assert.NotPanics(t, func() {
-		bot.StopLongPulling()
-	})
-}
-
-func TestBot_GetUpdatesChan(t *testing.T) {
-	ctrl := gomock.NewController(t)
-
-	t.Run("success", func(t *testing.T) {
-		m := newMockedBot(ctrl)
-
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil).MinTimes(1)
-
-		expectedUpdates := []Update{
-			{UpdateID: 1},
-			{UpdateID: 2},
-		}
-		resp := telegoResponse(t, expectedUpdates)
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil).MinTimes(1)
-
-		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPulling(nil)
-			assert.NoError(t, err)
-			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopLongPulling()
-			time.Sleep(time.Millisecond * 500)
-		})
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m := newMockedBot(ctrl)
-
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest).MinTimes(1)
-
-		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPulling(nil)
-			assert.NoError(t, err)
-			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopLongPulling()
-		})
-	})
-}
-
 func TestBot_StartListeningForWebhook(t *testing.T) {
 	b, err := NewBot(token, WithDiscardLogger())
 	require.NoError(t, err)
@@ -151,34 +90,6 @@ func TestBot_GetUpdatesViaWebhook(t *testing.T) {
 			ctx.Request.SetRequestURI("/bot")
 			b.server.Handler(ctx)
 		})
-	})
-}
-
-func TestBot_IsRunningLongPulling(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("stopped", func(t *testing.T) {
-		assert.False(t, m.Bot.IsRunningLongPulling())
-	})
-
-	t.Run("running", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil).AnyTimes()
-
-		resp := telegoResponse(t, []Update{})
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil).AnyTimes()
-
-		_, err := m.Bot.UpdatesViaLongPulling(nil)
-		require.NoError(t, err)
-
-		assert.True(t, m.Bot.IsRunningLongPulling())
-
-		m.Bot.StopLongPulling()
-		assert.False(t, m.Bot.IsRunningLongPulling())
 	})
 }
 
