@@ -140,7 +140,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/mymmrac/telego"
 )
@@ -312,7 +311,7 @@ Or other useful methods like:
 - ...
 
 Utils related to [`methods`](methods.go) can be found in [`telegoutil/methods`](telegoutil/methods.go), for
-[`types`](types.go) in [`telegoutil/types`](telegoutil/types.go), for [`handlers`](telegohandler/handler.go) in
+[`types`](types.go) in [`telegoutil/types`](telegoutil/types.go), for [`handlers`](telegohandler/bot_handler.go) in
 [`telegoutil/handler`](telegoutil/handler.go), for [`api`](telegoapi/api.go) in [`telegoutil/api`](telegoutil/api.go).
 
 > Note: If you think that something can be added to [`telegoutil`](telegoutil) package
@@ -336,7 +335,7 @@ import (
 )
 
 func main() {
-	// ... initializing bot
+	// ... initializing bot (full example in /examples/keyboard/main.go)
 
 	// Creating keyboard
 	keyboard := tu.Keyboard(
@@ -383,7 +382,7 @@ import th "github.com/mymmrac/telego/telegohandler"
 ```
 
 Here is example of using handlers with long pulling updates. You can see full list of available predicates
-in [`telegohandler/pradicates`](telegohandler/pradicates.go), or define your own.
+in [`telegohandler/predicates`](telegohandler/predicates.go), or define your own.
 
 ```go
 package main
@@ -440,6 +439,52 @@ func main() {
 
 	// Stop handling updates
 	defer bh.Stop()
+}
+```
+
+Also, just handling updates is useful, but handling specific updates like messages or callback queries in most of the
+cases are easies and provides cleaner code. So Telego provides specific handles for all files of `telego.Update`. See
+list of all available handler types in [`telegohandler/update_handlers`](telegohandler/update_handlers.go), or define
+your own.
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/mymmrac/telego"
+	th "github.com/mymmrac/telego/telegohandler"
+	tu "github.com/mymmrac/telego/telegoutil"
+)
+
+func main() {
+	// ... initializing bot and bot handler (full example in /examples/handler_specific/main.go)
+
+	// Register new handler with match on command `/start`
+	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		// Send message with inline keyboard
+		_, _ = bot.SendMessage(tu.Message(
+			tu.ID(message.Chat.ID),
+			fmt.Sprintf("Hello %s!", message.From.FirstName),
+		).WithReplyMarkup(tu.InlineKeyboard(
+			tu.InlineKeyboardRow(tu.InlineKeyboardButton("Go!").WithCallbackData("go"))),
+		))
+	}, th.CommandEqual("start"))
+
+	// Register new handler with match on call back query with data equal to `go` and non nil message
+	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
+		// Send message
+		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
+
+		// Answer callback query
+		_ = bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
+			CallbackQueryID: query.ID,
+			Text:            "Done",
+		})
+	}, th.AnyCallbackQueryWithMessage(), th.CallbackDataEqual("go"))
+
+	// ... start and stop bot handler
 }
 ```
 
