@@ -268,7 +268,8 @@ func main() {
 			// Retrieve chat ID
 			chatID := update.Message.Chat.ID
 
-			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
+			// Call method sendMessage 
+			// (https://core.telegram.org/bots/api#sendmessage).
 			// Sends message to sender with same text (echo bot).
 			sentMessage, _ := bot.SendMessage(
 				tu.Message(
@@ -340,21 +341,28 @@ func main() {
 	// Creating keyboard
 	keyboard := tu.Keyboard(
 		tu.KeyboardRow( // Row 1
-			tu.KeyboardButton("Button"), // Column 1
-			tu.KeyboardButton("Poll Regular"). // Column 2
-				WithRequestPoll(tu.PollTypeRegular()), // <- `with` method
+		    // Column 1
+			tu.KeyboardButton("Button"),
+
+            // Column 2, `with` method
+			tu.KeyboardButton("Poll Regular").
+				WithRequestPoll(tu.PollTypeRegular()),
 		),
 		tu.KeyboardRow( // Row 2
-			tu.KeyboardButton("Contact").WithRequestContact(),   // Column 1, <- `with` method 
-			tu.KeyboardButton("Location").WithRequestLocation(), // Column 2, <- `with` method 
+            // Column 1, `with` method 
+			tu.KeyboardButton("Contact").WithRequestContact(),
+			
+            // Column 2, `with` method 
+			tu.KeyboardButton("Location").WithRequestLocation(),
 		),
-	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something") // <- multiple `with` methods 
+	).WithResizeKeyboard().WithInputFieldPlaceholder("Select something")
+    // Multiple `with` methods can be chained
 
 	// Creating message
 	msg := tu.Message(
 		tu.ID(123),
 		"Hello World",
-	).WithReplyMarkup(keyboard).WithProtectContent() // <- multiple `with` method 
+	).WithReplyMarkup(keyboard).WithProtectContent() // Multiple `with` method 
 
 	bot.SendMessage(msg)
 }
@@ -424,8 +432,8 @@ func main() {
 	}, th.CommandEqual("start"))
 
 	// Register new handler with match on any command
-	// Handlers will match only once and in order of registration, so this handler will be called on any command except
-	// `/start` command
+	// Handlers will match only once and in order of registration, 
+	// so this handler will be called on any command except `/start` command
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		// Send message
 		_, _ = bot.SendMessage(tu.Message(
@@ -443,9 +451,10 @@ func main() {
 ```
 
 Also, just handling updates is useful, but handling specific updates like messages or callback queries in most of the
-cases are easies and provides cleaner code. So Telego provides specific handles for all files of `telego.Update`. See
-list of all available handler types in [`telegohandler/update_handlers`](telegohandler/update_handlers.go), or define
-your own.
+cases are more straightforward and provide cleaner code.
+
+So Telego provides specific handles for all fields of `telego.Update`. See the list of all available handler types in
+[`telegohandler/update_handlers`](telegohandler/update_handlers.go), or define your own.
 
 ```go
 package main
@@ -459,7 +468,8 @@ import (
 )
 
 func main() {
-	// ... initializing bot and bot handler (full example in /examples/handler_specific/main.go)
+	// ... initializing bot and bot handler 
+	// (full example in /examples/handler_specific/main.go)
 
 	// Register new handler with match on command `/start`
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
@@ -468,11 +478,14 @@ func main() {
 			tu.ID(message.Chat.ID),
 			fmt.Sprintf("Hello %s!", message.From.FirstName),
 		).WithReplyMarkup(tu.InlineKeyboard(
-			tu.InlineKeyboardRow(tu.InlineKeyboardButton("Go!").WithCallbackData("go"))),
+			tu.InlineKeyboardRow(
+				tu.InlineKeyboardButton("Go!").WithCallbackData("go"),
+			)),
 		))
 	}, th.CommandEqual("start"))
 
-	// Register new handler with match on call back query with data equal to `go` and non nil message
+	// Register new handler with match on call back query 
+	// with data equal to `go` and non nil message
 	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
 		// Send message
 		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
