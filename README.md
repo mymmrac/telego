@@ -68,14 +68,16 @@ More examples can be seen here:
 - [Methods](examples/methods/main.go)
 - [Updates (long pulling)](examples/updates_long_pulling/main.go)
 - [Updates (webhook)](examples/updates_webhook/main.go)
-- [Utility methods](examples/utility_methods/main.go)
-- [Bot handlers](examples/handler/main.go)
-- [Bot more handlers (custom)](examples/handler_custom/main.go)
 - [Echo bot](examples/echo_bot/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
+- [Utility methods](examples/utility_methods/main.go)
 - [Inline query bot](examples/inline_query_bot/main.go)
+- [Bot handlers](examples/handler/main.go)
+- [Custom predicates for handlers](examples/handler_custom/main.go)
+- [Specific handlers](examples/handler_specific/main.go)
+- [Predicate as middleware](examples/middleware_with_predicates/main.go)
 
 </details>
 
