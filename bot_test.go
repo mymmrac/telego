@@ -392,6 +392,26 @@ func TestBot_performRequest(t *testing.T) {
 		err := m.Bot.performRequest(methodName, params, &result)
 		assert.Error(t, err)
 	})
+
+	t.Run("error_unmarshal", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(&telegoapi.RequestData{}, nil).
+			Times(1)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(&telegoapi.Response{
+				Ok:     true,
+				Result: bytes.NewBufferString("1").Bytes(),
+				Error:  nil,
+			}, nil)
+
+		var stringResult string
+		err := m.Bot.performRequest(methodName, params, &stringResult)
+		assert.Error(t, err)
+		assert.Equal(t, "", stringResult)
+	})
 }
 
 func Test_isNil(t *testing.T) {

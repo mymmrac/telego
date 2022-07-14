@@ -219,6 +219,9 @@ func parseField(field reflect.Value) (string, bool, error) {
 		}
 
 		stringValue = buf.String()
+
+		// TODO: Test if any of this conditions/operations are needed
+		// ====
 		stringValue = strings.TrimSuffix(stringValue, "\n")
 		if len(stringValue) == 0 {
 			return "", false, nil
@@ -227,6 +230,7 @@ func parseField(field reflect.Value) (string, bool, error) {
 		if len(stringValue) >= 2 && stringValue[0] == '"' && stringValue[len(stringValue)-1] == '"' {
 			stringValue = stringValue[1 : len(stringValue)-1]
 		}
+		// ====
 	default:
 		stringValue = fmt.Sprintf("%v", value)
 	}
