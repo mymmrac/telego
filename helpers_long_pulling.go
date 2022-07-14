@@ -13,7 +13,7 @@ const (
 	defaultLongPullingRetryTimeout     = time.Second * 3 // 3s
 )
 
-// longPullingContext represents configuration of updates long pulling
+// longPullingContext represents configuration of getting updates via long pulling
 type longPullingContext struct {
 	running     bool
 	runningLock sync.RWMutex
@@ -25,17 +25,17 @@ type longPullingContext struct {
 }
 
 // LongPullingOption represents option that can be applied to longPullingContext
-type LongPullingOption func(config *longPullingContext) error
+type LongPullingOption func(ctx *longPullingContext) error
 
 // WithLongPullingUpdateInterval sets updates interval for long pulling. Ensures that between two calls of
 // Bot.GetUpdates() will be at least specified time, but it could be longer. Default is 0.5s.
 func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOption {
-	return func(config *longPullingContext) error {
+	return func(ctx *longPullingContext) error {
 		if updateInterval < 0 {
 			return errors.New("update interval can't be negative")
 		}
 
-		config.updateInterval = updateInterval
+		ctx.updateInterval = updateInterval
 		return nil
 	}
 }
@@ -43,20 +43,20 @@ func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOpti
 // WithLongPullingRetryTimeout sets updates retry timeout for long pulling. Ensures that between two calls of
 // Bot.GetUpdates() will be at least specified time if an error occurred, but it could be longer. Default is 3s.
 func WithLongPullingRetryTimeout(retryTimeout time.Duration) LongPullingOption {
-	return func(config *longPullingContext) error {
+	return func(ctx *longPullingContext) error {
 		if retryTimeout < 0 {
 			return errors.New("retry timeout can't be negative")
 		}
 
-		config.retryTimeout = retryTimeout
+		ctx.retryTimeout = retryTimeout
 		return nil
 	}
 }
 
 // WithLongPullingBuffer sets buffering for update chan. Default is 100.
 func WithLongPullingBuffer(chanBuffer uint) LongPullingOption {
-	return func(config *longPullingContext) error {
-		config.updateChanBuffer = chanBuffer
+	return func(ctx *longPullingContext) error {
+		ctx.updateChanBuffer = chanBuffer
 		return nil
 	}
 }
@@ -66,7 +66,7 @@ func WithLongPullingBuffer(chanBuffer uint) LongPullingOption {
 // Note: After you done with getting updates you should call StopLongPulling() method which will close update chan.
 func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPullingOption) (<-chan Update, error) {
 	if b.longPullingContext != nil {
-		return nil, errors.New("long pulling context already exist")
+		return nil, errors.New("long pulling context already exist") // TODO: Prefix all errors with `telego: `
 	}
 
 	ctx, err := b.createLongPullingContext(options)
