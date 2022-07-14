@@ -193,6 +193,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			resp, errHTTP := http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
 				bytes.NewBuffer([]byte{}))
 			assert.NoError(t, errHTTP)
+			assert.NoError(t, resp.Body.Close())
 
 			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
@@ -200,6 +201,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
 				bytes.NewBuffer(expectedUpdateBytes))
 			assert.NoError(t, errHTTP)
+			assert.NoError(t, resp.Body.Close())
 
 			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusOK, resp.StatusCode)

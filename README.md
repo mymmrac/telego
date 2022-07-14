@@ -105,9 +105,9 @@ func main() {
 	botToken := os.Getenv("TOKEN")
 
 	// Create bot and enable debugging info
-	// (more on configuration at /examples/configuration/main.go)
 	// Note: Please keep in mind that default logger may expose sensitive information,
 	// use in development only
+	// (more on configuration at examples/configuration/main.go)
 	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
@@ -158,7 +158,7 @@ func main() {
 	}
 
 	// Get updates channel
-	// (more on configuration at /examples/updates_long_pulling/main.go)
+	// (more on configuration at examples/updates_long_pulling/main.go)
 	updates, _ := bot.UpdatesViaLongPulling(nil)
 
 	// Stop reviving updates from updates channel
@@ -205,7 +205,7 @@ func main() {
 
 	// Get updates channel from webhook.
 	// Note: For one bot only one webhook allowed.
-	// (more on configuration at /examples/updates_webhook/main.go)
+	// (more on configuration at examples/updates_webhook/main.go)
 	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
 
 	// Start server for receiving requests from Telegram
@@ -271,9 +271,9 @@ func main() {
 			// Retrieve chat ID
 			chatID := update.Message.Chat.ID
 
-			// Call method sendMessage 
-			// (https://core.telegram.org/bots/api#sendmessage).
+			// Call method sendMessage.
 			// Sends message to sender with same text (echo bot).
+			// (https://core.telegram.org/bots/api#sendmessage)
 			sentMessage, _ := bot.SendMessage(
 				tu.Message(
 					tu.ID(chatID),
@@ -339,7 +339,7 @@ import (
 )
 
 func main() {
-	// ... initializing bot (full example in /examples/keyboard/main.go)
+	// ... initializing bot (full example in examples/keyboard/main.go)
 
 	// Creating keyboard
 	keyboard := tu.Keyboard(
@@ -472,7 +472,7 @@ import (
 
 func main() {
 	// ... initializing bot and bot handler 
-	// (full example in /examples/handler_specific/main.go)
+	// (full example in examples/handler_specific/main.go)
 
 	// Register new handler with match on command `/start`
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {

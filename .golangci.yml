@@ -32,6 +32,7 @@ linters:
     - ireturn # Accept Interfaces, Return Concrete Types
     - maligned # Tool to detect Go structs that would take less memory if their fields were sorted
     - nlreturn # nlreturn checks for a new line before return and branch statements to increase code clarity
+    - noctx # noctx finds sending http request without context.Context
     - nonamedreturns # Reports all named returns
     - paralleltest # paralleltest detects missing usage of t.Parallel() method in your Go test
     - scopelint # Scopelint checks for unpinned variables in go programs
