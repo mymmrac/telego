@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/valyala/fasthttp"
+
 	"github.com/mymmrac/telego"
 )
 
@@ -26,12 +28,18 @@ func main() {
 	info, _ := bot.GetWebhookInfo()
 	fmt.Printf("Webhook Info: %#v\n", info)
 
-	// Get updates channel from webhook.
+	// Get updates channel from webhook, all options are optional.
 	// Note: For one bot only one webhook allowed.
-	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
+	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
+		// Set chan buffer (default 100)
+		telego.WithWebhookBuffer(100),
+
+		// Set fast http server that will be used to handle webhooks (default &fasthttp.Server{})
+		telego.WithWebhookServer(&fasthttp.Server{}),
+	)
 
 	// Start server for receiving requests from Telegram
-	bot.StartListeningForWebhook("localhost:443")
+	_ = bot.StartListeningForWebhook("localhost:443")
 
 	// Stop reviving updates from updates channel and shutdown webhook server
 	defer func() {

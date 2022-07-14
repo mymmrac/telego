@@ -1,6 +1,8 @@
 package telego
 
 import (
+	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/goccy/go-json"
@@ -20,7 +22,20 @@ var (
 	expectedMessage = &Message{
 		MessageID: 1,
 	}
+
+	testPortStart = 3100
+	testPortLock  = sync.Mutex{}
 )
+
+func testAddress(t *testing.T) string {
+	t.Helper()
+
+	testPortLock.Lock()
+	defer testPortLock.Unlock()
+
+	testPortStart++
+	return fmt.Sprintf("127.0.0.1:%d", testPortStart)
+}
 
 func telegoResponse(t *testing.T, v interface{}) *telegoapi.Response {
 	t.Helper()

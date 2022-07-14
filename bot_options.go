@@ -92,11 +92,3 @@ func WithAPIServer(apiURL string) BotOption {
 		return nil
 	}
 }
-
-// WithWebhookServer sets bot HTTP server used for listening for webhook
-func WithWebhookServer(server *fasthttp.Server) BotOption {
-	return func(bot *Bot) error {
-		bot.server = server
-		return nil
-	}
-}

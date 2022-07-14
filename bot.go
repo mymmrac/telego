@@ -41,12 +41,8 @@ type Bot struct {
 	api         telegoapi.Caller
 	constructor telegoapi.RequestConstructor
 
-	stop           chan struct{}
-	startedWebhook bool
-
 	longPullingContext *longPullingContext
-
-	server *fasthttp.Server
+	webhookContext     *webhookContext
 }
 
 // BotOption represents option that can be applied to Bot
@@ -66,8 +62,6 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		log:         newDefaultLogger(token),
 		api:         telegoapi.FasthttpAPICaller{Client: &fasthttp.Client{}},
 		constructor: telegoapi.DefaultConstructor{},
-
-		server: &fasthttp.Server{},
 	}
 
 	for _, option := range options {

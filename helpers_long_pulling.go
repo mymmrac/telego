@@ -62,7 +62,7 @@ func WithLongPullingBuffer(chanBuffer uint) LongPullingOption {
 }
 
 // UpdatesViaLongPulling receive updates in chan using GetUpdates() method.
-// Calling UpdatesViaLongPulling() if already running (before StopLongPulling() method) will return an error.
+// Calling if already running (before StopLongPulling() method) will return an error.
 // Note: After you done with getting updates you should call StopLongPulling() method which will close update chan.
 func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPullingOption) (<-chan Update, error) {
 	if b.longPullingContext != nil {
@@ -151,7 +151,7 @@ func (b *Bot) IsRunningLongPulling() bool {
 
 // StopLongPulling stop reviving updates from UpdatesViaLongPulling() method, stopping is non-blocking, it closes update
 // chan, so it's caller's responsibility to process all unhandled updates after calling stop. Stop will only ensure
-// that no more updates will come in chan.
+// that no more updates will come in update chan.
 // Calling StopLongPulling() multiple times does nothing.
 func (b *Bot) StopLongPulling() {
 	ctx := b.longPullingContext

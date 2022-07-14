@@ -109,11 +109,26 @@ func TestBot_IsRunningLongPulling(t *testing.T) {
 }
 
 func TestBot_StopLongPulling(t *testing.T) {
-	bot := &Bot{}
+	t.Run("success", func(t *testing.T) {
+		bot := &Bot{}
 
-	bot.stop = make(chan struct{})
-	assert.NotPanics(t, func() {
-		bot.StopLongPulling()
+		bot.longPullingContext = &longPullingContext{
+			running: true,
+			stop:    make(chan struct{}),
+		}
+		assert.NotPanics(t, func() {
+			bot.StopLongPulling()
+		})
+
+		assert.Nil(t, bot.longPullingContext)
+	})
+
+	t.Run("success_no_context", func(t *testing.T) {
+		bot := &Bot{}
+
+		assert.NotPanics(t, func() {
+			bot.StopLongPulling()
+		})
 	})
 }
 

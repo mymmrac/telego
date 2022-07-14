@@ -18,7 +18,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 24
+const testCase = 25
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -597,6 +597,46 @@ func main() {
 		for upd := range updates {
 			fmt.Println(upd)
 		}
+	case 25:
+		fmt.Println(bot.IsRunningWebhook())
+
+		err = bot.StopWebhook()
+		assert(err == nil, err)
+
+		_, err := bot.UpdatesViaWebhook("/")
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningWebhook())
+
+		err = bot.StartListeningForWebhook(":8080")
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningWebhook())
+
+		err = bot.StopWebhook()
+		assert(err == nil, err)
+
+		err = bot.StopWebhook()
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningWebhook())
+
+		fmt.Println("====")
+
+		_, err = bot.UpdatesViaWebhook("/")
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningWebhook())
+
+		err = bot.StartListeningForWebhook(":8080")
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningWebhook())
+
+		err = bot.StopWebhook()
+		assert(err == nil, err)
+
+		fmt.Println(bot.IsRunningWebhook())
 	}
 }
 
