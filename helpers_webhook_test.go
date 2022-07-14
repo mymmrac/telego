@@ -1,15 +1,21 @@
 package telego
 
 import (
+	"bytes"
+	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
+	"github.com/goccy/go-json"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/telego/telegoapi"
 )
 
 func testWebhookBot(t *testing.T) *Bot {
@@ -157,6 +163,60 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 
 		_, err := b.UpdatesViaWebhook("/bot", WithWebhookServer(nil))
 		require.Error(t, err)
+	})
+
+	t.Run("end_to_end", func(t *testing.T) {
+		b, err := NewBot(token, WithDiscardLogger())
+		require.NoError(t, err)
+
+		require.False(t, b.IsRunningWebhook())
+
+		updates, err := b.UpdatesViaWebhook("/")
+		require.NoError(t, err)
+
+		require.False(t, b.IsRunningWebhook())
+
+		addr := testAddress(t)
+		err = b.StartListeningForWebhook(addr)
+		require.NoError(t, err)
+
+		require.True(t, b.IsRunningWebhook())
+
+		expectedUpdate := Update{
+			UpdateID: 1,
+			Message:  &Message{Text: "ok"},
+		}
+		expectedUpdateBytes, err := json.Marshal(expectedUpdate)
+		require.NoError(t, err)
+
+		go func() {
+			resp, errHTTP := http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
+				bytes.NewBuffer([]byte{}))
+			assert.NoError(t, errHTTP)
+
+			require.NotNil(t, resp)
+			assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
+				bytes.NewBuffer(expectedUpdateBytes))
+			assert.NoError(t, errHTTP)
+
+			require.NotNil(t, resp)
+			assert.Equal(t, http.StatusOK, resp.StatusCode)
+		}()
+
+		update, ok := <-updates
+		require.True(t, ok)
+
+		assert.Equal(t, expectedUpdate, update)
+
+		err = b.StopWebhook()
+		assert.NoError(t, err)
+
+		assert.False(t, b.IsRunningWebhook())
+
+		_, ok = <-updates
+		assert.False(t, ok)
 	})
 }
 

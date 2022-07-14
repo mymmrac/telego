@@ -170,7 +170,7 @@ func (b *Bot) StopWebhook() error {
 
 // UpdatesViaWebhook receive updates in chan from webhook.
 // Calling if already configured (before StopWebhook() method) will return an error.
-// TODO: Add end to end test for this
+// Note: UpdatesViaWebhook() will redefine webhook's server handler.
 func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
 	if b.webhookContext != nil {
 		return nil, errors.New("telego: webhook context already exist")
