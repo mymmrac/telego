@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/fasthttp/router"
 	"github.com/goccy/go-json"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -275,6 +276,22 @@ func TestWithWebhookServer(t *testing.T) {
 
 	t.Run("error", func(t *testing.T) {
 		err := WithWebhookServer(nil)(config)
+		assert.Error(t, err)
+	})
+}
+
+func TestWithWebhookRouter(t *testing.T) {
+	config := &webhookContext{}
+	testRouter := router.New()
+
+	t.Run("success", func(t *testing.T) {
+		err := WithWebhookRouter(testRouter)(config)
+		assert.NoError(t, err)
+		assert.EqualValues(t, testRouter, config.router)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		err := WithWebhookRouter(nil)(config)
 		assert.Error(t, err)
 	})
 }

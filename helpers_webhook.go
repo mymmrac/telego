@@ -6,6 +6,7 @@ import (
 	"os"
 	"sync"
 
+	"github.com/fasthttp/router"
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
 
@@ -21,7 +22,9 @@ type webhookContext struct {
 	runningLock sync.RWMutex
 	stop        chan struct{}
 
-	server           *fasthttp.Server
+	server *fasthttp.Server
+	router *router.Router
+
 	updateChanBuffer uint
 }
 
@@ -44,6 +47,19 @@ func WithWebhookServer(server *fasthttp.Server) WebhookOption {
 		}
 
 		ctx.server = server
+		return nil
+	}
+}
+
+// WithWebhookRouter sets HTTP router to use for webhook. Default is router.New()
+// Note: For webhook to work properly POST route with path specified in Bot.UpdatesViaWebhook() must be unset.
+func WithWebhookRouter(router *router.Router) WebhookOption {
+	return func(ctx *webhookContext) error {
+		if router == nil {
+			return errors.New("telego: webhook router is nil")
+		}
+
+		ctx.router = router
 		return nil
 	}
 }
@@ -168,7 +184,7 @@ func (b *Bot) StopWebhook() error {
 	return nil
 }
 
-// UpdatesViaWebhook receive updates in chan from webhook.
+// UpdatesViaWebhook receive updates in chan from webhook. New POST route with provided path will be added to router.
 // Calling if already configured (before StopWebhook() method) will return an error.
 // Note: UpdatesViaWebhook() will redefine webhook's server handler.
 func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
@@ -182,28 +198,15 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 	}
 
 	ctx.runningLock.Lock()
+	defer ctx.runningLock.Unlock()
+
 	b.webhookContext = ctx
 	ctx.stop = make(chan struct{})
 	ctx.configured = true
-	ctx.runningLock.Unlock()
 
 	updatesChan := make(chan Update, ctx.updateChanBuffer)
 
-	ctx.server.Handler = func(ctx *fasthttp.RequestCtx) {
-		if string(ctx.Path()) != path {
-			ctx.SetStatusCode(fasthttp.StatusNotFound)
-			b.log.Errorf("Unknown path was used in webhook: %q", ctx.Path())
-			return
-		}
-
-		if method := string(ctx.Method()); method != fasthttp.MethodPost {
-			err = fmt.Errorf("unexpected HTTP method, expected: %q, got: %q", fasthttp.MethodPost, method)
-			b.respondWithError(ctx, err)
-
-			b.log.Errorf("Webhook unexpected HTTP method, expected: %q, got: %q", fasthttp.MethodPost, method)
-			return
-		}
-
+	ctx.router.POST(path, func(ctx *fasthttp.RequestCtx) {
 		var update Update
 		err = json.Unmarshal(ctx.PostBody(), &update)
 		if err != nil {
@@ -215,7 +218,9 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 
 		updatesChan <- update
 		ctx.SetStatusCode(fasthttp.StatusOK)
-	}
+	})
+
+	ctx.server.Handler = ctx.router.Handler
 
 	go func() {
 		<-ctx.stop
@@ -227,7 +232,9 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 
 func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, error) {
 	ctx := &webhookContext{
-		server:           &fasthttp.Server{},
+		server: &fasthttp.Server{},
+		router: router.New(),
+
 		updateChanBuffer: defaultWebhookUpdateChanBuffer,
 	}
 

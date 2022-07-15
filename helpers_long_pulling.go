@@ -75,10 +75,11 @@ func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPul
 	}
 
 	ctx.runningLock.Lock()
+	defer ctx.runningLock.Unlock()
+
 	b.longPullingContext = ctx
 	ctx.stop = make(chan struct{})
 	ctx.running = true
-	ctx.runningLock.Unlock()
 
 	updatesChan := make(chan Update, ctx.updateChanBuffer)
 
