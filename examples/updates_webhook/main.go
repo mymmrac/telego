@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 
 	"github.com/mymmrac/telego"
@@ -36,6 +37,13 @@ func main() {
 
 		// Set fast http server that will be used to handle webhooks (default &fasthttp.Server{})
 		telego.WithWebhookServer(&fasthttp.Server{}),
+
+		// Set router to use, you can define your own routes (default router.New())
+		telego.WithWebhookRouter(router.New()),
+
+		// Enable default health API on `/health` (default disabled)
+		// Note: Should be used only after telego.WithWebhookRouter() if any
+		telego.WithWebhookHealthAPI(),
 	)
 
 	// Start server for receiving requests from Telegram

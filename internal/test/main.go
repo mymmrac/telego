@@ -5,6 +5,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/fasthttp/router"
+	"github.com/valyala/fasthttp"
+
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -18,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 25
+const testCase = 26
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -603,7 +606,7 @@ func main() {
 		err = bot.StopWebhook()
 		assert(err == nil, err)
 
-		_, err := bot.UpdatesViaWebhook("/")
+		_, err = bot.UpdatesViaWebhook("/")
 		assert(err == nil, err)
 
 		fmt.Println(bot.IsRunningWebhook())
@@ -637,6 +640,22 @@ func main() {
 		assert(err == nil, err)
 
 		fmt.Println(bot.IsRunningWebhook())
+	case 26:
+		r := router.New()
+		r.GET("/", func(ctx *fasthttp.RequestCtx) {
+			ctx.SetStatusCode(fasthttp.StatusAccepted)
+		})
+
+		_, err = bot.UpdatesViaWebhook("/", telego.WithWebhookRouter(r), telego.WithWebhookHealthAPI())
+		assert(err == nil, err)
+
+		err = bot.StartListeningForWebhook(":8080")
+		assert(err == nil, err)
+
+		defer func() {
+			_ = bot.StopWebhook()
+		}()
+		select {}
 	}
 }
 
