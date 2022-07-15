@@ -78,6 +78,7 @@ More examples can be seen here:
 - [Custom predicates for handlers](examples/handler_custom/main.go)
 - [Specific handlers](examples/handler_specific/main.go)
 - [Predicate as middleware](examples/middleware_with_predicates/main.go)
+- [Update processor](examples/update_processor/main.go)
 
 </details>
 
