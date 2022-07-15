@@ -32,7 +32,7 @@ type LongPullingOption func(ctx *longPullingContext) error
 func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOption {
 	return func(ctx *longPullingContext) error {
 		if updateInterval < 0 {
-			return errors.New("update interval can't be negative")
+			return errors.New("telego: update interval can't be negative")
 		}
 
 		ctx.updateInterval = updateInterval
@@ -45,7 +45,7 @@ func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOpti
 func WithLongPullingRetryTimeout(retryTimeout time.Duration) LongPullingOption {
 	return func(ctx *longPullingContext) error {
 		if retryTimeout < 0 {
-			return errors.New("retry timeout can't be negative")
+			return errors.New("telego: retry timeout can't be negative")
 		}
 
 		ctx.retryTimeout = retryTimeout
@@ -66,7 +66,7 @@ func WithLongPullingBuffer(chanBuffer uint) LongPullingOption {
 // Note: After you done with getting updates you should call StopLongPulling() method which will close update chan.
 func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPullingOption) (<-chan Update, error) {
 	if b.longPullingContext != nil {
-		return nil, errors.New("long pulling context already exist") // TODO: Prefix all errors with `telego: `
+		return nil, errors.New("telego: long pulling context already exist")
 	}
 
 	ctx, err := b.createLongPullingContext(options)

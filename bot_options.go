@@ -85,7 +85,7 @@ func WithLogger(log Logger) BotOption {
 func WithAPIServer(apiURL string) BotOption {
 	return func(bot *Bot) error {
 		if apiURL == "" {
-			return errors.New("empty bot api server url")
+			return errors.New("telego: empty bot api server url")
 		}
 
 		bot.apiURL = apiURL
