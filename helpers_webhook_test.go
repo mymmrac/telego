@@ -99,13 +99,10 @@ func TestBot_StartListeningForWebhookUNIX(t *testing.T) {
 	})
 }
 
-func TestBot_respondWithError(t *testing.T) {
-	b, err := NewBot(token, WithDiscardLogger())
-	require.NoError(t, err)
-
+func TestBot_httpRespondWithError(t *testing.T) {
 	ctx := &fasthttp.RequestCtx{}
 
-	b.respondWithError(ctx, errTest)
+	httpRespondWithError(ctx, errTest)
 	assert.Equal(t, fasthttp.StatusBadRequest, ctx.Response.StatusCode())
 }
 
@@ -256,42 +253,72 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 }
 
 func TestWebhookBuffer(t *testing.T) {
-	config := &webhookContext{}
+	ctx := &webhookContext{}
 	buffer := uint(1)
 
-	err := WithWebhookBuffer(buffer)(config)
+	err := WithWebhookBuffer(buffer)(ctx)
 	assert.NoError(t, err)
-	assert.EqualValues(t, buffer, config.updateChanBuffer)
+	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
 }
 
 func TestWithWebhookServer(t *testing.T) {
-	config := &webhookContext{}
+	ctx := &webhookContext{}
 	server := &fasthttp.Server{}
 
 	t.Run("success", func(t *testing.T) {
-		err := WithWebhookServer(server)(config)
+		err := WithWebhookServer(server)(ctx)
 		assert.NoError(t, err)
-		assert.EqualValues(t, server, config.server)
+		assert.EqualValues(t, server, ctx.server)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithWebhookServer(nil)(config)
+		err := WithWebhookServer(nil)(ctx)
 		assert.Error(t, err)
 	})
 }
 
 func TestWithWebhookRouter(t *testing.T) {
-	config := &webhookContext{}
+	ctx := &webhookContext{}
 	testRouter := router.New()
 
 	t.Run("success", func(t *testing.T) {
-		err := WithWebhookRouter(testRouter)(config)
+		err := WithWebhookRouter(testRouter)(ctx)
 		assert.NoError(t, err)
-		assert.EqualValues(t, testRouter, config.router)
+		assert.EqualValues(t, testRouter, ctx.router)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithWebhookRouter(nil)(config)
+		err := WithWebhookRouter(nil)(ctx)
 		assert.Error(t, err)
 	})
+}
+
+func TestWithWebhookBasicHealthAPI(t *testing.T) {
+	ctx := &webhookContext{
+		router: router.New(),
+	}
+
+	err := WithWebhookHealthAPI()(ctx)
+	assert.NoError(t, err)
+
+	routesByMethods := ctx.router.List()
+
+	routes, ok := routesByMethods[fasthttp.MethodGet]
+	require.True(t, ok)
+
+	found := false
+	for _, route := range routes {
+		if route == webhookHealthAPIPath {
+			found = true
+			break
+		}
+	}
+	assert.True(t, found)
+}
+
+func Test_httpHealthResponse(t *testing.T) {
+	ctx := &fasthttp.RequestCtx{}
+
+	httpHealthResponse(ctx)
+	assert.Equal(t, fasthttp.StatusOK, ctx.Response.StatusCode())
 }

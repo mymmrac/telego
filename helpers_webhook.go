@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/fasthttp/router"
 	"github.com/goccy/go-json"
@@ -14,6 +15,8 @@ import (
 )
 
 const defaultWebhookUpdateChanBuffer = 100 // Limited by number of updates in single Bot.GetUpdates() call
+
+const webhookHealthAPIPath = "/health"
 
 // longPullingContext represents configuration of getting updates via webhook
 type webhookContext struct {
@@ -60,6 +63,17 @@ func WithWebhookRouter(router *router.Router) WebhookOption {
 		}
 
 		ctx.router = router
+		return nil
+	}
+}
+
+// WithWebhookHealthAPI sets basic health API on `/health` path of the router. Keep in mind that should be
+// specified only after WithWebhookRouter() option if any.
+func WithWebhookHealthAPI() WebhookOption {
+	return func(ctx *webhookContext) error {
+		ctx.router.GET(webhookHealthAPIPath, func(ctx *fasthttp.RequestCtx) {
+			httpHealthResponse(ctx)
+		})
 		return nil
 	}
 }
@@ -210,7 +224,7 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 		var update Update
 		err = json.Unmarshal(ctx.PostBody(), &update)
 		if err != nil {
-			b.respondWithError(ctx, fmt.Errorf("decoding update: %w", err))
+			httpRespondWithError(ctx, fmt.Errorf("decoding update: %w", err))
 
 			b.log.Errorf("Webhook decoding error: %v", err)
 			return
@@ -247,15 +261,31 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 	return ctx, nil
 }
 
-func (b *Bot) respondWithError(ctx *fasthttp.RequestCtx, err error) {
-	//nolint:errcheck
+func httpRespondWithError(ctx *fasthttp.RequestCtx, err error) {
 	// Marshal will never return an error in such case
-	errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
+	//nolint:errcheck
+	errMsg, _ := json.Marshal(map[string]string{
+		"error": err.Error(),
+	})
 
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)
 	ctx.SetContentType(telegoapi.ContentTypeJSON)
 
-	//nolint:errcheck
 	// Write never returns an error
+	//nolint:errcheck
 	_, _ = ctx.Write(errMsg)
+}
+
+func httpHealthResponse(ctx *fasthttp.RequestCtx) {
+	//nolint:errcheck
+	healthData, _ := json.Marshal(map[string]interface{}{
+		"running": true,
+		"time":    time.Now().Local(),
+	})
+
+	ctx.SetStatusCode(fasthttp.StatusOK)
+	ctx.SetContentType(telegoapi.ContentTypeJSON)
+
+	//nolint:errcheck
+	_, _ = ctx.Write(healthData)
 }

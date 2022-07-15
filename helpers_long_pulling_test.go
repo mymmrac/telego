@@ -133,42 +133,42 @@ func TestBot_StopLongPulling(t *testing.T) {
 }
 
 func TestWithLongPullingUpdateInterval(t *testing.T) {
-	config := &longPullingContext{}
+	ctx := &longPullingContext{}
 	interval := time.Second
 
 	t.Run("success", func(t *testing.T) {
-		err := WithLongPullingUpdateInterval(interval)(config)
+		err := WithLongPullingUpdateInterval(interval)(ctx)
 		assert.NoError(t, err)
-		assert.EqualValues(t, interval, config.updateInterval)
+		assert.EqualValues(t, interval, ctx.updateInterval)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithLongPullingUpdateInterval(-interval)(config)
+		err := WithLongPullingUpdateInterval(-interval)(ctx)
 		assert.Error(t, err)
 	})
 }
 
 func TestWithLongPullingRetryTimeout(t *testing.T) {
-	config := &longPullingContext{}
+	ctx := &longPullingContext{}
 	timeout := time.Second
 
 	t.Run("success", func(t *testing.T) {
-		err := WithLongPullingRetryTimeout(timeout)(config)
+		err := WithLongPullingRetryTimeout(timeout)(ctx)
 		assert.NoError(t, err)
-		assert.EqualValues(t, timeout, config.retryTimeout)
+		assert.EqualValues(t, timeout, ctx.retryTimeout)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithLongPullingRetryTimeout(-timeout)(config)
+		err := WithLongPullingRetryTimeout(-timeout)(ctx)
 		assert.Error(t, err)
 	})
 }
 
 func TestWithLongPullingBuffer(t *testing.T) {
-	config := &longPullingContext{}
+	ctx := &longPullingContext{}
 	buffer := uint(1)
 
-	err := WithLongPullingBuffer(buffer)(config)
+	err := WithLongPullingBuffer(buffer)(ctx)
 	assert.NoError(t, err)
-	assert.EqualValues(t, buffer, config.updateChanBuffer)
+	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
 }
