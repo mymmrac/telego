@@ -79,6 +79,7 @@ More examples can be seen here:
 - [Specific handlers](examples/handler_specific/main.go)
 - [Predicate as middleware](examples/middleware_with_predicates/main.go)
 - [Update processor](examples/update_processor/main.go)
+- [Message entities](examples/message_entity/main.go)
 
 </details>
 

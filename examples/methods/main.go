@@ -11,6 +11,7 @@ import (
 func main() {
 	botToken := os.Getenv("TOKEN")
 
+	// Create Bot
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
 	bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
 	if err != nil {

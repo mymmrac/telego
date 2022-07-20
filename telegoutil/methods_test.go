@@ -117,6 +117,15 @@ func TestMessage(t *testing.T) {
 	assert.Equal(t, text1, m.Text)
 }
 
+func TestMessageWithEntities(t *testing.T) {
+	m := MessageWithEntities(id1, Entity(text1).Italic())
+	assert.Equal(t, id1, m.ChatID)
+	assert.Equal(t, text1, m.Text)
+	assert.Equal(t, []telego.MessageEntity{
+		{Type: "italic", Offset: 0, Length: 4, URL: "", User: nil, Language: ""},
+	}, m.Entities)
+}
+
 func TestPhoto(t *testing.T) {
 	p := Photo(id1, file)
 	assert.Equal(t, id1, p.ChatID)
