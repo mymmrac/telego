@@ -175,3 +175,8 @@ func TestInlineQuery(t *testing.T) {
 	assert.Equal(t, text1, i.InlineQueryID)
 	assert.Equal(t, []telego.InlineQueryResult{&telego.InlineQueryResultArticle{Title: text2}}, i.Results)
 }
+
+func TestCallbackQuery(t *testing.T) {
+	c := CallbackQuery(text1)
+	assert.Equal(t, text1, c.CallbackQueryID)
+}

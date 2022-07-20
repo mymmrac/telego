@@ -10,6 +10,16 @@ func Message(id telego.ChatID, text string) *telego.SendMessageParams {
 	}
 }
 
+// MessageWithEntities creates telego.SendMessageParams with required parameters and parsed entities
+func MessageWithEntities(id telego.ChatID, entityCollections ...MessageEntityCollection) *telego.SendMessageParams {
+	text, entities := MessageEntities(entityCollections...)
+	return &telego.SendMessageParams{
+		ChatID:   id,
+		Text:     text,
+		Entities: entities,
+	}
+}
+
 // Photo creates telego.SendPhotoParams with required parameters
 func Photo(id telego.ChatID, photo telego.InputFile) *telego.SendPhotoParams {
 	return &telego.SendPhotoParams{
@@ -174,5 +184,12 @@ func InlineQuery(inlineQueryID string, results ...telego.InlineQueryResult) *tel
 	return &telego.AnswerInlineQueryParams{
 		InlineQueryID: inlineQueryID,
 		Results:       results,
+	}
+}
+
+// CallbackQuery creates telego.AnswerCallbackQueryParams with required parameters
+func CallbackQuery(callbackQueryID string) *telego.AnswerCallbackQueryParams {
+	return &telego.AnswerCallbackQueryParams{
+		CallbackQueryID: callbackQueryID,
 	}
 }
