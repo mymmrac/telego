@@ -58,7 +58,7 @@ func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
 	var updates []Update
 	err := b.performRequest("getUpdates", params, &updates)
 	if err != nil {
-		return nil, fmt.Errorf("getUpdates(): %w", err)
+		return nil, fmt.Errorf("telego: getUpdates(): %w", err)
 	}
 
 	return updates, nil
@@ -151,7 +151,7 @@ func (b *Bot) GetWebhookInfo() (*WebhookInfo, error) {
 	var webhookInfo *WebhookInfo
 	err := b.performRequest("getWebhookInfo", nil, &webhookInfo)
 	if err != nil {
-		return nil, fmt.Errorf("getWebhookInfo(): %w", err)
+		return nil, fmt.Errorf("telego: getWebhookInfo(): %w", err)
 	}
 
 	return webhookInfo, nil
@@ -163,7 +163,7 @@ func (b *Bot) GetMe() (*User, error) {
 	var user *User
 	err := b.performRequest("getMe", nil, &user)
 	if err != nil {
-		return nil, fmt.Errorf("getMe(): %w", err)
+		return nil, fmt.Errorf("telego: getMe(): %w", err)
 	}
 
 	return user, nil
@@ -249,7 +249,7 @@ func (b *Bot) SendMessage(params *SendMessageParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendMessage", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendMessage(): %w", err)
+		return nil, fmt.Errorf("telego: sendMessage(): %w", err)
 	}
 
 	return message, nil
@@ -282,7 +282,7 @@ func (b *Bot) ForwardMessage(params *ForwardMessageParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("forwardMessage", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("forwardMessage(): %w", err)
+		return nil, fmt.Errorf("telego: forwardMessage(): %w", err)
 	}
 
 	return message, nil
@@ -343,7 +343,7 @@ func (b *Bot) CopyMessage(params *CopyMessageParams) (*MessageID, error) {
 	var messageID *MessageID
 	err := b.performRequest("copyMessage", params, &messageID)
 	if err != nil {
-		return nil, fmt.Errorf("copyMessage(): %w", err)
+		return nil, fmt.Errorf("telego: copyMessage(): %w", err)
 	}
 
 	return messageID, nil
@@ -407,7 +407,7 @@ func (b *Bot) SendPhoto(params *SendPhotoParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendPhoto", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendPhoto(): %w", err)
+		return nil, fmt.Errorf("telego: sendPhoto(): %w", err)
 	}
 
 	return message, nil
@@ -494,7 +494,7 @@ func (b *Bot) SendAudio(params *SendAudioParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendAudio", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendAudio(): %w", err)
+		return nil, fmt.Errorf("telego: sendAudio(): %w", err)
 	}
 
 	return message, nil
@@ -575,7 +575,7 @@ func (b *Bot) SendDocument(params *SendDocumentParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendDocument", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendDocument(): %w", err)
+		return nil, fmt.Errorf("telego: sendDocument(): %w", err)
 	}
 
 	return message, nil
@@ -665,7 +665,7 @@ func (b *Bot) SendVideo(params *SendVideoParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVideo", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendVideo(): %w", err)
+		return nil, fmt.Errorf("telego: sendVideo(): %w", err)
 	}
 
 	return message, nil
@@ -751,7 +751,7 @@ func (b *Bot) SendAnimation(params *SendAnimationParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendAnimation", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendAnimation(): %w", err)
+		return nil, fmt.Errorf("telego: sendAnimation(): %w", err)
 	}
 
 	return message, nil
@@ -820,7 +820,7 @@ func (b *Bot) SendVoice(params *SendVoiceParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVoice", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendVoice(): %w", err)
+		return nil, fmt.Errorf("telego: sendVoice(): %w", err)
 	}
 
 	return message, nil
@@ -890,7 +890,7 @@ func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVideoNote", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendVideoNote(): %w", err)
+		return nil, fmt.Errorf("telego: sendVideoNote(): %w", err)
 	}
 
 	return message, nil
@@ -942,7 +942,7 @@ func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) ([]Message, error) {
 	var messages []Message
 	err := b.performRequest("sendMediaGroup", params, &messages)
 	if err != nil {
-		return nil, fmt.Errorf("sendMediaGroup(): %w", err)
+		return nil, fmt.Errorf("telego: sendMediaGroup(): %w", err)
 	}
 
 	return messages, nil
@@ -1002,7 +1002,7 @@ func (b *Bot) SendLocation(params *SendLocationParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendLocation", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendLocation(): %w", err)
+		return nil, fmt.Errorf("telego: sendLocation(): %w", err)
 	}
 
 	return message, nil
@@ -1052,7 +1052,7 @@ func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*M
 	var message *Message
 	err := b.performRequest("editMessageLiveLocation", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("editMessageLiveLocation(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageLiveLocation(): %w", err)
 	}
 
 	return message, nil
@@ -1084,7 +1084,7 @@ func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*M
 	var message *Message
 	err := b.performRequest("stopMessageLiveLocation", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("stopMessageLiveLocation(): %w", err)
+		return nil, fmt.Errorf("telego: stopMessageLiveLocation(): %w", err)
 	}
 
 	return message, nil
@@ -1149,7 +1149,7 @@ func (b *Bot) SendVenue(params *SendVenueParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendVenue", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendVenue(): %w", err)
+		return nil, fmt.Errorf("telego: sendVenue(): %w", err)
 	}
 
 	return message, nil
@@ -1201,7 +1201,7 @@ func (b *Bot) SendContact(params *SendContactParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendContact", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendContact(): %w", err)
+		return nil, fmt.Errorf("telego: sendContact(): %w", err)
 	}
 
 	return message, nil
@@ -1284,7 +1284,7 @@ func (b *Bot) SendPoll(params *SendPollParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendPoll", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendPoll(): %w", err)
+		return nil, fmt.Errorf("telego: sendPoll(): %w", err)
 	}
 
 	return message, nil
@@ -1329,7 +1329,7 @@ func (b *Bot) SendDice(params *SendDiceParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendDice", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendDice(): %w", err)
+		return nil, fmt.Errorf("telego: sendDice(): %w", err)
 	}
 
 	return message, nil
@@ -1406,7 +1406,7 @@ func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) (*UserPro
 	var userProfilePhotos *UserProfilePhotos
 	err := b.performRequest("getUserProfilePhotos", params, &userProfilePhotos)
 	if err != nil {
-		return nil, fmt.Errorf("getUserProfilePhotos(): %w", err)
+		return nil, fmt.Errorf("telego: getUserProfilePhotos(): %w", err)
 	}
 
 	return userProfilePhotos, nil
@@ -1428,7 +1428,7 @@ func (b *Bot) GetFile(params *GetFileParams) (*File, error) {
 	var file *File
 	err := b.performRequest("getFile", params, &file)
 	if err != nil {
-		return nil, fmt.Errorf("getFile(): %w", err)
+		return nil, fmt.Errorf("telego: getFile(): %w", err)
 	}
 
 	return file, nil
@@ -1690,7 +1690,7 @@ func (b *Bot) ExportChatInviteLink(params *ExportChatInviteLinkParams) (*string,
 	var inviteLink *string
 	err := b.performRequest("exportChatInviteLink", params, &inviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("exportChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: exportChatInviteLink(): %w", err)
 	}
 
 	return inviteLink, nil
@@ -1725,7 +1725,7 @@ func (b *Bot) CreateChatInviteLink(params *CreateChatInviteLinkParams) (*ChatInv
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("createChatInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("createChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: createChatInviteLink(): %w", err)
 	}
 
 	return chatInviteLink, nil
@@ -1762,7 +1762,7 @@ func (b *Bot) EditChatInviteLink(params *EditChatInviteLinkParams) (*ChatInviteL
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("editChatInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("editChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: editChatInviteLink(): %w", err)
 	}
 
 	return chatInviteLink, nil
@@ -1786,7 +1786,7 @@ func (b *Bot) RevokeChatInviteLink(params *RevokeChatInviteLinkParams) (*ChatInv
 	var chatInviteLink *ChatInviteLink
 	err := b.performRequest("revokeChatInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("revokeChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: revokeChatInviteLink(): %w", err)
 	}
 
 	return chatInviteLink, nil
@@ -2027,7 +2027,7 @@ func (b *Bot) GetChat(params *GetChatParams) (*Chat, error) {
 	var chat *Chat
 	err := b.performRequest("getChat", params, &chat)
 	if err != nil {
-		return nil, fmt.Errorf("getChat(): %w", err)
+		return nil, fmt.Errorf("telego: getChat(): %w", err)
 	}
 
 	return chat, nil
@@ -2048,7 +2048,7 @@ func (b *Bot) GetChatAdministrators(params *GetChatAdministratorsParams) ([]Chat
 	var chatMembersData []chatMemberData
 	err := b.performRequest("getChatAdministrators", params, &chatMembersData)
 	if err != nil {
-		return nil, fmt.Errorf("getChatAdministrators(): %w", err)
+		return nil, fmt.Errorf("telego: getChatAdministrators(): %w", err)
 	}
 
 	chatMembers := make([]ChatMember, len(chatMembersData))
@@ -2070,7 +2070,7 @@ func (b *Bot) GetChatMemberCount(params *GetChatMemberCountParams) (*int, error)
 	var chatMemberCount *int
 	err := b.performRequest("getChatMemberCount", params, &chatMemberCount)
 	if err != nil {
-		return nil, fmt.Errorf("getChatMemberCount(): %w", err)
+		return nil, fmt.Errorf("telego: getChatMemberCount(): %w", err)
 	}
 
 	return chatMemberCount, nil
@@ -2092,7 +2092,7 @@ func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
 	var memberData chatMemberData
 	err := b.performRequest("getChatMember", params, &memberData)
 	if err != nil {
-		return nil, fmt.Errorf("getChatMember(): %w", err)
+		return nil, fmt.Errorf("telego: getChatMember(): %w", err)
 	}
 
 	return memberData.Data, nil
@@ -2249,7 +2249,7 @@ func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
 	var botCommands []BotCommand
 	err := b.performRequest("getMyCommands", params, &botCommands)
 	if err != nil {
-		return nil, fmt.Errorf("getMyCommands(): %w", err)
+		return nil, fmt.Errorf("telego: getMyCommands(): %w", err)
 	}
 
 	return botCommands, nil
@@ -2290,7 +2290,7 @@ func (b *Bot) GetChatMenuButton(params *GetChatMenuButtonParams) (MenuButton, er
 	var menuButton menuButtonData
 	err := b.performRequest("getChatMenuButton", params, &menuButton)
 	if err != nil {
-		return nil, fmt.Errorf("getChatMenuButton(): %w", err)
+		return nil, fmt.Errorf("telego: getChatMenuButton(): %w", err)
 	}
 
 	return menuButton.Data, nil
@@ -2334,7 +2334,7 @@ func (b *Bot) GetMyDefaultAdministratorRights(params *GetMyDefaultAdministratorR
 	var chatAdministratorRights *ChatAdministratorRights
 	err := b.performRequest("getMyDefaultAdministratorRights", params, &chatAdministratorRights)
 	if err != nil {
-		return nil, fmt.Errorf("getMyDefaultAdministratorRights(): %w", err)
+		return nil, fmt.Errorf("telego: getMyDefaultAdministratorRights(): %w", err)
 	}
 
 	return chatAdministratorRights, nil
@@ -2385,7 +2385,7 @@ func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
 	*/
 	err := b.performRequest("editMessageText", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("editMessageText(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageText(): %w", err)
 	}
 
 	return message, nil
@@ -2427,7 +2427,7 @@ func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, er
 	var message *Message
 	err := b.performRequest("editMessageCaption", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("editMessageCaption(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageCaption(): %w", err)
 	}
 
 	return message, nil
@@ -2477,7 +2477,7 @@ func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error)
 	var message *Message
 	err := b.performRequest("editMessageMedia", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("editMessageMedia(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageMedia(): %w", err)
 	}
 
 	return message, nil
@@ -2508,7 +2508,7 @@ func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Mes
 	var message *Message
 	err := b.performRequest("editMessageReplyMarkup", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("editMessageReplyMarkup(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageReplyMarkup(): %w", err)
 	}
 
 	return message, nil
@@ -2534,7 +2534,7 @@ func (b *Bot) StopPoll(params *StopPollParams) (*Poll, error) {
 	var poll *Poll
 	err := b.performRequest("stopPoll", params, &poll)
 	if err != nil {
-		return nil, fmt.Errorf("stopPoll(): %w", err)
+		return nil, fmt.Errorf("telego: stopPoll(): %w", err)
 	}
 
 	return poll, nil
@@ -2616,7 +2616,7 @@ func (b *Bot) SendSticker(params *SendStickerParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendSticker", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendSticker(): %w", err)
+		return nil, fmt.Errorf("telego: sendSticker(): %w", err)
 	}
 
 	return message, nil
@@ -2634,7 +2634,7 @@ func (b *Bot) GetStickerSet(params *GetStickerSetParams) (*StickerSet, error) {
 	var stickerSet *StickerSet
 	err := b.performRequest("getStickerSet", params, &stickerSet)
 	if err != nil {
-		return nil, fmt.Errorf("getStickerSet(): %w", err)
+		return nil, fmt.Errorf("telego: getStickerSet(): %w", err)
 	}
 
 	return stickerSet, nil
@@ -2664,7 +2664,7 @@ func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) (*File, error) 
 	var file *File
 	err := b.performRequest("uploadStickerFile", params, &file)
 	if err != nil {
-		return nil, fmt.Errorf("uploadStickerFile(): %w", err)
+		return nil, fmt.Errorf("telego: uploadStickerFile(): %w", err)
 	}
 
 	return file, nil
@@ -2945,7 +2945,7 @@ func (b *Bot) AnswerWebAppQuery(params *AnswerWebAppQueryParams) (*SentWebAppMes
 	var sentWebAppMessage *SentWebAppMessage
 	err := b.performRequest("answerWebAppQuery", params, &sentWebAppMessage)
 	if err != nil {
-		return nil, fmt.Errorf("answerWebAppQuery(): %w", err)
+		return nil, fmt.Errorf("telego: answerWebAppQuery(): %w", err)
 	}
 
 	return sentWebAppMessage, nil
@@ -3061,7 +3061,7 @@ func (b *Bot) SendInvoice(params *SendInvoiceParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendInvoice", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendInvoice(): %w", err)
+		return nil, fmt.Errorf("telego: sendInvoice(): %w", err)
 	}
 
 	return message, nil
@@ -3149,7 +3149,7 @@ func (b *Bot) CreateInvoiceLink(params *CreateInvoiceLinkParams) (*string, error
 	var invoiceLink *string
 	err := b.performRequest("createInvoiceLink", params, &invoiceLink)
 	if err != nil {
-		return nil, fmt.Errorf("createInvoiceLink(): %w", err)
+		return nil, fmt.Errorf("telego: createInvoiceLink(): %w", err)
 	}
 
 	return invoiceLink, nil
@@ -3276,7 +3276,7 @@ func (b *Bot) SendGame(params *SendGameParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("sendGame", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("sendGame(): %w", err)
+		return nil, fmt.Errorf("telego: sendGame(): %w", err)
 	}
 
 	return message, nil
@@ -3317,7 +3317,7 @@ func (b *Bot) SetGameScore(params *SetGameScoreParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("setGameScore", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("setGameScore(): %w", err)
+		return nil, fmt.Errorf("telego: setGameScore(): %w", err)
 	}
 
 	return message, nil
@@ -3349,7 +3349,7 @@ func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) ([]GameHighScor
 	var gameHighScores []GameHighScore
 	err := b.performRequest("getGameHighScores", params, &gameHighScores)
 	if err != nil {
-		return nil, fmt.Errorf("getGameHighScores(): %w", err)
+		return nil, fmt.Errorf("telego: getGameHighScores(): %w", err)
 	}
 
 	return gameHighScores, nil

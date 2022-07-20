@@ -217,7 +217,7 @@ import (
 				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, &%s)\n", m.name, returnVar))
 			}
 
-			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"%s(): %%w\", err)\n\t}\n\n", m.name))
+			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"telego: %s(): %%w\", err)\n\t}\n\n", m.name))
 			data.WriteString(fmt.Sprintf("\treturn %s, nil\n}\n\n", returnVar))
 		} else {
 			if len(m.parameters) > 0 {
@@ -226,7 +226,7 @@ import (
 				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, nil)\n", m.name))
 			}
 
-			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn fmt.Errorf(\"%s(): %%w\", err)\n\t}\n\n", m.name))
+			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn fmt.Errorf(\"telego: %s(): %%w\", err)\n\t}\n\n", m.name))
 			data.WriteString("\treturn nil\n}\n\n")
 		}
 	}
