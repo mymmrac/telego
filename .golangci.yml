@@ -34,6 +34,7 @@ linters:
     - nlreturn # nlreturn checks for a new line before return and branch statements to increase code clarity
     - noctx # noctx finds sending http request without context.Context
     - nonamedreturns # Reports all named returns
+    - nosnakecase # nosnakecase is a linter that detects snake case of variable naming and function name.
     - paralleltest # paralleltest detects missing usage of t.Parallel() method in your Go test
     - scopelint # Scopelint checks for unpinned variables in go programs
     - tagliatelle # Checks the struct tags.
