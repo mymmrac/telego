@@ -252,7 +252,10 @@ func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{MyChatMember: &telego.ChatMemberUpdated{}}
+	updates <- telego.Update{MyChatMember: &telego.ChatMemberUpdated{
+		OldChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
+		NewChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
+	}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)
@@ -270,7 +273,10 @@ func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{ChatMember: &telego.ChatMemberUpdated{}}
+	updates <- telego.Update{ChatMember: &telego.ChatMemberUpdated{
+		OldChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
+		NewChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
+	}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)

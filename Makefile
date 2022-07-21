@@ -25,6 +25,9 @@ cover: test ## Run tests & show coverage
 race: ## Run tests with race flag
 	go test -race -count=1 ./...
 
+bench: ## Run benchmarks
+	go test -bench=. -benchtime=10s -benchmem
+
 build-examples: ## Build examples into bin folder
 	go build -o bin/ ./examples/*
 

@@ -621,3 +621,154 @@ func TestTypesConstants(t *testing.T) {
 		}
 	}
 }
+
+func TestUpdate_Clone(t *testing.T) {
+	u := Update{
+		UpdateID: 1,
+		Message: &Message{
+			Text: "ok",
+			Contact: &Contact{
+				PhoneNumber: "123",
+			},
+		},
+	}
+
+	assert.NotPanics(t, func() {
+		uc := u.Clone()
+		assert.Equal(t, u, uc)
+	})
+
+	assert.Panics(t, func() {
+		_ = (Update{ChatMember: &ChatMemberUpdated{}}).Clone()
+	})
+}
+
+func BenchmarkUpdate_Clone(b *testing.B) {
+	const n1 = 1
+	const s1 = "text"
+	const b1 = true
+
+	c1 := Chat{
+		ID:        n1,
+		Type:      s1,
+		Title:     s1,
+		Username:  s1,
+		FirstName: s1,
+		LastName:  s1,
+		Photo: &ChatPhoto{
+			SmallFileID:       s1,
+			SmallFileUniqueID: s1,
+			BigFileID:         s1,
+			BigFileUniqueID:   s1,
+		},
+		Bio:                s1,
+		HasPrivateForwards: b1,
+		JoinToSendMessages: b1,
+		JoinByRequest:      b1,
+		Description:        s1,
+		InviteLink:         s1,
+		Permissions: &ChatPermissions{
+			CanSendMessages:       b1,
+			CanSendMediaMessages:  b1,
+			CanSendPolls:          b1,
+			CanSendOtherMessages:  b1,
+			CanAddWebPagePreviews: b1,
+			CanChangeInfo:         b1,
+			CanInviteUsers:        b1,
+			CanPinMessages:        b1,
+		},
+		SlowModeDelay:         n1,
+		MessageAutoDeleteTime: n1,
+		HasProtectedContent:   b1,
+		StickerSetName:        s1,
+		CanSetStickerSet:      b1,
+		LinkedChatID:          n1,
+		Location: &ChatLocation{
+			Location: Location{
+				Longitude:            n1,
+				Latitude:             n1,
+				HorizontalAccuracy:   n1,
+				LivePeriod:           n1,
+				Heading:              n1,
+				ProximityAlertRadius: n1,
+			},
+			Address: s1,
+		},
+	}
+
+	u1 := User{
+		ID:                      n1,
+		IsBot:                   b1,
+		FirstName:               s1,
+		LastName:                s1,
+		Username:                s1,
+		LanguageCode:            s1,
+		IsPremium:               b1,
+		AddedToAttachmentMenu:   b1,
+		CanJoinGroups:           b1,
+		CanReadAllGroupMessages: b1,
+		SupportsInlineQueries:   b1,
+	}
+
+	u := Update{
+		UpdateID: n1,
+		Message: &Message{
+			MessageID:             n1,
+			From:                  &u1,
+			SenderChat:            &c1,
+			Date:                  n1,
+			Chat:                  c1,
+			ForwardFrom:           &u1,
+			ForwardFromChat:       &c1,
+			ForwardFromMessageID:  n1,
+			ForwardSignature:      s1,
+			ForwardSenderName:     s1,
+			ForwardDate:           n1,
+			IsAutomaticForward:    b1,
+			ViaBot:                &u1,
+			EditDate:              n1,
+			HasProtectedContent:   b1,
+			MediaGroupID:          s1,
+			AuthorSignature:       s1,
+			Text:                  s1,
+			Caption:               s1,
+			NewChatTitle:          s1,
+			DeleteChatPhoto:       b1,
+			GroupChatCreated:      b1,
+			SupergroupChatCreated: b1,
+			ChannelChatCreated:    b1,
+			MigrateToChatID:       n1,
+			MigrateFromChatID:     n1,
+			ConnectedWebsite:      s1,
+		},
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = u.Clone()
+	}
+}
+
+func TestUpdate_CloneSafe(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		u := Update{
+			UpdateID: 1,
+			Message: &Message{
+				Text: "ok",
+				Contact: &Contact{
+					PhoneNumber: "123",
+				},
+			},
+		}
+
+		uc, err := u.CloneSafe()
+		assert.NoError(t, err)
+		assert.Equal(t, u, uc)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		uc, err := (Update{ChatMember: &ChatMemberUpdated{}}).CloneSafe()
+		assert.Error(t, err)
+		assert.Zero(t, uc)
+	})
+}

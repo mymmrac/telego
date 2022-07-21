@@ -21,13 +21,13 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 26
+const testCase = 18
 
 func main() {
 	testToken := os.Getenv("TOKEN")
 
 	bot, err := telego.NewBot(testToken,
-		telego.WithDefaultLogger(false, true))
+		telego.WithDefaultLogger(true, true))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -362,10 +362,13 @@ func main() {
 		bh.Start()
 		defer bh.Stop()
 	case 18:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
+		updates, err := bot.UpdatesViaLongPulling(nil)
+		assert(err == nil, err)
+
 		defer bot.StopLongPulling()
 
-		bh, _ := th.NewBotHandler(bot, updates)
+		bh, err := th.NewBotHandler(bot, updates)
+		assert(err == nil, err)
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message

@@ -71,6 +71,35 @@ type Update struct {
 	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
 }
 
+// Clone returns deep copy of Update.
+// Warning: Types like ChatMember and MenuButton requires to have their mandatory fields (like status or type) to be
+// filled properly, else Clone() will panic. To safely clone, use CloneSafe().
+func (u Update) Clone() Update {
+	update, err := u.CloneSafe()
+	if err != nil {
+		panic(err)
+	}
+
+	return update
+}
+
+// CloneSafe returns deep copy of Update or an error
+func (u Update) CloneSafe() (Update, error) {
+	var update Update
+
+	data, err := json.Marshal(u)
+	if err != nil {
+		return Update{}, fmt.Errorf("telego: clone update: marshal: %w", err)
+	}
+
+	err = json.Unmarshal(data, &update)
+	if err != nil {
+		return Update{}, fmt.Errorf("telego: clone update: unmarshal: %w", err)
+	}
+
+	return update, nil
+}
+
 // WebhookInfo - Describes the current status of a webhook.
 type WebhookInfo struct {
 	// URL - Webhook URL, may be empty if webhook is not set up
@@ -1383,7 +1412,7 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	default:
-		return fmt.Errorf("unknown member member status: %q", memberStatus.Status)
+		return fmt.Errorf("unknown member status: %q", memberStatus.Status)
 	}
 
 	return err

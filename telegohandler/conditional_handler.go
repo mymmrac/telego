@@ -11,7 +11,7 @@ type conditionalHandler struct {
 func (ch *conditionalHandler) match(update telego.Update) bool {
 	ok := true
 	for _, p := range ch.Predicates {
-		if !p(update) {
+		if !p(update.Clone()) {
 			ok = false
 			break
 		}
