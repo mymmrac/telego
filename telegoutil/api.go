@@ -31,7 +31,7 @@ func NameReader(reader io.Reader, name string) ta.NamedReader {
 
 // UpdateProcessor allows you to process updates and still use updates chan. New updates chan will be closed when
 // original chan is closed.
-// Note: telego.Update contains pointers so by modifying update you may modify original update.
+// Warning: Deep copy of update is passed, telego.Update's Clone() method can panic, please read its comment.
 func UpdateProcessor(updates <-chan telego.Update, buffer uint, processor func(update telego.Update) telego.Update,
 ) <-chan telego.Update {
 	processedUpdates := make(chan telego.Update, buffer)
@@ -39,7 +39,7 @@ func UpdateProcessor(updates <-chan telego.Update, buffer uint, processor func(u
 	go func() {
 		defer close(processedUpdates)
 		for update := range updates {
-			processedUpdates <- processor(update) // TODO: Pass copy of telego.Update
+			processedUpdates <- processor(update.Clone())
 		}
 	}()
 
