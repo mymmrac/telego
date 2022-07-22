@@ -1,9 +1,11 @@
-# Documentation with all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
   - package-ecosystem: "gomod"
-    directory: "/" # Location of package manifests
+    directory: "/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
