@@ -3,7 +3,7 @@ name: Race Testing
 on:
   schedule:
     - cron: "0 7 1/4 * *"
-  workflow_dispatch:
+  workflow_dispatch: { }
 
 jobs:
   race-1:

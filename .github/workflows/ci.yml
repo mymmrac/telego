@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch: { }
 
 jobs:
   lint:
@@ -29,8 +30,8 @@ jobs:
         with:
           version: latest
 
-  test-sonar-cloud:
-    name: Tests & SonarCloud
+  test:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,6 +44,26 @@ jobs:
 
       - name: Run tests
         run: make test
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage-report
+          path: bin
+
+  sonar-cloud:
+    name: SonarCloud
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download code coverage results
+        uses: actions/download-artifact@v1
+        with:
+          name: code-coverage-report
+          path: bin
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
