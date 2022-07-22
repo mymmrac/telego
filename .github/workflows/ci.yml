@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: "0 7 * * 6"
   workflow_dispatch: { }
 
 jobs:
@@ -72,7 +74,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build-examples:
-    name: Examples
+    name: Build Examples
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -87,7 +89,7 @@ jobs:
         run: make build-examples
 
   race:
-    name: Race Test
+    name: Race Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -100,3 +102,23 @@ jobs:
 
       - name: Run race tests
         run: make race
+
+  analyze:
+    name: CodeQL Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: go
+
+      - name: Auto build
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
