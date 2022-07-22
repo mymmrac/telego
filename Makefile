@@ -16,11 +16,13 @@ lint-list: ## Run golangci-lint linters (print enabled & disabled linters)
 	golangci-lint linters
 
 test: ## Run tests
-	go test -coverprofile cover.out \
+	mkdir -p bin
+	go test -coverprofile bin/cover.out \
 	$(shell go list ./... | grep -v /examples/ | grep -v /test | grep -v /internal/ | grep -v /mock)
 
 cover: test ## Run tests & show coverage
-	go tool cover -func cover.out
+	mkdir -p bin
+	go tool cover -func bin/cover.out
 
 race: ## Run tests with race flag
 	go test -race -count=1 ./...
