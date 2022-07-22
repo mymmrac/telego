@@ -52,7 +52,7 @@ jobs:
           path: bin
 
   sonar-cloud:
-    name: SonarCloud
+    name: SonarCloud Scan
     needs: [ test ]
     runs-on: ubuntu-latest
     steps:
