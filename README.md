@@ -76,6 +76,7 @@ More examples can be seen here:
 - [Inline query bot](examples/inline_query_bot/main.go)
 - [Bot handlers](examples/handler/main.go)
 - [Custom predicates for handlers](examples/handler_custom/main.go)
+- [Handler ordering](examples/handler_ordering/main.go)
 - [Specific handlers](examples/handler_specific/main.go)
 - [Predicate as middleware](examples/middleware_with_predicates/main.go)
 - [Update processor](examples/update_processor/main.go)
