@@ -49,8 +49,6 @@ telegram.
 
 ## :zap: Getting Started
 
-[//]: # (TODO: Create Wiki page with Github Wikis or Github Pages)
-
 How to get the library:
 
 ```shell

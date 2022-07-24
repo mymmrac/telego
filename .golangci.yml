@@ -25,7 +25,6 @@ linters:
     - forbidigo # Forbids identifiers
     - gochecknoglobals # check that no global variables exist
     - godot # Check if comments end in a period
-    - godox # Tool for detection of FIXMEs, TODOs and other comment keywords. TODO: Enable in stable version
     - goerr113 # Golang linter to check the errors handling expressions
     - golint # Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
     - interfacer # Linter that suggests narrower interface types
