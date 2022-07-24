@@ -165,6 +165,7 @@ func (t testEmptyMarshal) MarshalJSON() ([]byte, error) {
 	return []byte(`""`), nil
 }
 
+//nolint:funlen
 func Test_parseParameters(t *testing.T) {
 	n := 1
 
@@ -228,9 +229,9 @@ func Test_parseParameters(t *testing.T) {
 		{
 			name: "error_marshal",
 			parameters: &struct {
-				NonMarshalled testErrorMarshal `json:"non_marshalled"`
+				NonMarshaled testErrorMarshal `json:"non_marshaled"`
 			}{
-				NonMarshalled: testErrorMarshal{1},
+				NonMarshaled: testErrorMarshal{1},
 			},
 			parsedParameters: nil,
 			isError:          true,
@@ -280,9 +281,9 @@ func Test_parseParameters(t *testing.T) {
 		{
 			name: "success_empty_marshal",
 			parameters: &struct {
-				EmptyMarshalled testEmptyMarshal `json:"empty_marshalled"`
+				EmptyMarshaled testEmptyMarshal `json:"empty_marshaled"`
 			}{
-				EmptyMarshalled: testEmptyMarshal{1},
+				EmptyMarshaled: testEmptyMarshal{1},
 			},
 			parsedParameters: map[string]string{},
 			isError:          false,

@@ -126,20 +126,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			return nil, fmt.Errorf("multipart request: %w", err)
 		}
 
-		i := 0
-		debugFiles := make([]string, len(filesParams))
-		for k, v := range filesParams {
-			if k == v.Name() {
-				debugFiles[i] = fmt.Sprintf("%q", k)
-			} else {
-				debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
-			}
-			i++
-		}
-		//nolint:errcheck
-		debugJSON, _ := json.Marshal(parsedParameters)
-
-		debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
+		logRequestWithFiles(debug, parsedParameters, filesParams)
 	} else {
 		var err error
 		data, err = b.constructor.JSONRequest(parameters)
@@ -251,4 +238,21 @@ func isNil(i interface{}) bool {
 	default:
 		return false
 	}
+}
+
+func logRequestWithFiles(debug strings.Builder, parameters map[string]string, files map[string]telegoapi.NamedReader) {
+	i := 0
+	debugFiles := make([]string, len(files))
+	for k, v := range files {
+		if k == v.Name() {
+			debugFiles[i] = fmt.Sprintf("%q", k)
+		} else {
+			debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
+		}
+		i++
+	}
+	//nolint:errcheck
+	debugJSON, _ := json.Marshal(parameters)
+
+	debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 }
