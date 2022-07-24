@@ -66,6 +66,12 @@ func WithExtendedDefaultLogger(debugMode, printErrors bool, replacer *strings.Re
 	}
 }
 
+// WithDefaultDebugLogger configures default debug logger. Alias to default logger with debug and error logs.
+// Redefines existing logger.
+func WithDefaultDebugLogger() BotOption {
+	return WithDefaultLogger(true, true)
+}
+
 // WithDiscardLogger configures discard logger. Alias to default logger with disabled logs. Redefines existing logger.
 func WithDiscardLogger() BotOption {
 	return WithDefaultLogger(false, false)

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
 
 	"github.com/mymmrac/telego/telegoapi"
@@ -56,18 +57,43 @@ func TestWithRequestConstructor(t *testing.T) {
 func TestWithDefaultLogger(t *testing.T) {
 	bot := &Bot{}
 
-	err := WithDefaultLogger(true, true)(bot)
+	err := WithDefaultLogger(true, false)(bot)
 	assert.NoError(t, err)
+
+	log, ok := bot.log.(*logger)
+	require.True(t, ok)
+
+	assert.True(t, log.DebugMode)
+	assert.False(t, log.PrintErrors)
+	assert.NotNil(t, log.Replacer)
 }
 
 func TestWithExtendedDefaultLogger(t *testing.T) {
 	bot := &Bot{}
 
-	err := WithExtendedDefaultLogger(true, true, nil)(bot)
-	assert.NoError(t, err)
+	t.Run("nil_replacer", func(t *testing.T) {
+		err := WithExtendedDefaultLogger(true, true, nil)(bot)
+		assert.NoError(t, err)
 
-	err = WithExtendedDefaultLogger(true, true, strings.NewReplacer("old", "new"))(bot)
-	assert.NoError(t, err)
+		log, ok := bot.log.(*logger)
+		require.True(t, ok)
+
+		assert.True(t, log.DebugMode)
+		assert.True(t, log.PrintErrors)
+		assert.Nil(t, log.Replacer)
+	})
+
+	t.Run("not_nil_replacer", func(t *testing.T) {
+		err := WithExtendedDefaultLogger(true, true, strings.NewReplacer("old", "new"))(bot)
+		assert.NoError(t, err)
+
+		log, ok := bot.log.(*logger)
+		require.True(t, ok)
+
+		assert.True(t, log.DebugMode)
+		assert.True(t, log.PrintErrors)
+		assert.NotNil(t, log.Replacer)
+	})
 }
 
 func TestWithDiscardLogger(t *testing.T) {
@@ -75,6 +101,13 @@ func TestWithDiscardLogger(t *testing.T) {
 
 	err := WithDiscardLogger()(bot)
 	assert.NoError(t, err)
+
+	log, ok := bot.log.(*logger)
+	require.True(t, ok)
+
+	assert.False(t, log.DebugMode)
+	assert.False(t, log.PrintErrors)
+	assert.NotNil(t, log.Replacer)
 }
 
 type testLoggerType struct{}
@@ -117,4 +150,18 @@ func TestWithAPIServer(t *testing.T) {
 		err := WithAPIServer("")(bot)
 		assert.Error(t, err)
 	})
+}
+
+func TestWithDefaultDebugLogger(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithDefaultDebugLogger()(bot)
+	assert.NoError(t, err)
+
+	log, ok := bot.log.(*logger)
+	require.True(t, ok)
+
+	assert.True(t, log.DebugMode)
+	assert.True(t, log.PrintErrors)
+	assert.NotNil(t, log.Replacer)
 }

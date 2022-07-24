@@ -63,7 +63,7 @@ Simple echo bot:
 		botToken := os.Getenv("TOKEN")
 
 		// Create Bot with debug on
-		bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
+		bot, err := telego.NewBot(botToken, telego.WithDefaultDebugLogger())
 		if err != nil {
 			fmt.Println(err)
 			return

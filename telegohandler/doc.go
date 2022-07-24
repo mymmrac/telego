@@ -26,7 +26,7 @@ impacts order of checking matched handlers, and only the first matched handler w
 	func main() {
 		botToken := os.Getenv("TOKEN")
 
-		bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
+		bot, err := telego.NewBot(botToken, telego.WithDefaultDebugLogger())
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -83,7 +83,7 @@ One more example of handler usage. It shows how to use specific handlers to proc
 		botToken := os.Getenv("TOKEN")
 
 		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
-		bot, err := telego.NewBot(botToken, telego.WithDefaultLogger(true, true))
+		bot, err := telego.NewBot(botToken, telego.WithDefaultDebugLogger())
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

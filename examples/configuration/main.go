@@ -25,12 +25,19 @@ func main() {
 
 		// Configuration of default logger, enable printing debug information and errors (default: false, true)
 		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
-		telego.WithDefaultLogger(true, true),
+		telego.WithDefaultLogger(false, true),
 
 		// Extended configuration of default logger, enable printing debug information, errors and set replacer
 		// (default: false, true, default replacer of bot token)
 		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
 		telego.WithExtendedDefaultLogger(true, true, strings.NewReplacer("old", "new")),
+
+		// Uses default logger with enabled debug logs, same as telego.WithDefaultLogger(true, true)
+		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
+		telego.WithDefaultDebugLogger(),
+
+		// Uses default logger with disabled debug and errors, same as telego.WithDefaultLogger(false, false)
+		telego.WithDiscardLogger(),
 
 		// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
 		// Note: Please keep in mind that logger may expose sensitive information, use in development only or configure

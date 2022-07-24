@@ -26,8 +26,7 @@ const testCase = 18
 func main() {
 	testToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(testToken,
-		telego.WithDefaultLogger(true, true))
+	bot, err := telego.NewBot(testToken, telego.WithDefaultDebugLogger())
 	if err != nil {
 		fmt.Println(err)
 		return
