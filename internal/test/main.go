@@ -422,7 +422,6 @@ func main() {
 			_, _ = bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Hello"))
 		})
 
-		// TODO: Add example for graceful shutdown
 		bh.Start()
 		defer bh.Stop()
 	case 20:
