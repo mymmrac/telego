@@ -149,6 +149,14 @@ func TestBot_Token(t *testing.T) {
 	assert.Equal(t, token, bot.Token())
 }
 
+type testErrorMarshal struct {
+	Number int `json:"number"`
+}
+
+func (t testErrorMarshal) MarshalJSON() ([]byte, error) {
+	return nil, errTest
+}
+
 func Test_parseParameters(t *testing.T) {
 	n := 1
 
@@ -161,15 +169,18 @@ func Test_parseParameters(t *testing.T) {
 		{
 			name: "success",
 			parameters: &struct {
-				Empty  string `json:"empty,omitempty"`
-				Number int    `json:"number"`
-				Array  []int  `json:"array"`
-				Struct *struct {
+				Empty       string `json:"empty,omitempty"`
+				EmptyNoOmit string `json:"empty_no_omit"`
+				Number      int    `json:"number"`
+				Array       []int  `json:"array"`
+				Text        string `json:"text"`
+				Struct      *struct {
 					N int `json:"n"`
 				} `json:"struct"`
 			}{
 				Number: 10,
 				Array:  []int{1, 2, 3},
+				Text:   "ok",
 				Struct: &struct {
 					N int `json:"n"`
 				}{2},
@@ -178,6 +189,7 @@ func Test_parseParameters(t *testing.T) {
 				"number": "10",
 				"array":  "[1,2,3]",
 				"struct": "{\"n\":2}",
+				"text":   "ok",
 			},
 			isError: false,
 		},
@@ -194,6 +206,68 @@ func Test_parseParameters(t *testing.T) {
 			parameters:       &n,
 			parsedParameters: nil,
 			isError:          true,
+		},
+		{
+			name: "no_tag",
+			parameters: &struct {
+				Number int
+			}{
+				Number: 1,
+			},
+			parsedParameters: nil,
+			isError:          true,
+		},
+		{
+			name: "marshal_error",
+			parameters: &struct {
+				NonMarshalled testErrorMarshal `json:"non_marshalled"`
+			}{
+				NonMarshalled: testErrorMarshal{1},
+			},
+			parsedParameters: nil,
+			isError:          true,
+		},
+		{
+			name: "success_get_update",
+			parameters: &GetUpdatesParams{
+				Offset:         1,
+				Limit:          2,
+				Timeout:        3,
+				AllowedUpdates: []string{"ok1", "ok2"},
+			},
+			parsedParameters: map[string]string{
+				"offset":          "1",
+				"limit":           "2",
+				"timeout":         "3",
+				"allowed_updates": "[\"ok1\",\"ok2\"]",
+			},
+			isError: false,
+		},
+		{
+			name: "success_send_photo",
+			parameters: &SendPhotoParams{
+				ChatID:              ChatID{ID: 1},
+				Photo:               InputFile{URL: "ok1"},
+				Caption:             "ok2",
+				DisableNotification: true,
+				ReplyMarkup: &InlineKeyboardMarkup{
+					InlineKeyboard: [][]InlineKeyboardButton{
+						{
+							{
+								Text: "ok3",
+							},
+						},
+					},
+				},
+			},
+			parsedParameters: map[string]string{
+				"caption":              "ok2",
+				"chat_id":              "1",
+				"disable_notification": "true",
+				"photo":                "ok1",
+				"reply_markup":         "{\"inline_keyboard\":[[{\"text\":\"ok3\"}]]}",
+			},
+			isError: false,
 		},
 	}
 

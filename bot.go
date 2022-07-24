@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"reflect"
@@ -174,36 +173,39 @@ func filesParameters(parameters interface{}) (files map[string]telegoapi.NamedRe
 	return files, hasFiles
 }
 
-// parseParameters parses parameter struct to key value structure
+// parseParameters parses parameter struct to key value structure, v should be a pointer to struct
 func parseParameters(v interface{}) (map[string]string, error) {
 	valueOfV := reflect.ValueOf(v)
-	if valueOfV.Kind() != reflect.Ptr && valueOfV.Kind() != reflect.Interface {
-		return nil, fmt.Errorf("%s not a pointer or interface", valueOfV.Kind())
+	if valueOfV.Kind() != reflect.Ptr {
+		return nil, fmt.Errorf("%q not a pointer", valueOfV.Kind())
 	}
 
 	paramsStruct := valueOfV.Elem()
 	if paramsStruct.Kind() != reflect.Struct {
-		return nil, fmt.Errorf("%s not a struct", paramsStruct.Kind())
+		return nil, fmt.Errorf("%q not a struct", paramsStruct.Kind())
 	}
 	paramsStructType := paramsStruct.Type()
 
 	params := make(map[string]string)
 
-	for i := 0; i < paramsStruct.NumField(); i++ {
-		structField := paramsStructType.Field(i)
-		field := paramsStruct.Field(i)
+	for i := 0; i < paramsStructType.NumField(); i++ {
+		fieldType := paramsStructType.Field(i)
+		key := fieldType.Tag.Get("json")
+		key = strings.TrimSuffix(key, omitEmptySuffix)
+		if key == "" {
+			return nil, fmt.Errorf("%s does not have `json` tag", paramsStructType.String())
+		}
 
-		stringValue, ok, err := parseField(field)
+		fieldValue := paramsStruct.Field(i)
+		value, ok, err := parseField(fieldValue)
 		if err != nil {
-			return nil, fmt.Errorf("parse field: %w", err)
+			return nil, fmt.Errorf("parse of %s: %w", paramsStructType.String(), err)
 		}
 		if !ok {
 			continue
 		}
 
-		key := structField.Tag.Get("json")
-		key = strings.TrimSuffix(key, omitEmptySuffix)
-		params[key] = stringValue
+		params[key] = value
 	}
 
 	return params, nil
@@ -211,39 +213,23 @@ func parseParameters(v interface{}) (map[string]string, error) {
 
 // parseField parses struct field to string value
 func parseField(field reflect.Value) (string, bool, error) {
-	if field.IsZero() {
+	if field.IsZero() || !field.CanInterface() {
 		return "", false, nil
 	}
 
-	value := field.Interface()
-	var stringValue string
-
-	switch field.Kind() {
-	case reflect.Struct, reflect.Slice, reflect.Interface, reflect.Ptr:
-		buf := bytes.Buffer{}
-
-		if err := json.NewEncoder(&buf).Encode(value); err != nil {
-			return "", false, fmt.Errorf("encoding json: %w", err)
-		}
-
-		stringValue = buf.String()
-
-		// TODO: Test if any of this conditions/operations are needed
-		// ====
-		stringValue = strings.TrimSuffix(stringValue, "\n")
-		if len(stringValue) == 0 {
-			return "", false, nil
-		}
-
-		if len(stringValue) >= 2 && stringValue[0] == '"' && stringValue[len(stringValue)-1] == '"' {
-			stringValue = stringValue[1 : len(stringValue)-1]
-		}
-		// ====
-	default:
-		stringValue = fmt.Sprintf("%v", value)
+	data, err := json.Marshal(field.Interface())
+	if err != nil {
+		return "", false, err
 	}
 
-	return stringValue, true, nil
+	value := string(data)
+
+	// Trim double quotes in strings
+	if len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
+		value = value[1 : len(value)-1]
+	}
+
+	return value, true, nil
 }
 
 func isNil(i interface{}) bool {
