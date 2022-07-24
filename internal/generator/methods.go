@@ -221,9 +221,9 @@ import (
 			data.WriteString(fmt.Sprintf("\treturn %s, nil\n}\n\n", returnVar))
 		} else {
 			if len(m.parameters) > 0 {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, nil)\n", m.name))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params)\n", m.name))
 			} else {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, nil)\n", m.name))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil)\n", m.name))
 			}
 
 			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn fmt.Errorf(\"telego: %s(): %%w\", err)\n\t}\n\n", m.name))

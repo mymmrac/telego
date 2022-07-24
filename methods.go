@@ -119,7 +119,7 @@ func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
 // secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the
 // secret token as content.
 func (b *Bot) SetWebhook(params *SetWebhookParams) error {
-	err := b.performRequest("setWebhook", params, nil)
+	err := b.performRequest("setWebhook", params)
 	if err != nil {
 		return fmt.Errorf("setWebhook(): %w", err)
 	}
@@ -136,7 +136,7 @@ type DeleteWebhookParams struct {
 // DeleteWebhook - Use this method to remove webhook integration if you decide to switch back to getUpdates
 // (https://core.telegram.org/bots/api#getupdates). Returns True on success.
 func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
-	err := b.performRequest("deleteWebhook", params, nil)
+	err := b.performRequest("deleteWebhook", params)
 	if err != nil {
 		return fmt.Errorf("deleteWebhook(): %w", err)
 	}
@@ -1380,7 +1380,7 @@ const (
 // We only recommend using this method when a response from the bot will take a noticeable amount of time to
 // arrive.
 func (b *Bot) SendChatAction(params *SendChatActionParams) error {
-	err := b.performRequest("sendChatAction", params, nil)
+	err := b.performRequest("sendChatAction", params)
 	if err != nil {
 		return fmt.Errorf("sendChatAction(): %w", err)
 	}
@@ -1462,7 +1462,7 @@ type BanChatMemberParams struct {
 // administrator in the chat for this to work and must have the appropriate administrator rights. Returns True
 // on success.
 func (b *Bot) BanChatMember(params *BanChatMemberParams) error {
-	err := b.performRequest("banChatMember", params, nil)
+	err := b.performRequest("banChatMember", params)
 	if err != nil {
 		return fmt.Errorf("banChatMember(): %w", err)
 	}
@@ -1489,7 +1489,7 @@ type UnbanChatMemberParams struct {
 // a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be
 // removed from the chat. If you don't want this, use the parameter only_if_banned. Returns True on success.
 func (b *Bot) UnbanChatMember(params *UnbanChatMemberParams) error {
-	err := b.performRequest("unbanChatMember", params, nil)
+	err := b.performRequest("unbanChatMember", params)
 	if err != nil {
 		return fmt.Errorf("unbanChatMember(): %w", err)
 	}
@@ -1519,7 +1519,7 @@ type RestrictChatMemberParams struct {
 // in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all
 // permissions to lift restrictions from a user. Returns True on success.
 func (b *Bot) RestrictChatMember(params *RestrictChatMemberParams) error {
-	err := b.performRequest("restrictChatMember", params, nil)
+	err := b.performRequest("restrictChatMember", params)
 	if err != nil {
 		return fmt.Errorf("restrictChatMember(): %w", err)
 	}
@@ -1579,7 +1579,7 @@ type PromoteChatMemberParams struct {
 // be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass
 // False for all boolean parameters to demote a user. Returns True on success.
 func (b *Bot) PromoteChatMember(params *PromoteChatMemberParams) error {
-	err := b.performRequest("promoteChatMember", params, nil)
+	err := b.performRequest("promoteChatMember", params)
 	if err != nil {
 		return fmt.Errorf("promoteChatMember(): %w", err)
 	}
@@ -1603,7 +1603,7 @@ type SetChatAdministratorCustomTitleParams struct {
 // SetChatAdministratorCustomTitle - Use this method to set a custom title for an administrator in a
 // supergroup promoted by the bot. Returns True on success.
 func (b *Bot) SetChatAdministratorCustomTitle(params *SetChatAdministratorCustomTitleParams) error {
-	err := b.performRequest("setChatAdministratorCustomTitle", params, nil)
+	err := b.performRequest("setChatAdministratorCustomTitle", params)
 	if err != nil {
 		return fmt.Errorf("setChatAdministratorCustomTitle(): %w", err)
 	}
@@ -1626,7 +1626,7 @@ type BanChatSenderChatParams struct {
 // to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or
 // channel for this to work and must have the appropriate administrator rights. Returns True on success.
 func (b *Bot) BanChatSenderChat(params *BanChatSenderChatParams) error {
-	err := b.performRequest("banChatSenderChat", params, nil)
+	err := b.performRequest("banChatSenderChat", params)
 	if err != nil {
 		return fmt.Errorf("banChatSenderChat(): %w", err)
 	}
@@ -1648,7 +1648,7 @@ type UnbanChatSenderChatParams struct {
 // channel. The bot must be an administrator for this to work and must have the appropriate administrator
 // rights. Returns True on success.
 func (b *Bot) UnbanChatSenderChat(params *UnbanChatSenderChatParams) error {
-	err := b.performRequest("unbanChatSenderChat", params, nil)
+	err := b.performRequest("unbanChatSenderChat", params)
 	if err != nil {
 		return fmt.Errorf("unbanChatSenderChat(): %w", err)
 	}
@@ -1670,7 +1670,7 @@ type SetChatPermissionsParams struct {
 // administrator in the group or a supergroup for this to work and must have the can_restrict_members
 // administrator rights. Returns True on success.
 func (b *Bot) SetChatPermissions(params *SetChatPermissionsParams) error {
-	err := b.performRequest("setChatPermissions", params, nil)
+	err := b.performRequest("setChatPermissions", params)
 	if err != nil {
 		return fmt.Errorf("setChatPermissions(): %w", err)
 	}
@@ -1807,7 +1807,7 @@ type ApproveChatJoinRequestParams struct {
 // ApproveChatJoinRequest - Use this method to approve a chat join request. The bot must be an administrator
 // in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
 func (b *Bot) ApproveChatJoinRequest(params *ApproveChatJoinRequestParams) error {
-	err := b.performRequest("approveChatJoinRequest", params, nil)
+	err := b.performRequest("approveChatJoinRequest", params)
 	if err != nil {
 		return fmt.Errorf("approveChatJoinRequest(): %w", err)
 	}
@@ -1828,7 +1828,7 @@ type DeclineChatJoinRequestParams struct {
 // DeclineChatJoinRequest - Use this method to decline a chat join request. The bot must be an administrator
 // in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
 func (b *Bot) DeclineChatJoinRequest(params *DeclineChatJoinRequestParams) error {
-	err := b.performRequest("declineChatJoinRequest", params, nil)
+	err := b.performRequest("declineChatJoinRequest", params)
 	if err != nil {
 		return fmt.Errorf("declineChatJoinRequest(): %w", err)
 	}
@@ -1856,7 +1856,7 @@ func (p *SetChatPhotoParams) fileParameters() map[string]telegoapi.NamedReader {
 // private chats. The bot must be an administrator in the chat for this to work and must have the appropriate
 // administrator rights. Returns True on success.
 func (b *Bot) SetChatPhoto(params *SetChatPhotoParams) error {
-	err := b.performRequest("setChatPhoto", params, nil)
+	err := b.performRequest("setChatPhoto", params)
 	if err != nil {
 		return fmt.Errorf("setChatPhoto(): %w", err)
 	}
@@ -1875,7 +1875,7 @@ type DeleteChatPhotoParams struct {
 // bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
 // Returns True on success.
 func (b *Bot) DeleteChatPhoto(params *DeleteChatPhotoParams) error {
-	err := b.performRequest("deleteChatPhoto", params, nil)
+	err := b.performRequest("deleteChatPhoto", params)
 	if err != nil {
 		return fmt.Errorf("deleteChatPhoto(): %w", err)
 	}
@@ -1897,7 +1897,7 @@ type SetChatTitleParams struct {
 // The bot must be an administrator in the chat for this to work and must have the appropriate administrator
 // rights. Returns True on success.
 func (b *Bot) SetChatTitle(params *SetChatTitleParams) error {
-	err := b.performRequest("setChatTitle", params, nil)
+	err := b.performRequest("setChatTitle", params)
 	if err != nil {
 		return fmt.Errorf("setChatTitle(): %w", err)
 	}
@@ -1919,7 +1919,7 @@ type SetChatDescriptionParams struct {
 // bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
 // Returns True on success.
 func (b *Bot) SetChatDescription(params *SetChatDescriptionParams) error {
-	err := b.performRequest("setChatDescription", params, nil)
+	err := b.performRequest("setChatDescription", params)
 	if err != nil {
 		return fmt.Errorf("setChatDescription(): %w", err)
 	}
@@ -1946,7 +1946,7 @@ type PinChatMessageParams struct {
 // 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
 // channel. Returns True on success.
 func (b *Bot) PinChatMessage(params *PinChatMessageParams) error {
-	err := b.performRequest("pinChatMessage", params, nil)
+	err := b.performRequest("pinChatMessage", params)
 	if err != nil {
 		return fmt.Errorf("pinChatMessage(): %w", err)
 	}
@@ -1970,7 +1970,7 @@ type UnpinChatMessageParams struct {
 // 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
 // channel. Returns True on success.
 func (b *Bot) UnpinChatMessage(params *UnpinChatMessageParams) error {
-	err := b.performRequest("unpinChatMessage", params, nil)
+	err := b.performRequest("unpinChatMessage", params)
 	if err != nil {
 		return fmt.Errorf("unpinChatMessage(): %w", err)
 	}
@@ -1990,7 +1990,7 @@ type UnpinAllChatMessagesParams struct {
 // 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
 // channel. Returns True on success.
 func (b *Bot) UnpinAllChatMessages(params *UnpinAllChatMessagesParams) error {
-	err := b.performRequest("unpinAllChatMessages", params, nil)
+	err := b.performRequest("unpinAllChatMessages", params)
 	if err != nil {
 		return fmt.Errorf("unpinAllChatMessages(): %w", err)
 	}
@@ -2007,7 +2007,7 @@ type LeaveChatParams struct {
 
 // LeaveChat - Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
 func (b *Bot) LeaveChat(params *LeaveChatParams) error {
-	err := b.performRequest("leaveChat", params, nil)
+	err := b.performRequest("leaveChat", params)
 	if err != nil {
 		return fmt.Errorf("leaveChat(): %w", err)
 	}
@@ -2115,7 +2115,7 @@ type SetChatStickerSetParams struct {
 // can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
 // check if the bot can use this method. Returns True on success.
 func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
-	err := b.performRequest("setChatStickerSet", params, nil)
+	err := b.performRequest("setChatStickerSet", params)
 	if err != nil {
 		return fmt.Errorf("setChatStickerSet(): %w", err)
 	}
@@ -2135,7 +2135,7 @@ type DeleteChatStickerSetParams struct {
 // can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
 // check if the bot can use this method. Returns True on success.
 func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
-	err := b.performRequest("deleteChatStickerSet", params, nil)
+	err := b.performRequest("deleteChatStickerSet", params)
 	if err != nil {
 		return fmt.Errorf("deleteChatStickerSet(): %w", err)
 	}
@@ -2175,7 +2175,7 @@ type AnswerCallbackQueryParams struct {
 // create a game for your bot via @BotFather (https://t.me/botfather) and accept the terms. Otherwise, you may
 // use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
 func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
-	err := b.performRequest("answerCallbackQuery", params, nil)
+	err := b.performRequest("answerCallbackQuery", params)
 	if err != nil {
 		return fmt.Errorf("answerCallbackQuery(): %w", err)
 	}
@@ -2202,7 +2202,7 @@ type SetMyCommandsParams struct {
 // https://core.telegram.org/bots#commands (https://core.telegram.org/bots#commands) for more details about bot
 // commands. Returns True on success.
 func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
-	err := b.performRequest("setMyCommands", params, nil)
+	err := b.performRequest("setMyCommands", params)
 	if err != nil {
 		return fmt.Errorf("setMyCommands(): %w", err)
 	}
@@ -2226,7 +2226,7 @@ type DeleteMyCommandsParams struct {
 // (https://core.telegram.org/bots/api#determining-list-of-commands) will be shown to affected users. Returns
 // True on success.
 func (b *Bot) DeleteMyCommands(params *DeleteMyCommandsParams) error {
-	err := b.performRequest("deleteMyCommands", params, nil)
+	err := b.performRequest("deleteMyCommands", params)
 	if err != nil {
 		return fmt.Errorf("deleteMyCommands(): %w", err)
 	}
@@ -2271,7 +2271,7 @@ type SetChatMenuButtonParams struct {
 // SetChatMenuButton - Use this method to change the bot's menu button in a private chat, or the default menu
 // button. Returns True on success.
 func (b *Bot) SetChatMenuButton(params *SetChatMenuButtonParams) error {
-	err := b.performRequest("setChatMenuButton", params, nil)
+	err := b.performRequest("setChatMenuButton", params)
 	if err != nil {
 		return fmt.Errorf("setChatMenuButton(): %w", err)
 	}
@@ -2313,7 +2313,7 @@ type SetMyDefaultAdministratorRightsParams struct {
 // the bot when it's added as an administrator to groups or channels. These rights will be suggested to users,
 // but they are free to modify the list before adding the bot. Returns True on success.
 func (b *Bot) SetMyDefaultAdministratorRights(params *SetMyDefaultAdministratorRightsParams) error {
-	err := b.performRequest("setMyDefaultAdministratorRights", params, nil)
+	err := b.performRequest("setMyDefaultAdministratorRights", params)
 	if err != nil {
 		return fmt.Errorf("setMyDefaultAdministratorRights(): %w", err)
 	}
@@ -2562,7 +2562,7 @@ type DeleteMessageParams struct {
 // there.
 // Returns True on success.
 func (b *Bot) DeleteMessage(params *DeleteMessageParams) error {
-	err := b.performRequest("deleteMessage", params, nil)
+	err := b.performRequest("deleteMessage", params)
 	if err != nil {
 		return fmt.Errorf("deleteMessage(): %w", err)
 	}
@@ -2730,7 +2730,7 @@ func (p *CreateNewStickerSetParams) fileParameters() map[string]telegoapi.NamedR
 // edit the sticker set thus created. You must use exactly one of the fields png_sticker, tgs_sticker, or
 // webm_sticker. Returns True on success.
 func (b *Bot) CreateNewStickerSet(params *CreateNewStickerSetParams) error {
-	err := b.performRequest("createNewStickerSet", params, nil)
+	err := b.performRequest("createNewStickerSet", params)
 	if err != nil {
 		return fmt.Errorf("createNewStickerSet(): %w", err)
 	}
@@ -2791,7 +2791,7 @@ func (p *AddStickerToSetParams) fileParameters() map[string]telegoapi.NamedReade
 // sticker sets and only to them. Animated sticker sets can have up to 50 stickers. Static sticker sets can have
 // up to 120 stickers. Returns True on success.
 func (b *Bot) AddStickerToSet(params *AddStickerToSetParams) error {
-	err := b.performRequest("addStickerToSet", params, nil)
+	err := b.performRequest("addStickerToSet", params)
 	if err != nil {
 		return fmt.Errorf("addStickerToSet(): %w", err)
 	}
@@ -2811,7 +2811,7 @@ type SetStickerPositionInSetParams struct {
 // SetStickerPositionInSet - Use this method to move a sticker in a set created by the bot to a specific
 // position. Returns True on success.
 func (b *Bot) SetStickerPositionInSet(params *SetStickerPositionInSetParams) error {
-	err := b.performRequest("setStickerPositionInSet", params, nil)
+	err := b.performRequest("setStickerPositionInSet", params)
 	if err != nil {
 		return fmt.Errorf("setStickerPositionInSet(): %w", err)
 	}
@@ -2828,7 +2828,7 @@ type DeleteStickerFromSetParams struct {
 // DeleteStickerFromSet - Use this method to delete a sticker from a set created by the bot. Returns True on
 // success.
 func (b *Bot) DeleteStickerFromSet(params *DeleteStickerFromSetParams) error {
-	err := b.performRequest("deleteStickerFromSet", params, nil)
+	err := b.performRequest("deleteStickerFromSet", params)
 	if err != nil {
 		return fmt.Errorf("deleteStickerFromSet(): %w", err)
 	}
@@ -2872,7 +2872,7 @@ func (p *SetStickerSetThumbParams) fileParameters() map[string]telegoapi.NamedRe
 // for animated sticker sets only. Video thumbnails can be set only for video sticker sets only. Returns True on
 // success.
 func (b *Bot) SetStickerSetThumb(params *SetStickerSetThumbParams) error {
-	err := b.performRequest("setStickerSetThumb", params, nil)
+	err := b.performRequest("setStickerSetThumb", params)
 	if err != nil {
 		return fmt.Errorf("setStickerSetThumb(): %w", err)
 	}
@@ -2920,7 +2920,7 @@ type AnswerInlineQueryParams struct {
 // AnswerInlineQuery - Use this method to send answers to an inline query. On success, True is returned.
 // No more than 50 results per query are allowed.
 func (b *Bot) AnswerInlineQuery(params *AnswerInlineQueryParams) error {
-	err := b.performRequest("answerInlineQuery", params, nil)
+	err := b.performRequest("answerInlineQuery", params)
 	if err != nil {
 		return fmt.Errorf("answerInlineQuery(): %w", err)
 	}
@@ -3178,7 +3178,7 @@ type AnswerShippingQueryParams struct {
 // was specified, the Bot API will send an Update (https://core.telegram.org/bots/api#update) with a
 // shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned.
 func (b *Bot) AnswerShippingQuery(params *AnswerShippingQueryParams) error {
-	err := b.performRequest("answerShippingQuery", params, nil)
+	err := b.performRequest("answerShippingQuery", params)
 	if err != nil {
 		return fmt.Errorf("answerShippingQuery(): %w", err)
 	}
@@ -3207,7 +3207,7 @@ type AnswerPreCheckoutQueryParams struct {
 // pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned.
 // Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
 func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error {
-	err := b.performRequest("answerPreCheckoutQuery", params, nil)
+	err := b.performRequest("answerPreCheckoutQuery", params)
 	if err != nil {
 		return fmt.Errorf("answerPreCheckoutQuery(): %w", err)
 	}
@@ -3232,7 +3232,7 @@ type SetPassportDataErrorsParams struct {
 // of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the
 // issues.
 func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
-	err := b.performRequest("setPassportDataErrors", params, nil)
+	err := b.performRequest("setPassportDataErrors", params)
 	if err != nil {
 		return fmt.Errorf("setPassportDataErrors(): %w", err)
 	}
