@@ -129,7 +129,11 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 		i := 0
 		debugFiles := make([]string, len(filesParams))
 		for k, v := range filesParams {
-			debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
+			if k == v.Name() {
+				debugFiles[i] = fmt.Sprintf("%q", k)
+			} else {
+				debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
+			}
 			i++
 		}
 		//nolint:errcheck
@@ -227,6 +231,10 @@ func parseField(field reflect.Value) (string, bool, error) {
 	// Trim double quotes in strings
 	if len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
 		value = value[1 : len(value)-1]
+	}
+
+	if len(value) == 0 {
+		return "", false, nil
 	}
 
 	return value, true, nil

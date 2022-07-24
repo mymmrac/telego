@@ -2310,7 +2310,7 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 		return []byte(`""`), nil
 	}
 
-	return nil, errors.New("telego: file, file ID and URL are empty")
+	return nil, errors.New("telego: file ID and URL are empty")
 }
 
 // Sticker - This object represents a sticker.

@@ -157,6 +157,14 @@ func (t testErrorMarshal) MarshalJSON() ([]byte, error) {
 	return nil, errTest
 }
 
+type testEmptyMarshal struct {
+	Number int `json:"number"`
+}
+
+func (t testEmptyMarshal) MarshalJSON() ([]byte, error) {
+	return []byte(`""`), nil
+}
+
 func Test_parseParameters(t *testing.T) {
 	n := 1
 
@@ -208,7 +216,7 @@ func Test_parseParameters(t *testing.T) {
 			isError:          true,
 		},
 		{
-			name: "no_tag",
+			name: "error_no_tag",
 			parameters: &struct {
 				Number int
 			}{
@@ -218,7 +226,7 @@ func Test_parseParameters(t *testing.T) {
 			isError:          true,
 		},
 		{
-			name: "marshal_error",
+			name: "error_marshal",
 			parameters: &struct {
 				NonMarshalled testErrorMarshal `json:"non_marshalled"`
 			}{
@@ -268,6 +276,16 @@ func Test_parseParameters(t *testing.T) {
 				"reply_markup":         "{\"inline_keyboard\":[[{\"text\":\"ok3\"}]]}",
 			},
 			isError: false,
+		},
+		{
+			name: "success_empty_marshal",
+			parameters: &struct {
+				EmptyMarshalled testEmptyMarshal `json:"empty_marshalled"`
+			}{
+				EmptyMarshalled: testEmptyMarshal{1},
+			},
+			parsedParameters: map[string]string{},
+			isError:          false,
 		},
 	}
 

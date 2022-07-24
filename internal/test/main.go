@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 18
+const testCase = 27
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -657,6 +657,11 @@ func main() {
 			_ = bot.StopWebhook()
 		}()
 		select {}
+	case 27:
+		note := tu.File(mustOpen("note.mp4"))
+
+		_, err = bot.SendVideoNote(tu.VideoNote(myID, note))
+		assert(err == nil, err)
 	}
 }
 
