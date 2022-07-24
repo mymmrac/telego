@@ -494,6 +494,7 @@ func TestBot_performRequest(t *testing.T) {
 	}
 
 	var result int
+	var result2 bool
 
 	t.Run("success", func(t *testing.T) {
 		m.MockRequestConstructor.EXPECT().
@@ -512,6 +513,26 @@ func TestBot_performRequest(t *testing.T) {
 		err := m.Bot.performRequest(methodName, params, &result)
 		assert.NoError(t, err)
 		assert.Equal(t, 1, result)
+	})
+
+	t.Run("success_unmarshal_second", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(&ta.RequestData{}, nil).
+			Times(1)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(&ta.Response{
+				Ok:     true,
+				Result: bytes.NewBufferString("true").Bytes(),
+				Error:  nil,
+			}, nil)
+
+		err := m.Bot.performRequest(methodName, params, &result, &result2)
+		assert.NoError(t, err)
+		assert.Equal(t, 0, result)
+		assert.Equal(t, true, result2)
 	})
 
 	t.Run("error_not_ok", func(t *testing.T) {

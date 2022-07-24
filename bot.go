@@ -86,7 +86,7 @@ func (b *Bot) Token() string {
 }
 
 // performRequest executes and parses response of method
-func (b *Bot) performRequest(methodName string, parameters, v interface{}) error {
+func (b *Bot) performRequest(methodName string, parameters interface{}, vs ...interface{}) error {
 	resp, err := b.constructAndCallRequest(methodName, parameters)
 	if err != nil {
 		b.log.Errorf("Execution error %s: %s", methodName, err)
@@ -99,9 +99,16 @@ func (b *Bot) performRequest(methodName string, parameters, v interface{}) error
 	}
 
 	if resp.Result != nil {
-		err = json.Unmarshal(resp.Result, &v)
-		if err != nil {
-			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(v), err)
+		var unmarshalErr error
+		for i := range vs {
+			unmarshalErr = json.Unmarshal(resp.Result, &vs[i])
+			if unmarshalErr == nil {
+				break
+			}
+		}
+
+		if unmarshalErr != nil {
+			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(vs[len(vs)-1]), unmarshalErr)
 		}
 	}
 

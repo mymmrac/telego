@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 27
+const testCase = 21
 
 func main() {
 	testToken := os.Getenv("TOKEN")
