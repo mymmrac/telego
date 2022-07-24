@@ -48,10 +48,7 @@ func main() {
 		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
 
 		// Answer callback query
-		_ = bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
-			CallbackQueryID: query.ID,
-			Text:            "Done",
-		})
+		_ = bot.AnswerCallbackQuery(tu.CallbackQuery(query.ID).WithText("Done"))
 	}, th.AnyCallbackQueryWithMessage(), th.CallbackDataEqual("go"))
 
 	// Start handling updates
