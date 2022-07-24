@@ -19,9 +19,14 @@ func main() {
 	}
 
 	updates, _ := bot.UpdatesViaLongPulling(nil)
-	defer bot.StopLongPulling()
 
 	bh, _ := th.NewBotHandler(bot, updates)
+
+	// Stop handling updates
+	defer bh.Stop()
+
+	// Stop getting updates
+	defer bot.StopLongPulling()
 
 	// Should not be here, because order of handlers do meter.
 	//
@@ -45,4 +50,7 @@ func main() {
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 		fmt.Println("Message:", message.Text)
 	})
+
+	// Start handling
+	bh.Start()
 }

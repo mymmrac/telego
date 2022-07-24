@@ -21,10 +21,15 @@ func main() {
 
 	// Get updates channel
 	updates, _ := bot.UpdatesViaLongPulling(nil)
-	defer bot.StopLongPulling()
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
+
+	// Stop handling updates
+	defer bh.Stop()
+
+	// Stop getting updates
+	defer bot.StopLongPulling()
 
 	// Register new handler with match on command `/start`
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
@@ -48,7 +53,4 @@ func main() {
 
 	// Start handling updates
 	bh.Start()
-
-	// Stop handling updates
-	defer bh.Stop()
 }
