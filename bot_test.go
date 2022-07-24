@@ -493,10 +493,9 @@ func TestBot_performRequest(t *testing.T) {
 		N: 1,
 	}
 
-	var result int
-	var result2 bool
-
 	t.Run("success", func(t *testing.T) {
+		var result int
+
 		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(&ta.RequestData{}, nil).
@@ -516,6 +515,9 @@ func TestBot_performRequest(t *testing.T) {
 	})
 
 	t.Run("success_unmarshal_second", func(t *testing.T) {
+		var result1 int
+		var result2 bool
+
 		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(&ta.RequestData{}, nil).
@@ -529,13 +531,15 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  nil,
 			}, nil)
 
-		err := m.Bot.performRequest(methodName, params, &result, &result2)
+		err := m.Bot.performRequest(methodName, params, &result1, &result2)
 		assert.NoError(t, err)
-		assert.Equal(t, 0, result)
+		assert.Equal(t, 0, result1)
 		assert.Equal(t, true, result2)
 	})
 
 	t.Run("error_not_ok", func(t *testing.T) {
+		var result int
+
 		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(&ta.RequestData{}, nil).
@@ -554,6 +558,8 @@ func TestBot_performRequest(t *testing.T) {
 	})
 
 	t.Run("error_construct_and_call", func(t *testing.T) {
+		var result int
+
 		m.MockRequestConstructor.EXPECT().
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest).

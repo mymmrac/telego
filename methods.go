@@ -1050,7 +1050,8 @@ type EditMessageLiveLocationParams struct {
 // is returned.
 func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("editMessageLiveLocation", params, &message)
+	var success *bool
+	err := b.performRequest("editMessageLiveLocation", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: editMessageLiveLocation(): %w", err)
 	}
@@ -1082,7 +1083,8 @@ type StopMessageLiveLocationParams struct {
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
 func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("stopMessageLiveLocation", params, &message)
+	var success *bool
+	err := b.performRequest("stopMessageLiveLocation", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: stopMessageLiveLocation(): %w", err)
 	}
@@ -2378,7 +2380,6 @@ type EditMessageTextParams struct {
 func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
 	var message *Message
 	var success *bool
-
 	err := b.performRequest("editMessageText", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: editMessageText(): %w", err)
@@ -2421,7 +2422,8 @@ type EditMessageCaptionParams struct {
 // True is returned.
 func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("editMessageCaption", params, &message)
+	var success *bool
+	err := b.performRequest("editMessageCaption", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: editMessageCaption(): %w", err)
 	}
@@ -2471,7 +2473,8 @@ func (p *EditMessageMediaParams) fileParameters() map[string]telegoapi.NamedRead
 // returned, otherwise True is returned.
 func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("editMessageMedia", params, &message)
+	var success *bool
+	err := b.performRequest("editMessageMedia", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: editMessageMedia(): %w", err)
 	}
@@ -2502,7 +2505,8 @@ type EditMessageReplyMarkupParams struct {
 // returned, otherwise True is returned.
 func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("editMessageReplyMarkup", params, &message)
+	var success *bool
+	err := b.performRequest("editMessageReplyMarkup", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: editMessageReplyMarkup(): %w", err)
 	}
@@ -3311,7 +3315,8 @@ type SetGameScoreParams struct {
 // in the chat and force is False.
 func (b *Bot) SetGameScore(params *SetGameScoreParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("setGameScore", params, &message)
+	var success *bool
+	err := b.performRequest("setGameScore", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: setGameScore(): %w", err)
 	}
