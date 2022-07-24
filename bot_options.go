@@ -98,3 +98,11 @@ func WithAPIServer(apiURL string) BotOption {
 		return nil
 	}
 }
+
+// WithHealthCheck enables health check using Bot.GetMe() method on start
+func WithHealthCheck() BotOption {
+	return func(bot *Bot) error {
+		bot.healthCheckRequested = true
+		return nil
+	}
+}

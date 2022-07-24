@@ -11,3 +11,6 @@
 
 # Binaries
 bin
+
+# Env
+.env

@@ -165,3 +165,12 @@ func TestWithDefaultDebugLogger(t *testing.T) {
 	assert.True(t, log.PrintErrors)
 	assert.NotNil(t, log.Replacer)
 }
+
+func TestWithHealthCheck(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithHealthCheck()(bot)
+	assert.NoError(t, err)
+
+	assert.True(t, bot.healthCheckRequested)
+}

@@ -41,6 +41,8 @@ type Bot struct {
 	api         telegoapi.Caller
 	constructor telegoapi.RequestConstructor
 
+	healthCheckRequested bool
+
 	longPullingContext *longPullingContext
 	webhookContext     *webhookContext
 }
@@ -66,7 +68,13 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 
 	for _, option := range options {
 		if err := option(b); err != nil {
-			return nil, fmt.Errorf("options: %w", err)
+			return nil, fmt.Errorf("telego: options: %w", err)
+		}
+	}
+
+	if b.healthCheckRequested {
+		if _, err := b.GetMe(); err != nil {
+			return nil, fmt.Errorf("telego: health check: %w", err)
 		}
 	}
 

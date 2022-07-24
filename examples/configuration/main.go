@@ -23,6 +23,9 @@ func main() {
 		// Change HTTP client (default: &fasthttp.Client{})
 		telego.WithFastHTTPClient(&fasthttp.Client{}),
 
+		// Enables basic health check that will call getMe method before returning bot instance
+		telego.WithHealthCheck(),
+
 		// Configuration of default logger, enable printing debug information and errors (default: false, true)
 		// Note: Please keep in mind that default logger may expose sensitive information, use in development only
 		telego.WithDefaultLogger(false, true),

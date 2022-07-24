@@ -47,7 +47,7 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 	return bh, nil
 }
 
-// Start starts handling of updates
+// Start starts handling of updates, blocks execution
 // Calling Start() multiple times after the first one does nothing.
 // Note: After you done with handling updates you should call Stop() method, because stopping updates chan will do
 // nothing.
@@ -104,8 +104,7 @@ func (h *BotHandler) IsRunning() bool {
 
 // Stop stops handling of updates, will block until all updates has been processes or on timeout. If timeout set to 0,
 // bot handler will not wait for all handlers to done processing.
-// Calling Stop() multiple times does nothing.
-// Note: Calling before Start() does nothing.
+// Note: Calling Stop() multiple times does nothing. Calling before Start() does nothing.
 func (h *BotHandler) Stop() {
 	h.runningLock.Lock()
 	defer h.runningLock.Unlock()

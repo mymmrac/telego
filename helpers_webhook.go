@@ -46,7 +46,7 @@ func WithWebhookBuffer(chanBuffer uint) WebhookOption {
 func WithWebhookServer(server *fasthttp.Server) WebhookOption {
 	return func(ctx *webhookContext) error {
 		if server == nil {
-			return errors.New("telego: webhook server is nil")
+			return errors.New("webhook server is nil")
 		}
 
 		ctx.server = server
@@ -59,7 +59,7 @@ func WithWebhookServer(server *fasthttp.Server) WebhookOption {
 func WithWebhookRouter(router *router.Router) WebhookOption {
 	return func(ctx *webhookContext) error {
 		if router == nil {
-			return errors.New("telego: webhook router is nil")
+			return errors.New("webhook router is nil")
 		}
 
 		ctx.router = router
@@ -254,7 +254,7 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 
 	for _, option := range options {
 		if err := option(ctx); err != nil {
-			return nil, fmt.Errorf("options: %w", err)
+			return nil, fmt.Errorf("telego: options: %w", err)
 		}
 	}
 
