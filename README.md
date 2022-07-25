@@ -68,6 +68,7 @@ More examples can be seen here:
 - [Updates (long pulling)](examples/updates_long_pulling/main.go)
 - [Updates (webhook)](examples/updates_webhook/main.go)
 - [Echo bot](examples/echo_bot/main.go)
+- [Echo bot (with handlers)](examples/echo_bot_with_handlers/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
