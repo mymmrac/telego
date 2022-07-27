@@ -3,7 +3,7 @@ module github.com/mymmrac/telego
 go 1.17
 
 require (
-	github.com/fasthttp/router v1.4.10
+	github.com/fasthttp/router v1.4.11
 	github.com/goccy/go-json v0.9.10
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.8.0
