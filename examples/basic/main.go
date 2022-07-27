@@ -27,5 +27,5 @@ func main() {
 	}
 
 	// Print Bot information
-	fmt.Printf("Bot user: %#v\n", botUser)
+	fmt.Printf("Bot user: %+v\n", botUser)
 }

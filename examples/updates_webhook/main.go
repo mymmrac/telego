@@ -27,7 +27,7 @@ func main() {
 
 	// Receive information about webhook
 	info, _ := bot.GetWebhookInfo()
-	fmt.Printf("Webhook Info: %#v\n", info)
+	fmt.Printf("Webhook Info: %+v\n", info)
 
 	// Get updates channel from webhook, all options are optional.
 	// Note: For one bot only one webhook allowed.
@@ -56,6 +56,6 @@ func main() {
 
 	// Loop through all updates when they came
 	for update := range updates {
-		fmt.Printf("Update: %#v\n", update)
+		fmt.Printf("Update: %+v\n", update)
 	}
 }

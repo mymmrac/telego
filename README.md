@@ -125,7 +125,7 @@ func main() {
 	}
 
 	// Print Bot information
-	fmt.Printf("Bot user: %#v\n", botUser)
+	fmt.Printf("Bot user: %+v\n", botUser)
 }
 ```
 
@@ -170,7 +170,7 @@ func main() {
 
 	// Loop through all updates when they came
 	for update := range updates {
-		fmt.Printf("Update: %#v\n", update)
+		fmt.Printf("Update: %+v\n", update)
 	}
 }
 ```
@@ -205,7 +205,7 @@ func main() {
 
 	// Receive information about webhook
 	info, _ := bot.GetWebhookInfo()
-	fmt.Printf("Webhook Info: %#v\n", info)
+	fmt.Printf("Webhook Info: %+v\n", info)
 
 	// Get updates channel from webhook.
 	// Note: For one bot only one webhook allowed.
@@ -222,7 +222,7 @@ func main() {
 
 	// Loop through all updates when they came
 	for update := range updates {
-		fmt.Printf("Update: %#v\n", update)
+		fmt.Printf("Update: %+v\n", update)
 	}
 }
 ```
@@ -265,7 +265,7 @@ func main() {
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
-	fmt.Printf("Bot User: %#v\n", botUser)
+	fmt.Printf("Bot User: %+v\n", botUser)
 
 	updates, _ := bot.UpdatesViaLongPulling(nil)
 	defer bot.StopLongPulling()

@@ -29,6 +29,8 @@ type LongPullingOption func(ctx *longPullingContext) error
 
 // WithLongPullingUpdateInterval sets updates interval for long pulling. Ensures that between two calls of
 // Bot.GetUpdates() will be at least specified time, but it could be longer. Default is 0.5s.
+// Note: Telegram has built in timeout mechanism, to properly use it set GetUpdatesParams.Timeout to desired timeout
+// and update interval to 0.
 func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOption {
 	return func(ctx *longPullingContext) error {
 		if updateInterval < 0 {

@@ -21,7 +21,7 @@ func main() {
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
-	fmt.Printf("Bot User: %#v\n", botUser)
+	fmt.Printf("Bot User: %+v\n", botUser)
 
 	updates, _ := bot.UpdatesViaLongPulling(nil)
 	defer bot.StopLongPulling()

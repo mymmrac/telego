@@ -54,5 +54,5 @@ func main() {
 
 	// Call method getMe
 	botUser, _ := bot.GetMe()
-	fmt.Printf("Bot user: %#v\n", botUser)
+	fmt.Printf("Bot user: %+v\n", botUser)
 }
