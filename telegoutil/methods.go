@@ -162,6 +162,14 @@ func Invoice(id telego.ChatID, title, description, payload, providerToken, curre
 	}
 }
 
+// LabeledPrice creates telego.LabeledPrice with required parameters
+func LabeledPrice(label string, amount int) telego.LabeledPrice {
+	return telego.LabeledPrice{
+		Label:  label,
+		Amount: amount,
+	}
+}
+
 // Game creates telego.SendGameParams with required parameters
 func Game(id int64, gameShortName string) *telego.SendGameParams {
 	return &telego.SendGameParams{

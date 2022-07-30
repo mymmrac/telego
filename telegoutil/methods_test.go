@@ -98,6 +98,12 @@ func TestInvoice(t *testing.T) {
 	assert.Equal(t, prices, i.Prices)
 }
 
+func TestLabeledPrice(t *testing.T) {
+	l := LabeledPrice(text1, number1)
+	assert.Equal(t, text1, l.Label)
+	assert.Equal(t, number1, l.Amount)
+}
+
 func TestLocation(t *testing.T) {
 	l := Location(id1, latitude, longitude)
 	assert.Equal(t, id1, l.ChatID)
