@@ -34,6 +34,10 @@ var (
 			Label:  text1,
 			Amount: number1,
 		},
+		{
+			Label:  text2,
+			Amount: number1,
+		},
 	}
 
 	mediaGroups = []telego.InputMedia{
@@ -96,12 +100,6 @@ func TestInvoice(t *testing.T) {
 	assert.Equal(t, text4, i.ProviderToken)
 	assert.Equal(t, text5, i.Currency)
 	assert.Equal(t, prices, i.Prices)
-}
-
-func TestLabeledPrice(t *testing.T) {
-	l := LabeledPrice(text1, number1)
-	assert.Equal(t, text1, l.Label)
-	assert.Equal(t, number1, l.Amount)
 }
 
 func TestLocation(t *testing.T) {
@@ -185,13 +183,36 @@ func TestCopyMessage(t *testing.T) {
 	assert.Equal(t, number1, c.MessageID)
 }
 
-func TestInlineQuery(t *testing.T) {
-	i := InlineQuery(text1, &telego.InlineQueryResultArticle{Title: text2})
-	assert.Equal(t, text1, i.InlineQueryID)
-	assert.Equal(t, []telego.InlineQueryResult{&telego.InlineQueryResultArticle{Title: text2}}, i.Results)
-}
-
 func TestCallbackQuery(t *testing.T) {
 	c := CallbackQuery(text1)
 	assert.Equal(t, text1, c.CallbackQueryID)
+}
+
+func TestInlineQuery(t *testing.T) {
+	i := InlineQuery(text1, &telego.InlineQueryResultArticle{Title: text2},
+		&telego.InlineQueryResultArticle{Title: text3})
+	assert.Equal(t, text1, i.InlineQueryID)
+	assert.Equal(t, []telego.InlineQueryResult{
+		&telego.InlineQueryResultArticle{Title: text2},
+		&telego.InlineQueryResultArticle{Title: text3},
+	}, i.Results)
+}
+
+func TestShippingQuery(t *testing.T) {
+	c := ShippingQuery(text1, true, telego.ShippingOption{ID: text2}, telego.ShippingOption{ID: text3})
+	assert.Equal(t, text1, c.ShippingQueryID)
+	assert.Equal(t, true, c.Ok)
+	assert.Equal(t, []telego.ShippingOption{{ID: text2}, {ID: text3}}, c.ShippingOptions)
+}
+
+func TestPreCheckoutQuery(t *testing.T) {
+	c := PreCheckoutQuery(text1, true)
+	assert.Equal(t, text1, c.PreCheckoutQueryID)
+	assert.Equal(t, true, c.Ok)
+}
+
+func TestWebAppQuery(t *testing.T) {
+	i := WebAppQuery(text1, &telego.InlineQueryResultArticle{Title: text2})
+	assert.Equal(t, text1, i.WebAppQueryID)
+	assert.Equal(t, &telego.InlineQueryResultArticle{Title: text2}, i.Result)
 }

@@ -162,14 +162,6 @@ func Invoice(id telego.ChatID, title, description, payload, providerToken, curre
 	}
 }
 
-// LabeledPrice creates telego.LabeledPrice with required parameters
-func LabeledPrice(label string, amount int) telego.LabeledPrice {
-	return telego.LabeledPrice{
-		Label:  label,
-		Amount: amount,
-	}
-}
-
 // Game creates telego.SendGameParams with required parameters
 func Game(id int64, gameShortName string) *telego.SendGameParams {
 	return &telego.SendGameParams{
@@ -187,17 +179,42 @@ func CopyMessage(id, fromID telego.ChatID, messageID int) *telego.CopyMessagePar
 	}
 }
 
+// CallbackQuery creates telego.AnswerCallbackQueryParams with required parameters
+func CallbackQuery(queryID string) *telego.AnswerCallbackQueryParams {
+	return &telego.AnswerCallbackQueryParams{
+		CallbackQueryID: queryID,
+	}
+}
+
 // InlineQuery creates telego.AnswerInlineQueryParams with required parameters
-func InlineQuery(inlineQueryID string, results ...telego.InlineQueryResult) *telego.AnswerInlineQueryParams {
+func InlineQuery(queryID string, results ...telego.InlineQueryResult) *telego.AnswerInlineQueryParams {
 	return &telego.AnswerInlineQueryParams{
-		InlineQueryID: inlineQueryID,
+		InlineQueryID: queryID,
 		Results:       results,
 	}
 }
 
-// CallbackQuery creates telego.AnswerCallbackQueryParams with required parameters
-func CallbackQuery(callbackQueryID string) *telego.AnswerCallbackQueryParams {
-	return &telego.AnswerCallbackQueryParams{
-		CallbackQueryID: callbackQueryID,
+// ShippingQuery creates telego.AnswerShippingQueryParams with required parameters
+func ShippingQuery(queryID string, ok bool, options ...telego.ShippingOption) *telego.AnswerShippingQueryParams {
+	return &telego.AnswerShippingQueryParams{
+		ShippingQueryID: queryID,
+		Ok:              ok,
+		ShippingOptions: options,
+	}
+}
+
+// PreCheckoutQuery creates telego.AnswerPreCheckoutQueryParams with required parameters
+func PreCheckoutQuery(queryID string, ok bool) *telego.AnswerPreCheckoutQueryParams {
+	return &telego.AnswerPreCheckoutQueryParams{
+		PreCheckoutQueryID: queryID,
+		Ok:                 ok,
+	}
+}
+
+// WebAppQuery creates telego.AnswerWebAppQueryParams with required parameters
+func WebAppQuery(queryID string, result telego.InlineQueryResult) *telego.AnswerWebAppQueryParams {
+	return &telego.AnswerWebAppQueryParams{
+		WebAppQueryID: queryID,
+		Result:        result,
 	}
 }

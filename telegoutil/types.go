@@ -529,3 +529,19 @@ func ErrorUnspecified(sourceType, message, elementHash string) *telego.PassportE
 		Message:     message,
 	}
 }
+
+// LabeledPrice creates telego.LabeledPrice with required parameters
+func LabeledPrice(label string, amount int) telego.LabeledPrice {
+	return telego.LabeledPrice{
+		Label:  label,
+		Amount: amount,
+	}
+}
+
+// ShippingOption creates telego.ShippingOption with required parameters
+func ShippingOption(id string, prices ...telego.LabeledPrice) telego.ShippingOption {
+	return telego.ShippingOption{
+		ID:     id,
+		Prices: prices,
+	}
+}

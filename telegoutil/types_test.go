@@ -426,3 +426,15 @@ func TestInvoiceMessage(t *testing.T) {
 	assert.Equal(t, text5, m.Currency)
 	assert.Equal(t, prices, m.Prices)
 }
+
+func TestLabeledPrice(t *testing.T) {
+	l := LabeledPrice(text1, number1)
+	assert.Equal(t, text1, l.Label)
+	assert.Equal(t, number1, l.Amount)
+}
+
+func TestShippingOption(t *testing.T) {
+	s := ShippingOption(text1, prices...)
+	assert.Equal(t, text1, s.ID)
+	assert.Equal(t, prices, s.Prices)
+}
