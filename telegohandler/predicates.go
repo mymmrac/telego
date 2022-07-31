@@ -7,7 +7,7 @@ import (
 	"github.com/mymmrac/telego"
 )
 
-// Union is true if at least one of predicates is true
+// Union is true if at least one of the predicates is true
 func Union(predicates ...Predicate) Predicate {
 	return func(update telego.Update) bool {
 		for _, p := range predicates {
@@ -30,7 +30,7 @@ func anyMassage(message *telego.Message) bool {
 	return message != nil
 }
 
-// AnyMessage is true if message isn't nil
+// AnyMessage is true if the message isn't nil
 func AnyMessage() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassage(update.Message)
@@ -41,7 +41,7 @@ func anyMassageWithText(message *telego.Message) bool {
 	return message != nil && message.Text != ""
 }
 
-// AnyMessageWithText is true if message isn't nil and its text not empty
+// AnyMessageWithText is true if the message isn't nil and its text is not empty
 func AnyMessageWithText() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassageWithText(update.Message)
@@ -52,7 +52,7 @@ func textEqual(message *telego.Message, text string) bool {
 	return message != nil && message.Text == text
 }
 
-// TextEqual is true if message isn't nil, and its text equal to specified text
+// TextEqual is true if the message isn't nil, and its text is equal to the specified text
 func TextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqual(update.Message, text)
@@ -63,8 +63,8 @@ func textEqualFold(message *telego.Message, text string) bool {
 	return message != nil && strings.EqualFold(message.Text, text)
 }
 
-// TextEqualFold is true if message isn't nil, and its text equal fold (more general form of case-insensitivity equal)
-// to specified text
+// TextEqualFold is true if the message isn't nil, and its text equal fold (more general form of case-insensitivity equal)
+// to the specified text
 func TextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqualFold(update.Message, text)
@@ -75,7 +75,7 @@ func textContains(message *telego.Message, text string) bool {
 	return message != nil && strings.Contains(message.Text, text)
 }
 
-// TextContains is true if message isn't nil, and its text contains specified text
+// TextContains is true if the message isn't nil, and its text contains specified text
 func TextContains(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textContains(update.Message, text)
@@ -86,7 +86,7 @@ func textPrefix(message *telego.Message, prefix string) bool {
 	return message != nil && strings.HasPrefix(message.Text, prefix)
 }
 
-// TextPrefix is true if message isn't nil, and its text has specified prefix
+// TextPrefix is true if the message isn't nil, and its text has specified prefix
 func TextPrefix(prefix string) Predicate {
 	return func(update telego.Update) bool {
 		return textPrefix(update.Message, prefix)
@@ -97,7 +97,7 @@ func textSuffix(message *telego.Message, suffix string) bool {
 	return message != nil && strings.HasSuffix(message.Text, suffix)
 }
 
-// TextSuffix is true if message isn't nil, and its text has specified suffix
+// TextSuffix is true if the message isn't nil, and its text has specified suffix
 func TextSuffix(suffix string) Predicate {
 	return func(update telego.Update) bool {
 		return textSuffix(update.Message, suffix)
@@ -108,7 +108,7 @@ func textMatches(message *telego.Message, pattern *regexp.Regexp) bool {
 	return message != nil && pattern.MatchString(message.Text)
 }
 
-// TextMatches is true if message isn't nil, and its text matches specified regexp
+// TextMatches is true if the message isn't nil, and its text matches specified regexp
 func TextMatches(pattern *regexp.Regexp) Predicate {
 	return func(update telego.Update) bool {
 		return textMatches(update.Message, pattern)
@@ -118,17 +118,17 @@ func TextMatches(pattern *regexp.Regexp) Predicate {
 // CommandRegexp matches to command and has match groups on command and arguments
 var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
 
-// CommandMatchGroupsLen represents length of match groups of CommandRegexp
+// CommandMatchGroupsLen represents the length of match groups in the CommandRegexp
 const CommandMatchGroupsLen = 3
 
-// AnyCommand is true if message isn't nil, and it matches to command regexp
+// AnyCommand is true if the message isn't nil, and it matches to command regexp
 func AnyCommand() Predicate {
 	return func(update telego.Update) bool {
 		return update.Message != nil && CommandRegexp.MatchString(update.Message.Text)
 	}
 }
 
-// CommandEqual is true if message isn't nil, and it contains specified command
+// CommandEqual is true if the message isn't nil, and it contains specified command
 func CommandEqual(command string) Predicate {
 	return func(update telego.Update) bool {
 		if update.Message == nil {
@@ -144,7 +144,7 @@ func CommandEqual(command string) Predicate {
 	}
 }
 
-// CommandEqualArgc is true if message isn't nil, and it contains specified command with number of args
+// CommandEqualArgc is true if the message isn't nil, and it contains specified command with a number of args
 func CommandEqualArgc(command string, argc int) Predicate {
 	return func(update telego.Update) bool {
 		if update.Message == nil {
@@ -161,7 +161,7 @@ func CommandEqualArgc(command string, argc int) Predicate {
 	}
 }
 
-// CommandEqualArgv is true if message isn't nil, and it contains specified command and args
+// CommandEqualArgv is true if the message isn't nil, and it contains specified command and args
 func CommandEqualArgv(command string, argv ...string) Predicate {
 	return func(update telego.Update) bool {
 		if update.Message == nil {
@@ -178,57 +178,57 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 	}
 }
 
-// AnyEditedMessage is true if edited message isn't nil
+// AnyEditedMessage is true if the edited message isn't nil
 func AnyEditedMessage() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassage(update.EditedMessage)
 	}
 }
 
-// AnyEditedMessageWithText is true if edited message isn't nil and its text not empty
+// AnyEditedMessageWithText is true if the edited message isn't nil and its text is not empty
 func AnyEditedMessageWithText() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassageWithText(update.EditedMessage)
 	}
 }
 
-// EditedTextEqual is true if edited message isn't nil, and its text equal to specified text
+// EditedTextEqual is true if the edited message isn't nil, and its text equals to the specified text
 func EditedTextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqual(update.EditedMessage, text)
 	}
 }
 
-// EditedTextEqualFold is true if edited message isn't nil, and its text equal fold (more general form of
-// case-insensitivity equal) to specified text
+// EditedTextEqualFold is true if the edited message isn't nil, and its text equal fold (more general form of
+// case-insensitivity equal) to the specified text
 func EditedTextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqualFold(update.EditedMessage, text)
 	}
 }
 
-// EditedTextContains is true if edited message isn't nil, and its text contains specified text
+// EditedTextContains is true if the edited message isn't nil, and its text contains specified text
 func EditedTextContains(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textContains(update.EditedMessage, text)
 	}
 }
 
-// EditedTextPrefix is true if edited message isn't nil, and its text has specified prefix
+// EditedTextPrefix is true if the edited message isn't nil, and its text has specified prefix
 func EditedTextPrefix(prefix string) Predicate {
 	return func(update telego.Update) bool {
 		return textPrefix(update.EditedMessage, prefix)
 	}
 }
 
-// EditedTextSuffix is true if edited message isn't nil, and its text has specified suffix
+// EditedTextSuffix is true if the edited message isn't nil, and its text has specified suffix
 func EditedTextSuffix(suffix string) Predicate {
 	return func(update telego.Update) bool {
 		return textSuffix(update.EditedMessage, suffix)
 	}
 }
 
-// EditedTextMatches is true if edited message isn't nil, and its text matches specified regexp
+// EditedTextMatches is true if the edited message isn't nil, and its text matches specified regexp
 func EditedTextMatches(pattern *regexp.Regexp) Predicate {
 	return func(update telego.Update) bool {
 		return textMatches(update.EditedMessage, pattern)
@@ -242,14 +242,14 @@ func AnyChannelPost() Predicate {
 	}
 }
 
-// AnyChannelPostWithText is true if channel post isn't nil and its text not empty
+// AnyChannelPostWithText is true if channel post isn't nil and its text is not empty
 func AnyChannelPostWithText() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassageWithText(update.ChannelPost)
 	}
 }
 
-// PostTextEqual is true if channel post isn't nil, and its text equal to specified text
+// PostTextEqual is true if channel post isn't nil, and its text equals to the specified text
 func PostTextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqual(update.ChannelPost, text)
@@ -257,7 +257,7 @@ func PostTextEqual(text string) Predicate {
 }
 
 // PostTextEqualFold is true if channel post isn't nil, and its text equal fold (more general form of case-insensitivity
-// equal) to specified text
+// equal) to the specified text
 func PostTextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqualFold(update.ChannelPost, text)
@@ -292,21 +292,21 @@ func PostTextMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
-// AnyEditedChannelPost is true if edited channel post isn't nil
+// AnyEditedChannelPost is true if the edited channel post isn't nil
 func AnyEditedChannelPost() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassage(update.EditedChannelPost)
 	}
 }
 
-// AnyEditedChannelPostWithText is true if edited channel post isn't nil and its text not empty
+// AnyEditedChannelPostWithText is true if edited channel post isn't nil and its text is not empty
 func AnyEditedChannelPostWithText() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassageWithText(update.EditedChannelPost)
 	}
 }
 
-// EditedPostTextEqual is true if edited channel post isn't nil, and its text equal to specified text
+// EditedPostTextEqual is true if edited channel post isn't nil, and its text equals to the specified text
 func EditedPostTextEqual(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqual(update.EditedChannelPost, text)
@@ -314,7 +314,7 @@ func EditedPostTextEqual(text string) Predicate {
 }
 
 // EditedPostTextEqualFold is true if edited channel post isn't nil, and its text equal fold (more general form of
-// case-insensitivity equal) to specified text
+// case-insensitivity equal) to the specified text
 func EditedPostTextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqualFold(update.EditedChannelPost, text)
@@ -364,7 +364,7 @@ func InlineQueryEqual(text string) Predicate {
 }
 
 // InlineQueryEqualFold is true if inline query isn't nil, and its query equal fold (more general form of
-// case-insensitivity equal) to specified text
+// case-insensitivity equal) to the specified text
 func InlineQueryEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return update.InlineQuery != nil && strings.EqualFold(update.InlineQuery.Query, text)
@@ -399,14 +399,14 @@ func InlineQueryMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
-// AnyChosenInlineResult is true if chosen inline result isn't nil
+// AnyChosenInlineResult is true if the chosen inline result isn't nil
 func AnyChosenInlineResult() Predicate {
 	return func(update telego.Update) bool {
 		return update.ChosenInlineResult != nil
 	}
 }
 
-// AnyCallbackQuery is true if callback query isn't nil
+// AnyCallbackQuery is true if the callback query isn't nil
 func AnyCallbackQuery() Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil
@@ -427,36 +427,36 @@ func CallbackDataEqual(text string) Predicate {
 	}
 }
 
-// CallbackDataEqualFold is true if callback query isn't nil, and its data equal fold (more general form of
-// case-insensitivity equal) to specified text
+// CallbackDataEqualFold is true if the callback query isn't nil, and its data equal fold (more general form of
+// case-insensitivity equal) to the specified text
 func CallbackDataEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil && strings.EqualFold(update.CallbackQuery.Data, text)
 	}
 }
 
-// CallbackDataContains is true if callback query isn't nil, and its data contains specified text
+// CallbackDataContains is true if the callback query isn't nil, and its data contains specified text
 func CallbackDataContains(text string) Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil && strings.Contains(update.CallbackQuery.Data, text)
 	}
 }
 
-// CallbackDataPrefix is true if callback query isn't nil, and its data has specified prefix
+// CallbackDataPrefix is true if the callback query isn't nil, and its data has specified prefix
 func CallbackDataPrefix(prefix string) Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil && strings.HasPrefix(update.CallbackQuery.Data, prefix)
 	}
 }
 
-// CallbackDataSuffix is true if callback query isn't nil, and its data has specified suffix
+// CallbackDataSuffix is true if the callback query isn't nil, and its data has specified suffix
 func CallbackDataSuffix(suffix string) Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil && strings.HasSuffix(update.CallbackQuery.Data, suffix)
 	}
 }
 
-// CallbackDataMatches is true if callback query isn't nil, and its data matches specified regexp
+// CallbackDataMatches is true if the callback query isn't nil, and its data matches specified regexp
 func CallbackDataMatches(pattern *regexp.Regexp) Predicate {
 	return func(update telego.Update) bool {
 		return update.CallbackQuery != nil && pattern.MatchString(update.CallbackQuery.Data)
@@ -470,21 +470,21 @@ func AnyShippingQuery() Predicate {
 	}
 }
 
-// AnyPreCheckoutQuery is true if pre checkout query isn't nil
+// AnyPreCheckoutQuery is true if the pre checkout query isn't nil
 func AnyPreCheckoutQuery() Predicate {
 	return func(update telego.Update) bool {
 		return update.PreCheckoutQuery != nil
 	}
 }
 
-// AnyPoll is true if poll isn't nil
+// AnyPoll is true if the poll isn't nil
 func AnyPoll() Predicate {
 	return func(update telego.Update) bool {
 		return update.Poll != nil
 	}
 }
 
-// AnyPollAnswer is true if poll answer isn't nil
+// AnyPollAnswer is true if the poll answer isn't nil
 func AnyPollAnswer() Predicate {
 	return func(update telego.Update) bool {
 		return update.PollAnswer != nil
