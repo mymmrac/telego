@@ -178,6 +178,13 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 	}
 }
 
+// SuccessPayment is true if the message isn't nil, and contains success payment
+func SuccessPayment() Predicate {
+	return func(update telego.Update) bool {
+		return update.Message != nil && update.Message.SuccessfulPayment != nil
+	}
+}
+
 // AnyEditedMessage is true if the edited message isn't nil
 func AnyEditedMessage() Predicate {
 	return func(update telego.Update) bool {

@@ -239,6 +239,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "success_payment_matches",
+			predicate: SuccessPayment(),
+			update:    telego.Update{Message: &telego.Message{SuccessfulPayment: &telego.SuccessfulPayment{}}},
+			matches:   true,
+		},
+		{
+			name:      "success_payment_not_matches",
+			predicate: SuccessPayment(),
+			update:    telego.Update{Message: &telego.Message{}},
+			matches:   false,
+		},
+		{
 			name:      "any_edited_message_matches",
 			predicate: AnyEditedMessage(),
 			update:    telego.Update{EditedMessage: &telego.Message{}},
