@@ -63,8 +63,8 @@ func textEqualFold(message *telego.Message, text string) bool {
 	return message != nil && strings.EqualFold(message.Text, text)
 }
 
-// TextEqualFold is true if the message isn't nil, and its text equal fold (more general form of case-insensitivity equal)
-// to the specified text
+// TextEqualFold is true if the message isn't nil, and its text equal fold (more general form of case-insensitivity
+// equal) to the specified text
 func TextEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return textEqualFold(update.Message, text)
