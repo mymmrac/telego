@@ -1,6 +1,7 @@
 package telegoutil
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/mymmrac/telego"
@@ -16,6 +17,13 @@ type MessageEntityCollection struct {
 func Entity(text string) MessageEntityCollection {
 	return MessageEntityCollection{
 		text: text,
+	}
+}
+
+// Entityf creates new MessageEntityCollection with the provided format and args and no entities
+func Entityf(format string, args ...interface{}) MessageEntityCollection {
+	return MessageEntityCollection{
+		text: fmt.Sprintf(format, args...),
 	}
 }
 

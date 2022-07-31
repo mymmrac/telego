@@ -32,6 +32,11 @@ func TestEntity(t *testing.T) {
 	assert.Equal(t, 1, e.Entities()[1].Offset)
 }
 
+func TestEntityf(t *testing.T) {
+	e := Entityf("%s|%s", text1, text2)
+	assert.Equal(t, text1+"|"+text2, e.text)
+}
+
 func TestMessageEntities(t *testing.T) {
 	text, entities := MessageEntities(
 		Entity(text1),
