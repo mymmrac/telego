@@ -7,7 +7,7 @@ It achieves this by generating methods and types from docs (generation is in int
 The main goal was and is to create one-to-one library, so that if you know how Telegram bots work, you will immediately
 know how to implement that in Go using Telego.
 
-One-to-one implementation
+# One-to-one implementation
 
 All types named and contains same information as documented by Telegram, for methods it's exactly the same, however,
 some minor differences may be present (like use of interfaces or combined types).
@@ -43,7 +43,7 @@ For more flexibility file data for InputFile is provided via simple interface:
 
 this interface already implemented by os.File, so you can use it directly.
 
-Example
+# Example
 
 Most of the examples can be seen in examples folder.
 

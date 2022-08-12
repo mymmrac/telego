@@ -7,7 +7,7 @@ You can create BotHandler, register new handlers and start processing updates fr
 All handlers process updates concurrently, but keep in mind that predicates are checked sequentially. This gives an
 ability to process one update only with the first matched handler.
 
-Example
+# Example
 
 This example shows how you can create BotHandler and register new handlers. Note, that order of registration directly
 impacts order of checking matched handlers, and only the first matched handler will process the update.
@@ -125,6 +125,5 @@ One more example of handler usage. It shows how to use specific handlers to proc
 		// Stop handling updates
 		defer bh.Stop()
 	}
-
 */
 package telegohandler

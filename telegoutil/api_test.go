@@ -1,7 +1,7 @@
 package telegoutil
 
 import (
-	"io/ioutil"
+	"io"
 	"strings"
 	"sync"
 	"testing"
@@ -14,13 +14,13 @@ import (
 func TestNameReader(t *testing.T) {
 	buf := strings.NewReader(text1)
 
-	nr := NameReader(buf, text2)
+	nameReader := NameReader(buf, text2)
 
-	data, err := ioutil.ReadAll(nr)
+	data, err := io.ReadAll(nameReader)
 	assert.NoError(t, err)
 
 	assert.Equal(t, text1, string(data))
-	assert.Equal(t, text2, nr.Name())
+	assert.Equal(t, text2, nameReader.Name())
 }
 
 func TestUpdateProcessor(t *testing.T) {
