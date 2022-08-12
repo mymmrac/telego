@@ -212,6 +212,11 @@ type Chat struct {
 	// (https://core.telegram.org/bots/api#getchat).
 	HasPrivateForwards bool `json:"has_private_forwards,omitempty"`
 
+	// HasRestrictedVoiceAndVideoMessages - Optional. True, if the privacy settings of the other party restrict
+	// sending voice and video note messages in the private chat. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	HasRestrictedVoiceAndVideoMessages bool `json:"has_restricted_voice_and_video_messages,omitempty"`
+
 	// JoinToSendMessages - Optional. True, if users need to join the supergroup before they can send messages.
 	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	JoinToSendMessages bool `json:"join_to_send_messages,omitempty"`
@@ -507,7 +512,8 @@ type MessageEntity struct {
 	// (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic”
 	// (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler”
 	// (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable
-	// text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions))
+	// text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions)),
+	// “custom_emoji” (for inline custom emoji stickers)
 	Type string `json:"type"`
 
 	// Offset - Offset in UTF-16 code units to the start of the entity
@@ -524,6 +530,11 @@ type MessageEntity struct {
 
 	// Language - Optional. For “pre” only, the programming language of the entity text
 	Language string `json:"language,omitempty"`
+
+	// CustomEmojiID - Optional. For “custom_emoji” only, unique identifier of the custom emoji. Use
+	// getCustomEmojiStickers (https://core.telegram.org/bots/api#getcustomemojistickers) to get full information
+	// about the sticker
+	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
 }
 
 // MessageEntity types
@@ -544,6 +555,7 @@ const (
 	EntityTypePre           = "pre"
 	EntityTypeTextLink      = "text_link"
 	EntityTypeTextMention   = "text_mention"
+	EntityTypeCustomEmoji   = "custom_emoji"
 )
 
 // PhotoSize - This object represents one size of a photo or a file
@@ -1174,7 +1186,7 @@ type InlineKeyboardButton struct {
 // (https://telegram.org/blog/privacy-discussions-web-bots#meet-seamless-web-bots).
 // Sample bot: @discussbot (https://t.me/discussbot)
 type LoginURL struct {
-	// URL - An HTTP URL to be opened with user authorization data added to the query string when the button is
+	// URL - An HTTPS URL to be opened with user authorization data added to the query string when the button is
 	// pressed. If the user refuses to provide authorization data, the original URL without information about the
 	// user will be opened. The data added is the same as described in Receiving authorization data
 	// (https://core.telegram.org/widgets/login#receiving-authorization-data).
@@ -2085,7 +2097,7 @@ type InputMediaVideo struct {
 	// Duration - Optional. Video duration in seconds
 	Duration int `json:"duration,omitempty"`
 
-	// SupportsStreaming - Optional. Pass True, if the uploaded video is suitable for streaming
+	// SupportsStreaming - Optional. Pass True if the uploaded video is suitable for streaming
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 }
 
@@ -2322,6 +2334,10 @@ type Sticker struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
+	// Type - Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”. The type of
+	// the sticker is independent from its format, which is determined by the fields is_animated and is_video.
+	Type string `json:"type"`
+
 	// Width - Sticker width
 	Width int `json:"width"`
 
@@ -2344,15 +2360,25 @@ type Sticker struct {
 	// SetName - Optional. Name of the sticker set to which the sticker belongs
 	SetName string `json:"set_name,omitempty"`
 
-	// PremiumAnimation - Optional. Premium animation for the sticker, if the sticker is premium
+	// PremiumAnimation - Optional. For premium regular stickers, premium animation for the sticker
 	PremiumAnimation *File `json:"premium_animation,omitempty"`
 
 	// MaskPosition - Optional. For mask stickers, the position where the mask should be placed
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
 
+	// CustomEmojiID - Optional. For custom emoji stickers, unique identifier of the custom emoji
+	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
+
 	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
 }
+
+// Sticker types
+const (
+	StickerTypeRegular     = "regular"
+	StickerTypeMask        = "mask"
+	StickerTypeCustomEmoji = "custom_emoji"
+)
 
 // StickerSet - This object represents a sticker set.
 type StickerSet struct {
@@ -2362,6 +2388,9 @@ type StickerSet struct {
 	// Title - Sticker set title
 	Title string `json:"title"`
 
+	// StickerType - Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
+	StickerType string `json:"sticker_type"`
+
 	// IsAnimated - True, if the sticker set contains animated stickers
 	// (https://telegram.org/blog/animated-stickers)
 	IsAnimated bool `json:"is_animated"`
@@ -2369,9 +2398,6 @@ type StickerSet struct {
 	// IsVideo - True, if the sticker set contains video stickers
 	// (https://telegram.org/blog/video-stickers-better-reactions)
 	IsVideo bool `json:"is_video"`
-
-	// ContainsMasks - True, if the sticker set contains masks
-	ContainsMasks bool `json:"contains_masks"`
 
 	// Stickers - List of all set stickers
 	Stickers []Sticker `json:"stickers"`
@@ -2497,7 +2523,7 @@ type InlineQueryResultArticle struct {
 	// URL - Optional. URL of the result
 	URL string `json:"url,omitempty"`
 
-	// HideURL - Optional. Pass True, if you don't want the URL to be shown in the message
+	// HideURL - Optional. Pass True if you don't want the URL to be shown in the message
 	HideURL bool `json:"hide_url,omitempty"`
 
 	// Description - Optional. Short description of the result
@@ -3575,26 +3601,26 @@ type InputInvoiceMessageContent struct {
 	// PhotoHeight - Optional. Photo height
 	PhotoHeight int `json:"photo_height,omitempty"`
 
-	// NeedName - Optional. Pass True, if you require the user's full name to complete the order
+	// NeedName - Optional. Pass True if you require the user's full name to complete the order
 	NeedName bool `json:"need_name,omitempty"`
 
-	// NeedPhoneNumber - Optional. Pass True, if you require the user's phone number to complete the order
+	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order
 	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
 
-	// NeedEmail - Optional. Pass True, if you require the user's email address to complete the order
+	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order
 	NeedEmail bool `json:"need_email,omitempty"`
 
-	// NeedShippingAddress - Optional. Pass True, if you require the user's shipping address to complete the
+	// NeedShippingAddress - Optional. Pass True if you require the user's shipping address to complete the
 	// order
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True, if the user's phone number should be sent to provider
+	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to provider
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True, if the user's email address should be sent to provider
+	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to provider
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
-	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
+	// IsFlexible - Optional. Pass True if the final price depends on the shipping method
 	IsFlexible bool `json:"is_flexible,omitempty"`
 }
 

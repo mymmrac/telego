@@ -562,7 +562,7 @@ func TestTypesConstants(t *testing.T) {
 			EntityTypeMention, EntityTypeHashtag, EntityTypeCashtag, EntityTypeBotCommand, EntityTypeURL,
 			EntityTypeEmail, EntityTypePhoneNumber, EntityTypeBold, EntityTypeItalic, EntityTypeUnderline,
 			EntityTypeStrikethrough, EntityTypeSpoiler, EntityTypeCode, EntityTypePre, EntityTypeTextLink,
-			EntityTypeTextMention,
+			EntityTypeTextMention, EntityTypeCustomEmoji,
 		},
 		{
 			EmojiDice, EmojiDarts, EmojiBowling, EmojiBasketball, EmojiSoccer, EmojiSlotMachine,
@@ -586,6 +586,9 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,
+		},
+		{
+			StickerTypeRegular, StickerTypeMask, StickerTypeCustomEmoji,
 		},
 		{
 			PointForehead, PointEyes, PointMouth, PointChin,
