@@ -202,10 +202,11 @@ func (c MessageEntityCollection) TextMentionWithID(userID int64) MessageEntityCo
 }
 
 // CustomEmoji assigns custom emoji entity and returns new collection
-func (c MessageEntityCollection) CustomEmoji() MessageEntityCollection {
+func (c MessageEntityCollection) CustomEmoji(emojiID string) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
-		Type:   telego.EntityTypeCustomEmoji,
-		Length: len(c.text),
+		Type:          telego.EntityTypeCustomEmoji,
+		Length:        len(c.text),
+		CustomEmojiID: emojiID,
 	})
 	return c
 }
