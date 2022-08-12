@@ -2137,6 +2137,39 @@ func TestBot_GetStickerSet(t *testing.T) {
 	})
 }
 
+func TestBot_GetCustomEmojiStickers(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStickers := []Sticker{
+			{FileID: "FileID"},
+		}
+		resp := telegoResponse(t, expectedStickers)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		stickers, err := m.Bot.GetCustomEmojiStickers(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedStickers, stickers)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		stickers, err := m.Bot.GetCustomEmojiStickers(nil)
+		assert.Error(t, err)
+		assert.Nil(t, stickers)
+	})
+}
+
 func TestBot_UploadStickerFile(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)

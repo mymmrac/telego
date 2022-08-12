@@ -1100,6 +1100,15 @@ func TestGetStickerSetParams_Setters(t *testing.T) {
 	}, g)
 }
 
+func TestGetCustomEmojiStickersParams_Setters(t *testing.T) {
+	g := (&GetCustomEmojiStickersParams{}).
+		WithCustomEmojiIDs([]string{"CustomEmojiIDs"}...)
+
+	assert.Equal(t, &GetCustomEmojiStickersParams{
+		CustomEmojiIDs: []string{"CustomEmojiIDs"},
+	}, g)
+}
+
 func TestUploadStickerFileParams_Setters(t *testing.T) {
 	u := (&UploadStickerFileParams{}).
 		WithPngSticker(testInputFile)
@@ -1116,19 +1125,19 @@ func TestCreateNewStickerSetParams_Setters(t *testing.T) {
 		WithPngSticker(&testInputFile).
 		WithTgsSticker(&testInputFile).
 		WithWebmSticker(&testInputFile).
+		WithStickerType("StickerType").
 		WithEmojis("Emojis").
-		WithContainsMasks().
 		WithMaskPosition(&MaskPosition{Point: "MaskPosition"})
 
 	assert.Equal(t, &CreateNewStickerSetParams{
-		Name:          "Name",
-		Title:         "Title",
-		PngSticker:    &testInputFile,
-		TgsSticker:    &testInputFile,
-		WebmSticker:   &testInputFile,
-		Emojis:        "Emojis",
-		ContainsMasks: true,
-		MaskPosition:  &MaskPosition{Point: "MaskPosition"},
+		Name:         "Name",
+		Title:        "Title",
+		PngSticker:   &testInputFile,
+		TgsSticker:   &testInputFile,
+		WebmSticker:  &testInputFile,
+		StickerType:  "StickerType",
+		Emojis:       "Emojis",
+		MaskPosition: &MaskPosition{Point: "MaskPosition"},
 	}, c)
 }
 

@@ -14,7 +14,8 @@ type setterTest struct {
 func writeSettersTests(file *os.File, setters tgSetters, noPointerStructs []string) {
 	data := strings.Builder{}
 
-	data.WriteString(`package telego
+	data.WriteString(`//nolint:dupl
+package telego
 
 import (
 	"testing"

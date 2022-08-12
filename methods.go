@@ -52,8 +52,8 @@ const (
 )
 
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki
-// (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). An Array of Update
-// (https://core.telegram.org/bots/api#update) objects is returned.
+// (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). Returns an Array of Update
+// (https://core.telegram.org/bots/api#update) objects.
 func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
 	var updates []Update
 	err := b.performRequest("getUpdates", params, &updates)
@@ -121,7 +121,7 @@ func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
 func (b *Bot) SetWebhook(params *SetWebhookParams) error {
 	err := b.performRequest("setWebhook", params)
 	if err != nil {
-		return fmt.Errorf("setWebhook(): %w", err)
+		return fmt.Errorf("telego: setWebhook(): %w", err)
 	}
 
 	return nil
@@ -138,7 +138,7 @@ type DeleteWebhookParams struct {
 func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
 	err := b.performRequest("deleteWebhook", params)
 	if err != nil {
-		return fmt.Errorf("deleteWebhook(): %w", err)
+		return fmt.Errorf("telego: deleteWebhook(): %w", err)
 	}
 
 	return nil
@@ -174,9 +174,9 @@ func (b *Bot) GetMe() (*User, error) {
 // updates. After a successful call, you can immediately log in on a local server, but will not be able to log
 // in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
 func (b *Bot) LogOut() error {
-	err := b.performRequest("logOut", nil, nil)
+	err := b.performRequest("logOut", nil)
 	if err != nil {
-		return fmt.Errorf("logOut(): %w", err)
+		return fmt.Errorf("telego: logOut(): %w", err)
 	}
 
 	return nil
@@ -187,9 +187,9 @@ func (b *Bot) LogOut() error {
 // server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns
 // True on success. Requires no parameters.
 func (b *Bot) Close() error {
-	err := b.performRequest("close", nil, nil)
+	err := b.performRequest("close", nil)
 	if err != nil {
-		return fmt.Errorf("close(): %w", err)
+		return fmt.Errorf("telego: close(): %w", err)
 	}
 
 	return nil
@@ -225,7 +225,7 @@ type SendMessageParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -323,7 +323,7 @@ type CopyMessageParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -335,7 +335,8 @@ type CopyMessageParams struct {
 }
 
 // CopyMessage - Use this method to copy messages of any kind. Service messages and invoice messages can't be
-// copied. The method is analogous to the method forwardMessage
+// copied. A quiz poll (https://core.telegram.org/bots/api#poll) can be copied only if the value of the field
+// correct_option_id is known to the bot. The method is analogous to the method forwardMessage
 // (https://core.telegram.org/bots/api#forwardmessage), but the copied message doesn't have a link to the
 // original message. Returns the MessageID (https://core.telegram.org/bots/api#messageid) of the sent message on
 // success.
@@ -384,7 +385,7 @@ type SendPhotoParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -463,7 +464,7 @@ type SendAudioParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -546,7 +547,7 @@ type SendDocumentParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -622,7 +623,7 @@ type SendVideoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// SupportsStreaming - Optional. Pass True, if the uploaded video is suitable for streaming
+	// SupportsStreaming - Optional. Pass True if the uploaded video is suitable for streaming
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -635,7 +636,7 @@ type SendVideoParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -722,7 +723,7 @@ type SendAnimationParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -793,7 +794,7 @@ type SendVoiceParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -861,7 +862,7 @@ type SendVideoNoteParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -915,7 +916,7 @@ type SendMediaGroupParams struct {
 	// ReplyToMessageID - Optional. If the messages are a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 }
@@ -985,7 +986,7 @@ type SendLocationParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -1134,7 +1135,7 @@ type SendVenueParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -1186,7 +1187,7 @@ type SendContactParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -1255,7 +1256,7 @@ type SendPollParams struct {
 	// at least 5 and no more than 600 seconds in the future. Can't be used together with open_period.
 	CloseDate int64 `json:"close_date,omitempty"`
 
-	// IsClosed - Optional. Pass True, if the poll needs to be immediately closed. This can be useful for poll
+	// IsClosed - Optional. Pass True if the poll needs to be immediately closed. This can be useful for poll
 	// preview.
 	IsClosed bool `json:"is_closed,omitempty"`
 
@@ -1269,7 +1270,7 @@ type SendPollParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -1314,7 +1315,7 @@ type SendDiceParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -1343,15 +1344,15 @@ type SendChatActionParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive:
-	// typing for text messages (https://core.telegram.org/bots/api#sendmessage),
-	// upload_photo for photos (https://core.telegram.org/bots/api#sendphoto),
-	// record_video or upload_video for videos (https://core.telegram.org/bots/api#sendvideo),
-	// record_voice or upload_voice for voice notes (https://core.telegram.org/bots/api#sendvoice),
-	// upload_document for general files (https://core.telegram.org/bots/api#senddocument),
-	// choose_sticker for stickers (https://core.telegram.org/bots/api#sendsticker),
-	// find_location for location data (https://core.telegram.org/bots/api#sendlocation),
-	// record_video_note or upload_video_note for video notes (https://core.telegram.org/bots/api#sendvideonote).
+	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
+	// for text messages (https://core.telegram.org/bots/api#sendmessage), upload_photo for photos
+	// (https://core.telegram.org/bots/api#sendphoto), record_video or upload_video for videos
+	// (https://core.telegram.org/bots/api#sendvideo), record_voice or upload_voice for voice notes
+	// (https://core.telegram.org/bots/api#sendvoice), upload_document for general files
+	// (https://core.telegram.org/bots/api#senddocument), choose_sticker for stickers
+	// (https://core.telegram.org/bots/api#sendsticker), find_location for location data
+	// (https://core.telegram.org/bots/api#sendlocation), record_video_note or upload_video_note for video notes
+	// (https://core.telegram.org/bots/api#sendvideonote).
 	Action string `json:"action"`
 }
 
@@ -1382,7 +1383,7 @@ const (
 func (b *Bot) SendChatAction(params *SendChatActionParams) error {
 	err := b.performRequest("sendChatAction", params)
 	if err != nil {
-		return fmt.Errorf("sendChatAction(): %w", err)
+		return fmt.Errorf("telego: sendChatAction(): %w", err)
 	}
 
 	return nil
@@ -1464,7 +1465,7 @@ type BanChatMemberParams struct {
 func (b *Bot) BanChatMember(params *BanChatMemberParams) error {
 	err := b.performRequest("banChatMember", params)
 	if err != nil {
-		return fmt.Errorf("banChatMember(): %w", err)
+		return fmt.Errorf("telego: banChatMember(): %w", err)
 	}
 
 	return nil
@@ -1491,7 +1492,7 @@ type UnbanChatMemberParams struct {
 func (b *Bot) UnbanChatMember(params *UnbanChatMemberParams) error {
 	err := b.performRequest("unbanChatMember", params)
 	if err != nil {
-		return fmt.Errorf("unbanChatMember(): %w", err)
+		return fmt.Errorf("telego: unbanChatMember(): %w", err)
 	}
 
 	return nil
@@ -1521,7 +1522,7 @@ type RestrictChatMemberParams struct {
 func (b *Bot) RestrictChatMember(params *RestrictChatMemberParams) error {
 	err := b.performRequest("restrictChatMember", params)
 	if err != nil {
-		return fmt.Errorf("restrictChatMember(): %w", err)
+		return fmt.Errorf("telego: restrictChatMember(): %w", err)
 	}
 
 	return nil
@@ -1536,42 +1537,42 @@ type PromoteChatMemberParams struct {
 	// UserID - Unique identifier of the target user
 	UserID int64 `json:"user_id"`
 
-	// IsAnonymous - Optional. Pass True, if the administrator's presence in the chat is hidden
+	// IsAnonymous - Optional. Pass True if the administrator's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous,omitempty"`
 
-	// CanManageChat - Optional. Pass True, if the administrator can access the chat event log, chat statistics,
+	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, chat statistics,
 	// message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore
 	// slow mode. Implied by any other administrator privilege
 	CanManageChat bool `json:"can_manage_chat,omitempty"`
 
-	// CanPostMessages - Optional. Pass True, if the administrator can create channel posts, channels only
+	// CanPostMessages - Optional. Pass True if the administrator can create channel posts, channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
-	// CanEditMessages - Optional. Pass True, if the administrator can edit messages of other users and can pin
+	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
 	// messages, channels only
 	CanEditMessages bool `json:"can_edit_messages,omitempty"`
 
-	// CanDeleteMessages - Optional. Pass True, if the administrator can delete messages of other users
+	// CanDeleteMessages - Optional. Pass True if the administrator can delete messages of other users
 	CanDeleteMessages bool `json:"can_delete_messages,omitempty"`
 
-	// CanManageVideoChats - Optional. Pass True, if the administrator can manage video chats
+	// CanManageVideoChats - Optional. Pass True if the administrator can manage video chats
 	CanManageVideoChats bool `json:"can_manage_video_chats,omitempty"`
 
-	// CanRestrictMembers - Optional. Pass True, if the administrator can restrict, ban or unban chat members
+	// CanRestrictMembers - Optional. Pass True if the administrator can restrict, ban or unban chat members
 	CanRestrictMembers bool `json:"can_restrict_members,omitempty"`
 
-	// CanPromoteMembers - Optional. Pass True, if the administrator can add new administrators with a subset of
+	// CanPromoteMembers - Optional. Pass True if the administrator can add new administrators with a subset of
 	// their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by
 	// administrators that were appointed by him)
 	CanPromoteMembers bool `json:"can_promote_members,omitempty"`
 
-	// CanChangeInfo - Optional. Pass True, if the administrator can change chat title, photo and other settings
+	// CanChangeInfo - Optional. Pass True if the administrator can change chat title, photo and other settings
 	CanChangeInfo bool `json:"can_change_info,omitempty"`
 
-	// CanInviteUsers - Optional. Pass True, if the administrator can invite new users to the chat
+	// CanInviteUsers - Optional. Pass True if the administrator can invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users,omitempty"`
 
-	// CanPinMessages - Optional. Pass True, if the administrator can pin messages, supergroups only
+	// CanPinMessages - Optional. Pass True if the administrator can pin messages, supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
 }
 
@@ -1581,7 +1582,7 @@ type PromoteChatMemberParams struct {
 func (b *Bot) PromoteChatMember(params *PromoteChatMemberParams) error {
 	err := b.performRequest("promoteChatMember", params)
 	if err != nil {
-		return fmt.Errorf("promoteChatMember(): %w", err)
+		return fmt.Errorf("telego: promoteChatMember(): %w", err)
 	}
 
 	return nil
@@ -1605,7 +1606,7 @@ type SetChatAdministratorCustomTitleParams struct {
 func (b *Bot) SetChatAdministratorCustomTitle(params *SetChatAdministratorCustomTitleParams) error {
 	err := b.performRequest("setChatAdministratorCustomTitle", params)
 	if err != nil {
-		return fmt.Errorf("setChatAdministratorCustomTitle(): %w", err)
+		return fmt.Errorf("telego: setChatAdministratorCustomTitle(): %w", err)
 	}
 
 	return nil
@@ -1628,7 +1629,7 @@ type BanChatSenderChatParams struct {
 func (b *Bot) BanChatSenderChat(params *BanChatSenderChatParams) error {
 	err := b.performRequest("banChatSenderChat", params)
 	if err != nil {
-		return fmt.Errorf("banChatSenderChat(): %w", err)
+		return fmt.Errorf("telego: banChatSenderChat(): %w", err)
 	}
 
 	return nil
@@ -1650,7 +1651,7 @@ type UnbanChatSenderChatParams struct {
 func (b *Bot) UnbanChatSenderChat(params *UnbanChatSenderChatParams) error {
 	err := b.performRequest("unbanChatSenderChat", params)
 	if err != nil {
-		return fmt.Errorf("unbanChatSenderChat(): %w", err)
+		return fmt.Errorf("telego: unbanChatSenderChat(): %w", err)
 	}
 
 	return nil
@@ -1672,7 +1673,7 @@ type SetChatPermissionsParams struct {
 func (b *Bot) SetChatPermissions(params *SetChatPermissionsParams) error {
 	err := b.performRequest("setChatPermissions", params)
 	if err != nil {
-		return fmt.Errorf("setChatPermissions(): %w", err)
+		return fmt.Errorf("telego: setChatPermissions(): %w", err)
 	}
 
 	return nil
@@ -1809,7 +1810,7 @@ type ApproveChatJoinRequestParams struct {
 func (b *Bot) ApproveChatJoinRequest(params *ApproveChatJoinRequestParams) error {
 	err := b.performRequest("approveChatJoinRequest", params)
 	if err != nil {
-		return fmt.Errorf("approveChatJoinRequest(): %w", err)
+		return fmt.Errorf("telego: approveChatJoinRequest(): %w", err)
 	}
 
 	return nil
@@ -1830,7 +1831,7 @@ type DeclineChatJoinRequestParams struct {
 func (b *Bot) DeclineChatJoinRequest(params *DeclineChatJoinRequestParams) error {
 	err := b.performRequest("declineChatJoinRequest", params)
 	if err != nil {
-		return fmt.Errorf("declineChatJoinRequest(): %w", err)
+		return fmt.Errorf("telego: declineChatJoinRequest(): %w", err)
 	}
 
 	return nil
@@ -1858,7 +1859,7 @@ func (p *SetChatPhotoParams) fileParameters() map[string]telegoapi.NamedReader {
 func (b *Bot) SetChatPhoto(params *SetChatPhotoParams) error {
 	err := b.performRequest("setChatPhoto", params)
 	if err != nil {
-		return fmt.Errorf("setChatPhoto(): %w", err)
+		return fmt.Errorf("telego: setChatPhoto(): %w", err)
 	}
 
 	return nil
@@ -1877,7 +1878,7 @@ type DeleteChatPhotoParams struct {
 func (b *Bot) DeleteChatPhoto(params *DeleteChatPhotoParams) error {
 	err := b.performRequest("deleteChatPhoto", params)
 	if err != nil {
-		return fmt.Errorf("deleteChatPhoto(): %w", err)
+		return fmt.Errorf("telego: deleteChatPhoto(): %w", err)
 	}
 
 	return nil
@@ -1899,7 +1900,7 @@ type SetChatTitleParams struct {
 func (b *Bot) SetChatTitle(params *SetChatTitleParams) error {
 	err := b.performRequest("setChatTitle", params)
 	if err != nil {
-		return fmt.Errorf("setChatTitle(): %w", err)
+		return fmt.Errorf("telego: setChatTitle(): %w", err)
 	}
 
 	return nil
@@ -1921,7 +1922,7 @@ type SetChatDescriptionParams struct {
 func (b *Bot) SetChatDescription(params *SetChatDescriptionParams) error {
 	err := b.performRequest("setChatDescription", params)
 	if err != nil {
-		return fmt.Errorf("setChatDescription(): %w", err)
+		return fmt.Errorf("telego: setChatDescription(): %w", err)
 	}
 
 	return nil
@@ -1936,7 +1937,7 @@ type PinChatMessageParams struct {
 	// MessageID - Identifier of a message to pin
 	MessageID int `json:"message_id"`
 
-	// DisableNotification - Optional. Pass True, if it is not necessary to send a notification to all chat
+	// DisableNotification - Optional. Pass True if it is not necessary to send a notification to all chat
 	// members about the new pinned message. Notifications are always disabled in channels and private chats.
 	DisableNotification bool `json:"disable_notification,omitempty"`
 }
@@ -1948,7 +1949,7 @@ type PinChatMessageParams struct {
 func (b *Bot) PinChatMessage(params *PinChatMessageParams) error {
 	err := b.performRequest("pinChatMessage", params)
 	if err != nil {
-		return fmt.Errorf("pinChatMessage(): %w", err)
+		return fmt.Errorf("telego: pinChatMessage(): %w", err)
 	}
 
 	return nil
@@ -1972,7 +1973,7 @@ type UnpinChatMessageParams struct {
 func (b *Bot) UnpinChatMessage(params *UnpinChatMessageParams) error {
 	err := b.performRequest("unpinChatMessage", params)
 	if err != nil {
-		return fmt.Errorf("unpinChatMessage(): %w", err)
+		return fmt.Errorf("telego: unpinChatMessage(): %w", err)
 	}
 
 	return nil
@@ -1992,7 +1993,7 @@ type UnpinAllChatMessagesParams struct {
 func (b *Bot) UnpinAllChatMessages(params *UnpinAllChatMessagesParams) error {
 	err := b.performRequest("unpinAllChatMessages", params)
 	if err != nil {
-		return fmt.Errorf("unpinAllChatMessages(): %w", err)
+		return fmt.Errorf("telego: unpinAllChatMessages(): %w", err)
 	}
 
 	return nil
@@ -2009,7 +2010,7 @@ type LeaveChatParams struct {
 func (b *Bot) LeaveChat(params *LeaveChatParams) error {
 	err := b.performRequest("leaveChat", params)
 	if err != nil {
-		return fmt.Errorf("leaveChat(): %w", err)
+		return fmt.Errorf("telego: leaveChat(): %w", err)
 	}
 
 	return nil
@@ -2042,10 +2043,8 @@ type GetChatAdministratorsParams struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-// GetChatAdministrators - Use this method to get a list of administrators in a chat. On success, returns an
-// Array of ChatMember (https://core.telegram.org/bots/api#chatmember) objects that contains information about
-// all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were
-// appointed, only the creator will be returned.
+// GetChatAdministrators - Use this method to get a list of administrators in a chat, which aren't bots.
+// Returns an Array of ChatMember (https://core.telegram.org/bots/api#chatmember) objects.
 func (b *Bot) GetChatAdministrators(params *GetChatAdministratorsParams) ([]ChatMember, error) {
 	var chatMembersData []chatMemberData
 	err := b.performRequest("getChatAdministrators", params, &chatMembersData)
@@ -2117,7 +2116,7 @@ type SetChatStickerSetParams struct {
 func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
 	err := b.performRequest("setChatStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("setChatStickerSet(): %w", err)
+		return fmt.Errorf("telego: setChatStickerSet(): %w", err)
 	}
 
 	return nil
@@ -2137,7 +2136,7 @@ type DeleteChatStickerSetParams struct {
 func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
 	err := b.performRequest("deleteChatStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("deleteChatStickerSet(): %w", err)
+		return fmt.Errorf("telego: deleteChatStickerSet(): %w", err)
 	}
 
 	return nil
@@ -2177,7 +2176,7 @@ type AnswerCallbackQueryParams struct {
 func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
 	err := b.performRequest("answerCallbackQuery", params)
 	if err != nil {
-		return fmt.Errorf("answerCallbackQuery(): %w", err)
+		return fmt.Errorf("telego: answerCallbackQuery(): %w", err)
 	}
 
 	return nil
@@ -2204,7 +2203,7 @@ type SetMyCommandsParams struct {
 func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
 	err := b.performRequest("setMyCommands", params)
 	if err != nil {
-		return fmt.Errorf("setMyCommands(): %w", err)
+		return fmt.Errorf("telego: setMyCommands(): %w", err)
 	}
 
 	return nil
@@ -2228,7 +2227,7 @@ type DeleteMyCommandsParams struct {
 func (b *Bot) DeleteMyCommands(params *DeleteMyCommandsParams) error {
 	err := b.performRequest("deleteMyCommands", params)
 	if err != nil {
-		return fmt.Errorf("deleteMyCommands(): %w", err)
+		return fmt.Errorf("telego: deleteMyCommands(): %w", err)
 	}
 
 	return nil
@@ -2245,7 +2244,7 @@ type GetMyCommandsParams struct {
 }
 
 // GetMyCommands - Use this method to get the current list of the bot's commands for the given scope and user
-// language. Returns Array of BotCommand (https://core.telegram.org/bots/api#botcommand) on success. If commands
+// language. Returns an Array of BotCommand (https://core.telegram.org/bots/api#botcommand) objects. If commands
 // aren't set, an empty list is returned.
 func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
 	var botCommands []BotCommand
@@ -2273,7 +2272,7 @@ type SetChatMenuButtonParams struct {
 func (b *Bot) SetChatMenuButton(params *SetChatMenuButtonParams) error {
 	err := b.performRequest("setChatMenuButton", params)
 	if err != nil {
-		return fmt.Errorf("setChatMenuButton(): %w", err)
+		return fmt.Errorf("telego: setChatMenuButton(): %w", err)
 	}
 
 	return nil
@@ -2315,7 +2314,7 @@ type SetMyDefaultAdministratorRightsParams struct {
 func (b *Bot) SetMyDefaultAdministratorRights(params *SetMyDefaultAdministratorRightsParams) error {
 	err := b.performRequest("setMyDefaultAdministratorRights", params)
 	if err != nil {
-		return fmt.Errorf("setMyDefaultAdministratorRights(): %w", err)
+		return fmt.Errorf("telego: setMyDefaultAdministratorRights(): %w", err)
 	}
 
 	return nil
@@ -2564,7 +2563,7 @@ type DeleteMessageParams struct {
 func (b *Bot) DeleteMessage(params *DeleteMessageParams) error {
 	err := b.performRequest("deleteMessage", params)
 	if err != nil {
-		return fmt.Errorf("deleteMessage(): %w", err)
+		return fmt.Errorf("telego: deleteMessage(): %w", err)
 	}
 
 	return nil
@@ -2592,7 +2591,7 @@ type SendStickerParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -2638,6 +2637,24 @@ func (b *Bot) GetStickerSet(params *GetStickerSetParams) (*StickerSet, error) {
 	}
 
 	return stickerSet, nil
+}
+
+// GetCustomEmojiStickersParams - Represents parameters of getCustomEmojiStickers method.
+type GetCustomEmojiStickersParams struct {
+	// CustomEmojiIDs - List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
+	CustomEmojiIDs []string `json:"custom_emoji_ids"`
+}
+
+// GetCustomEmojiStickers - Use this method to get information about custom emoji stickers by their
+// identifiers. Returns an Array of Sticker (https://core.telegram.org/bots/api#sticker) objects.
+func (b *Bot) GetCustomEmojiStickers(params *GetCustomEmojiStickersParams) ([]Sticker, error) {
+	var stickers []Sticker
+	err := b.performRequest("getCustomEmojiStickers", params, &stickers)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getCustomEmojiStickers(): %w", err)
+	}
+
+	return stickers, nil
 }
 
 // UploadStickerFileParams - Represents parameters of uploadStickerFile method.
@@ -2700,11 +2717,12 @@ type CreateNewStickerSetParams struct {
 	// (https://core.telegram.org/stickers#video-sticker-requirements) for technical requirements
 	WebmSticker *InputFile `json:"webm_sticker,omitempty"`
 
+	// StickerType - Optional. Type of stickers in the set, pass “regular” or “mask”. Custom emoji
+	// sticker sets can't be created via the Bot API at the moment. By default, a regular sticker set is created.
+	StickerType string `json:"sticker_type,omitempty"`
+
 	// Emojis - One or more emoji corresponding to the sticker
 	Emojis string `json:"emojis"`
-
-	// ContainsMasks - Optional. Pass True, if a set of mask stickers should be created
-	ContainsMasks bool `json:"contains_masks,omitempty"`
 
 	// MaskPosition - Optional. A JSON-serialized object for position where the mask should be placed on faces
 	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
@@ -2732,7 +2750,7 @@ func (p *CreateNewStickerSetParams) fileParameters() map[string]telegoapi.NamedR
 func (b *Bot) CreateNewStickerSet(params *CreateNewStickerSetParams) error {
 	err := b.performRequest("createNewStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("createNewStickerSet(): %w", err)
+		return fmt.Errorf("telego: createNewStickerSet(): %w", err)
 	}
 
 	return nil
@@ -2793,7 +2811,7 @@ func (p *AddStickerToSetParams) fileParameters() map[string]telegoapi.NamedReade
 func (b *Bot) AddStickerToSet(params *AddStickerToSetParams) error {
 	err := b.performRequest("addStickerToSet", params)
 	if err != nil {
-		return fmt.Errorf("addStickerToSet(): %w", err)
+		return fmt.Errorf("telego: addStickerToSet(): %w", err)
 	}
 
 	return nil
@@ -2813,7 +2831,7 @@ type SetStickerPositionInSetParams struct {
 func (b *Bot) SetStickerPositionInSet(params *SetStickerPositionInSetParams) error {
 	err := b.performRequest("setStickerPositionInSet", params)
 	if err != nil {
-		return fmt.Errorf("setStickerPositionInSet(): %w", err)
+		return fmt.Errorf("telego: setStickerPositionInSet(): %w", err)
 	}
 
 	return nil
@@ -2830,7 +2848,7 @@ type DeleteStickerFromSetParams struct {
 func (b *Bot) DeleteStickerFromSet(params *DeleteStickerFromSetParams) error {
 	err := b.performRequest("deleteStickerFromSet", params)
 	if err != nil {
-		return fmt.Errorf("deleteStickerFromSet(): %w", err)
+		return fmt.Errorf("telego: deleteStickerFromSet(): %w", err)
 	}
 
 	return nil
@@ -2874,7 +2892,7 @@ func (p *SetStickerSetThumbParams) fileParameters() map[string]telegoapi.NamedRe
 func (b *Bot) SetStickerSetThumb(params *SetStickerSetThumbParams) error {
 	err := b.performRequest("setStickerSetThumb", params)
 	if err != nil {
-		return fmt.Errorf("setStickerSetThumb(): %w", err)
+		return fmt.Errorf("telego: setStickerSetThumb(): %w", err)
 	}
 
 	return nil
@@ -2892,7 +2910,7 @@ type AnswerInlineQueryParams struct {
 	// cached on the server. Defaults to 300.
 	CacheTime int `json:"cache_time,omitempty"`
 
-	// IsPersonal - Optional. Pass True, if results may be cached on the server side only for the user that sent
+	// IsPersonal - Optional. Pass True if results may be cached on the server side only for the user that sent
 	// the query. By default, results may be returned to any user who sends the same query
 	IsPersonal bool `json:"is_personal,omitempty"`
 
@@ -2922,7 +2940,7 @@ type AnswerInlineQueryParams struct {
 func (b *Bot) AnswerInlineQuery(params *AnswerInlineQueryParams) error {
 	err := b.performRequest("answerInlineQuery", params)
 	if err != nil {
-		return fmt.Errorf("answerInlineQuery(): %w", err)
+		return fmt.Errorf("telego: answerInlineQuery(): %w", err)
 	}
 
 	return nil
@@ -3013,26 +3031,26 @@ type SendInvoiceParams struct {
 	// PhotoHeight - Optional. Photo height
 	PhotoHeight int `json:"photo_height,omitempty"`
 
-	// NeedName - Optional. Pass True, if you require the user's full name to complete the order
+	// NeedName - Optional. Pass True if you require the user's full name to complete the order
 	NeedName bool `json:"need_name,omitempty"`
 
-	// NeedPhoneNumber - Optional. Pass True, if you require the user's phone number to complete the order
+	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order
 	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
 
-	// NeedEmail - Optional. Pass True, if you require the user's email address to complete the order
+	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order
 	NeedEmail bool `json:"need_email,omitempty"`
 
-	// NeedShippingAddress - Optional. Pass True, if you require the user's shipping address to complete the
+	// NeedShippingAddress - Optional. Pass True if you require the user's shipping address to complete the
 	// order
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True, if the user's phone number should be sent to provider
+	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to provider
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True, if the user's email address should be sent to provider
+	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to provider
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
-	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
+	// IsFlexible - Optional. Pass True if the final price depends on the shipping method
 	IsFlexible bool `json:"is_flexible,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -3045,7 +3063,7 @@ type SendInvoiceParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -3119,27 +3137,26 @@ type CreateInvoiceLinkParams struct {
 	// PhotoHeight - Optional. Photo height
 	PhotoHeight int `json:"photo_height,omitempty"`
 
-	// NeedName - Optional. Pass True, if you require the user's full name to complete the order
+	// NeedName - Optional. Pass True if you require the user's full name to complete the order
 	NeedName bool `json:"need_name,omitempty"`
 
-	// NeedPhoneNumber - Optional. Pass True, if you require the user's phone number to complete the order
+	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order
 	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
 
-	// NeedEmail - Optional. Pass True, if you require the user's email address to complete the order
+	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order
 	NeedEmail bool `json:"need_email,omitempty"`
 
-	// NeedShippingAddress - Optional. Pass True, if you require the user's shipping address to complete the
+	// NeedShippingAddress - Optional. Pass True if you require the user's shipping address to complete the
 	// order
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True, if the user's phone number should be sent to the
-	// provider
+	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to the provider
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True, if the user's email address should be sent to the provider
+	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to the provider
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
-	// IsFlexible - Optional. Pass True, if the final price depends on the shipping method
+	// IsFlexible - Optional. Pass True if the final price depends on the shipping method
 	IsFlexible bool `json:"is_flexible,omitempty"`
 }
 
@@ -3160,8 +3177,8 @@ type AnswerShippingQueryParams struct {
 	// ShippingQueryID - Unique identifier for the query to be answered
 	ShippingQueryID string `json:"shipping_query_id"`
 
-	// Ok - Specify True if delivery to the specified address is possible and False if there are any problems
-	// (for example, if delivery to the specified address is not possible)
+	// Ok - Pass True if delivery to the specified address is possible and False if there are any problems (for
+	// example, if delivery to the specified address is not possible)
 	Ok bool `json:"ok"`
 
 	// ShippingOptions - Optional. Required if ok is True. A JSON-serialized array of available shipping
@@ -3180,7 +3197,7 @@ type AnswerShippingQueryParams struct {
 func (b *Bot) AnswerShippingQuery(params *AnswerShippingQueryParams) error {
 	err := b.performRequest("answerShippingQuery", params)
 	if err != nil {
-		return fmt.Errorf("answerShippingQuery(): %w", err)
+		return fmt.Errorf("telego: answerShippingQuery(): %w", err)
 	}
 
 	return nil
@@ -3209,7 +3226,7 @@ type AnswerPreCheckoutQueryParams struct {
 func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error {
 	err := b.performRequest("answerPreCheckoutQuery", params)
 	if err != nil {
-		return fmt.Errorf("answerPreCheckoutQuery(): %w", err)
+		return fmt.Errorf("telego: answerPreCheckoutQuery(): %w", err)
 	}
 
 	return nil
@@ -3234,7 +3251,7 @@ type SetPassportDataErrorsParams struct {
 func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
 	err := b.performRequest("setPassportDataErrors", params)
 	if err != nil {
-		return fmt.Errorf("setPassportDataErrors(): %w", err)
+		return fmt.Errorf("telego: setPassportDataErrors(): %w", err)
 	}
 
 	return nil
@@ -3260,7 +3277,7 @@ type SendGameParams struct {
 	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
 	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
 
-	// AllowSendingWithoutReply - Optional. Pass True, if the message should be sent even if the specified
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
 	// replied-to message is not found
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
@@ -3290,11 +3307,11 @@ type SetGameScoreParams struct {
 	// Score - New score, must be non-negative
 	Score int `json:"score"`
 
-	// Force - Optional. Pass True, if the high score is allowed to decrease. This can be useful when fixing
+	// Force - Optional. Pass True if the high score is allowed to decrease. This can be useful when fixing
 	// mistakes or banning cheaters
 	Force bool `json:"force,omitempty"`
 
-	// DisableEditMessage - Optional. Pass True, if the game message should not be automatically edited to
+	// DisableEditMessage - Optional. Pass True if the game message should not be automatically edited to
 	// include the current scoreboard
 	DisableEditMessage bool `json:"disable_edit_message,omitempty"`
 
@@ -3341,7 +3358,7 @@ type GetGameHighScoresParams struct {
 }
 
 // GetGameHighScores - Use this method to get data for high score tables. Will return the score of the
-// specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore
+// specified user and several of their neighbors in a game. Returns an Array of GameHighScore
 // (https://core.telegram.org/bots/api#gamehighscore) objects.
 // This method will currently return scores for the target user, plus two of their closest neighbors on each
 // side. Will also return the top three users if the user and their neighbors are not among them. Please note

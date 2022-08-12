@@ -1878,6 +1878,12 @@ func (p *GetStickerSetParams) WithName(name string) *GetStickerSetParams {
 	return p
 }
 
+// WithCustomEmojiIDs adds custom emoji ids parameter
+func (p *GetCustomEmojiStickersParams) WithCustomEmojiIDs(customEmojiIDs ...string) *GetCustomEmojiStickersParams {
+	p.CustomEmojiIDs = customEmojiIDs
+	return p
+}
+
 // WithPngSticker adds png sticker parameter
 func (p *UploadStickerFileParams) WithPngSticker(pngSticker InputFile) *UploadStickerFileParams {
 	p.PngSticker = pngSticker
@@ -1914,15 +1920,15 @@ func (p *CreateNewStickerSetParams) WithWebmSticker(webmSticker *InputFile) *Cre
 	return p
 }
 
-// WithEmojis adds emojis parameter
-func (p *CreateNewStickerSetParams) WithEmojis(emojis string) *CreateNewStickerSetParams {
-	p.Emojis = emojis
+// WithStickerType adds sticker type parameter
+func (p *CreateNewStickerSetParams) WithStickerType(stickerType string) *CreateNewStickerSetParams {
+	p.StickerType = stickerType
 	return p
 }
 
-// WithContainsMasks adds contains masks parameter
-func (p *CreateNewStickerSetParams) WithContainsMasks() *CreateNewStickerSetParams {
-	p.ContainsMasks = true
+// WithEmojis adds emojis parameter
+func (p *CreateNewStickerSetParams) WithEmojis(emojis string) *CreateNewStickerSetParams {
+	p.Emojis = emojis
 	return p
 }
 
