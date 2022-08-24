@@ -2,6 +2,7 @@ package telegoutil
 
 import (
 	"io"
+	"net/url"
 	"strings"
 	"sync"
 	"testing"
@@ -50,5 +51,82 @@ func TestUpdateProcessor(t *testing.T) {
 		if count == updateCount {
 			close(updates)
 		}
+	}
+}
+
+func TestTypesConstants(t *testing.T) {
+	tests := [][]string{
+		{
+			WebAppSecret,
+		},
+		{
+			WebAppQueryID, WebAppUser, WebAppReceiver, WebAppChat, WebAppStartParam, WebAppCanSendAfter, WebAppAuthDate,
+			WebAppHash,
+		},
+	}
+
+	for _, tt := range tests {
+		assert.True(t, len(tt) > 0)
+		for _, ct := range tt {
+			assert.True(t, len(ct) > 0)
+		}
+	}
+}
+
+func TestValidateWebAppData(t *testing.T) {
+	tests := []struct {
+		name    string
+		token   string
+		data    string
+		values  url.Values
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name:  "success",
+			token: "token",
+			data:  "hash=2960d6823fe22f39b2b0b547baf7fa95a053411d4685a57a16b38cc57346a4e6&ok=true",
+			values: map[string][]string{
+				"hash": {"2960d6823fe22f39b2b0b547baf7fa95a053411d4685a57a16b38cc57346a4e6"},
+				"ok":   {"true"},
+			},
+			wantErr: assert.NoError,
+		},
+		{
+			name:    "error_invalid_query",
+			token:   "",
+			data:    "%_",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+		{
+			name:    "error_empty_hash",
+			token:   "",
+			data:    "hash=",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+		{
+			name:    "error_no_hash",
+			token:   "",
+			data:    "abc=%a2",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+		{
+			name:    "error_invalid_hash",
+			token:   "",
+			data:    "hash=test",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			values, err := ValidateWebAppData(tt.token, tt.data)
+			if !tt.wantErr(t, err) {
+				return
+			}
+			assert.Equal(t, tt.values, values)
+		})
 	}
 }
