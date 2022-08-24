@@ -434,7 +434,8 @@ func TestLabeledPrice(t *testing.T) {
 }
 
 func TestShippingOption(t *testing.T) {
-	s := ShippingOption(text1, prices...)
+	s := ShippingOption(text1, text2, prices...)
 	assert.Equal(t, text1, s.ID)
+	assert.Equal(t, text2, s.Title)
 	assert.Equal(t, prices, s.Prices)
 }

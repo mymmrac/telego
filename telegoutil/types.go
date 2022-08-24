@@ -539,9 +539,10 @@ func LabeledPrice(label string, amount int) telego.LabeledPrice {
 }
 
 // ShippingOption creates telego.ShippingOption with required parameters
-func ShippingOption(id string, prices ...telego.LabeledPrice) telego.ShippingOption {
+func ShippingOption(id, title string, prices ...telego.LabeledPrice) telego.ShippingOption {
 	return telego.ShippingOption{
 		ID:     id,
+		Title:  title,
 		Prices: prices,
 	}
 }
