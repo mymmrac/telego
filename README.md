@@ -1,6 +1,7 @@
 # Telego • Go Telegram Bot API
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego)
+[![Telego Docs](https://img.shields.io/static/v1?label=Telego&message=docs&color=8ed6fb&logo=hugo)](https://telego.ml)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/mymmrac/telego?logo=go)](go.mod)
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
 <br>
@@ -26,6 +27,8 @@ Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] im
 The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
 have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
+
+For more documentation, see docs at [telego.ml](https://telego.ml).
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and
 > [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
