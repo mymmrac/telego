@@ -41,6 +41,7 @@ type Bot struct {
 	constructor telegoapi.RequestConstructor
 
 	healthCheckRequested bool
+	warningAsErrors      bool
 
 	longPullingContext *longPullingContext
 	webhookContext     *webhookContext
@@ -110,6 +111,10 @@ func (b *Bot) performRequest(methodName string, parameters interface{}, vs ...in
 		if unmarshalErr != nil {
 			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(vs[len(vs)-1]), unmarshalErr)
 		}
+	}
+
+	if b.warningAsErrors && resp.Error != nil {
+		return resp.Error
 	}
 
 	return nil

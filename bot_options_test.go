@@ -174,3 +174,12 @@ func TestWithHealthCheck(t *testing.T) {
 
 	assert.True(t, bot.healthCheckRequested)
 }
+
+func TestWithWarnings(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithWarnings()(bot)
+	assert.NoError(t, err)
+
+	assert.True(t, bot.warningAsErrors)
+}

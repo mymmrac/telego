@@ -21,12 +21,12 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 21
+const testCase = 28
 
 func main() {
 	testToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(testToken, telego.WithDefaultDebugLogger())
+	bot, err := telego.NewBot(testToken, telego.WithDefaultDebugLogger(), telego.WithWarnings())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -106,18 +106,18 @@ func main() {
 		p := &telego.SendMediaGroupParams{
 			ChatID: myID,
 			Media: []telego.InputMedia{
-				//&telego.InputMediaDocument{
+				// &telego.InputMediaDocument{
 				//	Type:  "document",
 				//	Media: telego.InputFile{File: mustOpen("doc.txt")},
-				//},
+				// },
 				&telego.InputMediaPhoto{
 					Type:  "photo",
 					Media: telego.InputFile{URL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzJZk-efp0id1yxpUHPYwJ1t8vuAwMI_SXfh77dRFWsg1X1ancplws5_DH_WSJ52MHyH8&usqp=CAU"},
 				},
-				//telego.InputMediaPhoto{
+				// telego.InputMediaPhoto{
 				//	Type:  "photo",
 				//	Media: telego.InputFile{URL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqSw1_1Ar_u3f2lVhYkhz-R0KaaZtDKwx6Y5H1HGceAmx0sqexKzXkSawLG5PRoRKcy6A&usqp=CAU"},
-				//},
+				// },
 				&telego.InputMediaPhoto{
 					Type:  "photo",
 					Media: telego.InputFile{File: mustOpen("img1.jpg")},
@@ -662,6 +662,9 @@ func main() {
 
 		_, err = bot.SendVideoNote(tu.VideoNote(myID, note))
 		assert(err == nil, err)
+	case 28:
+		err = bot.DeleteWebhook(nil)
+		fmt.Println(err)
 	}
 }
 

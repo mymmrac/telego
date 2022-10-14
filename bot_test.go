@@ -483,6 +483,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 	})
 }
 
+//nolint:funlen
 func TestBot_performRequest(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -587,6 +588,27 @@ func TestBot_performRequest(t *testing.T) {
 		err := m.Bot.performRequest(methodName, params, &stringResult)
 		assert.Error(t, err)
 		assert.Equal(t, "", stringResult)
+	})
+
+	t.Run("error_warning", func(t *testing.T) {
+		var result int
+
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(&ta.RequestData{}, nil).
+			Times(1)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(&ta.Response{
+				Ok:     true,
+				Result: bytes.NewBufferString("1").Bytes(),
+				Error:  &ta.Error{ErrorCode: 1},
+			}, nil)
+
+		err := m.Bot.performRequest(methodName, params, &result)
+		assert.Equal(t, &ta.Error{ErrorCode: 1}, err)
+		assert.Equal(t, 1, result)
 	})
 }
 

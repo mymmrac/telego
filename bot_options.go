@@ -106,3 +106,12 @@ func WithHealthCheck() BotOption {
 		return nil
 	}
 }
+
+// WithWarnings treat Telegram warnings as errors
+// Note: Any request that has non-empty error will return both result and error
+func WithWarnings() BotOption {
+	return func(bot *Bot) error {
+		bot.warningAsErrors = true
+		return nil
+	}
+}
