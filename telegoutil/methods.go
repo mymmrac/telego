@@ -1,12 +1,24 @@
 package telegoutil
 
-import "github.com/mymmrac/telego"
+import (
+	"fmt"
+
+	"github.com/mymmrac/telego"
+)
 
 // Message creates telego.SendMessageParams with required parameters
 func Message(id telego.ChatID, text string) *telego.SendMessageParams {
 	return &telego.SendMessageParams{
 		ChatID: id,
 		Text:   text,
+	}
+}
+
+// Messagef creates telego.SendMessageParams with required parameters and provided format
+func Messagef(id telego.ChatID, format string, args ...interface{}) *telego.SendMessageParams {
+	return &telego.SendMessageParams{
+		ChatID: id,
+		Text:   fmt.Sprintf(format, args...),
 	}
 }
 

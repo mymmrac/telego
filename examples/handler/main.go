@@ -34,9 +34,9 @@ func main() {
 	// Register new handler with match on command `/start`
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		// Send message
-		_, _ = bot.SendMessage(tu.Message(
+		_, _ = bot.SendMessage(tu.Messagef(
 			tu.ID(update.Message.Chat.ID),
-			fmt.Sprintf("Hello %s!", update.Message.From.FirstName),
+			"Hello %s!", update.Message.From.FirstName,
 		))
 	}, th.CommandEqual("start"))
 

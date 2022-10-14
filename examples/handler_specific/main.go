@@ -34,9 +34,9 @@ func main() {
 	// Register new handler with match on command `/start`
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 		// Send message with inline keyboard
-		_, _ = bot.SendMessage(tu.Message(
+		_, _ = bot.SendMessage(tu.Messagef(
 			tu.ID(message.Chat.ID),
-			fmt.Sprintf("Hello %s!", message.From.FirstName),
+			"Hello %s!", message.From.FirstName,
 		).WithReplyMarkup(tu.InlineKeyboard(
 			tu.InlineKeyboardRow(tu.InlineKeyboardButton("Go!").WithCallbackData("go"))),
 		))

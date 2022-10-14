@@ -19,6 +19,8 @@ var (
 	text4 = "test4"
 	text5 = "test5"
 
+	format1 = "%s %s"
+
 	texts = []string{
 		text2, text3,
 	}
@@ -119,6 +121,12 @@ func TestMessage(t *testing.T) {
 	m := Message(id1, text1)
 	assert.Equal(t, id1, m.ChatID)
 	assert.Equal(t, text1, m.Text)
+}
+
+func TestMessagef(t *testing.T) {
+	m := Messagef(id1, format1, text1, text2)
+	assert.Equal(t, id1, m.ChatID)
+	assert.Equal(t, text1+" "+text2, m.Text)
 }
 
 func TestMessageWithEntities(t *testing.T) {
