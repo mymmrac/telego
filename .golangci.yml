@@ -20,6 +20,7 @@ linters:
   enable-all: true
   disable:
     - deadcode # Finds unused code
+    - dupword # checks for duplicate words in the source code
     - execinquery # execinquery is a linter about query string checker in Query function which reads your Go src files and warning it finds
     - exhaustivestruct # Checks if all struct's fields are initialized
     - exhaustruct # Checks if all structure fields are initialized
