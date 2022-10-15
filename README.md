@@ -85,6 +85,7 @@ More examples can be seen here:
 - [Predicate as middleware](examples/middleware_with_predicates/main.go)
 - [Update processor](examples/update_processor/main.go)
 - [Message entities](examples/message_entity/main.go)
+- [Empty values](examples/empty_values/main.go)
 
 </details>
 
@@ -503,7 +504,7 @@ func main() {
 		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
 
 		// Answer callback query
-      _ = bot.AnswerCallbackQuery(tu.CallbackQuery(query.ID).WithText("Done"))
+		_ = bot.AnswerCallbackQuery(tu.CallbackQuery(query.ID).WithText("Done"))
 	}, th.AnyCallbackQueryWithMessage(), th.CallbackDataEqual("go"))
 
 	// ... start bot handler
