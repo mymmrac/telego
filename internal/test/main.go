@@ -21,12 +21,13 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 28
+const testCase = 29
 
 func main() {
 	testToken := os.Getenv("TOKEN")
 
-	bot, err := telego.NewBot(testToken, telego.WithDefaultDebugLogger(), telego.WithWarnings())
+	bot, err := telego.NewBot(testToken,
+		telego.WithDefaultDebugLogger(), telego.WithWarnings(), telego.WithEmptyValues())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -665,6 +666,19 @@ func main() {
 	case 28:
 		err = bot.DeleteWebhook(nil)
 		fmt.Println(err)
+	case 29:
+		_, err = bot.SendMessage(
+			tu.Message(myID, "Hmm").
+				WithReplyMarkup(
+					tu.InlineKeyboard(
+						tu.InlineKeyboardRow(
+							tu.InlineKeyboardButton("OK").
+								WithSwitchInlineQueryCurrentChat(bot.EmptyValue()),
+						),
+					),
+				),
+		)
+		assert(err == nil, err)
 	}
 }
 

@@ -183,3 +183,33 @@ func TestWithWarnings(t *testing.T) {
 
 	assert.True(t, bot.warningAsErrors)
 }
+
+func TestWithEmptyValues(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithEmptyValues()(bot)
+	assert.NoError(t, err)
+
+	assert.Equal(t, defaultBotEmptyValue, bot.replaceToEmpty)
+}
+
+func TestWithCustomEmptyValues(t *testing.T) {
+	bot := &Bot{}
+
+	t.Run("success", func(t *testing.T) {
+		err := WithCustomEmptyValues(defaultBotEmptyValue)(bot)
+		assert.NoError(t, err)
+
+		assert.Equal(t, defaultBotEmptyValue, bot.replaceToEmpty)
+	})
+
+	t.Run("error_empty", func(t *testing.T) {
+		err := WithCustomEmptyValues("")(bot)
+		assert.Error(t, err)
+	})
+
+	t.Run("error_marshal_does_not_match", func(t *testing.T) {
+		err := WithCustomEmptyValues(string([]byte{1}))(bot)
+		assert.Error(t, err)
+	})
+}
