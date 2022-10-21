@@ -28,7 +28,7 @@ The goal of this library was to create API with same types and methods as actual
 have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
 telegram.
 
-For more documentation, see docs at [telego.ml](https://telego.ml).
+For more detailed documentation, see docs at [telego.ml](https://telego.ml).
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and
 > [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
@@ -90,6 +90,24 @@ More examples can be seen here:
 </details>
 
 > Note: Error handling may be missing in examples, but I strongly recommend handling all errors.
+
+Generally, useful information about Telegram Bots and their features:
+
+<details>
+<summary>Click to show • hide</summary>
+
+- [:page_facing_up: Telegram Bot API](https://core.telegram.org/bots/api) • Telegram documentation of Bot API (full
+  reference)
+- [:jigsaw: Telegram Bot Fundamentals](https://core.telegram.org/bots) • Bots: An introduction for developers
+- [:star2: Telegram Bot Features](https://core.telegram.org/bots/features) • Describes individual bot elements and
+  features in detail
+- [:headphones: Telegram Bot Webhooks](https://core.telegram.org/bots/webhooks) • Marvin's Marvellous Guide to All
+  Things Webhook
+- [:moneybag: Telegram Bot Payments](https://core.telegram.org/bots/payments) • Describes payment system and payment
+  lifecycle
+- [:iphone: Telegram Bot WebApps](https://core.telegram.org/bots/webapps) • Describes WebApps and interactions with them
+
+</details>
 
 ### :jigsaw: Basic setup
 
