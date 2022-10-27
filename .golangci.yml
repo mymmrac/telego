@@ -38,12 +38,15 @@ linters:
     - nonamedreturns # Reports all named returns
     - nosnakecase # nosnakecase is a linter that detects snake case of variable naming and function name.
     - paralleltest # paralleltest detects missing usage of t.Parallel() method in your Go test
+    - rowserrcheck # checks whether Err of rows is checked successfully
     - scopelint # Scopelint checks for unpinned variables in go programs
     - structcheck # Finds unused struct fields
+    - sqlclosecheck # Checks that sql.Rows and sql.Stmt are closed
     - tagliatelle # Checks the struct tags.
     - testpackage # linter that makes you use a separate _test package
     - varcheck # Finds unused global variables and constants
     - varnamelen # checks that the length of a variable's name matches its scope
+    - wastedassign # wastedassign finds wasted assignment statements
     - wrapcheck # Checks that errors returned from external packages are wrapped
     - wsl # Whitespace Linter - Forces you to use empty lines!
 

@@ -1,6 +1,6 @@
 module github.com/mymmrac/telego
 
-go 1.17
+go 1.19
 
 require (
 	github.com/fasthttp/router v1.4.12
