@@ -1,4 +1,4 @@
-# Adds $GOPATH/bit to $PATH
+# Adds $GOPATH/bin to $PATH
 export PATH := $(PATH):$(shell go env GOPATH)/bin
 
 help: ## Display this help message
