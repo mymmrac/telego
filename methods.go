@@ -201,6 +201,10 @@ type SendMessageParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
 	// Text - Text of the message to be sent, 1-4096 characters after entities parsing
 	Text string `json:"text"`
 
@@ -230,9 +234,9 @@ type SendMessageParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -260,6 +264,10 @@ type ForwardMessageParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original message was sent (or channel username in
 	// the format @channel_username)
@@ -293,6 +301,10 @@ type CopyMessageParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original message was sent (or channel username in
 	// the format @channel_username)
@@ -328,9 +340,9 @@ type CopyMessageParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -355,6 +367,10 @@ type SendPhotoParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new
@@ -390,9 +406,9 @@ type SendPhotoParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -419,6 +435,10 @@ type SendAudioParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or
@@ -469,9 +489,9 @@ type SendAudioParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -506,6 +526,10 @@ type SendDocumentParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
@@ -552,9 +576,9 @@ type SendDocumentParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -587,6 +611,10 @@ type SendVideoParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
@@ -641,9 +669,9 @@ type SendVideoParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -677,6 +705,10 @@ type SendAnimationParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
@@ -728,9 +760,9 @@ type SendAnimationParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -763,6 +795,10 @@ type SendVoiceParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
@@ -799,9 +835,9 @@ type SendVoiceParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -832,6 +868,10 @@ type SendVideoNoteParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
@@ -867,9 +907,9 @@ type SendVideoNoteParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -902,6 +942,10 @@ type SendMediaGroupParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Media - A JSON-serialized array describing messages to be sent, must include 2-10 items
 	Media []InputMedia `json:"media"`
@@ -955,6 +999,10 @@ type SendLocationParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
 	// Latitude - Latitude of the location
 	Latitude float64 `json:"latitude"`
 
@@ -991,9 +1039,9 @@ type SendLocationParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1040,7 +1088,7 @@ type EditMessageLiveLocationParams struct {
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1075,7 +1123,7 @@ type StopMessageLiveLocationParams struct {
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1098,6 +1146,10 @@ type SendVenueParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Latitude - Latitude of the venue
 	Latitude float64 `json:"latitude"`
@@ -1140,9 +1192,9 @@ type SendVenueParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1163,6 +1215,10 @@ type SendContactParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// PhoneNumber - Contact's phone number
 	PhoneNumber string `json:"phone_number"`
@@ -1192,9 +1248,9 @@ type SendContactParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove keyboard or to force a reply from the
-	// user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1215,6 +1271,10 @@ type SendPollParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Question - Poll question, 1-300 characters
 	Question string `json:"question"`
@@ -1275,9 +1335,9 @@ type SendPollParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1298,6 +1358,10 @@ type SendDiceParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Emoji - Optional. Emoji on which the dice throw animation is based. Currently, must be one of “🎲”,
 	// “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”,
@@ -1320,9 +1384,9 @@ type SendDiceParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1574,6 +1638,10 @@ type PromoteChatMemberParams struct {
 
 	// CanPinMessages - Optional. Pass True if the administrator can pin messages, supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+
+	// CanManageTopics - Optional. Pass True if the user is allowed to create, rename, close, and reopen forum
+	// topics, supergroups only
+	CanManageTopics bool `json:"can_manage_topics,omitempty"`
 }
 
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
@@ -1890,7 +1958,7 @@ type SetChatTitleParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// Title - New chat title, 1-255 characters
+	// Title - New chat title, 1-128 characters
 	Title string `json:"title"`
 }
 
@@ -2142,6 +2210,169 @@ func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
 	return nil
 }
 
+// GetForumTopicIconStickers - Use this method to get custom emoji stickers, which can be used as a forum
+// topic icon by any user. Requires no parameters. Returns an Array of Sticker
+// (https://core.telegram.org/bots/api#sticker) objects.
+func (b *Bot) GetForumTopicIconStickers() ([]Sticker, error) {
+	var stickers []Sticker
+	err := b.performRequest("getForumTopicIconStickers", nil, &stickers)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getForumTopicIconStickers(): %w", err)
+	}
+
+	return stickers, nil
+}
+
+// CreateForumTopicParams - Represents parameters of createForumTopic method.
+type CreateForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// Name - Topic name, 1-128 characters
+	Name string `json:"name"`
+
+	// IconColor - Optional. Color of the topic icon in RGB format. Currently, must be one of 0x6FB9F0,
+	// 0xFFD67E, 0xCB86DB, 0x8EEE98, 0xFF93B2, or 0xFB6F5F
+	IconColor int `json:"icon_color,omitempty"`
+
+	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown as the topic icon. Use
+	// getForumTopicIconStickers (https://core.telegram.org/bots/api#getforumtopiciconstickers) to get all allowed
+	// custom emoji identifiers.
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+}
+
+// CreateForumTopic - Use this method to create a topic in a forum supergroup chat. The bot must be an
+// administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns
+// information about the created topic as a ForumTopic (https://core.telegram.org/bots/api#forumtopic) object.
+func (b *Bot) CreateForumTopic(params *CreateForumTopicParams) (*ForumTopic, error) {
+	var forumTopic *ForumTopic
+	err := b.performRequest("createForumTopic", params, &forumTopic)
+	if err != nil {
+		return nil, fmt.Errorf("telego: createForumTopic(): %w", err)
+	}
+
+	return forumTopic, nil
+}
+
+// EditForumTopicParams - Represents parameters of editForumTopic method.
+type EditForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Unique identifier for the target message thread of the forum topic
+	MessageThreadID int `json:"message_thread_id"`
+
+	// Name - New topic name, 1-128 characters
+	Name string `json:"name"`
+
+	// IconCustomEmojiID - New unique identifier of the custom emoji shown as the topic icon. Use
+	// getForumTopicIconStickers (https://core.telegram.org/bots/api#getforumtopiciconstickers) to get all allowed
+	// custom emoji identifiers
+	IconCustomEmojiID string `json:"icon_custom_emoji_id"`
+}
+
+// EditForumTopic - Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must
+// be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless
+// it is the creator of the topic. Returns True on success.
+func (b *Bot) EditForumTopic(params *EditForumTopicParams) error {
+	err := b.performRequest("editForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: editForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// CloseForumTopicParams - Represents parameters of closeForumTopic method.
+type CloseForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Unique identifier for the target message thread of the forum topic
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+// CloseForumTopic - Use this method to close an open topic in a forum supergroup chat. The bot must be an
+// administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless
+// it is the creator of the topic. Returns True on success.
+func (b *Bot) CloseForumTopic(params *CloseForumTopicParams) error {
+	err := b.performRequest("closeForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: closeForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// ReopenForumTopicParams - Represents parameters of reopenForumTopic method.
+type ReopenForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Unique identifier for the target message thread of the forum topic
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+// ReopenForumTopic - Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an
+// administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless
+// it is the creator of the topic. Returns True on success.
+func (b *Bot) ReopenForumTopic(params *ReopenForumTopicParams) error {
+	err := b.performRequest("reopenForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: reopenForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// DeleteForumTopicParams - Represents parameters of deleteForumTopic method.
+type DeleteForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Unique identifier for the target message thread of the forum topic
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+// DeleteForumTopic - Use this method to delete a forum topic along with all its messages in a forum
+// supergroup chat. The bot must be an administrator in the chat for this to work and must have the
+// can_delete_messages administrator rights. Returns True on success.
+func (b *Bot) DeleteForumTopic(params *DeleteForumTopicParams) error {
+	err := b.performRequest("deleteForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// UnpinAllForumTopicMessagesParams - Represents parameters of unpinAllForumTopicMessages method.
+type UnpinAllForumTopicMessagesParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Unique identifier for the target message thread of the forum topic
+	MessageThreadID int `json:"message_thread_id"`
+}
+
+// UnpinAllForumTopicMessages - Use this method to clear the list of pinned messages in a forum topic. The
+// bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator
+// right in the supergroup. Returns True on success.
+func (b *Bot) UnpinAllForumTopicMessages(params *UnpinAllForumTopicMessagesParams) error {
+	err := b.performRequest("unpinAllForumTopicMessages", params)
+	if err != nil {
+		return fmt.Errorf("telego: unpinAllForumTopicMessages(): %w", err)
+	}
+
+	return nil
+}
+
 // AnswerCallbackQueryParams - Represents parameters of answerCallbackQuery method.
 type AnswerCallbackQueryParams struct {
 	// CallbackQueryID - Unique identifier for the query to be answered
@@ -2168,8 +2399,8 @@ type AnswerCallbackQueryParams struct {
 }
 
 // AnswerCallbackQuery - Use this method to send answers to callback queries sent from inline keyboards
-// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). The answer will be displayed to
-// the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+// (https://core.telegram.org/bots/features#inline-keyboards). The answer will be displayed to the user as a
+// notification at the top of the chat screen or as an alert. On success, True is returned.
 // Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first
 // create a game for your bot via @BotFather (https://t.me/botfather) and accept the terms. Otherwise, you may
 // use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
@@ -2197,9 +2428,9 @@ type SetMyCommandsParams struct {
 	LanguageCode string `json:"language_code,omitempty"`
 }
 
-// SetMyCommands - Use this method to change the list of the bot's commands. See
-// https://core.telegram.org/bots#commands (https://core.telegram.org/bots#commands) for more details about bot
-// commands. Returns True on success.
+// SetMyCommands - Use this method to change the list of the bot's commands. See this manual
+// (https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns True on
+// success.
 func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
 	err := b.performRequest("setMyCommands", params)
 	if err != nil {
@@ -2310,7 +2541,7 @@ type SetMyDefaultAdministratorRightsParams struct {
 
 // SetMyDefaultAdministratorRights - Use this method to change the default administrator rights requested by
 // the bot when it's added as an administrator to groups or channels. These rights will be suggested to users,
-// but they are free to modify the list before adding the bot. Returns True on success.
+// but they are are free to modify the list before adding the bot. Returns True on success.
 func (b *Bot) SetMyDefaultAdministratorRights(params *SetMyDefaultAdministratorRightsParams) error {
 	err := b.performRequest("setMyDefaultAdministratorRights", params)
 	if err != nil {
@@ -2369,7 +2600,7 @@ type EditMessageTextParams struct {
 	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2412,7 +2643,7 @@ type EditMessageCaptionParams struct {
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2447,7 +2678,7 @@ type EditMessageMediaParams struct {
 	Media InputMedia `json:"media"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2495,7 +2726,7 @@ type EditMessageReplyMarkupParams struct {
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2523,7 +2754,7 @@ type StopPollParams struct {
 	MessageID int `json:"message_id"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new message inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2552,6 +2783,7 @@ type DeleteMessageParams struct {
 // DeleteMessage - Use this method to delete a message, including service messages, with the following
 // limitations:
 // - A message can only be deleted if it was sent less than 48 hours ago.
+// - Service messages about a supergroup, channel, or forum topic creation can't be deleted.
 // - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
 // - Bots can delete outgoing messages in private chats, groups, and supergroups.
 // - Bots can delete incoming messages in private chats.
@@ -2575,6 +2807,10 @@ type SendStickerParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a
 	// new one using multipart/form-data. More information on Sending Files »
@@ -2596,9 +2832,9 @@ type SendStickerParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), custom reply keyboard
-	// (https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from
-	// the user.
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2923,9 +3159,9 @@ type AnswerInlineQueryParams struct {
 	// user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
 	SwitchPmText string `json:"switch_pm_text,omitempty"`
 
-	// SwitchPmParameter - Optional. Deep-linking (https://core.telegram.org/bots#deep-linking) parameter for
-	// the /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9,
-	// _ and - are allowed.
+	// SwitchPmParameter - Optional. Deep-linking (https://core.telegram.org/bots/features#deep-linking)
+	// parameter for the /start message sent to the bot when user presses the switch button. 1-64 characters, only
+	// A-Z, a-z, 0-9, _ and - are allowed.
 	// Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account
 	// to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above
 	// the results, or even before showing any. The user presses the button, switches to a private chat with the bot
@@ -2974,6 +3210,10 @@ type SendInvoiceParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Title - Product name, 1-32 characters
 	Title string `json:"title"`
@@ -3068,8 +3308,8 @@ type SendInvoiceParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). If empty, one 'Pay total price'
-	// button will be shown. If not empty, the first button must be a Pay button.
+	// (https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Pay total price' button will be
+	// shown. If not empty, the first button must be a Pay button.
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -3263,6 +3503,10 @@ type SendGameParams struct {
 	// Note: Should be int64 not ChatID according to documentation (https://core.telegram.org/bots/api#sendgame)
 	ChatID int64 `json:"chat_id"`
 
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
 	// GameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games
 	// via @BotFather (https://t.me/botfather).
 	GameShortName string `json:"game_short_name"`
@@ -3282,8 +3526,8 @@ type SendGameParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). If empty, one 'Play game_title'
-	// button will be shown. If not empty, the first button must launch the game.
+	// (https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game_title' button will be
+	// shown. If not empty, the first button must launch the game.
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 

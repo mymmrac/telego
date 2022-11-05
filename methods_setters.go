@@ -78,6 +78,12 @@ func (p *SendMessageParams) WithChatID(chatID ChatID) *SendMessageParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendMessageParams) WithMessageThreadID(messageThreadID int) *SendMessageParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithText adds text parameter
 func (p *SendMessageParams) WithText(text string) *SendMessageParams {
 	p.Text = text
@@ -138,6 +144,12 @@ func (p *ForwardMessageParams) WithChatID(chatID ChatID) *ForwardMessageParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *ForwardMessageParams) WithMessageThreadID(messageThreadID int) *ForwardMessageParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithFromChatID adds from chat ID parameter
 func (p *ForwardMessageParams) WithFromChatID(fromChatID ChatID) *ForwardMessageParams {
 	p.FromChatID = fromChatID
@@ -165,6 +177,12 @@ func (p *ForwardMessageParams) WithMessageID(messageID int) *ForwardMessageParam
 // WithChatID adds chat ID parameter
 func (p *CopyMessageParams) WithChatID(chatID ChatID) *CopyMessageParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *CopyMessageParams) WithMessageThreadID(messageThreadID int) *CopyMessageParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -234,6 +252,12 @@ func (p *SendPhotoParams) WithChatID(chatID ChatID) *SendPhotoParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendPhotoParams) WithMessageThreadID(messageThreadID int) *SendPhotoParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithPhoto adds photo parameter
 func (p *SendPhotoParams) WithPhoto(photo InputFile) *SendPhotoParams {
 	p.Photo = photo
@@ -291,6 +315,12 @@ func (p *SendPhotoParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendPhotoPar
 // WithChatID adds chat ID parameter
 func (p *SendAudioParams) WithChatID(chatID ChatID) *SendAudioParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendAudioParams) WithMessageThreadID(messageThreadID int) *SendAudioParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -378,6 +408,12 @@ func (p *SendDocumentParams) WithChatID(chatID ChatID) *SendDocumentParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendDocumentParams) WithMessageThreadID(messageThreadID int) *SendDocumentParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithDocument adds document parameter
 func (p *SendDocumentParams) WithDocument(document InputFile) *SendDocumentParams {
 	p.Document = document
@@ -447,6 +483,12 @@ func (p *SendDocumentParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendDocum
 // WithChatID adds chat ID parameter
 func (p *SendVideoParams) WithChatID(chatID ChatID) *SendVideoParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendVideoParams) WithMessageThreadID(messageThreadID int) *SendVideoParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -540,6 +582,12 @@ func (p *SendAnimationParams) WithChatID(chatID ChatID) *SendAnimationParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendAnimationParams) WithMessageThreadID(messageThreadID int) *SendAnimationParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithAnimation adds animation parameter
 func (p *SendAnimationParams) WithAnimation(animation InputFile) *SendAnimationParams {
 	p.Animation = animation
@@ -624,6 +672,12 @@ func (p *SendVoiceParams) WithChatID(chatID ChatID) *SendVoiceParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendVoiceParams) WithMessageThreadID(messageThreadID int) *SendVoiceParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithVoice adds voice parameter
 func (p *SendVoiceParams) WithVoice(voice InputFile) *SendVoiceParams {
 	p.Voice = voice
@@ -690,6 +744,12 @@ func (p *SendVideoNoteParams) WithChatID(chatID ChatID) *SendVideoNoteParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendVideoNoteParams) WithMessageThreadID(messageThreadID int) *SendVideoNoteParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithVideoNote adds video note parameter
 func (p *SendVideoNoteParams) WithVideoNote(videoNote InputFile) *SendVideoNoteParams {
 	p.VideoNote = videoNote
@@ -750,6 +810,12 @@ func (p *SendMediaGroupParams) WithChatID(chatID ChatID) *SendMediaGroupParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendMediaGroupParams) WithMessageThreadID(messageThreadID int) *SendMediaGroupParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithMedia adds media parameter
 func (p *SendMediaGroupParams) WithMedia(media ...InputMedia) *SendMediaGroupParams {
 	p.Media = media
@@ -783,6 +849,12 @@ func (p *SendMediaGroupParams) WithAllowSendingWithoutReply() *SendMediaGroupPar
 // WithChatID adds chat ID parameter
 func (p *SendLocationParams) WithChatID(chatID ChatID) *SendLocationParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendLocationParams) WithMessageThreadID(messageThreadID int) *SendLocationParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -903,6 +975,12 @@ func (p *SendVenueParams) WithChatID(chatID ChatID) *SendVenueParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendVenueParams) WithMessageThreadID(messageThreadID int) *SendVenueParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithTitle adds title parameter
 func (p *SendVenueParams) WithTitle(title string) *SendVenueParams {
 	p.Title = title
@@ -975,6 +1053,12 @@ func (p *SendContactParams) WithChatID(chatID ChatID) *SendContactParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendContactParams) WithMessageThreadID(messageThreadID int) *SendContactParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithPhoneNumber adds phone number parameter
 func (p *SendContactParams) WithPhoneNumber(phoneNumber string) *SendContactParams {
 	p.PhoneNumber = phoneNumber
@@ -1032,6 +1116,12 @@ func (p *SendContactParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendContac
 // WithChatID adds chat ID parameter
 func (p *SendPollParams) WithChatID(chatID ChatID) *SendPollParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendPollParams) WithMessageThreadID(messageThreadID int) *SendPollParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -1134,6 +1224,12 @@ func (p *SendPollParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendPollParam
 // WithChatID adds chat ID parameter
 func (p *SendDiceParams) WithChatID(chatID ChatID) *SendDiceParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendDiceParams) WithMessageThreadID(messageThreadID int) *SendDiceParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -1308,6 +1404,12 @@ func (p *PromoteChatMemberParams) WithCanInviteUsers() *PromoteChatMemberParams 
 // WithCanPinMessages adds can pin messages parameter
 func (p *PromoteChatMemberParams) WithCanPinMessages() *PromoteChatMemberParams {
 	p.CanPinMessages = true
+	return p
+}
+
+// WithCanManageTopics adds can manage topics parameter
+func (p *PromoteChatMemberParams) WithCanManageTopics() *PromoteChatMemberParams {
+	p.CanManageTopics = true
 	return p
 }
 
@@ -1555,6 +1657,102 @@ func (p *SetChatStickerSetParams) WithStickerSetName(stickerSetName string) *Set
 // WithChatID adds chat ID parameter
 func (p *DeleteChatStickerSetParams) WithChatID(chatID ChatID) *DeleteChatStickerSetParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *CreateForumTopicParams) WithChatID(chatID ChatID) *CreateForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithName adds name parameter
+func (p *CreateForumTopicParams) WithName(name string) *CreateForumTopicParams {
+	p.Name = name
+	return p
+}
+
+// WithIconColor adds icon color parameter
+func (p *CreateForumTopicParams) WithIconColor(iconColor int) *CreateForumTopicParams {
+	p.IconColor = iconColor
+	return p
+}
+
+// WithIconCustomEmojiID adds icon custom emoji ID parameter
+func (p *CreateForumTopicParams) WithIconCustomEmojiID(iconCustomEmojiID string) *CreateForumTopicParams {
+	p.IconCustomEmojiID = iconCustomEmojiID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditForumTopicParams) WithChatID(chatID ChatID) *EditForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *EditForumTopicParams) WithMessageThreadID(messageThreadID int) *EditForumTopicParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithName adds name parameter
+func (p *EditForumTopicParams) WithName(name string) *EditForumTopicParams {
+	p.Name = name
+	return p
+}
+
+// WithIconCustomEmojiID adds icon custom emoji ID parameter
+func (p *EditForumTopicParams) WithIconCustomEmojiID(iconCustomEmojiID string) *EditForumTopicParams {
+	p.IconCustomEmojiID = iconCustomEmojiID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *CloseForumTopicParams) WithChatID(chatID ChatID) *CloseForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *CloseForumTopicParams) WithMessageThreadID(messageThreadID int) *CloseForumTopicParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *ReopenForumTopicParams) WithChatID(chatID ChatID) *ReopenForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *ReopenForumTopicParams) WithMessageThreadID(messageThreadID int) *ReopenForumTopicParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *DeleteForumTopicParams) WithChatID(chatID ChatID) *DeleteForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *DeleteForumTopicParams) WithMessageThreadID(messageThreadID int) *DeleteForumTopicParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *UnpinAllForumTopicMessagesParams) WithChatID(chatID ChatID) *UnpinAllForumTopicMessagesParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *UnpinAllForumTopicMessagesParams) WithMessageThreadID(messageThreadID int) *UnpinAllForumTopicMessagesParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -1836,6 +2034,12 @@ func (p *SendStickerParams) WithChatID(chatID ChatID) *SendStickerParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendStickerParams) WithMessageThreadID(messageThreadID int) *SendStickerParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithSticker adds sticker parameter
 func (p *SendStickerParams) WithSticker(sticker InputFile) *SendStickerParams {
 	p.Sticker = sticker
@@ -2061,6 +2265,12 @@ func (p *AnswerWebAppQueryParams) WithResult(result InlineQueryResult) *AnswerWe
 // WithChatID adds chat ID parameter
 func (p *SendInvoiceParams) WithChatID(chatID ChatID) *SendInvoiceParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendInvoiceParams) WithMessageThreadID(messageThreadID int) *SendInvoiceParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 
@@ -2385,6 +2595,12 @@ func (p *AnswerPreCheckoutQueryParams) WithErrorMessage(errorMessage string) *An
 // WithErrors adds errors parameter
 func (p *SetPassportDataErrorsParams) WithErrors(errors ...PassportElementError) *SetPassportDataErrorsParams {
 	p.Errors = errors
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendGameParams) WithMessageThreadID(messageThreadID int) *SendGameParams {
+	p.MessageThreadID = messageThreadID
 	return p
 }
 

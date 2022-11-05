@@ -55,130 +55,24 @@ func TestDeleteWebhookParams_Setters(t *testing.T) {
 func TestSendMessageParams_Setters(t *testing.T) {
 	s := (&SendMessageParams{}).
 		WithChatID(ChatID{ID: 1}).
+		WithMessageThreadID(1).
 		WithText("Text").
 		WithParseMode("ParseMode").
 		WithEntities([]MessageEntity{{Type: "Entities"}}...).
 		WithDisableWebPagePreview().
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(1).
+		WithReplyToMessageID(2).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendMessageParams{
 		ChatID:                   ChatID{ID: 1},
+		MessageThreadID:          1,
 		Text:                     "Text",
 		ParseMode:                "ParseMode",
 		Entities:                 []MessageEntity{{Type: "Entities"}},
 		DisableWebPagePreview:    true,
-		DisableNotification:      true,
-		ProtectContent:           true,
-		ReplyToMessageID:         1,
-		AllowSendingWithoutReply: true,
-		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
-	}, s)
-}
-
-func TestForwardMessageParams_Setters(t *testing.T) {
-	f := (&ForwardMessageParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithFromChatID(ChatID{ID: 1}).
-		WithDisableNotification().
-		WithProtectContent().
-		WithMessageID(2)
-
-	assert.Equal(t, &ForwardMessageParams{
-		ChatID:              ChatID{ID: 2},
-		FromChatID:          ChatID{ID: 1},
-		DisableNotification: true,
-		ProtectContent:      true,
-		MessageID:           2,
-	}, f)
-}
-
-func TestCopyMessageParams_Setters(t *testing.T) {
-	c := (&CopyMessageParams{}).
-		WithChatID(ChatID{ID: 3}).
-		WithFromChatID(ChatID{ID: 1}).
-		WithMessageID(2).
-		WithCaption("Caption").
-		WithParseMode("ParseMode").
-		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithDisableNotification().
-		WithProtectContent().
-		WithReplyToMessageID(3).
-		WithAllowSendingWithoutReply().
-		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
-
-	assert.Equal(t, &CopyMessageParams{
-		ChatID:                   ChatID{ID: 3},
-		FromChatID:               ChatID{ID: 1},
-		MessageID:                2,
-		Caption:                  "Caption",
-		ParseMode:                "ParseMode",
-		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
-		DisableNotification:      true,
-		ProtectContent:           true,
-		ReplyToMessageID:         3,
-		AllowSendingWithoutReply: true,
-		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
-	}, c)
-}
-
-func TestSendPhotoParams_Setters(t *testing.T) {
-	s := (&SendPhotoParams{}).
-		WithChatID(ChatID{ID: 4}).
-		WithPhoto(testInputFile).
-		WithCaption("Caption").
-		WithParseMode("ParseMode").
-		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithDisableNotification().
-		WithProtectContent().
-		WithReplyToMessageID(1).
-		WithAllowSendingWithoutReply().
-		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
-
-	assert.Equal(t, &SendPhotoParams{
-		ChatID:                   ChatID{ID: 4},
-		Photo:                    testInputFile,
-		Caption:                  "Caption",
-		ParseMode:                "ParseMode",
-		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
-		DisableNotification:      true,
-		ProtectContent:           true,
-		ReplyToMessageID:         1,
-		AllowSendingWithoutReply: true,
-		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
-	}, s)
-}
-
-func TestSendAudioParams_Setters(t *testing.T) {
-	s := (&SendAudioParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithAudio(testInputFile).
-		WithCaption("Caption").
-		WithParseMode("ParseMode").
-		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithDuration(1).
-		WithPerformer("Performer").
-		WithTitle("Title").
-		WithThumb(&testInputFile).
-		WithDisableNotification().
-		WithProtectContent().
-		WithReplyToMessageID(2).
-		WithAllowSendingWithoutReply().
-		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
-
-	assert.Equal(t, &SendAudioParams{
-		ChatID:                   ChatID{ID: 2},
-		Audio:                    testInputFile,
-		Caption:                  "Caption",
-		ParseMode:                "ParseMode",
-		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
-		Duration:                 1,
-		Performer:                "Performer",
-		Title:                    "Title",
-		Thumb:                    &testInputFile,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         2,
@@ -187,9 +81,126 @@ func TestSendAudioParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestForwardMessageParams_Setters(t *testing.T) {
+	f := (&ForwardMessageParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
+		WithFromChatID(ChatID{ID: 2}).
+		WithDisableNotification().
+		WithProtectContent().
+		WithMessageID(3)
+
+	assert.Equal(t, &ForwardMessageParams{
+		ChatID:              ChatID{ID: 3},
+		MessageThreadID:     1,
+		FromChatID:          ChatID{ID: 2},
+		DisableNotification: true,
+		ProtectContent:      true,
+		MessageID:           3,
+	}, f)
+}
+
+func TestCopyMessageParams_Setters(t *testing.T) {
+	c := (&CopyMessageParams{}).
+		WithChatID(ChatID{ID: 4}).
+		WithMessageThreadID(1).
+		WithFromChatID(ChatID{ID: 2}).
+		WithMessageID(3).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithDisableNotification().
+		WithProtectContent().
+		WithReplyToMessageID(4).
+		WithAllowSendingWithoutReply().
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &CopyMessageParams{
+		ChatID:                   ChatID{ID: 4},
+		MessageThreadID:          1,
+		FromChatID:               ChatID{ID: 2},
+		MessageID:                3,
+		Caption:                  "Caption",
+		ParseMode:                "ParseMode",
+		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		DisableNotification:      true,
+		ProtectContent:           true,
+		ReplyToMessageID:         4,
+		AllowSendingWithoutReply: true,
+		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, c)
+}
+
+func TestSendPhotoParams_Setters(t *testing.T) {
+	s := (&SendPhotoParams{}).
+		WithChatID(ChatID{ID: 5}).
+		WithMessageThreadID(1).
+		WithPhoto(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithDisableNotification().
+		WithProtectContent().
+		WithReplyToMessageID(2).
+		WithAllowSendingWithoutReply().
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendPhotoParams{
+		ChatID:                   ChatID{ID: 5},
+		MessageThreadID:          1,
+		Photo:                    testInputFile,
+		Caption:                  "Caption",
+		ParseMode:                "ParseMode",
+		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		DisableNotification:      true,
+		ProtectContent:           true,
+		ReplyToMessageID:         2,
+		AllowSendingWithoutReply: true,
+		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
+func TestSendAudioParams_Setters(t *testing.T) {
+	s := (&SendAudioParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
+		WithAudio(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithDuration(2).
+		WithPerformer("Performer").
+		WithTitle("Title").
+		WithThumb(&testInputFile).
+		WithDisableNotification().
+		WithProtectContent().
+		WithReplyToMessageID(3).
+		WithAllowSendingWithoutReply().
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendAudioParams{
+		ChatID:                   ChatID{ID: 3},
+		MessageThreadID:          1,
+		Audio:                    testInputFile,
+		Caption:                  "Caption",
+		ParseMode:                "ParseMode",
+		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		Duration:                 2,
+		Performer:                "Performer",
+		Title:                    "Title",
+		Thumb:                    &testInputFile,
+		DisableNotification:      true,
+		ProtectContent:           true,
+		ReplyToMessageID:         3,
+		AllowSendingWithoutReply: true,
+		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
 func TestSendDocumentParams_Setters(t *testing.T) {
 	s := (&SendDocumentParams{}).
-		WithChatID(ChatID{ID: 3}).
+		WithChatID(ChatID{ID: 4}).
+		WithMessageThreadID(1).
 		WithDocument(testInputFile).
 		WithThumb(&testInputFile).
 		WithCaption("Caption").
@@ -198,12 +209,13 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		WithDisableContentTypeDetection().
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(1).
+		WithReplyToMessageID(2).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendDocumentParams{
-		ChatID:                      ChatID{ID: 3},
+		ChatID:                      ChatID{ID: 4},
+		MessageThreadID:             1,
 		Document:                    testInputFile,
 		Thumb:                       &testInputFile,
 		Caption:                     "Caption",
@@ -212,7 +224,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		DisableContentTypeDetection: true,
 		DisableNotification:         true,
 		ProtectContent:              true,
-		ReplyToMessageID:            1,
+		ReplyToMessageID:            2,
 		AllowSendingWithoutReply:    true,
 		ReplyMarkup:                 &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -220,11 +232,12 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 
 func TestSendVideoParams_Setters(t *testing.T) {
 	s := (&SendVideoParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
 		WithVideo(testInputFile).
-		WithDuration(1).
-		WithWidth(2).
-		WithHeight(3).
+		WithDuration(2).
+		WithWidth(3).
+		WithHeight(4).
 		WithThumb(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -232,16 +245,17 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithSupportsStreaming().
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(4).
+		WithReplyToMessageID(5).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVideoParams{
-		ChatID:                   ChatID{ID: 2},
+		ChatID:                   ChatID{ID: 3},
+		MessageThreadID:          1,
 		Video:                    testInputFile,
-		Duration:                 1,
-		Width:                    2,
-		Height:                   3,
+		Duration:                 2,
+		Width:                    3,
+		Height:                   4,
 		Thumb:                    &testInputFile,
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
@@ -249,7 +263,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		SupportsStreaming:        true,
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         4,
+		ReplyToMessageID:         5,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -257,34 +271,36 @@ func TestSendVideoParams_Setters(t *testing.T) {
 
 func TestSendAnimationParams_Setters(t *testing.T) {
 	s := (&SendAnimationParams{}).
-		WithChatID(ChatID{ID: 5}).
+		WithChatID(ChatID{ID: 6}).
+		WithMessageThreadID(1).
 		WithAnimation(testInputFile).
-		WithDuration(1).
-		WithWidth(2).
-		WithHeight(3).
+		WithDuration(2).
+		WithWidth(3).
+		WithHeight(4).
 		WithThumb(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(4).
+		WithReplyToMessageID(5).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendAnimationParams{
-		ChatID:                   ChatID{ID: 5},
+		ChatID:                   ChatID{ID: 6},
+		MessageThreadID:          1,
 		Animation:                testInputFile,
-		Duration:                 1,
-		Width:                    2,
-		Height:                   3,
+		Duration:                 2,
+		Width:                    3,
+		Height:                   4,
 		Thumb:                    &testInputFile,
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
 		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         4,
+		ReplyToMessageID:         5,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -292,52 +308,27 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 
 func TestSendVoiceParams_Setters(t *testing.T) {
 	s := (&SendVoiceParams{}).
-		WithChatID(ChatID{ID: 5}).
+		WithChatID(ChatID{ID: 6}).
+		WithMessageThreadID(1).
 		WithVoice(testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithDuration(1).
-		WithDisableNotification().
-		WithProtectContent().
-		WithReplyToMessageID(2).
-		WithAllowSendingWithoutReply().
-		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
-
-	assert.Equal(t, &SendVoiceParams{
-		ChatID:                   ChatID{ID: 5},
-		Voice:                    testInputFile,
-		Caption:                  "Caption",
-		ParseMode:                "ParseMode",
-		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
-		Duration:                 1,
-		DisableNotification:      true,
-		ProtectContent:           true,
-		ReplyToMessageID:         2,
-		AllowSendingWithoutReply: true,
-		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
-	}, s)
-}
-
-func TestSendVideoNoteParams_Setters(t *testing.T) {
-	s := (&SendVideoNoteParams{}).
-		WithChatID(ChatID{ID: 3}).
-		WithVideoNote(testInputFile).
-		WithDuration(1).
-		WithLength(2).
-		WithThumb(&testInputFile).
+		WithDuration(2).
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(3).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
-	assert.Equal(t, &SendVideoNoteParams{
-		ChatID:                   ChatID{ID: 3},
-		VideoNote:                testInputFile,
-		Duration:                 1,
-		Length:                   2,
-		Thumb:                    &testInputFile,
+	assert.Equal(t, &SendVoiceParams{
+		ChatID:                   ChatID{ID: 6},
+		MessageThreadID:          1,
+		Voice:                    testInputFile,
+		Caption:                  "Caption",
+		ParseMode:                "ParseMode",
+		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		Duration:                 2,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         3,
@@ -346,42 +337,27 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 	}, s)
 }
 
-func TestSendMediaGroupParams_Setters(t *testing.T) {
-	s := (&SendMediaGroupParams{}).
+func TestSendVideoNoteParams_Setters(t *testing.T) {
+	s := (&SendVideoNoteParams{}).
 		WithChatID(ChatID{ID: 4}).
-		WithMedia([]InputMedia{&InputMediaAnimation{Type: "Media"}}...).
-		WithDisableNotification().
-		WithProtectContent().
-		WithReplyToMessageID(1).
-		WithAllowSendingWithoutReply()
-
-	assert.Equal(t, &SendMediaGroupParams{
-		ChatID:                   ChatID{ID: 4},
-		Media:                    []InputMedia{&InputMediaAnimation{Type: "Media"}},
-		DisableNotification:      true,
-		ProtectContent:           true,
-		ReplyToMessageID:         1,
-		AllowSendingWithoutReply: true,
-	}, s)
-}
-
-func TestSendLocationParams_Setters(t *testing.T) {
-	s := (&SendLocationParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithLivePeriod(1).
-		WithHeading(2).
-		WithProximityAlertRadius(3).
+		WithMessageThreadID(1).
+		WithVideoNote(testInputFile).
+		WithDuration(2).
+		WithLength(3).
+		WithThumb(&testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(4).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
-	assert.Equal(t, &SendLocationParams{
-		ChatID:                   ChatID{ID: 2},
-		LivePeriod:               1,
-		Heading:                  2,
-		ProximityAlertRadius:     3,
+	assert.Equal(t, &SendVideoNoteParams{
+		ChatID:                   ChatID{ID: 4},
+		MessageThreadID:          1,
+		VideoNote:                testInputFile,
+		Duration:                 2,
+		Length:                   3,
+		Thumb:                    &testInputFile,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         4,
@@ -390,9 +366,57 @@ func TestSendLocationParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSendMediaGroupParams_Setters(t *testing.T) {
+	s := (&SendMediaGroupParams{}).
+		WithChatID(ChatID{ID: 5}).
+		WithMessageThreadID(1).
+		WithMedia([]InputMedia{&InputMediaAnimation{Type: "Media"}}...).
+		WithDisableNotification().
+		WithProtectContent().
+		WithReplyToMessageID(2).
+		WithAllowSendingWithoutReply()
+
+	assert.Equal(t, &SendMediaGroupParams{
+		ChatID:                   ChatID{ID: 5},
+		MessageThreadID:          1,
+		Media:                    []InputMedia{&InputMediaAnimation{Type: "Media"}},
+		DisableNotification:      true,
+		ProtectContent:           true,
+		ReplyToMessageID:         2,
+		AllowSendingWithoutReply: true,
+	}, s)
+}
+
+func TestSendLocationParams_Setters(t *testing.T) {
+	s := (&SendLocationParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
+		WithLivePeriod(2).
+		WithHeading(3).
+		WithProximityAlertRadius(4).
+		WithDisableNotification().
+		WithProtectContent().
+		WithReplyToMessageID(5).
+		WithAllowSendingWithoutReply().
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendLocationParams{
+		ChatID:                   ChatID{ID: 3},
+		MessageThreadID:          1,
+		LivePeriod:               2,
+		Heading:                  3,
+		ProximityAlertRadius:     4,
+		DisableNotification:      true,
+		ProtectContent:           true,
+		ReplyToMessageID:         5,
+		AllowSendingWithoutReply: true,
+		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
 func TestEditMessageLiveLocationParams_Setters(t *testing.T) {
 	e := (&EditMessageLiveLocationParams{}).
-		WithChatID(ChatID{ID: 5}).
+		WithChatID(ChatID{ID: 6}).
 		WithMessageID(1).
 		WithInlineMessageID("InlineMessageID").
 		WithHeading(2).
@@ -400,7 +424,7 @@ func TestEditMessageLiveLocationParams_Setters(t *testing.T) {
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageLiveLocationParams{
-		ChatID:               ChatID{ID: 5},
+		ChatID:               ChatID{ID: 6},
 		MessageID:            1,
 		InlineMessageID:      "InlineMessageID",
 		Heading:              2,
@@ -427,6 +451,7 @@ func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
 func TestSendVenueParams_Setters(t *testing.T) {
 	s := (&SendVenueParams{}).
 		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1).
 		WithTitle("Title").
 		WithAddress("Address").
 		WithFoursquareID("FoursquareID").
@@ -435,12 +460,13 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		WithGooglePlaceType("GooglePlaceType").
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(1).
+		WithReplyToMessageID(2).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVenueParams{
 		ChatID:                   ChatID{ID: 2},
+		MessageThreadID:          1,
 		Title:                    "Title",
 		Address:                  "Address",
 		FoursquareID:             "FoursquareID",
@@ -449,7 +475,7 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		GooglePlaceType:          "GooglePlaceType",
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         1,
+		ReplyToMessageID:         2,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -457,26 +483,28 @@ func TestSendVenueParams_Setters(t *testing.T) {
 
 func TestSendContactParams_Setters(t *testing.T) {
 	s := (&SendContactParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
 		WithPhoneNumber("PhoneNumber").
 		WithFirstName("FirstName").
 		WithLastName("LastName").
 		WithVcard("Vcard").
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(1).
+		WithReplyToMessageID(2).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendContactParams{
-		ChatID:                   ChatID{ID: 2},
+		ChatID:                   ChatID{ID: 3},
+		MessageThreadID:          1,
 		PhoneNumber:              "PhoneNumber",
 		FirstName:                "FirstName",
 		LastName:                 "LastName",
 		Vcard:                    "Vcard",
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         1,
+		ReplyToMessageID:         2,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -484,40 +512,42 @@ func TestSendContactParams_Setters(t *testing.T) {
 
 func TestSendPollParams_Setters(t *testing.T) {
 	s := (&SendPollParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
 		WithQuestion("Question").
 		WithOptions([]string{"Options"}...).
 		WithIsAnonymous().
 		WithType("Type").
 		WithAllowsMultipleAnswers().
-		WithCorrectOptionID(1).
+		WithCorrectOptionID(2).
 		WithExplanation("Explanation").
 		WithExplanationParseMode("ExplanationParseMode").
 		WithExplanationEntities([]MessageEntity{{Type: "ExplanationEntities"}}...).
-		WithOpenPeriod(2).
+		WithOpenPeriod(3).
 		WithIsClosed().
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(3).
+		WithReplyToMessageID(4).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendPollParams{
-		ChatID:                   ChatID{ID: 2},
+		ChatID:                   ChatID{ID: 3},
+		MessageThreadID:          1,
 		Question:                 "Question",
 		Options:                  []string{"Options"},
 		IsAnonymous:              true,
 		Type:                     "Type",
 		AllowsMultipleAnswers:    true,
-		CorrectOptionID:          1,
+		CorrectOptionID:          2,
 		Explanation:              "Explanation",
 		ExplanationParseMode:     "ExplanationParseMode",
 		ExplanationEntities:      []MessageEntity{{Type: "ExplanationEntities"}},
-		OpenPeriod:               2,
+		OpenPeriod:               3,
 		IsClosed:                 true,
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         3,
+		ReplyToMessageID:         4,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -525,20 +555,22 @@ func TestSendPollParams_Setters(t *testing.T) {
 
 func TestSendDiceParams_Setters(t *testing.T) {
 	s := (&SendDiceParams{}).
-		WithChatID(ChatID{ID: 4}).
+		WithChatID(ChatID{ID: 5}).
+		WithMessageThreadID(1).
 		WithEmoji("Emoji").
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(1).
+		WithReplyToMessageID(2).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendDiceParams{
-		ChatID:                   ChatID{ID: 4},
+		ChatID:                   ChatID{ID: 5},
+		MessageThreadID:          1,
 		Emoji:                    "Emoji",
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         1,
+		ReplyToMessageID:         2,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -546,11 +578,11 @@ func TestSendDiceParams_Setters(t *testing.T) {
 
 func TestSendChatActionParams_Setters(t *testing.T) {
 	s := (&SendChatActionParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 3}).
 		WithAction("Action")
 
 	assert.Equal(t, &SendChatActionParams{
-		ChatID: ChatID{ID: 2},
+		ChatID: ChatID{ID: 3},
 		Action: "Action",
 	}, s)
 }
@@ -621,7 +653,8 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		WithCanPromoteMembers().
 		WithCanChangeInfo().
 		WithCanInviteUsers().
-		WithCanPinMessages()
+		WithCanPinMessages().
+		WithCanManageTopics()
 
 	assert.Equal(t, &PromoteChatMemberParams{
 		ChatID:              ChatID{ID: 1},
@@ -636,6 +669,7 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		CanChangeInfo:       true,
 		CanInviteUsers:      true,
 		CanPinMessages:      true,
+		CanManageTopics:     true,
 	}, p)
 }
 
@@ -889,6 +923,80 @@ func TestDeleteChatStickerSetParams_Setters(t *testing.T) {
 	}, d)
 }
 
+func TestCreateForumTopicParams_Setters(t *testing.T) {
+	c := (&CreateForumTopicParams{}).
+		WithChatID(ChatID{ID: 1}).
+		WithName("Name").
+		WithIconColor(1).
+		WithIconCustomEmojiID("IconCustomEmojiID")
+
+	assert.Equal(t, &CreateForumTopicParams{
+		ChatID:            ChatID{ID: 1},
+		Name:              "Name",
+		IconColor:         1,
+		IconCustomEmojiID: "IconCustomEmojiID",
+	}, c)
+}
+
+func TestEditForumTopicParams_Setters(t *testing.T) {
+	e := (&EditForumTopicParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1).
+		WithName("Name").
+		WithIconCustomEmojiID("IconCustomEmojiID")
+
+	assert.Equal(t, &EditForumTopicParams{
+		ChatID:            ChatID{ID: 2},
+		MessageThreadID:   1,
+		Name:              "Name",
+		IconCustomEmojiID: "IconCustomEmojiID",
+	}, e)
+}
+
+func TestCloseForumTopicParams_Setters(t *testing.T) {
+	c := (&CloseForumTopicParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1)
+
+	assert.Equal(t, &CloseForumTopicParams{
+		ChatID:          ChatID{ID: 2},
+		MessageThreadID: 1,
+	}, c)
+}
+
+func TestReopenForumTopicParams_Setters(t *testing.T) {
+	r := (&ReopenForumTopicParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1)
+
+	assert.Equal(t, &ReopenForumTopicParams{
+		ChatID:          ChatID{ID: 2},
+		MessageThreadID: 1,
+	}, r)
+}
+
+func TestDeleteForumTopicParams_Setters(t *testing.T) {
+	d := (&DeleteForumTopicParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1)
+
+	assert.Equal(t, &DeleteForumTopicParams{
+		ChatID:          ChatID{ID: 2},
+		MessageThreadID: 1,
+	}, d)
+}
+
+func TestUnpinAllForumTopicMessagesParams_Setters(t *testing.T) {
+	u := (&UnpinAllForumTopicMessagesParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1)
+
+	assert.Equal(t, &UnpinAllForumTopicMessagesParams{
+		ChatID:          ChatID{ID: 2},
+		MessageThreadID: 1,
+	}, u)
+}
+
 func TestAnswerCallbackQueryParams_Setters(t *testing.T) {
 	a := (&AnswerCallbackQueryParams{}).
 		WithCallbackQueryID("CallbackQueryID").
@@ -1073,19 +1181,21 @@ func TestDeleteMessageParams_Setters(t *testing.T) {
 func TestSendStickerParams_Setters(t *testing.T) {
 	s := (&SendStickerParams{}).
 		WithChatID(ChatID{ID: 2}).
+		WithMessageThreadID(1).
 		WithSticker(testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(1).
+		WithReplyToMessageID(2).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendStickerParams{
 		ChatID:                   ChatID{ID: 2},
+		MessageThreadID:          1,
 		Sticker:                  testInputFile,
 		DisableNotification:      true,
 		ProtectContent:           true,
-		ReplyToMessageID:         1,
+		ReplyToMessageID:         2,
 		AllowSendingWithoutReply: true,
 		ReplyMarkup:              &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -1226,20 +1336,21 @@ func TestAnswerWebAppQueryParams_Setters(t *testing.T) {
 func TestSendInvoiceParams_Setters(t *testing.T) {
 	s := (&SendInvoiceParams{}).
 		WithChatID(ChatID{ID: 1}).
+		WithMessageThreadID(1).
 		WithTitle("Title").
 		WithDescription("Description").
 		WithPayload("Payload").
 		WithProviderToken("ProviderToken").
 		WithCurrency("Currency").
 		WithPrices([]LabeledPrice{{Label: "Prices"}}...).
-		WithMaxTipAmount(1).
-		WithSuggestedTipAmounts([]int{2}...).
+		WithMaxTipAmount(2).
+		WithSuggestedTipAmounts([]int{3}...).
 		WithStartParameter("StartParameter").
 		WithProviderData("ProviderData").
 		WithPhotoURL("PhotoURL").
-		WithPhotoSize(3).
-		WithPhotoWidth(4).
-		WithPhotoHeight(5).
+		WithPhotoSize(4).
+		WithPhotoWidth(5).
+		WithPhotoHeight(6).
 		WithNeedName().
 		WithNeedPhoneNumber().
 		WithNeedEmail().
@@ -1249,26 +1360,27 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 		WithIsFlexible().
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyToMessageID(6).
+		WithReplyToMessageID(7).
 		WithAllowSendingWithoutReply().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &SendInvoiceParams{
 		ChatID:                    ChatID{ID: 1},
+		MessageThreadID:           1,
 		Title:                     "Title",
 		Description:               "Description",
 		Payload:                   "Payload",
 		ProviderToken:             "ProviderToken",
 		Currency:                  "Currency",
 		Prices:                    []LabeledPrice{{Label: "Prices"}},
-		MaxTipAmount:              1,
-		SuggestedTipAmounts:       []int{2},
+		MaxTipAmount:              2,
+		SuggestedTipAmounts:       []int{3},
 		StartParameter:            "StartParameter",
 		ProviderData:              "ProviderData",
 		PhotoURL:                  "PhotoURL",
-		PhotoSize:                 3,
-		PhotoWidth:                4,
-		PhotoHeight:               5,
+		PhotoSize:                 4,
+		PhotoWidth:                5,
+		PhotoHeight:               6,
 		NeedName:                  true,
 		NeedPhoneNumber:           true,
 		NeedEmail:                 true,
@@ -1278,7 +1390,7 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 		IsFlexible:                true,
 		DisableNotification:       true,
 		ProtectContent:            true,
-		ReplyToMessageID:          6,
+		ReplyToMessageID:          7,
 		AllowSendingWithoutReply:  true,
 		ReplyMarkup:               &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, s)
@@ -1370,6 +1482,7 @@ func TestSetPassportDataErrorsParams_Setters(t *testing.T) {
 
 func TestSendGameParams_Setters(t *testing.T) {
 	s := (&SendGameParams{}).
+		WithMessageThreadID(1).
 		WithGameShortName("GameShortName").
 		WithDisableNotification().
 		WithProtectContent().
@@ -1378,6 +1491,7 @@ func TestSendGameParams_Setters(t *testing.T) {
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &SendGameParams{
+		MessageThreadID:          1,
 		GameShortName:            "GameShortName",
 		DisableNotification:      true,
 		ProtectContent:           true,
