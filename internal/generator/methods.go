@@ -77,12 +77,16 @@ const (
 
 const returnTypeNotFound = "NOT_FOUND"
 
+const curInternalFuncPattern = `^func \(.+?\) [a-z]\w+\(`
+
 var (
 	methodRegexp          = regexp.MustCompile(preparePattern(methodPattern))
 	methodParameterRegexp = regexp.MustCompile(preparePattern(methodParameterPattern))
 
 	returnTypeRegexp1 = regexp.MustCompile(returnTypePattern1)
 	returnTypeRegexp2 = regexp.MustCompile(returnTypePattern2)
+
+	curInternalFuncRegexp = regexp.MustCompile(curInternalFuncPattern)
 )
 
 func generateMethods(docs string) tgMethods {
@@ -130,7 +134,83 @@ func generateMethodParameters(parametersDocs string) tgMethodParameters {
 	return parameters
 }
 
-func writeMethods(file *os.File, methods tgMethods) {
+func parseCurrentMethods(methods string) map[string][]string {
+	additional := map[string][]string{}
+
+	constCount := 0
+	internalFuncCount := 0
+	currentType := ""
+
+	lines := strings.Split(methods, "\n")
+	for i, line := range lines {
+		typeMatches := curTypeRegexp.FindStringSubmatch(line)
+		if len(typeMatches) > 0 {
+			currentType = typeMatches[1]
+			continue
+		}
+
+		if currentType != "" && curConstRegexp.MatchString(line) {
+			end := i + 1
+			for ; ; end++ {
+				if end >= len(lines) {
+					end = -1
+					break
+				}
+
+				if lines[end] == ")" {
+					break
+				}
+			}
+
+			if end == -1 {
+				continue
+			}
+
+			_, ok := additional[currentType]
+			if !ok {
+				additional[currentType] = []string{}
+			}
+			additional[currentType] = append(additional[currentType], strings.Join(lines[i-1:end+1], "\n"))
+			constCount++
+
+			continue
+		}
+
+		if currentType != "" && curInternalFuncRegexp.MatchString(line) {
+			end := i + 1
+			for ; ; end++ {
+				if end >= len(lines) {
+					end = -1
+					break
+				}
+
+				if lines[end] == "}" {
+					break
+				}
+			}
+
+			if end == -1 {
+				continue
+			}
+
+			_, ok := additional[currentType]
+			if !ok {
+				additional[currentType] = []string{}
+			}
+			additional[currentType] = append(additional[currentType], strings.Join(lines[i:end+1], "\n"))
+			internalFuncCount++
+		}
+	}
+
+	logInfo("Const count: %d", constCount)
+	logInfo("Internal func count: %d", internalFuncCount)
+
+	return additional
+}
+
+func writeMethods(file *os.File, methods tgMethods, currentMethods string) {
+	additional := parseCurrentMethods(currentMethods)
+
 	data := strings.Builder{}
 
 	logInfo("Methods: %d", len(methods))
@@ -147,6 +227,8 @@ import (
 	parametersCount := 0
 	returnsCount := 0
 	returnsNotFoundCount := 0
+	successValuesCount := 0
+
 	for _, m := range methods {
 		parametersStruct := m.nameTitle + "Params"
 		parametersArg := ""
@@ -184,6 +266,12 @@ import (
 			}
 
 			data.WriteString("}\n\n")
+
+			additions := additional[parametersStruct]
+			for _, a := range additions {
+				data.WriteString(a)
+				data.WriteString("\n")
+			}
 		}
 
 		methodDescription := fitTextToLine(fmt.Sprintf("%s - %s", m.nameTitle, m.description), "// ")
@@ -211,10 +299,17 @@ import (
 		if hasReturnType {
 			data.WriteString(fmt.Sprintf("\tvar %s %s\n", returnVar, m.returnType))
 
+			successValue := ""
+			if strings.Contains(m.description, "otherwise True is returned") {
+				data.WriteString("\tvar success *bool\n")
+				successValue = ", &success"
+				successValuesCount++
+			}
+
 			if len(m.parameters) > 0 {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, &%s)\n", m.name, returnVar))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, &%s%s)\n", m.name, returnVar, successValue))
 			} else {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, &%s)\n", m.name, returnVar))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, &%s%s)\n", m.name, returnVar, successValue))
 			}
 
 			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"telego: %s(): %%w\", err)\n\t}\n\n", m.name))
@@ -234,6 +329,7 @@ import (
 	logInfo("Method parameters: %d", parametersCount)
 	logInfo("Method returns: %d", returnsCount)
 	logInfo("Method returns not found: %d", returnsNotFoundCount)
+	logInfo("Method returns success: %d", successValuesCount)
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)

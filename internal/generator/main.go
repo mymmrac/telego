@@ -115,11 +115,12 @@ func main() {
 			formatFile(typesFile.Name())
 		case runMethodsGeneration:
 			docs := sr.Docs()
+			currentMethods := sr.MethodsData()
 
 			methodsFile := openFile(generatedMethodsFilename)
 
 			methods := sr.Methods(docs)
-			writeMethods(methodsFile, methods)
+			writeMethods(methodsFile, methods, currentMethods)
 			_ = methodsFile.Close()
 
 			formatFile(methodsFile.Name())
@@ -182,7 +183,8 @@ type sharedResources struct {
 	docs    string
 	methods tgMethods
 
-	typesData string
+	typesData   string
+	methodsData string
 
 	methodsSetters tgSetters
 	typesSetters   tgSetters
@@ -223,14 +225,26 @@ func (r *sharedResources) TypesData() string {
 	return r.typesData
 }
 
-func (r *sharedResources) MethodsSetters() tgSetters {
-	if r.methodsSetters == nil {
+func (r *sharedResources) MethodsData() string {
+	if r.methodsData == "" {
 		logInfo("Reading methods from: %q", methodsFilename)
-		methodsBytes, err := os.ReadFile(methodsFilename)
+
+		mehtodsBytes, err := os.ReadFile(methodsFilename)
 		exitOnErr(err)
 
-		logInfo("Methods length: %d", len(methodsBytes))
-		methods := removeNl(string(methodsBytes))
+		logInfo("Methods length: %d", len(mehtodsBytes))
+
+		r.methodsData = string(mehtodsBytes)
+	} else {
+		logInfo("Reusing methods data")
+	}
+
+	return r.methodsData
+}
+
+func (r *sharedResources) MethodsSetters() tgSetters {
+	if r.methodsSetters == nil {
+		methods := removeNl(r.MethodsData())
 
 		r.methodsSetters = generateSetters(methods, nil)
 	} else {
