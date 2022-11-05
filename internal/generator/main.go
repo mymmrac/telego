@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -105,11 +104,12 @@ func main() {
 		switch arg {
 		case runTypesGeneration:
 			docs := sr.Docs()
+			currentTypes := sr.TypesData()
 
 			typesFile := openFile(generatedTypesFilename)
 
 			types := generateTypes(docs)
-			writeTypes(typesFile, types)
+			writeTypes(typesFile, types, currentTypes)
 			_ = typesFile.Close()
 
 			formatFile(typesFile.Name())
@@ -210,7 +210,7 @@ func (r *sharedResources) TypesData() string {
 	if r.typesData == "" {
 		logInfo("Reading types from: %q", typesFilename)
 
-		typesBytes, err := ioutil.ReadFile(typesFilename)
+		typesBytes, err := os.ReadFile(typesFilename)
 		exitOnErr(err)
 
 		logInfo("Types length: %d", len(typesBytes))
@@ -226,7 +226,7 @@ func (r *sharedResources) TypesData() string {
 func (r *sharedResources) MethodsSetters() tgSetters {
 	if r.methodsSetters == nil {
 		logInfo("Reading methods from: %q", methodsFilename)
-		methodsBytes, err := ioutil.ReadFile(methodsFilename)
+		methodsBytes, err := os.ReadFile(methodsFilename)
 		exitOnErr(err)
 
 		logInfo("Methods length: %d", len(methodsBytes))

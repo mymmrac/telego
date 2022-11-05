@@ -59,9 +59,18 @@ const typeFieldPattern = `
 </tr>
 `
 
+const curTypePattern = `^type (\w+) struct {`
+const curConstPattern = `^const \(`
+const curFuncPattern = `^func \(`
+const curInterfacePattern = `^type \w+ interface {`
+
 var (
-	typeRegexp      = regexp.MustCompile(preparePattern(typePattern))
-	typeFieldRegexp = regexp.MustCompile(preparePattern(typeFieldPattern))
+	typeRegexp        = regexp.MustCompile(preparePattern(typePattern))
+	typeFieldRegexp   = regexp.MustCompile(preparePattern(typeFieldPattern))
+	curTypeRegexp     = regexp.MustCompile(curTypePattern)
+	curConstRegexp    = regexp.MustCompile(curConstPattern)
+	curFuncRegexp     = regexp.MustCompile(curFuncPattern)
+	curInterfaceRegex = regexp.MustCompile(curInterfacePattern)
 )
 
 func generateTypes(docs string) tgTypes {
@@ -105,7 +114,95 @@ func generateTypeFields(fieldDocs string) tgTypeFields {
 	return fields
 }
 
-func writeTypes(file *os.File, types tgTypes) {
+func parseCurrentTypes(types string) map[string][]string {
+	additional := map[string][]string{}
+
+	constCount := 0
+	funcOrInterfaceCount := 0
+	currentType := ""
+
+	lines := strings.Split(types, "\n")
+	for i, line := range lines {
+		typeMatches := curTypeRegexp.FindStringSubmatch(line)
+		if len(typeMatches) > 0 {
+			currentType = typeMatches[1]
+			continue
+		}
+
+		if currentType != "" && curConstRegexp.MatchString(line) {
+			end := i + 1
+			for ; ; end++ {
+				if end >= len(lines) {
+					end = -1
+					break
+				}
+
+				if lines[end] == ")" {
+					break
+				}
+			}
+
+			if end == -1 {
+				continue
+			}
+
+			_, ok := additional[currentType]
+			if !ok {
+				additional[currentType] = []string{}
+			}
+			additional[currentType] = append(additional[currentType], strings.Join(lines[i-1:end+1], "\n"))
+			constCount++
+
+			continue
+		}
+
+		if currentType != "" && (curFuncRegexp.MatchString(line) || curInterfaceRegex.MatchString(line)) {
+			start := i - 1
+			for ; ; start-- {
+				if start < 0 {
+					start = -1
+					break
+				}
+
+				if !strings.HasPrefix(lines[start], "// ") {
+					break
+				}
+			}
+
+			end := i + 1
+			for ; ; end++ {
+				if end >= len(lines) {
+					end = -1
+					break
+				}
+
+				if lines[end] == "}" {
+					break
+				}
+			}
+
+			if start == -1 || end == -1 {
+				continue
+			}
+
+			_, ok := additional[currentType]
+			if !ok {
+				additional[currentType] = []string{}
+			}
+			additional[currentType] = append(additional[currentType], strings.Join(lines[start:end+1], "\n"))
+			funcOrInterfaceCount++
+		}
+	}
+
+	logInfo("Const count: %d", constCount)
+	logInfo("Func & interface count: %d", funcOrInterfaceCount)
+
+	return additional
+}
+
+func writeTypes(file *os.File, types tgTypes, currentTypes string) {
+	additional := parseCurrentTypes(currentTypes)
+
 	data := strings.Builder{}
 
 	logInfo("Types: %d", len(types))
@@ -147,6 +244,12 @@ import (
 		}
 
 		data.WriteString("}\n\n")
+
+		additions := additional[t.name]
+		for _, a := range additions {
+			data.WriteString(a)
+			data.WriteString("\n")
+		}
 	}
 
 	logInfo("Type fields: %d", fieldsCount)
