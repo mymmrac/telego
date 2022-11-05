@@ -1,0 +1,67 @@
+version: "3"
+
+silent: true
+
+tasks:
+  default:
+    desc: "Show available tasks"
+    cmds:
+      - task --list
+
+  lint:
+    desc: "Run golangci-lint"
+    # TODO: Add lint-install as dependency, but  follow https://taskfile.dev/usage/#prevent-unnecessary-work
+    cmds:
+      - golangci-lint run
+
+  lint-install: # TODO: Add work check
+    desc: "Install golangci-lint"
+    cmds:
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+  lint-list:
+    desc: "Run golangci-lint linters (print enabled & disabled linters)"
+    cmds:
+      - golangci-lint linters
+
+  test:
+    desc: "Run tests"
+    cmds:
+      - mkdir -p bin
+      - |
+        go test -coverprofile bin/cover.out \
+          $(go list ./... | grep -v /examples/ | grep -v /test | grep -v /internal/ | grep -v /mock)
+    sources:
+      - ./**/*.go
+      - go.mod
+    generates:
+      - bin/cover.out
+
+  cover: # TODO: Add work check
+    desc: "Run tests & show coverage"
+    deps:
+      - test
+    cmds:
+      - go tool cover -func bin/cover.out
+
+  race:
+    desc: "Run tests with race flag"
+    cmds:
+      - go test -race -count=1 ./...
+
+  bench:
+    desc: "Run benchmarks"
+    cmds:
+      - go test -bench=. -benchtime=10s -benchmem
+
+  build-examples: # TODO: Move to bin/examples and add work check
+    desc: "Build examples into bin folder"
+    cmds:
+      - go build -o bin/ ./examples/*
+
+  pre-commit:
+    desc: "Run tests, linter and build examples"
+    cmds:
+      - task: test
+      - task: lint
+      - task: build-examples
