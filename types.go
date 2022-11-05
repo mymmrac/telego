@@ -168,8 +168,9 @@ type User struct {
 	// (https://core.telegram.org/bots/api#getme).
 	CanJoinGroups bool `json:"can_join_groups,omitempty"`
 
-	// CanReadAllGroupMessages - Optional. True, if privacy mode (https://core.telegram.org/bots#privacy-mode)
-	// is disabled for the bot. Returned only in getMe (https://core.telegram.org/bots/api#getme).
+	// CanReadAllGroupMessages - Optional. True, if privacy mode
+	// (https://core.telegram.org/bots/features#privacy-mode) is disabled for the bot. Returned only in getMe
+	// (https://core.telegram.org/bots/api#getme).
 	CanReadAllGroupMessages bool `json:"can_read_all_group_messages,omitempty"`
 
 	// SupportsInlineQueries - Optional. True, if the bot supports inline queries. Returned only in getMe
@@ -200,8 +201,21 @@ type Chat struct {
 	// LastName - Optional. Last name of the other party in a private chat
 	LastName string `json:"last_name,omitempty"`
 
+	// IsForum - Optional. True, if the supergroup chat is a forum (has topics
+	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
+	IsForum bool `json:"is_forum,omitempty"`
+
 	// Photo - Optional. Chat photo. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	Photo *ChatPhoto `json:"photo,omitempty"`
+
+	// ActiveUsernames - Optional. If non-empty, the list of all active chat usernames
+	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#collectible-usernames); for private chats,
+	// supergroups and channels. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	ActiveUsernames []string `json:"active_usernames,omitempty"`
+
+	// EmojiStatusCustomEmojiID - Optional. Custom emoji identifier of emoji status of the other party in a
+	// private chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
 
 	// Bio - Optional. Bio of the other party in a private chat. Returned only in getChat
 	// (https://core.telegram.org/bots/api#getchat).
@@ -287,6 +301,10 @@ type Message struct {
 	// MessageID - Unique message identifier inside this chat
 	MessageID int `json:"message_id"`
 
+	// MessageThreadID - Optional. Unique identifier of a message thread to which the message belongs; for
+	// supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
 	// From - Optional. Sender of the message; empty for messages sent to channels. For backward compatibility,
 	// the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
 	From *User `json:"from,omitempty"`
@@ -324,6 +342,9 @@ type Message struct {
 
 	// ForwardDate - Optional. For forwarded messages, date the original message was sent in Unix time
 	ForwardDate int64 `json:"forward_date,omitempty"`
+
+	// IsTopicMessage - Optional. True, if the message is sent to a forum topic
+	IsTopicMessage bool `json:"is_topic_message,omitempty"`
 
 	// IsAutomaticForward - Optional. True, if the message is a channel post that was automatically forwarded to
 	// the connected discussion group
@@ -477,6 +498,15 @@ type Message struct {
 	// ProximityAlertTriggered - Optional. Service message. A user in the chat triggered another user's
 	// proximity alert while sharing Live Location.
 	ProximityAlertTriggered *ProximityAlertTriggered `json:"proximity_alert_triggered,omitempty"`
+
+	// ForumTopicCreated - Optional. Service message: forum topic created
+	ForumTopicCreated *ForumTopicCreated `json:"forum_topic_created,omitempty"`
+
+	// ForumTopicClosed - Optional. Service message: forum topic closed
+	ForumTopicClosed *ForumTopicClosed `json:"forum_topic_closed,omitempty"`
+
+	// ForumTopicReopened - Optional. Service message: forum topic reopened
+	ForumTopicReopened *ForumTopicReopened `json:"forum_topic_reopened,omitempty"`
 
 	// VideoChatScheduled - Optional. Service message: video chat scheduled
 	VideoChatScheduled *VideoChatScheduled `json:"video_chat_scheduled,omitempty"`
@@ -943,6 +973,26 @@ type MessageAutoDeleteTimerChanged struct {
 	MessageAutoDeleteTime int `json:"message_auto_delete_time"`
 }
 
+// ForumTopicCreated - This object represents a service message about a new forum topic created in the chat.
+type ForumTopicCreated struct {
+	// Name - Name of the topic
+	Name string `json:"name"`
+
+	// IconColor - Color of the topic icon in RGB format
+	IconColor int `json:"icon_color"`
+
+	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown as the topic icon
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+}
+
+// ForumTopicClosed - This object represents a service message about a forum topic closed in the chat.
+// Currently holds no information.
+type ForumTopicClosed struct{}
+
+// ForumTopicReopened - This object represents a service message about a forum topic reopened in the chat.
+// Currently holds no information.
+type ForumTopicReopened struct{}
+
 // VideoChatScheduled - This object represents a service message about a video chat scheduled in the chat.
 type VideoChatScheduled struct {
 	// StartDate - Point in time (Unix timestamp) when the video chat is supposed to be started by a chat
@@ -1019,9 +1069,9 @@ const (
 	MarkupTypeForceReply          = "ForceReply"
 )
 
-// ReplyKeyboardMarkup - This object represents a custom keyboard (https://core.telegram.org/bots#keyboards)
-// with reply options (see Introduction to bots (https://core.telegram.org/bots#keyboards) for details and
-// examples).
+// ReplyKeyboardMarkup - This object represents a custom keyboard
+// (https://core.telegram.org/bots/features#keyboards) with reply options (see Introduction to bots
+// (https://core.telegram.org/bots/features#keyboards) for details and examples).
 type ReplyKeyboardMarkup struct {
 	// Keyboard - Array of button rows, each represented by an Array of KeyboardButton
 	// (https://core.telegram.org/bots/api#keyboardbutton) objects
@@ -1113,8 +1163,8 @@ func (r *ReplyKeyboardRemove) ReplyType() string {
 }
 
 // InlineKeyboardMarkup - This object represents an inline keyboard
-// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) that appears right next to the
-// message it belongs to.
+// (https://core.telegram.org/bots/features#inline-keyboards) that appears right next to the message it belongs
+// to.
 type InlineKeyboardMarkup struct {
 	// InlineKeyboard - Array of button rows, each represented by an Array of InlineKeyboardButton
 	// (https://core.telegram.org/bots/api#inlinekeyboardbutton) objects
@@ -1211,11 +1261,10 @@ type LoginURL struct {
 }
 
 // CallbackQuery - This object represents an incoming callback query from a callback button in an inline
-// keyboard (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). If the button that
-// originated the query was attached to a message sent by the bot, the field message will be present. If the
-// button was attached to a message sent via the bot (in inline mode
-// (https://core.telegram.org/bots/api#inline-mode)), the field inline_message_id will be present. Exactly one
-// of the fields data or game_short_name will be present.
+// keyboard (https://core.telegram.org/bots/features#inline-keyboards). If the button that originated the query
+// was attached to a message sent by the bot, the field message will be present. If the button was attached to a
+// message sent via the bot (in inline mode (https://core.telegram.org/bots/api#inline-mode)), the field
+// inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
 type CallbackQuery struct {
 	// ID - Unique identifier for this query
 	ID string `json:"id"`
@@ -1247,7 +1296,7 @@ type CallbackQuery struct {
 // ForceReply - Upon receiving a message with this object, Telegram clients will display a reply interface to
 // the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful
 // if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode
-// (https://core.telegram.org/bots#privacy-mode).
+// (https://core.telegram.org/bots/features#privacy-mode).
 type ForceReply struct {
 	// ForceReply - Shows reply interface to the user, as if they manually selected the bot's message and tapped
 	// 'Reply'
@@ -1359,6 +1408,10 @@ type ChatAdministratorRights struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+
+	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
+	// topics; supergroups only
+	CanManageTopics bool `json:"can_manage_topics,omitempty"`
 }
 
 // ChatMember - This object contains information about one member of a chat. Currently, the following 6 types
@@ -1506,6 +1559,10 @@ type ChatMemberAdministrator struct {
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
 
+	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
+	// topics; supergroups only
+	CanManageTopics bool `json:"can_manage_topics,omitempty"`
+
 	// CustomTitle - Optional. Custom title for this user
 	CustomTitle string `json:"custom_title,omitempty"`
 }
@@ -1560,6 +1617,9 @@ type ChatMemberRestricted struct {
 
 	// CanPinMessages - True, if the user is allowed to pin messages
 	CanPinMessages bool `json:"can_pin_messages"`
+
+	// CanManageTopics - True, if the user is allowed to create forum topics
+	CanManageTopics bool `json:"can_manage_topics"`
 
 	// CanSendMessages - True, if the user is allowed to send text messages, contacts, locations and venues
 	CanSendMessages bool `json:"can_send_messages"`
@@ -1733,6 +1793,10 @@ type ChatPermissions struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+
+	// CanManageTopics - Optional. True, if the user is allowed to create forum topics. If omitted defaults to
+	// the value of can_pin_messages
+	CanManageTopics bool `json:"can_manage_topics,omitempty"`
 }
 
 // ChatLocation - Represents a location to which a chat is connected.
@@ -1742,6 +1806,21 @@ type ChatLocation struct {
 
 	// Address - Location address; 1-64 characters, as defined by the chat owner
 	Address string `json:"address"`
+}
+
+// ForumTopic - This object represents a forum topic.
+type ForumTopic struct {
+	// MessageThreadID - Unique identifier of the forum topic
+	MessageThreadID int `json:"message_thread_id"`
+
+	// Name - Name of the topic
+	Name string `json:"name"`
+
+	// IconColor - Color of the topic icon in RGB format
+	IconColor int `json:"icon_color"`
+
+	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown as the topic icon
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
 }
 
 // BotCommand - This object represents a bot command.
@@ -2516,8 +2595,8 @@ type InlineQueryResultArticle struct {
 	// InputMessageContent - Content of the message to be sent
 	InputMessageContent InputMessageContent `json:"input_message_content"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// URL - Optional. URL of the result
@@ -2583,8 +2662,8 @@ type InlineQueryResultPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
@@ -2639,8 +2718,8 @@ type InlineQueryResultGif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
@@ -2705,8 +2784,8 @@ type InlineQueryResultMpeg4Gif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
@@ -2765,8 +2844,8 @@ type InlineQueryResultVideo struct {
 	// Description - Optional. Short description of the result
 	Description string `json:"description,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video. This field is
@@ -2812,8 +2891,8 @@ type InlineQueryResultAudio struct {
 	// AudioDuration - Optional. Audio duration in seconds
 	AudioDuration int `json:"audio_duration,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the audio
@@ -2855,8 +2934,8 @@ type InlineQueryResultVoice struct {
 	// VoiceDuration - Optional. Recording duration in seconds
 	VoiceDuration int `json:"voice_duration,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice recording
@@ -2956,8 +3035,8 @@ type InlineQueryResultLocation struct {
 	// approaching another chat member, in meters. Must be between 1 and 100000 if specified.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the location
@@ -3014,8 +3093,8 @@ type InlineQueryResultVenue struct {
 	// (https://developers.google.com/places/web-service/supported_types).)
 	GooglePlaceType string `json:"google_place_type,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the venue
@@ -3059,8 +3138,8 @@ type InlineQueryResultContact struct {
 	// (https://en.wikipedia.org/wiki/VCard), 0-2048 bytes
 	Vcard string `json:"vcard,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the contact
@@ -3092,8 +3171,8 @@ type InlineQueryResultGame struct {
 	// GameShortName - Short name of the game
 	GameShortName string `json:"game_short_name"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -3132,8 +3211,8 @@ type InlineQueryResultCachedPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the photo
@@ -3172,8 +3251,8 @@ type InlineQueryResultCachedGif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the GIF animation
@@ -3213,8 +3292,8 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video animation
@@ -3239,8 +3318,8 @@ type InlineQueryResultCachedSticker struct {
 	// StickerFileID - A valid file identifier of the sticker
 	StickerFileID string `json:"sticker_file_id"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the sticker
@@ -3282,8 +3361,8 @@ type InlineQueryResultCachedDocument struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
@@ -3325,8 +3404,8 @@ type InlineQueryResultCachedVideo struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the video
@@ -3365,8 +3444,8 @@ type InlineQueryResultCachedVoice struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the voice message
@@ -3402,8 +3481,8 @@ type InlineQueryResultCachedAudio struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard
-	// (https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the audio
