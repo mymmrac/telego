@@ -10,17 +10,20 @@ tasks:
 
   lint:
     desc: "Run golangci-lint"
-    # TODO: Add lint-install as dependency, but  follow https://taskfile.dev/usage/#prevent-unnecessary-work
+    deps: [lint-install]
     cmds:
       - golangci-lint run
 
-  lint-install: # TODO: Add work check
+  lint-install:
     desc: "Install golangci-lint"
     cmds:
       - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    status:
+      - command -v golangci-lint
 
   lint-list:
     desc: "Run golangci-lint linters (print enabled & disabled linters)"
+    deps: [lint-install]
     cmds:
       - golangci-lint linters
 
@@ -37,7 +40,7 @@ tasks:
     generates:
       - bin/cover.out
 
-  cover: # TODO: Add work check
+  cover:
     desc: "Run tests & show coverage"
     deps:
       - test
@@ -54,7 +57,7 @@ tasks:
     cmds:
       - go test -bench=. -benchtime=10s -benchmem
 
-  build-examples: # TODO: Move to bin/examples and add work check
+  build-examples:
     desc: "Build examples into bin folder"
     cmds:
       - go build -o bin/ ./examples/*
@@ -65,3 +68,32 @@ tasks:
       - task: test
       - task: lint
       - task: build-examples
+
+  generate:
+    desc: "Generate (used for mock generation)"
+    cmds:
+      - go generate ./...
+
+  mock-install:
+    desc: "Install mockgen"
+    cmds:
+      - go install github.com/golang/mock/mockgen@latest
+    status:
+      - command -v mockgen
+
+  generator:
+    desc: "Run specific generation"
+    cmds:
+      - go run ./internal/generator {{.ARGS}}
+
+  generator-all:
+    desc: "Run all generators"
+    cmds:
+      - task: generator
+        vars:
+          ARGS: types types-tests types-setters types-setters-tests methods methods-tests methods-setters methods-setters-tests
+
+  generator-clean-up:
+    desc: "Remove generated files"
+    cmds:
+      - rm *.generated

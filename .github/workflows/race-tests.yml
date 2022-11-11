@@ -18,8 +18,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-2:
     name: Race Test 2
@@ -33,8 +36,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-3:
     name: Race Test 3
@@ -48,8 +54,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-4:
     name: Race Test 4
@@ -63,8 +72,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-5:
     name: Race Test 5
@@ -78,8 +90,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-6:
     name: Race Test 6
@@ -93,8 +108,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-7:
     name: Race Test 7
@@ -108,8 +126,11 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race
 
   race-8:
     name: Race Test 8
@@ -123,5 +144,8 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+
       - name: Run race tests
-        run: make race
+        run: task race

@@ -85,12 +85,11 @@ How to contribute step by step:
 
 How to run tests & linter locally:
 
-- Run tests: `make test`
-- Run linter: `make lint`
-    - Install linter: `make lint-install`
-- Run both tests and linter: `make pre-commit`
+- Run tests: `task test`
+- Run linter: `task lint`
+- Run both tests and linter: `task pre-commit`
 
-To see full usage of [Makefile](../Makefile) use: `make help` or just `make`.
+To see full usage of [Taskfile.yml](../Taskfile.yml) use: `task`.
 
 ## :art: Style guidelines
 
