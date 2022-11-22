@@ -30,7 +30,7 @@ func main() {
 	fmt.Printf("Webhook Info: %+v\n", info)
 
 	// Get updates channel from webhook, all options are optional.
-	// Note: For one bot only one webhook allowed.
+	// Note: For one bot, only one webhook allowed.
 	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
 		// Set chan buffer (default 100)
 		telego.WithWebhookBuffer(100),
@@ -46,7 +46,7 @@ func main() {
 		telego.WithWebhookHealthAPI(),
 	)
 
-	// Start server for receiving requests from Telegram
+	// Start server for receiving requests from the Telegram
 	_ = bot.StartListeningForWebhook("localhost:443")
 
 	// Stop reviving updates from updates channel and shutdown webhook server

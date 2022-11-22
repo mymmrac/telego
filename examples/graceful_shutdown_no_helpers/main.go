@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
 )
 
 func main() {
@@ -31,15 +30,12 @@ func main() {
 	// Get updates
 	updates, _ := bot.UpdatesViaLongPulling(nil)
 
-	// Create bot handler with stop timeout
-	bh, _ := th.NewBotHandler(bot, updates, th.WithStopTimeout(time.Second*10))
-
 	// Handle updates
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+	for update := range updates {
 		fmt.Println("Processing update:", update.UpdateID)
 		time.Sleep(time.Second * 5) // Simulate long process time
 		fmt.Println("Done update:", update.UpdateID)
-	})
+	}
 
 	// Handle stop signal (Ctrl+C)
 	go func() {
@@ -51,18 +47,11 @@ func main() {
 		bot.StopLongPulling()
 		fmt.Println("Long pulling done")
 
-		bh.Stop()
-		fmt.Println("Bot handler done")
-
 		// Notify that stop is done
 		done <- struct{}{}
 	}()
 
-	// Start handling in goroutine
-	go bh.Start()
-	fmt.Println("Handling updates...")
-
-	// Wait for stop process to be completed
+	// Wait for the stop process to be completed
 	<-done
 	fmt.Println("Done")
 }
