@@ -47,7 +47,7 @@ func main() {
 	// Start server for receiving requests from the Telegram
 	// Note: Only the last bot should start server, all others should be noop
 	_ = bot1.StartListeningForWebhookCustom(nil)
-	_ = bot1.StartListeningForWebhook("localhost:443")
+	_ = bot2.StartListeningForWebhook("localhost:443")
 
 	// Stop reviving updates from updates chan and shutdown webhook server
 	// Note: Only the first bot should stop server, all others should be noop
