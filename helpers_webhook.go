@@ -83,7 +83,7 @@ func WithWebhookHealthAPI() WebhookOption {
 // Calling if already running (before StopWebhook() method) will return an error.
 // Note: After you done with getting updates you should call StopWebhook() method to stop the server
 func (b *Bot) StartListeningForWebhook(address string) error {
-	return b.startListeningForWebhook(func(server *fasthttp.Server) error {
+	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
 		return server.ListenAndServe(address)
 	})
 }
@@ -94,7 +94,7 @@ func (b *Bot) StartListeningForWebhook(address string) error {
 // Calling if already running (before StopWebhook() method) will return an error.
 // Note: After you done with getting updates you should call StopWebhook() method to stop the server
 func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) error {
-	return b.startListeningForWebhook(func(server *fasthttp.Server) error {
+	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
 		return server.ListenAndServeTLS(address, certificateFile, keyFile)
 	})
 }
@@ -105,7 +105,7 @@ func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile stri
 // Calling if already running (before StopWebhook() method) will return an error.
 // Note: After you done with getting updates you should call StopWebhook() method to stop the server
 func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) error {
-	return b.startListeningForWebhook(func(server *fasthttp.Server) error {
+	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
 		return server.ListenAndServeTLSEmbed(address, certificateData, keyData)
 	})
 }
@@ -116,13 +116,14 @@ func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData [
 // Calling if already running (before StopWebhook() method) will return an error.
 // Note: After you done with getting updates you should call StopWebhook() method to stop the server
 func (b *Bot) StartListeningForWebhookUNIX(address string, mode os.FileMode) error {
-	return b.startListeningForWebhook(func(server *fasthttp.Server) error {
+	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
 		return server.ListenAndServeUNIX(address, mode)
 	})
 }
 
-// startListeningForWebhook checks configuration and starts webhook server
-func (b *Bot) startListeningForWebhook(listenAndServe func(server *fasthttp.Server) error) error {
+// StartListeningForWebhookCustom checks the configuration and starts webhook server using provided listen func.
+// Note: Listening func can be nil (useful for running multiple bots on the same server).
+func (b *Bot) StartListeningForWebhookCustom(listenAndServe func(server *fasthttp.Server) error) error {
 	ctx := b.webhookContext
 	if ctx == nil {
 		return errors.New("telego: webhook context does not exist")
@@ -144,9 +145,12 @@ func (b *Bot) startListeningForWebhook(listenAndServe func(server *fasthttp.Serv
 	ctx.running = true
 	ctx.runningLock.Unlock()
 
+	if listenAndServe == nil {
+		return nil
+	}
+
 	go func() {
-		err := listenAndServe(ctx.server)
-		if err != nil {
+		if err := listenAndServe(ctx.server); err != nil {
 			b.log.Errorf("Listening for webhook: %v", err)
 
 			ctx.runningLock.Lock()
@@ -173,11 +177,26 @@ func (b *Bot) IsRunningWebhook() bool {
 	return ctx.running
 }
 
-// StopWebhook shutdown webhook server used in UpdatesViaWebhook() method. Stopping will stop new updates from coming,
-// but processing updates should be handled by the caller. Stop will only ensure that no more updates will come
-// in update chan.
+// StopWebhook shutdown webhook server used in the UpdatesViaWebhook() method.
+// Stopping will stop new updates from coming, but processing updates should be handled by the caller.
+// Stop will only ensure that no more updates will come in update chan.
 // Calling StopLongPulling() multiple times does nothing.
 func (b *Bot) StopWebhook() error {
+	ctx := b.webhookContext
+	if ctx == nil {
+		return nil
+	}
+
+	return b.StopWebhookCustom(ctx.server.Shutdown)
+}
+
+// StopWebhookCustom shutdown webhook server used in the UpdatesViaWebhook() method using provided shutdown func.
+// Calling StopLongPulling() multiple times does nothing.
+// Note: Shutdown func can be nil (useful for running multiple bots on the same server).
+//
+// Warning: If after shutdown func any updates will be passed into updates chan, the program will panic.
+// Ensure that any active connections to webhook stopped before returning from shutdown func.
+func (b *Bot) StopWebhookCustom(shutdown func() error) error {
 	ctx := b.webhookContext
 	if ctx == nil {
 		return nil
@@ -188,7 +207,12 @@ func (b *Bot) StopWebhook() error {
 
 	if ctx.running {
 		ctx.running = false
-		err := ctx.server.Shutdown()
+
+		var err error
+		if shutdown != nil {
+			err = shutdown()
+		}
+
 		close(ctx.stop)
 		b.webhookContext = nil
 		return err
