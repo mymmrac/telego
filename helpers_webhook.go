@@ -31,7 +31,7 @@ type webhookContext struct {
 	updateChanBuffer uint
 }
 
-// WebhookOption represents option that can be applied to webhookContext
+// WebhookOption represents an option that can be applied to webhookContext
 type WebhookOption func(ctx *webhookContext) error
 
 // WithWebhookBuffer sets buffering for update chan. Default is 100.
@@ -55,7 +55,7 @@ func WithWebhookServer(server *fasthttp.Server) WebhookOption {
 }
 
 // WithWebhookRouter sets HTTP router to use for webhook. Default is router.New()
-// Note: For webhook to work properly POST route with path specified in Bot.UpdatesViaWebhook() must be unset.
+// Note: For webhook to work properly POST route with a path specified in Bot.UpdatesViaWebhook() must be unset.
 func WithWebhookRouter(router *router.Router) WebhookOption {
 	return func(ctx *webhookContext) error {
 		if router == nil {
@@ -174,7 +174,7 @@ func (b *Bot) IsRunningWebhook() bool {
 }
 
 // StopWebhook shutdown webhook server used in UpdatesViaWebhook() method. Stopping will stop new updates from coming,
-// but not processes updates should be handled by the caller. Stop will only ensure that no more updates will come
+// but processing updates should be handled by the caller. Stop will only ensure that no more updates will come
 // in update chan.
 // Calling StopLongPulling() multiple times does nothing.
 func (b *Bot) StopWebhook() error {
@@ -198,7 +198,8 @@ func (b *Bot) StopWebhook() error {
 	return nil
 }
 
-// UpdatesViaWebhook receive updates in chan from webhook. New POST route with provided path will be added to router.
+// UpdatesViaWebhook receive updates in chan from webhook.
+// New POST route with a provided path will be added to the router.
 // Calling if already configured (before StopWebhook() method) will return an error.
 // Note: UpdatesViaWebhook() will redefine webhook's server handler.
 func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
@@ -262,7 +263,6 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 }
 
 func httpRespondWithError(ctx *fasthttp.RequestCtx, err error) {
-	// Marshal will never return an error in such case
 	//nolint:errcheck
 	errMsg, _ := json.Marshal(map[string]string{
 		"error": err.Error(),
@@ -271,7 +271,6 @@ func httpRespondWithError(ctx *fasthttp.RequestCtx, err error) {
 	ctx.SetStatusCode(fasthttp.StatusBadRequest)
 	ctx.SetContentType(telegoapi.ContentTypeJSON)
 
-	// Write never returns an error
 	//nolint:errcheck
 	_, _ = ctx.Write(errMsg)
 }

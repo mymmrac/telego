@@ -50,10 +50,11 @@ type Bot struct {
 	webhookContext     *webhookContext
 }
 
-// BotOption represents option that can be applied to Bot
+// BotOption represents an option that can be applied to Bot
 type BotOption func(bot *Bot) error
 
-// NewBot creates new bot with given options. If no options specified default values are used.
+// NewBot creates new bots with given options.
+// If no options specified default values are used.
 // Note: Default logger (that logs only errors if not configured) will hide your bot token, but it still may log
 // sensitive information, it's only safe to use default logger in testing environment.
 func NewBot(token string, options ...BotOption) (*Bot, error) {
@@ -89,9 +90,9 @@ func (b *Bot) Token() string {
 	return b.token
 }
 
-// EmptyValue returns value that will be erased from all requests, useful for things like SwitchInlineQuery in
+// EmptyValue returns value that will be erased from all requests useful for things like SwitchInlineQuery in
 // telego.InlineKeyboardButton that have empty string as valid parameter value
-// Warning: Only works if at least one of bot options, WithEmptyValues or WithCustomEmptyValues are used
+// Warning: Only works if at least one of the bot options, WithEmptyValues or WithCustomEmptyValues are used
 func (b *Bot) EmptyValue() string {
 	return b.replaceToEmpty
 }
