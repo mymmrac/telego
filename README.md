@@ -88,6 +88,7 @@ More examples can be seen here:
 - [Update processor](examples/update_processor/main.go)
 - [Message entities](examples/message_entity/main.go)
 - [Empty values](examples/empty_values/main.go)
+- [Multi bot webhook](examples/multi_bot_webhook/main.go)
 
 </details>
 
