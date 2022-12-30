@@ -391,6 +391,9 @@ type SendPhotoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// HasSpoiler - Optional. Pass True if the photo needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
@@ -651,6 +654,9 @@ type SendVideoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// HasSpoiler - Optional. Pass True if the video needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+
 	// SupportsStreaming - Optional. Pass True if the uploaded video is suitable for streaming
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
 
@@ -744,6 +750,9 @@ type SendAnimationParams struct {
 	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// HasSpoiler - Optional. Pass True if the animation needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -1407,6 +1416,9 @@ type SendChatActionParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread; supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
 	// for text messages (https://core.telegram.org/bots/api#sendmessage), upload_photo for photos
@@ -2155,7 +2167,8 @@ type GetChatMemberParams struct {
 	UserID int64 `json:"user_id"`
 }
 
-// GetChatMember - Use this method to get information about a member of a chat. Returns a ChatMember
+// GetChatMember - Use this method to get information about a member of a chat. The method is guaranteed to
+// work only if the bot is an administrator in the chat. Returns a ChatMember
 // (https://core.telegram.org/bots/api#chatmember) object on success.
 func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
 	var memberData chatMemberData
@@ -2232,8 +2245,9 @@ type CreateForumTopicParams struct {
 	// Name - Topic name, 1-128 characters
 	Name string `json:"name"`
 
-	// IconColor - Optional. Color of the topic icon in RGB format. Currently, must be one of 0x6FB9F0,
-	// 0xFFD67E, 0xCB86DB, 0x8EEE98, 0xFF93B2, or 0xFB6F5F
+	// IconColor - Optional. Color of the topic icon in RGB format. Currently, must be one of 7322096
+	// (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047
+	// (0xFB6F5F)
 	IconColor int `json:"icon_color,omitempty"`
 
 	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown as the topic icon. Use
@@ -2264,13 +2278,15 @@ type EditForumTopicParams struct {
 	// MessageThreadID - Unique identifier for the target message thread of the forum topic
 	MessageThreadID int `json:"message_thread_id"`
 
-	// Name - New topic name, 1-128 characters
-	Name string `json:"name"`
+	// Name - Optional. New topic name, 0-128 characters. If not specififed or empty, the current name of the
+	// topic will be kept
+	Name string `json:"name,omitempty"`
 
-	// IconCustomEmojiID - New unique identifier of the custom emoji shown as the topic icon. Use
+	// IconCustomEmojiID - Optional. New unique identifier of the custom emoji shown as the topic icon. Use
 	// getForumTopicIconStickers (https://core.telegram.org/bots/api#getforumtopiciconstickers) to get all allowed
-	// custom emoji identifiers
-	IconCustomEmojiID string `json:"icon_custom_emoji_id"`
+	// custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be
+	// kept
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
 }
 
 // EditForumTopic - Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must
@@ -2368,6 +2384,104 @@ func (b *Bot) UnpinAllForumTopicMessages(params *UnpinAllForumTopicMessagesParam
 	err := b.performRequest("unpinAllForumTopicMessages", params)
 	if err != nil {
 		return fmt.Errorf("telego: unpinAllForumTopicMessages(): %w", err)
+	}
+
+	return nil
+}
+
+// EditGeneralForumTopicParams - Represents parameters of editGeneralForumTopic method.
+type EditGeneralForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// Name - New topic name, 1-128 characters
+	Name string `json:"name"`
+}
+
+// EditGeneralForumTopic - Use this method to edit the name of the 'General' topic in a forum supergroup
+// chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics
+// administrator rights. Returns True on success.
+func (b *Bot) EditGeneralForumTopic(params *EditGeneralForumTopicParams) error {
+	err := b.performRequest("editGeneralForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: editGeneralForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// CloseGeneralForumTopicParams - Represents parameters of closeGeneralForumTopic method.
+type CloseGeneralForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// CloseGeneralForumTopic - Use this method to close an open 'General' topic in a forum supergroup chat. The
+// bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator
+// rights. Returns True on success.
+func (b *Bot) CloseGeneralForumTopic(params *CloseGeneralForumTopicParams) error {
+	err := b.performRequest("closeGeneralForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: closeGeneralForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// ReopenGeneralForumTopicParams - Represents parameters of reopenGeneralForumTopic method.
+type ReopenGeneralForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// ReopenGeneralForumTopic - Use this method to reopen a closed 'General' topic in a forum supergroup chat.
+// The bot must be an administrator in the chat for this to work and must have the can_manage_topics
+// administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
+func (b *Bot) ReopenGeneralForumTopic(params *ReopenGeneralForumTopicParams) error {
+	err := b.performRequest("reopenGeneralForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: reopenGeneralForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// HideGeneralForumTopicParams - Represents parameters of hideGeneralForumTopic method.
+type HideGeneralForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// HideGeneralForumTopic - Use this method to hide the 'General' topic in a forum supergroup chat. The bot
+// must be an administrator in the chat for this to work and must have the can_manage_topics administrator
+// rights. The topic will be automatically closed if it was open. Returns True on success.
+func (b *Bot) HideGeneralForumTopic(params *HideGeneralForumTopicParams) error {
+	err := b.performRequest("hideGeneralForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: hideGeneralForumTopic(): %w", err)
+	}
+
+	return nil
+}
+
+// UnhideGeneralForumTopicParams - Represents parameters of unhideGeneralForumTopic method.
+type UnhideGeneralForumTopicParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// UnhideGeneralForumTopic - Use this method to unhide the 'General' topic in a forum supergroup chat. The
+// bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator
+// rights. Returns True on success.
+func (b *Bot) UnhideGeneralForumTopic(params *UnhideGeneralForumTopicParams) error {
+	err := b.performRequest("unhideGeneralForumTopic", params)
+	if err != nil {
+		return fmt.Errorf("telego: unhideGeneralForumTopic(): %w", err)
 	}
 
 	return nil

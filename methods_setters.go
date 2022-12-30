@@ -282,6 +282,12 @@ func (p *SendPhotoParams) WithCaptionEntities(captionEntities ...MessageEntity) 
 	return p
 }
 
+// WithHasSpoiler adds has spoiler parameter
+func (p *SendPhotoParams) WithHasSpoiler() *SendPhotoParams {
+	p.HasSpoiler = true
+	return p
+}
+
 // WithDisableNotification adds disable notification parameter
 func (p *SendPhotoParams) WithDisableNotification() *SendPhotoParams {
 	p.DisableNotification = true
@@ -540,6 +546,12 @@ func (p *SendVideoParams) WithCaptionEntities(captionEntities ...MessageEntity) 
 	return p
 }
 
+// WithHasSpoiler adds has spoiler parameter
+func (p *SendVideoParams) WithHasSpoiler() *SendVideoParams {
+	p.HasSpoiler = true
+	return p
+}
+
 // WithSupportsStreaming adds supports streaming parameter
 func (p *SendVideoParams) WithSupportsStreaming() *SendVideoParams {
 	p.SupportsStreaming = true
@@ -633,6 +645,12 @@ func (p *SendAnimationParams) WithParseMode(parseMode string) *SendAnimationPara
 // WithCaptionEntities adds caption entities parameter
 func (p *SendAnimationParams) WithCaptionEntities(captionEntities ...MessageEntity) *SendAnimationParams {
 	p.CaptionEntities = captionEntities
+	return p
+}
+
+// WithHasSpoiler adds has spoiler parameter
+func (p *SendAnimationParams) WithHasSpoiler() *SendAnimationParams {
+	p.HasSpoiler = true
 	return p
 }
 
@@ -1275,6 +1293,12 @@ func (p *SendChatActionParams) WithChatID(chatID ChatID) *SendChatActionParams {
 	return p
 }
 
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendChatActionParams) WithMessageThreadID(messageThreadID int) *SendChatActionParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
 // WithAction adds action parameter
 func (p *SendChatActionParams) WithAction(action string) *SendChatActionParams {
 	p.Action = action
@@ -1753,6 +1777,42 @@ func (p *UnpinAllForumTopicMessagesParams) WithChatID(chatID ChatID) *UnpinAllFo
 // WithMessageThreadID adds message thread ID parameter
 func (p *UnpinAllForumTopicMessagesParams) WithMessageThreadID(messageThreadID int) *UnpinAllForumTopicMessagesParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditGeneralForumTopicParams) WithChatID(chatID ChatID) *EditGeneralForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithName adds name parameter
+func (p *EditGeneralForumTopicParams) WithName(name string) *EditGeneralForumTopicParams {
+	p.Name = name
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *CloseGeneralForumTopicParams) WithChatID(chatID ChatID) *CloseGeneralForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *ReopenGeneralForumTopicParams) WithChatID(chatID ChatID) *ReopenGeneralForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *HideGeneralForumTopicParams) WithChatID(chatID ChatID) *HideGeneralForumTopicParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *UnhideGeneralForumTopicParams) WithChatID(chatID ChatID) *UnhideGeneralForumTopicParams {
+	p.ChatID = chatID
 	return p
 }
 

@@ -139,6 +139,7 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithHasSpoiler().
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(2).
@@ -152,6 +153,7 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
 		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		HasSpoiler:               true,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         2,
@@ -242,6 +244,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithHasSpoiler().
 		WithSupportsStreaming().
 		WithDisableNotification().
 		WithProtectContent().
@@ -260,6 +263,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
 		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		HasSpoiler:               true,
 		SupportsStreaming:        true,
 		DisableNotification:      true,
 		ProtectContent:           true,
@@ -281,6 +285,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithHasSpoiler().
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(5).
@@ -298,6 +303,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
 		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
+		HasSpoiler:               true,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         5,
@@ -579,21 +585,23 @@ func TestSendDiceParams_Setters(t *testing.T) {
 func TestSendChatActionParams_Setters(t *testing.T) {
 	s := (&SendChatActionParams{}).
 		WithChatID(ChatID{ID: 3}).
+		WithMessageThreadID(1).
 		WithAction("Action")
 
 	assert.Equal(t, &SendChatActionParams{
-		ChatID: ChatID{ID: 3},
-		Action: "Action",
+		ChatID:          ChatID{ID: 3},
+		MessageThreadID: 1,
+		Action:          "Action",
 	}, s)
 }
 
 func TestGetUserProfilePhotosParams_Setters(t *testing.T) {
 	g := (&GetUserProfilePhotosParams{}).
-		WithOffset(1).
+		WithOffset(2).
 		WithLimit(1)
 
 	assert.Equal(t, &GetUserProfilePhotosParams{
-		Offset: 1,
+		Offset: 2,
 		Limit:  1,
 	}, g)
 }
@@ -994,6 +1002,53 @@ func TestUnpinAllForumTopicMessagesParams_Setters(t *testing.T) {
 	assert.Equal(t, &UnpinAllForumTopicMessagesParams{
 		ChatID:          ChatID{ID: 2},
 		MessageThreadID: 1,
+	}, u)
+}
+
+func TestEditGeneralForumTopicParams_Setters(t *testing.T) {
+	e := (&EditGeneralForumTopicParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithName("Name")
+
+	assert.Equal(t, &EditGeneralForumTopicParams{
+		ChatID: ChatID{ID: 2},
+		Name:   "Name",
+	}, e)
+}
+
+func TestCloseGeneralForumTopicParams_Setters(t *testing.T) {
+	c := (&CloseGeneralForumTopicParams{}).
+		WithChatID(ChatID{ID: 1})
+
+	assert.Equal(t, &CloseGeneralForumTopicParams{
+		ChatID: ChatID{ID: 1},
+	}, c)
+}
+
+func TestReopenGeneralForumTopicParams_Setters(t *testing.T) {
+	r := (&ReopenGeneralForumTopicParams{}).
+		WithChatID(ChatID{ID: 1})
+
+	assert.Equal(t, &ReopenGeneralForumTopicParams{
+		ChatID: ChatID{ID: 1},
+	}, r)
+}
+
+func TestHideGeneralForumTopicParams_Setters(t *testing.T) {
+	h := (&HideGeneralForumTopicParams{}).
+		WithChatID(ChatID{ID: 1})
+
+	assert.Equal(t, &HideGeneralForumTopicParams{
+		ChatID: ChatID{ID: 1},
+	}, h)
+}
+
+func TestUnhideGeneralForumTopicParams_Setters(t *testing.T) {
+	u := (&UnhideGeneralForumTopicParams{}).
+		WithChatID(ChatID{ID: 1})
+
+	assert.Equal(t, &UnhideGeneralForumTopicParams{
+		ChatID: ChatID{ID: 1},
 	}, u)
 }
 
