@@ -84,14 +84,14 @@ tasks:
   generator:
     desc: "Run specific generation"
     cmds:
-      - go run ./internal/generator {{.ARGS}}
+      - go run ./internal/generator {{.CLI_ARGS}}
 
   generator-all:
     desc: "Run all generators"
     cmds:
       - task: generator
         vars:
-          ARGS: types types-tests types-setters types-setters-tests methods methods-tests methods-setters methods-setters-tests
+          CLI_ARGS: types types-tests types-setters types-setters-tests methods methods-tests methods-setters methods-setters-tests
 
   generator-clean-up:
     desc: "Remove generated files"
