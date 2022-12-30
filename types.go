@@ -263,6 +263,15 @@ type Chat struct {
 	// automatically deleted; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	MessageAutoDeleteTime int `json:"message_auto_delete_time,omitempty"`
 
+	// HasAggressiveAntiSpamEnabled - Optional. True, if aggressive anti-spam checks are enabled in the
+	// supergroup. The field is only available to chat administrators. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	HasAggressiveAntiSpamEnabled bool `json:"has_aggressive_anti_spam_enabled,omitempty"`
+
+	// HasHiddenMembers - Optional. True, if non-administrators can only get the list of bots and administrators
+	// in the chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	HasHiddenMembers bool `json:"has_hidden_members,omitempty"`
+
 	// HasProtectedContent - Optional. True, if messages from the chat can't be forwarded to other chats.
 	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	HasProtectedContent bool `json:"has_protected_content,omitempty"`
@@ -410,6 +419,9 @@ type Message struct {
 	// commands, etc. that appear in the caption
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// HasMediaSpoiler - Optional. True, if the message media is covered by a spoiler animation
+	HasMediaSpoiler bool `json:"has_media_spoiler,omitempty"`
+
 	// Contact - Optional. Message is a shared contact, information about the contact
 	Contact *Contact `json:"contact,omitempty"`
 
@@ -492,6 +504,10 @@ type Message struct {
 	// Telegram Login » (https://core.telegram.org/widgets/login)
 	ConnectedWebsite string `json:"connected_website,omitempty"`
 
+	// WriteAccessAllowed - Optional. Service message: the user allowed the bot added to the attachment menu to
+	// write messages
+	WriteAccessAllowed *WriteAccessAllowed `json:"write_access_allowed,omitempty"`
+
 	// PassportData - Optional. Telegram Passport data
 	PassportData *PassportData `json:"passport_data,omitempty"`
 
@@ -502,11 +518,20 @@ type Message struct {
 	// ForumTopicCreated - Optional. Service message: forum topic created
 	ForumTopicCreated *ForumTopicCreated `json:"forum_topic_created,omitempty"`
 
+	// ForumTopicEdited - Optional. Service message: forum topic edited
+	ForumTopicEdited *ForumTopicEdited `json:"forum_topic_edited,omitempty"`
+
 	// ForumTopicClosed - Optional. Service message: forum topic closed
 	ForumTopicClosed *ForumTopicClosed `json:"forum_topic_closed,omitempty"`
 
 	// ForumTopicReopened - Optional. Service message: forum topic reopened
 	ForumTopicReopened *ForumTopicReopened `json:"forum_topic_reopened,omitempty"`
+
+	// GeneralForumTopicHidden - Optional. Service message: the 'General' forum topic hidden
+	GeneralForumTopicHidden *GeneralForumTopicHidden `json:"general_forum_topic_hidden,omitempty"`
+
+	// GeneralForumTopicUnhidden - Optional. Service message: the 'General' forum topic unhidden
+	GeneralForumTopicUnhidden *GeneralForumTopicUnhidden `json:"general_forum_topic_unhidden,omitempty"`
 
 	// VideoChatScheduled - Optional. Service message: video chat scheduled
 	VideoChatScheduled *VideoChatScheduled `json:"video_chat_scheduled,omitempty"`
@@ -546,10 +571,11 @@ type MessageEntity struct {
 	// “custom_emoji” (for inline custom emoji stickers)
 	Type string `json:"type"`
 
-	// Offset - Offset in UTF-16 code units to the start of the entity
+	// Offset - Offset in UTF-16 code units (https://core.telegram.org/api/entities#entity-length) to the start
+	// of the entity
 	Offset int `json:"offset"`
 
-	// Length - Length of the entity in UTF-16 code units
+	// Length - Length of the entity in UTF-16 code units (https://core.telegram.org/api/entities#entity-length)
 	Length int `json:"length"`
 
 	// URL - Optional. For “text_link” only, URL that will be opened after user taps on the text
@@ -989,9 +1015,31 @@ type ForumTopicCreated struct {
 // Currently holds no information.
 type ForumTopicClosed struct{}
 
+// ForumTopicEdited - This object represents a service message about an edited forum topic.
+type ForumTopicEdited struct {
+	// Name - Optional. New name of the topic, if it was edited
+	Name string `json:"name,omitempty"`
+
+	// IconCustomEmojiID - Optional. New identifier of the custom emoji shown as the topic icon, if it was
+	// edited; an empty string if the icon was removed
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+}
+
 // ForumTopicReopened - This object represents a service message about a forum topic reopened in the chat.
 // Currently holds no information.
 type ForumTopicReopened struct{}
+
+// GeneralForumTopicHidden - This object represents a service message about General forum topic hidden in the
+// chat. Currently holds no information.
+type GeneralForumTopicHidden struct{}
+
+// GeneralForumTopicUnhidden - This object represents a service message about General forum topic unhidden in
+// the chat. Currently holds no information.
+type GeneralForumTopicUnhidden struct{}
+
+// WriteAccessAllowed - This object represents a service message about a user allowing a bot added to the
+// attachment menu to write messages. Currently holds no information.
+type WriteAccessAllowed struct{}
 
 // VideoChatScheduled - This object represents a service message about a video chat scheduled in the chat.
 type VideoChatScheduled struct {
@@ -1076,6 +1124,10 @@ type ReplyKeyboardMarkup struct {
 	// Keyboard - Array of button rows, each represented by an Array of KeyboardButton
 	// (https://core.telegram.org/bots/api#keyboardbutton) objects
 	Keyboard [][]KeyboardButton `json:"keyboard"`
+
+	// IsPersistent - Optional. Requests clients to always show the keyboard when the regular keyboard is
+	// hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
+	IsPersistent bool `json:"is_persistent,omitempty"`
 
 	// ResizeKeyboard - Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make
 	// the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom
@@ -2123,6 +2175,9 @@ type InputMediaPhoto struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// HasSpoiler - Optional. Pass True if the photo needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
 }
 
 // MediaType return InputMedia type
@@ -2178,6 +2233,9 @@ type InputMediaVideo struct {
 
 	// SupportsStreaming - Optional. Pass True if the uploaded video is suitable for streaming
 	SupportsStreaming bool `json:"supports_streaming,omitempty"`
+
+	// HasSpoiler - Optional. Pass True if the video needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
 }
 
 // MediaType return InputMedia type
@@ -2237,6 +2295,9 @@ type InputMediaAnimation struct {
 
 	// Duration - Optional. Animation duration in seconds
 	Duration int `json:"duration,omitempty"`
+
+	// HasSpoiler - Optional. Pass True if the animation needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
 }
 
 // MediaType return InputMedia type

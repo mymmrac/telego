@@ -10,6 +10,7 @@ import (
 func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 	r := (&ReplyKeyboardMarkup{}).
 		WithKeyboard([][]KeyboardButton{{}}...).
+		WithIsPersistent().
 		WithResizeKeyboard().
 		WithOneTimeKeyboard().
 		WithInputFieldPlaceholder("InputFieldPlaceholder").
@@ -17,6 +18,7 @@ func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 
 	assert.Equal(t, &ReplyKeyboardMarkup{
 		Keyboard:              [][]KeyboardButton{{}},
+		IsPersistent:          true,
 		ResizeKeyboard:        true,
 		OneTimeKeyboard:       true,
 		InputFieldPlaceholder: "InputFieldPlaceholder",
@@ -115,13 +117,15 @@ func TestInputMediaPhoto_Setters(t *testing.T) {
 		WithMedia(testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
-		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...)
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaPhoto{
 		Media:           testInputFile,
 		Caption:         "Caption",
 		ParseMode:       "ParseMode",
 		CaptionEntities: []MessageEntity{{Type: "CaptionEntities"}},
+		HasSpoiler:      true,
 	}, i)
 }
 
@@ -135,7 +139,8 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 		WithWidth(1).
 		WithHeight(2).
 		WithDuration(3).
-		WithSupportsStreaming()
+		WithSupportsStreaming().
+		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaVideo{
 		Media:             testInputFile,
@@ -147,6 +152,7 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 		Height:            2,
 		Duration:          3,
 		SupportsStreaming: true,
+		HasSpoiler:        true,
 	}, i)
 }
 
@@ -159,7 +165,8 @@ func TestInputMediaAnimation_Setters(t *testing.T) {
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
 		WithWidth(1).
 		WithHeight(2).
-		WithDuration(3)
+		WithDuration(3).
+		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaAnimation{
 		Media:           testInputFile,
@@ -170,6 +177,7 @@ func TestInputMediaAnimation_Setters(t *testing.T) {
 		Width:           1,
 		Height:          2,
 		Duration:        3,
+		HasSpoiler:      true,
 	}, i)
 }
 

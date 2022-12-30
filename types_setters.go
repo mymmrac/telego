@@ -6,6 +6,12 @@ func (r *ReplyKeyboardMarkup) WithKeyboard(keyboard ...[]KeyboardButton) *ReplyK
 	return r
 }
 
+// WithIsPersistent adds is persistent parameter
+func (r *ReplyKeyboardMarkup) WithIsPersistent() *ReplyKeyboardMarkup {
+	r.IsPersistent = true
+	return r
+}
+
 // WithResizeKeyboard adds resize keyboard parameter
 func (r *ReplyKeyboardMarkup) WithResizeKeyboard() *ReplyKeyboardMarkup {
 	r.ResizeKeyboard = true
@@ -187,6 +193,12 @@ func (i *InputMediaPhoto) WithCaptionEntities(captionEntities ...MessageEntity) 
 	return i
 }
 
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaPhoto) WithHasSpoiler() *InputMediaPhoto {
+	i.HasSpoiler = true
+	return i
+}
+
 // WithMedia adds media parameter
 func (i *InputMediaVideo) WithMedia(media InputFile) *InputMediaVideo {
 	i.Media = media
@@ -241,6 +253,12 @@ func (i *InputMediaVideo) WithSupportsStreaming() *InputMediaVideo {
 	return i
 }
 
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaVideo) WithHasSpoiler() *InputMediaVideo {
+	i.HasSpoiler = true
+	return i
+}
+
 // WithMedia adds media parameter
 func (i *InputMediaAnimation) WithMedia(media InputFile) *InputMediaAnimation {
 	i.Media = media
@@ -286,6 +304,12 @@ func (i *InputMediaAnimation) WithHeight(height int) *InputMediaAnimation {
 // WithDuration adds duration parameter
 func (i *InputMediaAnimation) WithDuration(duration int) *InputMediaAnimation {
 	i.Duration = duration
+	return i
+}
+
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaAnimation) WithHasSpoiler() *InputMediaAnimation {
+	i.HasSpoiler = true
 	return i
 }
 
