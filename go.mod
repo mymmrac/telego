@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.8.1
 	github.com/valyala/fasthttp v1.43.0
-	golang.org/x/text v0.5.0
+	golang.org/x/text v0.6.0
 )
 
 require (
