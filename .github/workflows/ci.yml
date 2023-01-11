@@ -50,6 +50,9 @@ jobs:
 
       - name: Install Task
         uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
 
       - name: Run tests
         run: task test
@@ -62,7 +65,7 @@ jobs:
 
   sonar-cloud:
     name: SonarCloud Scan
-    if: github.event_name != 'pull_request'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     needs: [ test ]
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +100,9 @@ jobs:
 
       - name: Install Task
         uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
 
       - name: Build examples
         run: task build-examples
@@ -117,6 +123,9 @@ jobs:
 
       - name: Install Task
         uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
 
       - name: Run race tests
         run: task race
