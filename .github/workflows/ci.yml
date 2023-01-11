@@ -22,7 +22,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Gofmt check
         run: diff -u <(echo -n) <(gofmt -d .)
@@ -42,7 +44,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Install Task
         uses: arduino/setup-task@v1
@@ -87,7 +91,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Install Task
         uses: arduino/setup-task@v1
@@ -105,7 +111,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Install Task
         uses: arduino/setup-task@v1

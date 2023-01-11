@@ -16,7 +16,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -31,7 +33,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -46,7 +50,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -61,7 +67,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -76,7 +84,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -91,7 +101,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -106,7 +118,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
@@ -121,7 +135,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ vars.GO_VERSION }}
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
       - name: Run race tests
         run: go test -race -count=1 ./...
