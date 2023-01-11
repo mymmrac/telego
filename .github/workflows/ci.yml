@@ -65,26 +65,28 @@ jobs:
           name: code-coverage-report
           path: bin
 
-  sonar-cloud:
-    name: SonarCloud Scan
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    needs: [ test ]
+  race:
+    name: Race Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download code coverage results
-        uses: actions/download-artifact@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
         with:
-          name: code-coverage-report
-          path: bin
+          go-version-file: "go.mod"
+          check-latest: true
+          cache: true
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
+
+      - name: Run race tests
+        run: task test:race
 
   build-examples:
     name: Build Examples
@@ -107,30 +109,28 @@ jobs:
           version: 3.x
 
       - name: Build examples
-        run: task build-examples
+        run: task build:examples
 
-  race:
-    name: Race Tests
+  sonar-cloud:
+    name: SonarCloud Scan
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: [ test ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
+      - name: Download code coverage results
+        uses: actions/download-artifact@v3
         with:
-          go-version-file: "go.mod"
-          check-latest: true
-          cache: true
+          name: code-coverage-report
+          path: bin
 
-      - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 3.x
-
-      - name: Run race tests
-        run: task race
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   analyze:
     name: CodeQL Analyze

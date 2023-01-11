@@ -6,24 +6,25 @@ tasks:
   default:
     desc: "Show available tasks"
     cmds:
-      - task --list
+      - task --list-all
+
+  pre-commit:
+    desc: "Run tests, linter and build examples"
+    cmds:
+      - go mod tidy
+      - task: lint
+      - task: test
+      - task: build:examples
 
   lint:
     desc: "Run golangci-lint"
-    deps: [lint-install]
+    deps: [ install:lint ]
     cmds:
       - golangci-lint run
 
-  lint-install:
-    desc: "Install golangci-lint"
-    cmds:
-      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-    status:
-      - command -v golangci-lint
-
-  lint-list:
+  lint:list:
     desc: "Run golangci-lint linters (print enabled & disabled linters)"
-    deps: [lint-install]
+    deps: [ install:lint ]
     cmds:
       - golangci-lint linters
 
@@ -33,67 +34,69 @@ tasks:
       - mkdir -p bin
       - |
         go test -coverprofile bin/cover.out \
-          $(go list ./... | grep -v /examples/ | grep -v /test | grep -v /internal/ | grep -v /mock)
+          $(go list ./... | grep -v /examples/ | grep -v /internal/ | grep -v /mock)
     sources:
       - ./**/*.go
       - go.mod
+      - go.sum
     generates:
       - bin/cover.out
 
-  cover:
+  test:cover:
     desc: "Run tests & show coverage"
     deps:
       - test
     cmds:
       - go tool cover -func bin/cover.out
 
-  race:
+  test:race:
     desc: "Run tests with race flag"
     cmds:
       - go test -race -count=1 ./...
 
-  bench:
+  test:bench:
     desc: "Run benchmarks"
     cmds:
       - go test -bench=. -benchtime=10s -benchmem
 
-  build-examples:
-    desc: "Build examples into bin folder"
+  build:examples:
+    desc: "Build examples"
     cmds:
       - go build -o bin/ ./examples/*
 
-  pre-commit:
-    desc: "Run tests, linter and build examples"
-    cmds:
-      - task: test
-      - task: lint
-      - task: build-examples
-
   generate:
     desc: "Generate (used for mock generation)"
+    deps: [ install:mock ]
     cmds:
       - go generate ./...
-
-  mock-install:
-    desc: "Install mockgen"
-    cmds:
-      - go install github.com/golang/mock/mockgen@latest
-    status:
-      - command -v mockgen
 
   generator:
     desc: "Run specific generation"
     cmds:
       - go run ./internal/generator {{.CLI_ARGS}}
 
-  generator-all:
+  generator:all:
     desc: "Run all generators"
     cmds:
       - task: generator
         vars:
           CLI_ARGS: types types-tests types-setters types-setters-tests methods methods-tests methods-setters methods-setters-tests
 
-  generator-clean-up:
+  generator:clean-up:
     desc: "Remove generated files"
     cmds:
       - rm *.generated
+
+  install:lint:
+    desc: "Install golangci-lint"
+    cmds:
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    status:
+      - command -v golangci-lint
+
+  install:mock:
+    desc: "Install mockgen"
+    cmds:
+      - go install github.com/golang/mock/mockgen@latest
+    status:
+      - command -v mockgen
