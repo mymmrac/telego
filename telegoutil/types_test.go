@@ -148,6 +148,16 @@ func TestKeyboardRow(t *testing.T) {
 	assert.Equal(t, 2, len(k))
 }
 
+func TestReplyKeyboardRemove(t *testing.T) {
+	r := ReplyKeyboardRemove()
+	assert.True(t, r.RemoveKeyboard)
+}
+
+func TestForceReply(t *testing.T) {
+	f := ForceReply()
+	assert.True(t, f.ForceReply)
+}
+
 func TestMediaAnimation(t *testing.T) {
 	m := MediaAnimation(telego.InputFile{File: nr})
 	assert.Equal(t, telego.MediaTypeAnimation, m.Type)

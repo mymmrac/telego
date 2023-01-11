@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 29
+const testCase = 30
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -678,6 +678,10 @@ func main() {
 					),
 				),
 		)
+		assert(err == nil, err)
+	case 30:
+		_, err = bot.SendMessage(tu.Message(myID, "Reply?").
+			WithReplyMarkup(tu.ForceReply().WithInputFieldPlaceholder("GG")))
 		assert(err == nil, err)
 	}
 }

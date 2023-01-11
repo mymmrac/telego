@@ -47,7 +47,7 @@ func Keyboard(rows ...[]telego.KeyboardButton) *telego.ReplyKeyboardMarkup {
 	}
 }
 
-// KeyboardRow creates slice of telego.KeyboardButton
+// KeyboardRow creates a slice of telego.KeyboardButton
 func KeyboardRow(buttons ...telego.KeyboardButton) []telego.KeyboardButton {
 	return buttons
 }
@@ -56,6 +56,20 @@ func KeyboardRow(buttons ...telego.KeyboardButton) []telego.KeyboardButton {
 func KeyboardButton(text string) telego.KeyboardButton {
 	return telego.KeyboardButton{
 		Text: text,
+	}
+}
+
+// ReplyKeyboardRemove creates telego.ReplyKeyboardRemove with required fields
+func ReplyKeyboardRemove() *telego.ReplyKeyboardRemove {
+	return &telego.ReplyKeyboardRemove{
+		RemoveKeyboard: true,
+	}
+}
+
+// ForceReply creates telego.ForceReply with required fields
+func ForceReply() *telego.ForceReply {
+	return &telego.ForceReply{
+		ForceReply: true,
 	}
 }
 
@@ -85,7 +99,7 @@ func InlineKeyboard(rows ...[]telego.InlineKeyboardButton) *telego.InlineKeyboar
 	}
 }
 
-// InlineKeyboardRow creates slice of telego.InlineKeyboardButton
+// InlineKeyboardRow creates a slice of telego.InlineKeyboardButton
 func InlineKeyboardRow(buttons ...telego.InlineKeyboardButton) []telego.InlineKeyboardButton {
 	return buttons
 }
