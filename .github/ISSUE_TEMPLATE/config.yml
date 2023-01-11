@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: 💬 Have a question or topic do discuss?
+    url: https://github.com/mymmrac/telego/discussions
+    about: "Go to discussions and ask anything"
   - name: 📄 Telegram Bot API
     url: https://core.telegram.org/bots/api
     about: "Telegram documentation of Bot API (full reference)"
