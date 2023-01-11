@@ -5,6 +5,9 @@ on:
     - cron: "0 7 4 * *"
   workflow_dispatch: { }
 
+permissions:
+  contents: read
+
 jobs:
   race-1:
     name: Race Test 1
