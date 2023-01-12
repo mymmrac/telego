@@ -12,6 +12,7 @@ tasks:
     desc: "Run tests, linter and build examples"
     cmds:
       - go mod tidy
+      - task: generate
       - task: lint
       - task: test
       - task: build:examples

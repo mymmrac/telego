@@ -43,7 +43,7 @@ func testHandlerSetup(t *testing.T, bh *BotHandler) {
 }
 
 func TestBotHandler_HandleMessage(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleMessage(nil) })
 
@@ -61,7 +61,7 @@ func TestBotHandler_HandleMessage(t *testing.T) {
 }
 
 func TestBotHandler_HandleEditedMessage(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleEditedMessage(nil) })
 
@@ -79,7 +79,7 @@ func TestBotHandler_HandleEditedMessage(t *testing.T) {
 }
 
 func TestBotHandler_HandleChannelPost(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleChannelPost(nil) })
 
@@ -97,7 +97,7 @@ func TestBotHandler_HandleChannelPost(t *testing.T) {
 }
 
 func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleEditedChannelPost(nil) })
 
@@ -115,7 +115,7 @@ func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 }
 
 func TestBotHandler_HandleInlineQuery(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleInlineQuery(nil) })
 
@@ -133,7 +133,7 @@ func TestBotHandler_HandleInlineQuery(t *testing.T) {
 }
 
 func TestBotHandler_HandleChosenInlineResult(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleChosenInlineResult(nil) })
 
@@ -151,7 +151,7 @@ func TestBotHandler_HandleChosenInlineResult(t *testing.T) {
 }
 
 func TestBotHandler_HandleCallbackQuery(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleCallbackQuery(nil) })
 
@@ -169,7 +169,7 @@ func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 }
 
 func TestBotHandler_HandleShippingQuery(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleShippingQuery(nil) })
 
@@ -187,7 +187,7 @@ func TestBotHandler_HandleShippingQuery(t *testing.T) {
 }
 
 func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandlePreCheckoutQuery(nil) })
 
@@ -205,7 +205,7 @@ func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
 }
 
 func TestBotHandler_HandlePoll(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandlePoll(nil) })
 
@@ -223,7 +223,7 @@ func TestBotHandler_HandlePoll(t *testing.T) {
 }
 
 func TestBotHandler_HandlePollAnswer(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandlePollAnswer(nil) })
 
@@ -241,7 +241,7 @@ func TestBotHandler_HandlePollAnswer(t *testing.T) {
 }
 
 func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleMyChatMemberUpdated(nil) })
 
@@ -262,7 +262,7 @@ func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 }
 
 func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleChatMemberUpdated(nil) })
 
@@ -283,7 +283,7 @@ func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
 }
 
 func TestBotHandler_HandleChatJoinRequest(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	require.Panics(t, func() { bh.HandleChatJoinRequest(nil) })
 

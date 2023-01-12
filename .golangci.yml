@@ -7,8 +7,8 @@ run:
   # "/" will be replaced by current OS file path separator to properly work
   # on Windows.
   skip-dirs:
-    - test
-    - generator
+    - mock
+    - internal
 
 # Output configuration options
 output:
@@ -19,36 +19,39 @@ output:
 linters:
   enable-all: true
   disable:
-    - deadcode # Finds unused code
+    # Disabled because not relevant for this project
     - dupword # checks for duplicate words in the source code
-    - execinquery # execinquery is a linter about query string checker in Query function which reads your Go src files and warning it finds
-    - exhaustivestruct # Checks if all struct's fields are initialized
     - exhaustruct # Checks if all structure fields are initialized
-    - forbidigo # Forbids identifiers
     - gochecknoglobals # check that no global variables exist
     - godot # Check if comments end in a period
     - goerr113 # Golang linter to check the errors handling expressions
-    - golint # Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
-    - ifshort # Checks that your code uses short syntax for if-statements whenever possible
-    - interfacer # Linter that suggests narrower interface types
     - ireturn # Accept Interfaces, Return Concrete Types
-    - maligned # Tool to detect Go structs that would take less memory if their fields were sorted
     - nlreturn # nlreturn checks for a new line before return and branch statements to increase code clarity
     - noctx # noctx finds sending http request without context.Context
     - nonamedreturns # Reports all named returns
-    - nosnakecase # nosnakecase is a linter that detects snake case of variable naming and function name.
     - paralleltest # paralleltest detects missing usage of t.Parallel() method in your Go test
-    - rowserrcheck # checks whether Err of rows is checked successfully
-    - scopelint # Scopelint checks for unpinned variables in go programs
-    - structcheck # Finds unused struct fields
-    - sqlclosecheck # Checks that sql.Rows and sql.Stmt are closed
-    - tagliatelle # Checks the struct tags.
+    - tagliatelle # Checks the struct tags
     - testpackage # linter that makes you use a separate _test package
-    - varcheck # Finds unused global variables and constants
     - varnamelen # checks that the length of a variable's name matches its scope
-    - wastedassign # wastedassign finds wasted assignment statements
     - wrapcheck # Checks that errors returned from external packages are wrapped
     - wsl # Whitespace Linter - Forces you to use empty lines!
+
+    # Disabled because of generics
+    - rowserrcheck # checks whether Err of rows is checked successfully
+    - sqlclosecheck # Checks that sql.Rows and sql.Stmt are closed
+    - wastedassign # wastedassign finds wasted assignment statements
+
+    # Disabled because deprecated
+    - deadcode # Finds unused code
+    - exhaustivestruct # Checks if all struct's fields are initialized
+    - golint # Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
+    - ifshort # Checks that your code uses short syntax for if-statements whenever possible
+    - interfacer # Linter that suggests narrower interface types
+    - maligned # Tool to detect Go structs that would take less memory if their fields were sorted
+    - nosnakecase # nosnakecase is a linter that detects snake case of variable naming and function name.
+    - scopelint # Scopelint checks for unpinned variables in go programs
+    - structcheck # Finds unused struct fields
+    - varcheck # Finds unused global variables and constants
 
     # To see a list of enabled/disabled by current configuration linters:
     # golangci-lint linters
@@ -125,9 +128,6 @@ linters-settings:
     # Make an issue if func has more lines of code than this setting, and it has naked returns; default is 30
     # decided to use 3 to exclude long functions with named returns which can be a potential source of many errors / bugs
     max-func-lines: 3
-  deadcode: # Finds unused code
-    # Include test files
-    test: true
   staticcheck: # Staticcheck is a go vet on steroids, applying a ton of static analysis checks
     # Include tests in the analysis.
     tests: true
@@ -149,6 +149,62 @@ linters-settings:
     # Presence of "default" case in switch statements satisfies exhaustiveness,
     # even if all enum members are not listed
     default-signifies-exhaustive: true
+  revive:
+    # Enable all available rules.
+    # Default: false
+    enable-all-rules: true
+    rules:
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
+      - name: add-constant
+        disabled: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#argument-limit
+      - name: argument-limit
+        severity: warning
+        disabled: false
+        arguments: [ 7 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#banned-characters
+      - name: banned-characters
+        disabled: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cognitive-complexity
+      - name: cognitive-complexity
+        severity: warning
+        disabled: false
+        arguments: [ 20 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cyclomatic
+      - name: cyclomatic
+        severity: warning
+        disabled: false
+        arguments: [ 15 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
+      - name: file-header
+        disabled: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-result-limit
+      - name: function-result-limit
+        severity: warning
+        disabled: false
+        arguments: [ 3 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-length
+      - name: function-length
+        disabled: true # Duplicate: funlen
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#line-length-limit
+      - name: line-length-limit
+        disabled: true # Duplicate: lll
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#max-public-structs
+      - name: max-public-structs
+        disabled: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#modifies-value-receiver
+      - name: modifies-value-receiver
+        disabled: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#package-comments
+      - name: package-comments
+        disabled: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unused-receiver
+      - name: unused-receiver
+        disabled: true
+  cyclop:
+    # The maximal code complexity to report.
+    # Default: 10
+    max-complexity: 15
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
@@ -168,6 +224,7 @@ issues:
   # Set to 0 to disable.
   # Default: 50
   max-issues-per-linter: 0
+
   # Maximum count of issues with the same text.
   # Set to 0 to disable.
   # Default: 3

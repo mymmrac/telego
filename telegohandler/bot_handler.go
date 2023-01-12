@@ -85,10 +85,10 @@ func (h *BotHandler) processUpdate(update telego.Update) {
 		}
 
 		h.handledUpdates.Add(1)
-		go func() {
+		go func(ch *conditionalHandler) {
 			ch.Handler(h.bot, update)
 			h.handledUpdates.Done()
-		}()
+		}(ch)
 
 		return
 	}

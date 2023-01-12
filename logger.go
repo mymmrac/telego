@@ -68,7 +68,8 @@ func (l *logger) log(mode logMode, text string) {
 
 	_, err := l.Out.Write([]byte(l.prefix(mode) + text))
 	if err != nil {
-		fmt.Printf("Logging error: %v\n", err)
+		//nolint:forbidigo
+		_, _ = fmt.Printf("Logging error: %v\n", err)
 	}
 }
 

@@ -22,7 +22,7 @@ const (
 
 var errTest = errors.New("error")
 
-func newBotHandler(t *testing.T) *BotHandler {
+func newTestBotHandler(t *testing.T) *BotHandler {
 	t.Helper()
 
 	bot, err := telego.NewBot(token)
@@ -128,9 +128,10 @@ func TestBotHandler_Start(t *testing.T) {
 	})
 }
 
+//revive:disable:cognitive-complexity
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
-		bh := newBotHandler(t)
+		bh := newTestBotHandler(t)
 		bh.stop = make(chan struct{})
 		assert.NotPanics(t, func() {
 			bh.Stop()
@@ -156,7 +157,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() {
+			for !bh.IsRunning() { //nolint:revive
 				// Wait for handler to start
 			}
 
@@ -191,7 +192,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() {
+			for !bh.IsRunning() { //nolint:revive
 				// Wait for handler to start
 			}
 
@@ -225,7 +226,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() {
+			for !bh.IsRunning() { //nolint:revive
 				// Wait for handler to start
 			}
 
@@ -237,7 +238,7 @@ func TestBotHandler_Stop(t *testing.T) {
 }
 
 func TestBotHandler_Handle(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	t.Run("panic_nil_handler", func(t *testing.T) {
 		assert.Panics(t, func() {
@@ -277,7 +278,7 @@ func TestBotHandler_Handle(t *testing.T) {
 }
 
 func TestBotHandler_IsRunning(t *testing.T) {
-	bh := newBotHandler(t)
+	bh := newTestBotHandler(t)
 
 	t.Run("stopped", func(t *testing.T) {
 		assert.False(t, bh.IsRunning())

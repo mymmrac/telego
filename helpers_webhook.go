@@ -56,13 +56,13 @@ func WithWebhookServer(server *fasthttp.Server) WebhookOption {
 
 // WithWebhookRouter sets HTTP router to use for webhook. Default is router.New()
 // Note: For webhook to work properly POST route with a path specified in Bot.UpdatesViaWebhook() must be unset.
-func WithWebhookRouter(router *router.Router) WebhookOption {
+func WithWebhookRouter(rtr *router.Router) WebhookOption {
 	return func(ctx *webhookContext) error {
-		if router == nil {
+		if rtr == nil {
 			return errors.New("webhook router is nil")
 		}
 
-		ctx.router = router
+		ctx.router = rtr
 		return nil
 	}
 }

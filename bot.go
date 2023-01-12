@@ -157,7 +157,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 			return nil, fmt.Errorf("json request: %w", err)
 		}
 
-		debug.WriteString(data.Buffer.String())
+		_, _ = debug.WriteString(data.Buffer.String())
 	}
 
 	url := b.apiURL + "/bot" + b.token + "/" + methodName
@@ -281,5 +281,5 @@ func logRequestWithFiles(debug strings.Builder, parameters map[string]string, fi
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)
 
-	debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
+	_, _ = debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 }

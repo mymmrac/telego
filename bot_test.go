@@ -185,12 +185,12 @@ func Test_parseParameters(t *testing.T) {
 		{
 			name: "success",
 			parameters: &struct {
-				Empty       string `json:"empty,omitempty"`
-				EmptyNoOmit string `json:"empty_no_omit"`
-				Number      int    `json:"number"`
-				Array       []int  `json:"array"`
-				Text        string `json:"text"`
-				Struct      *struct {
+				Empty       string    `json:"empty,omitempty"`
+				EmptyNoOmit string    `json:"empty_no_omit"`
+				Number      int       `json:"number"`
+				Array       []int     `json:"array"`
+				Text        string    `json:"text"`
+				Struct      *struct { //revive:disable:nested-structs
 					N int `json:"n"`
 				} `json:"struct"`
 			}{
