@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestBot_UpdatesViaLongPulling(t *testing.T) {
+func TestBot_UpdatesViaLongPolling(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
 	t.Run("success", func(t *testing.T) {
@@ -29,10 +29,10 @@ func TestBot_UpdatesViaLongPulling(t *testing.T) {
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPulling(nil)
+			_, err := m.Bot.UpdatesViaLongPolling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopLongPulling()
+			m.Bot.StopLongPolling()
 			time.Sleep(time.Millisecond * 500)
 		})
 	})
@@ -45,10 +45,10 @@ func TestBot_UpdatesViaLongPulling(t *testing.T) {
 			Return(nil, errTest).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPulling(nil)
+			_, err := m.Bot.UpdatesViaLongPolling(nil)
 			assert.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopLongPulling()
+			m.Bot.StopLongPolling()
 		})
 	})
 
@@ -60,13 +60,13 @@ func TestBot_UpdatesViaLongPulling(t *testing.T) {
 			Return(nil, errTest).AnyTimes()
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPulling(nil)
+			_, err := m.Bot.UpdatesViaLongPolling(nil)
 			assert.NoError(t, err)
 
-			_, err = m.Bot.UpdatesViaLongPulling(nil)
+			_, err = m.Bot.UpdatesViaLongPolling(nil)
 			assert.Error(t, err)
 
-			m.Bot.StopLongPulling()
+			m.Bot.StopLongPolling()
 		})
 	})
 
@@ -74,18 +74,18 @@ func TestBot_UpdatesViaLongPulling(t *testing.T) {
 		m := newMockedBot(ctrl)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPulling(nil, WithLongPullingUpdateInterval(-time.Second))
+			_, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingUpdateInterval(-time.Second))
 			assert.Error(t, err)
 		})
 	})
 }
 
-func TestBot_IsRunningLongPulling(t *testing.T) {
+func TestBot_IsRunningLongPolling(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
 
 	t.Run("stopped", func(t *testing.T) {
-		assert.False(t, m.Bot.IsRunningLongPulling())
+		assert.False(t, m.Bot.IsRunningLongPolling())
 	})
 
 	t.Run("running", func(t *testing.T) {
@@ -98,77 +98,77 @@ func TestBot_IsRunningLongPulling(t *testing.T) {
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil).AnyTimes()
 
-		_, err := m.Bot.UpdatesViaLongPulling(nil)
+		_, err := m.Bot.UpdatesViaLongPolling(nil)
 		require.NoError(t, err)
 
-		assert.True(t, m.Bot.IsRunningLongPulling())
+		assert.True(t, m.Bot.IsRunningLongPolling())
 
-		m.Bot.StopLongPulling()
-		assert.False(t, m.Bot.IsRunningLongPulling())
+		m.Bot.StopLongPolling()
+		assert.False(t, m.Bot.IsRunningLongPolling())
 	})
 }
 
-func TestBot_StopLongPulling(t *testing.T) {
+func TestBot_StopLongPolling(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		bot := &Bot{}
 
-		bot.longPullingContext = &longPullingContext{
+		bot.longPollingContext = &longPollingContext{
 			running: true,
 			stop:    make(chan struct{}),
 		}
 		assert.NotPanics(t, func() {
-			bot.StopLongPulling()
+			bot.StopLongPolling()
 		})
 
-		assert.Nil(t, bot.longPullingContext)
+		assert.Nil(t, bot.longPollingContext)
 	})
 
 	t.Run("success_no_context", func(t *testing.T) {
 		bot := &Bot{}
 
 		assert.NotPanics(t, func() {
-			bot.StopLongPulling()
+			bot.StopLongPolling()
 		})
 	})
 }
 
-func TestWithLongPullingUpdateInterval(t *testing.T) {
-	ctx := &longPullingContext{}
+func TestWithLongPollingUpdateInterval(t *testing.T) {
+	ctx := &longPollingContext{}
 	interval := time.Second
 
 	t.Run("success", func(t *testing.T) {
-		err := WithLongPullingUpdateInterval(interval)(ctx)
+		err := WithLongPollingUpdateInterval(interval)(ctx)
 		assert.NoError(t, err)
 		assert.EqualValues(t, interval, ctx.updateInterval)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithLongPullingUpdateInterval(-interval)(ctx)
+		err := WithLongPollingUpdateInterval(-interval)(ctx)
 		assert.Error(t, err)
 	})
 }
 
-func TestWithLongPullingRetryTimeout(t *testing.T) {
-	ctx := &longPullingContext{}
+func TestWithLongPollingRetryTimeout(t *testing.T) {
+	ctx := &longPollingContext{}
 	timeout := time.Second
 
 	t.Run("success", func(t *testing.T) {
-		err := WithLongPullingRetryTimeout(timeout)(ctx)
+		err := WithLongPollingRetryTimeout(timeout)(ctx)
 		assert.NoError(t, err)
 		assert.EqualValues(t, timeout, ctx.retryTimeout)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithLongPullingRetryTimeout(-timeout)(ctx)
+		err := WithLongPollingRetryTimeout(-timeout)(ctx)
 		assert.Error(t, err)
 	})
 }
 
-func TestWithLongPullingBuffer(t *testing.T) {
-	ctx := &longPullingContext{}
+func TestWithLongPollingBuffer(t *testing.T) {
+	ctx := &longPollingContext{}
 	buffer := uint(1)
 
-	err := WithLongPullingBuffer(buffer)(ctx)
+	err := WithLongPollingBuffer(buffer)(ctx)
 	assert.NoError(t, err)
 	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
 }

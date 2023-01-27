@@ -23,8 +23,8 @@ func main() {
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %+v\n", botUser)
 
-	updates, _ := bot.UpdatesViaLongPulling(nil)
-	defer bot.StopLongPulling()
+	updates, _ := bot.UpdatesViaLongPolling(nil)
+	defer bot.StopLongPolling()
 
 	for update := range updates {
 		if update.Message != nil {

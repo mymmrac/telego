@@ -20,10 +20,10 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Stop reviving updates from updates channel
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	fmt.Println("Listening for updates...")
 
@@ -38,7 +38,7 @@ func main() {
 
 		// Stop bot when processed 3 updates
 		if currentCount >= 3 {
-			bot.StopLongPulling()
+			bot.StopLongPolling()
 		}
 
 		return update

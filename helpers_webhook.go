@@ -18,7 +18,7 @@ const defaultWebhookUpdateChanBuffer = 100 // Limited by number of updates in si
 
 const webhookHealthAPIPath = "/health"
 
-// longPullingContext represents configuration of getting updates via webhook
+// longPollingContext represents configuration of getting updates via webhook
 type webhookContext struct {
 	running     bool
 	configured  bool
@@ -180,7 +180,7 @@ func (b *Bot) IsRunningWebhook() bool {
 // StopWebhook shutdown webhook server used in the UpdatesViaWebhook() method.
 // Stopping will stop new updates from coming, but processing updates should be handled by the caller.
 // Stop will only ensure that no more updates will come in update chan.
-// Calling StopLongPulling() multiple times does nothing.
+// Calling StopLongPolling() multiple times does nothing.
 func (b *Bot) StopWebhook() error {
 	ctx := b.webhookContext
 	if ctx == nil {
@@ -191,7 +191,7 @@ func (b *Bot) StopWebhook() error {
 }
 
 // StopWebhookCustom shutdown webhook server used in the UpdatesViaWebhook() method using provided shutdown func.
-// Calling StopLongPulling() multiple times does nothing.
+// Calling StopLongPolling() multiple times does nothing.
 // Note: Shutdown func can be nil (useful for running multiple bots on the same server).
 //
 // Warning: If after shutdown func any updates will be passed into updates chan, the program will panic.

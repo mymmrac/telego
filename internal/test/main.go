@@ -73,16 +73,16 @@ func main() {
 		}
 		fmt.Println(msg)
 	case 2:
-		updChan, err := bot.UpdatesViaLongPulling(&telego.GetUpdatesParams{})
+		updChan, err := bot.UpdatesViaLongPolling(&telego.GetUpdatesParams{})
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		defer bot.StopLongPulling()
+		defer bot.StopLongPolling()
 
 		for upd := range updChan {
 			fmt.Println(upd)
-			fmt.Println(bot.IsRunningLongPulling())
+			fmt.Println(bot.IsRunningLongPolling())
 
 			if upd.Message != nil {
 				_, err := bot.CopyMessage(&telego.CopyMessageParams{
@@ -287,8 +287,8 @@ func main() {
 			return
 		}
 	case 15:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 		defer bh.Stop()
@@ -309,8 +309,8 @@ func main() {
 
 		bh.Start()
 	case 16:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
@@ -343,8 +343,8 @@ func main() {
 		bh.Start()
 		defer bh.Stop()
 	case 17:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
@@ -362,10 +362,10 @@ func main() {
 		bh.Start()
 		defer bh.Stop()
 	case 18:
-		updates, err := bot.UpdatesViaLongPulling(nil)
+		updates, err := bot.UpdatesViaLongPolling(nil)
 		assert(err == nil, err)
 
-		defer bot.StopLongPulling()
+		defer bot.StopLongPolling()
 
 		bh, err := th.NewBotHandler(bot, updates)
 		assert(err == nil, err)
@@ -410,8 +410,8 @@ func main() {
 		bh.Start()
 		defer bh.Stop()
 	case 19:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
@@ -489,8 +489,8 @@ func main() {
 		err = bot.SendChatAction(tu.ChatAction(myID, telego.ChatActionTyping))
 		assert(err == nil, err)
 	case 21:
-		updates, _ := bot.UpdatesViaLongPulling(nil, telego.WithLongPullingUpdateInterval(time.Second))
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil, telego.WithLongPollingUpdateInterval(time.Second))
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
@@ -529,8 +529,8 @@ func main() {
 		defer bh.Stop()
 		bh.Start()
 	case 22:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
@@ -567,8 +567,8 @@ func main() {
 		defer bh.Stop()
 		bh.Start()
 	case 23:
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
@@ -589,15 +589,15 @@ func main() {
 		defer bh.Stop()
 		bh.Start()
 	case 24:
-		updates, err := bot.UpdatesViaLongPulling(nil)
+		updates, err := bot.UpdatesViaLongPolling(nil)
 		assert(err == nil, err)
 
-		fmt.Println(bot.IsRunningLongPulling())
+		fmt.Println(bot.IsRunningLongPolling())
 		time.Sleep(time.Second * 10)
 
-		fmt.Println(bot.IsRunningLongPulling())
-		bot.StopLongPulling()
-		fmt.Println(bot.IsRunningLongPulling())
+		fmt.Println(bot.IsRunningLongPolling())
+		bot.StopLongPolling()
+		fmt.Println(bot.IsRunningLongPolling())
 
 		for upd := range updates {
 			fmt.Println(upd)

@@ -22,10 +22,10 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Stop reviving updates from updates channel
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Loop through all updates when they came
 	for update := range updates {

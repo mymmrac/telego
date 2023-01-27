@@ -28,7 +28,7 @@ func main() {
 	done := make(chan struct{}, 1)
 
 	// Get updates
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Handle updates
 	for update := range updates {
@@ -44,8 +44,8 @@ func main() {
 
 		fmt.Println("Stopping...")
 
-		bot.StopLongPulling()
-		fmt.Println("Long pulling done")
+		bot.StopLongPolling()
+		fmt.Println("Long polling done")
 
 		// Notify that stop is done
 		done <- struct{}{}

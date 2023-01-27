@@ -29,7 +29,7 @@ func main() {
 	done := make(chan struct{}, 1)
 
 	// Get updates
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Create bot handler with stop timeout
 	bh, _ := th.NewBotHandler(bot, updates, th.WithStopTimeout(time.Second*10))
@@ -48,8 +48,8 @@ func main() {
 
 		fmt.Println("Stopping...")
 
-		bot.StopLongPulling()
-		fmt.Println("Long pulling done")
+		bot.StopLongPolling()
+		fmt.Println("Long polling done")
 
 		bh.Stop()
 		fmt.Println("Bot handler done")

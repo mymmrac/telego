@@ -40,8 +40,8 @@ func main() {
 	// Sending message
 	_, _ = bot.SendMessage(message)
 
-	updates, _ := bot.UpdatesViaLongPulling(nil)
-	defer bot.StopLongPulling()
+	updates, _ := bot.UpdatesViaLongPolling(nil)
+	defer bot.StopLongPolling()
 
 	// Receiving callback data
 	for update := range updates {

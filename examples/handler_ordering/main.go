@@ -18,7 +18,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	bh, _ := th.NewBotHandler(bot, updates)
 
@@ -26,7 +26,7 @@ func main() {
 	defer bh.Stop()
 
 	// Stop getting updates
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Should not be here, because order of handlers do meter.
 	//

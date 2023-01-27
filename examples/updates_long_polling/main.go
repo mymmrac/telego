@@ -19,26 +19,26 @@ func main() {
 	}
 
 	// Get updates channel, all options are optional
-	updates, _ := bot.UpdatesViaLongPulling(
+	updates, _ := bot.UpdatesViaLongPolling(
 		// Set Telegram parameter to get updates, can be nil
 		&telego.GetUpdatesParams{
-			// Offset:  0, // Will be automatically updated by UpdatesViaLongPulling
-			// Timeout: 0, // Can be set instead of using WithLongPullingUpdateInterval (recommended)
+			// Offset:  0, // Will be automatically updated by UpdatesViaLongPolling
+			// Timeout: 0, // Can be set instead of using WithLongPollingUpdateInterval (recommended)
 		},
 
 		// Set interval of getting updates (default: 0.5s).
 		// If you want to get updates as fast as possible set to 0, but webhook method is recommended for this.
-		telego.WithLongPullingUpdateInterval(time.Second/2),
+		telego.WithLongPollingUpdateInterval(time.Second/2),
 
 		// Set retry timeout that will be used if an error occurs (default 3s)
-		telego.WithLongPullingRetryTimeout(time.Second*3),
+		telego.WithLongPollingRetryTimeout(time.Second*3),
 
 		// Set chan buffer (default 100)
-		telego.WithLongPullingBuffer(100),
+		telego.WithLongPollingBuffer(100),
 	)
 
 	// Stop reviving updates from update channel
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Loop through all updates when they came
 	for update := range updates {

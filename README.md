@@ -68,7 +68,7 @@ More examples can be seen here:
 - [Basic](examples/basic/main.go)
 - [Configuration](examples/configuration/main.go)
 - [Methods](examples/methods/main.go)
-- [Updates (long pulling)](examples/updates_long_pulling/main.go)
+- [Updates (long polling)](examples/updates_long_polling/main.go)
 - [Updates (webhook)](examples/updates_webhook/main.go)
 - [Echo bot](examples/echo_bot/main.go)
 - [Echo bot (with handlers)](examples/echo_bot_with_handlers/main.go)
@@ -79,7 +79,7 @@ More examples can be seen here:
 - [Inline query bot](examples/inline_query_bot/main.go)
 - [Bot handlers](examples/handler/main.go)
 - [Graceful shutdown (no helpers)](examples/graceful_shutdown_no_helpers/main.go)
-- [Graceful shutdown (long pulling)](examples/graceful_shutdown_long_pulling/main.go)
+- [Graceful shutdown (long polling)](examples/graceful_shutdown_long_polling/main.go)
 - [Graceful shutdown (webhook)](examples/graceful_shutdown_webhook/main.go)
 - [Custom predicates for handlers](examples/handler_custom/main.go)
 - [Handler ordering](examples/handler_ordering/main.go)
@@ -160,10 +160,10 @@ func main() {
 
 In order to receive updates you can use two methods:
 
-- using long polling (`bot.UpdatesViaLongPulling`)
+- using long polling (`bot.UpdatesViaLongPolling`)
 - using webhook (`bot.UpdatesViaWebhook`)
 
-Let's start from long pulling (easier for local testing):
+Let's start from long polling (easier for local testing):
 
 ```go
 package main
@@ -187,11 +187,11 @@ func main() {
 	}
 
 	// Get updates channel
-	// (more on configuration at examples/updates_long_pulling/main.go)
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	// (more on configuration at examples/updates_long_polling/main.go)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Stop reviving updates from updates channel
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Loop through all updates when they came
 	for update := range updates {
@@ -292,8 +292,8 @@ func main() {
 	botUser, _ := bot.GetMe()
 	fmt.Printf("Bot User: %+v\n", botUser)
 
-	updates, _ := bot.UpdatesViaLongPulling(nil)
-	defer bot.StopLongPulling()
+	updates, _ := bot.UpdatesViaLongPolling(nil)
+	defer bot.StopLongPolling()
 
 	for update := range updates {
 		if update.Message != nil {
@@ -421,7 +421,7 @@ I suggest including it with alias to get cleaner code:
 import th "github.com/mymmrac/telego/telegohandler"
 ```
 
-Here is example of using handlers with long pulling updates. You can see full list of available predicates
+Here is example of using handlers with long polling updates. You can see full list of available predicates
 in [`telegohandler/predicates`](telegohandler/predicates.go), or define your own.
 
 ```go
@@ -448,7 +448,7 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
@@ -457,7 +457,7 @@ func main() {
 	defer bh.Stop()
 
 	// Stop getting updates
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Register new handler with match on command `/start`
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {

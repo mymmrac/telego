@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	defaultLongPullingUpdateChanBuffer = 100             // Limited by number of updates in single Bot.GetUpdates() call
-	defaultLongPullingUpdateInterval   = time.Second / 2 // 0.5s
-	defaultLongPullingRetryTimeout     = time.Second * 3 // 3s
+	defaultLongPollingUpdateChanBuffer = 100             // Limited by number of updates in single Bot.GetUpdates() call
+	defaultLongPollingUpdateInterval   = time.Second / 2 // 0.5s
+	defaultLongPollingRetryTimeout     = time.Second * 3 // 3s
 )
 
-// longPullingContext represents configuration of getting updates via long pulling
-type longPullingContext struct {
+// longPollingContext represents configuration of getting updates via long polling
+type longPollingContext struct {
 	running     bool
 	runningLock sync.RWMutex
 	stop        chan struct{}
@@ -24,16 +24,16 @@ type longPullingContext struct {
 	retryTimeout     time.Duration
 }
 
-// LongPullingOption represents an option that can be applied to longPullingContext
-type LongPullingOption func(ctx *longPullingContext) error
+// LongPollingOption represents an option that can be applied to longPollingContext
+type LongPollingOption func(ctx *longPollingContext) error
 
-// WithLongPullingUpdateInterval sets an update interval for long pulling. Ensure that between two calls of
+// WithLongPollingUpdateInterval sets an update interval for long polling. Ensure that between two calls of
 // Bot.GetUpdates() will be at least specified time, but it could be longer.
 // Default is 0.5s.
 // Note: Telegram has built in a timeout mechanism, to properly use it set GetUpdatesParams.Timeout to desired timeout
 // and update interval to 0 (recommended way).
-func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOption {
-	return func(ctx *longPullingContext) error {
+func WithLongPollingUpdateInterval(updateInterval time.Duration) LongPollingOption {
+	return func(ctx *longPollingContext) error {
 		if updateInterval < 0 {
 			return errors.New("update interval can't be negative")
 		}
@@ -43,12 +43,12 @@ func WithLongPullingUpdateInterval(updateInterval time.Duration) LongPullingOpti
 	}
 }
 
-// WithLongPullingRetryTimeout sets updates retry timeout for long pulling.
+// WithLongPollingRetryTimeout sets updates retry timeout for long polling.
 // Ensure that between two calls of Bot.GetUpdates() will be at least specified time if an error occurred,
 // but it could be longer.
 // Default is 3s.
-func WithLongPullingRetryTimeout(retryTimeout time.Duration) LongPullingOption {
-	return func(ctx *longPullingContext) error {
+func WithLongPollingRetryTimeout(retryTimeout time.Duration) LongPollingOption {
+	return func(ctx *longPollingContext) error {
 		if retryTimeout < 0 {
 			return errors.New("retry timeout can't be negative")
 		}
@@ -58,24 +58,24 @@ func WithLongPullingRetryTimeout(retryTimeout time.Duration) LongPullingOption {
 	}
 }
 
-// WithLongPullingBuffer sets buffering for update chan.
+// WithLongPollingBuffer sets buffering for update chan.
 // Default is 100.
-func WithLongPullingBuffer(chanBuffer uint) LongPullingOption {
-	return func(ctx *longPullingContext) error {
+func WithLongPollingBuffer(chanBuffer uint) LongPollingOption {
+	return func(ctx *longPollingContext) error {
 		ctx.updateChanBuffer = chanBuffer
 		return nil
 	}
 }
 
-// UpdatesViaLongPulling receive updates in chan using the GetUpdates() method.
-// Calling if already running (before StopLongPulling() method) will return an error.
-// Note: After you done with getting updates, you should call StopLongPulling() method which will close update chan.
-func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPullingOption) (<-chan Update, error) {
-	if b.longPullingContext != nil {
-		return nil, errors.New("telego: long pulling context already exist")
+// UpdatesViaLongPolling receive updates in chan using the GetUpdates() method.
+// Calling if already running (before StopLongPolling() method) will return an error.
+// Note: After you done with getting updates, you should call StopLongPolling() method which will close update chan.
+func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPollingOption) (<-chan Update, error) {
+	if b.longPollingContext != nil {
+		return nil, errors.New("telego: long polling context already exist")
 	}
 
-	ctx, err := b.createLongPullingContext(options)
+	ctx, err := b.createLongPollingContext(options)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPul
 	ctx.runningLock.Lock()
 	defer ctx.runningLock.Unlock()
 
-	b.longPullingContext = ctx
+	b.longPollingContext = ctx
 	ctx.stop = make(chan struct{})
 	ctx.running = true
 
@@ -128,11 +128,11 @@ func (b *Bot) UpdatesViaLongPulling(params *GetUpdatesParams, options ...LongPul
 	return updatesChan, nil
 }
 
-func (b *Bot) createLongPullingContext(options []LongPullingOption) (*longPullingContext, error) {
-	ctx := &longPullingContext{
-		updateChanBuffer: defaultLongPullingUpdateChanBuffer,
-		updateInterval:   defaultLongPullingUpdateInterval,
-		retryTimeout:     defaultLongPullingRetryTimeout,
+func (b *Bot) createLongPollingContext(options []LongPollingOption) (*longPollingContext, error) {
+	ctx := &longPollingContext{
+		updateChanBuffer: defaultLongPollingUpdateChanBuffer,
+		updateInterval:   defaultLongPollingUpdateInterval,
+		retryTimeout:     defaultLongPollingRetryTimeout,
 	}
 
 	for _, option := range options {
@@ -144,9 +144,9 @@ func (b *Bot) createLongPullingContext(options []LongPullingOption) (*longPullin
 	return ctx, nil
 }
 
-// IsRunningLongPulling tells if UpdatesViaLongPulling() is running
-func (b *Bot) IsRunningLongPulling() bool {
-	ctx := b.longPullingContext
+// IsRunningLongPolling tells if UpdatesViaLongPolling() is running
+func (b *Bot) IsRunningLongPolling() bool {
+	ctx := b.longPollingContext
 	if ctx == nil {
 		return false
 	}
@@ -157,12 +157,12 @@ func (b *Bot) IsRunningLongPulling() bool {
 	return ctx.running
 }
 
-// StopLongPulling stop reviving updates from UpdatesViaLongPulling() method, stopping is non-blocking, it closes update
+// StopLongPolling stop reviving updates from UpdatesViaLongPolling() method, stopping is non-blocking, it closes update
 // chan, so it's caller's responsibility to process all unhandled updates after calling stop. Stop will only ensure
 // that no more updates will come in update chan.
-// Calling StopLongPulling() multiple times does nothing.
-func (b *Bot) StopLongPulling() {
-	ctx := b.longPullingContext
+// Calling StopLongPolling() multiple times does nothing.
+func (b *Bot) StopLongPolling() {
+	ctx := b.longPollingContext
 	if ctx == nil {
 		return
 	}
@@ -173,6 +173,6 @@ func (b *Bot) StopLongPulling() {
 	if ctx.running {
 		ctx.running = false
 		close(ctx.stop)
-		b.longPullingContext = nil
+		b.longPollingContext = nil
 	}
 }

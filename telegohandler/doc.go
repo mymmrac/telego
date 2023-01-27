@@ -33,8 +33,8 @@ impacts order of checking matched handlers, and only the first matched handler w
 		}
 
 		// Get updates channel
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		// Create bot handler and specify from where to get updates
 		bh, _ := th.NewBotHandler(bot, updates)
@@ -90,8 +90,8 @@ One more example of handler usage. It shows how to use specific handlers to proc
 		}
 
 		// Get updates channel
-		updates, _ := bot.UpdatesViaLongPulling(nil)
-		defer bot.StopLongPulling()
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
 
 		// Create bot handler and specify from where to get updates
 		bh, _ := th.NewBotHandler(bot, updates)

@@ -30,7 +30,7 @@ func main() {
 	fmt.Printf("Bot user: %+v\n", botUser)
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Create bot handler
 	bh, _ := th.NewBotHandler(bot, updates)
@@ -48,7 +48,7 @@ func main() {
 
 	// Stop handling updates on exit
 	defer bh.Stop()
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Start handling updates
 	bh.Start()

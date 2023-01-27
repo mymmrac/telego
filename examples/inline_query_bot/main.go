@@ -18,8 +18,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	updates, _ := bot.UpdatesViaLongPulling(nil)
-	defer bot.StopLongPulling()
+	updates, _ := bot.UpdatesViaLongPolling(nil)
+	defer bot.StopLongPolling()
 
 	for update := range updates {
 		// Receive inline query

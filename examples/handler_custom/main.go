@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPulling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(nil)
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
@@ -28,7 +28,7 @@ func main() {
 	defer bh.Stop()
 
 	// Stop getting updates
-	defer bot.StopLongPulling()
+	defer bot.StopLongPolling()
 
 	// Register handler with union predicate and not predicate
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {

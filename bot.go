@@ -46,7 +46,7 @@ type Bot struct {
 	warningAsErrors      bool
 	replaceToEmpty       string
 
-	longPullingContext *longPullingContext
+	longPollingContext *longPollingContext
 	webhookContext     *webhookContext
 }
 
