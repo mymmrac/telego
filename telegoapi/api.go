@@ -1,24 +1,15 @@
-//go:generate mockgen -package mock -destination=mock/caller.go github.com/mymmrac/telego/telegoapi Caller
-//go:generate mockgen -package mock -destination=mock/request_constructor.go github.com/mymmrac/telego/telegoapi RequestConstructor
-
 package telegoapi
 
 import (
 	"bytes"
 	"fmt"
 	"io"
-	"mime/multipart"
-	"reflect"
-	"strings"
 
 	"github.com/goccy/go-json"
-	"github.com/valyala/fasthttp"
 )
 
-const (
-	// ContentTypeJSON http content type
-	ContentTypeJSON = "application/json"
-)
+// ContentTypeJSON http content type
+const ContentTypeJSON = "application/json"
 
 // Response represents response returned by Telegram API
 type Response struct {
@@ -78,127 +69,16 @@ type Caller interface {
 // Implemented by os.File.
 // Note: Name method should return unique names for all files sent in one request.
 //
-// Warning: Since for sending data (files) reader data will be copied, using same reader multiple times as is will not
-// work. For os.File you can use file.Seek(0, io.SeekStart) to prepare for new request.
+// Warning: Since, for sending data (files) reader data will be copied, using the same reader multiple times as is
+// will not work.
+// For os.File you can use file.Seek(0, io.SeekStart) to prepare for a new request.
 type NamedReader interface {
 	io.Reader
 	Name() string
 }
 
-// RequestConstructor represents way to construct API request
+// RequestConstructor represents a way to construct API request
 type RequestConstructor interface {
 	JSONRequest(parameters interface{}) (*RequestData, error)
 	MultipartRequest(parameters map[string]string, filesParameters map[string]NamedReader) (*RequestData, error)
-}
-
-// FasthttpAPICaller fasthttp implementation of Caller
-type FasthttpAPICaller struct {
-	Client *fasthttp.Client
-}
-
-// Call is fasthttp implementation
-func (a FasthttpAPICaller) Call(url string, data *RequestData) (*Response, error) {
-	req := fasthttp.AcquireRequest()
-	defer fasthttp.ReleaseRequest(req)
-
-	req.SetRequestURI(url)
-	req.Header.SetContentType(data.ContentType)
-	req.Header.SetMethod(fasthttp.MethodPost)
-	req.SetBodyRaw(data.Buffer.Bytes())
-
-	resp := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseResponse(resp)
-
-	err := a.Client.Do(req, resp)
-	if err != nil {
-		return nil, fmt.Errorf("fasthttp do request: %w", err)
-	}
-
-	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
-		return nil, fmt.Errorf("internal server error: %d", statusCode)
-	}
-
-	apiResp := &Response{}
-	err = json.Unmarshal(resp.Body(), apiResp)
-	if err != nil {
-		return nil, fmt.Errorf("decode json: %w", err)
-	}
-
-	return apiResp, nil
-}
-
-// DefaultConstructor default implementation of RequestConstructor
-type DefaultConstructor struct{}
-
-// JSONRequest is default implementation
-func (d DefaultConstructor) JSONRequest(parameters interface{}) (*RequestData, error) {
-	data := &RequestData{
-		ContentType: ContentTypeJSON,
-		Buffer:      &bytes.Buffer{},
-	}
-
-	err := json.NewEncoder(data.Buffer).Encode(parameters)
-	if err != nil {
-		return nil, fmt.Errorf("encode json: %w", err)
-	}
-
-	return data, nil
-}
-
-// MultipartRequest is default implementation
-func (d DefaultConstructor) MultipartRequest(parameters map[string]string, filesParameters map[string]NamedReader) (
-	*RequestData, error,
-) {
-	data := &RequestData{
-		Buffer: &bytes.Buffer{},
-	}
-	writer := multipart.NewWriter(data.Buffer)
-
-	for field, file := range filesParameters {
-		if isNil(file) {
-			continue
-		}
-
-		wr, err := writer.CreateFormFile(field, file.Name())
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, file)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	for field, value := range parameters {
-		wr, err := writer.CreateFormField(field)
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, strings.NewReader(value))
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if err := writer.Close(); err != nil {
-		return nil, fmt.Errorf("closing writer: %w", err)
-	}
-
-	data.ContentType = writer.FormDataContentType()
-	return data, nil
-}
-
-func isNil(i interface{}) bool {
-	if i == nil {
-		return true
-	}
-
-	switch reflect.TypeOf(i).Kind() {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-		return reflect.ValueOf(i).IsNil()
-	default:
-		return false
-	}
 }
