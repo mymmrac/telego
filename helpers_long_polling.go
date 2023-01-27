@@ -72,7 +72,9 @@ func WithLongPollingBuffer(chanBuffer uint) LongPollingOption {
 // UpdatesViaLongPolling receive updates in chan using the GetUpdates() method.
 // Calling if already running (before StopLongPolling() method) will return an error.
 // Note: After you done with getting updates, you should call StopLongPolling() method which will close update chan.
-// Note: If nil is passed as get update parameters then the default timout of 8s will be applied
+//
+// Warning: If nil is passed as get update parameters, then the default timout of 8s will be applied,
+// but if a non-nil parameter is passed, you should remember to explicitly specify timeout
 func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPollingOption) (<-chan Update, error) {
 	if b.longPollingContext != nil {
 		return nil, errors.New("telego: long polling context already exist")
