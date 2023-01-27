@@ -9,8 +9,10 @@ import (
 
 const (
 	defaultLongPollingUpdateChanBuffer = 100             // Limited by number of updates in single Bot.GetUpdates() call
-	defaultLongPollingUpdateInterval   = time.Second / 2 // 0.5s
-	defaultLongPollingRetryTimeout     = time.Second * 3 // 3s
+	defaultLongPollingUpdateInterval   = time.Second * 0 // 0s
+	defaultLongPollingRetryTimeout     = time.Second * 8 // 8s
+
+	defaultLongPollingUpdateTimeoutInSeconds = 8 // 8s
 )
 
 // longPollingContext represents configuration of getting updates via long polling
@@ -29,9 +31,9 @@ type LongPollingOption func(ctx *longPollingContext) error
 
 // WithLongPollingUpdateInterval sets an update interval for long polling. Ensure that between two calls of
 // Bot.GetUpdates() will be at least specified time, but it could be longer.
-// Default is 0.5s.
-// Note: Telegram has built in a timeout mechanism, to properly use it set GetUpdatesParams.Timeout to desired timeout
-// and update interval to 0 (recommended way).
+// Default is 0s.
+// Note: Telegram has built in a timeout mechanism, to properly use it, set GetUpdatesParams.Timeout to desired timeout
+// and update interval to 0 (default, recommended way).
 func WithLongPollingUpdateInterval(updateInterval time.Duration) LongPollingOption {
 	return func(ctx *longPollingContext) error {
 		if updateInterval < 0 {
@@ -46,7 +48,7 @@ func WithLongPollingUpdateInterval(updateInterval time.Duration) LongPollingOpti
 // WithLongPollingRetryTimeout sets updates retry timeout for long polling.
 // Ensure that between two calls of Bot.GetUpdates() will be at least specified time if an error occurred,
 // but it could be longer.
-// Default is 3s.
+// Default is 8s.
 func WithLongPollingRetryTimeout(retryTimeout time.Duration) LongPollingOption {
 	return func(ctx *longPollingContext) error {
 		if retryTimeout < 0 {
@@ -70,6 +72,7 @@ func WithLongPollingBuffer(chanBuffer uint) LongPollingOption {
 // UpdatesViaLongPolling receive updates in chan using the GetUpdates() method.
 // Calling if already running (before StopLongPolling() method) will return an error.
 // Note: After you done with getting updates, you should call StopLongPolling() method which will close update chan.
+// Note: If nil is passed as get update parameters then the default timout of 8s will be applied
 func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPollingOption) (<-chan Update, error) {
 	if b.longPollingContext != nil {
 		return nil, errors.New("telego: long polling context already exist")
@@ -90,7 +93,9 @@ func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPol
 	updatesChan := make(chan Update, ctx.updateChanBuffer)
 
 	if params == nil {
-		params = &GetUpdatesParams{}
+		params = &GetUpdatesParams{
+			Timeout: defaultLongPollingUpdateTimeoutInSeconds,
+		}
 	}
 
 	go func() {

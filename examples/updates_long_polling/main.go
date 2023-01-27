@@ -21,17 +21,19 @@ func main() {
 	// Get updates channel, all options are optional
 	updates, _ := bot.UpdatesViaLongPolling(
 		// Set Telegram parameter to get updates, can be nil
+		// Note: If nil then timeout will be set to default 8s
 		&telego.GetUpdatesParams{
 			// Offset:  0, // Will be automatically updated by UpdatesViaLongPolling
-			// Timeout: 0, // Can be set instead of using WithLongPollingUpdateInterval (recommended)
+			// Timeout: 8, // Can be set instead of using WithLongPollingUpdateInterval (default, recommended way)
 		},
 
-		// Set interval of getting updates (default: 0.5s).
-		// If you want to get updates as fast as possible set to 0, but webhook method is recommended for this.
-		telego.WithLongPollingUpdateInterval(time.Second/2),
+		// Set interval of getting updates (default: 0s).
+		// If you want to get updates as fast as possible set to 0 and explicitly set timeout in get updates parameters,
+		// but the webhook method is recommended for this.
+		telego.WithLongPollingUpdateInterval(time.Second*0),
 
-		// Set retry timeout that will be used if an error occurs (default 3s)
-		telego.WithLongPollingRetryTimeout(time.Second*3),
+		// Set retry timeout that will be used if an error occurs (default 8s)
+		telego.WithLongPollingRetryTimeout(time.Second*8),
 
 		// Set chan buffer (default 100)
 		telego.WithLongPollingBuffer(100),

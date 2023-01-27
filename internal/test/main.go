@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 30
+const testCase = 2
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -73,7 +73,7 @@ func main() {
 		}
 		fmt.Println(msg)
 	case 2:
-		updChan, err := bot.UpdatesViaLongPolling(&telego.GetUpdatesParams{})
+		updChan, err := bot.UpdatesViaLongPolling(nil)
 		if err != nil {
 			fmt.Println(err)
 			return
