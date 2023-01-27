@@ -8,8 +8,13 @@ import (
 	"github.com/goccy/go-json"
 )
 
-// ContentTypeJSON http content type
-const ContentTypeJSON = "application/json"
+const (
+	// ContentTypeHeader http content type header
+	ContentTypeHeader = "Content-Type"
+
+	// ContentTypeJSON http JSON content type
+	ContentTypeJSON = "application/json"
+)
 
 // Response represents response returned by Telegram API
 type Response struct {

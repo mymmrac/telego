@@ -28,6 +28,8 @@ The goal of this library was to create API with the same types and methods as ac
 Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly 
 all documentation from telegram.
 
+:warning: Telego is still in v0.x.x version, so do expect braking changes! :warning:
+
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and
@@ -116,7 +118,7 @@ Generally, useful information about Telegram Bots and their features:
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
-For start, you need to create instance of your bot and
+For start, you need to create an instance of your bot and
 specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
 
 ```go

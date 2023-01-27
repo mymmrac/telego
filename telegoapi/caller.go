@@ -4,6 +4,7 @@ package telegoapi
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
@@ -40,6 +41,41 @@ func (a FasthttpAPICaller) Call(url string, data *RequestData) (*Response, error
 	err = json.Unmarshal(resp.Body(), apiResp)
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
+	}
+
+	return apiResp, nil
+}
+
+// HTTPCaller http implementation of Caller
+type HTTPCaller struct {
+	Client *http.Client
+}
+
+// Call is a http implementation
+func (h *HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
+	req, err := http.NewRequest(http.MethodPost, url, data.Buffer)
+	if err != nil {
+		return nil, fmt.Errorf("http create request: %w", err)
+	}
+	req.Header.Set(ContentTypeHeader, ContentTypeJSON)
+
+	resp, err := h.Client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("http do request: %w", err)
+	}
+
+	if resp.StatusCode >= http.StatusInternalServerError {
+		return nil, fmt.Errorf("internal server error: %d", resp.StatusCode)
+	}
+
+	apiResp := &Response{}
+	err = json.NewDecoder(resp.Body).Decode(apiResp)
+	if err != nil {
+		return nil, fmt.Errorf("decode json: %w", err)
+	}
+
+	if err = resp.Body.Close(); err != nil {
+		return nil, fmt.Errorf("close body: %w", err)
 	}
 
 	return apiResp, nil

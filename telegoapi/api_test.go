@@ -4,13 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"net/http"
 	"strings"
 	"testing"
 
 	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
-	"github.com/valyala/fasthttp"
 )
 
 func Test_Response_String_and_Error_Error(t *testing.T) {
@@ -64,28 +62,6 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 			text := tt.resp.String()
 			assert.Equal(t, tt.text, text)
 		})
-	}
-}
-
-type server struct {
-	t *testing.T
-}
-
-func (s *server) Handle(ctx *fasthttp.RequestCtx) {
-	assert.True(s.t, ctx.IsPost())
-	assert.Equal(s.t, ContentTypeJSON, string(ctx.Request.Header.ContentType()))
-
-	switch string(ctx.Path()) {
-	case "/500":
-		ctx.SetStatusCode(http.StatusInternalServerError)
-	case "/json_err":
-		ctx.SetStatusCode(http.StatusOK)
-		_, err := ctx.WriteString("abc")
-		assert.NoError(s.t, err)
-	default:
-		ctx.SetStatusCode(http.StatusOK)
-		_, err := ctx.WriteString("{\"ok\": true}")
-		assert.NoError(s.t, err)
 	}
 }
 
