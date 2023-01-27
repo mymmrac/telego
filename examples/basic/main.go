@@ -12,7 +12,7 @@ func main() {
 	botToken := os.Getenv("TOKEN")
 
 	// Create bot and enable debugging info
-	// (more on configuration at /examples/configuration/main.go)
+	// (more on configuration in /examples/configuration/main.go)
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
 	bot, err := telego.NewBot(botToken, telego.WithDefaultDebugLogger())
 	if err != nil {

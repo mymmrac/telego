@@ -69,7 +69,7 @@ func main() {
 		tu.MediaPhoto(tu.FileByURL("https://example.com/my_photo.png")),
 	)
 
-	// Sending media group
+	// Sending a media group
 	_, _ = bot.SendMediaGroup(mediaGroup)
 }
 

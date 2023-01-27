@@ -22,7 +22,7 @@ func main() {
 	// Get updates channel
 	updates, _ := bot.UpdatesViaLongPolling(nil)
 
-	// Stop reviving updates from updates channel
+	// Stop reviving updates from update channel
 	defer bot.StopLongPolling()
 
 	fmt.Println("Listening for updates...")

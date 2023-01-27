@@ -29,7 +29,7 @@ func main() {
 	info, _ := bot.GetWebhookInfo()
 	fmt.Printf("Webhook Info: %+v\n", info)
 
-	// Get updates channel from webhook, all options are optional.
+	// Get an update channel from webhook, also all options are optional.
 	// Note: For one bot, only one webhook allowed.
 	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
 		// Set chan buffer (default 100)
@@ -49,7 +49,7 @@ func main() {
 	// Start server for receiving requests from the Telegram
 	_ = bot.StartListeningForWebhook("localhost:443")
 
-	// Stop reviving updates from updates channel and shutdown webhook server
+	// Stop reviving updates from update channel and shutdown webhook server
 	defer func() {
 		_ = bot.StopWebhook()
 	}()

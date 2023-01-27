@@ -34,7 +34,7 @@ func main() {
 				tu.ResultArticle(
 					"hello",
 					"Hello",
-					tu.TextMessage( // Hello message with inline query
+					tu.TextMessage( // Hello message with an inline query
 						fmt.Sprintf("Hello %s\n\nYour query:\n```%#+v```", name, iq),
 					).WithParseMode(telego.ModeMarkdownV2),
 				).WithDescription(fmt.Sprintf("Query: %q", iq.Query)),
@@ -42,7 +42,7 @@ func main() {
 				tu.ResultArticle(
 					"bey",
 					"Bye",
-					tu.TextMessage( // Bye message with inline query
+					tu.TextMessage( // Bye message with an inline query
 						fmt.Sprintf("Bye %s\n\nYour query:\n```%#+v```", name, iq),
 					).WithParseMode(telego.ModeMarkdownV2),
 				).WithDescription(fmt.Sprintf("Query: %q", iq.Query)),

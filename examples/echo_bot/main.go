@@ -24,17 +24,17 @@ func main() {
 	// Get updates channel
 	updates, _ := bot.UpdatesViaLongPolling(nil)
 
-	// Stop reviving updates from updates channel
+	// Stop reviving updates from update channel
 	defer bot.StopLongPolling()
 
 	// Loop through all updates when they came
 	for update := range updates {
-		// Check if update contains message
+		// Check if update contains a message
 		if update.Message != nil {
-			// Get chat ID from message
+			// Get chat ID from the message
 			chatID := tu.ID(update.Message.Chat.ID)
 
-			// Copy sent message back to user
+			// Copy sent message back to the user
 			_, _ = bot.CopyMessage(
 				tu.CopyMessage(
 					chatID,

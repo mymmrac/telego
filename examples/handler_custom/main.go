@@ -30,12 +30,12 @@ func main() {
 	// Stop getting updates
 	defer bot.StopLongPolling()
 
-	// Register handler with union predicate and not predicate
+	// Register a handler with union predicate and not predicate
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
 		fmt.Println("Update with message text `Hmm?` or any other, but without message.")
 	}, th.Union(
 		th.Not(th.AnyMessage()), // Matches to any not message update
-		th.TextEqual("Hmm?"),    // Matches to message update with text `Hmm?`
+		th.TextEqual("Hmm?"),    // Matches to message update with a text `Hmm?`
 	))
 
 	// Register handler with message predicate and custom predicate

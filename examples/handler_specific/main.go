@@ -33,7 +33,7 @@ func main() {
 
 	// Register new handler with match on command `/start`
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		// Send message with inline keyboard
+		// Send a message with inline keyboard
 		_, _ = bot.SendMessage(tu.Messagef(
 			tu.ID(message.Chat.ID),
 			"Hello %s!", message.From.FirstName,
@@ -42,7 +42,7 @@ func main() {
 		))
 	}, th.CommandEqual("start"))
 
-	// Register new handler with match on call back query with data equal to `go` and non nil message
+	// Register new handler with match on a call back query with data equal to `go` and non-nil message
 	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
 		// Send message
 		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))

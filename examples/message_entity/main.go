@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Send message with provided message entities
+	// Send a message with provided message entities
 	_, _ = bot.SendMessage(tu.MessageWithEntities(tu.ID(1234567),
 		tu.Entity("Hi").Bold(), tu.Entity(" "), tu.Entity("There").Italic().Spoiler(), tu.Entity("\n"),
 		tu.Entity("The Link").TextLink("https://example.com").Italic(), tu.Entity("\n"),

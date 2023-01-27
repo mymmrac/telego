@@ -34,12 +34,12 @@ func main() {
 	auth := func(update telego.Update) bool {
 		var userID int64
 
-		// Get user ID from message
+		// Get user ID from the message
 		if update.Message != nil && update.Message.From != nil {
 			userID = update.Message.From.ID
 		}
 
-		// Get user ID from callback query
+		// Get user ID from the callback query
 		if update.CallbackQuery != nil {
 			userID = update.CallbackQuery.From.ID
 		}

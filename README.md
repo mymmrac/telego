@@ -24,9 +24,9 @@
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
 
-The goal of this library was to create API with same types and methods as actual telegram bot API. Every type and method
-have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly all documentation from
-telegram.
+The goal of this library was to create API with the same types and methods as actual telegram bot API. 
+Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly 
+all documentation from telegram.
 
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
@@ -136,7 +136,7 @@ func main() {
 	// Create bot and enable debugging info
 	// Note: Please keep in mind that default logger may expose sensitive information,
 	// use in development only
-	// (more on configuration at examples/configuration/main.go)
+	// (more on configuration in examples/configuration/main.go)
 	bot, err := telego.NewBot(botToken, telego.WithDefaultDebugLogger())
 	if err != nil {
 		fmt.Println(err)
@@ -158,7 +158,7 @@ func main() {
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
-In order to receive updates you can use two methods:
+In order to receive updates, you can use two methods:
 
 - using long polling (`bot.UpdatesViaLongPolling`)
 - using webhook (`bot.UpdatesViaWebhook`)
@@ -187,10 +187,10 @@ func main() {
 	}
 
 	// Get updates channel
-	// (more on configuration at examples/updates_long_polling/main.go)
+	// (more on configuration in examples/updates_long_polling/main.go)
 	updates, _ := bot.UpdatesViaLongPolling(nil)
 
-	// Stop reviving updates from updates channel
+	// Stop reviving updates from update channel
 	defer bot.StopLongPolling()
 
 	// Loop through all updates when they came
@@ -232,15 +232,15 @@ func main() {
 	info, _ := bot.GetWebhookInfo()
 	fmt.Printf("Webhook Info: %+v\n", info)
 
-	// Get updates channel from webhook.
-	// Note: For one bot only one webhook allowed.
-	// (more on configuration at examples/updates_webhook/main.go)
+	// Get an update channel from webhook.
+	// Note: For one bot, only one webhook allowed.
+	// (more on configuration in examples/updates_webhook/main.go)
 	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
 
-	// Start server for receiving requests from Telegram
+	// Start server for receiving requests from the Telegram
 	_ = bot.StartListeningForWebhook("localhost:443")
 
-	// Stop reviving updates from updates channel and shutdown webhook server
+	// Stop reviving updates from update channel and shutdown webhook server
 	defer func() {
 		_ = bot.StopWebhook()
 	}()
@@ -260,7 +260,7 @@ func main() {
 
 All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be
 used by the library. They have same names and same parameters, parameters represented by struct with
-name: `<methodName>` + `Params`. If method don't have required parameters `nil` value can be used as a parameter.
+name: `<methodName>` + `Params`. If method doesn't have required parameters `nil` value can be used as a parameter.
 
 > Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](internal/generator)
 > from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and
@@ -301,7 +301,7 @@ func main() {
 			chatID := update.Message.Chat.ID
 
 			// Call method sendMessage.
-			// Sends message to sender with same text (echo bot).
+			// Send a message to sender with the same text (echo bot).
 			// (https://core.telegram.org/bots/api#sendmessage)
 			sentMessage, _ := bot.SendMessage(
 				tu.Message(
@@ -421,8 +421,9 @@ I suggest including it with alias to get cleaner code:
 import th "github.com/mymmrac/telego/telegohandler"
 ```
 
-Here is example of using handlers with long polling updates. You can see full list of available predicates
-in [`telegohandler/predicates`](telegohandler/predicates.go), or define your own.
+Here is an example of using handlers with long polling updates. 
+You can see the full list of available predicates in [`telegohandler/predicates`](telegohandler/predicates.go), 
+or define your own.
 
 ```go
 package main
@@ -485,7 +486,7 @@ func main() {
 ```
 
 Also, just handling updates is useful, but handling specific updates like messages or callback queries in most of the
-cases are more straightforward and provide cleaner code.
+cases are more straightforward and provides cleaner code.
 
 So Telego provides specific handles for all fields of `telego.Update`. See the list of all available handler types in
 [`telegohandler/update_handlers`](telegohandler/update_handlers.go), or define your own.
@@ -518,8 +519,8 @@ func main() {
 		))
 	}, th.CommandEqual("start"))
 
-	// Register new handler with match on call back query 
-	// with data equal to `go` and non nil message
+	// Register new handler with match on the call back query 
+	// with data equal to `go` and non-nil message
 	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
 		// Send message
 		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))

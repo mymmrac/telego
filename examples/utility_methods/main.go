@@ -22,27 +22,27 @@ func main() {
 	// Create telego.ChatID from int64
 	chatID := tu.ID(123)
 
-	// Create message with only required parameters
+	// Create a message with only required parameters
 	_, _ = bot.SendMessage(tu.Message(chatID, "Hello"))
 
-	// Create telego.ChatID username and send message
+	// Create telego.ChatID username and send a message
 	_, _ = bot.SendMessage(tu.Message(tu.Username("@user"), "World"))
 
-	// Create message and change optional parameters
+	// Create a message and change optional parameters
 	msg := tu.Message(chatID, "Hello World").
 		WithReplyToMessageID(1234).
 		WithDisableNotification().
 		WithProtectContent()
 	_, _ = bot.SendMessage(msg)
 
-	var file *os.File // Used just for example (not valid in real use)
+	var file *os.File // Used, just for example (not valid in real use)
 
 	// Create document using *os.File as telego.InputFile
 	_, _ = bot.SendDocument(tu.Document(chatID, tu.File(file)))
 
-	var reader io.Reader // Used just for example (not valid in real use)
+	var reader io.Reader // Used, just for example (not valid in real use)
 
-	// Create document using io.Reader by "naming" it and send as document
+	// Create a document using io.Reader by "naming" it and send as a document
 	_, _ = bot.SendDocument(tu.Document(chatID, tu.File(tu.NameReader(reader, "my_file"))))
 
 	// Create document using URL to file as telego.InputFile
@@ -60,7 +60,7 @@ func main() {
 			// Parse text into command and its arguments
 			command, args := tu.ParseCommand(text)
 
-			// Check if text contains command
+			// Check if the text contains command
 			if command != "" {
 				fmt.Println("Command:", command)
 				fmt.Println("Args:", args)

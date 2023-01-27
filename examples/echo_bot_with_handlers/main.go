@@ -37,10 +37,10 @@ func main() {
 
 	// Handle any message
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		// Get chat ID from message
+		// Get chat ID from the message
 		chatID := tu.ID(message.Chat.ID)
 
-		// Copy sent message back to user
+		// Copy sent message back to the user
 		_, _ = bot.CopyMessage(
 			tu.CopyMessage(chatID, chatID, message.MessageID),
 		)

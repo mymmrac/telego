@@ -32,7 +32,7 @@ func main() {
 			chatID := update.Message.Chat.ID
 
 			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
-			// Sends message to sender with same text (echo bot).
+			// Send a message to sender with the same text (echo bot).
 			sentMessage, _ := bot.SendMessage(
 				tu.Message(
 					tu.ID(chatID),

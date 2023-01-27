@@ -20,16 +20,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	// In cases when empty value is a valid parameter value, like here in telego.InlineKeyboardButton we have
-	// SwitchInlineQueryCurrentChat that has empty value as expected argument
+	// In cases, when empty value is a valid parameter value, like here in telego.InlineKeyboardButton we have
+	// SwitchInlineQueryCurrentChat that has an empty value as expected argument
 	keyboard := tu.InlineKeyboard(
 		tu.InlineKeyboardRow(
 			telego.InlineKeyboardButton{
 				Text: "Inline query in current chat",
 
 				// Pass empty value that will be properly passed in request as "switch_inline_query_current_chat": ""
-				// Warning: If telego.WithEmptyValues() or telego.WithCustomEmptyValues() bot option is not used this
-				// will do nothing
+				// Warning: If telego.WithEmptyValues() or telego.WithCustomEmptyValues() bot options are not used,
+				// this will do nothing
 				SwitchInlineQueryCurrentChat: bot.EmptyValue(),
 			},
 		),
