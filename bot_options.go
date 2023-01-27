@@ -3,6 +3,7 @@ package telego
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
 
@@ -23,7 +24,15 @@ func WithAPICaller(caller telegoapi.Caller) BotOption {
 // WithFastHTTPClient sets fasthttp client to use
 func WithFastHTTPClient(client *fasthttp.Client) BotOption {
 	return func(bot *Bot) error {
-		bot.api = telegoapi.FasthttpAPICaller{Client: client}
+		bot.api = telegoapi.FastHTTPCaller{Client: client}
+		return nil
+	}
+}
+
+// WithHTTPClient sets http client to use
+func WithHTTPClient(client *http.Client) BotOption {
+	return func(bot *Bot) error {
+		bot.api = telegoapi.HTTPCaller{Client: client}
 		return nil
 	}
 }

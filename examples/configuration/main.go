@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
 
@@ -20,8 +21,11 @@ func main() {
 		// Change bot API server URL (default: https://api.telegram.org)
 		telego.WithAPIServer("new bot api server"),
 
-		// Change HTTP client (default: &fasthttp.Client{})
+		// Change caller to the Fast HTTP client (default: &fasthttp.Client{})
 		telego.WithFastHTTPClient(&fasthttp.Client{}),
+
+		// Change caller to the HTTP client (default: &fasthttp.Client{})
+		telego.WithHTTPClient(&http.Client{}),
 
 		// Enables basic health check that will call getMe method before returning bot instance (default: false)
 		telego.WithHealthCheck(),

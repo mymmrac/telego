@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"net/http"
 	"strings"
 	"testing"
 
@@ -31,6 +32,14 @@ func TestWithFastHTTPClient(t *testing.T) {
 	client := &fasthttp.Client{}
 
 	err := WithFastHTTPClient(client)(bot)
+	assert.NoError(t, err)
+}
+
+func TestWithHTTPClient(t *testing.T) {
+	bot := &Bot{}
+	client := &http.Client{}
+
+	err := WithHTTPClient(client)(bot)
 	assert.NoError(t, err)
 }
 

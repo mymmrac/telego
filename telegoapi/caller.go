@@ -10,13 +10,13 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// FasthttpAPICaller fasthttp implementation of Caller
-type FasthttpAPICaller struct {
+// FastHTTPCaller fasthttp implementation of Caller
+type FastHTTPCaller struct {
 	Client *fasthttp.Client
 }
 
 // Call is a fasthttp implementation
-func (a FasthttpAPICaller) Call(url string, data *RequestData) (*Response, error) {
+func (a FastHTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
 
@@ -52,7 +52,7 @@ type HTTPCaller struct {
 }
 
 // Call is a http implementation
-func (h *HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
+func (h HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	req, err := http.NewRequest(http.MethodPost, url, data.Buffer)
 	if err != nil {
 		return nil, fmt.Errorf("http create request: %w", err)

@@ -41,7 +41,7 @@ func TestFasthttpAPICaller_Call(t *testing.T) {
 
 	defer teardown()
 
-	caller := FasthttpAPICaller{Client: client}
+	caller := FastHTTPCaller{Client: client}
 
 	data := &RequestData{
 		ContentType: ContentTypeJSON,

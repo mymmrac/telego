@@ -66,7 +66,7 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		token:       token,
 		apiURL:      defaultBotAPIServer,
 		log:         newDefaultLogger(token),
-		api:         telegoapi.FasthttpAPICaller{Client: &fasthttp.Client{}},
+		api:         telegoapi.FastHTTPCaller{Client: &fasthttp.Client{}},
 		constructor: telegoapi.DefaultConstructor{},
 	}
 
