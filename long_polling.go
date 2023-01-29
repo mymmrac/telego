@@ -100,45 +100,47 @@ func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPol
 		}
 	}
 
-	go func() {
-		defer close(updatesChan)
-
-		for {
-			select {
-			case <-ctx.stop:
-				return
-			default:
-				// Continue getting updates
-			}
-
-			var updates []Update
-			updates, err = b.GetUpdates(params)
-			if err != nil {
-				b.log.Errorf("Getting updates: %s", err)
-				b.log.Errorf("Retrying to get updates in %s", ctx.retryTimeout.String())
-
-				time.Sleep(ctx.retryTimeout)
-				continue
-			}
-
-			for _, update := range updates {
-				if update.UpdateID >= params.Offset {
-					params.Offset = update.UpdateID + 1
-
-					select {
-					case updatesChan <- update:
-					// Proceed reading updates
-					case <-ctx.stop:
-						return
-					}
-				}
-			}
-
-			time.Sleep(ctx.updateInterval)
-		}
-	}()
+	go b.doLongPolling(ctx, params, updatesChan)
 
 	return updatesChan, nil
+}
+
+func (b *Bot) doLongPolling(ctx *longPollingContext, params *GetUpdatesParams, updatesChan chan<- Update) {
+	defer close(updatesChan)
+
+	for {
+		select {
+		case <-ctx.stop:
+			return
+		default:
+			// Continue getting updates
+		}
+
+		var updates []Update
+		updates, err := b.GetUpdates(params)
+		if err != nil {
+			b.log.Errorf("Getting updates: %s", err)
+			b.log.Errorf("Retrying to get updates in %s", ctx.retryTimeout.String())
+
+			time.Sleep(ctx.retryTimeout)
+			continue
+		}
+
+		for _, update := range updates {
+			if update.UpdateID >= params.Offset {
+				params.Offset = update.UpdateID + 1
+
+				select {
+				case updatesChan <- update:
+				// Proceed reading updates
+				case <-ctx.stop:
+					return
+				}
+			}
+		}
+
+		time.Sleep(ctx.updateInterval)
+	}
 }
 
 func (b *Bot) createLongPollingContext(options []LongPollingOption) (*longPollingContext, error) {

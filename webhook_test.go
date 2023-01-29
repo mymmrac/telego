@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"os"
-	"path/filepath"
 	"testing"
 	"time"
 
@@ -28,26 +26,30 @@ func testWebhookBot(t *testing.T) *Bot {
 	b.webhookContext = &webhookContext{
 		running:    false,
 		configured: true,
-		server:     &fasthttp.Server{},
-		stop:       make(chan struct{}),
+		server: FastHTTPWebhookServer{
+			Server: &fasthttp.Server{},
+			Router: router.New(),
+		},
+		stop: make(chan struct{}),
 	}
 
 	return b
 }
 
-func TestBot_StartListeningForWebhook(t *testing.T) {
+func TestBot_StartWebhook(t *testing.T) {
 	t.Run("success_and_error_already_running", func(t *testing.T) {
 		b := testWebhookBot(t)
 
 		assert.NotPanics(t, func() {
-			err := b.StartListeningForWebhook(testAddress(t))
-			assert.NoError(t, err)
-
+			go func() {
+				err := b.StartWebhook(testAddress(t))
+				assert.NoError(t, err)
+			}()
 			time.Sleep(time.Millisecond * 10)
 		})
 
 		assert.NotPanics(t, func() {
-			err := b.StartListeningForWebhook("test")
+			err := b.StartWebhook("test")
 			assert.Error(t, err)
 		})
 	})
@@ -57,53 +59,10 @@ func TestBot_StartListeningForWebhook(t *testing.T) {
 		b.webhookContext.configured = false
 
 		assert.NotPanics(t, func() {
-			err := b.StartListeningForWebhook("test")
+			err := b.StartWebhook("test")
 			assert.Error(t, err)
 		})
 	})
-}
-
-func TestBot_StartListeningForWebhookTLS(t *testing.T) {
-	b := testWebhookBot(t)
-
-	assert.NotPanics(t, func() {
-		err := b.StartListeningForWebhookTLS(testAddress(t), "", "")
-		assert.NoError(t, err)
-
-		time.Sleep(time.Millisecond * 10)
-	})
-}
-
-func TestBot_StartListeningForWebhookTLSEmbed(t *testing.T) {
-	b := testWebhookBot(t)
-
-	c, k, err := fasthttp.GenerateTestCertificate(testAddress(t))
-	require.NoError(t, err)
-
-	assert.NotPanics(t, func() {
-		err = b.StartListeningForWebhookTLSEmbed(testAddress(t), c, k)
-		assert.NoError(t, err)
-
-		time.Sleep(time.Millisecond * 10)
-	})
-}
-
-func TestBot_StartListeningForWebhookUNIX(t *testing.T) {
-	b := testWebhookBot(t)
-
-	assert.NotPanics(t, func() {
-		err := b.StartListeningForWebhookUNIX(filepath.Join(t.TempDir(), testAddress(t)), os.ModeDir)
-		assert.NoError(t, err)
-
-		time.Sleep(time.Millisecond * 10)
-	})
-}
-
-func TestBot_httpRespondWithError(t *testing.T) {
-	ctx := &fasthttp.RequestCtx{}
-
-	httpRespondWithError(ctx, errTest)
-	assert.Equal(t, fasthttp.StatusBadRequest, ctx.Response.StatusCode())
 }
 
 func TestBot_StopWebhook(t *testing.T) {
@@ -131,19 +90,23 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		b, err := NewBot(token, WithDiscardLogger())
 		require.NoError(t, err)
 
-		_, err = b.UpdatesViaWebhook("/bot")
+		srv := &fasthttp.Server{}
+		_, err = b.UpdatesViaWebhook("/bot", WithWebhookServer(FastHTTPWebhookServer{
+			Server: srv,
+			Router: router.New(),
+		}))
 		require.NoError(t, err)
 
 		assert.NotPanics(t, func() {
 			t.Run("invalid_path_error", func(t *testing.T) {
 				ctx := &fasthttp.RequestCtx{}
-				b.webhookContext.server.Handler(ctx)
+				srv.Handler(ctx)
 			})
 
 			t.Run("invalid_method_error", func(t *testing.T) {
 				ctx := &fasthttp.RequestCtx{}
 				ctx.Request.SetRequestURI("/bot")
-				b.webhookContext.server.Handler(ctx)
+				srv.Handler(ctx)
 			})
 		})
 	})
@@ -175,8 +138,11 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		require.False(t, b.IsRunningWebhook())
 
 		addr := testAddress(t)
-		err = b.StartListeningForWebhook(addr)
-		require.NoError(t, err)
+		go func() {
+			err = b.StartWebhook(addr)
+			require.NoError(t, err)
+		}()
+		time.Sleep(time.Millisecond * 10)
 
 		require.True(t, b.IsRunningWebhook())
 
@@ -194,7 +160,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			assert.NoError(t, resp.Body.Close())
 
 			require.NotNil(t, resp)
-			assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
 
 			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
 				bytes.NewBuffer(expectedUpdateBytes))
@@ -232,8 +198,11 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 		_, err := m.Bot.UpdatesViaWebhook("/bot")
 		require.NoError(t, err)
 
-		err = m.Bot.StartListeningForWebhook(testAddress(t))
-		assert.NoError(t, err)
+		go func() {
+			err = m.Bot.StartWebhook(testAddress(t))
+			assert.NoError(t, err)
+		}()
+		time.Sleep(time.Millisecond * 10)
 
 		assert.True(t, m.Bot.IsRunningWebhook())
 
@@ -244,7 +213,7 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 	})
 
 	t.Run("running_order_error", func(t *testing.T) {
-		err := m.Bot.StartListeningForWebhook(testAddress(t))
+		err := m.Bot.StartWebhook(testAddress(t))
 		assert.Error(t, err)
 
 		_, err = m.Bot.UpdatesViaWebhook("/bot")
@@ -263,7 +232,7 @@ func TestWebhookBuffer(t *testing.T) {
 
 func TestWithWebhookServer(t *testing.T) {
 	ctx := &webhookContext{}
-	server := &fasthttp.Server{}
+	server := FastHTTPWebhookServer{}
 
 	t.Run("success", func(t *testing.T) {
 		err := WithWebhookServer(server)(ctx)
@@ -275,50 +244,4 @@ func TestWithWebhookServer(t *testing.T) {
 		err := WithWebhookServer(nil)(ctx)
 		assert.Error(t, err)
 	})
-}
-
-func TestWithWebhookRouter(t *testing.T) {
-	ctx := &webhookContext{}
-	testRouter := router.New()
-
-	t.Run("success", func(t *testing.T) {
-		err := WithWebhookRouter(testRouter)(ctx)
-		assert.NoError(t, err)
-		assert.EqualValues(t, testRouter, ctx.router)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		err := WithWebhookRouter(nil)(ctx)
-		assert.Error(t, err)
-	})
-}
-
-func TestWithWebhookBasicHealthAPI(t *testing.T) {
-	ctx := &webhookContext{
-		router: router.New(),
-	}
-
-	err := WithWebhookHealthAPI()(ctx)
-	assert.NoError(t, err)
-
-	routesByMethods := ctx.router.List()
-
-	routes, ok := routesByMethods[fasthttp.MethodGet]
-	require.True(t, ok)
-
-	found := false
-	for _, route := range routes {
-		if route == webhookHealthAPIPath {
-			found = true
-			break
-		}
-	}
-	assert.True(t, found)
-}
-
-func Test_httpHealthResponse(t *testing.T) {
-	ctx := &fasthttp.RequestCtx{}
-
-	httpHealthResponse(ctx)
-	assert.Equal(t, fasthttp.StatusOK, ctx.Response.StatusCode())
 }

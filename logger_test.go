@@ -28,22 +28,6 @@ func testLogger() (*logger, *bytes.Buffer) {
 	}, buffer
 }
 
-func Test_logger_Debug(t *testing.T) {
-	l, b := testLogger()
-
-	t.Run("disabled", func(t *testing.T) {
-		l.Debug(data1, data2)
-		assert.Equal(t, "", b.String())
-	})
-
-	t.Run("enabled", func(t *testing.T) {
-		l.DebugMode = true
-		l.Debug(data1, data2)
-		assert.Contains(t, b.String(), data1)
-		assert.Contains(t, b.String(), data2)
-	})
-}
-
 func Test_logger_Debugf(t *testing.T) {
 	l, b := testLogger()
 
@@ -55,22 +39,6 @@ func Test_logger_Debugf(t *testing.T) {
 	t.Run("enabled", func(t *testing.T) {
 		l.DebugMode = true
 		l.Debugf(format, data1, data2)
-		assert.Contains(t, b.String(), data1)
-		assert.Contains(t, b.String(), data2)
-	})
-}
-
-func Test_logger_Error(t *testing.T) {
-	l, b := testLogger()
-
-	t.Run("disabled", func(t *testing.T) {
-		l.Error(data1, data2)
-		assert.Equal(t, "", b.String())
-	})
-
-	t.Run("enabled", func(t *testing.T) {
-		l.PrintErrors = true
-		l.Error(data1, data2)
 		assert.Contains(t, b.String(), data1)
 		assert.Contains(t, b.String(), data2)
 	})
@@ -97,7 +65,7 @@ func Test_logger_replacer(t *testing.T) {
 
 	l.DebugMode = true
 	l.Replacer = strings.NewReplacer(data1, data3)
-	l.Debug(data1, data2)
+	l.Debugf(data1, data2)
 	assert.NotContains(t, b.String(), data1)
 	assert.Contains(t, b.String(), data2)
 	assert.Contains(t, b.String(), data3)
