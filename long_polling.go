@@ -124,7 +124,13 @@ func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPol
 			for _, update := range updates {
 				if update.UpdateID >= params.Offset {
 					params.Offset = update.UpdateID + 1
-					updatesChan <- update
+
+					select {
+					case updatesChan <- update:
+					// Proceed reading updates
+					case <-ctx.stop:
+						return
+					}
 				}
 			}
 

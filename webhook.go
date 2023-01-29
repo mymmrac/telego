@@ -86,8 +86,12 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 			return fmt.Errorf("telego: webhook decoding update: %w", err)
 		}
 
-		updatesChan <- update
-		return nil
+		select {
+		case updatesChan <- update:
+			return nil
+		case <-ctx.stop:
+			return fmt.Errorf("telego: webhook stopped")
+		}
 	})
 	if err != nil {
 		return nil, fmt.Errorf("telego: webhook register handler: %w", err)
