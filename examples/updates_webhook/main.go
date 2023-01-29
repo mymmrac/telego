@@ -32,22 +32,19 @@ func main() {
 	// Get an update channel from webhook, also all options are optional.
 	// Note: For one bot, only one webhook allowed.
 	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
-		// Set chan buffer (default 100)
-		telego.WithWebhookBuffer(100),
+		// Set chan buffer (default 128)
+		telego.WithWebhookBuffer(128),
 
-		// Set fast http server that will be used to handle webhooks (default &fasthttp.Server{})
-		telego.WithWebhookServer(&fasthttp.Server{}),
-
-		// Set router to use, you can define your own routes (default router.New())
-		telego.WithWebhookRouter(router.New()),
-
-		// Enable default health API on `/health` (default disabled)
-		// Note: Should be used only after telego.WithWebhookRouter() if any
-		telego.WithWebhookHealthAPI(),
+		// Set fast http server that will be used to handle webhooks (default telego.FastHTTPWebhookServer)
+		telego.WithWebhookServer(telego.FastHTTPWebhookServer{
+			Logger: bot.Logger(),
+			Server: &fasthttp.Server{},
+			Router: router.New(),
+		}),
 	)
 
 	// Start server for receiving requests from the Telegram
-	_ = bot.StartListeningForWebhook("localhost:443")
+	_ = bot.StartWebhook("localhost:443")
 
 	// Stop reviving updates from update channel and shutdown webhook server
 	defer func() {

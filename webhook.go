@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/fasthttp/router"
 	"github.com/goccy/go-json"
+	"github.com/valyala/fasthttp"
 )
 
 const defaultWebhookUpdateChanBuffer = 128
@@ -107,7 +109,11 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 
 func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, error) {
 	ctx := &webhookContext{
-		// TODO: Set default server
+		server: FastHTTPWebhookServer{
+			Logger: b.Logger(),
+			Server: &fasthttp.Server{},
+			Router: router.New(),
+		},
 		updateChanBuffer: defaultWebhookUpdateChanBuffer,
 	}
 
