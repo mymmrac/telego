@@ -114,7 +114,7 @@ func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPol
 			var updates []Update
 			updates, err = b.GetUpdates(params)
 			if err != nil {
-				b.log.Errorf("Getting updates: %v", err)
+				b.log.Errorf("Getting updates: %s", err)
 				b.log.Errorf("Retrying to get updates in %s", ctx.retryTimeout.String())
 
 				time.Sleep(ctx.retryTimeout)

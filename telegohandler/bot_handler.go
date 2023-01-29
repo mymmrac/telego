@@ -27,7 +27,7 @@ type BotHandler struct {
 	stopTimeout    time.Duration
 }
 
-// BotHandlerOption represents option that can be applied to bot handler
+// BotHandlerOption represents an option that can be applied to bot handler
 type BotHandlerOption func(bh *BotHandler) error
 
 // NewBotHandler creates new bot handler
@@ -72,7 +72,7 @@ func (h *BotHandler) Start() {
 			h.handledUpdates.Done()
 			return
 		case update := <-h.updates:
-			h.processUpdate(update)
+			h.processUpdate(update) // TODO: Add worker pool
 		}
 	}
 }
