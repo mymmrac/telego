@@ -1,32 +1,31 @@
 package telego
 
 import (
+	"context"
 	"errors"
 	"fmt"
-	"os"
 	"sync"
-	"time"
 
-	"github.com/fasthttp/router"
 	"github.com/goccy/go-json"
-	"github.com/valyala/fasthttp"
-
-	"github.com/mymmrac/telego/telegoapi"
 )
 
-const defaultWebhookUpdateChanBuffer = 100 // Limited by number of updates in single Bot.GetUpdates() call
+const defaultWebhookUpdateChanBuffer = 128
 
-const webhookHealthAPIPath = "/health"
+// WebhookServer represents generic webhook server
+type WebhookServer interface {
+	Start(address string) error
+	Stop(ctx context.Context) error
+	RegisterHandler(path string, handler func(data []byte) error) error
+}
 
-// longPollingContext represents configuration of getting updates via webhook
+// webhookContext represents configuration of getting updates via webhook
 type webhookContext struct {
 	running     bool
 	configured  bool
 	runningLock sync.RWMutex
 	stop        chan struct{}
 
-	server *fasthttp.Server
-	router *router.Router
+	server WebhookServer
 
 	updateChanBuffer uint
 }
@@ -34,7 +33,7 @@ type webhookContext struct {
 // WebhookOption represents an option that can be applied to webhookContext
 type WebhookOption func(ctx *webhookContext) error
 
-// WithWebhookBuffer sets buffering for update chan. Default is 100.
+// WithWebhookBuffer sets buffering for update chan. Default is 128.
 func WithWebhookBuffer(chanBuffer uint) WebhookOption {
 	return func(ctx *webhookContext) error {
 		ctx.updateChanBuffer = chanBuffer
@@ -42,8 +41,8 @@ func WithWebhookBuffer(chanBuffer uint) WebhookOption {
 	}
 }
 
-// WithWebhookServer sets HTTP server to use for webhook. Default is &fasthttp.Server{}
-func WithWebhookServer(server *fasthttp.Server) WebhookOption {
+// WithWebhookServer sets webhook server to use for webhook. Default is TODO Set default
+func WithWebhookServer(server WebhookServer) WebhookOption {
 	return func(ctx *webhookContext) error {
 		if server == nil {
 			return errors.New("webhook server is nil")
@@ -54,76 +53,75 @@ func WithWebhookServer(server *fasthttp.Server) WebhookOption {
 	}
 }
 
-// WithWebhookRouter sets HTTP router to use for webhook. Default is router.New()
-// Note: For webhook to work properly POST route with a path specified in Bot.UpdatesViaWebhook() must be unset.
-func WithWebhookRouter(rtr *router.Router) WebhookOption {
-	return func(ctx *webhookContext) error {
-		if rtr == nil {
-			return errors.New("webhook router is nil")
+// TODO: Add WithSetWebhook option
+
+// UpdatesViaWebhook receive updates in chan from webhook.
+// A new handler with a provided path will be registered on server.
+// Calling if already configured (before StopWebhook() method) will return an error.
+// Note: Once stopped, update chan will be closed
+func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
+	if b.webhookContext != nil {
+		return nil, errors.New("telego: webhook context already exist")
+	}
+
+	ctx, err := b.createWebhookContext(options)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.runningLock.Lock()
+	defer ctx.runningLock.Unlock()
+
+	b.webhookContext = ctx
+	ctx.stop = make(chan struct{})
+	ctx.configured = true
+
+	updatesChan := make(chan Update, ctx.updateChanBuffer)
+
+	err = ctx.server.RegisterHandler(path, func(data []byte) error {
+		var update Update
+		err = json.Unmarshal(data, &update)
+		if err != nil {
+			b.log.Errorf("Webhook decoding error: %s", err)
+			return fmt.Errorf("telego: webhook decoding update: %w", err)
 		}
 
-		ctx.router = rtr
+		updatesChan <- update
 		return nil
+	})
+	if err != nil {
+		return nil, fmt.Errorf("telego: webhook register handler: %w", err)
 	}
+
+	go func() {
+		<-ctx.stop
+		close(updatesChan)
+	}()
+
+	return updatesChan, nil
 }
 
-// WithWebhookHealthAPI sets basic health API on `/health` path of the router. Keep in mind that should be
-// specified only after WithWebhookRouter() option if any.
-func WithWebhookHealthAPI() WebhookOption {
-	return func(ctx *webhookContext) error {
-		ctx.router.GET(webhookHealthAPIPath, func(ctx *fasthttp.RequestCtx) {
-			httpHealthResponse(ctx)
-		})
-		return nil
+func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, error) {
+	ctx := &webhookContext{
+		// TODO: Set default server
+		updateChanBuffer: defaultWebhookUpdateChanBuffer,
 	}
+
+	for _, option := range options {
+		if err := option(ctx); err != nil {
+			return nil, fmt.Errorf("telego: options: %w", err)
+		}
+	}
+
+	return ctx, nil
 }
 
-// StartListeningForWebhook start server for listening for webhook. Any error that occurs will stop the webhook.
+// StartWebhook start server for listening for webhook.
+// Any error that occurs will stop the webhook.
 // Calling before UpdatesViaWebhook() will return an error.
 // Calling if already running (before StopWebhook() method) will return an error.
 // Note: After you done with getting updates you should call StopWebhook() method to stop the server
-func (b *Bot) StartListeningForWebhook(address string) error {
-	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
-		return server.ListenAndServe(address)
-	})
-}
-
-// StartListeningForWebhookTLS start server with TLS for listening for webhook. Any error that occurs will stop the
-// webhook.
-// Calling before UpdatesViaWebhook() will return an error.
-// Calling if already running (before StopWebhook() method) will return an error.
-// Note: After you done with getting updates you should call StopWebhook() method to stop the server
-func (b *Bot) StartListeningForWebhookTLS(address, certificateFile, keyFile string) error {
-	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
-		return server.ListenAndServeTLS(address, certificateFile, keyFile)
-	})
-}
-
-// StartListeningForWebhookTLSEmbed start server with TLS (embed) for listening for webhook. Any error that occurs
-// will stop the webhook.
-// Calling before UpdatesViaWebhook() will return an error.
-// Calling if already running (before StopWebhook() method) will return an error.
-// Note: After you done with getting updates you should call StopWebhook() method to stop the server
-func (b *Bot) StartListeningForWebhookTLSEmbed(address string, certificateData []byte, keyData []byte) error {
-	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
-		return server.ListenAndServeTLSEmbed(address, certificateData, keyData)
-	})
-}
-
-// StartListeningForWebhookUNIX start server with UNIX address for listening for webhook. Any error that occurs will
-// stop the webhook.
-// Calling before UpdatesViaWebhook() will return an error.
-// Calling if already running (before StopWebhook() method) will return an error.
-// Note: After you done with getting updates you should call StopWebhook() method to stop the server
-func (b *Bot) StartListeningForWebhookUNIX(address string, mode os.FileMode) error {
-	return b.StartListeningForWebhookCustom(func(server *fasthttp.Server) error {
-		return server.ListenAndServeUNIX(address, mode)
-	})
-}
-
-// StartListeningForWebhookCustom checks the configuration and starts webhook server using provided listen func.
-// Note: Listening func can be nil (useful for running multiple bots on the same server).
-func (b *Bot) StartListeningForWebhookCustom(listenAndServe func(server *fasthttp.Server) error) error {
+func (b *Bot) StartWebhook(address string) error {
 	ctx := b.webhookContext
 	if ctx == nil {
 		return errors.New("telego: webhook context does not exist")
@@ -145,26 +143,20 @@ func (b *Bot) StartListeningForWebhookCustom(listenAndServe func(server *fasthtt
 	ctx.running = true
 	ctx.runningLock.Unlock()
 
-	if listenAndServe == nil {
-		return nil
+	if err := ctx.server.Start(address); err != nil {
+		ctx.runningLock.Lock()
+		ctx.running = false
+		close(ctx.stop)
+		b.webhookContext = nil
+		ctx.runningLock.Unlock()
+
+		return err
 	}
-
-	go func() {
-		if err := listenAndServe(ctx.server); err != nil {
-			b.log.Errorf("Listening for webhook: %v", err)
-
-			ctx.runningLock.Lock()
-			ctx.running = false
-			close(ctx.stop)
-			b.webhookContext = nil
-			ctx.runningLock.Unlock()
-		}
-	}()
 
 	return nil
 }
 
-// IsRunningWebhook tells if StartListeningForWebhook[TLS|TLSEmbed|UNIX]() is running
+// IsRunningWebhook tells if webhook server is running
 func (b *Bot) IsRunningWebhook() bool {
 	ctx := b.webhookContext
 	if ctx == nil {
@@ -177,43 +169,25 @@ func (b *Bot) IsRunningWebhook() bool {
 	return ctx.running
 }
 
-// StopWebhook shutdown webhook server used in the UpdatesViaWebhook() method.
+// StopWebhookWithContext shutdown webhook server used in the UpdatesViaWebhook() method.
 // Stopping will stop new updates from coming, but processing updates should be handled by the caller.
 // Stop will only ensure that no more updates will come in update chan.
-// Calling StopLongPolling() multiple times does nothing.
-func (b *Bot) StopWebhook() error {
-	ctx := b.webhookContext
-	if ctx == nil {
+// Calling StopWebhookWithContext() multiple times does nothing.
+func (b *Bot) StopWebhookWithContext(ctx context.Context) error {
+	webhookCtx := b.webhookContext
+	if webhookCtx == nil {
 		return nil
 	}
 
-	return b.StopWebhookCustom(ctx.server.Shutdown)
-}
+	webhookCtx.runningLock.Lock()
+	defer webhookCtx.runningLock.Unlock()
 
-// StopWebhookCustom shutdown webhook server used in the UpdatesViaWebhook() method using provided shutdown func.
-// Calling StopLongPolling() multiple times does nothing.
-// Note: Shutdown func can be nil (useful for running multiple bots on the same server).
-//
-// Warning: If after shutdown func any updates will be passed into updates chan, the program will panic.
-// Ensure that any active connections to webhook stopped before returning from shutdown func.
-func (b *Bot) StopWebhookCustom(shutdown func() error) error {
-	ctx := b.webhookContext
-	if ctx == nil {
-		return nil
-	}
+	if webhookCtx.running {
+		webhookCtx.running = false
 
-	ctx.runningLock.Lock()
-	defer ctx.runningLock.Unlock()
+		err := webhookCtx.server.Stop(ctx)
 
-	if ctx.running {
-		ctx.running = false
-
-		var err error
-		if shutdown != nil {
-			err = shutdown()
-		}
-
-		close(ctx.stop)
+		close(webhookCtx.stop)
 		b.webhookContext = nil
 		return err
 	}
@@ -222,93 +196,8 @@ func (b *Bot) StopWebhookCustom(shutdown func() error) error {
 	return nil
 }
 
-// UpdatesViaWebhook receive updates in chan from webhook.
-// New POST route with a provided path will be added to the router.
-// Calling if already configured (before StopWebhook() method) will return an error.
-// Note: UpdatesViaWebhook() will redefine webhook's server handler.
-func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
-	if b.webhookContext != nil {
-		return nil, errors.New("telego: webhook context already exist")
-	}
-
-	ctx, err := b.createWebhookContext(options)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.runningLock.Lock()
-	defer ctx.runningLock.Unlock()
-
-	b.webhookContext = ctx
-	ctx.stop = make(chan struct{})
-	ctx.configured = true
-
-	updatesChan := make(chan Update, ctx.updateChanBuffer)
-
-	ctx.router.POST(path, func(ctx *fasthttp.RequestCtx) {
-		var update Update
-		err = json.Unmarshal(ctx.PostBody(), &update)
-		if err != nil {
-			httpRespondWithError(ctx, fmt.Errorf("decoding update: %w", err))
-
-			b.log.Errorf("Webhook decoding error: %v", err)
-			return
-		}
-
-		updatesChan <- update
-		ctx.SetStatusCode(fasthttp.StatusOK)
-	})
-
-	ctx.server.Handler = ctx.router.Handler
-
-	go func() {
-		<-ctx.stop
-		close(updatesChan)
-	}()
-
-	return updatesChan, nil
-}
-
-func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, error) {
-	ctx := &webhookContext{
-		server: &fasthttp.Server{},
-		router: router.New(),
-
-		updateChanBuffer: defaultWebhookUpdateChanBuffer,
-	}
-
-	for _, option := range options {
-		if err := option(ctx); err != nil {
-			return nil, fmt.Errorf("telego: options: %w", err)
-		}
-	}
-
-	return ctx, nil
-}
-
-func httpRespondWithError(ctx *fasthttp.RequestCtx, err error) {
-	//nolint:errcheck
-	errMsg, _ := json.Marshal(map[string]string{
-		"error": err.Error(),
-	})
-
-	ctx.SetStatusCode(fasthttp.StatusBadRequest)
-	ctx.SetContentType(telegoapi.ContentTypeJSON)
-
-	//nolint:errcheck
-	_, _ = ctx.Write(errMsg)
-}
-
-func httpHealthResponse(ctx *fasthttp.RequestCtx) {
-	//nolint:errcheck
-	healthData, _ := json.Marshal(map[string]interface{}{
-		"running": true,
-		"time":    time.Now().Local(),
-	})
-
-	ctx.SetStatusCode(fasthttp.StatusOK)
-	ctx.SetContentType(telegoapi.ContentTypeJSON)
-
-	//nolint:errcheck
-	_, _ = ctx.Write(healthData)
+// StopWebhook shutdown webhook server used in the UpdatesViaWebhook() method
+// Note: For more info, see StopWebhookWithContext()
+func (b *Bot) StopWebhook() error {
+	return b.StopWebhookWithContext(context.Background())
 }
