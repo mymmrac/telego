@@ -37,12 +37,14 @@ func testWebhookBot(t *testing.T) *Bot {
 }
 
 func TestBot_StartWebhook(t *testing.T) {
-	t.Run("success_and_error_already_running", func(t *testing.T) {
+	t.Run("success_and_error_already_running_and_start_fail", func(t *testing.T) {
 		b := testWebhookBot(t)
+
+		testAddr := testAddress(t)
 
 		assert.NotPanics(t, func() {
 			go func() {
-				err := b.StartWebhook(testAddress(t))
+				err := b.StartWebhook(testAddr)
 				assert.NoError(t, err)
 			}()
 			time.Sleep(time.Millisecond * 10)
@@ -50,6 +52,12 @@ func TestBot_StartWebhook(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			err := b.StartWebhook("test")
+			assert.Error(t, err)
+		})
+
+		b.webhookContext.running = false
+		assert.NotPanics(t, func() {
+			err := b.StartWebhook(testAddr)
 			assert.Error(t, err)
 		})
 	})

@@ -613,8 +613,10 @@ func main() {
 
 		fmt.Println(bot.IsRunningWebhook())
 
-		err = bot.StartListeningForWebhook(":8080")
-		assert(err == nil, err)
+		go func() {
+			err = bot.StartWebhook(":8080")
+			assert(err == nil, err)
+		}()
 
 		fmt.Println(bot.IsRunningWebhook())
 
@@ -633,8 +635,10 @@ func main() {
 
 		fmt.Println(bot.IsRunningWebhook())
 
-		err = bot.StartListeningForWebhook(":8080")
-		assert(err == nil, err)
+		go func() {
+			err = bot.StartWebhook(":8080")
+			assert(err == nil, err)
+		}()
 
 		fmt.Println(bot.IsRunningWebhook())
 
@@ -648,11 +652,17 @@ func main() {
 			ctx.SetStatusCode(fasthttp.StatusAccepted)
 		})
 
-		_, err = bot.UpdatesViaWebhook("/", telego.WithWebhookRouter(r), telego.WithWebhookHealthAPI())
+		_, err = bot.UpdatesViaWebhook("/", telego.WithWebhookServer(telego.FastHTTPWebhookServer{
+			Logger: bot.Logger(),
+			Server: &fasthttp.Server{},
+			Router: r,
+		}))
 		assert(err == nil, err)
 
-		err = bot.StartListeningForWebhook(":8080")
-		assert(err == nil, err)
+		go func() {
+			err = bot.StartWebhook(":8080")
+			assert(err == nil, err)
+		}()
 
 		defer func() {
 			_ = bot.StopWebhook()

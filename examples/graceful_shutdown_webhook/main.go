@@ -63,7 +63,9 @@ func main() {
 	fmt.Println("Handling updates...")
 
 	// Start server for receiving requests from the Telegram
-	_ = bot.StartListeningForWebhook("localhost:443")
+	go func() {
+		_ = bot.StartWebhook("localhost:443")
+	}()
 
 	// Wait for the stop process to be completed
 	<-done
