@@ -90,6 +90,11 @@ func (b *Bot) Token() string {
 	return b.token
 }
 
+// Logger returns bot logger
+func (b *Bot) Logger() Logger {
+	return b.log
+}
+
 // EmptyValue returns value that will be erased from all requests useful for things like SwitchInlineQuery in
 // telego.InlineKeyboardButton that have empty string as valid parameter value
 // Warning: Only works if at least one of the bot options, WithEmptyValues or WithCustomEmptyValues are used

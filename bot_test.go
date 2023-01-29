@@ -149,6 +149,13 @@ func TestBot_Token(t *testing.T) {
 	assert.Equal(t, token, bot.Token())
 }
 
+func TestBot_Logger(t *testing.T) {
+	bot, err := NewBot(token)
+	assert.NoError(t, err)
+
+	assert.Equal(t, bot.log, bot.Logger())
+}
+
 func TestBot_EmptyValue(t *testing.T) {
 	bot, err := NewBot(token, WithEmptyValues())
 	assert.NoError(t, err)

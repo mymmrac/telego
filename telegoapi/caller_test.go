@@ -13,7 +13,7 @@ import (
 	"github.com/valyala/fasthttp/fasthttputil"
 )
 
-func TestFasthttpAPICaller_Call(t *testing.T) {
+func TestFastHTTPCaller_Call(t *testing.T) {
 	ln := fasthttputil.NewInmemoryListener()
 
 	api := &fasthttpServer{
