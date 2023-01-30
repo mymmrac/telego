@@ -121,20 +121,12 @@ func TestWithDiscardLogger(t *testing.T) {
 
 type testLoggerType struct{}
 
-func (testLoggerType) Debug(_ ...interface{}) {
-	panic("implement me")
-}
-
 func (testLoggerType) Debugf(_ string, _ ...interface{}) {
-	panic("implement me")
-}
-
-func (testLoggerType) Error(_ ...interface{}) {
-	panic("implement me")
+	// NoOp
 }
 
 func (testLoggerType) Errorf(_ string, _ ...interface{}) {
-	panic("implement me")
+	// NoOp
 }
 
 func TestWithLogger(t *testing.T) {

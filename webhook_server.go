@@ -14,6 +14,7 @@ import (
 // TODO: Add tests
 
 // FastHTTPWebhookServer represents fasthttp implementation of WebhookServer
+// Note: The user should set both Server and Router, only Logger is optional
 type FastHTTPWebhookServer struct {
 	Logger Logger
 	Server *fasthttp.Server
@@ -54,6 +55,7 @@ func (f FastHTTPWebhookServer) RegisterHandler(path string, handler func(data []
 }
 
 // HTTPWebhookServer represents http implementation of WebhookServer
+// Note: The user should set both Server and ServeMux, only Logger is optional
 type HTTPWebhookServer struct {
 	Logger   Logger
 	Server   *http.Server
@@ -146,3 +148,5 @@ func (m *MultiBotWebhookServer) Stop(ctx context.Context) error {
 func (m *MultiBotWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
 	return m.Server.RegisterHandler(path, handler)
 }
+
+// TODO: Add implementation for more popular frameworks
