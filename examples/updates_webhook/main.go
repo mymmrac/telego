@@ -41,6 +41,11 @@ func main() {
 			Server: &fasthttp.Server{},
 			Router: router.New(),
 		}),
+
+		// Calls SetWebhook before starting webhook
+		telego.WithWebhookSet(&telego.SetWebhookParams{
+			URL: "https://example.com/bot" + bot.Token(),
+		}),
 	)
 
 	// Start server for receiving requests from the Telegram

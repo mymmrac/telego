@@ -27,7 +27,8 @@ func main() {
 		URL: "https://example.com/bot" + bot2.Token(),
 	})
 
-	// Create common server and router for all bots
+	// Create common webhook server for all bots.
+	// MultiBotWebhookServer will ensure that Start and Stop will be called only once.
 	srv := &telego.MultiBotWebhookServer{
 		Server: telego.FastHTTPWebhookServer{
 			Server: &fasthttp.Server{},
@@ -36,7 +37,7 @@ func main() {
 	}
 
 	// Get updates chan from webhook with respect to webhook URL
-	// Note: Each bot should use the same server and router
+	// Note: Each bot should use the same webhook server
 	updates1, _ := bot1.UpdatesViaWebhook(
 		"/bot"+bot1.Token(),
 		telego.WithWebhookServer(srv),

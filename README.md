@@ -67,8 +67,6 @@ More examples can be seen here:
 <details>
 <summary>Click to show • hide</summary>
 
-[//]: # (TODO: Check if all still work)
-
 - [Basic](examples/basic/main.go)
 - [Configuration](examples/configuration/main.go)
 - [Methods](examples/methods/main.go)
