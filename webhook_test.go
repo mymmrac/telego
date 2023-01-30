@@ -229,11 +229,11 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 	})
 }
 
-func TestWebhookBuffer(t *testing.T) {
+func TestWithWebhookBuffer(t *testing.T) {
 	ctx := &webhookContext{}
 	buffer := uint(1)
 
-	err := WithWebhookBuffer(buffer)(ctx)
+	err := WithWebhookBuffer(buffer)(nil, ctx)
 	assert.NoError(t, err)
 	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
 }
@@ -243,13 +243,28 @@ func TestWithWebhookServer(t *testing.T) {
 	server := FastHTTPWebhookServer{}
 
 	t.Run("success", func(t *testing.T) {
-		err := WithWebhookServer(server)(ctx)
+		err := WithWebhookServer(server)(nil, ctx)
 		assert.NoError(t, err)
 		assert.EqualValues(t, server, ctx.server)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		err := WithWebhookServer(nil)(ctx)
+		err := WithWebhookServer(nil)(nil, ctx)
 		assert.Error(t, err)
 	})
+}
+
+func TestWithWebhookSet(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+	ctx := &webhookContext{}
+
+	m.MockRequestConstructor.EXPECT().JSONRequest(gomock.Any()).Return(&telegoapi.RequestData{
+		Buffer: bytes.NewBuffer(nil),
+	}, nil)
+
+	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any()).Return(&telegoapi.Response{Ok: true}, nil)
+
+	err := WithWebhookSet(&SetWebhookParams{})(m.Bot, ctx)
+	assert.NoError(t, err)
 }

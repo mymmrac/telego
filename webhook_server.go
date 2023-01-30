@@ -11,8 +11,6 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// TODO: Add tests
-
 // FastHTTPWebhookServer represents fasthttp implementation of WebhookServer
 // Note: The user should set both Server and Router, only Logger is optional
 type FastHTTPWebhookServer struct {

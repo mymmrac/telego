@@ -33,19 +33,19 @@ type webhookContext struct {
 }
 
 // WebhookOption represents an option that can be applied to webhookContext
-type WebhookOption func(ctx *webhookContext) error
+type WebhookOption func(bot *Bot, ctx *webhookContext) error
 
 // WithWebhookBuffer sets buffering for update chan. Default is 128.
 func WithWebhookBuffer(chanBuffer uint) WebhookOption {
-	return func(ctx *webhookContext) error {
+	return func(_ *Bot, ctx *webhookContext) error {
 		ctx.updateChanBuffer = chanBuffer
 		return nil
 	}
 }
 
-// WithWebhookServer sets webhook server to use for webhook. Default is TODO Set default
+// WithWebhookServer sets webhook server to use for webhook. Default is FastHTTPWebhookServer
 func WithWebhookServer(server WebhookServer) WebhookOption {
-	return func(ctx *webhookContext) error {
+	return func(_ *Bot, ctx *webhookContext) error {
 		if server == nil {
 			return errors.New("webhook server is nil")
 		}
@@ -55,7 +55,12 @@ func WithWebhookServer(server WebhookServer) WebhookOption {
 	}
 }
 
-// TODO: Add WithSetWebhook option
+// WithWebhookSet calls Bot.SetWebhook() before starting webhook
+func WithWebhookSet(params *SetWebhookParams) WebhookOption {
+	return func(bot *Bot, ctx *webhookContext) error {
+		return bot.SetWebhook(params)
+	}
+}
 
 // UpdatesViaWebhook receive updates in chan from webhook.
 // A new handler with a provided path will be registered on server.
@@ -118,7 +123,7 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 	}
 
 	for _, option := range options {
-		if err := option(ctx); err != nil {
+		if err := option(b, ctx); err != nil {
 			return nil, fmt.Errorf("telego: options: %w", err)
 		}
 	}
