@@ -72,7 +72,7 @@ func (h *BotHandler) Start() {
 			h.handledUpdates.Done()
 			return
 		case update := <-h.updates:
-			h.processUpdate(update) // TODO: Add worker pool
+			h.processUpdate(update)
 		}
 	}
 }

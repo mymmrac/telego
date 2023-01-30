@@ -24,16 +24,16 @@
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
 
-The goal of this library was to create API with the same types and methods as actual telegram bot API. 
-Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly 
-all documentation from telegram.
+The goal of this library was to create API with the same types and methods as actual Telegram Bot API.
+Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly
+all documentation from Telegram.
 
 :warning: Telego is still in v0.x.x version, so do expect braking changes! :warning:
 
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
-> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` and
-> [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
+> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` by default (can be changed)
+> and [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
 
 ### :clipboard: Table Of Content
 
@@ -162,7 +162,7 @@ func main() {
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
-In order to receive updates, you can use two methods:
+In order to receive updates, you can use one of two methods:
 
 - using long polling (`bot.UpdatesViaLongPolling`)
 - using webhook (`bot.UpdatesViaWebhook`)
@@ -206,8 +206,6 @@ func main() {
 
 Webhook example (recommended way):
 
-[//]: # (TODO: Fix examples)
-
 ```go
 package main
 
@@ -239,12 +237,13 @@ func main() {
 	fmt.Printf("Webhook Info: %+v\n", info)
 
 	// Get an update channel from webhook.
-	// Note: For one bot, only one webhook allowed.
 	// (more on configuration in examples/updates_webhook/main.go)
 	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
 
 	// Start server for receiving requests from the Telegram
-	_ = bot.StartListeningForWebhook("localhost:443")
+	go func() {
+		_ = bot.StartWebhook("localhost:443")
+	}()
 
 	// Stop reviving updates from update channel and shutdown webhook server
 	defer func() {
@@ -258,6 +257,8 @@ func main() {
 }
 ```
 
+For running multiple bots from a single server, see [this](examples/multi_bot_webhook/main.go) example.
+
 > Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
 
 ### :kite: Using Telegram methods
@@ -265,10 +266,10 @@ func main() {
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
 All Telegram Bot API methods described in [documentation](https://core.telegram.org/bots/api#available-methods) can be
-used by the library. They have same names and same parameters, parameters represented by struct with
+used by the library. They have the same names and the same parameters, parameters represented by struct with
 name: `<methodName>` + `Params`. If method doesn't have required parameters `nil` value can be used as a parameter.
 
-> Note: [`types.go`](types.go) and [`methods.go`](methods.go) was automatically [generated](internal/generator)
+> Note: [`types.go`](types.go) and [`methods.go`](methods.go) were automatically [generated](internal/generator)
 > from [documentation][TelegramBotAPI], and it's possible that they have errors or missing parts both in comments and
 > actual code. Feel free to report such things.
 
@@ -336,7 +337,7 @@ I suggest including it with alias to get cleaner code:
 import tu "github.com/mymmrac/telego/telegoutil"
 ```
 
-Package contains couple methods for creating send parameters with all required parameters like:
+The package contains couple methods for creating send parameters with all required parameters like:
 
 - `Message(chatID, text) => SendMessageParams`
 - `Photo(chatID, photoFile) => SendPhotoParams`
@@ -417,7 +418,7 @@ Processing updates just in for loop is not the most pleasing thing to do, so Tel
 but instead of the path, you provide predicates.
 
 One update will only match to the first handler whose predicates are satisfied, predicates checked in order of handler
-registration (it's useful to first specify most specific predicates and then more general).
+registration (it's useful to first specify the most specific predicates and then more general).
 
 Also, all handlers (but not their predicates) are processed in parallel.
 
@@ -427,8 +428,8 @@ I suggest including it with alias to get cleaner code:
 import th "github.com/mymmrac/telego/telegohandler"
 ```
 
-Here is an example of using handlers with long polling updates. 
-You can see the full list of available predicates in [`telegohandler/predicates`](telegohandler/predicates.go), 
+Here is an example of using handlers with long polling updates.
+You can see the full list of available predicates in [`telegohandler/predicates`](telegohandler/predicates.go),
 or define your own.
 
 ```go
@@ -514,7 +515,7 @@ func main() {
 
 	// Register new handler with match on command `/start`
 	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		// Send message with inline keyboard
+		// Send a message with inline keyboard
 		_, _ = bot.SendMessage(tu.Message(
 			tu.ID(message.Chat.ID),
 			fmt.Sprintf("Hello %s!", message.From.FirstName),

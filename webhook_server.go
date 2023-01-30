@@ -146,5 +146,3 @@ func (m *MultiBotWebhookServer) Stop(ctx context.Context) error {
 func (m *MultiBotWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
 	return m.Server.RegisterHandler(path, handler)
 }
-
-// TODO: Add implementation for more popular frameworks
