@@ -70,71 +70,85 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 }
 
 func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
-	addr := testAddress(t)
-
-	s := HTTPWebhookServer{
-		Logger:   testLoggerType{},
-		Server:   &http.Server{}, //nolint:gosec
-		ServeMux: http.NewServeMux(),
-	}
-
-	go func() {
-		err := s.Start(addr)
-		require.NoError(t, err)
-	}()
-
-	time.Sleep(time.Microsecond * 10)
-
-	err := s.Start(addr)
-	require.Error(t, err)
-
-	err = s.RegisterHandler("/", func(data []byte) error {
-		if len(data) == 0 {
-			return nil
+	t.Run("error_start_fail", func(t *testing.T) {
+		s := HTTPWebhookServer{
+			Logger:   testLoggerType{},
+			Server:   &http.Server{}, //nolint:gosec
+			ServeMux: http.NewServeMux(),
 		}
 
-		return errTest
-	})
-	assert.NoError(t, err)
+		testAddr := testAddress(t)
+		go func() {
+			err := http.ListenAndServe(testAddr, nil) //nolint:gosec
+			require.NoError(t, err)
+		}()
 
-	t.Run("success", func(t *testing.T) {
-		rc := httptest.NewRecorder()
-		req := httptest.NewRequest(http.MethodPost, "/", nil)
+		time.Sleep(time.Millisecond * 10)
 
-		s.Server.Handler.ServeHTTP(rc, req)
-
-		assert.Equal(t, http.StatusOK, rc.Code)
-	})
-
-	t.Run("error_method", func(t *testing.T) {
-		rc := httptest.NewRecorder()
-		req := httptest.NewRequest(http.MethodGet, "/", nil)
-
-		s.Server.Handler.ServeHTTP(rc, req)
-
-		assert.Equal(t, http.StatusMethodNotAllowed, rc.Code)
+		err := s.Start(testAddr)
+		require.Error(t, err)
 	})
 
-	t.Run("error_handler", func(t *testing.T) {
-		rc := httptest.NewRecorder()
-		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("err"))
+	t.Run("end_to_end", func(t *testing.T) {
+		s := HTTPWebhookServer{
+			Logger:   testLoggerType{},
+			Server:   &http.Server{}, //nolint:gosec
+			ServeMux: http.NewServeMux(),
+		}
 
-		s.Server.Handler.ServeHTTP(rc, req)
+		go func() {
+			err := s.Start(testAddress(t))
+			require.NoError(t, err)
+		}()
 
-		assert.Equal(t, http.StatusInternalServerError, rc.Code)
+		err := s.RegisterHandler("/", func(data []byte) error {
+			if len(data) == 0 {
+				return nil
+			}
+
+			return errTest
+		})
+		assert.NoError(t, err)
+
+		t.Run("success", func(t *testing.T) {
+			rc := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/", nil)
+
+			s.Server.Handler.ServeHTTP(rc, req)
+
+			assert.Equal(t, http.StatusOK, rc.Code)
+		})
+
+		t.Run("error_method", func(t *testing.T) {
+			rc := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodGet, "/", nil)
+
+			s.Server.Handler.ServeHTTP(rc, req)
+
+			assert.Equal(t, http.StatusMethodNotAllowed, rc.Code)
+		})
+
+		t.Run("error_handler", func(t *testing.T) {
+			rc := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("err"))
+
+			s.Server.Handler.ServeHTTP(rc, req)
+
+			assert.Equal(t, http.StatusInternalServerError, rc.Code)
+		})
+
+		t.Run("error_read", func(t *testing.T) {
+			rc := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/", errReader{})
+
+			s.Server.Handler.ServeHTTP(rc, req)
+
+			assert.Equal(t, http.StatusInternalServerError, rc.Code)
+		})
+
+		err = s.Stop(context.Background())
+		assert.NoError(t, err)
 	})
-
-	t.Run("error_read", func(t *testing.T) {
-		rc := httptest.NewRecorder()
-		req := httptest.NewRequest(http.MethodPost, "/", errReader{})
-
-		s.Server.Handler.ServeHTTP(rc, req)
-
-		assert.Equal(t, http.StatusInternalServerError, rc.Code)
-	})
-
-	err = s.Stop(context.Background())
-	assert.NoError(t, err)
 }
 
 type errReader struct{}

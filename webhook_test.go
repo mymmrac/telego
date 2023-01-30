@@ -147,8 +147,8 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 
 		addr := testAddress(t)
 		go func() {
-			err = b.StartWebhook(addr)
-			require.NoError(t, err)
+			startErr := b.StartWebhook(addr)
+			require.NoError(t, startErr)
 		}()
 		time.Sleep(time.Millisecond * 10)
 
@@ -207,8 +207,8 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 		require.NoError(t, err)
 
 		go func() {
-			err = m.Bot.StartWebhook(testAddress(t))
-			assert.NoError(t, err)
+			startErr := m.Bot.StartWebhook(testAddress(t))
+			assert.NoError(t, startErr)
 		}()
 		time.Sleep(time.Millisecond * 10)
 
