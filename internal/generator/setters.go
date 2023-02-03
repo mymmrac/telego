@@ -106,10 +106,20 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 		noPointer := contains(noPointerStructs, setter.structType)
 
+		boolPtr := setter.fieldType == "*bool" && setter.structType == "PromoteChatMemberParams"
+
 		var s string
 		if setter.fieldType != "bool" {
+			if boolPtr {
+				setter.fieldType = "bool"
+			}
+
 			s = fmt.Sprintf("func (%s *%s) With%s(%s %s) *%s {\n", r, setter.structType,
 				setter.fieldName, firstToLower(setter.fieldName), setter.fieldType, setter.structType)
+
+			if boolPtr {
+				setter.fieldType = "*bool"
+			}
 		} else {
 			s = fmt.Sprintf("func (%s *%s) With%s() *%s {\n", r, setter.structType,
 				setter.fieldName, setter.structType)
@@ -127,7 +137,12 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		data.WriteString(s)
 
 		if setter.fieldType != "bool" {
-			data.WriteString(fmt.Sprintf("\t%s.%s = %s\n", r, setter.fieldName, firstToLower(setter.fieldName)))
+			value := firstToLower(setter.fieldName)
+			if boolPtr {
+				value = "Bool(" + value + ")"
+			}
+
+			data.WriteString(fmt.Sprintf("\t%s.%s = %s\n", r, setter.fieldName, value))
 		} else {
 			data.WriteString(fmt.Sprintf("\t%s.%s = true\n", r, setter.fieldName))
 		}

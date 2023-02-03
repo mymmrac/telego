@@ -640,12 +640,12 @@ func TestUnbanChatMemberParams_Setters(t *testing.T) {
 func TestRestrictChatMemberParams_Setters(t *testing.T) {
 	r := (&RestrictChatMemberParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithPermissions(ChatPermissions{CanSendMessages: true}).
+		WithPermissions(ChatPermissions{CanSendMessages: Bool(true)}).
 		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &RestrictChatMemberParams{
 		ChatID:                        ChatID{ID: 1},
-		Permissions:                   ChatPermissions{CanSendMessages: true},
+		Permissions:                   ChatPermissions{CanSendMessages: Bool(true)},
 		UseIndependentChatPermissions: true,
 	}, r)
 }
@@ -653,33 +653,33 @@ func TestRestrictChatMemberParams_Setters(t *testing.T) {
 func TestPromoteChatMemberParams_Setters(t *testing.T) {
 	p := (&PromoteChatMemberParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithIsAnonymous().
-		WithCanManageChat().
-		WithCanPostMessages().
-		WithCanEditMessages().
-		WithCanDeleteMessages().
-		WithCanManageVideoChats().
-		WithCanRestrictMembers().
-		WithCanPromoteMembers().
-		WithCanChangeInfo().
-		WithCanInviteUsers().
-		WithCanPinMessages().
-		WithCanManageTopics()
+		WithIsAnonymous(true).
+		WithCanManageChat(true).
+		WithCanPostMessages(true).
+		WithCanEditMessages(true).
+		WithCanDeleteMessages(true).
+		WithCanManageVideoChats(true).
+		WithCanRestrictMembers(true).
+		WithCanPromoteMembers(true).
+		WithCanChangeInfo(true).
+		WithCanInviteUsers(true).
+		WithCanPinMessages(true).
+		WithCanManageTopics(true)
 
 	assert.Equal(t, &PromoteChatMemberParams{
 		ChatID:              ChatID{ID: 1},
-		IsAnonymous:         true,
-		CanManageChat:       true,
-		CanPostMessages:     true,
-		CanEditMessages:     true,
-		CanDeleteMessages:   true,
-		CanManageVideoChats: true,
-		CanRestrictMembers:  true,
-		CanPromoteMembers:   true,
-		CanChangeInfo:       true,
-		CanInviteUsers:      true,
-		CanPinMessages:      true,
-		CanManageTopics:     true,
+		IsAnonymous:         Bool(true),
+		CanManageChat:       Bool(true),
+		CanPostMessages:     Bool(true),
+		CanEditMessages:     Bool(true),
+		CanDeleteMessages:   Bool(true),
+		CanManageVideoChats: Bool(true),
+		CanRestrictMembers:  Bool(true),
+		CanPromoteMembers:   Bool(true),
+		CanChangeInfo:       Bool(true),
+		CanInviteUsers:      Bool(true),
+		CanPinMessages:      Bool(true),
+		CanManageTopics:     Bool(true),
 	}, p)
 }
 
@@ -715,12 +715,12 @@ func TestUnbanChatSenderChatParams_Setters(t *testing.T) {
 func TestSetChatPermissionsParams_Setters(t *testing.T) {
 	s := (&SetChatPermissionsParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithPermissions(ChatPermissions{CanSendMessages: true}).
+		WithPermissions(ChatPermissions{CanSendMessages: Bool(true)}).
 		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &SetChatPermissionsParams{
 		ChatID:                        ChatID{ID: 1},
-		Permissions:                   ChatPermissions{CanSendMessages: true},
+		Permissions:                   ChatPermissions{CanSendMessages: Bool(true)},
 		UseIndependentChatPermissions: true,
 	}, s)
 }

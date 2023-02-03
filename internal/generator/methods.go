@@ -100,7 +100,7 @@ func generateMethods(docs string) tgMethods {
 			name:        methodGroup[1],
 			nameTitle:   cs.String(methodGroup[1]),
 			description: replaceHTML(methodGroup[2]),
-			parameters:  generateMethodParameters(methodGroup[3]),
+			parameters:  generateMethodParameters(methodGroup[3], methodGroup[1]),
 			returnType:  parseReturnType(methodGroup[2]),
 		}
 
@@ -112,8 +112,8 @@ func generateMethods(docs string) tgMethods {
 	return methods
 }
 
-func generateMethodParameters(parametersDocs string) tgMethodParameters {
-	parameterGroups := methodParameterRegexp.FindAllStringSubmatch(parametersDocs, -1)
+func generateMethodParameters(parameterDocs, methodName string) tgMethodParameters {
+	parameterGroups := methodParameterRegexp.FindAllStringSubmatch(parameterDocs, -1)
 	parameters := make(tgMethodParameters, len(parameterGroups))
 
 	for i, parameterGroup := range parameterGroups {
@@ -126,7 +126,7 @@ func generateMethodParameters(parametersDocs string) tgMethodParameters {
 		parameter.optional = parameterGroup[3] == "Optional"
 		parameter.typ = parseType(parameterGroup[2], parameter.optional)
 
-		parameterSpecialCases(&parameter)
+		parameterSpecialCases(&parameter, methodName)
 
 		parameters[i] = parameter
 	}
@@ -341,7 +341,7 @@ func methodSpecialCases(method *tgMethod) {
 	}
 }
 
-func parameterSpecialCases(parameter *tgMethodParameter) {
+func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 	if parameter.typ == "*InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply" {
 		parameter.typ = "ReplyMarkup"
 	}
@@ -365,6 +365,10 @@ func parameterSpecialCases(parameter *tgMethodParameter) {
 
 	if strings.Contains(parameter.name, "Date") && parameter.typ == "int" {
 		parameter.typ = "int64"
+	}
+
+	if methodName == "promoteChatMember" && parameter.typ == "bool" {
+		parameter.typ = "*bool"
 	}
 }
 

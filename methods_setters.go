@@ -1372,74 +1372,74 @@ func (p *PromoteChatMemberParams) WithChatID(chatID ChatID) *PromoteChatMemberPa
 }
 
 // WithIsAnonymous adds is anonymous parameter
-func (p *PromoteChatMemberParams) WithIsAnonymous() *PromoteChatMemberParams {
-	p.IsAnonymous = true
+func (p *PromoteChatMemberParams) WithIsAnonymous(isAnonymous bool) *PromoteChatMemberParams {
+	p.IsAnonymous = Bool(isAnonymous)
 	return p
 }
 
 // WithCanManageChat adds can manage chat parameter
-func (p *PromoteChatMemberParams) WithCanManageChat() *PromoteChatMemberParams {
-	p.CanManageChat = true
+func (p *PromoteChatMemberParams) WithCanManageChat(canManageChat bool) *PromoteChatMemberParams {
+	p.CanManageChat = Bool(canManageChat)
 	return p
 }
 
 // WithCanPostMessages adds can post messages parameter
-func (p *PromoteChatMemberParams) WithCanPostMessages() *PromoteChatMemberParams {
-	p.CanPostMessages = true
+func (p *PromoteChatMemberParams) WithCanPostMessages(canPostMessages bool) *PromoteChatMemberParams {
+	p.CanPostMessages = Bool(canPostMessages)
 	return p
 }
 
 // WithCanEditMessages adds can edit messages parameter
-func (p *PromoteChatMemberParams) WithCanEditMessages() *PromoteChatMemberParams {
-	p.CanEditMessages = true
+func (p *PromoteChatMemberParams) WithCanEditMessages(canEditMessages bool) *PromoteChatMemberParams {
+	p.CanEditMessages = Bool(canEditMessages)
 	return p
 }
 
 // WithCanDeleteMessages adds can delete messages parameter
-func (p *PromoteChatMemberParams) WithCanDeleteMessages() *PromoteChatMemberParams {
-	p.CanDeleteMessages = true
+func (p *PromoteChatMemberParams) WithCanDeleteMessages(canDeleteMessages bool) *PromoteChatMemberParams {
+	p.CanDeleteMessages = Bool(canDeleteMessages)
 	return p
 }
 
 // WithCanManageVideoChats adds can manage video chats parameter
-func (p *PromoteChatMemberParams) WithCanManageVideoChats() *PromoteChatMemberParams {
-	p.CanManageVideoChats = true
+func (p *PromoteChatMemberParams) WithCanManageVideoChats(canManageVideoChats bool) *PromoteChatMemberParams {
+	p.CanManageVideoChats = Bool(canManageVideoChats)
 	return p
 }
 
 // WithCanRestrictMembers adds can restrict members parameter
-func (p *PromoteChatMemberParams) WithCanRestrictMembers() *PromoteChatMemberParams {
-	p.CanRestrictMembers = true
+func (p *PromoteChatMemberParams) WithCanRestrictMembers(canRestrictMembers bool) *PromoteChatMemberParams {
+	p.CanRestrictMembers = Bool(canRestrictMembers)
 	return p
 }
 
 // WithCanPromoteMembers adds can promote members parameter
-func (p *PromoteChatMemberParams) WithCanPromoteMembers() *PromoteChatMemberParams {
-	p.CanPromoteMembers = true
+func (p *PromoteChatMemberParams) WithCanPromoteMembers(canPromoteMembers bool) *PromoteChatMemberParams {
+	p.CanPromoteMembers = Bool(canPromoteMembers)
 	return p
 }
 
 // WithCanChangeInfo adds can change info parameter
-func (p *PromoteChatMemberParams) WithCanChangeInfo() *PromoteChatMemberParams {
-	p.CanChangeInfo = true
+func (p *PromoteChatMemberParams) WithCanChangeInfo(canChangeInfo bool) *PromoteChatMemberParams {
+	p.CanChangeInfo = Bool(canChangeInfo)
 	return p
 }
 
 // WithCanInviteUsers adds can invite users parameter
-func (p *PromoteChatMemberParams) WithCanInviteUsers() *PromoteChatMemberParams {
-	p.CanInviteUsers = true
+func (p *PromoteChatMemberParams) WithCanInviteUsers(canInviteUsers bool) *PromoteChatMemberParams {
+	p.CanInviteUsers = Bool(canInviteUsers)
 	return p
 }
 
 // WithCanPinMessages adds can pin messages parameter
-func (p *PromoteChatMemberParams) WithCanPinMessages() *PromoteChatMemberParams {
-	p.CanPinMessages = true
+func (p *PromoteChatMemberParams) WithCanPinMessages(canPinMessages bool) *PromoteChatMemberParams {
+	p.CanPinMessages = Bool(canPinMessages)
 	return p
 }
 
 // WithCanManageTopics adds can manage topics parameter
-func (p *PromoteChatMemberParams) WithCanManageTopics() *PromoteChatMemberParams {
-	p.CanManageTopics = true
+func (p *PromoteChatMemberParams) WithCanManageTopics(canManageTopics bool) *PromoteChatMemberParams {
+	p.CanManageTopics = Bool(canManageTopics)
 	return p
 }
 

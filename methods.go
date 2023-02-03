@@ -1620,46 +1620,46 @@ type PromoteChatMemberParams struct {
 	UserID int64 `json:"user_id"`
 
 	// IsAnonymous - Optional. Pass True if the administrator's presence in the chat is hidden
-	IsAnonymous bool `json:"is_anonymous,omitempty"`
+	IsAnonymous *bool `json:"is_anonymous,omitempty"`
 
 	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, chat statistics,
 	// message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore
 	// slow mode. Implied by any other administrator privilege
-	CanManageChat bool `json:"can_manage_chat,omitempty"`
+	CanManageChat *bool `json:"can_manage_chat,omitempty"`
 
 	// CanPostMessages - Optional. Pass True if the administrator can create channel posts, channels only
-	CanPostMessages bool `json:"can_post_messages,omitempty"`
+	CanPostMessages *bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
 	// messages, channels only
-	CanEditMessages bool `json:"can_edit_messages,omitempty"`
+	CanEditMessages *bool `json:"can_edit_messages,omitempty"`
 
 	// CanDeleteMessages - Optional. Pass True if the administrator can delete messages of other users
-	CanDeleteMessages bool `json:"can_delete_messages,omitempty"`
+	CanDeleteMessages *bool `json:"can_delete_messages,omitempty"`
 
 	// CanManageVideoChats - Optional. Pass True if the administrator can manage video chats
-	CanManageVideoChats bool `json:"can_manage_video_chats,omitempty"`
+	CanManageVideoChats *bool `json:"can_manage_video_chats,omitempty"`
 
 	// CanRestrictMembers - Optional. Pass True if the administrator can restrict, ban or unban chat members
-	CanRestrictMembers bool `json:"can_restrict_members,omitempty"`
+	CanRestrictMembers *bool `json:"can_restrict_members,omitempty"`
 
 	// CanPromoteMembers - Optional. Pass True if the administrator can add new administrators with a subset of
 	// their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by
 	// administrators that were appointed by him)
-	CanPromoteMembers bool `json:"can_promote_members,omitempty"`
+	CanPromoteMembers *bool `json:"can_promote_members,omitempty"`
 
 	// CanChangeInfo - Optional. Pass True if the administrator can change chat title, photo and other settings
-	CanChangeInfo bool `json:"can_change_info,omitempty"`
+	CanChangeInfo *bool `json:"can_change_info,omitempty"`
 
 	// CanInviteUsers - Optional. Pass True if the administrator can invite new users to the chat
-	CanInviteUsers bool `json:"can_invite_users,omitempty"`
+	CanInviteUsers *bool `json:"can_invite_users,omitempty"`
 
 	// CanPinMessages - Optional. Pass True if the administrator can pin messages, supergroups only
-	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+	CanPinMessages *bool `json:"can_pin_messages,omitempty"`
 
 	// CanManageTopics - Optional. Pass True if the user is allowed to create, rename, close, and reopen forum
 	// topics, supergroups only
-	CanManageTopics bool `json:"can_manage_topics,omitempty"`
+	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
 }
 
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
