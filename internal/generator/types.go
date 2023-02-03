@@ -81,7 +81,7 @@ func generateTypes(docs string) tgTypes {
 		typ := tgType{
 			name:        typeGroup[1],
 			description: replaceHTML(typeGroup[2]),
-			fields:      generateTypeFields(typeGroup[3]),
+			fields:      generateTypeFields(typeGroup[3], typeGroup[1]),
 		}
 
 		types[i] = typ
@@ -90,7 +90,7 @@ func generateTypes(docs string) tgTypes {
 	return types
 }
 
-func generateTypeFields(fieldDocs string) tgTypeFields {
+func generateTypeFields(fieldDocs, typeName string) tgTypeFields {
 	fieldGroups := typeFieldRegexp.FindAllStringSubmatch(fieldDocs, -1)
 	fields := make(tgTypeFields, len(fieldGroups))
 
@@ -106,7 +106,7 @@ func generateTypeFields(fieldDocs string) tgTypeFields {
 		}
 
 		field.typ = parseType(fieldGroup[2], field.optional)
-		fieldSpecialCases(&field)
+		fieldSpecialCases(&field, typeName)
 
 		fields[i] = field
 	}
@@ -258,7 +258,7 @@ import (
 	exitOnErr(err)
 }
 
-func fieldSpecialCases(field *tgTypeField) {
+func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if strings.Contains(field.name, "Date") && field.typ == "int" {
 		field.typ = "int64"
 	}
@@ -278,5 +278,9 @@ func fieldSpecialCases(field *tgTypeField) {
 
 	if field.name == "InputMessageContent" && field.typ == "*InputMessageContent" {
 		field.typ = "InputMessageContent"
+	}
+
+	if typeName == "ChatPermissions" {
+		field.typ = "*bool"
 	}
 }

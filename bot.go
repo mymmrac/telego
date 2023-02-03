@@ -288,3 +288,8 @@ func logRequestWithFiles(debug strings.Builder, parameters map[string]string, fi
 
 	_, _ = debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 }
+
+// Bool converts bool value into a bool pointer
+func Bool(value bool) *bool {
+	return &value
+}

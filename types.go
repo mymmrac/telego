@@ -1935,49 +1935,49 @@ type ChatJoinRequest struct {
 type ChatPermissions struct {
 	// CanSendMessages - Optional. True, if the user is allowed to send text messages, contacts, invoices,
 	// locations and venues
-	CanSendMessages bool `json:"can_send_messages,omitempty"`
+	CanSendMessages *bool `json:"can_send_messages,omitempty"`
 
 	// CanSendAudios - Optional. True, if the user is allowed to send audios
-	CanSendAudios bool `json:"can_send_audios,omitempty"`
+	CanSendAudios *bool `json:"can_send_audios,omitempty"`
 
 	// CanSendDocuments - Optional. True, if the user is allowed to send documents
-	CanSendDocuments bool `json:"can_send_documents,omitempty"`
+	CanSendDocuments *bool `json:"can_send_documents,omitempty"`
 
 	// CanSendPhotos - Optional. True, if the user is allowed to send photos
-	CanSendPhotos bool `json:"can_send_photos,omitempty"`
+	CanSendPhotos *bool `json:"can_send_photos,omitempty"`
 
 	// CanSendVideos - Optional. True, if the user is allowed to send videos
-	CanSendVideos bool `json:"can_send_videos,omitempty"`
+	CanSendVideos *bool `json:"can_send_videos,omitempty"`
 
 	// CanSendVideoNotes - Optional. True, if the user is allowed to send video notes
-	CanSendVideoNotes bool `json:"can_send_video_notes,omitempty"`
+	CanSendVideoNotes *bool `json:"can_send_video_notes,omitempty"`
 
 	// CanSendVoiceNotes - Optional. True, if the user is allowed to send voice notes
-	CanSendVoiceNotes bool `json:"can_send_voice_notes,omitempty"`
+	CanSendVoiceNotes *bool `json:"can_send_voice_notes,omitempty"`
 
 	// CanSendPolls - Optional. True, if the user is allowed to send polls
-	CanSendPolls bool `json:"can_send_polls,omitempty"`
+	CanSendPolls *bool `json:"can_send_polls,omitempty"`
 
 	// CanSendOtherMessages - Optional. True, if the user is allowed to send animations, games, stickers and use
 	// inline bots
-	CanSendOtherMessages bool `json:"can_send_other_messages,omitempty"`
+	CanSendOtherMessages *bool `json:"can_send_other_messages,omitempty"`
 
 	// CanAddWebPagePreviews - Optional. True, if the user is allowed to add web page previews to their messages
-	CanAddWebPagePreviews bool `json:"can_add_web_page_previews,omitempty"`
+	CanAddWebPagePreviews *bool `json:"can_add_web_page_previews,omitempty"`
 
 	// CanChangeInfo - Optional. True, if the user is allowed to change the chat title, photo and other
 	// settings. Ignored in public supergroups
-	CanChangeInfo bool `json:"can_change_info,omitempty"`
+	CanChangeInfo *bool `json:"can_change_info,omitempty"`
 
 	// CanInviteUsers - Optional. True, if the user is allowed to invite new users to the chat
-	CanInviteUsers bool `json:"can_invite_users,omitempty"`
+	CanInviteUsers *bool `json:"can_invite_users,omitempty"`
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
-	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+	CanPinMessages *bool `json:"can_pin_messages,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create forum topics. If omitted defaults to
 	// the value of can_pin_messages
-	CanManageTopics bool `json:"can_manage_topics,omitempty"`
+	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
 }
 
 // ChatLocation - Represents a location to which a chat is connected.

@@ -658,3 +658,8 @@ func Test_isNil(t *testing.T) {
 		})
 	}
 }
+
+func TestBool(t *testing.T) {
+	assert.True(t, *Bool(true))
+	assert.False(t, *Bool(false))
+}

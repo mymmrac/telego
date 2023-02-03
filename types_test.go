@@ -650,6 +650,7 @@ func BenchmarkUpdate_Clone(b *testing.B) {
 	const n1 = 1
 	const s1 = "text"
 	const b1 = true
+	b2 := true
 
 	c1 := Chat{
 		ID:        n1,
@@ -671,13 +672,13 @@ func BenchmarkUpdate_Clone(b *testing.B) {
 		Description:        s1,
 		InviteLink:         s1,
 		Permissions: &ChatPermissions{
-			CanSendMessages:       b1,
-			CanSendPolls:          b1,
-			CanSendOtherMessages:  b1,
-			CanAddWebPagePreviews: b1,
-			CanChangeInfo:         b1,
-			CanInviteUsers:        b1,
-			CanPinMessages:        b1,
+			CanSendMessages:       &b2,
+			CanSendPolls:          &b2,
+			CanSendOtherMessages:  &b2,
+			CanAddWebPagePreviews: &b2,
+			CanChangeInfo:         &b2,
+			CanInviteUsers:        &b2,
+			CanPinMessages:        &b2,
 		},
 		SlowModeDelay:         n1,
 		MessageAutoDeleteTime: n1,
