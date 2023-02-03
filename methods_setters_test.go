@@ -640,11 +640,13 @@ func TestUnbanChatMemberParams_Setters(t *testing.T) {
 func TestRestrictChatMemberParams_Setters(t *testing.T) {
 	r := (&RestrictChatMemberParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithPermissions(ChatPermissions{CanSendMessages: true})
+		WithPermissions(ChatPermissions{CanSendMessages: true}).
+		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &RestrictChatMemberParams{
-		ChatID:      ChatID{ID: 1},
-		Permissions: ChatPermissions{CanSendMessages: true},
+		ChatID:                        ChatID{ID: 1},
+		Permissions:                   ChatPermissions{CanSendMessages: true},
+		UseIndependentChatPermissions: true,
 	}, r)
 }
 
@@ -713,11 +715,13 @@ func TestUnbanChatSenderChatParams_Setters(t *testing.T) {
 func TestSetChatPermissionsParams_Setters(t *testing.T) {
 	s := (&SetChatPermissionsParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithPermissions(ChatPermissions{CanSendMessages: true})
+		WithPermissions(ChatPermissions{CanSendMessages: true}).
+		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &SetChatPermissionsParams{
-		ChatID:      ChatID{ID: 1},
-		Permissions: ChatPermissions{CanSendMessages: true},
+		ChatID:                        ChatID{ID: 1},
+		Permissions:                   ChatPermissions{CanSendMessages: true},
+		UseIndependentChatPermissions: true,
 	}, s)
 }
 

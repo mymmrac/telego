@@ -1586,6 +1586,12 @@ type RestrictChatMemberParams struct {
 	// Permissions - A JSON-serialized object for new user permissions
 	Permissions ChatPermissions `json:"permissions"`
 
+	// UseIndependentChatPermissions - Optional. Pass True if chat permissions are set independently. Otherwise,
+	// the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages,
+	// can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and
+	// can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.
+	UseIndependentChatPermissions bool `json:"use_independent_chat_permissions,omitempty"`
+
 	// UntilDate - Optional. Date when restrictions will be lifted for the user, unix time. If user is
 	// restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be
 	// restricted forever
@@ -1638,7 +1644,7 @@ type PromoteChatMemberParams struct {
 	CanRestrictMembers bool `json:"can_restrict_members,omitempty"`
 
 	// CanPromoteMembers - Optional. Pass True if the administrator can add new administrators with a subset of
-	// their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by
+	// their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by
 	// administrators that were appointed by him)
 	CanPromoteMembers bool `json:"can_promote_members,omitempty"`
 
@@ -1745,6 +1751,12 @@ type SetChatPermissionsParams struct {
 
 	// Permissions - A JSON-serialized object for new default chat permissions
 	Permissions ChatPermissions `json:"permissions"`
+
+	// UseIndependentChatPermissions - Optional. Pass True if chat permissions are set independently. Otherwise,
+	// the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages,
+	// can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and
+	// can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.
+	UseIndependentChatPermissions bool `json:"use_independent_chat_permissions,omitempty"`
 }
 
 // SetChatPermissions - Use this method to set default chat permissions for all members. The bot must be an
@@ -2168,7 +2180,7 @@ type GetChatMemberParams struct {
 }
 
 // GetChatMember - Use this method to get information about a member of a chat. The method is guaranteed to
-// work only if the bot is an administrator in the chat. Returns a ChatMember
+// work for other users, only if the bot is an administrator in the chat. Returns a ChatMember
 // (https://core.telegram.org/bots/api#chatmember) object on success.
 func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
 	var memberData chatMemberData
@@ -2278,7 +2290,7 @@ type EditForumTopicParams struct {
 	// MessageThreadID - Unique identifier for the target message thread of the forum topic
 	MessageThreadID int `json:"message_thread_id"`
 
-	// Name - Optional. New topic name, 0-128 characters. If not specififed or empty, the current name of the
+	// Name - Optional. New topic name, 0-128 characters. If not specified or empty, the current name of the
 	// topic will be kept
 	Name string `json:"name,omitempty"`
 

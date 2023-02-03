@@ -1359,6 +1359,12 @@ func (p *RestrictChatMemberParams) WithPermissions(permissions ChatPermissions) 
 	return p
 }
 
+// WithUseIndependentChatPermissions adds use independent chat permissions parameter
+func (p *RestrictChatMemberParams) WithUseIndependentChatPermissions() *RestrictChatMemberParams {
+	p.UseIndependentChatPermissions = true
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *PromoteChatMemberParams) WithChatID(chatID ChatID) *PromoteChatMemberParams {
 	p.ChatID = chatID
@@ -1471,6 +1477,12 @@ func (p *SetChatPermissionsParams) WithChatID(chatID ChatID) *SetChatPermissions
 // WithPermissions adds permissions parameter
 func (p *SetChatPermissionsParams) WithPermissions(permissions ChatPermissions) *SetChatPermissionsParams {
 	p.Permissions = permissions
+	return p
+}
+
+// WithUseIndependentChatPermissions adds use independent chat permissions parameter
+func (p *SetChatPermissionsParams) WithUseIndependentChatPermissions() *SetChatPermissionsParams {
+	p.UseIndependentChatPermissions = true
 	return p
 }
 
