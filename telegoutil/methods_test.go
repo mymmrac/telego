@@ -224,3 +224,8 @@ func TestWebAppQuery(t *testing.T) {
 	assert.Equal(t, text1, i.WebAppQueryID)
 	assert.Equal(t, &telego.InlineQueryResultArticle{Title: text2}, i.Result)
 }
+
+func TestWebhook(t *testing.T) {
+	w := Webhook(text1)
+	assert.Equal(t, text1, w.URL)
+}

@@ -86,6 +86,8 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 	updatesChan := make(chan Update, ctx.updateChanBuffer)
 
 	err = ctx.server.RegisterHandler(path, func(data []byte) error {
+		b.log.Debugf("Webhook request with data: %s", string(data))
+
 		var update Update
 		err = json.Unmarshal(data, &update)
 		if err != nil {

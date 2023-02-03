@@ -230,3 +230,10 @@ func WebAppQuery(queryID string, result telego.InlineQueryResult) *telego.Answer
 		Result:        result,
 	}
 }
+
+// Webhook creates telego.SetWebhookParams with required parameters
+func Webhook(url string) *telego.SetWebhookParams {
+	return &telego.SetWebhookParams{
+		URL: url,
+	}
+}
