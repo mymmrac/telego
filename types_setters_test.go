@@ -29,6 +29,8 @@ func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 func TestKeyboardButton_Setters(t *testing.T) {
 	k := (KeyboardButton{}).
 		WithText("Text").
+		WithRequestUser(&KeyboardButtonRequestUser{RequestID: 1}).
+		WithRequestChat(&KeyboardButtonRequestChat{RequestID: 2}).
 		WithRequestContact().
 		WithRequestLocation().
 		WithRequestPoll(&KeyboardButtonPollType{Type: "RequestPoll"}).
@@ -36,6 +38,8 @@ func TestKeyboardButton_Setters(t *testing.T) {
 
 	assert.Equal(t, KeyboardButton{
 		Text:            "Text",
+		RequestUser:     &KeyboardButtonRequestUser{RequestID: 1},
+		RequestChat:     &KeyboardButtonRequestChat{RequestID: 2},
 		RequestContact:  true,
 		RequestLocation: true,
 		RequestPoll:     &KeyboardButtonPollType{Type: "RequestPoll"},

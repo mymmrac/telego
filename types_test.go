@@ -672,7 +672,6 @@ func BenchmarkUpdate_Clone(b *testing.B) {
 		InviteLink:         s1,
 		Permissions: &ChatPermissions{
 			CanSendMessages:       b1,
-			CanSendMediaMessages:  b1,
 			CanSendPolls:          b1,
 			CanSendOtherMessages:  b1,
 			CanAddWebPagePreviews: b1,

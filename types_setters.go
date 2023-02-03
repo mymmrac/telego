@@ -42,6 +42,18 @@ func (k KeyboardButton) WithText(text string) KeyboardButton {
 	return k
 }
 
+// WithRequestUser adds request user parameter
+func (k KeyboardButton) WithRequestUser(requestUser *KeyboardButtonRequestUser) KeyboardButton {
+	k.RequestUser = requestUser
+	return k
+}
+
+// WithRequestChat adds request chat parameter
+func (k KeyboardButton) WithRequestChat(requestChat *KeyboardButtonRequestChat) KeyboardButton {
+	k.RequestChat = requestChat
+	return k
+}
+
 // WithRequestContact adds request contact parameter
 func (k KeyboardButton) WithRequestContact() KeyboardButton {
 	k.RequestContact = true

@@ -116,7 +116,8 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		}
 
 		if noPointer {
-			s = strings.ReplaceAll(s, "*"+setter.structType, setter.structType)
+			s = strings.Replace(s, "*"+setter.structType+")", setter.structType+")", 1)
+			s = strings.Replace(s, "*"+setter.structType+" ", setter.structType+" ", 1)
 		}
 
 		if len(s) > maxLineLen+11 {
