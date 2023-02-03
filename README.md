@@ -74,6 +74,7 @@ More examples can be seen here:
 - [Updates (webhook)](examples/updates_webhook/main.go)
 - [Echo bot](examples/echo_bot/main.go)
 - [Echo bot (with handlers)](examples/echo_bot_with_handlers/main.go)
+- [Echo bot (handlers + webhook + graceful shutdown + docker)](https://github.com/mymmrac/echo-bot)
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
