@@ -2,6 +2,7 @@ package telego
 
 import (
 	"context"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -18,9 +19,10 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 	addr := testAddress(t)
 
 	s := FastHTTPWebhookServer{
-		Logger: testLoggerType{},
-		Server: &fasthttp.Server{},
-		Router: router.New(),
+		Logger:      testLoggerType{},
+		Server:      &fasthttp.Server{},
+		Router:      router.New(),
+		SecretToken: "secret",
 	}
 
 	go func() {
@@ -41,6 +43,7 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		ctx := &fasthttp.RequestCtx{}
 		ctx.Request.SetRequestURI("/")
 		ctx.Request.Header.SetMethod(fasthttp.MethodPost)
+		ctx.Request.Header.Set(WebhookSecretTokenHeader, s.SecretToken)
 		s.Server.Handler(ctx)
 
 		assert.Equal(t, fasthttp.StatusOK, ctx.Response.StatusCode())
@@ -59,10 +62,20 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		ctx := &fasthttp.RequestCtx{}
 		ctx.Request.SetRequestURI("/")
 		ctx.Request.Header.SetMethod(fasthttp.MethodPost)
+		ctx.Request.Header.Set(WebhookSecretTokenHeader, s.SecretToken)
 		ctx.Request.SetBody([]byte("err"))
 		s.Server.Handler(ctx)
 
 		assert.Equal(t, fasthttp.StatusInternalServerError, ctx.Response.StatusCode())
+	})
+
+	t.Run("secret_token_invalid", func(t *testing.T) {
+		ctx := &fasthttp.RequestCtx{}
+		ctx.Request.SetRequestURI("/")
+		ctx.Request.Header.SetMethod(fasthttp.MethodPost)
+		s.Server.Handler(ctx)
+
+		assert.Equal(t, fasthttp.StatusUnauthorized, ctx.Response.StatusCode())
 	})
 
 	err = s.Stop(context.Background())
@@ -91,9 +104,10 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 
 	t.Run("end_to_end", func(t *testing.T) {
 		s := HTTPWebhookServer{
-			Logger:   testLoggerType{},
-			Server:   &http.Server{}, //nolint:gosec
-			ServeMux: http.NewServeMux(),
+			Logger:      testLoggerType{},
+			Server:      &http.Server{}, //nolint:gosec
+			ServeMux:    http.NewServeMux(),
+			SecretToken: "secret",
 		}
 
 		go func() {
@@ -113,6 +127,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		t.Run("success", func(t *testing.T) {
 			rc := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodPost, "/", nil)
+			req.Header.Set(WebhookSecretTokenHeader, s.SecretToken)
 
 			s.Server.Handler.ServeHTTP(rc, req)
 
@@ -131,6 +146,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		t.Run("error_handler", func(t *testing.T) {
 			rc := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("err"))
+			req.Header.Set(WebhookSecretTokenHeader, s.SecretToken)
 
 			s.Server.Handler.ServeHTTP(rc, req)
 
@@ -140,10 +156,30 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		t.Run("error_read", func(t *testing.T) {
 			rc := httptest.NewRecorder()
 			req := httptest.NewRequest(http.MethodPost, "/", errReader{})
+			req.Header.Set(WebhookSecretTokenHeader, s.SecretToken)
 
 			s.Server.Handler.ServeHTTP(rc, req)
 
 			assert.Equal(t, http.StatusInternalServerError, rc.Code)
+		})
+
+		t.Run("error_close", func(t *testing.T) {
+			rc := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/", errReaderCloser{reader: strings.NewReader("ok")})
+			req.Header.Set(WebhookSecretTokenHeader, s.SecretToken)
+
+			s.Server.Handler.ServeHTTP(rc, req)
+
+			assert.Equal(t, http.StatusInternalServerError, rc.Code)
+		})
+
+		t.Run("secret_token_invalid", func(t *testing.T) {
+			rc := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/", nil)
+
+			s.Server.Handler.ServeHTTP(rc, req)
+
+			assert.Equal(t, http.StatusUnauthorized, rc.Code)
 		})
 
 		err = s.Stop(context.Background())
@@ -155,6 +191,18 @@ type errReader struct{}
 
 func (e errReader) Read(_ []byte) (n int, err error) {
 	return 0, errTest
+}
+
+type errReaderCloser struct {
+	reader io.Reader
+}
+
+func (e errReaderCloser) Close() error {
+	return errTest
+}
+
+func (e errReaderCloser) Read(b []byte) (n int, err error) {
+	return e.reader.Read(b)
 }
 
 func TestMultiBotWebhookServer_RegisterHandler(t *testing.T) {

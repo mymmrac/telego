@@ -11,12 +11,16 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// FastHTTPWebhookServer represents fasthttp implementation of WebhookServer
-// Note: The user should set both Server and Router, only Logger is optional
+// WebhookSecretTokenHeader represents secret token header name, see SetWebhookParams.SecretToken for more details
+const WebhookSecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token" //nolint:gosec
+
+// FastHTTPWebhookServer represents fasthttp implementation of WebhookServer.
+// The Server and Router are required fields, optional Logger and SecretToken can be provided.
 type FastHTTPWebhookServer struct {
-	Logger Logger
-	Server *fasthttp.Server
-	Router *router.Router
+	Logger      Logger
+	Server      *fasthttp.Server
+	Router      *router.Router
+	SecretToken string
 }
 
 // Start starts server
@@ -33,6 +37,18 @@ func (f FastHTTPWebhookServer) Stop(ctx context.Context) error {
 // Note: If server's handler is not set, it will be set to router's handler
 func (f FastHTTPWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
 	f.Router.POST(path, func(ctx *fasthttp.RequestCtx) {
+		if f.SecretToken != "" {
+			secretToken := ctx.Request.Header.Peek(WebhookSecretTokenHeader)
+			if f.SecretToken != string(secretToken) {
+				if f.Logger != nil {
+					f.Logger.Errorf("Webhook handler: unauthorized: secret token does not match")
+				}
+
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				return
+			}
+		}
+
 		if err := handler(ctx.PostBody()); err != nil {
 			if f.Logger != nil {
 				f.Logger.Errorf("Webhook handler: %s", err)
@@ -52,12 +68,13 @@ func (f FastHTTPWebhookServer) RegisterHandler(path string, handler func(data []
 	return nil
 }
 
-// HTTPWebhookServer represents http implementation of WebhookServer
-// Note: The user should set both Server and ServeMux, only Logger is optional
+// HTTPWebhookServer represents http implementation of WebhookServer.
+// The Server and ServeMux are required fields, optional Logger and SecretToken can be provided.
 type HTTPWebhookServer struct {
-	Logger   Logger
-	Server   *http.Server
-	ServeMux *http.ServeMux
+	Logger      Logger
+	Server      *http.Server
+	ServeMux    *http.ServeMux
+	SecretToken string
 }
 
 // Start starts server
@@ -81,8 +98,7 @@ func (h HTTPWebhookServer) Stop(ctx context.Context) error {
 // Note: If server's handler is not set, it will be set to serve mux handler
 func (h HTTPWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
 	h.ServeMux.HandleFunc(path, func(writer http.ResponseWriter, request *http.Request) {
-		if request.Method != http.MethodPost {
-			writer.WriteHeader(http.StatusMethodNotAllowed)
+		if !h.validateRequest(writer, request) {
 			return
 		}
 
@@ -94,6 +110,12 @@ func (h HTTPWebhookServer) RegisterHandler(path string, handler func(data []byte
 
 			writer.WriteHeader(http.StatusInternalServerError)
 			return
+		}
+
+		if err = request.Body.Close(); err != nil {
+			if h.Logger != nil {
+				h.Logger.Errorf("Webhook handler: close body: %s", err)
+			}
 		}
 
 		if err = handler(data); err != nil {
@@ -113,6 +135,27 @@ func (h HTTPWebhookServer) RegisterHandler(path string, handler func(data []byte
 	}
 
 	return nil
+}
+
+func (h HTTPWebhookServer) validateRequest(writer http.ResponseWriter, request *http.Request) bool {
+	if request.Method != http.MethodPost {
+		writer.WriteHeader(http.StatusMethodNotAllowed)
+		return false
+	}
+
+	if h.SecretToken != "" {
+		secretToken := request.Header.Get(WebhookSecretTokenHeader)
+		if h.SecretToken != secretToken {
+			if h.Logger != nil {
+				h.Logger.Errorf("Webhook handler: unauthorized: secret token does not match")
+			}
+
+			writer.WriteHeader(http.StatusUnauthorized)
+			return false
+		}
+	}
+
+	return true
 }
 
 // MultiBotWebhookServer represents multi bot implementation of WebhookServer,

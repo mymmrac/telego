@@ -36,10 +36,12 @@ func main() {
 		telego.WithWebhookBuffer(128),
 
 		// Set fast http server that will be used to handle webhooks (default telego.FastHTTPWebhookServer)
+		// Note: If SecretToken is non-empty, it will be verified on each request
 		telego.WithWebhookServer(telego.FastHTTPWebhookServer{
-			Logger: bot.Logger(),
-			Server: &fasthttp.Server{},
-			Router: router.New(),
+			Logger:      bot.Logger(),
+			Server:      &fasthttp.Server{},
+			Router:      router.New(),
+			SecretToken: "token",
 		}),
 
 		// Calls SetWebhook before starting webhook
