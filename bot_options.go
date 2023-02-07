@@ -2,12 +2,10 @@ package telego
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
 
-	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
 
 	"github.com/mymmrac/telego/telegoapi"
@@ -62,7 +60,7 @@ func WithDefaultLogger(debugMode, printErrors bool) BotOption {
 }
 
 // WithExtendedDefaultLogger configures default logger, replacer can be nil. Redefines existing logger.
-// Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
+// Note: Keep in mind that debug logs will include your bot token. It's only safe to have them enabled in
 // testing environment, or hide sensitive information (like bot token) yourself.
 func WithExtendedDefaultLogger(debugMode, printErrors bool, replacer *strings.Replacer) BotOption {
 	return func(bot *Bot) error {
@@ -89,7 +87,7 @@ func WithDiscardLogger() BotOption {
 }
 
 // WithLogger sets logger to use. Redefines existing logger.
-// Note: Keep in mind that debug logs will include your bot token, it's only safe to have them enabled in
+// Note: Keep in mind that debug logs will include your bot token. It's only safe to have them enabled in
 // testing environment, or hide sensitive information (like bot token) yourself.
 func WithLogger(log Logger) BotOption {
 	return func(bot *Bot) error {
@@ -118,44 +116,11 @@ func WithHealthCheck() BotOption {
 	}
 }
 
-// WithWarnings treat Telegram warnings as errors
-// Note: Any request that has non-empty error will return both result and error
+// WithWarnings treat Telegram warnings as an error
+// Note: Any request that has a non-empty error will return both result and error
 func WithWarnings() BotOption {
 	return func(bot *Bot) error {
 		bot.warningAsErrors = true
-		return nil
-	}
-}
-
-// WithEmptyValues sets empty value to default one that will be erased from all requests
-// Note: Used with Bot.EmptyValue() to get empty strings as parameters
-func WithEmptyValues() BotOption {
-	return func(bot *Bot) error {
-		bot.replaceToEmpty = defaultBotEmptyValue
-		return nil
-	}
-}
-
-// WithCustomEmptyValues sets empty value to custom value that will be erased from all requests
-// Note: Used with Bot.EmptyValue() to get empty strings as parameters values
-// Warning: Request data is encoded using JSON, so the value will be escaped in JSON and may not match intended value
-func WithCustomEmptyValues(emptyValue string) BotOption {
-	return func(bot *Bot) error {
-		if emptyValue == "" {
-			return fmt.Errorf("empty value can't be zero length")
-		}
-
-		data, err := json.Marshal(emptyValue)
-		if err != nil {
-			return fmt.Errorf("marshal empty value: %w", err)
-		}
-
-		if fmt.Sprintf(`"%s"`, emptyValue) != string(data) {
-			return fmt.Errorf(`empty value does't match it's JSON encoded varian: "%s" not equal to %s`,
-				emptyValue, string(data))
-		}
-
-		bot.replaceToEmpty = emptyValue
 		return nil
 	}
 }

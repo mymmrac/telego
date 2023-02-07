@@ -27,7 +27,7 @@ func main() {
 	testToken := os.Getenv("TOKEN")
 
 	bot, err := telego.NewBot(testToken,
-		telego.WithDefaultDebugLogger(), telego.WithWarnings(), telego.WithEmptyValues())
+		telego.WithDefaultDebugLogger(), telego.WithWarnings())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -683,7 +683,7 @@ func main() {
 					tu.InlineKeyboard(
 						tu.InlineKeyboardRow(
 							tu.InlineKeyboardButton("OK").
-								WithSwitchInlineQueryCurrentChat(bot.EmptyValue()),
+								WithSwitchInlineQueryCurrentChat(""),
 						),
 					),
 				),

@@ -2298,7 +2298,7 @@ type EditForumTopicParams struct {
 	// getForumTopicIconStickers (https://core.telegram.org/bots/api#getforumtopiciconstickers) to get all allowed
 	// custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be
 	// kept
-	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+	IconCustomEmojiID *string `json:"icon_custom_emoji_id,omitempty"`
 }
 
 // EditForumTopic - Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must

@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"reflect"
@@ -15,8 +14,7 @@ import (
 )
 
 const (
-	defaultBotAPIServer  = "https://api.telegram.org"
-	defaultBotEmptyValue = "TELEGO_EMPTY_VALUE"
+	defaultBotAPIServer = "https://api.telegram.org"
 
 	tokenRegexp = `^\d{9,10}:[\w-]{35}$` //nolint:gosec
 
@@ -44,7 +42,6 @@ type Bot struct {
 
 	healthCheckRequested bool
 	warningAsErrors      bool
-	replaceToEmpty       string
 
 	longPollingContext *longPollingContext
 	webhookContext     *webhookContext
@@ -93,13 +90,6 @@ func (b *Bot) Token() string {
 // Logger returns bot logger
 func (b *Bot) Logger() Logger {
 	return b.log
-}
-
-// EmptyValue returns value that will be erased from all requests useful for things like SwitchInlineQuery in
-// telego.InlineKeyboardButton that have empty string as valid parameter value
-// Warning: Only works if at least one of the bot options, WithEmptyValues or WithCustomEmptyValues are used
-func (b *Bot) EmptyValue() string {
-	return b.replaceToEmpty
 }
 
 // performRequest executes and parses response of method
@@ -169,10 +159,6 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 
 	debugData := strings.TrimSuffix(debug.String(), "\n")
 	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
-
-	if b.replaceToEmpty != "" {
-		data.Buffer = bytes.NewBuffer(bytes.ReplaceAll(data.Buffer.Bytes(), []byte(b.replaceToEmpty), []byte{}))
-	}
 
 	resp, err := b.api.Call(url, data)
 	if err != nil {
@@ -291,5 +277,10 @@ func logRequestWithFiles(debug strings.Builder, parameters map[string]string, fi
 
 // Bool converts bool value into a bool pointer
 func Bool(value bool) *bool {
+	return &value
+}
+
+// String converts string value into a string pointer
+func String(value string) *string {
 	return &value
 }

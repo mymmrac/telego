@@ -961,7 +961,7 @@ func TestEditForumTopicParams_Setters(t *testing.T) {
 		ChatID:            ChatID{ID: 2},
 		MessageThreadID:   1,
 		Name:              "Name",
-		IconCustomEmojiID: "IconCustomEmojiID",
+		IconCustomEmojiID: String("IconCustomEmojiID"),
 	}, e)
 }
 

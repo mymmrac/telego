@@ -775,3 +775,76 @@ func TestUpdate_CloneSafe(t *testing.T) {
 		assert.Zero(t, uc)
 	})
 }
+
+func TestChatID_String(t *testing.T) {
+	tests := []struct {
+		name        string
+		chatID      ChatID
+		stringValue string
+	}{
+		{
+			name:        "empty",
+			chatID:      ChatID{},
+			stringValue: "",
+		},
+		{
+			name: "id",
+			chatID: ChatID{
+				ID: 123,
+			},
+			stringValue: "123",
+		},
+		{
+			name: "username",
+			chatID: ChatID{
+				Username: "test",
+			},
+			stringValue: "test",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.stringValue, tt.chatID.String())
+		})
+	}
+}
+
+func TestInputFile_String(t *testing.T) {
+	tests := []struct {
+		name        string
+		inputFile   InputFile
+		stringValue string
+	}{
+		{
+			name:        "empty",
+			inputFile:   InputFile{},
+			stringValue: "",
+		},
+		{
+			name: "file",
+			inputFile: InputFile{
+				File: &testNamedReade{},
+			},
+			stringValue: "test",
+		},
+		{
+			name: "id",
+			inputFile: InputFile{
+				FileID: "fileID",
+			},
+			stringValue: "fileID",
+		},
+		{
+			name: "url",
+			inputFile: InputFile{
+				URL: "url",
+			},
+			stringValue: "url",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.stringValue, tt.inputFile.String())
+		})
+	}
+}

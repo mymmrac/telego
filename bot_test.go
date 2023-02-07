@@ -156,13 +156,6 @@ func TestBot_Logger(t *testing.T) {
 	assert.Equal(t, bot.log, bot.Logger())
 }
 
-func TestBot_EmptyValue(t *testing.T) {
-	bot, err := NewBot(token, WithEmptyValues())
-	assert.NoError(t, err)
-
-	assert.Equal(t, defaultBotEmptyValue, bot.EmptyValue())
-}
-
 type testErrorMarshal struct {
 	Number int `json:"number"`
 }
@@ -662,4 +655,9 @@ func Test_isNil(t *testing.T) {
 func TestBool(t *testing.T) {
 	assert.True(t, *Bool(true))
 	assert.False(t, *Bool(false))
+}
+
+func TestString(t *testing.T) {
+	assert.Equal(t, "", *String(""))
+	assert.Equal(t, "a", *String("a"))
 }

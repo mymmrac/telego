@@ -3,6 +3,7 @@ package telego
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/goccy/go-json"
 
@@ -1354,14 +1355,14 @@ type InlineKeyboardButton struct {
 	// (https://core.telegram.org/bots/inline) when they are currently in a private chat with it. Especially useful
 	// when combined with switch_pm… (https://core.telegram.org/bots/api#answerinlinequery) actions - in this case
 	// the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
-	SwitchInlineQuery string `json:"switch_inline_query,omitempty"`
+	SwitchInlineQuery *string `json:"switch_inline_query,omitempty"`
 
 	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and
 	// the specified inline query in the current chat's input field. May be empty, in which case only the bot's
 	// username will be inserted.
 	// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting
 	// something from multiple options.
-	SwitchInlineQueryCurrentChat string `json:"switch_inline_query_current_chat,omitempty"`
+	SwitchInlineQueryCurrentChat *string `json:"switch_inline_query_current_chat,omitempty"`
 
 	// CallbackGame - Optional. Description of the game that will be launched when the user presses the button.
 	// NOTE: This type of button must always be the first button in the first row.
@@ -2099,6 +2100,19 @@ type ChatID struct {
 	Username string
 }
 
+// String returns string representation of ChatID
+func (c ChatID) String() string {
+	if c.ID != 0 {
+		return strconv.FormatInt(c.ID, 10)
+	}
+
+	if c.Username != "" {
+		return c.Username
+	}
+
+	return ""
+}
+
 // MarshalJSON returns JSON representation of ChatID
 func (c ChatID) MarshalJSON() ([]byte, error) {
 	if c.ID != 0 {
@@ -2572,6 +2586,23 @@ type InputFile struct {
 	URL string
 
 	needAttach bool
+}
+
+// String returns string representation of InputFile
+func (i InputFile) String() string {
+	if i.FileID != "" {
+		return i.FileID
+	}
+
+	if i.URL != "" {
+		return i.URL
+	}
+
+	if i.File != nil {
+		return i.File.Name()
+	}
+
+	return ""
 }
 
 // MarshalJSON return JSON representation of InputFile

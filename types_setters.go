@@ -128,14 +128,14 @@ func (i InlineKeyboardButton) WithLoginURL(loginURL *LoginURL) InlineKeyboardBut
 
 // WithSwitchInlineQuery adds switch inline query parameter
 func (i InlineKeyboardButton) WithSwitchInlineQuery(switchInlineQuery string) InlineKeyboardButton {
-	i.SwitchInlineQuery = switchInlineQuery
+	i.SwitchInlineQuery = String(switchInlineQuery)
 	return i
 }
 
 // WithSwitchInlineQueryCurrentChat adds switch inline query current chat parameter
 func (i InlineKeyboardButton) WithSwitchInlineQueryCurrentChat(switchInlineQueryCurrentChat string,
 ) InlineKeyboardButton {
-	i.SwitchInlineQueryCurrentChat = switchInlineQueryCurrentChat
+	i.SwitchInlineQueryCurrentChat = String(switchInlineQueryCurrentChat)
 	return i
 }
 

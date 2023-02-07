@@ -1740,7 +1740,7 @@ func (p *EditForumTopicParams) WithName(name string) *EditForumTopicParams {
 
 // WithIconCustomEmojiID adds icon custom emoji ID parameter
 func (p *EditForumTopicParams) WithIconCustomEmojiID(iconCustomEmojiID string) *EditForumTopicParams {
-	p.IconCustomEmojiID = iconCustomEmojiID
+	p.IconCustomEmojiID = String(iconCustomEmojiID)
 	return p
 }
 

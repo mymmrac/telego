@@ -85,8 +85,8 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		CallbackData:                 "CallbackData",
 		WebApp:                       &WebAppInfo{},
 		LoginURL:                     &LoginURL{URL: "LoginURL"},
-		SwitchInlineQuery:            "SwitchInlineQuery",
-		SwitchInlineQueryCurrentChat: "SwitchInlineQueryCurrentChat",
+		SwitchInlineQuery:            String("SwitchInlineQuery"),
+		SwitchInlineQueryCurrentChat: String("SwitchInlineQueryCurrentChat"),
 		CallbackGame:                 &CallbackGame{},
 		Pay:                          true,
 	}, i)
