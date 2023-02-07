@@ -102,20 +102,10 @@ func (h HTTPWebhookServer) RegisterHandler(path string, handler func(data []byte
 			return
 		}
 
-		data, err := io.ReadAll(request.Body)
+		data, err := h.readData(request)
 		if err != nil {
-			if h.Logger != nil {
-				h.Logger.Errorf("Webhook handler: read body: %s", err)
-			}
-
 			writer.WriteHeader(http.StatusInternalServerError)
 			return
-		}
-
-		if err = request.Body.Close(); err != nil {
-			if h.Logger != nil {
-				h.Logger.Errorf("Webhook handler: close body: %s", err)
-			}
 		}
 
 		if err = handler(data); err != nil {
@@ -156,6 +146,25 @@ func (h HTTPWebhookServer) validateRequest(writer http.ResponseWriter, request *
 	}
 
 	return true
+}
+
+func (h HTTPWebhookServer) readData(request *http.Request) ([]byte, error) {
+	data, err := io.ReadAll(request.Body)
+	if err != nil {
+		if h.Logger != nil {
+			h.Logger.Errorf("Webhook handler: read body: %s", err)
+		}
+
+		return nil, err
+	}
+
+	if err = request.Body.Close(); err != nil {
+		if h.Logger != nil {
+			h.Logger.Errorf("Webhook handler: close body: %s", err)
+		}
+	}
+
+	return data, nil
 }
 
 // MultiBotWebhookServer represents multi bot implementation of WebhookServer,
