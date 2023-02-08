@@ -111,6 +111,8 @@ Generally, useful information about Telegram Bots and their features:
 - [:moneybag: Telegram Bot Payments](https://core.telegram.org/bots/payments) • Describes payment system and payment
   lifecycle
 - [:iphone: Telegram Bot WebApps](https://core.telegram.org/bots/webapps) • Describes WebApps and interactions with them
+- [:link: Ngrok](https://ngrok.com) • Connect localhost to the Internet
+- [:shield: Let's Encrypt](https://letsencrypt.org) • TLS certificates for free
 
 </details>
 
@@ -257,7 +259,11 @@ func main() {
 
 For running multiple bots from a single server, see [this](examples/multi_bot_webhook/main.go) example.
 
-> Note: You may wish to use [Let's Encrypt](https://letsencrypt.org/) in order to generate your free TLS certificate.
+> Tip: For testing webhooks, you can use [Ngrok](https://ngrok.com) to make a tunnel to your localhost, 
+> and get a random domain available from the Internet.
+> It's as simple as `ngrok http 8080`.
+
+> Tip: You may wish to use [Let's Encrypt](https://letsencrypt.org) in order to generate your free TLS certificate.
 
 ### :kite: Using Telegram methods
 
