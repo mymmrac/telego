@@ -48,6 +48,7 @@ For more detailed documentation, see docs at [telego.pixelbox.dev](https://teleg
     - [:mechanical_arm: Helper `With...` methods](#mechanical_arm-helper-with-methods)
     - [:sun_behind_large_cloud: Bot handlers](#sun_behind_large_cloud-bot-handlers)
 - [:art: Contribution](#art-contribution)
+- [:star: Stargazers over time](#star-stargazers-over-time)
 - [:closed_lock_with_key: License](#closed_lock_with_key-license)
 
 </details>
@@ -547,6 +548,12 @@ func main() {
 ## :art: Contribution
 
 Contribution guidelines listed [here](docs/CONTRIBUTING.md).
+
+## :star: Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/mymmrac/telego.svg)](https://starchart.cc/mymmrac/telego)
+
+> Powered by [caarlos0/starcharts](https://github.com/caarlos0/starcharts)
 
 ## :closed_lock_with_key: License
 
