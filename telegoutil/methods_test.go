@@ -19,6 +19,8 @@ var (
 	text4 = "test4"
 	text5 = "test5"
 
+	textNonASCII = "Hello, 世界"
+
 	format1 = "%s %s"
 
 	texts = []string{

@@ -96,4 +96,21 @@ func TestMessageEntities(t *testing.T) {
 		{Type: "email", Offset: 95, Length: 4, URL: "", User: nil, Language: ""},
 		{Type: "custom_emoji", Offset: 99, Length: 5, URL: "", User: nil, Language: "", CustomEmojiID: text1},
 	}, entities)
+
+	t.Run("non_ascii", func(t *testing.T) {
+		text, entities = MessageEntities(Entity(text1), Entity(textNonASCII).Bold(), Entity(text2).Bold())
+		assert.Equal(t, text1+textNonASCII+text2, text)
+		assert.Equal(t, []telego.MessageEntity{
+			{
+				Type:   "bold",
+				Offset: len(text1),
+				Length: 9,
+			},
+			{
+				Type:   "bold",
+				Offset: len(text1) + 9,
+				Length: len(text2),
+			},
+		}, entities)
+	})
 }
