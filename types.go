@@ -1231,7 +1231,7 @@ type KeyboardButton struct {
 // identifier of the selected user will be shared with the bot when the corresponding button is pressed.
 type KeyboardButtonRequestUser struct {
 	// RequestID - Signed 32-bit identifier of the request
-	RequestID int `json:"request_id"`
+	RequestID int32 `json:"request_id"`
 
 	// UserIsBot - Optional. Pass True to request a bot, pass False to request a regular user. If not specified,
 	// no additional restrictions are applied.
@@ -1246,7 +1246,7 @@ type KeyboardButtonRequestUser struct {
 // identifier of the selected chat will be shared with the bot when the corresponding button is pressed.
 type KeyboardButtonRequestChat struct {
 	// RequestID - Signed 32-bit identifier of the request
-	RequestID int `json:"request_id"`
+	RequestID int32 `json:"request_id"`
 
 	// ChatIsChannel - Pass True to request a channel chat, pass False to request a group or a supergroup chat.
 	ChatIsChannel bool `json:"chat_is_channel"`
