@@ -49,6 +49,7 @@ const (
 	PollAnswerUpdates         = "poll_answer"
 	MyChatMemberUpdates       = "my_chat_member"
 	ChatMemberUpdates         = "chat_member"
+	ChatJoinRequestUpdates    = "chat_join_request"
 )
 
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki

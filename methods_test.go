@@ -3165,7 +3165,7 @@ func TestMethodsConstants(t *testing.T) {
 		{
 			MessageUpdates, EditedMessageUpdates, ChannelPostUpdates, EditedChannelPostUpdates, InlineQueryUpdates,
 			ChosenInlineResultUpdates, CallbackQueryUpdates, ShippingQueryUpdates, PreCheckoutQueryUpdates,
-			PollUpdates, PollAnswerUpdates, MyChatMemberUpdates, ChatMemberUpdates,
+			PollUpdates, PollAnswerUpdates, MyChatMemberUpdates, ChatMemberUpdates, ChatJoinRequestUpdates,
 		},
 		{
 			ModeHTML, ModeMarkdown, ModeMarkdownV2,
