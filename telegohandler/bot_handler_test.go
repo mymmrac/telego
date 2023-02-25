@@ -240,41 +240,43 @@ func TestBotHandler_Stop(t *testing.T) {
 func TestBotHandler_Handle(t *testing.T) {
 	bh := newTestBotHandler(t)
 
-	t.Run("panic_nil_handler", func(t *testing.T) {
-		assert.Panics(t, func() {
-			bh.Handle(nil)
-		})
-	})
-
 	handler := Handler(func(bot *telego.Bot, update telego.Update) {})
+	predicate := Predicate(func(update telego.Update) bool { return false })
 
-	t.Run("panic_nil_predicate", func(t *testing.T) {
-		assert.Panics(t, func() {
-			bh.Handle(handler, nil)
-		})
-	})
+	bh.Handle(handler, predicate)
 
-	t.Run("without_predicates", func(t *testing.T) {
-		bh.Handle(handler)
+	require.Equal(t, 1, len(bh.baseGroup.handlers))
+	assert.NotNil(t, bh.baseGroup.handlers[0].Handler)
+	assert.NotNil(t, bh.baseGroup.handlers[0].Predicates)
 
-		require.Equal(t, 1, len(bh.baseGroup.handlers))
-		assert.NotNil(t, bh.baseGroup.handlers[0].Handler)
-		assert.Nil(t, bh.baseGroup.handlers[0].Predicates)
+	bh.baseGroup.handlers = make([]conditionalHandler, 0)
+}
 
-		bh.baseGroup.handlers = make([]conditionalHandler, 0)
-	})
+func TestBotHandler_Group(t *testing.T) {
+	bh := newTestBotHandler(t)
 
 	predicate := Predicate(func(update telego.Update) bool { return false })
 
-	t.Run("with_predicates", func(t *testing.T) {
-		bh.Handle(handler, predicate)
+	newGr := bh.Group(predicate)
 
-		require.Equal(t, 1, len(bh.baseGroup.handlers))
-		assert.NotNil(t, bh.baseGroup.handlers[0].Handler)
-		assert.NotNil(t, bh.baseGroup.handlers[0].Predicates)
+	require.Equal(t, 1, len(bh.baseGroup.groups))
+	assert.Equal(t, newGr, bh.baseGroup.groups[0])
+	assert.NotEmpty(t, bh.baseGroup.groups[0].predicates)
+}
 
-		bh.baseGroup.handlers = make([]conditionalHandler, 0)
+func TestBotHandler_Use(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	middleware := Middleware(func(next Handler) Handler {
+		return func(bot *telego.Bot, update telego.Update) {
+			next(bot, update)
+		}
 	})
+
+	bh.Use(middleware)
+
+	require.Equal(t, 1, len(bh.baseGroup.middlewares))
+	assert.NotNil(t, bh.baseGroup.middlewares[0])
 }
 
 func TestBotHandler_IsRunning(t *testing.T) {
