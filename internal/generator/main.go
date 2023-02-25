@@ -301,13 +301,23 @@ func docsText() (string, error) {
 }
 
 func formatFile(filename string) {
-	buf := bytes.Buffer{}
-
 	cmd := exec.Command("goimports", "-w", filename)
+
+	buf := bytes.Buffer{}
 	cmd.Stderr = &buf
 
 	if err := cmd.Run(); err != nil {
 		logError("Gofmt: %v\n%s", err, buf.String())
+		os.Exit(1)
+	}
+
+	cmd = exec.Command("gofumpt", "-w", filename)
+
+	buf = bytes.Buffer{}
+	cmd.Stderr = &buf
+
+	if err := cmd.Run(); err != nil {
+		logError("Gofumpt: %v\n%s", err, buf.String())
 		os.Exit(1)
 	}
 }

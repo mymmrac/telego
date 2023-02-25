@@ -58,7 +58,8 @@ func generateSetters(typesData string, desiredStructs []string) tgSetters {
 			}
 
 			if (strings.HasPrefix(setter.structType, "InlineQueryResult") ||
-				strings.HasPrefix(setter.structType, "InputMedia")) &&
+				strings.HasPrefix(setter.structType, "InputMedia") ||
+				setter.structType == "MenuButtonWebApp") &&
 				setter.fieldName == "Type" {
 				continue
 			}
@@ -106,19 +107,20 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 		noPointer := contains(noPointerStructs, setter.structType)
 
-		boolPtr := setter.fieldType == "*bool" && setter.structType == "PromoteChatMemberParams"
+		convertToPtr := setter.fieldType == "*bool" && setter.structType == "PromoteChatMemberParams" ||
+			setter.fieldType == "*string" && setter.structType == "InlineKeyboardButton"
 
 		var s string
 		if setter.fieldType != "bool" {
-			if boolPtr {
-				setter.fieldType = "bool"
+			if convertToPtr {
+				setter.fieldType = strings.TrimPrefix(setter.fieldType, "*")
 			}
 
 			s = fmt.Sprintf("func (%s *%s) With%s(%s %s) *%s {\n", r, setter.structType,
 				setter.fieldName, firstToLower(setter.fieldName), setter.fieldType, setter.structType)
 
-			if boolPtr {
-				setter.fieldType = "*bool"
+			if convertToPtr {
+				setter.fieldType = "*" + setter.fieldType
 			}
 		} else {
 			s = fmt.Sprintf("func (%s *%s) With%s() *%s {\n", r, setter.structType,
@@ -138,7 +140,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 		if setter.fieldType != "bool" {
 			value := firstToLower(setter.fieldName)
-			if boolPtr {
+			if convertToPtr {
 				value = "ToPtr(" + value + ")"
 			}
 
