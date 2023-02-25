@@ -212,6 +212,7 @@ func writeTypes(file *os.File, types tgTypes, currentTypes string) {
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/goccy/go-json"
 
@@ -268,6 +269,10 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		field.typ = "int64"
 	}
 
+	if strings.Contains(field.description, "32-bit identifier") && field.typ == "int" {
+		field.typ = "int32"
+	}
+
 	if field.name == "UserId" && field.typ == "int" {
 		field.typ = "int64"
 	}
@@ -282,5 +287,10 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 
 	if typeName == "ChatPermissions" {
 		field.typ = "*bool"
+	}
+
+	if typeName == "InlineKeyboardButton" && field.typ == "string" &&
+		(field.name == "SwitchInlineQuery" || field.name == "SwitchInlineQueryCurrentChat") {
+		field.typ = "*string"
 	}
 }

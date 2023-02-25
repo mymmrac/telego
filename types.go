@@ -1230,7 +1230,8 @@ type KeyboardButton struct {
 // KeyboardButtonRequestUser - This object defines the criteria used to request a suitable user. The
 // identifier of the selected user will be shared with the bot when the corresponding button is pressed.
 type KeyboardButtonRequestUser struct {
-	// RequestID - Signed 32-bit identifier of the request
+	// RequestID - Signed 32-bit identifier of the request, which will be received back in the UserShared
+	// (https://core.telegram.org/bots/api#usershared) object. Must be unique within the message
 	RequestID int32 `json:"request_id"`
 
 	// UserIsBot - Optional. Pass True to request a bot, pass False to request a regular user. If not specified,
@@ -1245,7 +1246,8 @@ type KeyboardButtonRequestUser struct {
 // KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. The
 // identifier of the selected chat will be shared with the bot when the corresponding button is pressed.
 type KeyboardButtonRequestChat struct {
-	// RequestID - Signed 32-bit identifier of the request
+	// RequestID - Signed 32-bit identifier of the request, which will be received back in the ChatShared
+	// (https://core.telegram.org/bots/api#chatshared) object. Must be unique within the message
 	RequestID int32 `json:"request_id"`
 
 	// ChatIsChannel - Pass True to request a channel chat, pass False to request a group or a supergroup chat.
@@ -1264,7 +1266,8 @@ type KeyboardButtonRequestChat struct {
 	ChatIsCreated bool `json:"chat_is_created,omitempty"`
 
 	// UserAdministratorRights - Optional. A JSON-serialized object listing the required administrator rights of
-	// the user in the chat. If not specified, no additional restrictions are applied.
+	// the user in the chat. The rights must be a superset of bot_administrator_rights. If not specified, no
+	// additional restrictions are applied.
 	UserAdministratorRights *ChatAdministratorRights `json:"user_administrator_rights,omitempty"`
 
 	// BotAdministratorRights - Optional. A JSON-serialized object listing the required administrator rights of
