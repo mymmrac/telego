@@ -56,8 +56,8 @@ impacts order of checking matched handlers, and only the first matched handler w
 		}, th.CommandEqual("start"))
 
 		// Register new handler with match on any command
-		// Handlers will match only once and in order of registration, so this handler will be called on any command except
-		// `/start` command
+		// Handlers will match only once and in order of registration, so this handler will be called on any command
+		// except `/start` command
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			// Send message
 			_, _ = bot.SendMessage(tu.Message(
