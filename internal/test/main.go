@@ -737,7 +737,7 @@ func main() {
 			fmt.Println("OK", ok)
 			return ok
 		})
-		adminUserMsg.Handle(func(bot *telego.Bot, update telego.Update) {
+		adminUserMsg.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 			fmt.Println("ADMIN USER")
 		})
 		adminUserMsg.Use(func(next th.Handler) th.Handler {
