@@ -70,7 +70,7 @@ import (
 
 		for _, s := range currentSetters {
 			if s.value == " true" {
-				s.value = "Bool(true)"
+				s.value = "ToPtr(true)"
 			}
 
 			data.WriteString(fmt.Sprintf("\t\t%s: %s,\n", s.name, s.value))
@@ -141,7 +141,7 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "InputMedia":
 		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
 	case "ChatPermissions":
-		return "ChatPermissions{CanSendMessages: Bool(true)}"
+		return "ChatPermissions{CanSendMessages: ToPtr(true)}"
 	case "InputMessageContent":
 		return "&InputTextMessageContent{}"
 	case "*CallbackGame":

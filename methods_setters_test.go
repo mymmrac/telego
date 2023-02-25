@@ -640,12 +640,12 @@ func TestUnbanChatMemberParams_Setters(t *testing.T) {
 func TestRestrictChatMemberParams_Setters(t *testing.T) {
 	r := (&RestrictChatMemberParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithPermissions(ChatPermissions{CanSendMessages: Bool(true)}).
+		WithPermissions(ChatPermissions{CanSendMessages: ToPtr(true)}).
 		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &RestrictChatMemberParams{
 		ChatID:                        ChatID{ID: 1},
-		Permissions:                   ChatPermissions{CanSendMessages: Bool(true)},
+		Permissions:                   ChatPermissions{CanSendMessages: ToPtr(true)},
 		UseIndependentChatPermissions: true,
 	}, r)
 }
@@ -668,18 +668,18 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 
 	assert.Equal(t, &PromoteChatMemberParams{
 		ChatID:              ChatID{ID: 1},
-		IsAnonymous:         Bool(true),
-		CanManageChat:       Bool(true),
-		CanPostMessages:     Bool(true),
-		CanEditMessages:     Bool(true),
-		CanDeleteMessages:   Bool(true),
-		CanManageVideoChats: Bool(true),
-		CanRestrictMembers:  Bool(true),
-		CanPromoteMembers:   Bool(true),
-		CanChangeInfo:       Bool(true),
-		CanInviteUsers:      Bool(true),
-		CanPinMessages:      Bool(true),
-		CanManageTopics:     Bool(true),
+		IsAnonymous:         ToPtr(true),
+		CanManageChat:       ToPtr(true),
+		CanPostMessages:     ToPtr(true),
+		CanEditMessages:     ToPtr(true),
+		CanDeleteMessages:   ToPtr(true),
+		CanManageVideoChats: ToPtr(true),
+		CanRestrictMembers:  ToPtr(true),
+		CanPromoteMembers:   ToPtr(true),
+		CanChangeInfo:       ToPtr(true),
+		CanInviteUsers:      ToPtr(true),
+		CanPinMessages:      ToPtr(true),
+		CanManageTopics:     ToPtr(true),
 	}, p)
 }
 
@@ -715,12 +715,12 @@ func TestUnbanChatSenderChatParams_Setters(t *testing.T) {
 func TestSetChatPermissionsParams_Setters(t *testing.T) {
 	s := (&SetChatPermissionsParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithPermissions(ChatPermissions{CanSendMessages: Bool(true)}).
+		WithPermissions(ChatPermissions{CanSendMessages: ToPtr(true)}).
 		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &SetChatPermissionsParams{
 		ChatID:                        ChatID{ID: 1},
-		Permissions:                   ChatPermissions{CanSendMessages: Bool(true)},
+		Permissions:                   ChatPermissions{CanSendMessages: ToPtr(true)},
 		UseIndependentChatPermissions: true,
 	}, s)
 }
@@ -961,7 +961,7 @@ func TestEditForumTopicParams_Setters(t *testing.T) {
 		ChatID:            ChatID{ID: 2},
 		MessageThreadID:   1,
 		Name:              "Name",
-		IconCustomEmojiID: String("IconCustomEmojiID"),
+		IconCustomEmojiID: ToPtr("IconCustomEmojiID"),
 	}, e)
 }
 

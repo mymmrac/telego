@@ -652,12 +652,10 @@ func Test_isNil(t *testing.T) {
 	}
 }
 
-func TestBool(t *testing.T) {
-	assert.True(t, *Bool(true))
-	assert.False(t, *Bool(false))
-}
+func TestToPtr(t *testing.T) {
+	assert.True(t, *ToPtr(true))
+	assert.False(t, *ToPtr(false))
 
-func TestString(t *testing.T) {
-	assert.Equal(t, "", *String(""))
-	assert.Equal(t, "a", *String("a"))
+	assert.Equal(t, "", *ToPtr(""))
+	assert.Equal(t, "a", *ToPtr("a"))
 }

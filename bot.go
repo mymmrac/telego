@@ -275,12 +275,7 @@ func logRequestWithFiles(debug strings.Builder, parameters map[string]string, fi
 	_, _ = debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 }
 
-// Bool converts bool value into a bool pointer
-func Bool(value bool) *bool {
-	return &value
-}
-
-// String converts string value into a string pointer
-func String(value string) *string {
+// ToPtr converts value into a pointer to value
+func ToPtr[T any](value T) *T {
 	return &value
 }

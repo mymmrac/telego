@@ -139,7 +139,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		if setter.fieldType != "bool" {
 			value := firstToLower(setter.fieldName)
 			if boolPtr {
-				value = "Bool(" + value + ")"
+				value = "ToPtr(" + value + ")"
 			}
 
 			data.WriteString(fmt.Sprintf("\t%s.%s = %s\n", r, setter.fieldName, value))
