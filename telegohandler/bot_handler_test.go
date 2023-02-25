@@ -49,7 +49,7 @@ func TestNewBotHandler(t *testing.T) {
 
 		assert.Equal(t, bot, bh.bot)
 		assert.EqualValues(t, updates, bh.updates)
-		assert.Equal(t, []*conditionalHandler{}, bh.handlers)
+		assert.Equal(t, &HandlerGroup{}, bh.baseGroup)
 		assert.Nil(t, bh.stop)
 	})
 
@@ -59,7 +59,7 @@ func TestNewBotHandler(t *testing.T) {
 
 		assert.Equal(t, bot, bh.bot)
 		assert.EqualValues(t, updates, bh.updates)
-		assert.Equal(t, []*conditionalHandler{}, bh.handlers)
+		assert.Equal(t, &HandlerGroup{}, bh.baseGroup)
 		assert.Nil(t, bh.stop)
 	})
 
@@ -104,7 +104,7 @@ func TestBotHandler_Start(t *testing.T) {
 
 		go bh.Start()
 
-		// Check if multiple Start calls does nothing
+		// Check if multiple Start calls do nothing
 		time.Sleep(smallTimeout)
 		bh.Start()
 
@@ -257,11 +257,11 @@ func TestBotHandler_Handle(t *testing.T) {
 	t.Run("without_predicates", func(t *testing.T) {
 		bh.Handle(handler)
 
-		require.Equal(t, 1, len(bh.handlers))
-		assert.NotNil(t, bh.handlers[0].Handler)
-		assert.Nil(t, bh.handlers[0].Predicates)
+		require.Equal(t, 1, len(bh.baseGroup.handlers))
+		assert.NotNil(t, bh.baseGroup.handlers[0].Handler)
+		assert.Nil(t, bh.baseGroup.handlers[0].Predicates)
 
-		bh.handlers = make([]*conditionalHandler, 0)
+		bh.baseGroup.handlers = make([]conditionalHandler, 0)
 	})
 
 	predicate := Predicate(func(update telego.Update) bool { return false })
@@ -269,11 +269,11 @@ func TestBotHandler_Handle(t *testing.T) {
 	t.Run("with_predicates", func(t *testing.T) {
 		bh.Handle(handler, predicate)
 
-		require.Equal(t, 1, len(bh.handlers))
-		assert.NotNil(t, bh.handlers[0].Handler)
-		assert.NotNil(t, bh.handlers[0].Predicates)
+		require.Equal(t, 1, len(bh.baseGroup.handlers))
+		assert.NotNil(t, bh.baseGroup.handlers[0].Handler)
+		assert.NotNil(t, bh.baseGroup.handlers[0].Predicates)
 
-		bh.handlers = make([]*conditionalHandler, 0)
+		bh.baseGroup.handlers = make([]conditionalHandler, 0)
 	})
 }
 

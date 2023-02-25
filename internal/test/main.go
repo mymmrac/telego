@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 2
+const testCase = 31
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -693,6 +693,64 @@ func main() {
 		_, err = bot.SendMessage(tu.Message(myID, "Reply?").
 			WithReplyMarkup(tu.ForceReply().WithInputFieldPlaceholder("GG")))
 		assert(err == nil, err)
+	case 31:
+		updates, _ := bot.UpdatesViaLongPolling(nil)
+		defer bot.StopLongPolling()
+
+		bh, _ := th.NewBotHandler(bot, updates)
+
+		bh.Use(func(next th.Handler) th.Handler {
+			return func(bot *telego.Bot, update telego.Update) {
+				defer func() {
+					panicErr := recover()
+					if panicErr != nil {
+						bot.Logger().Errorf("PANIC: %s", panicErr)
+					}
+				}()
+
+				fmt.Println("M 1")
+				next(bot, update)
+			}
+		})
+		bh.Use(func(next th.Handler) th.Handler {
+			fmt.Println("KK 1")
+
+			return func(bot *telego.Bot, update telego.Update) {
+				fmt.Println("M 2")
+				next(bot, update)
+			}
+		}, func(next th.Handler) th.Handler {
+			fmt.Println("KK 2")
+
+			return func(bot *telego.Bot, update telego.Update) {
+				fmt.Println("M 3")
+				next(bot, update)
+			}
+		})
+
+		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+			fmt.Println("REGULAR USER")
+		})
+
+		adminUserMsg := bh.Group(th.AnyMessage(), func(update telego.Update) bool {
+			ok := update.Message.From.ID == myID.ID
+			fmt.Println("OK", ok)
+			return ok
+		})
+		adminUserMsg.Handle(func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("ADMIN USER")
+		})
+		adminUserMsg.Use(func(next th.Handler) th.Handler {
+			fmt.Println("KK 3")
+
+			return func(bot *telego.Bot, update telego.Update) {
+				fmt.Println("M 4")
+				next(bot, update)
+			}
+		})
+
+		defer bh.Stop()
+		bh.Start()
 	}
 }
 

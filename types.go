@@ -72,7 +72,7 @@ type Update struct {
 	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
 }
 
-// Clone returns deep copy of Update.
+// Clone returns a deep copy of Update.
 // Warning: Types like ChatMember and MenuButton requires to have their mandatory fields (like status or type) to be
 // filled properly, else Clone() will panic. To safely clone, use CloneSafe().
 func (u Update) Clone() Update {
@@ -84,7 +84,7 @@ func (u Update) Clone() Update {
 	return update
 }
 
-// CloneSafe returns deep copy of Update or an error
+// CloneSafe returns a deep copy of Update or an error
 func (u Update) CloneSafe() (Update, error) {
 	var update Update
 

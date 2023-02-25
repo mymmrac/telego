@@ -12,18 +12,22 @@ import (
 type Handler func(bot *telego.Bot, update telego.Update)
 
 // Predicate allows filtering updates for handlers
+// Note: Predicate can't change the update, because it uses a copy, not original value
 type Predicate func(update telego.Update) bool
+
+// Middleware applies any function on update before calling the handler
+type Middleware func(next Handler) Handler
 
 // BotHandler represents bot handler that can handle updated matching by predicates
 type BotHandler struct {
-	bot      *telego.Bot
-	updates  <-chan telego.Update
-	handlers []*conditionalHandler
+	bot       *telego.Bot
+	updates   <-chan telego.Update
+	baseGroup *HandlerGroup
 
 	running        bool
 	runningLock    sync.RWMutex
 	stop           chan struct{}
-	handledUpdates sync.WaitGroup
+	handledUpdates *sync.WaitGroup
 	stopTimeout    time.Duration
 }
 
@@ -33,9 +37,10 @@ type BotHandlerOption func(bh *BotHandler) error
 // NewBotHandler creates new bot handler
 func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...BotHandlerOption) (*BotHandler, error) {
 	bh := &BotHandler{
-		bot:      bot,
-		updates:  updates,
-		handlers: make([]*conditionalHandler, 0),
+		bot:            bot,
+		updates:        updates,
+		baseGroup:      &HandlerGroup{},
+		handledUpdates: &sync.WaitGroup{},
 	}
 
 	for _, option := range options {
@@ -77,21 +82,9 @@ func (h *BotHandler) Start() {
 	}
 }
 
-// processUpdate checks all handlers and tries to process update in first matched handler
+// processUpdate checks all groups and handlers, tries to process update in first matched handler
 func (h *BotHandler) processUpdate(update telego.Update) {
-	for _, ch := range h.handlers {
-		if !ch.match(update) {
-			continue
-		}
-
-		h.handledUpdates.Add(1)
-		go func(ch *conditionalHandler) {
-			ch.Handler(h.bot, update)
-			h.handledUpdates.Done()
-		}(ch)
-
-		return
-	}
+	_ = h.baseGroup.useGroups(h.bot, update, h.handledUpdates)
 }
 
 // IsRunning tells if Start is running
@@ -127,25 +120,28 @@ func (h *BotHandler) Stop() {
 	}
 }
 
-// Handle registers new handler, update will be processed only by first matched handler, order of registration
-// determines order of matching handlers
-// Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates also, keep
+// Handle registers new handler in the base group, update will be processed only by first-matched handler,
+// order of registration determines the order of matching handlers
+// Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
 // in mind that predicates checked sequentially
 //
-// Warning: Panics if nil handler or predicate passed
+// Warning: Panics if nil handler or predicates passed
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
-	if handler == nil {
-		panic("Telego: nil handlers not allowed")
-	}
+	h.baseGroup.Handle(handler, predicates...)
+}
 
-	for _, p := range predicates {
-		if p == nil {
-			panic("Telego: nil predicates not allowed")
-		}
-	}
+// Group creates a new group of handlers and middlewares from the base group
+// Note: Updates first checked by group and only after that by handler
+//
+// Warning: Panics if nil predicates passed
+func (h *BotHandler) Group(predicates ...Predicate) *HandlerGroup {
+	return h.baseGroup.Group(predicates...)
+}
 
-	h.handlers = append(h.handlers, &conditionalHandler{
-		Handler:    handler,
-		Predicates: predicates,
-	})
+// Use applies middleware to the base group
+// Note: The Handler chain will be stopped if middleware doesn't call the next func
+//
+// Warning: Panics if nil middlewares passed
+func (h *BotHandler) Use(middlewares ...Middleware) {
+	h.baseGroup.Use(middlewares...)
 }
