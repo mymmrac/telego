@@ -2180,8 +2180,8 @@ type GetChatMemberParams struct {
 	UserID int64 `json:"user_id"`
 }
 
-// GetChatMember - Use this method to get information about a member of a chat. The method is guaranteed to
-// work for other users, only if the bot is an administrator in the chat. Returns a ChatMember
+// GetChatMember - Use this method to get information about a member of a chat. The method is only guaranteed
+// to work for other users if the bot is an administrator in the chat. Returns a ChatMember
 // (https://core.telegram.org/bots/api#chatmember) object on success.
 func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
 	var memberData chatMemberData
@@ -2668,7 +2668,7 @@ type SetMyDefaultAdministratorRightsParams struct {
 
 // SetMyDefaultAdministratorRights - Use this method to change the default administrator rights requested by
 // the bot when it's added as an administrator to groups or channels. These rights will be suggested to users,
-// but they are are free to modify the list before adding the bot. Returns True on success.
+// but they are free to modify the list before adding the bot. Returns True on success.
 func (b *Bot) SetMyDefaultAdministratorRights(params *SetMyDefaultAdministratorRightsParams) error {
 	err := b.performRequest("setMyDefaultAdministratorRights", params)
 	if err != nil {

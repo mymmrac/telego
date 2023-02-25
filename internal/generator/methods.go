@@ -295,6 +295,14 @@ import (
 		data.WriteString(fmt.Sprintf("\nfunc (b *Bot) %s(%s) %s {\n", m.nameTitle, parametersArg, returnType))
 
 		returnVar := returnTypeToVar(m.returnType)
+		switch m.nameTitle {
+		case "ExportChatInviteLink":
+			returnVar = "inviteLink"
+		case "GetChatMemberCount":
+			returnVar = "chatMemberCount"
+		case "CreateInvoiceLink":
+			returnVar = "invoiceLink"
+		}
 
 		if hasReturnType {
 			data.WriteString(fmt.Sprintf("\tvar %s %s\n", returnVar, m.returnType))
@@ -369,6 +377,10 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 
 	if methodName == "promoteChatMember" && parameter.typ == "bool" {
 		parameter.typ = "*bool"
+	}
+
+	if methodName == "editForumTopic" && parameter.nameSnakeCase == "icon_custom_emoji_id" {
+		parameter.typ = "*string"
 	}
 }
 
