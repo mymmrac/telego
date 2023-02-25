@@ -82,6 +82,7 @@ More examples can be seen here:
 - [Utility methods](examples/utility_methods/main.go)
 - [Inline query bot](examples/inline_query_bot/main.go)
 - [Bot handlers](examples/handler/main.go)
+- [Bot handles (groups + middleware)](examples/handler_groups_and_middleware/main.go)
 - [Graceful shutdown (no helpers)](examples/graceful_shutdown_no_helpers/main.go)
 - [Graceful shutdown (long polling)](examples/graceful_shutdown_long_polling/main.go)
 - [Graceful shutdown (webhook)](examples/graceful_shutdown_webhook/main.go)
@@ -260,7 +261,7 @@ func main() {
 
 For running multiple bots from a single server, see [this](examples/multi_bot_webhook/main.go) example.
 
-> Tip: For testing webhooks, you can use [Ngrok](https://ngrok.com) to make a tunnel to your localhost, 
+> Tip: For testing webhooks, you can use [Ngrok](https://ngrok.com) to make a tunnel to your localhost,
 > and get a random domain available from the Internet.
 > It's as simple as `ngrok http 8080`.
 
@@ -543,6 +544,56 @@ func main() {
 
 	// ... start bot handler
 }
+```
+
+One more important part of handlers are groups and middlewares.
+Telego allows creating groups with and without predicates and attaching middleware to groups.
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/mymmrac/telego"
+	th "github.com/mymmrac/telego/telegohandler"
+)
+
+func main() {
+	// Init ...
+
+	// Add global middleware, it will be applied in order of addition
+	bh.Use(
+		func(next th.Handler) th.Handler {
+			return func(bot *telego.Bot, update telego.Update) {
+				fmt.Println("Global middleware") // Will be called first
+				next(bot, update)
+			}
+		},
+	)
+
+	// Create any groups with or without predicates
+	// Note: Updates first checked by groups and only then by handlers 
+	// (group -> ... -> group -> handler)
+	task := bh.Group(th.TextContains("task"))
+
+	// Add middleware to groups
+	task.Use(func(next th.Handler) th.Handler {
+		return func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("Group based middleware") // Will be called second
+
+			if len(update.Message.Text) < 10 {
+				next(bot, update)
+			}
+		}
+	})
+
+	// Handle updates on a group
+	task.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		fmt.Println("Task...") // Will be called third
+	})
+}
+
 ```
 
 ## :art: Contribution

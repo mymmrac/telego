@@ -8,6 +8,10 @@ import (
 	th "github.com/mymmrac/telego/telegohandler"
 )
 
+// ==== DEPRECATED ====
+// See example handler_groups_and_middleware/main.go for a proper way of middleware implementation.
+// ====================
+
 func main() {
 	botToken := os.Getenv("TOKEN")
 
