@@ -94,7 +94,9 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		data.WriteString(fmt.Sprintf("// With%s adds %s parameter\n", setter.fieldName,
 			strings.ReplaceAll(setter.fieldSnakeCaseName, "_", " ")))
 
-		setterSpecialCase(&setter)
+		if setter.fieldName == "Type" && setter.structType == "SendPollParams" {
+			setter.fieldName = "XXXType"
+		}
 
 		if strings.HasPrefix(setter.fieldType, "[]") {
 			setter.fieldType = strings.Replace(setter.fieldType, "[]", "...", 1)
@@ -108,7 +110,8 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		noPointer := contains(noPointerStructs, setter.structType)
 
 		convertToPtr := setter.fieldType == "*bool" && setter.structType == "PromoteChatMemberParams" ||
-			setter.fieldType == "*string" && setter.structType == "InlineKeyboardButton"
+			setter.fieldType == "*string" && setter.structType == "InlineKeyboardButton" ||
+			setter.fieldType == "*string" && setter.structType == "EditForumTopicParams"
 
 		var s string
 		if setter.fieldType != "bool" {
@@ -154,10 +157,4 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)
-}
-
-func setterSpecialCase(setter *tgSetter) {
-	if setter.fieldName == "Type" {
-		setter.fieldName = "XXXType"
-	}
 }
