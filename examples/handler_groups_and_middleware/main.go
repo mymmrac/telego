@@ -31,16 +31,17 @@ func main() {
 	defer bot.StopLongPolling()
 
 	// Add global middleware, it will be applied in order of addition
+	bh.Use(th.PanicRecovery) // Will be called first
 	bh.Use(
 		func(next th.Handler) th.Handler {
 			return func(bot *telego.Bot, update telego.Update) {
-				fmt.Println("Global middleware") // Will be called first
+				fmt.Println("Global middleware") // Will be called second
 				next(bot, update)
 			}
 		},
 		func(next th.Handler) th.Handler {
 			return func(bot *telego.Bot, update telego.Update) {
-				fmt.Println("Global middleware 2") // Will be called second
+				fmt.Println("Global middleware 2") // Will be called third
 				next(bot, update)
 			}
 		},
@@ -53,7 +54,7 @@ func main() {
 	// Add middleware to groups
 	task.Use(func(next th.Handler) th.Handler {
 		return func(bot *telego.Bot, update telego.Update) {
-			fmt.Println("Group based middleware") // Will be called third
+			fmt.Println("Group based middleware") // Will be called fourth
 
 			if len(update.Message.Text) < 10 {
 				next(bot, update)
@@ -63,7 +64,7 @@ func main() {
 
 	// Handle updates on a group
 	task.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		fmt.Println("Task...") // Will be called fourth
+		fmt.Println("Task...") // Will be called fifth
 	})
 
 	// Start handling updates

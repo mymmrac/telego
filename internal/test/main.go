@@ -699,19 +699,7 @@ func main() {
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
-		bh.Use(func(next th.Handler) th.Handler {
-			return func(bot *telego.Bot, update telego.Update) {
-				defer func() {
-					panicErr := recover()
-					if panicErr != nil {
-						bot.Logger().Errorf("PANIC: %s", panicErr)
-					}
-				}()
-
-				fmt.Println("M 1")
-				next(bot, update)
-			}
-		})
+		bh.Use(th.PanicRecovery)
 		bh.Use(func(next th.Handler) th.Handler {
 			fmt.Println("KK 1")
 
