@@ -20,6 +20,7 @@ linters:
   enable-all: true
   disable:
     # Disabled because not relevant for this project
+    - containedctx # containedctx is a linter that detects struct contained context.Context field
     - dupword # checks for duplicate words in the source code
     - exhaustruct # Checks if all structure fields are initialized
     - gochecknoglobals # check that no global variables exist

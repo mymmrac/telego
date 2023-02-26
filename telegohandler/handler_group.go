@@ -1,6 +1,7 @@
 package telegohandler
 
 import (
+	"context"
 	"sync"
 
 	"github.com/mymmrac/telego"
@@ -53,8 +54,10 @@ func (h *HandlerGroup) useHandlers(bot *telego.Bot, update telego.Update, wg *sy
 
 		wg.Add(1)
 		go func(ch conditionalHandler) {
-			h.applyMiddlewares(ch.Handler)(bot, update)
+			ctx, cancel := context.WithCancel(update.Context())
+			h.applyMiddlewares(ch.Handler)(bot, update.WithContext(ctx))
 			wg.Done()
+			cancel()
 		}(handler)
 
 		return true
@@ -93,9 +96,10 @@ func (h *HandlerGroup) useGroups(bot *telego.Bot, update telego.Update, wg *sync
 }
 
 // Handle registers new handler in the group, update will be processed only by first-matched handler,
-// order of registration determines the order of matching handlers
+// order of registration determines the order of matching handlers.
+// Important to notice, update's context will be automatically canceled once the handler will finish processing.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
-// in mind that predicates checked sequentially
+// in mind that predicates checked sequentially.
 //
 // Warning: Panics if nil handler or predicates passed
 func (h *HandlerGroup) Handle(handler Handler, predicates ...Predicate) {

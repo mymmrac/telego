@@ -83,6 +83,7 @@ More examples can be seen here:
 - [Inline query bot](examples/inline_query_bot/main.go)
 - [Bot handlers](examples/handler/main.go)
 - [Bot handles (groups + middleware)](examples/handler_groups_and_middleware/main.go)
+- [Update's context](examples/handler_with_context/main.go)
 - [Graceful shutdown (no helpers)](examples/graceful_shutdown_no_helpers/main.go)
 - [Graceful shutdown (long polling)](examples/graceful_shutdown_long_polling/main.go)
 - [Graceful shutdown (webhook)](examples/graceful_shutdown_webhook/main.go)

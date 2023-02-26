@@ -121,9 +121,10 @@ func (h *BotHandler) Stop() {
 }
 
 // Handle registers new handler in the base group, update will be processed only by first-matched handler,
-// order of registration determines the order of matching handlers
+// order of registration determines the order of matching handlers.
+// Important to notice, update's context will be automatically canceled once the handler will finish processing.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
-// in mind that predicates checked sequentially
+// in mind that predicates checked sequentially.
 //
 // Warning: Panics if nil handler or predicates passed
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {

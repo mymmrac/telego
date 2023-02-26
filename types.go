@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -70,9 +71,14 @@ type Update struct {
 	// ChatJoinRequest - Optional. A request to join the chat has been sent. The bot must have the
 	// can_invite_users administrator right in the chat to receive these updates.
 	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
+
+	// ctx - Internal context value, can be retrieved using Update.Context and set by Update.WithContext.
+	// Value can't be cloned, thus after calling Update.Clone or Update.CloneSafe ctx will be nil.
+	ctx context.Context
 }
 
 // Clone returns a deep copy of Update.
+//
 // Warning: Types like ChatMember and MenuButton requires to have their mandatory fields (like status or type) to be
 // filled properly, else Clone() will panic. To safely clone, use CloneSafe().
 func (u Update) Clone() Update {
@@ -99,6 +105,28 @@ func (u Update) CloneSafe() (Update, error) {
 	}
 
 	return update, nil
+}
+
+// Context returns the update's context. To change the context, use WithContext.
+// The returned context is always non-nil; it defaults to the background context.
+func (u Update) Context() context.Context {
+	if u.ctx != nil {
+		return u.ctx
+	}
+
+	return context.Background()
+}
+
+// WithContext returns a shallow copy of the update with its context changed to ctx
+//
+// Warning: Panics if nil context passed
+func (u Update) WithContext(ctx context.Context) Update {
+	if ctx == nil {
+		panic("Telego: nil context not allowed")
+	}
+
+	u.ctx = ctx
+	return u
 }
 
 // WebhookInfo - Describes the current status of a webhook.

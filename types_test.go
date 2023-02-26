@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -847,4 +848,21 @@ func TestInputFile_String(t *testing.T) {
 			assert.Equal(t, tt.stringValue, tt.inputFile.String())
 		})
 	}
+}
+
+func TestUpdate_Context(t *testing.T) {
+	u := Update{
+		UpdateID: 1,
+	}
+
+	assert.NotNil(t, u.Context())
+
+	ctx := context.TODO()
+	cu := u.WithContext(ctx)
+	assert.Equal(t, ctx, cu.Context())
+	assert.Equal(t, u.UpdateID, cu.UpdateID)
+
+	assert.Panics(t, func() {
+		u.WithContext(nil) //nolint:staticcheck
+	})
 }
