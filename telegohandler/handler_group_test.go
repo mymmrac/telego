@@ -1,8 +1,10 @@
 package telegohandler
 
 import (
+	"context"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -152,4 +154,24 @@ func TestHandlerGroup_useGroups(t *testing.T) {
 		return false
 	}).useGroups(nil, telego.Update{}, wg)
 	assert.False(t, ok)
+}
+
+func TestHandlerGroup_Handle_context(t *testing.T) {
+	gr := &HandlerGroup{}
+
+	var ctx context.Context
+	gr.Handle(func(bot *telego.Bot, update telego.Update) {
+		ctx = update.Context()
+	})
+
+	wg := &sync.WaitGroup{}
+	ok := gr.useGroups(nil, telego.Update{}, wg)
+	assert.True(t, ok)
+	wg.Wait()
+
+	select {
+	case <-ctx.Done():
+	case <-time.After(smallTimeout):
+		assert.FailNow(t, "timeout")
+	}
 }
