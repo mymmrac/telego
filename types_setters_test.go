@@ -136,7 +136,7 @@ func TestInputMediaPhoto_Setters(t *testing.T) {
 func TestInputMediaVideo_Setters(t *testing.T) {
 	i := (&InputMediaVideo{}).
 		WithMedia(testInputFile).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -148,7 +148,7 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 
 	assert.Equal(t, &InputMediaVideo{
 		Media:             testInputFile,
-		Thumb:             &testInputFile,
+		Thumbnail:         &testInputFile,
 		Caption:           "Caption",
 		ParseMode:         "ParseMode",
 		CaptionEntities:   []MessageEntity{{Type: "CaptionEntities"}},
@@ -163,7 +163,7 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 func TestInputMediaAnimation_Setters(t *testing.T) {
 	i := (&InputMediaAnimation{}).
 		WithMedia(testInputFile).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -174,7 +174,7 @@ func TestInputMediaAnimation_Setters(t *testing.T) {
 
 	assert.Equal(t, &InputMediaAnimation{
 		Media:           testInputFile,
-		Thumb:           &testInputFile,
+		Thumbnail:       &testInputFile,
 		Caption:         "Caption",
 		ParseMode:       "ParseMode",
 		CaptionEntities: []MessageEntity{{Type: "CaptionEntities"}},
@@ -188,7 +188,7 @@ func TestInputMediaAnimation_Setters(t *testing.T) {
 func TestInputMediaAudio_Setters(t *testing.T) {
 	i := (&InputMediaAudio{}).
 		WithMedia(testInputFile).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -198,7 +198,7 @@ func TestInputMediaAudio_Setters(t *testing.T) {
 
 	assert.Equal(t, &InputMediaAudio{
 		Media:           testInputFile,
-		Thumb:           &testInputFile,
+		Thumbnail:       &testInputFile,
 		Caption:         "Caption",
 		ParseMode:       "ParseMode",
 		CaptionEntities: []MessageEntity{{Type: "CaptionEntities"}},
@@ -211,7 +211,7 @@ func TestInputMediaAudio_Setters(t *testing.T) {
 func TestInputMediaDocument_Setters(t *testing.T) {
 	i := (&InputMediaDocument{}).
 		WithMedia(testInputFile).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -219,7 +219,7 @@ func TestInputMediaDocument_Setters(t *testing.T) {
 
 	assert.Equal(t, &InputMediaDocument{
 		Media:                       testInputFile,
-		Thumb:                       &testInputFile,
+		Thumbnail:                   &testInputFile,
 		Caption:                     "Caption",
 		ParseMode:                   "ParseMode",
 		CaptionEntities:             []MessageEntity{{Type: "CaptionEntities"}},
@@ -236,9 +236,9 @@ func TestInlineQueryResultArticle_Setters(t *testing.T) {
 		WithURL("URL").
 		WithHideURL().
 		WithDescription("Description").
-		WithThumbURL("ThumbURL").
-		WithThumbWidth(1).
-		WithThumbHeight(2)
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailWidth(1).
+		WithThumbnailHeight(2)
 
 	assert.Equal(t, &InlineQueryResultArticle{
 		ID:                  "ID",
@@ -248,9 +248,9 @@ func TestInlineQueryResultArticle_Setters(t *testing.T) {
 		URL:                 "URL",
 		HideURL:             true,
 		Description:         "Description",
-		ThumbURL:            "ThumbURL",
-		ThumbWidth:          1,
-		ThumbHeight:         2,
+		ThumbnailURL:        "ThumbnailURL",
+		ThumbnailWidth:      1,
+		ThumbnailHeight:     2,
 	}, i)
 }
 
@@ -258,7 +258,7 @@ func TestInlineQueryResultPhoto_Setters(t *testing.T) {
 	i := (&InlineQueryResultPhoto{}).
 		WithID("ID").
 		WithPhotoURL("PhotoURL").
-		WithThumbURL("ThumbURL").
+		WithThumbnailURL("ThumbnailURL").
 		WithPhotoWidth(1).
 		WithPhotoHeight(2).
 		WithTitle("Title").
@@ -272,7 +272,7 @@ func TestInlineQueryResultPhoto_Setters(t *testing.T) {
 	assert.Equal(t, &InlineQueryResultPhoto{
 		ID:                  "ID",
 		PhotoURL:            "PhotoURL",
-		ThumbURL:            "ThumbURL",
+		ThumbnailURL:        "ThumbnailURL",
 		PhotoWidth:          1,
 		PhotoHeight:         2,
 		Title:               "Title",
@@ -285,7 +285,6 @@ func TestInlineQueryResultPhoto_Setters(t *testing.T) {
 	}, i)
 }
 
-//nolint:dupl
 func TestInlineQueryResultGif_Setters(t *testing.T) {
 	i := (&InlineQueryResultGif{}).
 		WithID("ID").
@@ -293,8 +292,8 @@ func TestInlineQueryResultGif_Setters(t *testing.T) {
 		WithGifWidth(1).
 		WithGifHeight(2).
 		WithGifDuration(3).
-		WithThumbURL("ThumbURL").
-		WithThumbMimeType("ThumbMimeType").
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailMimeType("ThumbnailMimeType").
 		WithTitle("Title").
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -308,8 +307,8 @@ func TestInlineQueryResultGif_Setters(t *testing.T) {
 		GifWidth:            1,
 		GifHeight:           2,
 		GifDuration:         3,
-		ThumbURL:            "ThumbURL",
-		ThumbMimeType:       "ThumbMimeType",
+		ThumbnailURL:        "ThumbnailURL",
+		ThumbnailMimeType:   "ThumbnailMimeType",
 		Title:               "Title",
 		Caption:             "Caption",
 		ParseMode:           "ParseMode",
@@ -319,7 +318,6 @@ func TestInlineQueryResultGif_Setters(t *testing.T) {
 	}, i)
 }
 
-//nolint:dupl
 func TestInlineQueryResultMpeg4Gif_Setters(t *testing.T) {
 	i := (&InlineQueryResultMpeg4Gif{}).
 		WithID("ID").
@@ -327,8 +325,8 @@ func TestInlineQueryResultMpeg4Gif_Setters(t *testing.T) {
 		WithMpeg4Width(1).
 		WithMpeg4Height(2).
 		WithMpeg4Duration(3).
-		WithThumbURL("ThumbURL").
-		WithThumbMimeType("ThumbMimeType").
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailMimeType("ThumbnailMimeType").
 		WithTitle("Title").
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -342,8 +340,8 @@ func TestInlineQueryResultMpeg4Gif_Setters(t *testing.T) {
 		Mpeg4Width:          1,
 		Mpeg4Height:         2,
 		Mpeg4Duration:       3,
-		ThumbURL:            "ThumbURL",
-		ThumbMimeType:       "ThumbMimeType",
+		ThumbnailURL:        "ThumbnailURL",
+		ThumbnailMimeType:   "ThumbnailMimeType",
 		Title:               "Title",
 		Caption:             "Caption",
 		ParseMode:           "ParseMode",
@@ -358,7 +356,7 @@ func TestInlineQueryResultVideo_Setters(t *testing.T) {
 		WithID("ID").
 		WithVideoURL("VideoURL").
 		WithMimeType("MimeType").
-		WithThumbURL("ThumbURL").
+		WithThumbnailURL("ThumbnailURL").
 		WithTitle("Title").
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -374,7 +372,7 @@ func TestInlineQueryResultVideo_Setters(t *testing.T) {
 		ID:                  "ID",
 		VideoURL:            "VideoURL",
 		MimeType:            "MimeType",
-		ThumbURL:            "ThumbURL",
+		ThumbnailURL:        "ThumbnailURL",
 		Title:               "Title",
 		Caption:             "Caption",
 		ParseMode:           "ParseMode",
@@ -452,9 +450,9 @@ func TestInlineQueryResultDocument_Setters(t *testing.T) {
 		WithDescription("Description").
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{}).
-		WithThumbURL("ThumbURL").
-		WithThumbWidth(1).
-		WithThumbHeight(2)
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailWidth(1).
+		WithThumbnailHeight(2)
 
 	assert.Equal(t, &InlineQueryResultDocument{
 		ID:                  "ID",
@@ -467,9 +465,9 @@ func TestInlineQueryResultDocument_Setters(t *testing.T) {
 		Description:         "Description",
 		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 		InputMessageContent: &InputTextMessageContent{},
-		ThumbURL:            "ThumbURL",
-		ThumbWidth:          1,
-		ThumbHeight:         2,
+		ThumbnailURL:        "ThumbnailURL",
+		ThumbnailWidth:      1,
+		ThumbnailHeight:     2,
 	}, i)
 }
 
@@ -482,9 +480,9 @@ func TestInlineQueryResultLocation_Setters(t *testing.T) {
 		WithProximityAlertRadius(3).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{}).
-		WithThumbURL("ThumbURL").
-		WithThumbWidth(4).
-		WithThumbHeight(5)
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailWidth(4).
+		WithThumbnailHeight(5)
 
 	assert.Equal(t, &InlineQueryResultLocation{
 		ID:                   "ID",
@@ -494,9 +492,9 @@ func TestInlineQueryResultLocation_Setters(t *testing.T) {
 		ProximityAlertRadius: 3,
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 		InputMessageContent:  &InputTextMessageContent{},
-		ThumbURL:             "ThumbURL",
-		ThumbWidth:           4,
-		ThumbHeight:          5,
+		ThumbnailURL:         "ThumbnailURL",
+		ThumbnailWidth:       4,
+		ThumbnailHeight:      5,
 	}, i)
 }
 
@@ -511,9 +509,9 @@ func TestInlineQueryResultVenue_Setters(t *testing.T) {
 		WithGooglePlaceType("GooglePlaceType").
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{}).
-		WithThumbURL("ThumbURL").
-		WithThumbWidth(1).
-		WithThumbHeight(2)
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailWidth(1).
+		WithThumbnailHeight(2)
 
 	assert.Equal(t, &InlineQueryResultVenue{
 		ID:                  "ID",
@@ -525,9 +523,9 @@ func TestInlineQueryResultVenue_Setters(t *testing.T) {
 		GooglePlaceType:     "GooglePlaceType",
 		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 		InputMessageContent: &InputTextMessageContent{},
-		ThumbURL:            "ThumbURL",
-		ThumbWidth:          1,
-		ThumbHeight:         2,
+		ThumbnailURL:        "ThumbnailURL",
+		ThumbnailWidth:      1,
+		ThumbnailHeight:     2,
 	}, i)
 }
 
@@ -540,9 +538,9 @@ func TestInlineQueryResultContact_Setters(t *testing.T) {
 		WithVcard("Vcard").
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{}).
-		WithThumbURL("ThumbURL").
-		WithThumbWidth(1).
-		WithThumbHeight(2)
+		WithThumbnailURL("ThumbnailURL").
+		WithThumbnailWidth(1).
+		WithThumbnailHeight(2)
 
 	assert.Equal(t, &InlineQueryResultContact{
 		ID:                  "ID",
@@ -552,9 +550,9 @@ func TestInlineQueryResultContact_Setters(t *testing.T) {
 		Vcard:               "Vcard",
 		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 		InputMessageContent: &InputTextMessageContent{},
-		ThumbURL:            "ThumbURL",
-		ThumbWidth:          1,
-		ThumbHeight:         2,
+		ThumbnailURL:        "ThumbnailURL",
+		ThumbnailWidth:      1,
+		ThumbnailHeight:     2,
 	}, i)
 }
 

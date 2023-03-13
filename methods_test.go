@@ -2647,7 +2647,7 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 	})
 }
 
-func TestBot_SetStickerSetThumb(t *testing.T) {
+func TestBot_SetStickerSetThumbnail(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
 
@@ -3064,12 +3064,12 @@ func TestSendMediaGroupParams_fileParameters(t *testing.T) {
 	p := &SendMediaGroupParams{
 		Media: []InputMedia{
 			&InputMediaDocument{
-				Media: testInputFile,
-				Thumb: &testInputFile,
+				Media:     testInputFile,
+				Thumbnail: &testInputFile,
 			},
 			&InputMediaVideo{
-				Media: testInputFile,
-				Thumb: &InputFile{File: nil},
+				Media:     testInputFile,
+				Thumbnail: &InputFile{File: nil},
 			},
 		},
 	}
@@ -3092,8 +3092,8 @@ func TestSetChatPhotoParams_fileParameters(t *testing.T) {
 func TestEditMessageMediaParams_fileParameters(t *testing.T) {
 	p := &EditMessageMediaParams{
 		Media: &InputMediaVideo{
-			Media: testInputFile,
-			Thumb: &InputFile{File: nil},
+			Media:     testInputFile,
+			Thumbnail: &InputFile{File: nil},
 		},
 	}
 
@@ -3150,7 +3150,7 @@ func TestAddStickerToSetParams_fileParameters(t *testing.T) {
 	}, p.fileParameters())
 }
 
-func TestSetStickerSetThumbParams_fileParameters(t *testing.T) {
+func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {
 	p := &SetStickerSetThumbParams{
 		Thumb: &testInputFile,
 	}

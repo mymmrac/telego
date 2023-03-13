@@ -688,8 +688,8 @@ type Animation struct {
 	// Duration - Duration of the video in seconds as defined by sender
 	Duration int `json:"duration"`
 
-	// Thumb - Optional. Animation thumbnail as defined by sender
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Animation thumbnail as defined by sender
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
 	// FileName - Optional. Original animation filename as defined by sender
 	FileName string `json:"file_name,omitempty"`
@@ -732,8 +732,8 @@ type Audio struct {
 	// integer or double-precision float type are safe for storing this value.
 	FileSize int64 `json:"file_size,omitempty"`
 
-	// Thumb - Optional. Thumbnail of the album cover to which the music file belongs
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Thumbnail of the album cover to which the music file belongs
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 }
 
 // Document - This object represents a general file (as opposed to photos
@@ -747,8 +747,8 @@ type Document struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Thumb - Optional. Document thumbnail as defined by sender
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Document thumbnail as defined by sender
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
 	// FileName - Optional. Original filename as defined by sender
 	FileName string `json:"file_name,omitempty"`
@@ -780,8 +780,8 @@ type Video struct {
 	// Duration - Duration of the video in seconds as defined by sender
 	Duration int `json:"duration"`
 
-	// Thumb - Optional. Video thumbnail
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Video thumbnail
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
 	// FileName - Optional. Original filename as defined by sender
 	FileName string `json:"file_name,omitempty"`
@@ -812,8 +812,8 @@ type VideoNote struct {
 	// Duration - Duration of the video in seconds as defined by sender
 	Duration int `json:"duration"`
 
-	// Thumb - Optional. Video thumbnail
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Video thumbnail
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
 	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
@@ -2209,6 +2209,18 @@ func (b *BotCommandScopeChatMember) ScopeType() string {
 	return ScopeTypeChatMember
 }
 
+// BotDescription - This object represents the bot's description.
+type BotDescription struct {
+	// Description - The bot's description
+	Description string `json:"description"`
+}
+
+// BotShortDescription - This object represents the bot's short description.
+type BotShortDescription struct {
+	// ShortDescription - The bot's short description
+	ShortDescription string `json:"short_description"`
+}
+
 // MenuButton - This object describes the bot's menu button in a private chat. It should be one of
 // MenuButtonCommands (https://core.telegram.org/bots/api#menubuttoncommands)
 // MenuButtonWebApp (https://core.telegram.org/bots/api#menubuttonwebapp)
@@ -2377,13 +2389,13 @@ type InputMediaVideo struct {
 	// » (https://core.telegram.org/bots/api#sending-files)
 	Media InputFile `json:"media"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -2422,9 +2434,9 @@ func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
-	if i.Thumb != nil {
-		i.Thumb.needAttach = true
-		fp["thumb"] = i.Thumb.File
+	if i.Thumbnail != nil {
+		i.Thumbnail.needAttach = true
+		fp["thumbnail"] = i.Thumbnail.File
 	}
 
 	return fp
@@ -2442,13 +2454,13 @@ type InputMediaAnimation struct {
 	// » (https://core.telegram.org/bots/api#sending-files)
 	Media InputFile `json:"media"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Caption of the animation to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -2484,9 +2496,9 @@ func (i *InputMediaAnimation) fileParameters() map[string]telegoapi.NamedReader 
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
-	if i.Thumb != nil {
-		i.Thumb.needAttach = true
-		fp["thumb"] = i.Thumb.File
+	if i.Thumbnail != nil {
+		i.Thumbnail.needAttach = true
+		fp["thumbnail"] = i.Thumbnail.File
 	}
 
 	return fp
@@ -2503,13 +2515,13 @@ type InputMediaAudio struct {
 	// » (https://core.telegram.org/bots/api#sending-files)
 	Media InputFile `json:"media"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Caption of the audio to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -2542,9 +2554,9 @@ func (i *InputMediaAudio) fileParameters() map[string]telegoapi.NamedReader {
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
-	if i.Thumb != nil {
-		i.Thumb.needAttach = true
-		fp["thumb"] = i.Thumb.File
+	if i.Thumbnail != nil {
+		i.Thumbnail.needAttach = true
+		fp["thumbnail"] = i.Thumbnail.File
 	}
 
 	return fp
@@ -2561,13 +2573,13 @@ type InputMediaDocument struct {
 	// » (https://core.telegram.org/bots/api#sending-files)
 	Media InputFile `json:"media"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Caption of the document to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -2595,9 +2607,9 @@ func (i *InputMediaDocument) fileParameters() map[string]telegoapi.NamedReader {
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
-	if i.Thumb != nil {
-		i.Thumb.needAttach = true
-		fp["thumb"] = i.Thumb.File
+	if i.Thumbnail != nil {
+		i.Thumbnail.needAttach = true
+		fp["thumbnail"] = i.Thumbnail.File
 	}
 
 	return fp
@@ -2682,8 +2694,8 @@ type Sticker struct {
 	// (https://telegram.org/blog/video-stickers-better-reactions)
 	IsVideo bool `json:"is_video"`
 
-	// Thumb - Optional. Sticker thumbnail in the .WEBP or .JPG format
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Sticker thumbnail in the .WEBP or .JPG format
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
 	// Emoji - Optional. Emoji associated with the sticker
 	Emoji string `json:"emoji,omitempty"`
@@ -2699,6 +2711,11 @@ type Sticker struct {
 
 	// CustomEmojiID - Optional. For custom emoji stickers, unique identifier of the custom emoji
 	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
+
+	// NeedsRepainting - Optional. True, if the sticker must be repainted to a text color in messages, the color
+	// of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in
+	// other places
+	NeedsRepainting bool `json:"needs_repainting,omitempty"`
 
 	// FileSize - Optional. File size in bytes
 	FileSize int `json:"file_size,omitempty"`
@@ -2733,8 +2750,8 @@ type StickerSet struct {
 	// Stickers - List of all set stickers
 	Stickers []Sticker `json:"stickers"`
 
-	// Thumb - Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
-	Thumb *PhotoSize `json:"thumb,omitempty"`
+	// Thumbnail - Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
+	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 }
 
 // MaskPosition - This object describes the position on faces where a mask should be placed by default.
@@ -2762,6 +2779,25 @@ const (
 	PointMouth    = "mouth"
 	PointChin     = "chin"
 )
+
+// InputSticker - This object describes a sticker to be added to a sticker set.
+type InputSticker struct {
+	// Sticker - The added sticker. Pass a file_id as a String to send a file that already exists on the
+	// Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new
+	// one using multipart/form-data. Animated and video stickers can't be uploaded via HTTP URL. More information
+	// on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Sticker InputFile `json:"sticker"`
+
+	// EmojiList - List of 1-20 emoji associated with the sticker
+	EmojiList []string `json:"emoji_list"`
+
+	// MaskPosition - Optional. Position where the mask should be placed on faces. For “mask” stickers only.
+	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
+
+	// Keywords - Optional. List of 0-20 search keywords for the sticker with total length of up to 64
+	// characters. For “regular” and “custom_emoji” stickers only.
+	Keywords []string `json:"keywords,omitempty"`
+}
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.
@@ -2860,14 +2896,14 @@ type InlineQueryResultArticle struct {
 	// Description - Optional. Short description of the result
 	Description string `json:"description,omitempty"`
 
-	// ThumbURL - Optional. URL of the thumbnail for the result
-	ThumbURL string `json:"thumb_url,omitempty"`
+	// ThumbnailURL - Optional. URL of the thumbnail for the result
+	ThumbnailURL string `json:"thumbnail_url,omitempty"`
 
-	// ThumbWidth - Optional. Thumbnail width
-	ThumbWidth int `json:"thumb_width,omitempty"`
+	// ThumbnailWidth - Optional. Thumbnail width
+	ThumbnailWidth int `json:"thumbnail_width,omitempty"`
 
-	// ThumbHeight - Optional. Thumbnail height
-	ThumbHeight int `json:"thumb_height,omitempty"`
+	// ThumbnailHeight - Optional. Thumbnail height
+	ThumbnailHeight int `json:"thumbnail_height,omitempty"`
 }
 
 // ResultType returns InlineQueryResult type
@@ -2888,8 +2924,8 @@ type InlineQueryResultPhoto struct {
 	// PhotoURL - A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB
 	PhotoURL string `json:"photo_url"`
 
-	// ThumbURL - URL of the thumbnail for the photo
-	ThumbURL string `json:"thumb_url"`
+	// ThumbnailURL - URL of the thumbnail for the photo
+	ThumbnailURL string `json:"thumbnail_url"`
 
 	// PhotoWidth - Optional. Width of the photo
 	PhotoWidth int `json:"photo_width,omitempty"`
@@ -2949,12 +2985,12 @@ type InlineQueryResultGif struct {
 	// GifDuration - Optional. Duration of the GIF in seconds
 	GifDuration int `json:"gif_duration,omitempty"`
 
-	// ThumbURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-	ThumbURL string `json:"thumb_url"`
+	// ThumbnailURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
+	ThumbnailURL string `json:"thumbnail_url"`
 
-	// ThumbMimeType - Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”,
-	// or “video/mp4”. Defaults to “image/jpeg”
-	ThumbMimeType string `json:"thumb_mime_type,omitempty"`
+	// ThumbnailMimeType - Optional. MIME type of the thumbnail, must be one of “image/jpeg”,
+	// “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+	ThumbnailMimeType string `json:"thumbnail_mime_type,omitempty"`
 
 	// Title - Optional. Title for the result
 	Title string `json:"title,omitempty"`
@@ -3015,12 +3051,12 @@ type InlineQueryResultMpeg4Gif struct {
 	// Mpeg4Duration - Optional. Video duration in seconds
 	Mpeg4Duration int `json:"mpeg4_duration,omitempty"`
 
-	// ThumbURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-	ThumbURL string `json:"thumb_url"`
+	// ThumbnailURL - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
+	ThumbnailURL string `json:"thumbnail_url"`
 
-	// ThumbMimeType - Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”,
-	// or “video/mp4”. Defaults to “image/jpeg”
-	ThumbMimeType string `json:"thumb_mime_type,omitempty"`
+	// ThumbnailMimeType - Optional. MIME type of the thumbnail, must be one of “image/jpeg”,
+	// “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+	ThumbnailMimeType string `json:"thumbnail_mime_type,omitempty"`
 
 	// Title - Optional. Title for the result
 	Title string `json:"title,omitempty"`
@@ -3067,8 +3103,8 @@ type InlineQueryResultVideo struct {
 	// MimeType - MIME type of the content of the video URL, “text/html” or “video/mp4”
 	MimeType string `json:"mime_type"`
 
-	// ThumbURL - URL of the thumbnail (JPEG only) for the video
-	ThumbURL string `json:"thumb_url"`
+	// ThumbnailURL - URL of the thumbnail (JPEG only) for the video
+	ThumbnailURL string `json:"thumbnail_url"`
 
 	// Title - Title for the result
 	Title string `json:"title"`
@@ -3238,14 +3274,14 @@ type InlineQueryResultDocument struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbURL - Optional. URL of the thumbnail (JPEG only) for the file
-	ThumbURL string `json:"thumb_url,omitempty"`
+	// ThumbnailURL - Optional. URL of the thumbnail (JPEG only) for the file
+	ThumbnailURL string `json:"thumbnail_url,omitempty"`
 
-	// ThumbWidth - Optional. Thumbnail width
-	ThumbWidth int `json:"thumb_width,omitempty"`
+	// ThumbnailWidth - Optional. Thumbnail width
+	ThumbnailWidth int `json:"thumbnail_width,omitempty"`
 
-	// ThumbHeight - Optional. Thumbnail height
-	ThumbHeight int `json:"thumb_height,omitempty"`
+	// ThumbnailHeight - Optional. Thumbnail height
+	ThumbnailHeight int `json:"thumbnail_height,omitempty"`
 }
 
 // ResultType returns InlineQueryResult type
@@ -3294,14 +3330,14 @@ type InlineQueryResultLocation struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the location
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbURL - Optional. URL of the thumbnail for the result
-	ThumbURL string `json:"thumb_url,omitempty"`
+	// ThumbnailURL - Optional. URL of the thumbnail for the result
+	ThumbnailURL string `json:"thumbnail_url,omitempty"`
 
-	// ThumbWidth - Optional. Thumbnail width
-	ThumbWidth int `json:"thumb_width,omitempty"`
+	// ThumbnailWidth - Optional. Thumbnail width
+	ThumbnailWidth int `json:"thumbnail_width,omitempty"`
 
-	// ThumbHeight - Optional. Thumbnail height
-	ThumbHeight int `json:"thumb_height,omitempty"`
+	// ThumbnailHeight - Optional. Thumbnail height
+	ThumbnailHeight int `json:"thumbnail_height,omitempty"`
 }
 
 // ResultType returns InlineQueryResult type
@@ -3352,14 +3388,14 @@ type InlineQueryResultVenue struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the venue
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbURL - Optional. URL of the thumbnail for the result
-	ThumbURL string `json:"thumb_url,omitempty"`
+	// ThumbnailURL - Optional. URL of the thumbnail for the result
+	ThumbnailURL string `json:"thumbnail_url,omitempty"`
 
-	// ThumbWidth - Optional. Thumbnail width
-	ThumbWidth int `json:"thumb_width,omitempty"`
+	// ThumbnailWidth - Optional. Thumbnail width
+	ThumbnailWidth int `json:"thumbnail_width,omitempty"`
 
-	// ThumbHeight - Optional. Thumbnail height
-	ThumbHeight int `json:"thumb_height,omitempty"`
+	// ThumbnailHeight - Optional. Thumbnail height
+	ThumbnailHeight int `json:"thumbnail_height,omitempty"`
 }
 
 // ResultType returns InlineQueryResult type
@@ -3397,14 +3433,14 @@ type InlineQueryResultContact struct {
 	// InputMessageContent - Optional. Content of the message to be sent instead of the contact
 	InputMessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
-	// ThumbURL - Optional. URL of the thumbnail for the result
-	ThumbURL string `json:"thumb_url,omitempty"`
+	// ThumbnailURL - Optional. URL of the thumbnail for the result
+	ThumbnailURL string `json:"thumbnail_url,omitempty"`
 
-	// ThumbWidth - Optional. Thumbnail width
-	ThumbWidth int `json:"thumb_width,omitempty"`
+	// ThumbnailWidth - Optional. Thumbnail width
+	ThumbnailWidth int `json:"thumbnail_width,omitempty"`
 
-	// ThumbHeight - Optional. Thumbnail height
-	ThumbHeight int `json:"thumb_height,omitempty"`
+	// ThumbnailHeight - Optional. Thumbnail height
+	ThumbnailHeight int `json:"thumbnail_height,omitempty"`
 }
 
 // ResultType returns InlineQueryResult type

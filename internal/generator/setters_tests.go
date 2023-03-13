@@ -69,8 +69,8 @@ import (
 		data.WriteString(fmt.Sprintf("\tassert.Equal(t, %s%s{\n", pointer, currentStruct))
 
 		for _, s := range currentSetters {
-			if s.value == " true" {
-				s.value = "ToPtr(true)"
+			if strings.HasPrefix(s.value, " ") {
+				s.value = "ToPtr(" + s.value + ")"
 			}
 
 			data.WriteString(fmt.Sprintf("\t\t%s: %s,\n", s.name, s.value))
@@ -101,6 +101,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return " true"
 	case "string":
 		return "\"" + setter.fieldName + "\""
+	case "*string":
+		return " \"" + setter.fieldName + "\""
 	case "int":
 		*counter++
 		return fmt.Sprintf("%d", *counter)

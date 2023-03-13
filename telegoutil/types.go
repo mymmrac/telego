@@ -238,12 +238,12 @@ func ResultDocument(id, title, documentURL, mimeType string) *telego.InlineQuery
 }
 
 // ResultGif creates telego.InlineQueryResultGif with required fields
-func ResultGif(id, gifURL, thumbURL string) *telego.InlineQueryResultGif {
+func ResultGif(id, gifURL, thumbnailURL string) *telego.InlineQueryResultGif {
 	return &telego.InlineQueryResultGif{
-		Type:     telego.ResultTypeGif,
-		ID:       id,
-		GifURL:   gifURL,
-		ThumbURL: thumbURL,
+		Type:         telego.ResultTypeGif,
+		ID:           id,
+		GifURL:       gifURL,
+		ThumbnailURL: thumbnailURL,
 	}
 }
 
@@ -259,22 +259,22 @@ func ResultLocation(id string, latitude, longitude float64, title string) *teleg
 }
 
 // ResultMpeg4Gif creates telego.InlineQueryResultMpeg4Gif with required fields
-func ResultMpeg4Gif(id, mpeg4URL, thumbURL string) *telego.InlineQueryResultMpeg4Gif {
+func ResultMpeg4Gif(id, mpeg4URL, thumbnailURL string) *telego.InlineQueryResultMpeg4Gif {
 	return &telego.InlineQueryResultMpeg4Gif{
-		Type:     telego.ResultTypeMpeg4Gif,
-		ID:       id,
-		Mpeg4URL: mpeg4URL,
-		ThumbURL: thumbURL,
+		Type:         telego.ResultTypeMpeg4Gif,
+		ID:           id,
+		Mpeg4URL:     mpeg4URL,
+		ThumbnailURL: thumbnailURL,
 	}
 }
 
 // ResultPhoto creates telego.InlineQueryResultPhoto with required fields
-func ResultPhoto(id, photoURL, thumbURL string) *telego.InlineQueryResultPhoto {
+func ResultPhoto(id, photoURL, thumbnailURL string) *telego.InlineQueryResultPhoto {
 	return &telego.InlineQueryResultPhoto{
-		Type:     telego.ResultTypePhoto,
-		ID:       id,
-		PhotoURL: photoURL,
-		ThumbURL: thumbURL,
+		Type:         telego.ResultTypePhoto,
+		ID:           id,
+		PhotoURL:     photoURL,
+		ThumbnailURL: thumbnailURL,
 	}
 }
 
@@ -292,14 +292,14 @@ func ResultVenue(id string, latitude, longitude float64, title, address string,
 }
 
 // ResultVideo creates telego.InlineQueryResultVideo with required fields
-func ResultVideo(id, videoURL, mimeType, thumbURL, title string) *telego.InlineQueryResultVideo {
+func ResultVideo(id, videoURL, mimeType, thumbnailURL, title string) *telego.InlineQueryResultVideo {
 	return &telego.InlineQueryResultVideo{
-		Type:     telego.ResultTypeVideo,
-		ID:       id,
-		VideoURL: videoURL,
-		MimeType: mimeType,
-		ThumbURL: thumbURL,
-		Title:    title,
+		Type:         telego.ResultTypeVideo,
+		ID:           id,
+		VideoURL:     videoURL,
+		MimeType:     mimeType,
+		ThumbnailURL: thumbnailURL,
+		Title:        title,
 	}
 }
 

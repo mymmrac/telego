@@ -217,9 +217,9 @@ func (i *InputMediaVideo) WithMedia(media InputFile) *InputMediaVideo {
 	return i
 }
 
-// WithThumb adds thumb parameter
-func (i *InputMediaVideo) WithThumb(thumb *InputFile) *InputMediaVideo {
-	i.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (i *InputMediaVideo) WithThumbnail(thumbnail *InputFile) *InputMediaVideo {
+	i.Thumbnail = thumbnail
 	return i
 }
 
@@ -277,9 +277,9 @@ func (i *InputMediaAnimation) WithMedia(media InputFile) *InputMediaAnimation {
 	return i
 }
 
-// WithThumb adds thumb parameter
-func (i *InputMediaAnimation) WithThumb(thumb *InputFile) *InputMediaAnimation {
-	i.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (i *InputMediaAnimation) WithThumbnail(thumbnail *InputFile) *InputMediaAnimation {
+	i.Thumbnail = thumbnail
 	return i
 }
 
@@ -331,9 +331,9 @@ func (i *InputMediaAudio) WithMedia(media InputFile) *InputMediaAudio {
 	return i
 }
 
-// WithThumb adds thumb parameter
-func (i *InputMediaAudio) WithThumb(thumb *InputFile) *InputMediaAudio {
-	i.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (i *InputMediaAudio) WithThumbnail(thumbnail *InputFile) *InputMediaAudio {
+	i.Thumbnail = thumbnail
 	return i
 }
 
@@ -379,9 +379,9 @@ func (i *InputMediaDocument) WithMedia(media InputFile) *InputMediaDocument {
 	return i
 }
 
-// WithThumb adds thumb parameter
-func (i *InputMediaDocument) WithThumb(thumb *InputFile) *InputMediaDocument {
-	i.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (i *InputMediaDocument) WithThumbnail(thumbnail *InputFile) *InputMediaDocument {
+	i.Thumbnail = thumbnail
 	return i
 }
 
@@ -452,21 +452,21 @@ func (i *InlineQueryResultArticle) WithDescription(description string) *InlineQu
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultArticle) WithThumbURL(thumbURL string) *InlineQueryResultArticle {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultArticle) WithThumbnailURL(thumbnailURL string) *InlineQueryResultArticle {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbWidth adds thumb width parameter
-func (i *InlineQueryResultArticle) WithThumbWidth(thumbWidth int) *InlineQueryResultArticle {
-	i.ThumbWidth = thumbWidth
+// WithThumbnailWidth adds thumbnail width parameter
+func (i *InlineQueryResultArticle) WithThumbnailWidth(thumbnailWidth int) *InlineQueryResultArticle {
+	i.ThumbnailWidth = thumbnailWidth
 	return i
 }
 
-// WithThumbHeight adds thumb height parameter
-func (i *InlineQueryResultArticle) WithThumbHeight(thumbHeight int) *InlineQueryResultArticle {
-	i.ThumbHeight = thumbHeight
+// WithThumbnailHeight adds thumbnail height parameter
+func (i *InlineQueryResultArticle) WithThumbnailHeight(thumbnailHeight int) *InlineQueryResultArticle {
+	i.ThumbnailHeight = thumbnailHeight
 	return i
 }
 
@@ -482,9 +482,9 @@ func (i *InlineQueryResultPhoto) WithPhotoURL(photoURL string) *InlineQueryResul
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultPhoto) WithThumbURL(thumbURL string) *InlineQueryResultPhoto {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultPhoto) WithThumbnailURL(thumbnailURL string) *InlineQueryResultPhoto {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
@@ -573,15 +573,15 @@ func (i *InlineQueryResultGif) WithGifDuration(gifDuration int) *InlineQueryResu
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultGif) WithThumbURL(thumbURL string) *InlineQueryResultGif {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultGif) WithThumbnailURL(thumbnailURL string) *InlineQueryResultGif {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbMimeType adds thumb mime type parameter
-func (i *InlineQueryResultGif) WithThumbMimeType(thumbMimeType string) *InlineQueryResultGif {
-	i.ThumbMimeType = thumbMimeType
+// WithThumbnailMimeType adds thumbnail mime type parameter
+func (i *InlineQueryResultGif) WithThumbnailMimeType(thumbnailMimeType string) *InlineQueryResultGif {
+	i.ThumbnailMimeType = thumbnailMimeType
 	return i
 }
 
@@ -651,15 +651,15 @@ func (i *InlineQueryResultMpeg4Gif) WithMpeg4Duration(mpeg4Duration int) *Inline
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultMpeg4Gif) WithThumbURL(thumbURL string) *InlineQueryResultMpeg4Gif {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultMpeg4Gif) WithThumbnailURL(thumbnailURL string) *InlineQueryResultMpeg4Gif {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbMimeType adds thumb mime type parameter
-func (i *InlineQueryResultMpeg4Gif) WithThumbMimeType(thumbMimeType string) *InlineQueryResultMpeg4Gif {
-	i.ThumbMimeType = thumbMimeType
+// WithThumbnailMimeType adds thumbnail mime type parameter
+func (i *InlineQueryResultMpeg4Gif) WithThumbnailMimeType(thumbnailMimeType string) *InlineQueryResultMpeg4Gif {
+	i.ThumbnailMimeType = thumbnailMimeType
 	return i
 }
 
@@ -718,9 +718,9 @@ func (i *InlineQueryResultVideo) WithMimeType(mimeType string) *InlineQueryResul
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultVideo) WithThumbURL(thumbURL string) *InlineQueryResultVideo {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultVideo) WithThumbnailURL(thumbnailURL string) *InlineQueryResultVideo {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
@@ -962,21 +962,21 @@ func (i *InlineQueryResultDocument) WithInputMessageContent(inputMessageContent 
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultDocument) WithThumbURL(thumbURL string) *InlineQueryResultDocument {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultDocument) WithThumbnailURL(thumbnailURL string) *InlineQueryResultDocument {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbWidth adds thumb width parameter
-func (i *InlineQueryResultDocument) WithThumbWidth(thumbWidth int) *InlineQueryResultDocument {
-	i.ThumbWidth = thumbWidth
+// WithThumbnailWidth adds thumbnail width parameter
+func (i *InlineQueryResultDocument) WithThumbnailWidth(thumbnailWidth int) *InlineQueryResultDocument {
+	i.ThumbnailWidth = thumbnailWidth
 	return i
 }
 
-// WithThumbHeight adds thumb height parameter
-func (i *InlineQueryResultDocument) WithThumbHeight(thumbHeight int) *InlineQueryResultDocument {
-	i.ThumbHeight = thumbHeight
+// WithThumbnailHeight adds thumbnail height parameter
+func (i *InlineQueryResultDocument) WithThumbnailHeight(thumbnailHeight int) *InlineQueryResultDocument {
+	i.ThumbnailHeight = thumbnailHeight
 	return i
 }
 
@@ -1023,21 +1023,21 @@ func (i *InlineQueryResultLocation) WithInputMessageContent(inputMessageContent 
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultLocation) WithThumbURL(thumbURL string) *InlineQueryResultLocation {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultLocation) WithThumbnailURL(thumbnailURL string) *InlineQueryResultLocation {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbWidth adds thumb width parameter
-func (i *InlineQueryResultLocation) WithThumbWidth(thumbWidth int) *InlineQueryResultLocation {
-	i.ThumbWidth = thumbWidth
+// WithThumbnailWidth adds thumbnail width parameter
+func (i *InlineQueryResultLocation) WithThumbnailWidth(thumbnailWidth int) *InlineQueryResultLocation {
+	i.ThumbnailWidth = thumbnailWidth
 	return i
 }
 
-// WithThumbHeight adds thumb height parameter
-func (i *InlineQueryResultLocation) WithThumbHeight(thumbHeight int) *InlineQueryResultLocation {
-	i.ThumbHeight = thumbHeight
+// WithThumbnailHeight adds thumbnail height parameter
+func (i *InlineQueryResultLocation) WithThumbnailHeight(thumbnailHeight int) *InlineQueryResultLocation {
+	i.ThumbnailHeight = thumbnailHeight
 	return i
 }
 
@@ -1096,21 +1096,21 @@ func (i *InlineQueryResultVenue) WithInputMessageContent(inputMessageContent Inp
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultVenue) WithThumbURL(thumbURL string) *InlineQueryResultVenue {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultVenue) WithThumbnailURL(thumbnailURL string) *InlineQueryResultVenue {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbWidth adds thumb width parameter
-func (i *InlineQueryResultVenue) WithThumbWidth(thumbWidth int) *InlineQueryResultVenue {
-	i.ThumbWidth = thumbWidth
+// WithThumbnailWidth adds thumbnail width parameter
+func (i *InlineQueryResultVenue) WithThumbnailWidth(thumbnailWidth int) *InlineQueryResultVenue {
+	i.ThumbnailWidth = thumbnailWidth
 	return i
 }
 
-// WithThumbHeight adds thumb height parameter
-func (i *InlineQueryResultVenue) WithThumbHeight(thumbHeight int) *InlineQueryResultVenue {
-	i.ThumbHeight = thumbHeight
+// WithThumbnailHeight adds thumbnail height parameter
+func (i *InlineQueryResultVenue) WithThumbnailHeight(thumbnailHeight int) *InlineQueryResultVenue {
+	i.ThumbnailHeight = thumbnailHeight
 	return i
 }
 
@@ -1157,21 +1157,21 @@ func (i *InlineQueryResultContact) WithInputMessageContent(inputMessageContent I
 	return i
 }
 
-// WithThumbURL adds thumb URL parameter
-func (i *InlineQueryResultContact) WithThumbURL(thumbURL string) *InlineQueryResultContact {
-	i.ThumbURL = thumbURL
+// WithThumbnailURL adds thumbnail URL parameter
+func (i *InlineQueryResultContact) WithThumbnailURL(thumbnailURL string) *InlineQueryResultContact {
+	i.ThumbnailURL = thumbnailURL
 	return i
 }
 
-// WithThumbWidth adds thumb width parameter
-func (i *InlineQueryResultContact) WithThumbWidth(thumbWidth int) *InlineQueryResultContact {
-	i.ThumbWidth = thumbWidth
+// WithThumbnailWidth adds thumbnail width parameter
+func (i *InlineQueryResultContact) WithThumbnailWidth(thumbnailWidth int) *InlineQueryResultContact {
+	i.ThumbnailWidth = thumbnailWidth
 	return i
 }
 
-// WithThumbHeight adds thumb height parameter
-func (i *InlineQueryResultContact) WithThumbHeight(thumbHeight int) *InlineQueryResultContact {
-	i.ThumbHeight = thumbHeight
+// WithThumbnailHeight adds thumbnail height parameter
+func (i *InlineQueryResultContact) WithThumbnailHeight(thumbnailHeight int) *InlineQueryResultContact {
+	i.ThumbnailHeight = thumbnailHeight
 	return i
 }
 

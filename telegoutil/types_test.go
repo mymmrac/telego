@@ -307,7 +307,7 @@ func TestResultGif(t *testing.T) {
 	assert.Equal(t, telego.ResultTypeGif, r.Type)
 	assert.Equal(t, text1, r.ID)
 	assert.Equal(t, text2, r.GifURL)
-	assert.Equal(t, text3, r.ThumbURL)
+	assert.Equal(t, text3, r.ThumbnailURL)
 }
 
 func TestResultLocation(t *testing.T) {
@@ -324,7 +324,7 @@ func TestResultMpeg4Gif(t *testing.T) {
 	assert.Equal(t, telego.ResultTypeMpeg4Gif, r.Type)
 	assert.Equal(t, text1, r.ID)
 	assert.Equal(t, text2, r.Mpeg4URL)
-	assert.Equal(t, text3, r.ThumbURL)
+	assert.Equal(t, text3, r.ThumbnailURL)
 }
 
 func TestResultPhoto(t *testing.T) {
@@ -332,7 +332,7 @@ func TestResultPhoto(t *testing.T) {
 	assert.Equal(t, telego.ResultTypePhoto, r.Type)
 	assert.Equal(t, text1, r.ID)
 	assert.Equal(t, text2, r.PhotoURL)
-	assert.Equal(t, text3, r.ThumbURL)
+	assert.Equal(t, text3, r.ThumbnailURL)
 }
 
 func TestResultVenue(t *testing.T) {
@@ -351,7 +351,7 @@ func TestResultVideo(t *testing.T) {
 	assert.Equal(t, text1, r.ID)
 	assert.Equal(t, text2, r.VideoURL)
 	assert.Equal(t, text3, r.MimeType)
-	assert.Equal(t, text4, r.ThumbURL)
+	assert.Equal(t, text4, r.ThumbnailURL)
 	assert.Equal(t, text5, r.Title)
 }
 

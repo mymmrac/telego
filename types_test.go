@@ -504,52 +504,52 @@ func TestInputMedia_fileParameters(t *testing.T) {
 
 func TestInputMediaVideo_fileParameters(t *testing.T) {
 	im := &InputMediaVideo{
-		Media: testInputFile,
-		Thumb: &testInputFile,
+		Media:     testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"media": testNamedReade{},
-		"thumb": testNamedReade{},
+		"media":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
 }
 
 func TestInputMediaAnimation_fileParameters(t *testing.T) {
 	im := &InputMediaAnimation{
-		Media: testInputFile,
-		Thumb: &testInputFile,
+		Media:     testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"media": testNamedReade{},
-		"thumb": testNamedReade{},
+		"media":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
 }
 
 func TestInputMediaAudio_fileParameters(t *testing.T) {
 	im := &InputMediaAudio{
-		Media: testInputFile,
-		Thumb: &testInputFile,
+		Media:     testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"media": testNamedReade{},
-		"thumb": testNamedReade{},
+		"media":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
 }
 
 func TestInputMediaDocument_fileParameters(t *testing.T) {
 	im := &InputMediaDocument{
-		Media: testInputFile,
-		Thumb: &testInputFile,
+		Media:     testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"media": testNamedReade{},
-		"thumb": testNamedReade{},
+		"media":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
 }

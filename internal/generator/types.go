@@ -164,7 +164,7 @@ func parseCurrentTypes(types string) map[string][]string {
 					break
 				}
 
-				if !strings.HasPrefix(lines[start], "// ") {
+				if !strings.HasPrefix(lines[start], "//") {
 					break
 				}
 			}
