@@ -131,7 +131,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 	filesParams, hasFiles := filesParameters(parameters)
 	var data *telegoapi.RequestData
 
-	debug := strings.Builder{}
+	debug := &strings.Builder{}
 
 	if hasFiles {
 		parsedParameters, err := parseParameters(parameters)
@@ -258,7 +258,7 @@ func isNil(i interface{}) bool {
 	}
 }
 
-func logRequestWithFiles(debug strings.Builder, parameters map[string]string, files map[string]telegoapi.NamedReader) {
+func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, files map[string]telegoapi.NamedReader) {
 	i := 0
 	debugFiles := make([]string, len(files))
 	for k, v := range files {

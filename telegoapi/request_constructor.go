@@ -8,7 +8,6 @@ import (
 	"io"
 	"mime/multipart"
 	"reflect"
-	"strings"
 
 	"github.com/goccy/go-json"
 )
@@ -57,13 +56,7 @@ func (d DefaultConstructor) MultipartRequest(parameters map[string]string, files
 	}
 
 	for field, value := range parameters {
-		wr, err := writer.CreateFormField(field)
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(wr, strings.NewReader(value))
-		if err != nil {
+		if err := writer.WriteField(field, value); err != nil {
 			return nil, err
 		}
 	}

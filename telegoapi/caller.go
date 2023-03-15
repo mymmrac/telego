@@ -57,7 +57,7 @@ func (h HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("http create request: %w", err)
 	}
-	req.Header.Set(ContentTypeHeader, ContentTypeJSON)
+	req.Header.Set(ContentTypeHeader, data.ContentType)
 
 	resp, err := h.Client.Do(req)
 	if err != nil {
