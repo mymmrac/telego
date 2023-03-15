@@ -2660,7 +2660,7 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			Call(gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerSetThumb(nil)
+		err := m.Bot.SetStickerSetThumbnail(nil)
 		assert.NoError(t, err)
 	})
 
@@ -2669,7 +2669,7 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerSetThumb(nil)
+		err := m.Bot.SetStickerSetThumbnail(nil)
 		assert.Error(t, err)
 	})
 }
@@ -2992,49 +2992,49 @@ func TestSendPhotoParams_fileParameters(t *testing.T) {
 
 func TestSendAudioParams_fileParameters(t *testing.T) {
 	p := &SendAudioParams{
-		Audio: testInputFile,
-		Thumb: &testInputFile,
+		Audio:     testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"audio": testNamedReade{},
-		"thumb": testNamedReade{},
+		"audio":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestSendDocumentParams_fileParameters(t *testing.T) {
 	p := &SendDocumentParams{
-		Document: testInputFile,
-		Thumb:    &testInputFile,
+		Document:  testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"document": testNamedReade{},
-		"thumb":    testNamedReade{},
+		"document":  testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestSendVideoParams_fileParameters(t *testing.T) {
 	p := &SendVideoParams{
-		Video: testInputFile,
-		Thumb: &testInputFile,
+		Video:     testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"video": testNamedReade{},
-		"thumb": testNamedReade{},
+		"video":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestSendAnimationParams_fileParameters(t *testing.T) {
 	p := &SendAnimationParams{
 		Animation: testInputFile,
-		Thumb:     &testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"animation": testNamedReade{},
-		"thumb":     testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
 }
 
@@ -3051,12 +3051,12 @@ func TestSendVoiceParams_fileParameters(t *testing.T) {
 func TestSendVideoNoteParams_fileParameters(t *testing.T) {
 	p := &SendVideoNoteParams{
 		VideoNote: testInputFile,
-		Thumb:     &testInputFile,
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"video_note": testNamedReade{},
-		"thumb":      testNamedReade{},
+		"thumbnail":  testNamedReade{},
 	}, p.fileParameters())
 }
 
@@ -3114,49 +3114,44 @@ func TestSendStickerParams_fileParameters(t *testing.T) {
 
 func TestUploadStickerFileParams_fileParameters(t *testing.T) {
 	p := &UploadStickerFileParams{
-		PngSticker: testInputFile,
+		Sticker: testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"png_sticker": testNamedReade{},
+		"sticker": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestCreateNewStickerSetParams_fileParameters(t *testing.T) {
 	p := &CreateNewStickerSetParams{
-		PngSticker:  &testInputFile,
-		TgsSticker:  &testInputFile,
-		WebmSticker: &testInputFile,
+		Stickers: []InputSticker{
+			{Sticker: testInputFile},
+			{Sticker: testInputFile},
+		},
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"png_sticker":  testNamedReade{},
-		"tgs_sticker":  testNamedReade{},
-		"webm_sticker": testNamedReade{},
+		"test": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestAddStickerToSetParams_fileParameters(t *testing.T) {
 	p := &AddStickerToSetParams{
-		PngSticker:  &testInputFile,
-		TgsSticker:  &testInputFile,
-		WebmSticker: &testInputFile,
+		Sticker: InputSticker{Sticker: testInputFile},
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"png_sticker":  testNamedReade{},
-		"tgs_sticker":  testNamedReade{},
-		"webm_sticker": testNamedReade{},
+		"sticker": testNamedReade{},
 	}, p.fileParameters())
 }
 
 func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {
-	p := &SetStickerSetThumbParams{
-		Thumb: &testInputFile,
+	p := &SetStickerSetThumbnailParams{
+		Thumbnail: &testInputFile,
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"thumb": testNamedReade{},
+		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
 }
 
@@ -3174,6 +3169,9 @@ func TestMethodsConstants(t *testing.T) {
 			ChatActionTyping, ChatActionUploadPhoto, ChatActionRecordVideo, ChatActionUploadVideo,
 			ChatActionRecordVoice, ChatActionUploadVoice, ChatActionUploadDocument, ChatActionChooseSticker,
 			ChatActionFindLocation, ChatActionRecordVideoNote, ChatActionUploadVideoNote,
+		},
+		{
+			StickerFormatStatic, StickerFormatAnimated, StickerFormatVideo,
 		},
 	}
 

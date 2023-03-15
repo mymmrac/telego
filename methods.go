@@ -470,13 +470,13 @@ type SendAudioParams struct {
 	// Title - Optional. Track name
 	Title string `json:"title,omitempty"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -503,8 +503,8 @@ func (p *SendAudioParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
 	fp["audio"] = p.Audio.File
-	if p.Thumb != nil {
-		fp["thumb"] = p.Thumb.File
+	if p.Thumbnail != nil {
+		fp["thumbnail"] = p.Thumbnail.File
 	}
 
 	return fp
@@ -541,13 +541,13 @@ type SendDocumentParams struct {
 	// (https://core.telegram.org/bots/api#sending-files)
 	Document InputFile `json:"document"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Document caption (may also be used when resending documents by file_id), 0-1024
 	// characters after entities parsing
@@ -590,8 +590,8 @@ func (p *SendDocumentParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
 	fp["document"] = p.Document.File
-	if p.Thumb != nil {
-		fp["thumb"] = p.Thumb.File
+	if p.Thumbnail != nil {
+		fp["thumbnail"] = p.Thumbnail.File
 	}
 
 	return fp
@@ -635,13 +635,13 @@ type SendVideoParams struct {
 	// Height - Optional. Video height
 	Height int `json:"height,omitempty"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Video caption (may also be used when resending videos by file_id), 0-1024 characters
 	// after entities parsing
@@ -686,8 +686,8 @@ func (p *SendVideoParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
 	fp["video"] = p.Video.File
-	if p.Thumb != nil {
-		fp["thumb"] = p.Thumb.File
+	if p.Thumbnail != nil {
+		fp["thumbnail"] = p.Thumbnail.File
 	}
 
 	return fp
@@ -732,13 +732,13 @@ type SendAnimationParams struct {
 	// Height - Optional. Animation height
 	Height int `json:"height,omitempty"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Caption - Optional. Animation caption (may also be used when resending animation by file_id), 0-1024
 	// characters after entities parsing
@@ -780,8 +780,8 @@ func (p *SendAnimationParams) fileParameters() map[string]telegoapi.NamedReader 
 	fp := make(map[string]telegoapi.NamedReader)
 
 	fp["animation"] = p.Animation.File
-	if p.Thumb != nil {
-		fp["thumb"] = p.Thumb.File
+	if p.Thumbnail != nil {
+		fp["thumbnail"] = p.Thumbnail.File
 	}
 
 	return fp
@@ -894,13 +894,13 @@ type SendVideoNoteParams struct {
 	// Length - Optional. Video width and height, i.e. diameter of the video message
 	Length int `json:"length,omitempty"`
 
-	// Thumb - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
 	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
 	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
 	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
 	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
-	Thumb *InputFile `json:"thumb,omitempty"`
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -927,8 +927,8 @@ func (p *SendVideoNoteParams) fileParameters() map[string]telegoapi.NamedReader 
 	fp := make(map[string]telegoapi.NamedReader)
 
 	fp["video_note"] = p.VideoNote.File
-	if p.Thumb != nil {
-		fp["thumb"] = p.Thumb.File
+	if p.Thumbnail != nil {
+		fp["thumbnail"] = p.Thumbnail.File
 	}
 
 	return fp
@@ -1062,90 +1062,6 @@ func (b *Bot) SendLocation(params *SendLocationParams) (*Message, error) {
 	err := b.performRequest("sendLocation", params, &message)
 	if err != nil {
 		return nil, fmt.Errorf("telego: sendLocation(): %w", err)
-	}
-
-	return message, nil
-}
-
-// EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
-type EditMessageLiveLocationParams struct {
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// Latitude - Latitude of new location
-	Latitude float64 `json:"latitude"`
-
-	// Longitude - Longitude of new location
-	Longitude float64 `json:"longitude"`
-
-	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
-	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
-
-	// Heading - Optional. Direction in which the user is moving, in degrees. Must be between 1 and 360 if
-	// specified.
-	Heading int `json:"heading,omitempty"`
-
-	// ProximityAlertRadius - Optional. The maximum distance for proximity alerts about approaching another chat
-	// member, in meters. Must be between 1 and 100000 if specified.
-	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
-// its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
-// (https://core.telegram.org/bots/api#stopmessagelivelocation). On success, if the edited message is not an
-// inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True
-// is returned.
-func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest("editMessageLiveLocation", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageLiveLocation(): %w", err)
-	}
-
-	return message, nil
-}
-
-// StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
-type StopMessageLiveLocationParams struct {
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message with live
-	// location to stop
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
-// expires. On success, if the message is not an inline message, the edited Message
-// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
-func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest("stopMessageLiveLocation", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: stopMessageLiveLocation(): %w", err)
 	}
 
 	return message, nil
@@ -2614,6 +2530,86 @@ func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
 	return botCommands, nil
 }
 
+// SetMyDescriptionParams - Represents parameters of setMyDescription method.
+type SetMyDescriptionParams struct {
+	// Description - Optional. New bot description; 0-512 characters. Pass an empty string to remove the
+	// dedicated description for the given language.
+	Description string `json:"description,omitempty"` // TODO: Test
+
+	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, the description will be applied
+	// to all users for whose language there is no dedicated description.
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+// SetMyDescription - Use this method to change the bot's description, which is shown in the chat with the
+// bot if the chat is empty. Returns True on success.
+func (b *Bot) SetMyDescription(params *SetMyDescriptionParams) error {
+	err := b.performRequest("setMyDescription", params)
+	if err != nil {
+		return fmt.Errorf("telego: setMyDescription(): %w", err)
+	}
+
+	return nil
+}
+
+// GetMyDescriptionParams - Represents parameters of getMyDescription method.
+type GetMyDescriptionParams struct {
+	// LanguageCode - Optional. A two-letter ISO 639-1 language code or an empty string
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+// GetMyDescription - Use this method to get the current bot description for the given user language. Returns
+// BotDescription (https://core.telegram.org/bots/api#botdescription) on success.
+func (b *Bot) GetMyDescription(params *GetMyDescriptionParams) (*BotDescription, error) {
+	var botDescription *BotDescription
+	err := b.performRequest("getMyDescription", params, &botDescription)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getMyDescription(): %w", err)
+	}
+
+	return botDescription, nil
+}
+
+// SetMyShortDescriptionParams - Represents parameters of setMyShortDescription method.
+type SetMyShortDescriptionParams struct {
+	// ShortDescription - Optional. New short description for the bot; 0-120 characters. Pass an empty string to
+	// remove the dedicated short description for the given language.
+	ShortDescription string `json:"short_description,omitempty"` // TODO: Test
+
+	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, the short description will be
+	// applied to all users for whose language there is no dedicated short description.
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+// SetMyShortDescription - Use this method to change the bot's short description, which is shown on the bot's
+// profile page and is sent together with the link when users share the bot. Returns True on success.
+func (b *Bot) SetMyShortDescription(params *SetMyShortDescriptionParams) error {
+	err := b.performRequest("setMyShortDescription", params)
+	if err != nil {
+		return fmt.Errorf("telego: setMyShortDescription(): %w", err)
+	}
+
+	return nil
+}
+
+// GetMyShortDescriptionParams - Represents parameters of getMyShortDescription method.
+type GetMyShortDescriptionParams struct {
+	// LanguageCode - Optional. A two-letter ISO 639-1 language code or an empty string
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+// GetMyShortDescription - Use this method to get the current bot short description for the given user
+// language. Returns BotShortDescription (https://core.telegram.org/bots/api#botshortdescription) on success.
+func (b *Bot) GetMyShortDescription(params *GetMyShortDescriptionParams) (*BotShortDescription, error) {
+	var botShortDescription *BotShortDescription
+	err := b.performRequest("getMyShortDescription", params, &botShortDescription)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getMyShortDescription(): %w", err)
+	}
+
+	return botShortDescription, nil
+}
+
 // SetChatMenuButtonParams - Represents parameters of setChatMenuButton method.
 type SetChatMenuButtonParams struct {
 	// ChatID - Optional. Unique identifier for the target private chat. If not specified, default bot's menu
@@ -2839,6 +2835,90 @@ func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error)
 	return message, nil
 }
 
+// EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
+type EditMessageLiveLocationParams struct {
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// Latitude - Latitude of new location
+	Latitude float64 `json:"latitude"`
+
+	// Longitude - Longitude of new location
+	Longitude float64 `json:"longitude"`
+
+	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
+	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
+
+	// Heading - Optional. Direction in which the user is moving, in degrees. Must be between 1 and 360 if
+	// specified.
+	Heading int `json:"heading,omitempty"`
+
+	// ProximityAlertRadius - Optional. The maximum distance for proximity alerts about approaching another chat
+	// member, in meters. Must be between 1 and 100000 if specified.
+	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
+// its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
+// (https://core.telegram.org/bots/api#stopmessagelivelocation). On success, if the edited message is not an
+// inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True
+// is returned.
+func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest("editMessageLiveLocation", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageLiveLocation(): %w", err)
+	}
+
+	return message, nil
+}
+
+// StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
+type StopMessageLiveLocationParams struct {
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message with live
+	// location to stop
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
+// expires. On success, if the message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
+func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest("stopMessageLiveLocation", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: stopMessageLiveLocation(): %w", err)
+	}
+
+	return message, nil
+}
+
 // EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
 type EditMessageReplyMarkupParams struct {
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
@@ -2939,10 +3019,14 @@ type SendStickerParams struct {
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
-	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a
-	// new one using multipart/form-data. More information on Sending Files »
-	// (https://core.telegram.org/bots/api#sending-files)
+	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload
+	// a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files). Video stickers can only be sent by a file_id. Animated
+	// stickers can't be sent via an HTTP URL.
 	Sticker InputFile `json:"sticker"`
+
+	// Emoji - Optional. Emoji associated with the sticker; only for just uploaded stickers
+	Emoji string `json:"emoji,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -3025,21 +3109,32 @@ type UploadStickerFileParams struct {
 	// UserID - User identifier of sticker file owner
 	UserID int64 `json:"user_id"`
 
-	// PngSticker - PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed
-	// 512px, and either width or height must be exactly 512px. More information on Sending Files »
-	// (https://core.telegram.org/bots/api#sending-files)
-	PngSticker InputFile `json:"png_sticker"`
+	// Sticker - A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See
+	// https://core.telegram.org/stickers (https://core.telegram.org/stickers) for technical requirements. More
+	// information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Sticker InputFile `json:"sticker"`
+
+	// StickerFormat - Format of the sticker, must be one of “static”, “animated”, “video”
+	StickerFormat string `json:"sticker_format"`
 }
+
+// Sticker formats
+const (
+	StickerFormatStatic   = "static"
+	StickerFormatAnimated = "animated"
+	StickerFormatVideo    = "video"
+)
 
 func (p *UploadStickerFileParams) fileParameters() map[string]telegoapi.NamedReader {
 	return map[string]telegoapi.NamedReader{
-		"png_sticker": p.PngSticker.File,
+		"sticker": p.Sticker.File,
 	}
 }
 
-// UploadStickerFile - Use this method to upload a .PNG file with a sticker for later use in
-// createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File
-// (https://core.telegram.org/bots/api#file) on success.
+// UploadStickerFile - Use this method to upload a file with a sticker for later use in the
+// createNewStickerSet (https://core.telegram.org/bots/api#createnewstickerset) and addStickerToSet
+// (https://core.telegram.org/bots/api#addstickertoset) methods (the file can be used multiple times). Returns
+// the uploaded File (https://core.telegram.org/bots/api#file) on success.
 func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) (*File, error) {
 	var file *File
 	err := b.performRequest("uploadStickerFile", params, &file)
@@ -3063,53 +3158,42 @@ type CreateNewStickerSetParams struct {
 	// Title - Sticker set title, 1-64 characters
 	Title string `json:"title"`
 
-	// PngSticker - Optional. PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must
-	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
-	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
-	// Internet, or upload a new one using multipart/form-data. More information on Sending Files »
-	// (https://core.telegram.org/bots/api#sending-files)
-	PngSticker *InputFile `json:"png_sticker,omitempty"`
+	// Stickers - A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
+	Stickers []InputSticker `json:"stickers"`
 
-	// TgsSticker - Optional. TGS animation with the sticker, uploaded using multipart/form-data. See
-	// https://core.telegram.org/stickers#animated-sticker-requirements
-	// (https://core.telegram.org/stickers#animated-sticker-requirements) for technical requirements
-	TgsSticker *InputFile `json:"tgs_sticker,omitempty"`
+	// StickerFormat - Format of stickers in the set, must be one of “static”, “animated”, “video”
+	StickerFormat string `json:"sticker_format"`
 
-	// WebmSticker - Optional. WEBM video with the sticker, uploaded using multipart/form-data. See
-	// https://core.telegram.org/stickers#video-sticker-requirements
-	// (https://core.telegram.org/stickers#video-sticker-requirements) for technical requirements
-	WebmSticker *InputFile `json:"webm_sticker,omitempty"`
-
-	// StickerType - Optional. Type of stickers in the set, pass “regular” or “mask”. Custom emoji
-	// sticker sets can't be created via the Bot API at the moment. By default, a regular sticker set is created.
+	// StickerType - Optional. Type of stickers in the set, pass “regular”, “mask”, or
+	// “custom_emoji”. By default, a regular sticker set is created.
 	StickerType string `json:"sticker_type,omitempty"`
 
-	// Emojis - One or more emoji corresponding to the sticker
-	Emojis string `json:"emojis"`
-
-	// MaskPosition - Optional. A JSON-serialized object for position where the mask should be placed on faces
-	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
+	// NeedsRepainting - Optional. Pass True if stickers in the sticker set must be repainted to the color of
+	// text when used in messages, the accent color if used as emoji status, white on chat photos, or another
+	// appropriate color based on context; for custom emoji sticker sets only
+	NeedsRepainting bool `json:"needs_repainting,omitempty"`
 }
 
+// TODO: Test
 func (p *CreateNewStickerSetParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
-	if p.PngSticker != nil {
-		fp["png_sticker"] = p.PngSticker.File
-	}
-	if p.TgsSticker != nil {
-		fp["tgs_sticker"] = p.TgsSticker.File
-	}
-	if p.WebmSticker != nil {
-		fp["webm_sticker"] = p.WebmSticker.File
+	for i, s := range p.Stickers {
+		p.Stickers[i].Sticker.needAttach = true
+
+		file := s.Sticker.File
+		if isNil(file) {
+			continue
+		}
+
+		fp[file.Name()] = file
 	}
 
 	return fp
 }
 
 // CreateNewStickerSet - Use this method to create a new sticker set owned by a user. The bot will be able to
-// edit the sticker set thus created. You must use exactly one of the fields png_sticker, tgs_sticker, or
-// webm_sticker. Returns True on success.
+// edit the sticker set thus created. Returns True on success.
 func (b *Bot) CreateNewStickerSet(params *CreateNewStickerSetParams) error {
 	err := b.performRequest("createNewStickerSet", params)
 	if err != nil {
@@ -3127,50 +3211,21 @@ type AddStickerToSetParams struct {
 	// Name - Sticker set name
 	Name string `json:"name"`
 
-	// PngSticker - Optional. PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must
-	// not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file
-	// that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the
-	// Internet, or upload a new one using multipart/form-data. More information on Sending Files »
-	// (https://core.telegram.org/bots/api#sending-files)
-	PngSticker *InputFile `json:"png_sticker,omitempty"`
-
-	// TgsSticker - Optional. TGS animation with the sticker, uploaded using multipart/form-data. See
-	// https://core.telegram.org/stickers#animated-sticker-requirements
-	// (https://core.telegram.org/stickers#animated-sticker-requirements) for technical requirements
-	TgsSticker *InputFile `json:"tgs_sticker,omitempty"`
-
-	// WebmSticker - Optional. WEBM video with the sticker, uploaded using multipart/form-data. See
-	// https://core.telegram.org/stickers#video-sticker-requirements
-	// (https://core.telegram.org/stickers#video-sticker-requirements) for technical requirements
-	WebmSticker *InputFile `json:"webm_sticker,omitempty"`
-
-	// Emojis - One or more emoji corresponding to the sticker
-	Emojis string `json:"emojis"`
-
-	// MaskPosition - Optional. A JSON-serialized object for position where the mask should be placed on faces
-	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
+	// Sticker - A JSON-serialized object with information about the added sticker. If exactly the same sticker
+	// had already been added to the set, then the set isn't changed.
+	Sticker InputSticker `json:"sticker"`
 }
 
 func (p *AddStickerToSetParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
-
-	if p.PngSticker != nil {
-		fp["png_sticker"] = p.PngSticker.File
+	return map[string]telegoapi.NamedReader{ // TODO: Test
+		"sticker": p.Sticker.Sticker.File,
 	}
-	if p.TgsSticker != nil {
-		fp["tgs_sticker"] = p.TgsSticker.File
-	}
-	if p.WebmSticker != nil {
-		fp["webm_sticker"] = p.WebmSticker.File
-	}
-
-	return fp
 }
 
-// AddStickerToSet - Use this method to add a new sticker to a set created by the bot. You must use exactly
-// one of the fields png_sticker, tgs_sticker, or webm_sticker. Animated stickers can be added to animated
-// sticker sets and only to them. Animated sticker sets can have up to 50 stickers. Static sticker sets can have
-// up to 120 stickers. Returns True on success.
+// AddStickerToSet - Use this method to add a new sticker to a set created by the bot. The format of the
+// added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200
+// stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120
+// stickers. Returns True on success.
 func (b *Bot) AddStickerToSet(params *AddStickerToSetParams) error {
 	err := b.performRequest("addStickerToSet", params)
 	if err != nil {
@@ -3217,45 +3272,166 @@ func (b *Bot) DeleteStickerFromSet(params *DeleteStickerFromSetParams) error {
 	return nil
 }
 
-// SetStickerSetThumbParams - Represents parameters of setStickerSetThumb method.
-type SetStickerSetThumbParams struct {
+// SetStickerEmojiListParams - Represents parameters of setStickerEmojiList method.
+type SetStickerEmojiListParams struct {
+	// Sticker - File identifier of the sticker
+	Sticker string `json:"sticker"`
+
+	// EmojiList - A JSON-serialized list of 1-20 emoji associated with the sticker
+	EmojiList []string `json:"emoji_list"`
+}
+
+// SetStickerEmojiList - Use this method to change the list of emoji assigned to a regular or custom emoji
+// sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
+func (b *Bot) SetStickerEmojiList(params *SetStickerEmojiListParams) error {
+	err := b.performRequest("setStickerEmojiList", params)
+	if err != nil {
+		return fmt.Errorf("telego: setStickerEmojiList(): %w", err)
+	}
+
+	return nil
+}
+
+// SetStickerKeywordsParams - Represents parameters of setStickerKeywords method.
+type SetStickerKeywordsParams struct {
+	// Sticker - File identifier of the sticker
+	Sticker string `json:"sticker"`
+
+	// Keywords - Optional. A JSON-serialized list of 0-20 search keywords for the sticker with total length of
+	// up to 64 characters
+	Keywords []string `json:"keywords,omitempty"`
+}
+
+// SetStickerKeywords - Use this method to change search keywords assigned to a regular or custom emoji
+// sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
+func (b *Bot) SetStickerKeywords(params *SetStickerKeywordsParams) error {
+	err := b.performRequest("setStickerKeywords", params)
+	if err != nil {
+		return fmt.Errorf("telego: setStickerKeywords(): %w", err)
+	}
+
+	return nil
+}
+
+// SetStickerMaskPositionParams - Represents parameters of setStickerMaskPosition method.
+type SetStickerMaskPositionParams struct {
+	// Sticker - File identifier of the sticker
+	Sticker string `json:"sticker"`
+
+	// MaskPosition - Optional. A JSON-serialized object with the position where the mask should be placed on
+	// faces. Omit the parameter to remove the mask position.
+	MaskPosition *MaskPosition `json:"mask_position,omitempty"`
+}
+
+// SetStickerMaskPosition - Use this method to change the mask position
+// (https://core.telegram.org/bots/api#maskposition) of a mask sticker. The sticker must belong to a sticker set
+// that was created by the bot. Returns True on success.
+func (b *Bot) SetStickerMaskPosition(params *SetStickerMaskPositionParams) error {
+	err := b.performRequest("setStickerMaskPosition", params)
+	if err != nil {
+		return fmt.Errorf("telego: setStickerMaskPosition(): %w", err)
+	}
+
+	return nil
+}
+
+// SetStickerSetTitleParams - Represents parameters of setStickerSetTitle method.
+type SetStickerSetTitleParams struct {
+	// Name - Sticker set name
+	Name string `json:"name"`
+
+	// Title - Sticker set title, 1-64 characters
+	Title string `json:"title"`
+}
+
+// SetStickerSetTitle - Use this method to set the title of a created sticker set. Returns True on success.
+func (b *Bot) SetStickerSetTitle(params *SetStickerSetTitleParams) error {
+	err := b.performRequest("setStickerSetTitle", params)
+	if err != nil {
+		return fmt.Errorf("telego: setStickerSetTitle(): %w", err)
+	}
+
+	return nil
+}
+
+// SetStickerSetThumbnailParams - Represents parameters of setStickerSetThumbnail method.
+type SetStickerSetThumbnailParams struct {
 	// Name - Sticker set name
 	Name string `json:"name"`
 
 	// UserID - User identifier of the sticker set owner
 	UserID int64 `json:"user_id"`
 
-	// Thumb - Optional. A PNG image with the thumbnail, must be up to 128 kilobytes in size and have width and
-	// height exactly 100px, or a TGS animation with the thumbnail up to 32 kilobytes in size; see
-	// https://core.telegram.org/stickers#animated-sticker-requirements
+	// Thumbnail - Optional. A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and
+	// have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size
+	// (see https://core.telegram.org/stickers#animated-sticker-requirements
 	// (https://core.telegram.org/stickers#animated-sticker-requirements) for animated sticker technical
-	// requirements, or a WEBM video with the thumbnail up to 32 kilobytes in size; see
+	// requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see
 	// https://core.telegram.org/stickers#video-sticker-requirements
 	// (https://core.telegram.org/stickers#video-sticker-requirements) for video sticker technical requirements.
 	// Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a
 	// String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More
-	// information on Sending Files » (https://core.telegram.org/bots/api#sending-files). Animated sticker set
-	// thumbnails can't be uploaded via HTTP URL.
-	Thumb *InputFile `json:"thumb,omitempty"`
+	// information on Sending Files » (https://core.telegram.org/bots/api#sending-files). Animated and video
+	// sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the
+	// first sticker is used as the thumbnail.
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 }
 
-func (p *SetStickerSetThumbParams) fileParameters() map[string]telegoapi.NamedReader {
+func (p *SetStickerSetThumbnailParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
-	if p.Thumb != nil {
-		fp["thumb"] = p.Thumb.File
+	if p.Thumbnail != nil {
+		fp["thumbnail"] = p.Thumbnail.File
 	}
 
 	return fp
 }
 
-// SetStickerSetThumb - Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set
-// for animated sticker sets only. Video thumbnails can be set only for video sticker sets only. Returns True on
-// success.
-func (b *Bot) SetStickerSetThumb(params *SetStickerSetThumbParams) error {
-	err := b.performRequest("setStickerSetThumb", params)
+// SetStickerSetThumbnail - Use this method to set the thumbnail of a regular or mask sticker set. The format
+// of the thumbnail file must match the format of the stickers in the set. Returns True on success.
+func (b *Bot) SetStickerSetThumbnail(params *SetStickerSetThumbnailParams) error {
+	err := b.performRequest("setStickerSetThumbnail", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerSetThumb(): %w", err)
+		return fmt.Errorf("telego: setStickerSetThumbnail(): %w", err)
+	}
+
+	return nil
+}
+
+// SetCustomEmojiStickerSetThumbnailParams - Represents parameters of setCustomEmojiStickerSetThumbnail
+// method.
+type SetCustomEmojiStickerSetThumbnailParams struct {
+	// Name - Sticker set name
+	Name string `json:"name"`
+
+	// CustomEmojiID - Optional. Custom emoji identifier of a sticker from the sticker set; pass an empty string
+	// to drop the thumbnail and use the first sticker as the thumbnail.
+	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
+}
+
+// SetCustomEmojiStickerSetThumbnail - Use this method to set the thumbnail of a custom emoji sticker set.
+// Returns True on success.
+func (b *Bot) SetCustomEmojiStickerSetThumbnail(params *SetCustomEmojiStickerSetThumbnailParams) error {
+	err := b.performRequest("setCustomEmojiStickerSetThumbnail", params)
+	if err != nil {
+		return fmt.Errorf("telego: setCustomEmojiStickerSetThumbnail(): %w", err)
+	}
+
+	return nil
+}
+
+// DeleteStickerSetParams - Represents parameters of deleteStickerSet method.
+type DeleteStickerSetParams struct {
+	// Name - Sticker set name
+	Name string `json:"name"`
+}
+
+// DeleteStickerSet - Use this method to delete a sticker set that was created by the bot. Returns True on
+// success.
+func (b *Bot) DeleteStickerSet(params *DeleteStickerSetParams) error {
+	err := b.performRequest("deleteStickerSet", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteStickerSet(): %w", err)
 	}
 
 	return nil

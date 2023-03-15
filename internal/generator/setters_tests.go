@@ -172,6 +172,10 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "*KeyboardButtonRequestChat":
 		*counter++
 		return fmt.Sprintf("&KeyboardButtonRequestChat{RequestID: %d}", *counter)
+	case "[]InputSticker":
+		return "[]InputSticker{{}}"
+	case "InputSticker":
+		return "InputSticker{Sticker: testInputFile}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

@@ -173,7 +173,7 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		WithDuration(2).
 		WithPerformer("Performer").
 		WithTitle("Title").
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(3).
@@ -190,7 +190,7 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		Duration:                 2,
 		Performer:                "Performer",
 		Title:                    "Title",
-		Thumb:                    &testInputFile,
+		Thumbnail:                &testInputFile,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         3,
@@ -204,7 +204,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 4}).
 		WithMessageThreadID(1).
 		WithDocument(testInputFile).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -219,7 +219,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		ChatID:                      ChatID{ID: 4},
 		MessageThreadID:             1,
 		Document:                    testInputFile,
-		Thumb:                       &testInputFile,
+		Thumbnail:                   &testInputFile,
 		Caption:                     "Caption",
 		ParseMode:                   "ParseMode",
 		CaptionEntities:             []MessageEntity{{Type: "CaptionEntities"}},
@@ -240,7 +240,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithDuration(2).
 		WithWidth(3).
 		WithHeight(4).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -259,7 +259,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		Duration:                 2,
 		Width:                    3,
 		Height:                   4,
-		Thumb:                    &testInputFile,
+		Thumbnail:                &testInputFile,
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
 		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
@@ -281,7 +281,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		WithDuration(2).
 		WithWidth(3).
 		WithHeight(4).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -299,7 +299,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		Duration:                 2,
 		Width:                    3,
 		Height:                   4,
-		Thumb:                    &testInputFile,
+		Thumbnail:                &testInputFile,
 		Caption:                  "Caption",
 		ParseMode:                "ParseMode",
 		CaptionEntities:          []MessageEntity{{Type: "CaptionEntities"}},
@@ -350,7 +350,7 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 		WithVideoNote(testInputFile).
 		WithDuration(2).
 		WithLength(3).
-		WithThumb(&testInputFile).
+		WithThumbnail(&testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(4).
@@ -363,7 +363,7 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 		VideoNote:                testInputFile,
 		Duration:                 2,
 		Length:                   3,
-		Thumb:                    &testInputFile,
+		Thumbnail:                &testInputFile,
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         4,
@@ -420,43 +420,9 @@ func TestSendLocationParams_Setters(t *testing.T) {
 	}, s)
 }
 
-func TestEditMessageLiveLocationParams_Setters(t *testing.T) {
-	e := (&EditMessageLiveLocationParams{}).
-		WithChatID(ChatID{ID: 6}).
-		WithMessageID(1).
-		WithInlineMessageID("InlineMessageID").
-		WithHeading(2).
-		WithProximityAlertRadius(3).
-		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
-
-	assert.Equal(t, &EditMessageLiveLocationParams{
-		ChatID:               ChatID{ID: 6},
-		MessageID:            1,
-		InlineMessageID:      "InlineMessageID",
-		Heading:              2,
-		ProximityAlertRadius: 3,
-		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-	}, e)
-}
-
-func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
-	s := (&StopMessageLiveLocationParams{}).
-		WithChatID(ChatID{ID: 4}).
-		WithMessageID(1).
-		WithInlineMessageID("InlineMessageID").
-		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
-
-	assert.Equal(t, &StopMessageLiveLocationParams{
-		ChatID:          ChatID{ID: 4},
-		MessageID:       1,
-		InlineMessageID: "InlineMessageID",
-		ReplyMarkup:     &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-	}, s)
-}
-
 func TestSendVenueParams_Setters(t *testing.T) {
 	s := (&SendVenueParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 6}).
 		WithMessageThreadID(1).
 		WithTitle("Title").
 		WithAddress("Address").
@@ -471,7 +437,7 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVenueParams{
-		ChatID:                   ChatID{ID: 2},
+		ChatID:                   ChatID{ID: 6},
 		MessageThreadID:          1,
 		Title:                    "Title",
 		Address:                  "Address",
@@ -1108,6 +1074,46 @@ func TestGetMyCommandsParams_Setters(t *testing.T) {
 	}, g)
 }
 
+func TestSetMyDescriptionParams_Setters(t *testing.T) {
+	s := (&SetMyDescriptionParams{}).
+		WithDescription("Description").
+		WithLanguageCode("LanguageCode")
+
+	assert.Equal(t, &SetMyDescriptionParams{
+		Description:  "Description",
+		LanguageCode: "LanguageCode",
+	}, s)
+}
+
+func TestGetMyDescriptionParams_Setters(t *testing.T) {
+	g := (&GetMyDescriptionParams{}).
+		WithLanguageCode("LanguageCode")
+
+	assert.Equal(t, &GetMyDescriptionParams{
+		LanguageCode: "LanguageCode",
+	}, g)
+}
+
+func TestSetMyShortDescriptionParams_Setters(t *testing.T) {
+	s := (&SetMyShortDescriptionParams{}).
+		WithShortDescription("ShortDescription").
+		WithLanguageCode("LanguageCode")
+
+	assert.Equal(t, &SetMyShortDescriptionParams{
+		ShortDescription: "ShortDescription",
+		LanguageCode:     "LanguageCode",
+	}, s)
+}
+
+func TestGetMyShortDescriptionParams_Setters(t *testing.T) {
+	g := (&GetMyShortDescriptionParams{}).
+		WithLanguageCode("LanguageCode")
+
+	assert.Equal(t, &GetMyShortDescriptionParams{
+		LanguageCode: "LanguageCode",
+	}, g)
+}
+
 func TestSetChatMenuButtonParams_Setters(t *testing.T) {
 	s := (&SetChatMenuButtonParams{}).
 		WithMenuButton(&MenuButtonCommands{Type: "MenuButton"})
@@ -1198,6 +1204,40 @@ func TestEditMessageMediaParams_Setters(t *testing.T) {
 	}, e)
 }
 
+func TestEditMessageLiveLocationParams_Setters(t *testing.T) {
+	e := (&EditMessageLiveLocationParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageID(1).
+		WithInlineMessageID("InlineMessageID").
+		WithHeading(2).
+		WithProximityAlertRadius(3).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &EditMessageLiveLocationParams{
+		ChatID:               ChatID{ID: 2},
+		MessageID:            1,
+		InlineMessageID:      "InlineMessageID",
+		Heading:              2,
+		ProximityAlertRadius: 3,
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
+}
+
+func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
+	s := (&StopMessageLiveLocationParams{}).
+		WithChatID(ChatID{ID: 4}).
+		WithMessageID(1).
+		WithInlineMessageID("InlineMessageID").
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &StopMessageLiveLocationParams{
+		ChatID:          ChatID{ID: 4},
+		MessageID:       1,
+		InlineMessageID: "InlineMessageID",
+		ReplyMarkup:     &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, s)
+}
+
 func TestEditMessageReplyMarkupParams_Setters(t *testing.T) {
 	e := (&EditMessageReplyMarkupParams{}).
 		WithChatID(ChatID{ID: 2}).
@@ -1242,6 +1282,7 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 2}).
 		WithMessageThreadID(1).
 		WithSticker(testInputFile).
+		WithEmoji("Emoji").
 		WithDisableNotification().
 		WithProtectContent().
 		WithReplyToMessageID(2).
@@ -1252,6 +1293,7 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		ChatID:                   ChatID{ID: 2},
 		MessageThreadID:          1,
 		Sticker:                  testInputFile,
+		Emoji:                    "Emoji",
 		DisableNotification:      true,
 		ProtectContent:           true,
 		ReplyToMessageID:         2,
@@ -1280,10 +1322,12 @@ func TestGetCustomEmojiStickersParams_Setters(t *testing.T) {
 
 func TestUploadStickerFileParams_Setters(t *testing.T) {
 	u := (&UploadStickerFileParams{}).
-		WithPngSticker(testInputFile)
+		WithSticker(testInputFile).
+		WithStickerFormat("StickerFormat")
 
 	assert.Equal(t, &UploadStickerFileParams{
-		PngSticker: testInputFile,
+		Sticker:       testInputFile,
+		StickerFormat: "StickerFormat",
 	}, u)
 }
 
@@ -1291,41 +1335,29 @@ func TestCreateNewStickerSetParams_Setters(t *testing.T) {
 	c := (&CreateNewStickerSetParams{}).
 		WithName("Name").
 		WithTitle("Title").
-		WithPngSticker(&testInputFile).
-		WithTgsSticker(&testInputFile).
-		WithWebmSticker(&testInputFile).
+		WithStickers([]InputSticker{{}}...).
+		WithStickerFormat("StickerFormat").
 		WithStickerType("StickerType").
-		WithEmojis("Emojis").
-		WithMaskPosition(&MaskPosition{Point: "MaskPosition"})
+		WithNeedsRepainting()
 
 	assert.Equal(t, &CreateNewStickerSetParams{
-		Name:         "Name",
-		Title:        "Title",
-		PngSticker:   &testInputFile,
-		TgsSticker:   &testInputFile,
-		WebmSticker:  &testInputFile,
-		StickerType:  "StickerType",
-		Emojis:       "Emojis",
-		MaskPosition: &MaskPosition{Point: "MaskPosition"},
+		Name:            "Name",
+		Title:           "Title",
+		Stickers:        []InputSticker{{}},
+		StickerFormat:   "StickerFormat",
+		StickerType:     "StickerType",
+		NeedsRepainting: true,
 	}, c)
 }
 
 func TestAddStickerToSetParams_Setters(t *testing.T) {
 	a := (&AddStickerToSetParams{}).
 		WithName("Name").
-		WithPngSticker(&testInputFile).
-		WithTgsSticker(&testInputFile).
-		WithWebmSticker(&testInputFile).
-		WithEmojis("Emojis").
-		WithMaskPosition(&MaskPosition{Point: "MaskPosition"})
+		WithSticker(InputSticker{Sticker: testInputFile})
 
 	assert.Equal(t, &AddStickerToSetParams{
-		Name:         "Name",
-		PngSticker:   &testInputFile,
-		TgsSticker:   &testInputFile,
-		WebmSticker:  &testInputFile,
-		Emojis:       "Emojis",
-		MaskPosition: &MaskPosition{Point: "MaskPosition"},
+		Name:    "Name",
+		Sticker: InputSticker{Sticker: testInputFile},
 	}, a)
 }
 
@@ -1349,15 +1381,79 @@ func TestDeleteStickerFromSetParams_Setters(t *testing.T) {
 	}, d)
 }
 
-func TestSetStickerSetThumbParams_Setters(t *testing.T) {
-	s := (&SetStickerSetThumbParams{}).
-		WithName("Name").
-		WithThumb(&testInputFile)
+func TestSetStickerEmojiListParams_Setters(t *testing.T) {
+	s := (&SetStickerEmojiListParams{}).
+		WithSticker("Sticker").
+		WithEmojiList([]string{"EmojiList"}...)
 
-	assert.Equal(t, &SetStickerSetThumbParams{
-		Name:  "Name",
-		Thumb: &testInputFile,
+	assert.Equal(t, &SetStickerEmojiListParams{
+		Sticker:   "Sticker",
+		EmojiList: []string{"EmojiList"},
 	}, s)
+}
+
+func TestSetStickerKeywordsParams_Setters(t *testing.T) {
+	s := (&SetStickerKeywordsParams{}).
+		WithSticker("Sticker").
+		WithKeywords([]string{"Keywords"}...)
+
+	assert.Equal(t, &SetStickerKeywordsParams{
+		Sticker:  "Sticker",
+		Keywords: []string{"Keywords"},
+	}, s)
+}
+
+func TestSetStickerMaskPositionParams_Setters(t *testing.T) {
+	s := (&SetStickerMaskPositionParams{}).
+		WithSticker("Sticker").
+		WithMaskPosition(&MaskPosition{Point: "MaskPosition"})
+
+	assert.Equal(t, &SetStickerMaskPositionParams{
+		Sticker:      "Sticker",
+		MaskPosition: &MaskPosition{Point: "MaskPosition"},
+	}, s)
+}
+
+func TestSetStickerSetTitleParams_Setters(t *testing.T) {
+	s := (&SetStickerSetTitleParams{}).
+		WithName("Name").
+		WithTitle("Title")
+
+	assert.Equal(t, &SetStickerSetTitleParams{
+		Name:  "Name",
+		Title: "Title",
+	}, s)
+}
+
+func TestSetStickerSetThumbnailParams_Setters(t *testing.T) {
+	s := (&SetStickerSetThumbnailParams{}).
+		WithName("Name").
+		WithThumbnail(&testInputFile)
+
+	assert.Equal(t, &SetStickerSetThumbnailParams{
+		Name:      "Name",
+		Thumbnail: &testInputFile,
+	}, s)
+}
+
+func TestSetCustomEmojiStickerSetThumbnailParams_Setters(t *testing.T) {
+	s := (&SetCustomEmojiStickerSetThumbnailParams{}).
+		WithName("Name").
+		WithCustomEmojiID("CustomEmojiID")
+
+	assert.Equal(t, &SetCustomEmojiStickerSetThumbnailParams{
+		Name:          "Name",
+		CustomEmojiID: "CustomEmojiID",
+	}, s)
+}
+
+func TestDeleteStickerSetParams_Setters(t *testing.T) {
+	d := (&DeleteStickerSetParams{}).
+		WithName("Name")
+
+	assert.Equal(t, &DeleteStickerSetParams{
+		Name: "Name",
+	}, d)
 }
 
 func TestAnswerInlineQueryParams_Setters(t *testing.T) {

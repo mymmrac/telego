@@ -372,9 +372,9 @@ func (p *SendAudioParams) WithTitle(title string) *SendAudioParams {
 	return p
 }
 
-// WithThumb adds thumb parameter
-func (p *SendAudioParams) WithThumb(thumb *InputFile) *SendAudioParams {
-	p.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (p *SendAudioParams) WithThumbnail(thumbnail *InputFile) *SendAudioParams {
+	p.Thumbnail = thumbnail
 	return p
 }
 
@@ -426,9 +426,9 @@ func (p *SendDocumentParams) WithDocument(document InputFile) *SendDocumentParam
 	return p
 }
 
-// WithThumb adds thumb parameter
-func (p *SendDocumentParams) WithThumb(thumb *InputFile) *SendDocumentParams {
-	p.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (p *SendDocumentParams) WithThumbnail(thumbnail *InputFile) *SendDocumentParams {
+	p.Thumbnail = thumbnail
 	return p
 }
 
@@ -522,9 +522,9 @@ func (p *SendVideoParams) WithHeight(height int) *SendVideoParams {
 	return p
 }
 
-// WithThumb adds thumb parameter
-func (p *SendVideoParams) WithThumb(thumb *InputFile) *SendVideoParams {
-	p.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (p *SendVideoParams) WithThumbnail(thumbnail *InputFile) *SendVideoParams {
+	p.Thumbnail = thumbnail
 	return p
 }
 
@@ -624,9 +624,9 @@ func (p *SendAnimationParams) WithHeight(height int) *SendAnimationParams {
 	return p
 }
 
-// WithThumb adds thumb parameter
-func (p *SendAnimationParams) WithThumb(thumb *InputFile) *SendAnimationParams {
-	p.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (p *SendAnimationParams) WithThumbnail(thumbnail *InputFile) *SendAnimationParams {
+	p.Thumbnail = thumbnail
 	return p
 }
 
@@ -786,9 +786,9 @@ func (p *SendVideoNoteParams) WithLength(length int) *SendVideoNoteParams {
 	return p
 }
 
-// WithThumb adds thumb parameter
-func (p *SendVideoNoteParams) WithThumb(thumb *InputFile) *SendVideoNoteParams {
-	p.Thumb = thumb
+// WithThumbnail adds thumbnail parameter
+func (p *SendVideoNoteParams) WithThumbnail(thumbnail *InputFile) *SendVideoNoteParams {
+	p.Thumbnail = thumbnail
 	return p
 }
 
@@ -920,69 +920,6 @@ func (p *SendLocationParams) WithAllowSendingWithoutReply() *SendLocationParams 
 
 // WithReplyMarkup adds reply markup parameter
 func (p *SendLocationParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendLocationParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageLiveLocationParams) WithChatID(chatID ChatID) *EditMessageLiveLocationParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageLiveLocationParams) WithMessageID(messageID int) *EditMessageLiveLocationParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *EditMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *EditMessageLiveLocationParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithHeading adds heading parameter
-func (p *EditMessageLiveLocationParams) WithHeading(heading int) *EditMessageLiveLocationParams {
-	p.Heading = heading
-	return p
-}
-
-// WithProximityAlertRadius adds proximity alert radius parameter
-func (p *EditMessageLiveLocationParams) WithProximityAlertRadius(proximityAlertRadius int,
-) *EditMessageLiveLocationParams {
-	p.ProximityAlertRadius = proximityAlertRadius
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *EditMessageLiveLocationParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *StopMessageLiveLocationParams) WithChatID(chatID ChatID) *StopMessageLiveLocationParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *StopMessageLiveLocationParams) WithMessageID(messageID int) *StopMessageLiveLocationParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *StopMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *StopMessageLiveLocationParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *StopMessageLiveLocationParams {
 	p.ReplyMarkup = replyMarkup
 	return p
 }
@@ -1900,6 +1837,42 @@ func (p *GetMyCommandsParams) WithLanguageCode(languageCode string) *GetMyComman
 	return p
 }
 
+// WithDescription adds description parameter
+func (p *SetMyDescriptionParams) WithDescription(description string) *SetMyDescriptionParams {
+	p.Description = description
+	return p
+}
+
+// WithLanguageCode adds language code parameter
+func (p *SetMyDescriptionParams) WithLanguageCode(languageCode string) *SetMyDescriptionParams {
+	p.LanguageCode = languageCode
+	return p
+}
+
+// WithLanguageCode adds language code parameter
+func (p *GetMyDescriptionParams) WithLanguageCode(languageCode string) *GetMyDescriptionParams {
+	p.LanguageCode = languageCode
+	return p
+}
+
+// WithShortDescription adds short description parameter
+func (p *SetMyShortDescriptionParams) WithShortDescription(shortDescription string) *SetMyShortDescriptionParams {
+	p.ShortDescription = shortDescription
+	return p
+}
+
+// WithLanguageCode adds language code parameter
+func (p *SetMyShortDescriptionParams) WithLanguageCode(languageCode string) *SetMyShortDescriptionParams {
+	p.LanguageCode = languageCode
+	return p
+}
+
+// WithLanguageCode adds language code parameter
+func (p *GetMyShortDescriptionParams) WithLanguageCode(languageCode string) *GetMyShortDescriptionParams {
+	p.LanguageCode = languageCode
+	return p
+}
+
 // WithMenuButton adds menu button parameter
 func (p *SetChatMenuButtonParams) WithMenuButton(menuButton MenuButton) *SetChatMenuButtonParams {
 	p.MenuButton = menuButton
@@ -2046,6 +2019,69 @@ func (p *EditMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithChatID adds chat ID parameter
+func (p *EditMessageLiveLocationParams) WithChatID(chatID ChatID) *EditMessageLiveLocationParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageLiveLocationParams) WithMessageID(messageID int) *EditMessageLiveLocationParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *EditMessageLiveLocationParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithHeading adds heading parameter
+func (p *EditMessageLiveLocationParams) WithHeading(heading int) *EditMessageLiveLocationParams {
+	p.Heading = heading
+	return p
+}
+
+// WithProximityAlertRadius adds proximity alert radius parameter
+func (p *EditMessageLiveLocationParams) WithProximityAlertRadius(proximityAlertRadius int,
+) *EditMessageLiveLocationParams {
+	p.ProximityAlertRadius = proximityAlertRadius
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditMessageLiveLocationParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *StopMessageLiveLocationParams) WithChatID(chatID ChatID) *StopMessageLiveLocationParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *StopMessageLiveLocationParams) WithMessageID(messageID int) *StopMessageLiveLocationParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *StopMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *StopMessageLiveLocationParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *StopMessageLiveLocationParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
 func (p *EditMessageReplyMarkupParams) WithChatID(chatID ChatID) *EditMessageReplyMarkupParams {
 	p.ChatID = chatID
 	return p
@@ -2118,6 +2154,12 @@ func (p *SendStickerParams) WithSticker(sticker InputFile) *SendStickerParams {
 	return p
 }
 
+// WithEmoji adds emoji parameter
+func (p *SendStickerParams) WithEmoji(emoji string) *SendStickerParams {
+	p.Emoji = emoji
+	return p
+}
+
 // WithDisableNotification adds disable notification parameter
 func (p *SendStickerParams) WithDisableNotification() *SendStickerParams {
 	p.DisableNotification = true
@@ -2160,9 +2202,15 @@ func (p *GetCustomEmojiStickersParams) WithCustomEmojiIDs(customEmojiIDs ...stri
 	return p
 }
 
-// WithPngSticker adds png sticker parameter
-func (p *UploadStickerFileParams) WithPngSticker(pngSticker InputFile) *UploadStickerFileParams {
-	p.PngSticker = pngSticker
+// WithSticker adds sticker parameter
+func (p *UploadStickerFileParams) WithSticker(sticker InputFile) *UploadStickerFileParams {
+	p.Sticker = sticker
+	return p
+}
+
+// WithStickerFormat adds sticker format parameter
+func (p *UploadStickerFileParams) WithStickerFormat(stickerFormat string) *UploadStickerFileParams {
+	p.StickerFormat = stickerFormat
 	return p
 }
 
@@ -2178,21 +2226,15 @@ func (p *CreateNewStickerSetParams) WithTitle(title string) *CreateNewStickerSet
 	return p
 }
 
-// WithPngSticker adds png sticker parameter
-func (p *CreateNewStickerSetParams) WithPngSticker(pngSticker *InputFile) *CreateNewStickerSetParams {
-	p.PngSticker = pngSticker
+// WithStickers adds stickers parameter
+func (p *CreateNewStickerSetParams) WithStickers(stickers ...InputSticker) *CreateNewStickerSetParams {
+	p.Stickers = stickers
 	return p
 }
 
-// WithTgsSticker adds tgs sticker parameter
-func (p *CreateNewStickerSetParams) WithTgsSticker(tgsSticker *InputFile) *CreateNewStickerSetParams {
-	p.TgsSticker = tgsSticker
-	return p
-}
-
-// WithWebmSticker adds webm sticker parameter
-func (p *CreateNewStickerSetParams) WithWebmSticker(webmSticker *InputFile) *CreateNewStickerSetParams {
-	p.WebmSticker = webmSticker
+// WithStickerFormat adds sticker format parameter
+func (p *CreateNewStickerSetParams) WithStickerFormat(stickerFormat string) *CreateNewStickerSetParams {
+	p.StickerFormat = stickerFormat
 	return p
 }
 
@@ -2202,15 +2244,9 @@ func (p *CreateNewStickerSetParams) WithStickerType(stickerType string) *CreateN
 	return p
 }
 
-// WithEmojis adds emojis parameter
-func (p *CreateNewStickerSetParams) WithEmojis(emojis string) *CreateNewStickerSetParams {
-	p.Emojis = emojis
-	return p
-}
-
-// WithMaskPosition adds mask position parameter
-func (p *CreateNewStickerSetParams) WithMaskPosition(maskPosition *MaskPosition) *CreateNewStickerSetParams {
-	p.MaskPosition = maskPosition
+// WithNeedsRepainting adds needs repainting parameter
+func (p *CreateNewStickerSetParams) WithNeedsRepainting() *CreateNewStickerSetParams {
+	p.NeedsRepainting = true
 	return p
 }
 
@@ -2220,33 +2256,9 @@ func (p *AddStickerToSetParams) WithName(name string) *AddStickerToSetParams {
 	return p
 }
 
-// WithPngSticker adds png sticker parameter
-func (p *AddStickerToSetParams) WithPngSticker(pngSticker *InputFile) *AddStickerToSetParams {
-	p.PngSticker = pngSticker
-	return p
-}
-
-// WithTgsSticker adds tgs sticker parameter
-func (p *AddStickerToSetParams) WithTgsSticker(tgsSticker *InputFile) *AddStickerToSetParams {
-	p.TgsSticker = tgsSticker
-	return p
-}
-
-// WithWebmSticker adds webm sticker parameter
-func (p *AddStickerToSetParams) WithWebmSticker(webmSticker *InputFile) *AddStickerToSetParams {
-	p.WebmSticker = webmSticker
-	return p
-}
-
-// WithEmojis adds emojis parameter
-func (p *AddStickerToSetParams) WithEmojis(emojis string) *AddStickerToSetParams {
-	p.Emojis = emojis
-	return p
-}
-
-// WithMaskPosition adds mask position parameter
-func (p *AddStickerToSetParams) WithMaskPosition(maskPosition *MaskPosition) *AddStickerToSetParams {
-	p.MaskPosition = maskPosition
+// WithSticker adds sticker parameter
+func (p *AddStickerToSetParams) WithSticker(sticker InputSticker) *AddStickerToSetParams {
+	p.Sticker = sticker
 	return p
 }
 
@@ -2268,15 +2280,82 @@ func (p *DeleteStickerFromSetParams) WithSticker(sticker string) *DeleteStickerF
 	return p
 }
 
+// WithSticker adds sticker parameter
+func (p *SetStickerEmojiListParams) WithSticker(sticker string) *SetStickerEmojiListParams {
+	p.Sticker = sticker
+	return p
+}
+
+// WithEmojiList adds emoji list parameter
+func (p *SetStickerEmojiListParams) WithEmojiList(emojiList ...string) *SetStickerEmojiListParams {
+	p.EmojiList = emojiList
+	return p
+}
+
+// WithSticker adds sticker parameter
+func (p *SetStickerKeywordsParams) WithSticker(sticker string) *SetStickerKeywordsParams {
+	p.Sticker = sticker
+	return p
+}
+
+// WithKeywords adds keywords parameter
+func (p *SetStickerKeywordsParams) WithKeywords(keywords ...string) *SetStickerKeywordsParams {
+	p.Keywords = keywords
+	return p
+}
+
+// WithSticker adds sticker parameter
+func (p *SetStickerMaskPositionParams) WithSticker(sticker string) *SetStickerMaskPositionParams {
+	p.Sticker = sticker
+	return p
+}
+
+// WithMaskPosition adds mask position parameter
+func (p *SetStickerMaskPositionParams) WithMaskPosition(maskPosition *MaskPosition) *SetStickerMaskPositionParams {
+	p.MaskPosition = maskPosition
+	return p
+}
+
 // WithName adds name parameter
-func (p *SetStickerSetThumbParams) WithName(name string) *SetStickerSetThumbParams {
+func (p *SetStickerSetTitleParams) WithName(name string) *SetStickerSetTitleParams {
 	p.Name = name
 	return p
 }
 
-// WithThumb adds thumb parameter
-func (p *SetStickerSetThumbParams) WithThumb(thumb *InputFile) *SetStickerSetThumbParams {
-	p.Thumb = thumb
+// WithTitle adds title parameter
+func (p *SetStickerSetTitleParams) WithTitle(title string) *SetStickerSetTitleParams {
+	p.Title = title
+	return p
+}
+
+// WithName adds name parameter
+func (p *SetStickerSetThumbnailParams) WithName(name string) *SetStickerSetThumbnailParams {
+	p.Name = name
+	return p
+}
+
+// WithThumbnail adds thumbnail parameter
+func (p *SetStickerSetThumbnailParams) WithThumbnail(thumbnail *InputFile) *SetStickerSetThumbnailParams {
+	p.Thumbnail = thumbnail
+	return p
+}
+
+// WithName adds name parameter
+func (p *SetCustomEmojiStickerSetThumbnailParams) WithName(name string) *SetCustomEmojiStickerSetThumbnailParams {
+	p.Name = name
+	return p
+}
+
+// WithCustomEmojiID adds custom emoji ID parameter
+func (p *SetCustomEmojiStickerSetThumbnailParams) WithCustomEmojiID(customEmojiID string,
+) *SetCustomEmojiStickerSetThumbnailParams {
+	p.CustomEmojiID = customEmojiID
+	return p
+}
+
+// WithName adds name parameter
+func (p *DeleteStickerSetParams) WithName(name string) *DeleteStickerSetParams {
+	p.Name = name
 	return p
 }
 
