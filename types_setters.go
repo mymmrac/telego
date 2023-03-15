@@ -409,6 +409,30 @@ func (i *InputMediaDocument) WithDisableContentTypeDetection() *InputMediaDocume
 	return i
 }
 
+// WithSticker adds sticker parameter
+func (i *InputSticker) WithSticker(sticker InputFile) *InputSticker {
+	i.Sticker = sticker
+	return i
+}
+
+// WithEmojiList adds emoji list parameter
+func (i *InputSticker) WithEmojiList(emojiList ...string) *InputSticker {
+	i.EmojiList = emojiList
+	return i
+}
+
+// WithMaskPosition adds mask position parameter
+func (i *InputSticker) WithMaskPosition(maskPosition *MaskPosition) *InputSticker {
+	i.MaskPosition = maskPosition
+	return i
+}
+
+// WithKeywords adds keywords parameter
+func (i *InputSticker) WithKeywords(keywords ...string) *InputSticker {
+	i.Keywords = keywords
+	return i
+}
+
 // WithID adds ID parameter
 func (i *InlineQueryResultArticle) WithID(iD string) *InlineQueryResultArticle {
 	i.ID = iD

@@ -227,6 +227,21 @@ func TestInputMediaDocument_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestInputSticker_Setters(t *testing.T) {
+	i := (&InputSticker{}).
+		WithSticker(testInputFile).
+		WithEmojiList([]string{"EmojiList"}...).
+		WithMaskPosition(&MaskPosition{Point: "MaskPosition"}).
+		WithKeywords([]string{"Keywords"}...)
+
+	assert.Equal(t, &InputSticker{
+		Sticker:      testInputFile,
+		EmojiList:    []string{"EmojiList"},
+		MaskPosition: &MaskPosition{Point: "MaskPosition"},
+		Keywords:     []string{"Keywords"},
+	}, i)
+}
+
 func TestInlineQueryResultArticle_Setters(t *testing.T) {
 	i := (&InlineQueryResultArticle{}).
 		WithID("ID").

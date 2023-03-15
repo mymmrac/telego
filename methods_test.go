@@ -3141,7 +3141,7 @@ func TestAddStickerToSetParams_fileParameters(t *testing.T) {
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
-		"sticker": testNamedReade{},
+		"test": testNamedReade{},
 	}, p.fileParameters())
 }
 

@@ -83,7 +83,7 @@ var typeStructsSetters = []string{
 	"InputContactMessageContent",
 	"InputInvoiceMessageContent",
 
-	"InputSticker", // TODO: Gen
+	"InputSticker",
 }
 
 var typeStructsNoPointerSetters = []string{

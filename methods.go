@@ -3174,7 +3174,6 @@ type CreateNewStickerSetParams struct {
 	NeedsRepainting bool `json:"needs_repainting,omitempty"`
 }
 
-// TODO: Test
 func (p *CreateNewStickerSetParams) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
