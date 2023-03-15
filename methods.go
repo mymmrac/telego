@@ -3217,8 +3217,14 @@ type AddStickerToSetParams struct {
 }
 
 func (p *AddStickerToSetParams) fileParameters() map[string]telegoapi.NamedReader {
-	return map[string]telegoapi.NamedReader{ // TODO: Test
-		"sticker": p.Sticker.Sticker.File,
+	file := p.Sticker.Sticker.File
+	if isNil(file) {
+		return map[string]telegoapi.NamedReader{}
+	}
+
+	p.Sticker.Sticker.needAttach = true
+	return map[string]telegoapi.NamedReader{
+		file.Name(): file,
 	}
 }
 

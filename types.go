@@ -2628,6 +2628,7 @@ type InputFile struct {
 	// URL - URL to get file from
 	URL string
 
+	// needAttach used to specify that file field will be named the same as file name
 	needAttach bool
 }
 

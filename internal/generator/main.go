@@ -82,6 +82,8 @@ var typeStructsSetters = []string{
 	"InputVenueMessageContent",
 	"InputContactMessageContent",
 	"InputInvoiceMessageContent",
+
+	"InputSticker", // TODO: Gen
 }
 
 var typeStructsNoPointerSetters = []string{
@@ -97,8 +99,6 @@ func main() {
 	args := os.Args[1:]
 
 	sr := sharedResources{}
-
-	// TODO: Add cases for *bool and *string
 
 	for _, arg := range args {
 		logInfo("==== %s ====", arg)

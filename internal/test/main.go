@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 31
+const testCase = 33
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -739,6 +739,35 @@ func main() {
 
 		defer bh.Stop()
 		bh.Start()
+	case 32:
+		err = bot.CreateNewStickerSet(&telego.CreateNewStickerSetParams{
+			UserID: myID.ID,
+			Name:   "the_test_by_ThenWhyBot",
+			Title:  "The Test",
+			Stickers: []telego.InputSticker{
+				{
+					Sticker:   telego.InputFile{File: mustOpen("sticker1.png")},
+					EmojiList: []string{"⚡️"},
+				},
+			},
+			StickerFormat:   telego.StickerFormatStatic,
+			StickerType:     telego.StickerTypeRegular,
+			NeedsRepainting: false,
+		})
+		assert(err == nil, err)
+	case 33:
+		err = bot.AddStickerToSet(&telego.AddStickerToSetParams{
+			UserID: myID.ID,
+			Name:   "the_test_by_ThenWhyBot",
+			Sticker: telego.InputSticker{
+				Sticker: telego.InputFile{
+					File: mustOpen("sticker2.png"),
+					// URL: "https://upload.wikimedia.org/wikipedia/commons/6/63/Icon_Bird_512x512.png",
+				},
+				EmojiList: []string{"🐳"},
+			},
+		})
+		assert(err == nil, err)
 	}
 }
 
