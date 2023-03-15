@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 33
+const testCase = 34
 
 func main() {
 	testToken := os.Getenv("TOKEN")
@@ -766,6 +766,16 @@ func main() {
 				},
 				EmojiList: []string{"🐳"},
 			},
+		})
+		assert(err == nil, err)
+	case 34:
+		err = bot.SetMyDescription(&telego.SetMyDescriptionParams{
+			Description: "",
+		})
+		assert(err == nil, err)
+
+		err = bot.SetMyShortDescription(&telego.SetMyShortDescriptionParams{
+			ShortDescription: "",
 		})
 		assert(err == nil, err)
 	}

@@ -2534,7 +2534,7 @@ func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
 type SetMyDescriptionParams struct {
 	// Description - Optional. New bot description; 0-512 characters. Pass an empty string to remove the
 	// dedicated description for the given language.
-	Description string `json:"description,omitempty"` // TODO: Test
+	Description string `json:"description,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, the description will be applied
 	// to all users for whose language there is no dedicated description.
@@ -2574,7 +2574,7 @@ func (b *Bot) GetMyDescription(params *GetMyDescriptionParams) (*BotDescription,
 type SetMyShortDescriptionParams struct {
 	// ShortDescription - Optional. New short description for the bot; 0-120 characters. Pass an empty string to
 	// remove the dedicated short description for the given language.
-	ShortDescription string `json:"short_description,omitempty"` // TODO: Test
+	ShortDescription string `json:"short_description,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, the short description will be
 	// applied to all users for whose language there is no dedicated short description.
