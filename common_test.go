@@ -37,14 +37,14 @@ func testAddress(t *testing.T) string {
 	return fmt.Sprintf("127.0.0.1:%d", testPortStart)
 }
 
-func telegoResponse(t *testing.T, v interface{}) *telegoapi.Response {
+func telegoResponse(t *testing.T, v any) *telegoapi.Response {
 	t.Helper()
 
-	bytesData, err := json.Marshal(v)
+	byteData, err := json.Marshal(v)
 	require.NoError(t, err)
 	return &telegoapi.Response{
 		Ok:     true,
-		Result: bytesData,
+		Result: byteData,
 	}
 }
 

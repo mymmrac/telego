@@ -15,7 +15,7 @@ func Message(id telego.ChatID, text string) *telego.SendMessageParams {
 }
 
 // Messagef creates telego.SendMessageParams with required parameters and provided format
-func Messagef(id telego.ChatID, format string, args ...interface{}) *telego.SendMessageParams {
+func Messagef(id telego.ChatID, format string, args ...any) *telego.SendMessageParams {
 	return &telego.SendMessageParams{
 		ChatID: id,
 		Text:   fmt.Sprintf(format, args...),

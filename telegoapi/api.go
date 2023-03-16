@@ -84,6 +84,6 @@ type NamedReader interface {
 
 // RequestConstructor represents a way to construct API request
 type RequestConstructor interface {
-	JSONRequest(parameters interface{}) (*RequestData, error)
+	JSONRequest(parameters any) (*RequestData, error)
 	MultipartRequest(parameters map[string]string, filesParameters map[string]NamedReader) (*RequestData, error)
 }

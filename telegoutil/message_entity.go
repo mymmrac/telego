@@ -22,7 +22,7 @@ func Entity(text string) MessageEntityCollection {
 }
 
 // Entityf creates new MessageEntityCollection with the provided format and args and no entities
-func Entityf(format string, args ...interface{}) MessageEntityCollection {
+func Entityf(format string, args ...any) MessageEntityCollection {
 	return MessageEntityCollection{
 		text: fmt.Sprintf(format, args...),
 	}

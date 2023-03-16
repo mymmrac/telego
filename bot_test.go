@@ -178,7 +178,7 @@ func Test_parseParameters(t *testing.T) {
 
 	tests := []struct {
 		name             string
-		parameters       interface{}
+		parameters       any
 		parsedParameters map[string]string
 		isError          bool
 	}{
@@ -323,7 +323,7 @@ func (ts *testStruct) fileParameters() map[string]ta.NamedReader {
 func Test_filesParameters(t *testing.T) {
 	tests := []struct {
 		name       string
-		parameters interface{}
+		parameters any
 		files      map[string]ta.NamedReader
 		hasFiles   bool
 	}{
@@ -626,7 +626,7 @@ func Test_isNil(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		i     interface{}
+		i     any
 		isNil bool
 	}{
 		{

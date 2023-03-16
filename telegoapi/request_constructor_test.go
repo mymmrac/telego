@@ -13,7 +13,7 @@ import (
 func TestDefaultConstructor_JSONRequest(t *testing.T) {
 	tests := []struct {
 		name       string
-		parameters interface{}
+		parameters any
 		data       *RequestData
 		isError    bool
 	}{
@@ -118,13 +118,13 @@ func (t testFile) Name() string {
 
 func Test_isNil(t *testing.T) {
 	var nr NamedReader
-	var ns interface{}
+	var ns any
 	var s []int
 	ns = s
 
 	tests := []struct {
 		name  string
-		value interface{}
+		value any
 		isNil bool
 	}{
 		{

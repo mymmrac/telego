@@ -93,7 +93,7 @@ func (b *Bot) Logger() Logger {
 }
 
 // performRequest executes and parses response of method
-func (b *Bot) performRequest(methodName string, parameters interface{}, vs ...interface{}) error {
+func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error {
 	resp, err := b.constructAndCallRequest(methodName, parameters)
 	if err != nil {
 		b.log.Errorf("Execution error %s: %s", methodName, err)
@@ -127,7 +127,7 @@ func (b *Bot) performRequest(methodName string, parameters interface{}, vs ...in
 }
 
 // constructAndCallRequest creates and executes request with parsing of parameters
-func (b *Bot) constructAndCallRequest(methodName string, parameters interface{}) (*telegoapi.Response, error) {
+func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*telegoapi.Response, error) {
 	filesParams, hasFiles := filesParameters(parameters)
 	var data *telegoapi.RequestData
 
@@ -169,7 +169,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters interface{})
 }
 
 // filesParameters gets all files from parameters
-func filesParameters(parameters interface{}) (files map[string]telegoapi.NamedReader, hasFiles bool) {
+func filesParameters(parameters any) (files map[string]telegoapi.NamedReader, hasFiles bool) {
 	if parametersWithFiles, ok := parameters.(fileCompatible); ok && !isNil(parameters) {
 		files = parametersWithFiles.fileParameters()
 		for _, file := range files {
@@ -183,7 +183,7 @@ func filesParameters(parameters interface{}) (files map[string]telegoapi.NamedRe
 }
 
 // parseParameters parses parameter struct to key value structure, v should be a pointer to struct
-func parseParameters(v interface{}) (map[string]string, error) {
+func parseParameters(v any) (map[string]string, error) {
 	valueOfV := reflect.ValueOf(v)
 	if valueOfV.Kind() != reflect.Ptr {
 		return nil, fmt.Errorf("%q not a pointer", valueOfV.Kind())
@@ -245,7 +245,7 @@ func parseField(field reflect.Value) (string, bool, error) {
 	return value, true, nil
 }
 
-func isNil(i interface{}) bool {
+func isNil(i any) bool {
 	if i == nil {
 		return true
 	}

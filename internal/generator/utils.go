@@ -42,11 +42,11 @@ var (
 	multiSpaceRegexp = regexp.MustCompile(multiSpacePattern)
 )
 
-func logInfo(format string, args ...interface{}) {
+func logInfo(format string, args ...any) {
 	fmt.Printf("[INFO] "+format+"\n", args...)
 }
 
-func logError(format string, args ...interface{}) {
+func logError(format string, args ...any) {
 	fmt.Printf("[ERROR] "+format+"\n", args...)
 }
 

@@ -45,7 +45,7 @@ func TestWithHTTPClient(t *testing.T) {
 
 type testConstructorType struct{}
 
-func (testConstructorType) JSONRequest(_ interface{}) (*telegoapi.RequestData, error) {
+func (testConstructorType) JSONRequest(_ any) (*telegoapi.RequestData, error) {
 	panic("implement me")
 }
 
@@ -121,11 +121,11 @@ func TestWithDiscardLogger(t *testing.T) {
 
 type testLoggerType struct{}
 
-func (testLoggerType) Debugf(_ string, _ ...interface{}) {
+func (testLoggerType) Debugf(_ string, _ ...any) {
 	// NoOp
 }
 
-func (testLoggerType) Errorf(_ string, _ ...interface{}) {
+func (testLoggerType) Errorf(_ string, _ ...any) {
 	// NoOp
 }
 

@@ -16,7 +16,7 @@ import (
 type DefaultConstructor struct{}
 
 // JSONRequest is default implementation
-func (d DefaultConstructor) JSONRequest(parameters interface{}) (*RequestData, error) {
+func (d DefaultConstructor) JSONRequest(parameters any) (*RequestData, error) {
 	data := &RequestData{
 		ContentType: ContentTypeJSON,
 		Buffer:      &bytes.Buffer{},
@@ -69,7 +69,7 @@ func (d DefaultConstructor) MultipartRequest(parameters map[string]string, files
 	return data, nil
 }
 
-func isNil(i interface{}) bool {
+func isNil(i any) bool {
 	if i == nil {
 		return true
 	}

@@ -11,8 +11,8 @@ import (
 
 // Logger represents logger used to debug or error information
 type Logger interface {
-	Debugf(format string, args ...interface{})
-	Errorf(format string, args ...interface{})
+	Debugf(format string, args ...any)
+	Errorf(format string, args ...any)
 }
 
 type logMode string
@@ -71,13 +71,13 @@ func (l *logger) log(mode logMode, text string) {
 	}
 }
 
-func (l *logger) Debugf(format string, args ...interface{}) {
+func (l *logger) Debugf(format string, args ...any) {
 	if l.DebugMode {
 		l.log(debugMode, fmt.Sprintf(format+"\n", args...))
 	}
 }
 
-func (l *logger) Errorf(format string, args ...interface{}) {
+func (l *logger) Errorf(format string, args ...any) {
 	if l.PrintErrors {
 		l.log(errorMode, fmt.Sprintf(format+"\n", args...))
 	}
