@@ -585,66 +585,6 @@ func TestBot_SendLocation(t *testing.T) {
 	})
 }
 
-func TestBot_EditMessageLiveLocation(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		resp := telegoResponse(t, expectedMessage)
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
-
-		message, err := m.Bot.EditMessageLiveLocation(nil)
-		assert.NoError(t, err)
-		assert.Equal(t, expectedMessage, message)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		message, err := m.Bot.EditMessageLiveLocation(nil)
-		assert.Error(t, err)
-		assert.Nil(t, message)
-	})
-}
-
-func TestBot_StopMessageLiveLocation(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		resp := telegoResponse(t, expectedMessage)
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
-			Return(resp, nil)
-
-		message, err := m.Bot.StopMessageLiveLocation(nil)
-		assert.NoError(t, err)
-		assert.Equal(t, expectedMessage, message)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		message, err := m.Bot.StopMessageLiveLocation(nil)
-		assert.Error(t, err)
-		assert.Nil(t, message)
-	})
-}
-
 func TestBot_SendVenue(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2110,6 +2050,126 @@ func TestBot_GetMyCommands(t *testing.T) {
 	})
 }
 
+func TestBot_SetMyDescription(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetMyDescription(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetMyDescription(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_GetMyDescription(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedBotDescription := &BotDescription{
+			Description: "Description",
+		}
+		resp := telegoResponse(t, expectedBotDescription)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		botDescription, err := m.Bot.GetMyDescription(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedBotDescription, botDescription)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		botDescription, err := m.Bot.GetMyDescription(nil)
+		assert.Error(t, err)
+		assert.Nil(t, botDescription)
+	})
+}
+
+func TestBot_SetMyShortDescription(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetMyShortDescription(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetMyShortDescription(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_GetMyShortDescription(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedBotShortDescription := &BotShortDescription{
+			ShortDescription: "ShortDescription",
+		}
+		resp := telegoResponse(t, expectedBotShortDescription)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		botShortDescription, err := m.Bot.GetMyShortDescription(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedBotShortDescription, botShortDescription)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		botShortDescription, err := m.Bot.GetMyShortDescription(nil)
+		assert.Error(t, err)
+		assert.Nil(t, botShortDescription)
+	})
+}
+
 func TestBot_SetChatMenuButton(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2315,6 +2375,66 @@ func TestBot_EditMessageMedia(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.EditMessageMedia(nil)
+		assert.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
+func TestBot_EditMessageLiveLocation(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.EditMessageLiveLocation(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.EditMessageLiveLocation(nil)
+		assert.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
+func TestBot_StopMessageLiveLocation(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.StopMessageLiveLocation(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.StopMessageLiveLocation(nil)
 		assert.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2647,6 +2767,114 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 	})
 }
 
+func TestBot_SetStickerEmojiList(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetStickerEmojiList(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetStickerEmojiList(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_SetStickerKeywords(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetStickerKeywords(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetStickerKeywords(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_SetStickerMaskPosition(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetStickerMaskPosition(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetStickerMaskPosition(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_SetStickerSetTitle(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetStickerSetTitle(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetStickerSetTitle(nil)
+		assert.Error(t, err)
+	})
+}
+
 func TestBot_SetStickerSetThumbnail(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2670,6 +2898,60 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerSetThumbnail(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_SetCustomEmojiStickerSetThumbnail(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetCustomEmojiStickerSetThumbnail(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetCustomEmojiStickerSetThumbnail(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_DeleteStickerSet(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteStickerSet(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteStickerSet(nil)
 		assert.Error(t, err)
 	})
 }
@@ -3127,12 +3409,15 @@ func TestCreateNewStickerSetParams_fileParameters(t *testing.T) {
 		Stickers: []InputSticker{
 			{Sticker: testInputFile},
 			{Sticker: testInputFile},
+			{Sticker: InputFile{URL: "url"}},
 		},
 	}
 
 	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"test": testNamedReade{},
 	}, p.fileParameters())
+
+	assert.Equal(t, map[string]telegoapi.NamedReader{}, (&CreateNewStickerSetParams{}).fileParameters())
 }
 
 func TestAddStickerToSetParams_fileParameters(t *testing.T) {
@@ -3143,6 +3428,8 @@ func TestAddStickerToSetParams_fileParameters(t *testing.T) {
 	assert.Equal(t, map[string]telegoapi.NamedReader{
 		"test": testNamedReade{},
 	}, p.fileParameters())
+
+	assert.Equal(t, map[string]telegoapi.NamedReader{}, (&AddStickerToSetParams{}).fileParameters())
 }
 
 func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {

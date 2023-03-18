@@ -770,11 +770,36 @@ func TestUpdate_CloneSafe(t *testing.T) {
 		assert.Equal(t, u, uc)
 	})
 
-	t.Run("error", func(t *testing.T) {
+	t.Run("error_unmarshal", func(t *testing.T) {
 		uc, err := (Update{ChatMember: &ChatMemberUpdated{}}).CloneSafe()
 		assert.Error(t, err)
 		assert.Zero(t, uc)
 	})
+
+	t.Run("error_marshal", func(t *testing.T) {
+		u := Update{
+			MyChatMember: &ChatMemberUpdated{
+				OldChatMember: badChatMember{},
+			},
+		}
+		uc, err := u.CloneSafe()
+		assert.Error(t, err)
+		assert.Zero(t, uc)
+	})
+}
+
+type badChatMember struct{}
+
+func (b badChatMember) MarshalJSON() ([]byte, error) {
+	return nil, errTest
+}
+
+func (b badChatMember) MemberStatus() string {
+	panic("implement me")
+}
+
+func (b badChatMember) MemberUser() User {
+	panic("implement me")
 }
 
 func TestChatID_String(t *testing.T) {
