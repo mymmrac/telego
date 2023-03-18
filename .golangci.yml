@@ -171,6 +171,12 @@ linters-settings:
         severity: warning
         disabled: false
         arguments: [ 20 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#comment-spacings
+      - name: comment-spacings
+        severity: warning
+        disabled: false
+        arguments:
+          - nolint
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cyclomatic
       - name: cyclomatic
         severity: warning
