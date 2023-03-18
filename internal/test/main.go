@@ -781,7 +781,7 @@ func main() {
 	}
 }
 
-func assert(ok bool, args ...interface{}) {
+func assert(ok bool, args ...any) {
 	if !ok {
 		fmt.Println(args...)
 		os.Exit(1)
