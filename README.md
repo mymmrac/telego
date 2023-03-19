@@ -79,6 +79,7 @@ More examples can be seen here:
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
+- [Edit message](examples/edit_message/main.go)
 - [Utility methods](examples/utility_methods/main.go)
 - [Inline query bot](examples/inline_query_bot/main.go)
 - [Bot handlers](examples/handler/main.go)
