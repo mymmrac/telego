@@ -51,7 +51,7 @@ type Bot struct {
 type BotOption func(bot *Bot) error
 
 // NewBot creates new bots with given options.
-// If no options specified default values are used.
+// If no options are specified, default values are used.
 // Note: Default logger (that logs only errors if not configured) will hide your bot token, but it still may log
 // sensitive information, it's only safe to use default logger in testing environment.
 func NewBot(token string, options ...BotOption) (*Bot, error) {
@@ -90,6 +90,11 @@ func (b *Bot) Token() string {
 // Logger returns bot logger
 func (b *Bot) Logger() Logger {
 	return b.log
+}
+
+// FileDownloadURL returns URL used to download file by its file path retrieved from GetFile method
+func (b *Bot) FileDownloadURL(filepath string) string {
+	return b.apiURL + "/file/bot" + b.token + "/" + filepath
 }
 
 // performRequest executes and parses response of method

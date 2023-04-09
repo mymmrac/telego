@@ -8,6 +8,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	ta "github.com/mymmrac/telego/telegoapi"
 	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
@@ -144,16 +145,25 @@ func TestNewBot(t *testing.T) {
 
 func TestBot_Token(t *testing.T) {
 	bot, err := NewBot(token)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, token, bot.Token())
 }
 
 func TestBot_Logger(t *testing.T) {
 	bot, err := NewBot(token)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, bot.log, bot.Logger())
+}
+
+func TestBot_FileDownloadURL(t *testing.T) {
+	bot, err := NewBot(token)
+	require.NoError(t, err)
+
+	filepath := "file.txt"
+	url := bot.FileDownloadURL(filepath)
+	assert.Equal(t, bot.apiURL+"/file/bot"+bot.token+"/"+filepath, url)
 }
 
 type testErrorMarshal struct {

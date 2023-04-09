@@ -1,6 +1,10 @@
 package telegoutil
 
 import (
+	"fmt"
+
+	"github.com/valyala/fasthttp"
+
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegoapi"
 )
@@ -38,6 +42,21 @@ func FileByID(id string) telego.InputFile {
 	return telego.InputFile{
 		FileID: id,
 	}
+}
+
+// DownloadFile returns downloaded file bytes or error
+func DownloadFile(url string) ([]byte, error) {
+	var file []byte
+	status, file, err := fasthttp.Get(file, url)
+	if err != nil {
+		return nil, fmt.Errorf("telego: %w", err)
+	}
+
+	if status != fasthttp.StatusOK {
+		return nil, fmt.Errorf("telego: http status: %d", status)
+	}
+
+	return file, nil
 }
 
 // Keyboard creates telego.ReplyKeyboardMarkup from slice of keyboard buttons

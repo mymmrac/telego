@@ -1,6 +1,8 @@
 package telegoutil
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -33,6 +35,38 @@ func TestFileByID(t *testing.T) {
 func TestFileByURL(t *testing.T) {
 	f := FileByURL(text1)
 	assert.Equal(t, text1, f.URL)
+}
+
+func TestDownloadFile(t *testing.T) {
+	expectedData := []byte("OK")
+	srv := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		if request.URL.Path == "/error" {
+			writer.WriteHeader(http.StatusInternalServerError)
+		} else {
+			//nolint:errcheck
+			_, _ = writer.Write(expectedData)
+			writer.WriteHeader(http.StatusOK)
+		}
+	}))
+	defer srv.Close()
+
+	t.Run("success", func(t *testing.T) {
+		data, err := DownloadFile(srv.URL + "/")
+		assert.NoError(t, err)
+		assert.Equal(t, expectedData, data)
+	})
+
+	t.Run("error_request", func(t *testing.T) {
+		data, err := DownloadFile("")
+		assert.Error(t, err)
+		assert.Nil(t, data)
+	})
+
+	t.Run("error_status", func(t *testing.T) {
+		data, err := DownloadFile(srv.URL + "/error")
+		assert.Error(t, err)
+		assert.Nil(t, data)
+	})
 }
 
 func TestID(t *testing.T) {
