@@ -114,3 +114,49 @@ func TestMessageEntities(t *testing.T) {
 		}, entities)
 	})
 }
+
+func TestEntityLength(t *testing.T) {
+	text, entities := MessageEntities(
+		Entity("😅").Italic(),
+		Entity(" test ").Bold(),
+		Entity("🌗").Italic(),
+		Entity(" Україна").Bold(),
+		Entity(" "),
+		Entity("\U0001FAE5 ").Italic(),
+		Entity("世界").Bold(),
+	)
+
+	assert.Equal(t, "😅 test 🌗 Україна \U0001FAE5 世界", text)
+	require.Equal(t, 6, len(entities))
+
+	assert.Equal(t, telego.MessageEntity{
+		Type:   telego.EntityTypeItalic,
+		Offset: 0,
+		Length: 2,
+	}, entities[0]) // "😅"
+	assert.Equal(t, telego.MessageEntity{
+		Type:   telego.EntityTypeBold,
+		Offset: 2,
+		Length: 6,
+	}, entities[1]) // " test "
+	assert.Equal(t, telego.MessageEntity{
+		Type:   telego.EntityTypeItalic,
+		Offset: 8,
+		Length: 2,
+	}, entities[2]) // "🌗"
+	assert.Equal(t, telego.MessageEntity{
+		Type:   telego.EntityTypeBold,
+		Offset: 10,
+		Length: 8,
+	}, entities[3]) // " Україна"
+	assert.Equal(t, telego.MessageEntity{
+		Type:   telego.EntityTypeItalic,
+		Offset: 19,
+		Length: 3,
+	}, entities[4]) // "\U0001FAE5 "
+	assert.Equal(t, telego.MessageEntity{
+		Type:   telego.EntityTypeBold,
+		Offset: 22,
+		Length: 2,
+	}, entities[5]) // "世界"
+}

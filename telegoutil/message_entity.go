@@ -3,7 +3,6 @@ package telegoutil
 import (
 	"fmt"
 	"strings"
-	"unicode/utf8"
 	"unicode/utf16"
 
 	"github.com/mymmrac/telego"
@@ -50,7 +49,7 @@ func (c MessageEntityCollection) SetOffset(offset int) {
 func (c MessageEntityCollection) Mention() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeMention,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -59,7 +58,7 @@ func (c MessageEntityCollection) Mention() MessageEntityCollection {
 func (c MessageEntityCollection) Hashtag() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeHashtag,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -68,7 +67,7 @@ func (c MessageEntityCollection) Hashtag() MessageEntityCollection {
 func (c MessageEntityCollection) Cashtag() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeCashtag,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -77,7 +76,7 @@ func (c MessageEntityCollection) Cashtag() MessageEntityCollection {
 func (c MessageEntityCollection) BotCommand() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeBotCommand,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -86,7 +85,7 @@ func (c MessageEntityCollection) BotCommand() MessageEntityCollection {
 func (c MessageEntityCollection) URL() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeURL,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -95,7 +94,7 @@ func (c MessageEntityCollection) URL() MessageEntityCollection {
 func (c MessageEntityCollection) Email() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeEmail,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -104,7 +103,7 @@ func (c MessageEntityCollection) Email() MessageEntityCollection {
 func (c MessageEntityCollection) PhoneNumber() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypePhoneNumber,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -113,7 +112,7 @@ func (c MessageEntityCollection) PhoneNumber() MessageEntityCollection {
 func (c MessageEntityCollection) Bold() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeBold,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -122,7 +121,7 @@ func (c MessageEntityCollection) Bold() MessageEntityCollection {
 func (c MessageEntityCollection) Italic() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeItalic,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -131,7 +130,7 @@ func (c MessageEntityCollection) Italic() MessageEntityCollection {
 func (c MessageEntityCollection) Underline() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeUnderline,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -140,7 +139,7 @@ func (c MessageEntityCollection) Underline() MessageEntityCollection {
 func (c MessageEntityCollection) Strikethrough() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeStrikethrough,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -149,7 +148,7 @@ func (c MessageEntityCollection) Strikethrough() MessageEntityCollection {
 func (c MessageEntityCollection) Spoiler() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeSpoiler,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -158,7 +157,7 @@ func (c MessageEntityCollection) Spoiler() MessageEntityCollection {
 func (c MessageEntityCollection) Code() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeCode,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 	})
 	return c
 }
@@ -167,7 +166,7 @@ func (c MessageEntityCollection) Code() MessageEntityCollection {
 func (c MessageEntityCollection) Pre(language string) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:     telego.EntityTypePre,
-		Length:   utf8.RuneCountInString(c.text),
+		Length:   UTF16TextLen(c.text),
 		Language: language,
 	})
 	return c
@@ -177,7 +176,7 @@ func (c MessageEntityCollection) Pre(language string) MessageEntityCollection {
 func (c MessageEntityCollection) TextLink(url string) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextLink,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 		URL:    url,
 	})
 	return c
@@ -187,7 +186,7 @@ func (c MessageEntityCollection) TextLink(url string) MessageEntityCollection {
 func (c MessageEntityCollection) TextMention(user *telego.User) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextMention,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 		User:   user,
 	})
 	return c
@@ -197,7 +196,7 @@ func (c MessageEntityCollection) TextMention(user *telego.User) MessageEntityCol
 func (c MessageEntityCollection) TextMentionWithID(userID int64) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextMention,
-		Length: utf8.RuneCountInString(c.text),
+		Length: UTF16TextLen(c.text),
 		User:   &telego.User{ID: userID},
 	})
 	return c
@@ -207,7 +206,7 @@ func (c MessageEntityCollection) TextMentionWithID(userID int64) MessageEntityCo
 func (c MessageEntityCollection) CustomEmoji(emojiID string) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:          telego.EntityTypeCustomEmoji,
-		Length:        utf8.RuneCountInString(c.text),
+		Length:        UTF16TextLen(c.text),
 		CustomEmojiID: emojiID,
 	})
 	return c
@@ -219,11 +218,16 @@ func MessageEntities(entityCollections ...MessageEntityCollection) (string, []te
 	var entities []telego.MessageEntity
 
 	for _, collection := range entityCollections {
-		collection.SetOffset(len(utf16.Encode([]rune(text.String()))))
+		collection.SetOffset(UTF16TextLen(text.String()))
 		entities = append(entities, collection.Entities()...)
 
 		_, _ = text.WriteString(collection.Text())
 	}
 
 	return text.String(), entities
+}
+
+// UTF16TextLen returns length of a UTF-16 text
+func UTF16TextLen(text string) int {
+	return len(utf16.Encode([]rune(text)))
 }
