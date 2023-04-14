@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
+	"unicode/utf16"
 
 	"github.com/mymmrac/telego"
 )
@@ -218,7 +219,7 @@ func MessageEntities(entityCollections ...MessageEntityCollection) (string, []te
 	var entities []telego.MessageEntity
 
 	for _, collection := range entityCollections {
-		collection.SetOffset(utf8.RuneCountInString(text.String()))
+		collection.SetOffset(len(utf16.Encode([]rune(text.String()))))
 		entities = append(entities, collection.Entities()...)
 
 		_, _ = text.WriteString(collection.Text())
