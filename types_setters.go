@@ -140,7 +140,8 @@ func (i InlineKeyboardButton) WithSwitchInlineQueryCurrentChat(switchInlineQuery
 }
 
 // WithSwitchInlineQueryChosenChat adds switch inline query chosen chat parameter
-func (i InlineKeyboardButton) WithSwitchInlineQueryChosenChat(switchInlineQueryChosenChat *SwitchInlineQueryChosenChat) InlineKeyboardButton {
+func (i InlineKeyboardButton) WithSwitchInlineQueryChosenChat(switchInlineQueryChosenChat *SwitchInlineQueryChosenChat,
+) InlineKeyboardButton {
 	i.SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
 	return i
 }
