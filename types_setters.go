@@ -139,6 +139,12 @@ func (i InlineKeyboardButton) WithSwitchInlineQueryCurrentChat(switchInlineQuery
 	return i
 }
 
+// WithSwitchInlineQueryChosenChat adds switch inline query chosen chat parameter
+func (i InlineKeyboardButton) WithSwitchInlineQueryChosenChat(switchInlineQueryChosenChat *SwitchInlineQueryChosenChat) InlineKeyboardButton {
+	i.SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
+	return i
+}
+
 // WithCallbackGame adds callback game parameter
 func (i InlineKeyboardButton) WithCallbackGame(callbackGame *CallbackGame) InlineKeyboardButton {
 	i.CallbackGame = callbackGame

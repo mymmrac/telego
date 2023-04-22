@@ -1100,9 +1100,12 @@ type ChatShared struct {
 	ChatID int64 `json:"chat_id"`
 }
 
-// WriteAccessAllowed - This object represents a service message about a user allowing a bot added to the
-// attachment menu to write messages. Currently holds no information.
-type WriteAccessAllowed struct{}
+// WriteAccessAllowed - This object represents a service message about a user allowing a bot to write
+// messages after adding the bot to the attachment menu or launching a Web App from a link.
+type WriteAccessAllowed struct {
+	// WebAppName - Optional. Name of the Web App which was launched from a link
+	WebAppName string `json:"web_app_name,omitempty"`
+}
 
 // VideoChatScheduled - This object represents a service message about a video chat scheduled in the chat.
 type VideoChatScheduled struct {
@@ -1256,7 +1259,8 @@ type KeyboardButton struct {
 }
 
 // KeyboardButtonRequestUser - This object defines the criteria used to request a suitable user. The
-// identifier of the selected user will be shared with the bot when the corresponding button is pressed.
+// identifier of the selected user will be shared with the bot when the corresponding button is pressed. More
+// about requesting users » (https://core.telegram.org/bots/features#chat-and-user-selection)
 type KeyboardButtonRequestUser struct {
 	// RequestID - Signed 32-bit identifier of the request, which will be received back in the UserShared
 	// (https://core.telegram.org/bots/api#usershared) object. Must be unique within the message
@@ -1272,7 +1276,8 @@ type KeyboardButtonRequestUser struct {
 }
 
 // KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. The
-// identifier of the selected chat will be shared with the bot when the corresponding button is pressed.
+// identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More
+// about requesting chats » (https://core.telegram.org/bots/features#chat-and-user-selection)
 type KeyboardButtonRequestChat struct {
 	// RequestID - Signed 32-bit identifier of the request, which will be received back in the ChatShared
 	// (https://core.telegram.org/bots/api#chatshared) object. Must be unique within the message
@@ -1395,6 +1400,11 @@ type InlineKeyboardButton struct {
 	// something from multiple options.
 	SwitchInlineQueryCurrentChat *string `json:"switch_inline_query_current_chat,omitempty"`
 
+	// SwitchInlineQueryChosenChat - Optional. If set, pressing the button will prompt the user to select one of
+	// their chats of the specified type, open that chat and insert the bot's username and the specified inline
+	// query in the input field
+	SwitchInlineQueryChosenChat *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`
+
 	// CallbackGame - Optional. Description of the game that will be launched when the user presses the button.
 	// NOTE: This type of button must always be the first button in the first row.
 	CallbackGame *CallbackGame `json:"callback_game,omitempty"`
@@ -1436,6 +1446,26 @@ type LoginURL struct {
 	// RequestWriteAccess - Optional. Pass True to request the permission for your bot to send messages to the
 	// user.
 	RequestWriteAccess bool `json:"request_write_access,omitempty"`
+}
+
+// SwitchInlineQueryChosenChat - This object represents an inline button that switches the current user to
+// inline mode in a chosen chat, with an optional default inline query.
+type SwitchInlineQueryChosenChat struct {
+	// Query - Optional. The default inline query to be inserted in the input field. If left empty, only the
+	// bot's username will be inserted
+	Query string `json:"query,omitempty"`
+
+	// AllowUserChats - Optional. True, if private chats with users can be chosen
+	AllowUserChats bool `json:"allow_user_chats,omitempty"`
+
+	// AllowBotChats - Optional. True, if private chats with bots can be chosen
+	AllowBotChats bool `json:"allow_bot_chats,omitempty"`
+
+	// AllowGroupChats - Optional. True, if group and supergroup chats can be chosen
+	AllowGroupChats bool `json:"allow_group_chats,omitempty"`
+
+	// AllowChannelChats - Optional. True, if channel chats can be chosen
+	AllowChannelChats bool `json:"allow_channel_chats,omitempty"`
 }
 
 // CallbackQuery - This object represents an incoming callback query from a callback button in an inline
@@ -1910,6 +1940,9 @@ type ChatMemberUpdated struct {
 	// InviteLink - Optional. Chat invite link, which was used by the user to join the chat; for joining by
 	// invite link events only.
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
+
+	// ViaChatFolderInviteLink - Optional. True, if the user joined the chat via a chat folder invite link
+	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
 }
 
 // UnmarshalJSON converts JSON to ChatMemberUpdated
@@ -2207,6 +2240,12 @@ type BotCommandScopeChatMember struct {
 // ScopeType returns BotCommandScope type
 func (b *BotCommandScopeChatMember) ScopeType() string {
 	return ScopeTypeChatMember
+}
+
+// BotName - This object represents the bot's name.
+type BotName struct {
+	// Name - The bot's name
+	Name string `json:"name"`
 }
 
 // BotDescription - This object represents the bot's description.
@@ -2784,9 +2823,10 @@ const (
 // InputSticker - This object describes a sticker to be added to a sticker set.
 type InputSticker struct {
 	// Sticker - The added sticker. Pass a file_id as a String to send a file that already exists on the
-	// Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new
-	// one using multipart/form-data. Animated and video stickers can't be uploaded via HTTP URL. More information
-	// on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	// Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one
+	// using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using
+	// multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP
+	// URL. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Sticker InputFile `json:"sticker"`
 
 	// EmojiList - List of 1-20 emoji associated with the sticker
@@ -2823,6 +2863,29 @@ type InlineQuery struct {
 
 	// Location - Optional. Sender location, only for bots that request user location
 	Location *Location `json:"location,omitempty"`
+}
+
+// InlineQueryResultsButton - This object represents a button to be shown above inline query results. You
+// must use exactly one of the optional fields.
+type InlineQueryResultsButton struct {
+	// Text - Label text on the button
+	Text string `json:"text"`
+
+	// WebApp - Optional. Description of the Web App (https://core.telegram.org/bots/webapps) that will be
+	// launched when the user presses the button. The Web App will be able to switch back to the inline mode using
+	// the method web_app_switch_inline_query inside the Web App.
+	WebApp *WebAppInfo `json:"web_app,omitempty"`
+
+	// StartParameter - Optional. Deep-linking (https://core.telegram.org/bots/features#deep-linking) parameter
+	// for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _
+	// and - are allowed.
+	// Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account
+	// to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above
+	// the results, or even before showing any. The user presses the button, switches to a private chat with the bot
+	// and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot
+	// can offer a switch_inline (https://core.telegram.org/bots/api#inlinekeyboardmarkup) button so that the user
+	// can easily return to the chat where they wanted to use the bot's inline capabilities.
+	StartParameter string `json:"start_parameter,omitempty"`
 }
 
 // InlineQueryResult - This object represents one result of an inline query. Telegram clients currently

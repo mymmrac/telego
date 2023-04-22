@@ -176,6 +176,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputSticker{{}}"
 	case "InputSticker":
 		return "InputSticker{Sticker: testInputFile}"
+	case "*SwitchInlineQueryChosenChat":
+		return "&SwitchInlineQueryChosenChat{AllowUserChats: true}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

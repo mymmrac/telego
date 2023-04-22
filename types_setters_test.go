@@ -76,6 +76,7 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		WithLoginURL(&LoginURL{URL: "LoginURL"}).
 		WithSwitchInlineQuery("SwitchInlineQuery").
 		WithSwitchInlineQueryCurrentChat("SwitchInlineQueryCurrentChat").
+		WithSwitchInlineQueryChosenChat(&SwitchInlineQueryChosenChat{AllowUserChats: true}).
 		WithCallbackGame(&CallbackGame{}).
 		WithPay()
 
@@ -87,6 +88,7 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		LoginURL:                     &LoginURL{URL: "LoginURL"},
 		SwitchInlineQuery:            ToPtr("SwitchInlineQuery"),
 		SwitchInlineQueryCurrentChat: ToPtr("SwitchInlineQueryCurrentChat"),
+		SwitchInlineQueryChosenChat:  &SwitchInlineQueryChosenChat{AllowUserChats: true},
 		CallbackGame:                 &CallbackGame{},
 		Pay:                          true,
 	}, i)
