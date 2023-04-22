@@ -53,6 +53,7 @@ func TestSendMessage(t *testing.T) {
 		/*
 
 			TODO: Method is not fully compliant with API, trailing newlines or whitespaces not counted correctly
+			https://core.telegram.org/api/entities
 
 			actual  : []telego.MessageEntity{
 				telego.MessageEntity{Type:"italic", Offset:0, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
