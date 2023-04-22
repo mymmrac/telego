@@ -231,15 +231,21 @@ func parseField(field reflect.Value) (string, bool, error) {
 		return "", false, nil
 	}
 
-	data, err := json.Marshal(field.Interface())
-	if err != nil {
-		return "", false, err
+	var value string
+	var rawString bool
+
+	fieldInterface := field.Interface()
+	if value, rawString = fieldInterface.(string); !rawString {
+		data, err := json.Marshal(fieldInterface)
+		if err != nil {
+			return "", false, err
+		}
+
+		value = string(data)
 	}
 
-	value := string(data)
-
-	// Trim double quotes in strings
-	if len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
+	// Trim double quotes for values marshaled into string (like file names)
+	if !rawString && len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
 		value = value[1 : len(value)-1]
 	}
 

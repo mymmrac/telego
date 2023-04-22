@@ -77,17 +77,55 @@ func TestSendMessage(t *testing.T) {
 		assert.Equal(t, msg.Text, text)
 		assert.Equal(t, msg.Entities, entities)
 	})
+
+	t.Run("new_line", func(t *testing.T) {
+		msg, err := bot.SendMessage(&telego.SendMessageParams{
+			ChatID: tu.ID(chatID),
+			Text:   "Send\nMessage",
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
 }
 
 func TestSendPhoto(t *testing.T) {
-	msg, err := bot.SendPhoto(&telego.SendPhotoParams{
-		ChatID:  tu.ID(chatID),
-		Photo:   tu.File(open(img1Jpg)),
-		Caption: "SendPhoto " + timeNow,
+	t.Run("regular", func(t *testing.T) {
+		msg, err := bot.SendPhoto(&telego.SendPhotoParams{
+			ChatID:  tu.ID(chatID),
+			Photo:   tu.File(open(img1Jpg)),
+			Caption: "SendPhoto " + timeNow,
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
 	})
 
-	require.NoError(t, err)
-	assert.NotNil(t, msg)
+	t.Run("new_line", func(t *testing.T) {
+		msg, err := bot.SendPhoto(&telego.SendPhotoParams{
+			ChatID:  tu.ID(chatID),
+			Photo:   tu.File(open(img1Jpg)),
+			Caption: "Send\nPhoto \" >",
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+
+	t.Run("keyboard_and_markdown", func(t *testing.T) {
+		msg, err := bot.SendPhoto(&telego.SendPhotoParams{
+			ChatID:    tu.ID(chatID),
+			Photo:     tu.File(open(img1Jpg)),
+			ParseMode: telego.ModeMarkdownV2,
+			Caption:   "Send\n`Photo`",
+			ReplyMarkup: tu.InlineKeyboard(tu.InlineKeyboardRow(
+				tu.InlineKeyboardButton("Test").WithCallbackData("ok"),
+			)),
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
 }
 
 func TestSendAudio(t *testing.T) {
