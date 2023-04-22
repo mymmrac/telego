@@ -211,11 +211,11 @@ func parseParameters(v any) (map[string]string, error) {
 		}
 
 		fieldValue := paramsStruct.Field(i)
-		value, ok, err := parseField(fieldValue)
+		value, err := parseField(fieldValue)
 		if err != nil {
 			return nil, fmt.Errorf("parse of %s: %w", paramsStructType.String(), err)
 		}
-		if !ok {
+		if value == "" {
 			continue
 		}
 
@@ -226,9 +226,9 @@ func parseParameters(v any) (map[string]string, error) {
 }
 
 // parseField parses struct field to string value
-func parseField(field reflect.Value) (string, bool, error) {
+func parseField(field reflect.Value) (string, error) {
 	if field.IsZero() || !field.CanInterface() {
-		return "", false, nil
+		return "", nil
 	}
 
 	var value string
@@ -238,7 +238,7 @@ func parseField(field reflect.Value) (string, bool, error) {
 	if value, rawString = fieldInterface.(string); !rawString {
 		data, err := json.Marshal(fieldInterface)
 		if err != nil {
-			return "", false, err
+			return "", err
 		}
 
 		value = string(data)
@@ -249,11 +249,7 @@ func parseField(field reflect.Value) (string, bool, error) {
 		value = value[1 : len(value)-1]
 	}
 
-	if len(value) == 0 {
-		return "", false, nil
-	}
-
-	return value, true, nil
+	return value, nil
 }
 
 func isNil(i any) bool {
