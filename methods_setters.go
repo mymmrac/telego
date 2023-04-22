@@ -1837,6 +1837,24 @@ func (p *GetMyCommandsParams) WithLanguageCode(languageCode string) *GetMyComman
 	return p
 }
 
+// WithName adds name parameter
+func (p *SetMyNameParams) WithName(name string) *SetMyNameParams {
+	p.Name = name
+	return p
+}
+
+// WithLanguageCode adds language code parameter
+func (p *SetMyNameParams) WithLanguageCode(languageCode string) *SetMyNameParams {
+	p.LanguageCode = languageCode
+	return p
+}
+
+// WithLanguageCode adds language code parameter
+func (p *GetMyNameParams) WithLanguageCode(languageCode string) *GetMyNameParams {
+	p.LanguageCode = languageCode
+	return p
+}
+
 // WithDescription adds description parameter
 func (p *SetMyDescriptionParams) WithDescription(description string) *SetMyDescriptionParams {
 	p.Description = description
@@ -2389,15 +2407,9 @@ func (p *AnswerInlineQueryParams) WithNextOffset(nextOffset string) *AnswerInlin
 	return p
 }
 
-// WithSwitchPmText adds switch pm text parameter
-func (p *AnswerInlineQueryParams) WithSwitchPmText(switchPmText string) *AnswerInlineQueryParams {
-	p.SwitchPmText = switchPmText
-	return p
-}
-
-// WithSwitchPmParameter adds switch pm parameter parameter
-func (p *AnswerInlineQueryParams) WithSwitchPmParameter(switchPmParameter string) *AnswerInlineQueryParams {
-	p.SwitchPmParameter = switchPmParameter
+// WithButton adds button parameter
+func (p *AnswerInlineQueryParams) WithButton(button *InlineQueryResultsButton) *AnswerInlineQueryParams {
+	p.Button = button
 	return p
 }
 

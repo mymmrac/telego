@@ -1074,6 +1074,26 @@ func TestGetMyCommandsParams_Setters(t *testing.T) {
 	}, g)
 }
 
+func TestSetMyNameParams_Setters(t *testing.T) {
+	s := (&SetMyNameParams{}).
+		WithName("Name").
+		WithLanguageCode("LanguageCode")
+
+	assert.Equal(t, &SetMyNameParams{
+		Name:         "Name",
+		LanguageCode: "LanguageCode",
+	}, s)
+}
+
+func TestGetMyNameParams_Setters(t *testing.T) {
+	g := (&GetMyNameParams{}).
+		WithLanguageCode("LanguageCode")
+
+	assert.Equal(t, &GetMyNameParams{
+		LanguageCode: "LanguageCode",
+	}, g)
+}
+
 func TestSetMyDescriptionParams_Setters(t *testing.T) {
 	s := (&SetMyDescriptionParams{}).
 		WithDescription("Description").
@@ -1463,17 +1483,15 @@ func TestAnswerInlineQueryParams_Setters(t *testing.T) {
 		WithCacheTime(1).
 		WithIsPersonal().
 		WithNextOffset("NextOffset").
-		WithSwitchPmText("SwitchPmText").
-		WithSwitchPmParameter("SwitchPmParameter")
+		WithButton(&InlineQueryResultsButton{})
 
 	assert.Equal(t, &AnswerInlineQueryParams{
-		InlineQueryID:     "InlineQueryID",
-		Results:           []InlineQueryResult{&InlineQueryResultArticle{Type: "Results"}},
-		CacheTime:         1,
-		IsPersonal:        true,
-		NextOffset:        "NextOffset",
-		SwitchPmText:      "SwitchPmText",
-		SwitchPmParameter: "SwitchPmParameter",
+		InlineQueryID: "InlineQueryID",
+		Results:       []InlineQueryResult{&InlineQueryResultArticle{Type: "Results"}},
+		CacheTime:     1,
+		IsPersonal:    true,
+		NextOffset:    "NextOffset",
+		Button:        &InlineQueryResultsButton{},
 	}, a)
 }
 

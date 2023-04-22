@@ -2050,6 +2050,66 @@ func TestBot_GetMyCommands(t *testing.T) {
 	})
 }
 
+func TestBot_SetMyName(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetMyName(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetMyName(nil)
+		assert.Error(t, err)
+	})
+}
+
+func TestBot_GetMyName(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedBotName := &BotName{
+			Name: "Name",
+		}
+		resp := telegoResponse(t, expectedBotName)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		botName, err := m.Bot.GetMyName(nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedBotName, botName)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		botName, err := m.Bot.GetMyName(nil)
+		assert.Error(t, err)
+		assert.Nil(t, botName)
+	})
+}
+
 func TestBot_SetMyDescription(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)

@@ -13,7 +13,7 @@ type GetUpdatesParams struct {
 	// unconfirmed update are returned. An update is considered confirmed as soon as getUpdates
 	// (https://core.telegram.org/bots/api#getupdates) is called with an offset higher than its update_id. The
 	// negative offset can be specified to retrieve updates starting from -offset update from the end of the updates
-	// queue. All previous updates will forgotten.
+	// queue. All previous updates will be forgotten.
 	Offset int `json:"offset,omitempty"`
 
 	// Limit - Optional. Limits the number of updates to be retrieved. Values between 1-100 are accepted.
@@ -2530,6 +2530,45 @@ func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
 	return botCommands, nil
 }
 
+// SetMyNameParams - Represents parameters of setMyName method.
+type SetMyNameParams struct {
+	// Name - Optional. New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the
+	// given language.
+	Name string `json:"name,omitempty"`
+
+	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, the name will be shown to all
+	// users for whose language there is no dedicated name.
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+// SetMyName - Use this method to change the bot's name. Returns True on success.
+func (b *Bot) SetMyName(params *SetMyNameParams) error {
+	err := b.performRequest("setMyName", params)
+	if err != nil {
+		return fmt.Errorf("telego: setMyName(): %w", err)
+	}
+
+	return nil
+}
+
+// GetMyNameParams - Represents parameters of getMyName method.
+type GetMyNameParams struct {
+	// LanguageCode - Optional. A two-letter ISO 639-1 language code or an empty string
+	LanguageCode string `json:"language_code,omitempty"`
+}
+
+// GetMyName - Use this method to get the current bot name for the given user language. Returns BotName
+// (https://core.telegram.org/bots/api#botname) on success.
+func (b *Bot) GetMyName(params *GetMyNameParams) (*BotName, error) {
+	var botName *BotName
+	err := b.performRequest("getMyName", params, &botName)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getMyName(): %w", err)
+	}
+
+	return botName, nil
+}
+
 // SetMyDescriptionParams - Represents parameters of setMyDescription method.
 type SetMyDescriptionParams struct {
 	// Description - Optional. New bot description; 0-512 characters. Pass an empty string to remove the
@@ -3455,7 +3494,7 @@ type AnswerInlineQueryParams struct {
 	CacheTime int `json:"cache_time,omitempty"`
 
 	// IsPersonal - Optional. Pass True if results may be cached on the server side only for the user that sent
-	// the query. By default, results may be returned to any user who sends the same query
+	// the query. By default, results may be returned to any user who sends the same query.
 	IsPersonal bool `json:"is_personal,omitempty"`
 
 	// NextOffset - Optional. Pass the offset that a client should send in the next query with the same text to
@@ -3463,20 +3502,8 @@ type AnswerInlineQueryParams struct {
 	// Offset length can't exceed 64 bytes.
 	NextOffset string `json:"next_offset,omitempty"`
 
-	// SwitchPmText - Optional. If passed, clients will display a button with specified text that switches the
-	// user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
-	SwitchPmText string `json:"switch_pm_text,omitempty"`
-
-	// SwitchPmParameter - Optional. Deep-linking (https://core.telegram.org/bots/features#deep-linking)
-	// parameter for the /start message sent to the bot when user presses the switch button. 1-64 characters, only
-	// A-Z, a-z, 0-9, _ and - are allowed.
-	// Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account
-	// to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above
-	// the results, or even before showing any. The user presses the button, switches to a private chat with the bot
-	// and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot
-	// can offer a switch_inline (https://core.telegram.org/bots/api#inlinekeyboardmarkup) button so that the user
-	// can easily return to the chat where they wanted to use the bot's inline capabilities.
-	SwitchPmParameter string `json:"switch_pm_parameter,omitempty"`
+	// Button - Optional. A JSON-serialized object describing a button to be shown above inline query results
+	Button *InlineQueryResultsButton `json:"button,omitempty"`
 }
 
 // AnswerInlineQuery - Use this method to send answers to an inline query. On success, True is returned.
