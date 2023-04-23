@@ -56,6 +56,7 @@ func WithWebhookServer(server WebhookServer) WebhookOption {
 }
 
 // WithWebhookSet calls Bot.SetWebhook() before starting webhook
+// Note: Calling Bot.SetWebhook() multiple times in a row may give "too many requests" errors
 func WithWebhookSet(params *SetWebhookParams) WebhookOption {
 	return func(bot *Bot, ctx *webhookContext) error {
 		return bot.SetWebhook(params)
