@@ -21,7 +21,7 @@ func main() {
 	}
 
 	// Set up a webhook on Telegram side
-	// Note: If tou are keeping this call, you shouldn't use telego.WithWebhookSet option below
+	// Note: If you are keeping this call, you shouldn't use telego.WithWebhookSet option below
 	_ = bot.SetWebhook(&telego.SetWebhookParams{
 		URL: "https://example.com/bot" + bot.Token(),
 	})
@@ -46,7 +46,7 @@ func main() {
 		}),
 
 		// Calls SetWebhook before starting webhook
-		// Note: If tou are using this option, you shouldn't call bot.SetWebhook above
+		// Note: If you are using this option, you shouldn't call bot.SetWebhook above
 		telego.WithWebhookSet(&telego.SetWebhookParams{
 			URL: "https://example.com/bot" + bot.Token(),
 		}),
