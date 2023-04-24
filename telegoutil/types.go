@@ -30,15 +30,15 @@ func File(file telegoapi.NamedReader) telego.InputFile {
 	}
 }
 
-// FileByURL creates telego.InputFile from URL
-func FileByURL(url string) telego.InputFile {
+// FileFromURL creates telego.InputFile from URL
+func FileFromURL(url string) telego.InputFile {
 	return telego.InputFile{
 		URL: url,
 	}
 }
 
-// FileByID creates telego.InputFile from file ID
-func FileByID(id string) telego.InputFile {
+// FileFromID creates telego.InputFile from file ID
+func FileFromID(id string) telego.InputFile {
 	return telego.InputFile{
 		FileID: id,
 	}

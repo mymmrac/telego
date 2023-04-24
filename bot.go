@@ -266,15 +266,17 @@ func isNil(i any) bool {
 }
 
 func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, files map[string]telegoapi.NamedReader) {
-	i := 0
-	debugFiles := make([]string, len(files))
+	debugFiles := make([]string, 0, len(files))
 	for k, v := range files {
-		if k == v.Name() {
-			debugFiles[i] = fmt.Sprintf("%q", k)
-		} else {
-			debugFiles[i] = fmt.Sprintf("%q: %q", k, v.Name())
+		if isNil(v) {
+			continue
 		}
-		i++
+
+		if k == v.Name() {
+			debugFiles = append(debugFiles, fmt.Sprintf("%q", k))
+		} else {
+			debugFiles = append(debugFiles, fmt.Sprintf("%q: %q", k, v.Name()))
+		}
 	}
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)

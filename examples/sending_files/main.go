@@ -27,10 +27,10 @@ func main() {
 		tu.File(mustOpen("my_file.txt")),
 
 		// Send using external URL
-		// tu.FileByURL("https://example.com/my_file.txt"),
+		// tu.FileFromURL("https://example.com/my_file.txt"),
 
 		// Send using file ID
-		// tu.FileByID("<file ID of your file>"),
+		// tu.FileFromID("<file ID of your file>"),
 	).WithCaption("My cool file from disk")
 
 	// Sending document
@@ -64,9 +64,9 @@ func main() {
 		// Specify slice of telego.InputMedia with media you want to send as a group
 		tu.MediaPhoto(tu.File(mustOpen("my_photo.png"))),
 
-		tu.MediaPhoto(tu.FileByID("<file ID of your photo>")),
+		tu.MediaPhoto(tu.FileFromID("<file ID of your photo>")),
 
-		tu.MediaPhoto(tu.FileByURL("https://example.com/my_photo.png")),
+		tu.MediaPhoto(tu.FileFromURL("https://example.com/my_photo.png")),
 	)
 
 	// Sending a media group

@@ -129,12 +129,27 @@ func TestSendPhoto(t *testing.T) {
 }
 
 func TestSendAudio(t *testing.T) {
-	msg, err := bot.SendAudio(&telego.SendAudioParams{
-		ChatID:  tu.ID(chatID),
-		Audio:   tu.File(open(kittenMp3)),
-		Caption: "SendAudio " + timeNow,
+	t.Run("audio_file", func(t *testing.T) {
+		msg, err := bot.SendAudio(&telego.SendAudioParams{
+			ChatID:    tu.ID(chatID),
+			Audio:     tu.File(open(kittenMp3)),
+			Caption:   "SendAudio " + timeNow,
+			Thumbnail: telego.ToPtr(tu.File(open(img1Jpg))),
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
 	})
 
-	require.NoError(t, err)
-	assert.NotNil(t, msg)
+	t.Run("url", func(t *testing.T) {
+		msg, err := bot.SendAudio(&telego.SendAudioParams{
+			ChatID:    tu.ID(chatID),
+			Audio:     tu.FileFromURL("https://file-examples.com/storage/fe0e4ffeec64469f8a2ba23/2017/11/file_example_MP3_700KB.mp3"),
+			Caption:   "SendAudio " + timeNow,
+			Thumbnail: telego.ToPtr(tu.File(open(img1Jpg))), // Expected to be not displayed
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
 }

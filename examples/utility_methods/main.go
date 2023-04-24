@@ -46,7 +46,7 @@ func main() {
 	_, _ = bot.SendDocument(tu.Document(chatID, tu.File(tu.NameReader(reader, "my_file"))))
 
 	// Create document using URL to file as telego.InputFile
-	_, _ = bot.SendDocument(tu.Document(chatID, tu.FileByURL("https://example.com/test.txt")))
+	_, _ = bot.SendDocument(tu.Document(chatID, tu.FileFromURL("https://example.com/test.txt")))
 
 	// Create contact from phone and first name
 	_, _ = bot.SendContact(tu.Contact(chatID, "+123454321", "John"))

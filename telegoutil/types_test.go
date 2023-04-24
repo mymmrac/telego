@@ -28,12 +28,12 @@ func TestFile(t *testing.T) {
 }
 
 func TestFileByID(t *testing.T) {
-	f := FileByID(text1)
+	f := FileFromID(text1)
 	assert.Equal(t, text1, f.FileID)
 }
 
 func TestFileByURL(t *testing.T) {
-	f := FileByURL(text1)
+	f := FileFromURL(text1)
 	assert.Equal(t, text1, f.URL)
 }
 
