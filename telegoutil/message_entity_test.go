@@ -136,8 +136,8 @@ func TestEntityLength(t *testing.T) {
 	}, entities[0]) // "😅"
 	assert.Equal(t, telego.MessageEntity{
 		Type:   telego.EntityTypeBold,
-		Offset: 2,
-		Length: 6,
+		Offset: 3,
+		Length: 4,
 	}, entities[1]) // " test "
 	assert.Equal(t, telego.MessageEntity{
 		Type:   telego.EntityTypeItalic,
@@ -146,13 +146,13 @@ func TestEntityLength(t *testing.T) {
 	}, entities[2]) // "🌗"
 	assert.Equal(t, telego.MessageEntity{
 		Type:   telego.EntityTypeBold,
-		Offset: 10,
-		Length: 8,
+		Offset: 11,
+		Length: 7,
 	}, entities[3]) // " Україна"
 	assert.Equal(t, telego.MessageEntity{
 		Type:   telego.EntityTypeItalic,
 		Offset: 19,
-		Length: 3,
+		Length: 2,
 	}, entities[4]) // "\U0001FAE5 "
 	assert.Equal(t, telego.MessageEntity{
 		Type:   telego.EntityTypeBold,

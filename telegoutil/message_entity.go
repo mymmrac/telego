@@ -3,6 +3,7 @@ package telegoutil
 import (
 	"fmt"
 	"strings"
+	"unicode"
 	"unicode/utf16"
 
 	"github.com/mymmrac/telego"
@@ -10,8 +11,9 @@ import (
 
 // MessageEntityCollection represents text and slice of telego.MessageEntity associated with it
 type MessageEntityCollection struct {
-	text     string
-	entities []telego.MessageEntity
+	text       string
+	entities   []telego.MessageEntity
+	keepSpaces bool
 }
 
 // Entity creates new MessageEntityCollection with provided text and no entities
@@ -28,12 +30,12 @@ func Entityf(format string, args ...any) MessageEntityCollection {
 	}
 }
 
-// Text returns text associated with collection
+// Text returns text associated with a collection
 func (c MessageEntityCollection) Text() string {
 	return c.text
 }
 
-// Entities returns message entities associated with collection
+// Entities return message entities associated with a collection
 func (c MessageEntityCollection) Entities() []telego.MessageEntity {
 	return c.entities
 }
@@ -49,79 +51,79 @@ func (c MessageEntityCollection) SetOffset(offset int) {
 func (c MessageEntityCollection) Mention() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeMention,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// Hashtag assigns hashtag entity and returns new collection
+// Hashtag assigns hashtag entity and returns a new collection
 func (c MessageEntityCollection) Hashtag() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeHashtag,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// Cashtag assigns cashtag entity and returns new collection
+// Cashtag assigns cashtag entity and returns a new collection
 func (c MessageEntityCollection) Cashtag() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeCashtag,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// BotCommand assigns bot command entity and returns new collection
+// BotCommand assigns bot command entity and returns a new collection
 func (c MessageEntityCollection) BotCommand() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeBotCommand,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// URL assigns url entity and returns new collection
+// URL assigns url entity and returns a new collection
 func (c MessageEntityCollection) URL() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeURL,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// Email assigns email entity and returns new collection
+// Email assigns email entity and returns a new collection
 func (c MessageEntityCollection) Email() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeEmail,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// PhoneNumber assigns phone number entity and returns new collection
+// PhoneNumber assigns phone number entity and returns a new collection
 func (c MessageEntityCollection) PhoneNumber() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypePhoneNumber,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// Bold assigns bold entity and returns new collection
+// Bold assigns bold entity and returns a new collection
 func (c MessageEntityCollection) Bold() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeBold,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// Italic assigns italic entity and returns new collection
+// Italic assigns italic entity and returns a new collection
 func (c MessageEntityCollection) Italic() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeItalic,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
@@ -130,16 +132,16 @@ func (c MessageEntityCollection) Italic() MessageEntityCollection {
 func (c MessageEntityCollection) Underline() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeUnderline,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
-// Strikethrough assigns strikethrough entity and returns new collection
+// Strikethrough assigns strikethrough entity and returns a new collection
 func (c MessageEntityCollection) Strikethrough() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeStrikethrough,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
@@ -148,13 +150,14 @@ func (c MessageEntityCollection) Strikethrough() MessageEntityCollection {
 func (c MessageEntityCollection) Spoiler() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeSpoiler,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 	})
 	return c
 }
 
 // Code assigns code entity and returns new collection
 func (c MessageEntityCollection) Code() MessageEntityCollection {
+	c.keepSpaces = true
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeCode,
 		Length: UTF16TextLen(c.text),
@@ -162,8 +165,9 @@ func (c MessageEntityCollection) Code() MessageEntityCollection {
 	return c
 }
 
-// Pre assigns pre entity with language and returns new collection
+// Pre assigns pre entity with language and returns a new collection
 func (c MessageEntityCollection) Pre(language string) MessageEntityCollection {
+	c.keepSpaces = true
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:     telego.EntityTypePre,
 		Length:   UTF16TextLen(c.text),
@@ -172,11 +176,11 @@ func (c MessageEntityCollection) Pre(language string) MessageEntityCollection {
 	return c
 }
 
-// TextLink assigns text link entity with URL and returns new collection
+// TextLink assigns text link entity with URL and returns a new collection
 func (c MessageEntityCollection) TextLink(url string) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextLink,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 		URL:    url,
 	})
 	return c
@@ -186,27 +190,27 @@ func (c MessageEntityCollection) TextLink(url string) MessageEntityCollection {
 func (c MessageEntityCollection) TextMention(user *telego.User) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextMention,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 		User:   user,
 	})
 	return c
 }
 
-// TextMentionWithID assigns text mention entity with just user ID and returns new collection
+// TextMentionWithID assigns text mention entity with just user ID and returns a new collection
 func (c MessageEntityCollection) TextMentionWithID(userID int64) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextMention,
-		Length: UTF16TextLen(c.text),
+		Length: TrimmedUTF16TextLen(c.text),
 		User:   &telego.User{ID: userID},
 	})
 	return c
 }
 
-// CustomEmoji assigns custom emoji entity and returns new collection
+// CustomEmoji assigns custom emoji entity and returns a new collection
 func (c MessageEntityCollection) CustomEmoji(emojiID string) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:          telego.EntityTypeCustomEmoji,
-		Length:        UTF16TextLen(c.text),
+		Length:        TrimmedUTF16TextLen(c.text),
 		CustomEmojiID: emojiID,
 	})
 	return c
@@ -218,16 +222,41 @@ func MessageEntities(entityCollections ...MessageEntityCollection) (string, []te
 	var entities []telego.MessageEntity
 
 	for _, collection := range entityCollections {
-		collection.SetOffset(UTF16TextLen(text.String()))
+		spaceOffset := 0
+		collText := collection.Text()
+		if !collection.keepSpaces {
+			spaceOffset = leftSpaceCount(collText)
+		}
+
+		collection.SetOffset(UTF16TextLen(text.String()) + spaceOffset)
 		entities = append(entities, collection.Entities()...)
 
-		_, _ = text.WriteString(collection.Text())
+		_, _ = text.WriteString(collText)
 	}
 
 	return text.String(), entities
 }
 
+// leftSpaceCount returns number of spaces at the start of the text
+func leftSpaceCount(text string) int {
+	start := 0
+
+	textRunes := []rune(text)
+	for ; start < len(textRunes); start++ {
+		if !unicode.IsSpace(textRunes[start]) {
+			break
+		}
+	}
+
+	return start
+}
+
 // UTF16TextLen returns length of a UTF-16 text
 func UTF16TextLen(text string) int {
 	return len(utf16.Encode([]rune(text)))
+}
+
+// TrimmedUTF16TextLen returns length of a trimmed UTF-16 text
+func TrimmedUTF16TextLen(text string) int {
+	return UTF16TextLen(strings.TrimSpace(text))
 }

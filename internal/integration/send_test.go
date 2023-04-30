@@ -50,30 +50,6 @@ func TestSendMessage(t *testing.T) {
 		msg, err := bot.SendMessage(tu.Message(tu.ID(chatID), text).WithEntities(entities...))
 		require.NoError(t, err)
 
-		/*
-
-			TODO: Method is not fully compliant with API, trailing newlines or whitespaces not counted correctly
-			https://core.telegram.org/api/entities
-
-			actual  : []telego.MessageEntity{
-				telego.MessageEntity{Type:"italic", Offset:0, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"bold", Offset:3, Length:5, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"italic", Offset:8, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"bold", Offset:11, Length:7, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"italic", Offset:19, Length:3, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"bold", Offset:22, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""}
-			}
-			expected: []telego.MessageEntity{
-				telego.MessageEntity{Type:"italic", Offset:0, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"bold", Offset:2, Length:6, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"italic", Offset:8, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"bold", Offset:10, Length:8, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"italic", Offset:19, Length:3, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""},
-				telego.MessageEntity{Type:"bold", Offset:22, Length:2, URL:"", User:(*telego.User)(nil), Language:"", CustomEmojiID:""}
-			}
-
-		*/
-
 		assert.Equal(t, msg.Text, text)
 		assert.Equal(t, msg.Entities, entities)
 	})
@@ -86,6 +62,19 @@ func TestSendMessage(t *testing.T) {
 
 		require.NoError(t, err)
 		assert.NotNil(t, msg)
+	})
+
+	t.Run("code_space", func(t *testing.T) {
+		text, entities := tu.MessageEntities(
+			tu.Entity("    Code").Code(),
+			tu.Entity("\n"),
+			tu.Entity("  Pre\nPre").Pre(""),
+		)
+		msg, err := bot.SendMessage(tu.Message(tu.ID(chatID), text).WithEntities(entities...))
+		require.NoError(t, err)
+
+		assert.Equal(t, msg.Text, text)
+		assert.Equal(t, msg.Entities, entities)
 	})
 }
 
