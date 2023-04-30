@@ -37,7 +37,7 @@ func NameReader(reader io.Reader, name string) ta.NamedReader {
 
 // UpdateProcessor allows you to process updates and still use updates chan.
 // New updates chan will be closed when the original chan is closed.
-// Warning: Deep copy of update is passed, telego.Update's Clone() method can panic, please read its comment.
+// Warning: Deep copy of update is passed, [telego.Update.Clone] method can panic, please read its comment.
 func UpdateProcessor(updates <-chan telego.Update, buffer uint, processor func(update telego.Update) telego.Update,
 ) <-chan telego.Update {
 	processedUpdates := make(chan telego.Update, buffer)
@@ -82,7 +82,7 @@ func ValidateWebAppData(token string, data string) (url.Values, error) {
 
 	appData.Del(WebAppHash)
 
-	// Can't return error because url.Values.Encode() always inescapable
+	// Can't return error because [url.Values.Encode] method always inescapable
 	//nolint:errcheck
 	appDataToCheck, _ := url.QueryUnescape(strings.ReplaceAll(appData.Encode(), "&", "\n"))
 

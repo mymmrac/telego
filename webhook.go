@@ -55,8 +55,8 @@ func WithWebhookServer(server WebhookServer) WebhookOption {
 	}
 }
 
-// WithWebhookSet calls Bot.SetWebhook() before starting webhook
-// Note: Calling Bot.SetWebhook() multiple times in a row may give "too many requests" errors
+// WithWebhookSet calls [Bot.SetWebhook] method before starting webhook
+// Note: Calling [Bot.SetWebhook] method multiple times in a row may give "too many requests" errors
 func WithWebhookSet(params *SetWebhookParams) WebhookOption {
 	return func(bot *Bot, ctx *webhookContext) error {
 		return bot.SetWebhook(params)
@@ -65,7 +65,7 @@ func WithWebhookSet(params *SetWebhookParams) WebhookOption {
 
 // UpdatesViaWebhook receive updates in chan from webhook.
 // A new handler with a provided path will be registered on server.
-// Calling if already configured (before StopWebhook() method) will return an error.
+// Calling if already configured (before [Bot.StopWebhook] method) will return an error.
 // Note: Once stopped, update chan will be closed
 func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
 	if b.webhookContext != nil {
@@ -136,9 +136,9 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 
 // StartWebhook start server for listening for webhook.
 // Any error that occurs will stop the webhook.
-// Calling before UpdatesViaWebhook() will return an error.
-// Calling if already running (before StopWebhook() method) will return an error.
-// Note: After you done with getting updates you should call StopWebhook() method to stop the server
+// Calling before [Bot.UpdatesViaWebhook] method will return an error.
+// Calling if already running (before [Bot.StopWebhook] method) will return an error.
+// Note: After you done with getting updates, you should call [Bot.StopWebhook] method to stop the server
 func (b *Bot) StartWebhook(address string) error {
 	ctx := b.webhookContext
 	if ctx == nil {
@@ -187,10 +187,10 @@ func (b *Bot) IsRunningWebhook() bool {
 	return ctx.running
 }
 
-// StopWebhookWithContext shutdown webhook server used in the UpdatesViaWebhook() method.
+// StopWebhookWithContext shutdown webhook server used in the [Bot.UpdatesViaWebhook] method.
 // Stopping will stop new updates from coming, but processing updates should be handled by the caller.
 // Stop will only ensure that no more updates will come in update chan.
-// Calling StopWebhookWithContext() multiple times does nothing.
+// Calling [Bot.StopWebhookWithContext] method multiple times does nothing.
 func (b *Bot) StopWebhookWithContext(ctx context.Context) error {
 	webhookCtx := b.webhookContext
 	if webhookCtx == nil {
@@ -214,8 +214,8 @@ func (b *Bot) StopWebhookWithContext(ctx context.Context) error {
 	return nil
 }
 
-// StopWebhook shutdown webhook server used in the UpdatesViaWebhook() method
-// Note: For more info, see StopWebhookWithContext()
+// StopWebhook shutdown webhook server used in the [Bot.UpdatesViaWebhook] method
+// Note: For more info, see [Bot.StopWebhookWithContext] method
 func (b *Bot) StopWebhook() error {
 	return b.StopWebhookWithContext(context.Background())
 }

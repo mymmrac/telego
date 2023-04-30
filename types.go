@@ -79,8 +79,8 @@ type Update struct {
 
 // Clone returns a deep copy of Update.
 //
-// Warning: Types like ChatMember and MenuButton requires to have their mandatory fields (like status or type) to be
-// filled properly, else Clone() will panic. To safely clone, use CloneSafe().
+// Warning: Types like [ChatMember] and [MenuButton] require to have their mandatory fields (like status or type) to be
+// filled properly, else [Update.Clone] method will panic. To safely clone, use [Update.CloneSafe] method.
 func (u Update) Clone() Update {
 	update, err := u.CloneSafe()
 	if err != nil {

@@ -18,7 +18,7 @@ type Predicate func(update telego.Update) bool
 // Middleware applies any function on update before calling the handler
 type Middleware func(next Handler) Handler
 
-// BotHandler represents bot handler that can handle updated matching by predicates
+// BotHandler represents a bot handler that can handle updated matching by predicates
 type BotHandler struct {
 	bot       *telego.Bot
 	updates   <-chan telego.Update
@@ -53,9 +53,9 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 }
 
 // Start starts handling of updates, blocks execution
-// Calling Start() multiple times after the first one does nothing.
-// Note: After you done with handling updates you should call Stop() method, because stopping updates chan will do
-// nothing.
+// Calling [BotHandler.Start] method multiple times after the first one does nothing.
+// Note: After you done with handling updates, you should call [BotHandler.Stop] method,
+// because stopping updates chan will do nothing.
 func (h *BotHandler) Start() {
 	h.runningLock.RLock()
 	if h.running {
@@ -96,8 +96,9 @@ func (h *BotHandler) IsRunning() bool {
 }
 
 // Stop stops handling of updates, will block until all updates has been processes or on timeout. If timeout set to 0,
-// bot handler will not wait for all handlers to done processing.
-// Note: Calling Stop() multiple times does nothing. Calling before Start() does nothing.
+// bot handler will not wait for all handlers to complete processing.
+// Note: Calling [BotHandler.Stop] method multiple times does nothing. Calling before [BotHandler.Start] method does
+// nothing.
 func (h *BotHandler) Stop() {
 	h.runningLock.Lock()
 	defer h.runningLock.Unlock()
@@ -124,7 +125,7 @@ func (h *BotHandler) Stop() {
 // order of registration determines the order of matching handlers.
 // Important to notice, update's context will be automatically canceled once the handler will finish processing.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
-// in mind that predicates checked sequentially.
+// in mind that predicates are checked sequentially.
 //
 // Warning: Panics if nil handler or predicates passed
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
