@@ -26,6 +26,7 @@ type webhookContext struct {
 	configured  bool
 	runningLock sync.RWMutex
 	stop        chan struct{}
+	ctx         context.Context
 
 	server WebhookServer
 
@@ -63,6 +64,21 @@ func WithWebhookSet(params *SetWebhookParams) WebhookOption {
 	}
 }
 
+// WithWebhookContext sets context used in webhook server, this context will be added to each update
+//
+// Warning: Canceling the context doesn't stop webhook server, it only closes update chan,
+// be sure to stop server by calling [Bot.StopWebhook] or [Bot.StopWebhookWithContext] methods
+func WithWebhookContext(ctx context.Context) WebhookOption {
+	return func(_ *Bot, wCtx *webhookContext) error {
+		if ctx == nil {
+			return errors.New("context is nil")
+		}
+
+		wCtx.ctx = ctx
+		return nil
+	}
+}
+
 // UpdatesViaWebhook receive updates in chan from webhook.
 // A new handler with a provided path will be registered on server.
 // Calling if already configured (before [Bot.StopWebhook] method) will return an error.
@@ -97,10 +113,15 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 		}
 
 		select {
-		case updatesChan <- update:
-			return nil
 		case <-ctx.stop:
 			return fmt.Errorf("telego: webhook stopped")
+		case <-ctx.ctx.Done():
+			return fmt.Errorf("telego: %w", ctx.ctx.Err())
+		default:
+			if safeSend(updatesChan, update.WithContext(ctx.ctx)) {
+				return fmt.Errorf("telego: webhook stopped")
+			}
+			return nil
 		}
 	})
 	if err != nil {
@@ -108,7 +129,10 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 	}
 
 	go func() {
-		<-ctx.stop
+		select {
+		case <-ctx.stop:
+		case <-ctx.ctx.Done():
+		}
 		close(updatesChan)
 	}()
 
@@ -123,6 +147,7 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 			Router: router.New(),
 		},
 		updateChanBuffer: defaultWebhookUpdateChanBuffer,
+		ctx:              context.Background(),
 	}
 
 	for _, option := range options {
@@ -201,11 +226,11 @@ func (b *Bot) StopWebhookWithContext(ctx context.Context) error {
 	defer webhookCtx.runningLock.Unlock()
 
 	if webhookCtx.running {
-		webhookCtx.running = false
-
 		err := webhookCtx.server.Stop(ctx)
 
 		close(webhookCtx.stop)
+		webhookCtx.running = false
+
 		b.webhookContext = nil
 		return err
 	}

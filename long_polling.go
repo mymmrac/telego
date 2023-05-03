@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"sync"
@@ -21,6 +22,7 @@ type longPollingContext struct {
 	running     bool
 	runningLock sync.RWMutex
 	stop        chan struct{}
+	ctx         context.Context
 
 	updateChanBuffer uint
 	updateInterval   time.Duration
@@ -70,6 +72,21 @@ func WithLongPollingBuffer(chanBuffer uint) LongPollingOption {
 	}
 }
 
+// WithLongPollingContext sets context used in long polling, this context will be added to each update
+//
+// Warning: Canceling the context doesn't stop long polling, it only closes update chan,
+// be sure to stop long polling by calling [Bot.StopLongPolling] method
+func WithLongPollingContext(ctx context.Context) LongPollingOption {
+	return func(lCtx *longPollingContext) error {
+		if ctx == nil {
+			return errors.New("context is nil")
+		}
+
+		lCtx.ctx = ctx
+		return nil
+	}
+}
+
 // UpdatesViaLongPolling receive updates in chan using the [Bot.GetUpdates] method.
 // Calling if already running (before [Bot.StopLongPolling] method) will return an error.
 // Note: After you done with getting updates, you should call [Bot.StopLongPolling] method which will close update chan.
@@ -113,6 +130,8 @@ func (b *Bot) doLongPolling(ctx *longPollingContext, params *GetUpdatesParams, u
 		select {
 		case <-ctx.stop:
 			return
+		case <-ctx.ctx.Done():
+			return
 		default:
 			// Continue getting updates
 		}
@@ -132,10 +151,15 @@ func (b *Bot) doLongPolling(ctx *longPollingContext, params *GetUpdatesParams, u
 				params.Offset = update.UpdateID + 1
 
 				select {
-				case updatesChan <- update:
-				// Proceed reading updates
 				case <-ctx.stop:
 					return
+				case <-ctx.ctx.Done():
+					return
+				default:
+					if safeSend(updatesChan, update.WithContext(ctx.ctx)) {
+						b.log.Debugf("Long polling update chan closed")
+						return
+					}
 				}
 			}
 		}
@@ -149,6 +173,7 @@ func (b *Bot) createLongPollingContext(options []LongPollingOption) (*longPollin
 		updateChanBuffer: defaultLongPollingUpdateChanBuffer,
 		updateInterval:   defaultLongPollingUpdateInterval,
 		retryTimeout:     defaultLongPollingRetryTimeout,
+		ctx:              context.Background(),
 	}
 
 	for _, option := range options {
@@ -187,8 +212,8 @@ func (b *Bot) StopLongPolling() {
 	defer ctx.runningLock.Unlock()
 
 	if ctx.running {
-		ctx.running = false
 		close(ctx.stop)
+		ctx.running = false
 		b.longPollingContext = nil
 	}
 }

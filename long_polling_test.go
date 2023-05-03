@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -76,6 +77,40 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 		assert.NotPanics(t, func() {
 			_, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingUpdateInterval(-time.Second))
 			assert.Error(t, err)
+		})
+	})
+
+	t.Run("success_with_context", func(t *testing.T) {
+		m := newMockedBot(ctrl)
+
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil).MinTimes(1)
+
+		expectedUpdates := []Update{
+			{UpdateID: 1},
+			{UpdateID: 2},
+		}
+		resp := telegoResponse(t, expectedUpdates)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil).MinTimes(1)
+
+		assert.NotPanics(t, func() {
+			ctx, cansel := context.WithCancel(context.Background())
+			defer cansel()
+
+			updates, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingContext(ctx))
+			assert.NoError(t, err)
+
+			time.Sleep(time.Millisecond * 10)
+
+			cansel()
+			<-updates
+
+			assert.True(t, m.Bot.IsRunningLongPolling())
+			m.Bot.StopLongPolling()
+			assert.False(t, m.Bot.IsRunningLongPolling())
 		})
 	})
 }
@@ -171,4 +206,20 @@ func TestWithLongPollingBuffer(t *testing.T) {
 	err := WithLongPollingBuffer(buffer)(ctx)
 	assert.NoError(t, err)
 	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
+}
+
+func TestWithLongPollingContext(t *testing.T) {
+	lCtx := &longPollingContext{}
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+		err := WithLongPollingContext(ctx)(lCtx)
+		assert.NoError(t, err)
+		assert.EqualValues(t, ctx, lCtx.ctx)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		err := WithLongPollingContext(nil)(lCtx)
+		assert.Error(t, err)
+	})
 }

@@ -288,3 +288,15 @@ func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, f
 func ToPtr[T any](value T) *T {
 	return &value
 }
+
+// safeSend safely send to chan and return true if chan was closed
+func safeSend[T any](ch chan<- T, value T) (closed bool) {
+	defer func() {
+		if recover() != nil {
+			closed = true
+		}
+	}()
+
+	ch <- value
+	return false
+}
