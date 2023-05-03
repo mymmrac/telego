@@ -16,6 +16,8 @@ import (
 const (
 	img1Jpg   = "img1.jpg"
 	kittenMp3 = "kitten.mp3"
+
+	exampleMp3 = "https://file-examples.com/storage/fe0e4ffeec64469f8a2ba23/2017/11/file_example_MP3_700KB.mp3"
 )
 
 var (
