@@ -219,6 +219,7 @@ func TestWithLongPollingContext(t *testing.T) {
 	})
 
 	t.Run("error", func(t *testing.T) {
+		//nolint:staticcheck
 		err := WithLongPollingContext(nil)(lCtx)
 		assert.Error(t, err)
 	})

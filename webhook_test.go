@@ -205,6 +205,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 
 		update, ok := <-updates
 		require.True(t, ok)
+		update.ctx = nil
 
 		assert.Equal(t, expectedUpdate, update)
 
@@ -355,6 +356,7 @@ func TestWithWebhookContext(t *testing.T) {
 	})
 
 	t.Run("error", func(t *testing.T) {
+		//nolint:staticcheck
 		err := WithWebhookContext(nil)(nil, wCtx)
 		assert.Error(t, err)
 	})
