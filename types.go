@@ -72,8 +72,9 @@ type Update struct {
 	// can_invite_users administrator right in the chat to receive these updates.
 	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
 
-	// ctx - Internal context value, can be retrieved using Update.Context and set by Update.WithContext.
-	// Value can't be cloned, thus after calling Update.Clone or Update.CloneSafe ctx will be nil.
+	// ctx - Internal context value can be retrieved using [Update.Context] and set by [Update.WithContext].
+	// Value can't be cloned; thus, after calling [Update.Clone] or [Update.CloneSafe] ctx will be the same as in the
+	// original update.
 	ctx context.Context
 }
 
@@ -103,6 +104,7 @@ func (u Update) CloneSafe() (Update, error) {
 	if err != nil {
 		return Update{}, fmt.Errorf("telego: clone update: unmarshal: %w", err)
 	}
+	update.ctx = u.ctx
 
 	return update, nil
 }
