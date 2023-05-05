@@ -168,7 +168,7 @@ func (h HTTPWebhookServer) readData(request *http.Request) ([]byte, error) {
 }
 
 // MultiBotWebhookServer represents multi bot implementation of WebhookServer,
-// stable for running multiple bots from single server
+// suitable for running multiple bots from single server
 type MultiBotWebhookServer struct {
 	Server WebhookServer
 
@@ -197,4 +197,25 @@ func (m *MultiBotWebhookServer) Stop(ctx context.Context) error {
 // RegisterHandler registers new handler for the desired path
 func (m *MultiBotWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
 	return m.Server.RegisterHandler(path, handler)
+}
+
+// NoOpBotWebhookServer represents bo-op bot implementation of WebhookServer,
+// suitable for cases when you want to have full control over start & stop of server manually
+type NoOpBotWebhookServer struct {
+	RegisterHandlerFunc func(path string, handler func(data []byte) error) error
+}
+
+// Start does nothing
+func (n *NoOpBotWebhookServer) Start(_ string) error {
+	return nil
+}
+
+// Stop does nothing
+func (n *NoOpBotWebhookServer) Stop(_ context.Context) error {
+	return nil
+}
+
+// RegisterHandler registers new handler for the desired path
+func (n *NoOpBotWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
+	return n.RegisterHandlerFunc(path, handler)
 }

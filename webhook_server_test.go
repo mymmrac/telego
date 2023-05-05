@@ -260,3 +260,21 @@ func (t *testServer) RegisterHandler(_ string, _ func(data []byte) error) error 
 	t.registered++
 	return nil
 }
+
+func TestNoOpBotWebhookServer(t *testing.T) {
+	registered := false
+	s := NoOpBotWebhookServer{
+		RegisterHandlerFunc: func(path string, handler func(data []byte) error) error {
+			registered = true
+			return nil
+		},
+	}
+
+	err := s.Start("")
+	assert.NoError(t, err)
+	err = s.Stop(nil) //nolint:staticcheck
+	assert.NoError(t, err)
+	err = s.RegisterHandler("", nil)
+	assert.NoError(t, err)
+	assert.True(t, registered)
+}
