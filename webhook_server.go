@@ -35,7 +35,7 @@ func (f FastHTTPWebhookServer) Stop(ctx context.Context) error {
 
 // RegisterHandler registers new POST handler for the desired path
 // Note: If server's handler is not set, it will be set to router's handler
-func (f FastHTTPWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
+func (f FastHTTPWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
 	f.Router.POST(path, func(ctx *fasthttp.RequestCtx) {
 		if f.SecretToken != "" {
 			secretToken := ctx.Request.Header.Peek(WebhookSecretTokenHeader)
@@ -96,7 +96,7 @@ func (h HTTPWebhookServer) Stop(ctx context.Context) error {
 
 // RegisterHandler registers new POST handler for the desired path
 // Note: If server's handler is not set, it will be set to serve mux handler
-func (h HTTPWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
+func (h HTTPWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
 	h.ServeMux.HandleFunc(path, func(writer http.ResponseWriter, request *http.Request) {
 		if !h.validateRequest(writer, request) {
 			return
@@ -195,14 +195,14 @@ func (m *MultiBotWebhookServer) Stop(ctx context.Context) error {
 }
 
 // RegisterHandler registers new handler for the desired path
-func (m *MultiBotWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
+func (m *MultiBotWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
 	return m.Server.RegisterHandler(path, handler)
 }
 
 // NoOpBotWebhookServer represents bo-op bot implementation of WebhookServer,
 // suitable for cases when you want to have full control over start & stop of server manually
 type NoOpBotWebhookServer struct {
-	RegisterHandlerFunc func(path string, handler func(data []byte) error) error
+	RegisterHandlerFunc func(path string, handler WebhookHandler) error
 }
 
 // Start does nothing
@@ -216,6 +216,6 @@ func (n *NoOpBotWebhookServer) Stop(_ context.Context) error {
 }
 
 // RegisterHandler registers new handler for the desired path
-func (n *NoOpBotWebhookServer) RegisterHandler(path string, handler func(data []byte) error) error {
+func (n *NoOpBotWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
 	return n.RegisterHandlerFunc(path, handler)
 }

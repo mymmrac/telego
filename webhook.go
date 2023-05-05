@@ -13,11 +13,14 @@ import (
 
 const defaultWebhookUpdateChanBuffer = 128
 
+// WebhookHandler user handler for incoming updates
+type WebhookHandler func(data []byte) error
+
 // WebhookServer represents generic webhook server
 type WebhookServer interface {
 	Start(address string) error
 	Stop(ctx context.Context) error
-	RegisterHandler(path string, handler func(data []byte) error) error
+	RegisterHandler(path string, handler WebhookHandler) error
 }
 
 // webhookContext represents configuration of getting updates via webhook

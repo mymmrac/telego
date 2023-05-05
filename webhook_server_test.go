@@ -256,7 +256,7 @@ func (t *testServer) Stop(_ context.Context) error {
 	return nil
 }
 
-func (t *testServer) RegisterHandler(_ string, _ func(data []byte) error) error {
+func (t *testServer) RegisterHandler(_ string, _ WebhookHandler) error {
 	t.registered++
 	return nil
 }
@@ -264,7 +264,7 @@ func (t *testServer) RegisterHandler(_ string, _ func(data []byte) error) error 
 func TestNoOpBotWebhookServer(t *testing.T) {
 	registered := false
 	s := NoOpBotWebhookServer{
-		RegisterHandlerFunc: func(path string, handler func(data []byte) error) error {
+		RegisterHandlerFunc: func(path string, handler WebhookHandler) error {
 			registered = true
 			return nil
 		},
