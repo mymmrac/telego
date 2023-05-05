@@ -69,14 +69,18 @@ func (h *BotHandler) Start() {
 	h.running = true
 	// Prevents calling Wait before single Add call
 	h.handledUpdates.Add(1)
+	defer h.handledUpdates.Done()
 	h.runningLock.Unlock()
 
 	for {
 		select {
 		case <-h.stop:
-			h.handledUpdates.Done()
 			return
-		case update := <-h.updates:
+		case update, ok := <-h.updates:
+			if !ok {
+				return
+			}
+
 			h.processUpdate(update)
 		}
 	}
