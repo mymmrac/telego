@@ -6,7 +6,7 @@ require (
 	github.com/fasthttp/router v1.4.19
 	github.com/goccy/go-json v0.10.2
 	github.com/golang/mock v1.6.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	github.com/valyala/fasthttp v1.47.0
 	golang.org/x/text v0.9.0
 )
