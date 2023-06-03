@@ -237,3 +237,11 @@ func Webhook(url string) *telego.SetWebhookParams {
 		URL: url,
 	}
 }
+
+// Delete creates telego.DeleteMessageParams with required parameters
+func Delete(id telego.ChatID, messageID int)) *telego.DeleteMessageParams {
+	return &telego.SendMessageParams{
+		ChatID: id,
+		messageID:   messageID,
+	}
+}
