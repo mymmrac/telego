@@ -242,6 +242,6 @@ func Webhook(url string) *telego.SetWebhookParams {
 func Delete(id telego.ChatID, messageID int)) *telego.DeleteMessageParams {
 	return &telego.SendMessageParams{
 		ChatID: id,
-		messageID:   messageID,
+		MessageID:   messageID,
 	}
 }
