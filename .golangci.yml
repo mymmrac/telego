@@ -21,6 +21,7 @@ linters:
   disable:
     # Disabled because not relevant for this project
     - containedctx # containedctx is a linter that detects struct contained context.Context field
+    - depguard # Go linter that checks if package imports are in a list of acceptable packages
     - dupword # checks for duplicate words in the source code
     - exhaustruct # Checks if all structure fields are initialized
     - gochecknoglobals # check that no global variables exist
@@ -132,12 +133,6 @@ linters-settings:
   staticcheck: # Staticcheck is a go vet on steroids, applying a ton of static analysis checks
     # Include tests in the analysis.
     tests: true
-  depguard: # Go linter that checks if package imports are in a list of acceptable packages
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      - unsafe
-      - reflect
   funlen: # Tool for detection of long functions
     lines: 120
     statements: 40

@@ -46,7 +46,7 @@ func newDefaultLogger(token string) *logger {
 }
 
 func (l *logger) prefix(mode logMode) string {
-	timeNow := ansiBlue + time.Now().Local().Format(time.UnixDate) + ansiReset
+	timeNow := ansiBlue + time.Now().Format(time.UnixDate) + ansiReset
 	switch mode {
 	case debugMode:
 		return fmt.Sprintf("[%s] %sDEBUG%s ", timeNow, ansiYellow, ansiReset)
