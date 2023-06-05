@@ -231,3 +231,9 @@ func TestWebhook(t *testing.T) {
 	w := Webhook(text1)
 	assert.Equal(t, text1, w.URL)
 }
+
+func TestDelete(t *testing.T) {
+	d := Delete(id1, number1)
+	assert.Equal(t, id1, d.ChatID)
+	assert.Equal(t, number1, d.MessageID)
+}
