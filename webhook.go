@@ -9,6 +9,8 @@ import (
 	"github.com/fasthttp/router"
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
+	"golang.ngrok.com/ngrok"
+	"golang.ngrok.com/ngrok/config"
 )
 
 const defaultWebhookUpdateChanBuffer = 128
@@ -246,4 +248,57 @@ func (b *Bot) StopWebhookWithContext(ctx context.Context) error {
 // Note: For more info, see [Bot.StopWebhookWithContext] method
 func (b *Bot) StopWebhook() error {
 	return b.StopWebhookWithContext(context.Background())
+}
+
+// UpdatesWithSecret set SecretToken to FastHTTPWebhookServer and SetWebhookParams
+func (b *Bot) UpdatesWithSecret(SecretToken, publicURL, endPoint string) (updates <-chan Update, whs FastHTTPWebhookServer, err error) {
+	whs = FastHTTPWebhookServer{
+		Logger:      b.Logger(),
+		Server:      &fasthttp.Server{},
+		Router:      router.New(),
+		SecretToken: SecretToken,
+	}
+	updates, err = b.UpdatesViaWebhook(endPoint, WithWebhookServer(whs), WithWebhookSet(&SetWebhookParams{URL: publicURL + endPoint, SecretToken: SecretToken}))
+	return
+}
+
+// UpdatesWithNgrok start ngrok.Tunnel with os.Getenv("NGROK_AUTHTOKEN") and SecretToken
+// for close ngrok.Tunnel use (*nt).Session().Close()
+func (b *Bot) UpdatesWithNgrok(SecretToken, forwardsTo, endPoint string) (updates <-chan Update, nt *ngrok.Tunnel, err error) {
+	tun, err := ngrok.Listen(context.Background(), config.HTTPEndpoint(
+		config.WithForwardsTo(forwardsTo)),
+		ngrok.WithAuthtokenFromEnv(),
+	)
+	if err != nil {
+		return
+	}
+	nt = &tun
+	publicURL := tun.URL()
+	defer func() {
+		if err != nil {
+			tun.Session().Close()
+			nt = nil
+		}
+	}()
+	updates, whs, err := b.UpdatesWithSecret(SecretToken, publicURL, endPoint)
+	if err != nil {
+		return
+	}
+	go func() {
+		for {
+			conn, err := tun.Accept()
+			if err != nil {
+				b.log.Errorf("error accept connection %v", err)
+				return
+			}
+			b.log.Debugf("%s => %s", conn.RemoteAddr().String(), conn.LocalAddr().String())
+			go func() {
+				err := whs.Server.ServeConn(conn)
+				if err != nil {
+					b.log.Errorf("error serving connection %v: %v", conn, err)
+				}
+			}()
+		}
+	}()
+	return
 }
