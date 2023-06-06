@@ -566,14 +566,12 @@ func main() {
 	// Init ...
 
 	// Add global middleware, it will be applied in order of addition
-	bh.Use(
-		func(next th.Handler) th.Handler {
-			return func(bot *telego.Bot, update telego.Update) {
-				fmt.Println("Global middleware") // Will be called first
-				next(bot, update)
-			}
-		},
-	)
+	bh.Use(func(next th.Handler) th.Handler {
+		return func(bot *telego.Bot, update telego.Update) {
+			fmt.Println("Global middleware") // Will be called first
+			next(bot, update)
+		}
+	})
 
 	// Create any groups with or without predicates
 	// Note: Updates first checked by groups and only then by handlers 
