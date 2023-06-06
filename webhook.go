@@ -250,21 +250,26 @@ func (b *Bot) StopWebhook() error {
 	return b.StopWebhookWithContext(context.Background())
 }
 
-// UpdatesWithSecret set SecretToken to FastHTTPWebhookServer and SetWebhookParams
-func (b *Bot) UpdatesWithSecret(SecretToken, publicURL, endPoint string) (updates <-chan Update, whs FastHTTPWebhookServer, err error) {
+// UpdatesWithSecret set secretToken to FastHTTPWebhookServer and SetWebhookParams
+func (b *Bot) UpdatesWithSecret(secretToken, publicURL, endPoint string) (updates <-chan Update, whs FastHTTPWebhookServer, err error) {
 	whs = FastHTTPWebhookServer{
 		Logger:      b.Logger(),
 		Server:      &fasthttp.Server{},
 		Router:      router.New(),
-		SecretToken: SecretToken,
+		SecretToken: secretToken,
 	}
-	updates, err = b.UpdatesViaWebhook(endPoint, WithWebhookServer(whs), WithWebhookSet(&SetWebhookParams{URL: publicURL + endPoint, SecretToken: SecretToken}))
+	updates, err = b.UpdatesViaWebhook(endPoint,
+		WithWebhookServer(whs),
+		WithWebhookSet(&SetWebhookParams{
+			URL:         publicURL + endPoint,
+			SecretToken: secretToken,
+		}))
 	return
 }
 
 // UpdatesWithNgrok start ngrok.Tunnel with os.Getenv("NGROK_AUTHTOKEN") and SecretToken
 // for close ngrok.Tunnel use (*nt).Session().Close()
-func (b *Bot) UpdatesWithNgrok(SecretToken, forwardsTo, endPoint string) (updates <-chan Update, nt *ngrok.Tunnel, err error) {
+func (b *Bot) UpdatesWithNgrok(secretToken, forwardsTo, endPoint string) (updates <-chan Update, nt *ngrok.Tunnel, err error) {
 	tun, err := ngrok.Listen(context.Background(), config.HTTPEndpoint(
 		config.WithForwardsTo(forwardsTo)),
 		ngrok.WithAuthtokenFromEnv(),
@@ -280,7 +285,7 @@ func (b *Bot) UpdatesWithNgrok(SecretToken, forwardsTo, endPoint string) (update
 			nt = nil
 		}
 	}()
-	updates, whs, err := b.UpdatesWithSecret(SecretToken, publicURL, endPoint)
+	updates, whs, err := b.UpdatesWithSecret(secretToken, publicURL, endPoint)
 	if err != nil {
 		return
 	}
