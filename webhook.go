@@ -251,43 +251,42 @@ func (b *Bot) StopWebhook() error {
 }
 
 // UpdatesWithSecret set secretToken to FastHTTPWebhookServer and SetWebhookParams
-func (b *Bot) UpdatesWithSecret(secretToken, publicURL, endPoint string) (updates <-chan Update, whs FastHTTPWebhookServer, err error) {
-	whs = FastHTTPWebhookServer{
+func (b *Bot) UpdatesWithSecret(secretToken, publicURL, endPoint string) (<-chan Update, FastHTTPWebhookServer, error) {
+	whs := FastHTTPWebhookServer{
 		Logger:      b.Logger(),
 		Server:      &fasthttp.Server{},
 		Router:      router.New(),
 		SecretToken: secretToken,
 	}
-	updates, err = b.UpdatesViaWebhook(endPoint,
+	updates, err := b.UpdatesViaWebhook(endPoint,
 		WithWebhookServer(whs),
 		WithWebhookSet(&SetWebhookParams{
 			URL:         publicURL + endPoint,
 			SecretToken: secretToken,
 		}))
-	return
+	return updates, whs, err
 }
 
 // UpdatesWithNgrok start ngrok.Tunnel with os.Getenv("NGROK_AUTHTOKEN") and SecretToken
-// for close ngrok.Tunnel use (*nt).Session().Close()
-func (b *Bot) UpdatesWithNgrok(secretToken, forwardsTo, endPoint string) (updates <-chan Update, nt *ngrok.Tunnel, err error) {
+// for close ngrok.Tunnel use ngrok.Tunnel.Session().Close()
+func (b *Bot) UpdatesWithNgrok(secretToken, forwardsTo, endPoint string) (<-chan Update, *ngrok.Tunnel, error) {
 	tun, err := ngrok.Listen(context.Background(), config.HTTPEndpoint(
 		config.WithForwardsTo(forwardsTo)),
 		ngrok.WithAuthtokenFromEnv(),
 	)
 	if err != nil {
-		return
+		return nil, nil, err
 	}
-	nt = &tun
 	publicURL := tun.URL()
 	defer func() {
 		if err != nil {
-			tun.Session().Close()
-			nt = nil
+			err = tun.Session().Close()
+			b.log.Errorf("error close session of tunnel %v", err)
 		}
 	}()
 	updates, whs, err := b.UpdatesWithSecret(secretToken, publicURL, endPoint)
 	if err != nil {
-		return
+		return nil, nil, err
 	}
 	go func() {
 		for {
@@ -305,5 +304,5 @@ func (b *Bot) UpdatesWithNgrok(secretToken, forwardsTo, endPoint string) (update
 			}()
 		}
 	}()
-	return
+	return updates, &tun, err
 }
