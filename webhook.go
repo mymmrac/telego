@@ -162,7 +162,7 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 	return ctx, nil
 }
 
-// StartWebhook start server for listening for webhook.
+// StartWebhook start server for listening for webhook, blocking operation.
 // Any error that occurs will stop the webhook.
 // Calling before [Bot.UpdatesViaWebhook] method will return an error.
 // Calling if already running (before [Bot.StopWebhook] method) will return an error.

@@ -16,6 +16,8 @@ import (
 )
 
 func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
+	require.Implements(t, (*WebhookServer)(nil), FastHTTPWebhookServer{})
+
 	addr := testAddress(t)
 
 	s := FastHTTPWebhookServer{
@@ -83,6 +85,8 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 }
 
 func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
+	require.Implements(t, (*WebhookServer)(nil), HTTPWebhookServer{})
+
 	t.Run("error_start_fail", func(t *testing.T) {
 		s := HTTPWebhookServer{
 			Logger:   testLoggerType{},
@@ -206,6 +210,8 @@ func (e errReaderCloser) Read(b []byte) (n int, err error) {
 }
 
 func TestMultiBotWebhookServer_RegisterHandler(t *testing.T) {
+	require.Implements(t, (*WebhookServer)(nil), &MultiBotWebhookServer{})
+
 	ts := &testServer{}
 	s := &MultiBotWebhookServer{
 		Server: ts,
@@ -261,9 +267,11 @@ func (t *testServer) RegisterHandler(_ string, _ WebhookHandler) error {
 	return nil
 }
 
-func TestNoOpBotWebhookServer(t *testing.T) {
+func TestNoOpWebhookServer(t *testing.T) {
+	require.Implements(t, (*WebhookServer)(nil), NoOpWebhookServer{})
+
 	registered := false
-	s := NoOpBotWebhookServer{
+	s := NoOpWebhookServer{
 		RegisterHandlerFunc: func(path string, handler WebhookHandler) error {
 			registered = true
 			return nil
@@ -277,4 +285,66 @@ func TestNoOpBotWebhookServer(t *testing.T) {
 	err = s.RegisterHandler("", nil)
 	assert.NoError(t, err)
 	assert.True(t, registered)
+}
+
+func TestFuncWebhookServer(t *testing.T) {
+	require.Implements(t, (*WebhookServer)(nil), FuncWebhookServer{})
+
+	ts := &testServer{}
+	s1 := FuncWebhookServer{
+		Server: ts,
+	}
+
+	assert.Equal(t, 0, ts.started)
+	assert.Equal(t, 0, ts.stopped)
+	assert.Equal(t, 0, ts.registered)
+
+	err := s1.Start("")
+	assert.NoError(t, err)
+
+	err = s1.RegisterHandler("", nil)
+	assert.NoError(t, err)
+
+	err = s1.Stop(context.Background())
+	assert.NoError(t, err)
+
+	assert.Equal(t, 1, ts.started)
+	assert.Equal(t, 1, ts.stopped)
+	assert.Equal(t, 1, ts.registered)
+
+	started := 0
+	stopped := 0
+	registered := 0
+	s2 := FuncWebhookServer{
+		Server: ts,
+		StartFunc: func(_ string) error {
+			started++
+			return nil
+		},
+		StopFunc: func(_ context.Context) error {
+			stopped++
+			return nil
+		},
+		RegisterHandlerFunc: func(_ string, _ WebhookHandler) error {
+			registered++
+			return nil
+		},
+	}
+
+	err = s2.Start("")
+	assert.NoError(t, err)
+
+	err = s2.RegisterHandler("", nil)
+	assert.NoError(t, err)
+
+	err = s2.Stop(context.Background())
+	assert.NoError(t, err)
+
+	assert.Equal(t, 1, ts.started)
+	assert.Equal(t, 1, ts.stopped)
+	assert.Equal(t, 1, ts.registered)
+
+	assert.Equal(t, 1, started)
+	assert.Equal(t, 1, stopped)
+	assert.Equal(t, 1, registered)
 }

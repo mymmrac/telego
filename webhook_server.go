@@ -199,23 +199,56 @@ func (m *MultiBotWebhookServer) RegisterHandler(path string, handler WebhookHand
 	return m.Server.RegisterHandler(path, handler)
 }
 
-// NoOpBotWebhookServer represents bo-op bot implementation of WebhookServer,
+// NoOpWebhookServer represents no-op implementation of WebhookServer,
 // suitable for cases when you want to have full control over start & stop of server manually
-type NoOpBotWebhookServer struct {
+type NoOpWebhookServer struct {
 	RegisterHandlerFunc func(path string, handler WebhookHandler) error
 }
 
 // Start does nothing
-func (n *NoOpBotWebhookServer) Start(_ string) error {
+func (n NoOpWebhookServer) Start(_ string) error {
 	return nil
 }
 
 // Stop does nothing
-func (n *NoOpBotWebhookServer) Stop(_ context.Context) error {
+func (n NoOpWebhookServer) Stop(_ context.Context) error {
 	return nil
 }
 
 // RegisterHandler registers new handler for the desired path
-func (n *NoOpBotWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
+func (n NoOpWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
 	return n.RegisterHandlerFunc(path, handler)
+}
+
+// FuncWebhookServer uses provided functions instead of server's methods in order to override behavior
+// if any of function are not provided respective server's methods will be used
+type FuncWebhookServer struct {
+	Server              WebhookServer
+	StartFunc           func(address string) error
+	StopFunc            func(ctx context.Context) error
+	RegisterHandlerFunc func(path string, handler WebhookHandler) error
+}
+
+// Start using func or server's method
+func (f FuncWebhookServer) Start(address string) error {
+	if f.StartFunc != nil {
+		return f.StartFunc(address)
+	}
+	return f.Server.Start(address)
+}
+
+// Stop using func or server's method
+func (f FuncWebhookServer) Stop(ctx context.Context) error {
+	if f.StopFunc != nil {
+		return f.StopFunc(ctx)
+	}
+	return f.Server.Stop(ctx)
+}
+
+// RegisterHandler using func or server's method
+func (f FuncWebhookServer) RegisterHandler(path string, handler WebhookHandler) error {
+	if f.RegisterHandlerFunc != nil {
+		return f.RegisterHandlerFunc(path, handler)
+	}
+	return f.Server.RegisterHandler(path, handler)
 }

@@ -73,6 +73,7 @@ More examples can be seen here:
 - [Methods](examples/methods/main.go)
 - [Updates (long polling)](examples/updates_long_polling/main.go)
 - [Updates (webhook)](examples/updates_webhook/main.go)
+- [Ngrok webhook](examples/ngrok/main.go)
 - [Echo bot](examples/echo_bot/main.go)
 - [Echo bot (with handlers)](examples/echo_bot_with_handlers/main.go)
 - [Echo bot (handlers + webhook + graceful shutdown + docker)](https://github.com/mymmrac/echo-bot)
@@ -267,6 +268,8 @@ For running multiple bots from a single server, see [this](examples/multi_bot_we
 > Tip: For testing webhooks, you can use [Ngrok](https://ngrok.com) to make a tunnel to your localhost,
 > and get a random domain available from the Internet.
 > It's as simple as `ngrok http 8080`.
+> Or follow [Telego + Ngrok example](examples/ngrok/main.go) using [ngrok/ngrok-go](https://github.com/ngrok/ngrok-go)
+> for most convenient bot testing.
 
 > Tip: You may wish to use [Let's Encrypt](https://letsencrypt.org) in order to generate your free TLS certificate.
 
