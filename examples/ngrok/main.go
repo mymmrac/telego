@@ -49,14 +49,17 @@ func main() {
 	// Prepare fast HTTP server
 	srv := &fasthttp.Server{}
 
+	// Set SecretToken - let there be a little more security
+	secret := "foobar"
 	// Get an update channel from webhook using Ngrok
 	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
 		// Set func server with fast http server inside that will be used to handle webhooks
 		telego.WithWebhookServer(telego.FuncWebhookServer{
 			Server: telego.FastHTTPWebhookServer{
-				Logger: bot.Logger(),
-				Server: srv,
-				Router: router.New(),
+				Logger:      bot.Logger(),
+				Server:      srv,
+				Router:      router.New(),
+				SecretToken: secret,
 			},
 			// Override default start func to use Ngrok tunnel
 			StartFunc: func(_ string) error {
@@ -68,7 +71,8 @@ func main() {
 
 		// Calls SetWebhook before starting webhook and provide dynamic Ngrok tunnel URL
 		telego.WithWebhookSet(&telego.SetWebhookParams{
-			URL: tun.URL() + "/bot" + bot.Token(),
+			URL:         tun.URL() + "/bot" + bot.Token(),
+			SecretToken: secret,
 		}),
 	)
 
