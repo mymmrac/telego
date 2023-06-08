@@ -88,6 +88,10 @@ func main() {
 		bot.StopWebhook()
 		fmt.Println("StopWebhook done")
 
+		// unset webhook on telegram server but keep updates for next start
+		bot.DeleteWebhook(&telego.DeleteWebhookParams{DropPendingUpdates: false})
+		fmt.Println("DeleteWebhook done")
+
 		// Notify that stop is done
 		done <- struct{}{}
 	}()
