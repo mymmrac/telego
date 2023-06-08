@@ -15,3 +15,5 @@ bin
 
 # Env
 .env
+*.bat
+*.exe

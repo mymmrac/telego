@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
@@ -22,6 +24,13 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	// Initialize signal handling
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	// Initialize done chan
+	done := make(chan struct{}, 1)
 
 	ctx := context.Background()
 
@@ -51,7 +60,9 @@ func main() {
 			},
 			// Override default start func to use Ngrok tunnel
 			StartFunc: func(_ string) error {
-				return srv.Serve(tun)
+				err := srv.Serve(tun)
+				bot.Logger().Errorf("%s", err)
+				return nil
 			},
 		}),
 
@@ -66,13 +77,27 @@ func main() {
 		_ = bot.StartWebhook("")
 	}()
 
-	// Stop reviving updates from update channel and shutdown webhook server
-	defer func() {
-		_ = bot.StopWebhook()
+	// Handle stop signal (Ctrl+C)
+	go func() {
+		// Wait for stop signal
+		<-sigs
+
+		fmt.Println("Stopping...")
+
+		// Stop reviving updates from update channel and shutdown webhook server
+		bot.StopWebhook()
+		fmt.Println("StopWebhook done")
+
+		// Notify that stop is done
+		done <- struct{}{}
 	}()
 
 	// Loop through all updates when they came
 	for update := range updates {
 		fmt.Printf("Update: %+v\n", update)
 	}
+
+	// Wait for the stop process to be completed
+	<-done
+	fmt.Println("Done")
 }

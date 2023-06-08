@@ -30,13 +30,6 @@ func main() {
 	// Get updates
 	updates, _ := bot.UpdatesViaLongPolling(nil)
 
-	// Handle updates
-	for update := range updates {
-		fmt.Println("Processing update:", update.UpdateID)
-		time.Sleep(time.Second * 5) // Simulate long process time
-		fmt.Println("Done update:", update.UpdateID)
-	}
-
 	// Handle stop signal (Ctrl+C)
 	go func() {
 		// Wait for stop signal
@@ -50,6 +43,13 @@ func main() {
 		// Notify that stop is done
 		done <- struct{}{}
 	}()
+
+	// Handle updates
+	for update := range updates {
+		fmt.Println("Processing update:", update.UpdateID)
+		time.Sleep(time.Second * 5) // Simulate long process time
+		fmt.Println("Done update:", update.UpdateID)
+	}
 
 	// Wait for the stop process to be completed
 	<-done
