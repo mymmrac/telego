@@ -7,12 +7,12 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/fasthttp/router"
-	"github.com/valyala/fasthttp"
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"
 
+	"github.com/fasthttp/router"
 	"github.com/mymmrac/telego"
+	"github.com/valyala/fasthttp"
 )
 
 func main() {
@@ -63,9 +63,12 @@ func main() {
 			},
 			// Override default start func to use Ngrok tunnel
 			StartFunc: func(_ string) error {
-				err := srv.Serve(tun)
-				bot.Logger().Errorf("%s", err)
-				return nil
+				return srv.Serve(tun)
+			},
+			// Override default stop func to close Ngrok tunnel
+			StopFunc: func(ctx context.Context) error {
+				tun.Session().Close()
+				return srv.ShutdownWithContext(ctx)
 			},
 		}),
 
@@ -92,7 +95,7 @@ func main() {
 		bot.StopWebhook()
 		fmt.Println("StopWebhook done")
 
-		// unset webhook on telegram server but keep updates for next start
+		// Unset webhook on telegram server but keep updates for next start
 		bot.DeleteWebhook(&telego.DeleteWebhookParams{DropPendingUpdates: false})
 		fmt.Println("DeleteWebhook done")
 

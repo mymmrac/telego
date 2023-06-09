@@ -191,9 +191,11 @@ func (b *Bot) StartWebhook(address string) error {
 
 	if err := ctx.server.Start(address); err != nil {
 		ctx.runningLock.Lock()
-		ctx.running = false
-		close(ctx.stop)
-		b.webhookContext = nil
+		if ctx.running {
+			close(ctx.stop)
+			ctx.running = false
+			b.webhookContext = nil
+		}
 		ctx.runningLock.Unlock()
 
 		return err
@@ -230,7 +232,6 @@ func (b *Bot) StopWebhookWithContext(ctx context.Context) error {
 
 	if webhookCtx.running {
 		err := webhookCtx.server.Stop(ctx)
-
 		close(webhookCtx.stop)
 		webhookCtx.running = false
 
