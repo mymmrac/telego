@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"golang.ngrok.com/ngrok"
@@ -105,7 +106,16 @@ func main() {
 	// Loop through all updates when they came
 	for update := range updates {
 		fmt.Printf("Update: %+v\n", update)
+		// Break loop on /stop command
+		if update.Message != nil {
+			if strings.HasPrefix(update.Message.Text, "/stop") {
+				break
+			}
+		}
 	}
+
+	// If updates stop then send stop signal
+	sigs <- syscall.SIGTERM
 
 	// Wait for the stop process to be completed
 	<-done
