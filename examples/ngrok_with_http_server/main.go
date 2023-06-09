@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,9 +11,7 @@ import (
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"
 
-	"github.com/fasthttp/router"
 	"github.com/mymmrac/telego"
-	"github.com/valyala/fasthttp"
 )
 
 func main() {
@@ -46,19 +45,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Prepare fast HTTP server
-	srv := &fasthttp.Server{}
+	// Prepare HTTP server
+	srv := &http.Server{}
 
 	// Set SecretToken - let there be a little more security
 	secret := "foobar"
 	// Get an update channel from webhook using Ngrok
 	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
-		// Set func server with fast http server inside that will be used to handle webhooks
+		// Set func server with http server inside that will be used to handle webhooks enstead fast http server
 		telego.WithWebhookServer(telego.FuncWebhookServer{
-			Server: telego.FastHTTPWebhookServer{
+			Server: telego.HTTPWebhookServer{
 				Logger:      bot.Logger(),
 				Server:      srv,
-				Router:      router.New(),
+				ServeMux:    http.NewServeMux(),
 				SecretToken: secret,
 			},
 			// Override default start func to use Ngrok tunnel
@@ -68,7 +67,7 @@ func main() {
 			// Override default stop func to close Ngrok tunnel
 			StopFunc: func(ctx context.Context) error {
 				tun.CloseWithContext(ctx)
-				return srv.ShutdownWithContext(ctx)
+				return srv.Shutdown(ctx)
 			},
 		}),
 
