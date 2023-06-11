@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
@@ -23,10 +25,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctx := context.Background()
+	// Initialize signal handling
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	// Initialize done chan
+	done := make(chan struct{}, 1)
 
 	// Create a new Ngrok tunnel to connect local network with the Internet & have HTTPS domain for bot
-	tun, err := ngrok.Listen(ctx,
+	tun, err := ngrok.Listen(context.Background(),
 		// Forward connections to localhost:8080
 		config.HTTPEndpoint(config.WithForwardsTo(":8080")),
 		// Authenticate into Ngrok using NGROK_AUTHTOKEN env (optional)
@@ -50,6 +57,7 @@ func main() {
 				Router: router.New(),
 			},
 			// Override default start func to use Ngrok tunnel
+			// Note: When server is stopped, the Ngrok tunnel always returns an error, so it should be handled by user
 			StartFunc: func(_ string) error {
 				return srv.Serve(tun)
 			},
@@ -61,18 +69,34 @@ func main() {
 		}),
 	)
 
+	// Handle stop signal (Ctrl+C)
+	go func() {
+		// Wait for stop signal
+		<-sigs
+
+		fmt.Println("Stopping...")
+
+		// Stop reviving updates from update channel and shutdown webhook server
+		_ = bot.StopWebhook()
+		fmt.Println("Webhook done")
+
+		// Notify that stop is done
+		done <- struct{}{}
+	}()
+
 	// Start server for receiving requests from the Telegram
 	go func() {
 		_ = bot.StartWebhook("")
 	}()
 
-	// Stop reviving updates from update channel and shutdown webhook server
-	defer func() {
-		_ = bot.StopWebhook()
+	// Loop through all updates when they came
+	go func() {
+		for update := range updates {
+			fmt.Printf("Update: %+v\n", update)
+		}
 	}()
 
-	// Loop through all updates when they came
-	for update := range updates {
-		fmt.Printf("Update: %+v\n", update)
-	}
+	// Wait for the stop process to be completed
+	<-done
+	fmt.Println("Done")
 }
