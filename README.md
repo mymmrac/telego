@@ -19,7 +19,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=ncloc)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 
 <p align="center">
-  <img src="docs/Telego-long.png" alt="Telego logo" width="512px" style="border-radius: 12px;">
+  <img src="docs/logo/telego-long.png" alt="Telego logo" width="512px" style="border-radius: 12px;">
 </p>
 
 Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
