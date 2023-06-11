@@ -88,7 +88,7 @@ func WithWebhookContext(ctx context.Context) WebhookOption {
 // Note: Once stopped, update chan will be closed
 func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan Update, error) {
 	if b.webhookContext != nil {
-		return nil, errors.New("telego: webhook context already exist")
+		return nil, errors.New("telego: webhook context already exists")
 	}
 
 	ctx, err := b.createWebhookContext(options)

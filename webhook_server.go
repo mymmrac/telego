@@ -11,10 +11,10 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// WebhookSecretTokenHeader represents secret token header name, see SetWebhookParams.SecretToken for more details
+// WebhookSecretTokenHeader represents secret token header name, see [SetWebhookParams.SecretToken] for more details
 const WebhookSecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token" //nolint:gosec
 
-// FastHTTPWebhookServer represents fasthttp implementation of WebhookServer.
+// FastHTTPWebhookServer represents fasthttp implementation of [WebhookServer].
 // The Server and Router are required fields, optional Logger and SecretToken can be provided.
 type FastHTTPWebhookServer struct {
 	Logger      Logger
@@ -68,7 +68,7 @@ func (f FastHTTPWebhookServer) RegisterHandler(path string, handler WebhookHandl
 	return nil
 }
 
-// HTTPWebhookServer represents http implementation of WebhookServer.
+// HTTPWebhookServer represents http implementation of [WebhookServer].
 // The Server and ServeMux are required fields, optional Logger and SecretToken can be provided.
 type HTTPWebhookServer struct {
 	Logger      Logger
@@ -167,7 +167,7 @@ func (h HTTPWebhookServer) readData(request *http.Request) ([]byte, error) {
 	return data, nil
 }
 
-// MultiBotWebhookServer represents multi bot implementation of WebhookServer,
+// MultiBotWebhookServer represents multi bot implementation of [WebhookServer],
 // suitable for running multiple bots from single server
 type MultiBotWebhookServer struct {
 	Server WebhookServer
@@ -199,7 +199,7 @@ func (m *MultiBotWebhookServer) RegisterHandler(path string, handler WebhookHand
 	return m.Server.RegisterHandler(path, handler)
 }
 
-// NoOpWebhookServer represents no-op implementation of WebhookServer,
+// NoOpWebhookServer represents no-op implementation of [WebhookServer],
 // suitable for cases when you want to have full control over start & stop of server manually
 type NoOpWebhookServer struct {
 	RegisterHandlerFunc func(path string, handler WebhookHandler) error
@@ -220,8 +220,9 @@ func (n NoOpWebhookServer) RegisterHandler(path string, handler WebhookHandler) 
 	return n.RegisterHandlerFunc(path, handler)
 }
 
-// FuncWebhookServer uses provided functions instead of server's methods in order to override behavior
-// if any of function are not provided respective server's methods will be used
+// FuncWebhookServer represents func implementation of [WebhookServer],
+// uses provided functions instead of server's methods in order to override behavior if any of function are not
+// provided respective server's methods will be used
 type FuncWebhookServer struct {
 	Server              WebhookServer
 	StartFunc           func(address string) error
