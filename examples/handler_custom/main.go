@@ -40,7 +40,7 @@ func main() {
 
 	// Register handler with message predicate and custom predicate
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
-		fmt.Println("Update with message which text is longer then 7 chars.")
+		fmt.Println("Update with the message which text is longer than 7 chars.")
 	},
 		th.AnyMessage(), // Matches to any message update
 		func(update telego.Update) bool { // Matches to message update with text longer then 7

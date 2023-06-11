@@ -50,7 +50,7 @@ func main() {
 		// Use default logger with disabled debug and errors, same as telego.WithDefaultLogger(false, false)
 		telego.WithDiscardLogger(),
 
-		// Create you custom logger that implements telego.Logger (default: telego has build in default logger)
+		// Create you custom logger that implements telego.Logger (default: telego has built in default logger)
 		// Note: Please keep in mind that logger may expose sensitive information, use in development only or configure
 		// it not to leak unwanted content
 		telego.WithLogger(myLogger),

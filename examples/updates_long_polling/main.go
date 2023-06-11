@@ -28,8 +28,8 @@ func main() {
 		},
 
 		// Set interval of getting updates (default: 0s).
-		// If you want to get updates as fast as possible set to 0 and explicitly set timeout in get updates parameters,
-		// but the webhook method is recommended for this.
+		// If you want to get updates as fast as possible, set to 0 and explicitly set timeout in get updates
+		// parameters, but the webhook method is recommended for this.
 		telego.WithLongPollingUpdateInterval(time.Second*0),
 
 		// Set retry timeout that will be used if an error occurs (default 8s)

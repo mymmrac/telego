@@ -45,7 +45,7 @@ func main() {
 	// Register new handler with match on a call back query with data equal to `go` and non-nil message
 	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
 		// Send message
-		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
+		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO"))
 
 		// Answer callback query
 		_ = bot.AnswerCallbackQuery(tu.CallbackQuery(query.ID).WithText("Done"))

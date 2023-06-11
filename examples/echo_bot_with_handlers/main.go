@@ -40,7 +40,7 @@ func main() {
 		// Get chat ID from the message
 		chatID := tu.ID(message.Chat.ID)
 
-		// Copy sent message back to the user
+		// Copy sent messages back to the user
 		_, _ = bot.CopyMessage(
 			tu.CopyMessage(chatID, chatID, message.MessageID),
 		)

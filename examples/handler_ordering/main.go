@@ -28,7 +28,7 @@ func main() {
 	// Stop getting updates
 	defer bot.StopLongPolling()
 
-	// Should not be here, because the order of handlers do meter.
+	// Should not be here, because the order of handlers does meter.
 	//
 	// bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 	// 	 fmt.Println("Message:", message.Text)

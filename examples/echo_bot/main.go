@@ -1,5 +1,3 @@
-// This bot will send same messages as you sent to him.
-
 package main
 
 import (
@@ -34,7 +32,7 @@ func main() {
 			// Get chat ID from the message
 			chatID := tu.ID(update.Message.Chat.ID)
 
-			// Copy sent message back to the user
+			// Copy sent messages back to the user
 			_, _ = bot.CopyMessage(
 				tu.CopyMessage(
 					chatID,

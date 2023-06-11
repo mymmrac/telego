@@ -61,7 +61,7 @@ func main() {
 	mediaGroup := tu.MediaGroup(
 		tu.ID(1234567),
 
-		// Specify slice of telego.InputMedia with media you want to send as a group
+		// Specify a slice of telego.InputMedia with media you want to send as a group
 		tu.MediaPhoto(tu.File(mustOpen("my_photo.png"))),
 
 		tu.MediaPhoto(tu.FileFromID("<file ID of your photo>")),
