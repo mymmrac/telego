@@ -9,7 +9,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/valyala/fasthttp v1.47.0
 	golang.ngrok.com/ngrok v1.3.0
-	golang.org/x/text v0.9.0
+	golang.org/x/text v0.10.0
 )
 
 require (
