@@ -170,3 +170,29 @@ func TestSendAudio(t *testing.T) {
 		assert.NotNil(t, msg)
 	})
 }
+
+func TestSendPoll(t *testing.T) {
+	t.Run("anonymous", func(t *testing.T) {
+		msg, err := bot.SendPoll(&telego.SendPollParams{
+			ChatID:      tu.ID(chatID),
+			Question:    "Test",
+			Options:     []string{"Option 1", "Option 2"},
+			IsAnonymous: nil,
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+
+	t.Run("not_anonymous", func(t *testing.T) {
+		msg, err := bot.SendPoll(&telego.SendPollParams{
+			ChatID:      tu.ID(chatID),
+			Question:    "Test",
+			Options:     []string{"Option 1", "Option 2"},
+			IsAnonymous: telego.ToPtr(false),
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+}

@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	_ "github.com/joho/godotenv/autoload"
+
 	"github.com/mymmrac/telego"
 )
 

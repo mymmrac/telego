@@ -6,6 +6,7 @@ require (
 	github.com/fasthttp/router v1.4.19
 	github.com/goccy/go-json v0.10.2
 	github.com/golang/mock v1.6.0
+	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.4
 	github.com/valyala/fasthttp v1.48.0
 	golang.ngrok.com/ngrok v1.3.0
