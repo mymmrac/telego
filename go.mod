@@ -7,7 +7,7 @@ require (
 	github.com/goccy/go-json v0.10.2
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.8.4
-	github.com/valyala/fasthttp v1.47.0
+	github.com/valyala/fasthttp v1.48.0
 	golang.ngrok.com/ngrok v1.3.0
 	golang.org/x/text v0.10.0
 )
