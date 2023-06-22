@@ -1093,8 +1093,8 @@ func (p *SendPollParams) WithOptions(options ...string) *SendPollParams {
 }
 
 // WithIsAnonymous adds is anonymous parameter
-func (p *SendPollParams) WithIsAnonymous() *SendPollParams {
-	p.IsAnonymous = true
+func (p *SendPollParams) WithIsAnonymous(isAnonymous bool) *SendPollParams {
+	p.IsAnonymous = ToPtr(isAnonymous)
 	return p
 }
 

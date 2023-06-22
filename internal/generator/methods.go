@@ -382,6 +382,10 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 	if methodName == "editForumTopic" && parameter.nameSnakeCase == "icon_custom_emoji_id" {
 		parameter.typ = "*string"
 	}
+
+	if methodName == "sendPoll" && parameter.nameSnakeCase == "is_anonymous" {
+		parameter.typ = "*bool"
+	}
 }
 
 func parseReturnType(methodDescription string) string {

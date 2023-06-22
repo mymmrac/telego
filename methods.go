@@ -1209,7 +1209,7 @@ type SendPollParams struct {
 	Options []string `json:"options"`
 
 	// IsAnonymous - Optional. True, if the poll needs to be anonymous, defaults to True
-	IsAnonymous bool `json:"is_anonymous,omitempty"`
+	IsAnonymous *bool `json:"is_anonymous,omitempty"`
 
 	// Type - Optional. Poll type, “quiz” or “regular”, defaults to “regular”
 	Type string `json:"type,omitempty"`

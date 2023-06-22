@@ -488,7 +488,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 		WithMessageThreadID(1).
 		WithQuestion("Question").
 		WithOptions([]string{"Options"}...).
-		WithIsAnonymous().
+		WithIsAnonymous(true).
 		WithType("Type").
 		WithAllowsMultipleAnswers().
 		WithCorrectOptionID(2).
@@ -508,7 +508,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 		MessageThreadID:          1,
 		Question:                 "Question",
 		Options:                  []string{"Options"},
-		IsAnonymous:              true,
+		IsAnonymous:              ToPtr(true),
 		Type:                     "Type",
 		AllowsMultipleAnswers:    true,
 		CorrectOptionID:          2,
