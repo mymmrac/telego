@@ -16,7 +16,7 @@ type conditionalHandler struct {
 // match matches the current update and handler
 func (h conditionalHandler) match(update telego.Update) bool {
 	for _, p := range h.Predicates {
-		if !p(update.Clone()) {
+		if !p(update) {
 			return false
 		}
 	}
@@ -48,7 +48,7 @@ func (h *HandlerGroup) applyMiddlewares(next Handler) Handler {
 // useHandlers tries to match update to a handler
 func (h *HandlerGroup) useHandlers(bot *telego.Bot, update telego.Update, wg *sync.WaitGroup) bool {
 	for _, handler := range h.handlers {
-		if !handler.match(update) {
+		if !handler.match(update.Clone()) {
 			continue
 		}
 
@@ -56,8 +56,8 @@ func (h *HandlerGroup) useHandlers(bot *telego.Bot, update telego.Update, wg *sy
 		go func(ch conditionalHandler) {
 			ctx, cancel := context.WithCancel(update.Context())
 			h.applyMiddlewares(ch.Handler)(bot, update.WithContext(ctx))
-			wg.Done()
 			cancel()
+			wg.Done()
 		}(handler)
 
 		return true
@@ -69,7 +69,7 @@ func (h *HandlerGroup) useHandlers(bot *telego.Bot, update telego.Update, wg *sy
 // match matches the current update and group
 func (h *HandlerGroup) match(update telego.Update) bool {
 	for _, p := range h.predicates {
-		if !p(update.Clone()) {
+		if !p(update) {
 			return false
 		}
 	}
@@ -79,7 +79,7 @@ func (h *HandlerGroup) match(update telego.Update) bool {
 // useHandlers tries to match update to a group
 func (h *HandlerGroup) useGroups(bot *telego.Bot, update telego.Update, wg *sync.WaitGroup) bool {
 	for _, group := range h.groups {
-		if !group.match(update) {
+		if !group.match(update.Clone()) {
 			continue
 		}
 

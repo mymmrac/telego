@@ -91,7 +91,9 @@ func (u Update) Clone() Update {
 	return update
 }
 
-// CloneSafe returns a deep copy of Update or an error
+// CloneSafe returns a deep copy of Update or an error.
+//
+// Note: Update's context is carried to the copy as is, to change it use [Update.WithContext] method.
 func (u Update) CloneSafe() (Update, error) {
 	var update Update
 
@@ -119,9 +121,9 @@ func (u Update) Context() context.Context {
 	return context.Background()
 }
 
-// WithContext returns a shallow copy of the update with its context changed to ctx
+// WithContext returns a shallow copy of the update with its context changed to ctx.
 //
-// Warning: Panics if nil context passed
+// Warning: Panics if nil context passed.
 func (u Update) WithContext(ctx context.Context) Update {
 	if ctx == nil {
 		panic("Telego: nil context not allowed")
