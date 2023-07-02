@@ -62,11 +62,17 @@ func (h *HandlerGroup) processUpdateWithMiddlewares(
 
 	// Process all middlewares
 	if len(middlewares) != 0 {
-		matched := false
+		done := make(chan bool, 1)
 		middlewares[0](bot, update, func(bot *telego.Bot, update telego.Update) {
-			matched = h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
+			done <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
 		})
-		return matched
+
+		select {
+		case <-ctx.Done():
+			return false
+		case matched := <-done:
+			return matched
+		}
 	}
 
 	// Process all groups

@@ -136,6 +136,13 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				t.Log("After nested next")
 				updOrder(12)
 			},
+			func(bot *telego.Bot, update telego.Update, next Handler) {
+				t.Log("Before nested next go")
+				updOrder(20)
+				go next(bot, update)
+				t.Log("After nested next go")
+				updOrder(21)
+			},
 		},
 		groups: []*HandlerGroup{
 			{
@@ -253,6 +260,6 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 
 	lock.Lock()
 	t.Log("Order:", order)
-	assert.Equal(t, []int{1, 9, 11, 14, 15, 19, 18, 16, 17, 13, 2, 5, 4, 3, 6, 12, 10}, order)
+	assert.Equal(t, []int{1, 9, 11, 20, 21, 14, 15, 19, 18, 16, 17, 13, 2, 5, 4, 3, 6, 12, 10}, order)
 	lock.Unlock()
 }
