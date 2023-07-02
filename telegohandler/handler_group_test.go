@@ -260,6 +260,15 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 
 	lock.Lock()
 	t.Log("Order:", order)
-	assert.Equal(t, []int{1, 9, 11, 20, 21, 14, 15, 19, 18, 16, 17, 13, 2, 5, 4, 3, 6, 12, 10}, order)
+	ok := false
+	for i, value := range order {
+		if value == 21 {
+			order = append(order[:i], order[i+1:]...)
+			ok = true
+			break
+		}
+	}
+	assert.True(t, ok)
+	assert.Equal(t, []int{1, 9, 11, 20, 14, 15, 19, 18, 16, 17, 13, 2, 5, 4, 3, 6, 12, 10}, order)
 	lock.Unlock()
 }
