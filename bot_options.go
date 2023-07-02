@@ -59,7 +59,7 @@ func WithDefaultLogger(debugMode, printErrors bool) BotOption {
 	}
 }
 
-// WithExtendedDefaultLogger configures default logger, replacer can be nil. Redefines existing logger.
+// WithExtendedDefaultLogger configures default logger, replacer can be nil. Redefines existing loggers.
 // Note: Keep in mind that debug logs will include your bot token. It's only safe to have them enabled in
 // testing environment, or hide sensitive information (like bot token) yourself.
 func WithExtendedDefaultLogger(debugMode, printErrors bool, replacer *strings.Replacer) BotOption {
@@ -86,7 +86,7 @@ func WithDiscardLogger() BotOption {
 	return WithDefaultLogger(false, false)
 }
 
-// WithLogger sets logger to use. Redefines existing logger.
+// WithLogger sets logger to use. Redefines existing loggers.
 // Note: Keep in mind that debug logs will include your bot token. It's only safe to have them enabled in
 // testing environment, or hide sensitive information (like bot token) yourself.
 func WithLogger(log Logger) BotOption {
@@ -100,7 +100,7 @@ func WithLogger(log Logger) BotOption {
 func WithAPIServer(apiURL string) BotOption {
 	return func(bot *Bot) error {
 		if apiURL == "" {
-			return errors.New("telego: empty bot api server url")
+			return errors.New("empty bot api server url")
 		}
 
 		bot.apiURL = apiURL

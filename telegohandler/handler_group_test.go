@@ -102,6 +102,7 @@ func TestHandlerGroup_Use(t *testing.T) {
 	})
 }
 
+//nolint:funlen
 func TestHandlerGroup_processUpdate(t *testing.T) {
 	var order []int
 	gr := &HandlerGroup{

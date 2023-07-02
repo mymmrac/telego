@@ -40,7 +40,7 @@ type LongPollingOption func(ctx *longPollingContext) error
 func WithLongPollingUpdateInterval(updateInterval time.Duration) LongPollingOption {
 	return func(ctx *longPollingContext) error {
 		if updateInterval < 0 {
-			return errors.New("update interval can't be negative")
+			return fmt.Errorf("update interval is negative: %s", updateInterval)
 		}
 
 		ctx.updateInterval = updateInterval
@@ -55,7 +55,7 @@ func WithLongPollingUpdateInterval(updateInterval time.Duration) LongPollingOpti
 func WithLongPollingRetryTimeout(retryTimeout time.Duration) LongPollingOption {
 	return func(ctx *longPollingContext) error {
 		if retryTimeout < 0 {
-			return errors.New("retry timeout can't be negative")
+			return fmt.Errorf("retry timeout is negative: %s", retryTimeout)
 		}
 
 		ctx.retryTimeout = retryTimeout
@@ -95,7 +95,7 @@ func WithLongPollingContext(ctx context.Context) LongPollingOption {
 // but if a non-nil parameter is passed, you should remember to explicitly specify timeout
 func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPollingOption) (<-chan Update, error) {
 	if b.longPollingContext != nil {
-		return nil, errors.New("telego: long polling context already exist")
+		return nil, errors.New("telego: long polling context already exists")
 	}
 
 	ctx, err := b.createLongPollingContext(options)

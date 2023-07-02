@@ -129,6 +129,7 @@ func TestBotHandler_Start(t *testing.T) {
 }
 
 //revive:disable:cognitive-complexity
+//nolint:funlen,gocognit
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		bh := newTestBotHandler(t)
@@ -234,6 +235,61 @@ func TestBotHandler_Stop(t *testing.T) {
 
 			updates <- telego.Update{}
 		})
+	})
+
+	t.Run("with_done", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update, 1)
+
+		done := make(chan struct{})
+		bh, err := NewBotHandler(bot, updates, WithDone(done))
+		require.NoError(t, err)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			t.Fatal("handled after stop")
+		})
+
+		assert.NotPanics(t, func() {
+			go bh.Start()
+			for !bh.IsRunning() { //nolint:revive
+				// Wait for handler to start
+			}
+
+			close(done)
+
+			updates <- telego.Update{}
+		})
+
+		time.Sleep(smallTimeout)
+		assert.False(t, bh.IsRunning())
+	})
+
+	t.Run("updates_close", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update, 1)
+
+		bh, err := NewBotHandler(bot, updates)
+		require.NoError(t, err)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			t.Fatal("handled after stop")
+		})
+
+		assert.NotPanics(t, func() {
+			go bh.Start()
+			for !bh.IsRunning() { //nolint:revive
+				// Wait for handler to start
+			}
+
+			close(updates)
+		})
+
+		time.Sleep(smallTimeout)
+		assert.False(t, bh.IsRunning())
 	})
 }
 

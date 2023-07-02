@@ -30,6 +30,7 @@ type BotHandler struct {
 	stop           chan struct{}
 	handledUpdates *sync.WaitGroup
 	stopTimeout    time.Duration
+	done           <-chan struct{}
 }
 
 // BotHandlerOption represents an option that can be applied to bot handler
@@ -42,11 +43,12 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 		updates:        updates,
 		baseGroup:      &HandlerGroup{},
 		handledUpdates: &sync.WaitGroup{},
+		done:           make(chan struct{}),
 	}
 
 	for _, option := range options {
 		if err := option(bh); err != nil {
-			return nil, fmt.Errorf("options: %w", err)
+			return nil, fmt.Errorf("telego: options: %w", err)
 		}
 	}
 
@@ -77,9 +79,13 @@ func (h *BotHandler) Start() {
 		select {
 		case <-h.stop:
 			return
+		case <-h.done:
+			h.Stop()
+			return
 		case update, ok := <-h.updates:
 			if !ok {
-				return // TODO: Add stop
+				h.Stop()
+				return
 			}
 
 			// Process update
@@ -118,23 +124,24 @@ func (h *BotHandler) IsRunning() bool {
 func (h *BotHandler) Stop() {
 	h.runningLock.Lock()
 	defer h.runningLock.Unlock()
-
-	if h.running {
-		close(h.stop)
-
-		wait := make(chan struct{})
-		go func() {
-			h.handledUpdates.Wait()
-			wait <- struct{}{}
-		}()
-
-		select {
-		case <-time.After(h.stopTimeout):
-		case <-wait:
-		}
-
-		h.running = false
+	if !h.running {
+		return
 	}
+
+	close(h.stop)
+
+	wait := make(chan struct{})
+	go func() {
+		h.handledUpdates.Wait()
+		wait <- struct{}{}
+	}()
+
+	select {
+	case <-time.After(h.stopTimeout):
+	case <-wait:
+	}
+
+	h.running = false
 }
 
 // Handle registers new handler in the base group, update will be processed only by first-matched handler,
