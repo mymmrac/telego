@@ -48,6 +48,17 @@ func AnyMessageWithText() Predicate {
 	}
 }
 
+func anyMassageWithFrom(message *telego.Message) bool {
+	return message != nil && message.From != nil
+}
+
+// AnyMessageWithFrom is true if the message isn't nil and its from (sender) is not nil
+func AnyMessageWithFrom() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithFrom(update.Message)
+	}
+}
+
 func baseTextEqual(message *telego.Message, text string) bool {
 	return message != nil && message.Text == text
 }
@@ -196,6 +207,13 @@ func AnyEditedMessage() Predicate {
 func AnyEditedMessageWithText() Predicate {
 	return func(update telego.Update) bool {
 		return anyMassageWithText(update.EditedMessage)
+	}
+}
+
+// AnyEditedMessageWithFrom is true if the edited message isn't nil and its from (sender) is not nil
+func AnyEditedMessageWithFrom() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithFrom(update.EditedMessage)
 	}
 }
 

@@ -83,6 +83,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_message_with_from_matches",
+			predicate: AnyMessageWithFrom(),
+			update:    telego.Update{Message: &telego.Message{From: &telego.User{}}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_from_not_matches",
+			predicate: AnyMessageWithFrom(),
+			update:    telego.Update{Message: &telego.Message{}},
+			matches:   false,
+		},
+		{
 			name:      "text_equal_matches",
 			predicate: TextEqual(testText),
 			update:    telego.Update{Message: &telego.Message{Text: testText}},
@@ -271,6 +283,18 @@ func TestPredicates(t *testing.T) {
 		{
 			name:      "any_edited_message_with_text_not_matches",
 			predicate: AnyEditedMessageWithText(),
+			update:    telego.Update{EditedMessage: &telego.Message{}},
+			matches:   false,
+		},
+		{
+			name:      "any_edited_message_with_from_matches",
+			predicate: AnyEditedMessageWithFrom(),
+			update:    telego.Update{EditedMessage: &telego.Message{From: &telego.User{}}},
+			matches:   true,
+		},
+		{
+			name:      "any_edited_message_with_from_not_matches",
+			predicate: AnyEditedMessageWithFrom(),
 			update:    telego.Update{EditedMessage: &telego.Message{}},
 			matches:   false,
 		},
