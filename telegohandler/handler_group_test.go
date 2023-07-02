@@ -126,6 +126,7 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				t.Log("Before next")
 				updOrder(9)
 				next(bot, update)
+				next(bot, update)
 				t.Log("After next")
 				updOrder(10)
 			},

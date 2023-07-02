@@ -258,11 +258,10 @@ func TestBotHandler_Stop(t *testing.T) {
 			}
 
 			close(done)
+			time.Sleep(smallTimeout)
 
 			updates <- telego.Update{}
 		})
-
-		time.Sleep(smallTimeout)
 		assert.False(t, bh.IsRunning())
 	})
 
