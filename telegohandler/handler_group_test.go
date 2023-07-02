@@ -181,8 +181,7 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 						next(bot, update.WithContext(ctx))
 						cancel()
 						t.Log("After nested in a group next")
-						// Do not record this, since it can be executed in any time and this is expected
-						// order = append(order, 17)
+						updOrder(17)
 					},
 					func(bot *telego.Bot, update telego.Update, next Handler) {
 						t.Log("Before nested in a group next")
@@ -254,6 +253,15 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 
 	lock.Lock()
 	t.Log("Order:", order)
+	ok := false
+	for i, value := range order {
+		if value == 17 {
+			ok = true
+			order = append(order[:i], order[i+1:]...)
+			break
+		}
+	}
+	assert.True(t, ok)
 	assert.Equal(t, []int{1, 9, 11, 14, 15, 19, 18, 16, 13, 2, 5, 4, 3, 6, 12, 10}, order)
 	lock.Unlock()
 }

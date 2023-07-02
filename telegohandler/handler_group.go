@@ -1,6 +1,10 @@
 package telegohandler
 
-import "github.com/mymmrac/telego"
+import (
+	"sync"
+
+	"github.com/mymmrac/telego"
+)
 
 // conditionalHandler represents handler with respectful predicates
 type conditionalHandler struct {
@@ -40,12 +44,14 @@ func (h *HandlerGroup) match(update telego.Update) bool {
 
 // processUpdate checks all group predicates, runs middlewares, checks handler predicates,
 // tries to process update in first matched handler
-func (h *HandlerGroup) processUpdate(bot *telego.Bot, update telego.Update) bool {
-	return h.processUpdateWithMiddlewares(bot, update, h.middlewares)
+func (h *HandlerGroup) processUpdate(bot *telego.Bot, update telego.Update) {
+	wg := &sync.WaitGroup{}
+	h.processUpdateWithMiddlewares(bot, update, h.middlewares, wg)
+	wg.Wait()
 }
 
 func (h *HandlerGroup) processUpdateWithMiddlewares(
-	bot *telego.Bot, update telego.Update, middlewares []Middleware,
+	bot *telego.Bot, update telego.Update, middlewares []Middleware, wg *sync.WaitGroup,
 ) bool {
 	ctx := update.Context()
 	select {
@@ -63,10 +69,14 @@ func (h *HandlerGroup) processUpdateWithMiddlewares(
 	// Process all middlewares
 	if len(middlewares) != 0 {
 		matched := make(chan bool)
-		go middlewares[0](bot, update, func(bot *telego.Bot, update telego.Update) {
-			matched <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
-			close(matched)
-		})
+		wg.Add(1)
+		go func() {
+			middlewares[0](bot, update, func(bot *telego.Bot, update telego.Update) {
+				matched <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:], wg)
+				close(matched)
+			})
+			wg.Done()
+		}()
 
 		// Wait for match
 		select {
@@ -84,7 +94,7 @@ func (h *HandlerGroup) processUpdateWithMiddlewares(
 
 	// Process all groups
 	for _, group := range h.groups {
-		if group.processUpdate(bot, update) {
+		if group.processUpdateWithMiddlewares(bot, update, group.middlewares, wg) {
 			return true
 		}
 	}
