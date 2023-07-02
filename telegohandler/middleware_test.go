@@ -15,17 +15,15 @@ func TestPanicRecovery(t *testing.T) {
 
 	t.Run("no_panic", func(t *testing.T) {
 		assert.NotPanics(t, func() {
-			h := PanicRecovery(func(bot *telego.Bot, update telego.Update) {})
-			h(bot, telego.Update{})
+			PanicRecovery(bot, telego.Update{}, func(bot *telego.Bot, update telego.Update) {})
 		})
 	})
 
 	t.Run("panic_recovered", func(t *testing.T) {
 		assert.NotPanics(t, func() {
-			h := PanicRecovery(func(bot *telego.Bot, update telego.Update) {
+			PanicRecovery(bot, telego.Update{}, func(bot *telego.Bot, update telego.Update) {
 				panic("test panic")
 			})
-			h(bot, telego.Update{})
 		})
 	})
 }

@@ -569,11 +569,9 @@ func main() {
 	// Init ...
 
 	// Add global middleware, it will be applied in order of addition
-	bh.Use(func(next th.Handler) th.Handler {
-		return func(bot *telego.Bot, update telego.Update) {
-			fmt.Println("Global middleware") // Will be called first
-			next(bot, update)
-		}
+	bh.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+		fmt.Println("Global middleware") // Will be called first
+		next(bot, update)
 	})
 
 	// Create any groups with or without predicates
@@ -582,13 +580,11 @@ func main() {
 	task := bh.Group(th.TextContains("task"))
 
 	// Add middleware to groups
-	task.Use(func(next th.Handler) th.Handler {
-		return func(bot *telego.Bot, update telego.Update) {
-			fmt.Println("Group based middleware") // Will be called second
+	task.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+		fmt.Println("Group-based middleware") // Will be called second
 
-			if len(update.Message.Text) < 10 {
-				next(bot, update)
-			}
+		if len(update.Message.Text) < 10 {
+			next(bot, update)
 		}
 	})
 

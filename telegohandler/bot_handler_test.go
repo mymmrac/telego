@@ -149,7 +149,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			time.Sleep(hugeTimeout)
-			t.Fatal("timeout didn't worked")
+			t.Fatal("timeout didn't work")
 		})
 
 		timeoutSignal := time.After(timeout)
@@ -267,10 +267,8 @@ func TestBotHandler_Group(t *testing.T) {
 func TestBotHandler_Use(t *testing.T) {
 	bh := newTestBotHandler(t)
 
-	middleware := Middleware(func(next Handler) Handler {
-		return func(bot *telego.Bot, update telego.Update) {
-			next(bot, update)
-		}
+	middleware := Middleware(func(bot *telego.Bot, update telego.Update, next Handler) {
+		next(bot, update)
 	})
 
 	bh.Use(middleware)

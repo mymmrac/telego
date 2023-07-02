@@ -1,6 +1,7 @@
 package telegohandler
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -16,7 +17,7 @@ type Handler func(bot *telego.Bot, update telego.Update)
 type Predicate func(update telego.Update) bool
 
 // Middleware applies any function on update before calling the handler
-type Middleware func(next Handler) Handler
+type Middleware func(bot *telego.Bot, update telego.Update, next Handler)
 
 // BotHandler represents a bot handler that can handle updated matching by predicates
 type BotHandler struct {
@@ -78,17 +79,28 @@ func (h *BotHandler) Start() {
 			return
 		case update, ok := <-h.updates:
 			if !ok {
-				return
+				return // TODO: Add stop
 			}
 
-			h.processUpdate(update)
+			// Process update
+			h.handledUpdates.Add(1)
+			go func() {
+				ctx, cancel := context.WithCancel(update.Context())
+				go func() {
+					select {
+					case <-ctx.Done():
+					case <-h.stop:
+						cancel()
+					}
+				}()
+
+				h.baseGroup.processUpdate(h.bot, update.WithContext(ctx))
+				cancel()
+
+				h.handledUpdates.Done()
+			}()
 		}
 	}
-}
-
-// processUpdate checks all groups and handlers, tries to process update in first matched handler
-func (h *BotHandler) processUpdate(update telego.Update) {
-	_ = h.baseGroup.useGroups(h.bot, update, h.handledUpdates)
 }
 
 // IsRunning tells if Start is running

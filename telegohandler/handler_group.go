@@ -1,11 +1,6 @@
 package telegohandler
 
-import (
-	"context"
-	"sync"
-
-	"github.com/mymmrac/telego"
-)
+import "github.com/mymmrac/telego"
 
 // conditionalHandler represents handler with respectful predicates
 type conditionalHandler struct {
@@ -25,45 +20,10 @@ func (h conditionalHandler) match(update telego.Update) bool {
 
 // HandlerGroup represents a group of handlers, middlewares and child groups
 type HandlerGroup struct {
-	parent      *HandlerGroup
 	predicates  []Predicate
+	middlewares []Middleware
 	groups      []*HandlerGroup
 	handlers    []conditionalHandler
-	middlewares []Middleware
-}
-
-// applyMiddlewares applies all parent middlewares and its own in reverse order
-func (h *HandlerGroup) applyMiddlewares(next Handler) Handler {
-	for i := len(h.middlewares) - 1; i >= 0; i-- {
-		next = h.middlewares[i](next)
-	}
-
-	if h.parent != nil {
-		next = h.parent.applyMiddlewares(next)
-	}
-
-	return next
-}
-
-// useHandlers tries to match update to a handler
-func (h *HandlerGroup) useHandlers(bot *telego.Bot, update telego.Update, wg *sync.WaitGroup) bool {
-	for _, handler := range h.handlers {
-		if !handler.match(update.Clone()) {
-			continue
-		}
-
-		wg.Add(1)
-		go func(ch conditionalHandler) {
-			ctx, cancel := context.WithCancel(update.Context())
-			h.applyMiddlewares(ch.Handler)(bot, update.WithContext(ctx))
-			cancel()
-			wg.Done()
-		}(handler)
-
-		return true
-	}
-
-	return false
 }
 
 // match matches the current update and group
@@ -76,20 +36,63 @@ func (h *HandlerGroup) match(update telego.Update) bool {
 	return true
 }
 
-// useHandlers tries to match update to a group
-func (h *HandlerGroup) useGroups(bot *telego.Bot, update telego.Update, wg *sync.WaitGroup) bool {
-	for _, group := range h.groups {
-		if !group.match(update.Clone()) {
-			continue
+// processUpdate checks all group predicates, runs middlewares, checks handler predicates,
+// tries to process update in first matched handler
+func (h *HandlerGroup) processUpdate(bot *telego.Bot, update telego.Update) bool {
+	return h.processUpdateWithMiddlewares(bot, update, h.middlewares)
+}
+
+func (h *HandlerGroup) processUpdateWithMiddlewares(
+	bot *telego.Bot, update telego.Update, middlewares []Middleware,
+) bool {
+	ctx := update.Context()
+	select {
+	case <-ctx.Done():
+		return false
+	default:
+		// Continue
+	}
+
+	// Check group predicates once
+	if len(middlewares) == len(h.middlewares) && !h.match(update) {
+		return false
+	}
+
+	// Process all middlewares
+	if len(middlewares) != 0 {
+		matched := make(chan bool)
+		go middlewares[0](bot, update, func(bot *telego.Bot, update telego.Update) {
+			matched <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
+			close(matched)
+		})
+
+		// Wait for match
+		select {
+		case <-ctx.Done():
+			return false
+		case ok := <-matched:
+			if ok {
+				return true
+			}
 		}
 
-		if ok := group.useGroups(bot, update, wg); ok {
+		// Processing shouldn't continue since not all middlewares were called
+		return false
+	}
+
+	// Process all groups
+	for _, group := range h.groups {
+		if group.processUpdate(bot, update) {
 			return true
 		}
 	}
 
-	if ok := h.useHandlers(bot, update, wg); ok {
-		return true
+	// Process all handlers
+	for _, handler := range h.handlers {
+		if handler.match(update) {
+			handler.Handler(bot, update)
+			return true
+		}
 	}
 
 	return false
@@ -131,7 +134,6 @@ func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
 	}
 
 	group := &HandlerGroup{
-		parent:     h,
 		predicates: predicates,
 	}
 	h.groups = append(h.groups, group)
@@ -140,7 +142,9 @@ func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
 }
 
 // Use applies middleware to the group
-// Note: The Handler chain will be stopped if middleware doesn't call the next func
+// Note: The chain will be stopped if middleware doesn't call the next func,
+// if there is no context timeout then update will be stuck,
+// if there is time out then the group will be skipped since not all middlewares were called
 //
 // Warning: Panics if nil middlewares passed
 func (h *HandlerGroup) Use(middlewares ...Middleware) {

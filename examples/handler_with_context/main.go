@@ -36,20 +36,18 @@ func main() {
 	var userIDKey userID
 
 	// Apply middleware that will retrieve user ID from update
-	bh.Use(func(next th.Handler) th.Handler {
-		return func(bot *telego.Bot, update telego.Update) {
-			// Get initial context
-			ctx := update.Context()
+	bh.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+		// Get initial context
+		ctx := update.Context()
 
-			if update.Message != nil && update.Message.From != nil {
-				// Set user ID in context
-				ctx = context.WithValue(ctx, userIDKey, update.Message.From.ID)
-			}
-
-			// Update context
-			update = update.WithContext(ctx)
-			next(bot, update)
+		if update.Message != nil && update.Message.From != nil {
+			// Set user ID in context
+			ctx = context.WithValue(ctx, userIDKey, update.Message.From.ID)
 		}
+
+		// Update context
+		update = update.WithContext(ctx)
+		next(bot, update)
 	})
 
 	// Handle messages

@@ -700,21 +700,16 @@ func main() {
 		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.Use(th.PanicRecovery)
-		bh.Use(func(next th.Handler) th.Handler {
-			fmt.Println("KK 1")
-
-			return func(bot *telego.Bot, update telego.Update) {
+		bh.Use(
+			func(bot *telego.Bot, update telego.Update, next th.Handler) {
 				fmt.Println("M 2")
 				next(bot, update)
-			}
-		}, func(next th.Handler) th.Handler {
-			fmt.Println("KK 2")
-
-			return func(bot *telego.Bot, update telego.Update) {
+			},
+			func(bot *telego.Bot, update telego.Update, next th.Handler) {
 				fmt.Println("M 3")
 				next(bot, update)
-			}
-		})
+			},
+		)
 
 		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 			fmt.Println("REGULAR USER")
@@ -728,13 +723,9 @@ func main() {
 		adminUserMsg.HandleMessage(func(bot *telego.Bot, message telego.Message) {
 			fmt.Println("ADMIN USER")
 		})
-		adminUserMsg.Use(func(next th.Handler) th.Handler {
-			fmt.Println("KK 3")
-
-			return func(bot *telego.Bot, update telego.Update) {
-				fmt.Println("M 4")
-				next(bot, update)
-			}
+		adminUserMsg.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+			fmt.Println("M 4")
+			next(bot, update)
 		})
 
 		defer bh.Stop()

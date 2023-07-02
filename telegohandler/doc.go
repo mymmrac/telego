@@ -165,17 +165,13 @@ In this example, usage of groups and middleware will be shown.
 
 		// Add global middleware, it will be applied in order of addition
 		bh.Use(
-			func(next th.Handler) th.Handler {
-				return func(bot *telego.Bot, update telego.Update) {
-					fmt.Println("Global middleware") // Will be called first
-					next(bot, update)
-				}
+			func(bot *telego.Bot, update telego.Update, next th.Handler) {
+				fmt.Println("Global middleware") // Will be called first
+				next(bot, update)
 			},
-			func(next th.Handler) th.Handler {
-				return func(bot *telego.Bot, update telego.Update) {
-					fmt.Println("Global middleware 2") // Will be called second
-					next(bot, update)
-				}
+			func(bot *telego.Bot, update telego.Update, next th.Handler) {
+				fmt.Println("Global middleware 2") // Will be called second
+				next(bot, update)
 			},
 		)
 
@@ -184,13 +180,11 @@ In this example, usage of groups and middleware will be shown.
 		task := bh.Group(th.TextContains("task"))
 
 		// Add middleware to groups
-		task.Use(func(next th.Handler) th.Handler {
-			return func(bot *telego.Bot, update telego.Update) {
-				fmt.Println("Group based middleware") // Will be called third
+		task.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+			fmt.Println("Group based middleware") // Will be called third
 
-				if len(update.Message.Text) < 10 {
-					next(bot, update)
-				}
+			if len(update.Message.Text) < 10 {
+				next(bot, update)
 			}
 		})
 
