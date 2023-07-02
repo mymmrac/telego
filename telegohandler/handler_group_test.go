@@ -2,6 +2,7 @@ package telegohandler
 
 import (
 	"context"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -105,28 +106,35 @@ func TestHandlerGroup_Use(t *testing.T) {
 //nolint:funlen
 func TestHandlerGroup_processUpdate(t *testing.T) {
 	var order []int
+	lock := sync.Mutex{}
+	updOrder := func(i int) {
+		lock.Lock()
+		order = append(order, i)
+		lock.Unlock()
+	}
+
 	gr := &HandlerGroup{
 		predicates: []Predicate{
 			func(update telego.Update) bool {
 				t.Log("Predicate")
-				order = append(order, 1)
+				updOrder(1)
 				return true
 			},
 		},
 		middlewares: []Middleware{
 			func(bot *telego.Bot, update telego.Update, next Handler) {
 				t.Log("Before next")
-				order = append(order, 9)
+				updOrder(9)
 				next(bot, update)
 				t.Log("After next")
-				order = append(order, 10)
+				updOrder(10)
 			},
 			func(bot *telego.Bot, update telego.Update, next Handler) {
 				t.Log("Before nested next")
-				order = append(order, 11)
+				updOrder(11)
 				next(bot, update)
 				t.Log("After nested next")
-				order = append(order, 12)
+				updOrder(12)
 			},
 		},
 		groups: []*HandlerGroup{
@@ -136,7 +144,7 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 						Predicates: []Predicate{
 							func(update telego.Update) bool {
 								t.Log("Predicate handler nested in a group")
-								order = append(order, 14)
+								updOrder(14)
 								return false
 							},
 						},
@@ -147,10 +155,11 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				middlewares: []Middleware{
 					func(bot *telego.Bot, update telego.Update, next Handler) {
 						t.Log("Before nested in a group next")
-						order = append(order, 15)
+						updOrder(15)
 						ctx, cancel := context.WithCancel(update.Context())
 						cancel()
 						next(bot, update.WithContext(ctx))
+						updOrder(19)
 					},
 				},
 				groups: []*HandlerGroup{
@@ -167,16 +176,17 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				middlewares: []Middleware{
 					func(bot *telego.Bot, update telego.Update, next Handler) {
 						t.Log("Before nested in a group next")
-						order = append(order, 18)
+						updOrder(18)
 						ctx, cancel := context.WithTimeout(update.Context(), smallTimeout)
 						next(bot, update.WithContext(ctx))
 						cancel()
 						t.Log("After nested in a group next")
-						order = append(order, 17)
+						// Do not record this, since it can be executed in any time and this is expected
+						// order = append(order, 17)
 					},
 					func(bot *telego.Bot, update telego.Update, next Handler) {
 						t.Log("Before nested in a group next")
-						order = append(order, 16)
+						updOrder(16)
 					},
 				},
 			},
@@ -184,7 +194,7 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				predicates: []Predicate{
 					func(update telego.Update) bool {
 						t.Log("Predicate nested in a group")
-						order = append(order, 13)
+						updOrder(13)
 						return false
 					},
 				},
@@ -193,29 +203,29 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				predicates: []Predicate{
 					func(update telego.Update) bool {
 						t.Log("Predicate nested in a group")
-						order = append(order, 2)
+						updOrder(2)
 						return true
 					},
 				},
 				middlewares: []Middleware{
 					func(bot *telego.Bot, update telego.Update, next Handler) {
 						t.Log("Before nested in a group next")
-						order = append(order, 5)
+						updOrder(5)
 						next(bot, update)
 						t.Log("After nested in a group next")
-						order = append(order, 6)
+						updOrder(6)
 					},
 				},
 				handlers: []conditionalHandler{
 					{
 						Handler: func(bot *telego.Bot, update telego.Update) {
 							t.Log("Handler in a group")
-							order = append(order, 3)
+							updOrder(3)
 						},
 						Predicates: []Predicate{
 							func(update telego.Update) bool {
 								t.Log("Predicate handler nested in a group")
-								order = append(order, 4)
+								updOrder(4)
 								return true
 							},
 						},
@@ -227,12 +237,12 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 			{
 				Handler: func(bot *telego.Bot, update telego.Update) {
 					t.Log("Handler")
-					order = append(order, 7)
+					updOrder(7)
 				},
 				Predicates: []Predicate{
 					func(update telego.Update) bool {
 						t.Log("Predicate handler")
-						order = append(order, 8)
+						updOrder(8)
 						return true
 					},
 				},
@@ -241,6 +251,9 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 	}
 
 	gr.processUpdate(nil, telego.Update{})
+
+	lock.Lock()
 	t.Log("Order:", order)
-	assert.Equal(t, []int{1, 9, 11, 14, 15, 18, 16, 17, 13, 2, 5, 4, 3, 6, 12, 10}, order)
+	assert.Equal(t, []int{1, 9, 11, 14, 15, 19, 18, 16, 13, 2, 5, 4, 3, 6, 12, 10}, order)
+	lock.Unlock()
 }
