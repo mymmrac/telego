@@ -35,7 +35,7 @@ tasks:
       - mkdir -p bin
       - |
         go test -coverprofile bin/cover.out \
-          $(go list ./... | grep -v /examples/ | grep -v /internal/ | grep -v /mock)
+          $(go list ./... | grep -v /examples | grep -v /internal | grep -v /mock)
     sources:
       - ./**/*.go
       - go.mod
@@ -51,9 +51,9 @@ tasks:
       - go tool cover -func bin/cover.out
 
   test:race:
-    desc: "Run tests with race flag"
+    desc: "Run tests with a race flag"
     cmds:
-      - go test -race -count=1 ./...
+      - go test -race -count=8 -failfast $(go list ./... | grep -v /examples | grep -v /internal | grep -v /mock)
 
   test:bench:
     desc: "Run benchmarks"

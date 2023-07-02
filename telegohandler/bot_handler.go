@@ -17,7 +17,7 @@ type Handler func(bot *telego.Bot, update telego.Update)
 type Predicate func(update telego.Update) bool
 
 // Middleware applies any function on bot and update before calling other middlewares, predicates and handler
-// Note: Calling next in goroutine is allowed
+// Note: Calling next multiple times does nothing after first call, calling next in goroutine is allowed
 //
 // Warning: Not calling next at all is allowed, but if context doesn't close, update will be stuck forever however
 // if context closes since not all middlewares were executed, the handler group will be skipped

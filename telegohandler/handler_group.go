@@ -1,6 +1,10 @@
 package telegohandler
 
-import "github.com/mymmrac/telego"
+import (
+	"sync"
+
+	"github.com/mymmrac/telego"
+)
 
 // conditionalHandler represents handler with respectful predicates
 type conditionalHandler struct {
@@ -62,9 +66,12 @@ func (h *HandlerGroup) processUpdateWithMiddlewares(
 
 	// Process all middlewares
 	if len(middlewares) != 0 {
+		once := sync.Once{}
 		done := make(chan bool, 1)
 		middlewares[0](bot, update, func(bot *telego.Bot, update telego.Update) {
-			done <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
+			once.Do(func() {
+				done <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
+			})
 		})
 
 		select {
