@@ -4,13 +4,14 @@ import "github.com/mymmrac/telego"
 
 // conditionalHandler represents handler with respectful predicates
 type conditionalHandler struct {
-	Handler    Handler
-	Predicates []Predicate
+	handler    Handler
+	predicates []Predicate
 }
 
 // match matches the current update and handler
 func (h conditionalHandler) match(update telego.Update) bool {
-	for _, p := range h.Predicates {
+	update = update.Clone()
+	for _, p := range h.predicates {
 		if !p(update) {
 			return false
 		}
@@ -28,6 +29,7 @@ type HandlerGroup struct {
 
 // match matches the current update and group
 func (h *HandlerGroup) match(update telego.Update) bool {
+	update = update.Clone()
 	for _, p := range h.predicates {
 		if !p(update) {
 			return false
@@ -90,7 +92,7 @@ func (h *HandlerGroup) processUpdateWithMiddlewares(
 	// Process all handlers
 	for _, handler := range h.handlers {
 		if handler.match(update) {
-			handler.Handler(bot, update)
+			handler.handler(bot, update)
 			return true
 		}
 	}
@@ -117,8 +119,8 @@ func (h *HandlerGroup) Handle(handler Handler, predicates ...Predicate) {
 	}
 
 	h.handlers = append(h.handlers, conditionalHandler{
-		Handler:    handler,
-		Predicates: predicates,
+		handler:    handler,
+		predicates: predicates,
 	})
 }
 

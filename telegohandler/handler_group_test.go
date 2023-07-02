@@ -32,8 +32,8 @@ func TestHandlerGroup_Handle(t *testing.T) {
 		gr.Handle(handler)
 
 		require.Equal(t, 1, len(gr.handlers))
-		assert.NotNil(t, gr.handlers[0].Handler)
-		assert.Nil(t, gr.handlers[0].Predicates)
+		assert.NotNil(t, gr.handlers[0].handler)
+		assert.Nil(t, gr.handlers[0].predicates)
 
 		gr.handlers = make([]conditionalHandler, 0)
 	})
@@ -44,8 +44,8 @@ func TestHandlerGroup_Handle(t *testing.T) {
 		gr.Handle(handler, predicate)
 
 		require.Equal(t, 1, len(gr.handlers))
-		assert.NotNil(t, gr.handlers[0].Handler)
-		assert.NotNil(t, gr.handlers[0].Predicates)
+		assert.NotNil(t, gr.handlers[0].handler)
+		assert.NotNil(t, gr.handlers[0].predicates)
 
 		gr.handlers = make([]conditionalHandler, 0)
 	})
@@ -141,7 +141,7 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 			{
 				handlers: []conditionalHandler{
 					{
-						Predicates: []Predicate{
+						predicates: []Predicate{
 							func(update telego.Update) bool {
 								t.Log("Predicate handler nested in a group")
 								updOrder(14)
@@ -218,11 +218,11 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 				},
 				handlers: []conditionalHandler{
 					{
-						Handler: func(bot *telego.Bot, update telego.Update) {
+						handler: func(bot *telego.Bot, update telego.Update) {
 							t.Log("Handler in a group")
 							updOrder(3)
 						},
-						Predicates: []Predicate{
+						predicates: []Predicate{
 							func(update telego.Update) bool {
 								t.Log("Predicate handler nested in a group")
 								updOrder(4)
@@ -235,11 +235,11 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 		},
 		handlers: []conditionalHandler{
 			{
-				Handler: func(bot *telego.Bot, update telego.Update) {
+				handler: func(bot *telego.Bot, update telego.Update) {
 					t.Log("Handler")
 					updOrder(7)
 				},
-				Predicates: []Predicate{
+				predicates: []Predicate{
 					func(update telego.Update) bool {
 						t.Log("Predicate handler")
 						updOrder(8)

@@ -37,9 +37,9 @@ func testHandlerSetup(t *testing.T, bh *BotHandler) {
 	t.Helper()
 
 	require.Equal(t, 1, len(bh.baseGroup.handlers))
-	require.NotNil(t, bh.baseGroup.handlers[0].Handler)
-	require.NotNil(t, bh.baseGroup.handlers[0].Predicates)
-	require.Equal(t, 1, len(bh.baseGroup.handlers[0].Predicates))
+	require.NotNil(t, bh.baseGroup.handlers[0].handler)
+	require.NotNil(t, bh.baseGroup.handlers[0].predicates)
+	require.Equal(t, 1, len(bh.baseGroup.handlers[0].predicates))
 }
 
 func TestBotHandler_HandleMessage(t *testing.T) {

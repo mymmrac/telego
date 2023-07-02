@@ -302,8 +302,8 @@ func TestBotHandler_Handle(t *testing.T) {
 	bh.Handle(handler, predicate)
 
 	require.Equal(t, 1, len(bh.baseGroup.handlers))
-	assert.NotNil(t, bh.baseGroup.handlers[0].Handler)
-	assert.NotNil(t, bh.baseGroup.handlers[0].Predicates)
+	assert.NotNil(t, bh.baseGroup.handlers[0].handler)
+	assert.NotNil(t, bh.baseGroup.handlers[0].predicates)
 
 	bh.baseGroup.handlers = make([]conditionalHandler, 0)
 }
