@@ -348,3 +348,9 @@ func TestBotHandler_IsRunning(t *testing.T) {
 		assert.False(t, bh.IsRunning())
 	})
 }
+
+func TestBotHandler_BaseGroup(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	assert.Equal(t, bh.baseGroup, bh.BaseGroup())
+}

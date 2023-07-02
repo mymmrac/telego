@@ -170,9 +170,16 @@ func (h *BotHandler) Group(predicates ...Predicate) *HandlerGroup {
 }
 
 // Use applies middleware to the base group
-// Note: The Handler chain will be stopped if middleware doesn't call the next func
+// Note: The chain will be stopped if middleware doesn't call the next func,
+// if there is no context timeout then update will be stuck,
+// if there is time out then the group will be skipped since not all middlewares were called
 //
 // Warning: Panics if nil middlewares passed
 func (h *BotHandler) Use(middlewares ...Middleware) {
 	h.baseGroup.Use(middlewares...)
+}
+
+// BaseGroup returns a base group that is used by default in [BotHandler] methods
+func (h *BotHandler) BaseGroup() *HandlerGroup {
+	return h.baseGroup
 }
