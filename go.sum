@@ -49,10 +49,10 @@ github.com/valyala/fasthttp v1.48.0/go.mod h1:k2zXd82h/7UZc3VOdJ2WaUqt1uZ/XpXAfE
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 go.uber.org/multierr v1.10.0 h1:S0h4aNzvfcFsC3dRF1jLoaov7oRaKqRGC/pUEJ2yvPQ=
 go.uber.org/multierr v1.10.0/go.mod h1:20+QtiLqy0Nd6FdQB9TLXag12DsQkrbs3htMFfDN80Y=
-golang.ngrok.com/muxado v1.0.0 h1:r4BOkKR/7B6JpPvWzsUJ7E7OEPDSwNku/NW3jFuU0QQ=
-golang.ngrok.com/muxado v1.0.0/go.mod h1:ttzTgo3kIxNRpoJdle7jgSvPo7mqY+RtuZKM3iObkF0=
-golang.ngrok.com/ngrok v1.3.0 h1:oQ7EvMOAgjTHiyksfZ0efbVcFtaP9/pGTS7LMLeqAsM=
-golang.ngrok.com/ngrok v1.3.0/go.mod h1:kzmBMe8oFB3x6mmJDfT6QYpair9bRDgAdiaNU468ehQ=
+golang.ngrok.com/muxado/v2 v2.0.0 h1:bu9eIDhRdYNtIXNnqat/HyMeHYOAbUH55ebD7gTvW6c=
+golang.ngrok.com/muxado/v2 v2.0.0/go.mod h1:wzxJYX4xiAtmwumzL+QsukVwFRXmPNv86vB8RPpOxyM=
+golang.ngrok.com/ngrok v1.3.1 h1:ZTr4ijIJXY6+b9Zaq/Hd3azpNGMPJ1dplhpCkLhkc6w=
+golang.ngrok.com/ngrok v1.3.1/go.mod h1:8a8GVoqR305t0O51ld211Xq2UeKgm32o8px24ddvXZI=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.9.0 h1:LF6fAI+IutBocDJ2OT0Q1g8plpYljMZ4+lty+dsqw3g=
