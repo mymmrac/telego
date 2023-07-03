@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
@@ -42,9 +43,17 @@ type Bot struct {
 
 	healthCheckRequested bool
 	warningAsErrors      bool
+	retryOptions         retryOptions
 
 	longPollingContext *longPollingContext
 	webhookContext     *webhookContext
+}
+
+type retryOptions struct {
+	maxAttempts int
+	delayFactor int
+	startDelay  time.Duration
+	maxDelay    time.Duration
 }
 
 // BotOption represents an option that can be applied to Bot
@@ -65,6 +74,9 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		log:         newDefaultLogger(token),
 		api:         telegoapi.FastHTTPCaller{Client: &fasthttp.Client{}},
 		constructor: telegoapi.DefaultConstructor{},
+		retryOptions: retryOptions{
+			maxAttempts: 1,
+		},
 	}
 
 	for _, option := range options {

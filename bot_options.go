@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/valyala/fasthttp"
 
@@ -121,6 +122,30 @@ func WithHealthCheck() BotOption {
 func WithWarnings() BotOption {
 	return func(bot *Bot) error {
 		bot.warningAsErrors = true
+		return nil
+	}
+}
+
+// WithRetry configure the number of retry attempts and the delay time telego
+// will apply when doing API requests.
+// `maxAttempts` is the maximum number of attempts it will do and must be >= 1.
+// `delayFactor` is the base of exponential time delay and must be >= 1.
+// `startDelay` the initial delay between retries.
+// `maxDelay` the maximum delay between retries.
+func WithRetry(maxAttempts, delayFactor int, startDelay, maxDelay time.Duration) BotOption {
+	return func(bot *Bot) error {
+		if maxAttempts < 1 {
+			return errors.New("`maxAttempts` must be >= 1")
+		}
+		if delayFactor < 1 {
+			return errors.New("`delayFactor` must be >= 1")
+		}
+		bot.retryOptions = retryOptions{
+			maxAttempts,
+			delayFactor,
+			startDelay,
+			maxDelay,
+		}
 		return nil
 	}
 }

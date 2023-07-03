@@ -2,9 +2,33 @@ package telego
 
 import (
 	"fmt"
+	"math"
+	"time"
 
 	"github.com/mymmrac/telego/telegoapi"
 )
+
+// `retry` - executes a function multiple times and returns the final `err` value.
+// It finishes when either `err == nil` or `maxAttempts` is reached.
+func (b *Bot) retry(fn func() error) error {
+	var err error
+
+	for i := 0; i < b.retryOptions.maxAttempts; i++ {
+		err = fn()
+		if err == nil {
+			return nil
+		}
+
+		multiplier := math.Pow(float64(b.retryOptions.delayFactor), float64(i))
+		delay := b.retryOptions.startDelay * time.Duration(multiplier)
+		if delay > b.retryOptions.maxDelay {
+			delay = b.retryOptions.maxDelay
+		}
+		time.Sleep(delay)
+	}
+
+	return err
+}
 
 // GetUpdatesParams - Represents parameters of getUpdates method.
 type GetUpdatesParams struct {
@@ -252,12 +276,16 @@ const (
 // (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) SendMessage(params *SendMessageParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendMessage", params, &message)
-	if err != nil {
-		return nil, fmt.Errorf("telego: sendMessage(): %w", err)
-	}
 
-	return message, nil
+	err := b.retry(func() error {
+		err := b.performRequest("sendMessage", params, &message)
+		if err != nil {
+			return fmt.Errorf("telego: sendMessage(): %w", err)
+		}
+		return nil
+	})
+
+	return message, err
 }
 
 // ForwardMessageParams - Represents parameters of forwardMessage method.

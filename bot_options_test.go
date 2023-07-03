@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -183,4 +184,25 @@ func TestWithWarnings(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.True(t, bot.warningAsErrors)
+}
+
+func TestWithRetry(t *testing.T) {
+	bot := &Bot{}
+
+	t.Run("success", func(t *testing.T) {
+		err := WithRetry(1, 1, 2, 3)(bot)
+		assert.NoError(t, err)
+		assert.Equal(t, 1, bot.retryOptions.maxAttempts)
+		assert.Equal(t, 1, bot.retryOptions.delayFactor)
+		assert.Equal(t, time.Duration(2), bot.retryOptions.startDelay)
+		assert.Equal(t, time.Duration(3), bot.retryOptions.maxDelay)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		err := WithRetry(0, 1, 2, 3)(bot)
+		assert.Error(t, err)
+
+		err = WithRetry(1, 0, 2, 3)(bot)
+		assert.Error(t, err)
+	})
 }
