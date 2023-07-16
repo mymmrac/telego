@@ -8,6 +8,14 @@ updates:
       - ":hamster: Go"
       - ":shamrock: Dependencies"
 
+  - package-ecosystem: "gomod"
+    directory: "/examples"
+    schedule:
+      interval: "weekly"
+    labels:
+      - ":hamster: Go"
+      - ":shamrock: Examples dependencies"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
