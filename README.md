@@ -97,6 +97,7 @@ More examples can be seen here:
 - [Update processor](examples/update_processor/main.go)
 - [Message entities](examples/message_entity/main.go)
 - [Multi bot webhook](examples/multi_bot_webhook/main.go)
+- [Retry caller](examples/retry_caller/main.go)
 
 </details>
 

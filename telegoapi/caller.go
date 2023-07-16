@@ -3,8 +3,11 @@
 package telegoapi
 
 import (
+	"errors"
 	"fmt"
+	"math"
 	"net/http"
+	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
@@ -13,6 +16,11 @@ import (
 // FastHTTPCaller fasthttp implementation of Caller
 type FastHTTPCaller struct {
 	Client *fasthttp.Client
+}
+
+// DefaultFastHTTPCaller is a default fast http caller
+var DefaultFastHTTPCaller = &FastHTTPCaller{
+	Client: &fasthttp.Client{},
 }
 
 // Call is a fasthttp implementation
@@ -51,6 +59,11 @@ type HTTPCaller struct {
 	Client *http.Client
 }
 
+// DefaultHTTPCaller is a default http caller
+var DefaultHTTPCaller = &HTTPCaller{
+	Client: http.DefaultClient,
+}
+
 // Call is a http implementation
 func (h HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	req, err := http.NewRequest(http.MethodPost, url, data.Buffer)
@@ -79,4 +92,38 @@ func (h HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	}
 
 	return apiResp, nil
+}
+
+// RetryCaller decorator over Caller that provides reties with exponential backoff
+// Delay = (ExponentBase ^ AttemptNumber) * StartDelay or MaxDelay
+type RetryCaller struct {
+	Caller       Caller
+	MaxAttempts  int
+	ExponentBase float64
+	StartDelay   time.Duration
+	MaxDelay     time.Duration
+}
+
+// ErrMaxRetryAttempts returned when max retry attempts reached
+var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
+
+// Call makes calls using provided caller with retries
+func (r *RetryCaller) Call(url string, data *RequestData) (resp *Response, err error) {
+	for i := 0; i < r.MaxAttempts; i++ {
+		resp, err = r.Caller.Call(url, data)
+		if err == nil {
+			return resp, nil
+		}
+
+		if i == r.MaxAttempts-1 {
+			break
+		}
+
+		delay := time.Duration(math.Pow(r.ExponentBase, float64(i))) * r.StartDelay
+		if delay > r.MaxDelay {
+			delay = r.MaxDelay
+		}
+		time.Sleep(delay)
+	}
+	return nil, errors.Join(err, ErrMaxRetryAttempts)
 }

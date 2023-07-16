@@ -2,6 +2,7 @@ package telegoapi
 
 import (
 	"bytes"
+	"errors"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +13,8 @@ import (
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttp/fasthttputil"
 )
+
+var _ Caller = DefaultFastHTTPCaller
 
 func TestFastHTTPCaller_Call(t *testing.T) {
 	ln := fasthttputil.NewInmemoryListener()
@@ -95,6 +98,8 @@ func (s *fasthttpServer) Handle(ctx *fasthttp.RequestCtx) {
 	}
 }
 
+var _ Caller = DefaultHTTPCaller
+
 func TestHTTPCaller_Call(t *testing.T) {
 	api := &httpServer{
 		t: t,
@@ -161,4 +166,79 @@ func (h *httpServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 		_, err := resp.Write([]byte("{\"ok\": true}"))
 		assert.NoError(h.t, err)
 	}
+}
+
+type testRetryCaller struct {
+	resp     *Response
+	err      error
+	attempts int
+	okAfter  int
+}
+
+func (t *testRetryCaller) Call(_ string, _ *RequestData) (*Response, error) {
+	t.attempts++
+	if t.okAfter != 0 && t.attempts > t.okAfter {
+		return t.resp, nil
+	}
+	return t.resp, t.err
+}
+
+func TestRetryCaller_Call(t *testing.T) {
+	expectedResp := &Response{Ok: true}
+
+	t.Run("success", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: expectedResp,
+				err:  nil,
+			},
+			MaxAttempts: 1,
+		}
+		resp, err := retryCaller.Call("", nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResp, resp)
+	})
+
+	t.Run("success_retry", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp:    expectedResp,
+				err:     errors.New("test"),
+				okAfter: 2,
+			},
+			MaxAttempts: 3,
+		}
+		resp, err := retryCaller.Call("", nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResp, resp)
+	})
+
+	t.Run("error_retry", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err:  errors.New("test"),
+			},
+			MaxAttempts: 2,
+		}
+		resp, err := retryCaller.Call("", nil)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("max_delay", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err:  errors.New("test"),
+			},
+			MaxAttempts:  2,
+			ExponentBase: 2,
+			StartDelay:   10,
+			MaxDelay:     1,
+		}
+		resp, err := retryCaller.Call("", nil)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
 }

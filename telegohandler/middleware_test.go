@@ -9,6 +9,8 @@ import (
 	"github.com/mymmrac/telego"
 )
 
+var _ Middleware = PanicRecovery
+
 func TestPanicRecovery(t *testing.T) {
 	bot, err := telego.NewBot(token, telego.WithDiscardLogger())
 	require.NoError(t, err)
