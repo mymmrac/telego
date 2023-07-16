@@ -7,8 +7,8 @@ package mock
 import (
 	reflect "reflect"
 
-	gomock "github.com/golang/mock/gomock"
 	telegoapi "github.com/mymmrac/telego/telegoapi"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockCaller is a mock of Caller interface.
@@ -44,7 +44,31 @@ func (m *MockCaller) Call(arg0 string, arg1 *telegoapi.RequestData) (*telegoapi.
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockCallerMockRecorder) Call(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockCallerMockRecorder) Call(arg0, arg1 interface{}) *CallerCallCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), arg0, arg1)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), arg0, arg1)
+	return &CallerCallCall{Call: call}
+}
+
+// CallerCallCall wrap *gomock.Call
+type CallerCallCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *CallerCallCall) Return(arg0 *telegoapi.Response, arg1 error) *CallerCallCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *CallerCallCall) Do(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *CallerCallCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *CallerCallCall) DoAndReturn(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *CallerCallCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
 }

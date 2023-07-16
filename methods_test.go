@@ -4,8 +4,8 @@ package telego
 import (
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 
 	ta "github.com/mymmrac/telego/telegoapi"
 )

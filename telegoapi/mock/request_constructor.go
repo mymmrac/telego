@@ -7,8 +7,8 @@ package mock
 import (
 	reflect "reflect"
 
-	gomock "github.com/golang/mock/gomock"
 	telegoapi "github.com/mymmrac/telego/telegoapi"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockRequestConstructor is a mock of RequestConstructor interface.
@@ -44,9 +44,33 @@ func (m *MockRequestConstructor) JSONRequest(arg0 interface{}) (*telegoapi.Reque
 }
 
 // JSONRequest indicates an expected call of JSONRequest.
-func (mr *MockRequestConstructorMockRecorder) JSONRequest(arg0 interface{}) *gomock.Call {
+func (mr *MockRequestConstructorMockRecorder) JSONRequest(arg0 interface{}) *RequestConstructorJSONRequestCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONRequest", reflect.TypeOf((*MockRequestConstructor)(nil).JSONRequest), arg0)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONRequest", reflect.TypeOf((*MockRequestConstructor)(nil).JSONRequest), arg0)
+	return &RequestConstructorJSONRequestCall{Call: call}
+}
+
+// RequestConstructorJSONRequestCall wrap *gomock.Call
+type RequestConstructorJSONRequestCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *RequestConstructorJSONRequestCall) Return(arg0 *telegoapi.RequestData, arg1 error) *RequestConstructorJSONRequestCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *RequestConstructorJSONRequestCall) Do(f func(interface{}) (*telegoapi.RequestData, error)) *RequestConstructorJSONRequestCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *RequestConstructorJSONRequestCall) DoAndReturn(f func(interface{}) (*telegoapi.RequestData, error)) *RequestConstructorJSONRequestCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
 }
 
 // MultipartRequest mocks base method.
@@ -59,7 +83,31 @@ func (m *MockRequestConstructor) MultipartRequest(arg0 map[string]string, arg1 m
 }
 
 // MultipartRequest indicates an expected call of MultipartRequest.
-func (mr *MockRequestConstructorMockRecorder) MultipartRequest(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockRequestConstructorMockRecorder) MultipartRequest(arg0, arg1 interface{}) *RequestConstructorMultipartRequestCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultipartRequest", reflect.TypeOf((*MockRequestConstructor)(nil).MultipartRequest), arg0, arg1)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultipartRequest", reflect.TypeOf((*MockRequestConstructor)(nil).MultipartRequest), arg0, arg1)
+	return &RequestConstructorMultipartRequestCall{Call: call}
+}
+
+// RequestConstructorMultipartRequestCall wrap *gomock.Call
+type RequestConstructorMultipartRequestCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *RequestConstructorMultipartRequestCall) Return(arg0 *telegoapi.RequestData, arg1 error) *RequestConstructorMultipartRequestCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *RequestConstructorMultipartRequestCall) Do(f func(map[string]string, map[string]telegoapi.NamedReader) (*telegoapi.RequestData, error)) *RequestConstructorMultipartRequestCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *RequestConstructorMultipartRequestCall) DoAndReturn(f func(map[string]string, map[string]telegoapi.NamedReader) (*telegoapi.RequestData, error)) *RequestConstructorMultipartRequestCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
 }

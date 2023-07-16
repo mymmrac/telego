@@ -88,6 +88,12 @@ tasks:
     cmds:
       - rm *.generated
 
+  install:
+    desc: "Install all tools"
+    deps:
+      - install:lint
+      - install:mock
+
   install:lint:
     desc: "Install golangci-lint"
     cmds:
@@ -98,6 +104,6 @@ tasks:
   install:mock:
     desc: "Install mockgen"
     cmds:
-      - go install github.com/golang/mock/mockgen@latest
+      - go install go.uber.org/mock/mockgen@latest
     status:
       - command -v mockgen

@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/goccy/go-json"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	ta "github.com/mymmrac/telego/telegoapi"
 	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
