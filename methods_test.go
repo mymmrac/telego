@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 func TestBot_GetUpdates(t *testing.T) {
@@ -3317,7 +3317,7 @@ func TestSetWebhookParams_fileParameters(t *testing.T) {
 		Certificate: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"certificate": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3327,7 +3327,7 @@ func TestSendPhotoParams_fileParameters(t *testing.T) {
 		Photo: testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"photo": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3338,7 +3338,7 @@ func TestSendAudioParams_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"audio":     testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
@@ -3350,7 +3350,7 @@ func TestSendDocumentParams_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"document":  testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
@@ -3362,7 +3362,7 @@ func TestSendVideoParams_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"video":     testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
@@ -3374,7 +3374,7 @@ func TestSendAnimationParams_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"animation": testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
@@ -3385,7 +3385,7 @@ func TestSendVoiceParams_fileParameters(t *testing.T) {
 		Voice: testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"voice": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3396,7 +3396,7 @@ func TestSendVideoNoteParams_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"video_note": testNamedReade{},
 		"thumbnail":  testNamedReade{},
 	}, p.fileParameters())
@@ -3416,7 +3416,7 @@ func TestSendMediaGroupParams_fileParameters(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"test": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3426,7 +3426,7 @@ func TestSetChatPhotoParams_fileParameters(t *testing.T) {
 		Photo: testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"photo": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3439,7 +3439,7 @@ func TestEditMessageMediaParams_fileParameters(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"test": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3449,7 +3449,7 @@ func TestSendStickerParams_fileParameters(t *testing.T) {
 		Sticker: testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"sticker": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3459,7 +3459,7 @@ func TestUploadStickerFileParams_fileParameters(t *testing.T) {
 		Sticker: testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"sticker": testNamedReade{},
 	}, p.fileParameters())
 }
@@ -3473,11 +3473,11 @@ func TestCreateNewStickerSetParams_fileParameters(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"test": testNamedReade{},
 	}, p.fileParameters())
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{}, (&CreateNewStickerSetParams{}).fileParameters())
+	assert.Equal(t, map[string]ta.NamedReader{}, (&CreateNewStickerSetParams{}).fileParameters())
 }
 
 func TestAddStickerToSetParams_fileParameters(t *testing.T) {
@@ -3485,11 +3485,11 @@ func TestAddStickerToSetParams_fileParameters(t *testing.T) {
 		Sticker: InputSticker{Sticker: testInputFile},
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"test": testNamedReade{},
 	}, p.fileParameters())
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{}, (&AddStickerToSetParams{}).fileParameters())
+	assert.Equal(t, map[string]ta.NamedReader{}, (&AddStickerToSetParams{}).fileParameters())
 }
 
 func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {
@@ -3497,7 +3497,7 @@ func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"thumbnail": testNamedReade{},
 	}, p.fileParameters())
 }

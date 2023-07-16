@@ -6,7 +6,7 @@ import (
 	"github.com/valyala/fasthttp"
 
 	"github.com/mymmrac/telego"
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 // ID creates telego.ChatID from user's identifier
@@ -24,7 +24,7 @@ func Username(username string) telego.ChatID {
 }
 
 // File creates telego.InputFile from telegoapi.NamedReader
-func File(file telegoapi.NamedReader) telego.InputFile {
+func File(file ta.NamedReader) telego.InputFile {
 	return telego.InputFile{
 		File: file,
 	}

@@ -9,13 +9,13 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
 )
 
 var (
-	data      = &telegoapi.RequestData{}
-	emptyResp = &telegoapi.Response{
+	data      = &ta.RequestData{}
+	emptyResp = &ta.Response{
 		Ok: true,
 	}
 
@@ -37,12 +37,12 @@ func testAddress(t *testing.T) string {
 	return fmt.Sprintf("127.0.0.1:%d", testPortStart)
 }
 
-func telegoResponse(t *testing.T, v any) *telegoapi.Response {
+func telegoResponse(t *testing.T, v any) *ta.Response {
 	t.Helper()
 
 	byteData, err := json.Marshal(v)
 	require.NoError(t, err)
-	return &telegoapi.Response{
+	return &ta.Response{
 		Ok:     true,
 		Result: byteData,
 	}

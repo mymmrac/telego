@@ -10,7 +10,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 const (
@@ -37,8 +37,8 @@ type Bot struct {
 	token       string
 	apiURL      string
 	log         Logger
-	api         telegoapi.Caller
-	constructor telegoapi.RequestConstructor
+	api         ta.Caller
+	constructor ta.RequestConstructor
 
 	healthCheckRequested bool
 	warningAsErrors      bool
@@ -63,8 +63,8 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		token:       token,
 		apiURL:      defaultBotAPIServer,
 		log:         newDefaultLogger(token),
-		api:         telegoapi.FastHTTPCaller{Client: &fasthttp.Client{}},
-		constructor: telegoapi.DefaultConstructor{},
+		api:         ta.FastHTTPCaller{Client: &fasthttp.Client{}},
+		constructor: ta.DefaultConstructor{},
 	}
 
 	for _, option := range options {
@@ -132,9 +132,9 @@ func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error
 }
 
 // constructAndCallRequest creates and executes request with parsing of parameters
-func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*telegoapi.Response, error) {
+func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Response, error) {
 	filesParams, hasFiles := filesParameters(parameters)
-	var data *telegoapi.RequestData
+	var data *ta.RequestData
 
 	debug := &strings.Builder{}
 
@@ -174,7 +174,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*teleg
 }
 
 // filesParameters gets all files from parameters
-func filesParameters(parameters any) (files map[string]telegoapi.NamedReader, hasFiles bool) {
+func filesParameters(parameters any) (files map[string]ta.NamedReader, hasFiles bool) {
 	if parametersWithFiles, ok := parameters.(fileCompatible); ok && !isNil(parameters) {
 		files = parametersWithFiles.fileParameters()
 		for _, file := range files {
@@ -265,7 +265,7 @@ func isNil(i any) bool {
 	}
 }
 
-func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, files map[string]telegoapi.NamedReader) {
+func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, files map[string]ta.NamedReader) {
 	debugFiles := make([]string, 0, len(files))
 	for k, v := range files {
 		if isNil(v) {

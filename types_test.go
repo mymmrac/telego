@@ -8,7 +8,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 //nolint:funlen
@@ -496,7 +496,7 @@ func TestInputMedia_fileParameters(t *testing.T) {
 		Media: testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"media": testNamedReade{},
 	}, im.fileParameters())
 	assert.True(t, im.Media.needAttach)
@@ -508,7 +508,7 @@ func TestInputMediaVideo_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"media":     testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
@@ -521,7 +521,7 @@ func TestInputMediaAnimation_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"media":     testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
@@ -534,7 +534,7 @@ func TestInputMediaAudio_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"media":     testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, im.fileParameters())
@@ -547,7 +547,7 @@ func TestInputMediaDocument_fileParameters(t *testing.T) {
 		Thumbnail: &testInputFile,
 	}
 
-	assert.Equal(t, map[string]telegoapi.NamedReader{
+	assert.Equal(t, map[string]ta.NamedReader{
 		"media":     testNamedReade{},
 		"thumbnail": testNamedReade{},
 	}, im.fileParameters())

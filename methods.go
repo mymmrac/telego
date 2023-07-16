@@ -3,7 +3,7 @@ package telego
 import (
 	"fmt"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 // GetUpdatesParams - Represents parameters of getUpdates method.
@@ -102,8 +102,8 @@ type SetWebhookParams struct {
 	SecretToken string `json:"secret_token,omitempty"`
 }
 
-func (p *SetWebhookParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SetWebhookParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	if p.Certificate != nil {
 		fp["certificate"] = p.Certificate.File
@@ -416,8 +416,8 @@ type SendPhotoParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendPhotoParams) fileParameters() map[string]telegoapi.NamedReader {
-	return map[string]telegoapi.NamedReader{
+func (p *SendPhotoParams) fileParameters() map[string]ta.NamedReader {
+	return map[string]ta.NamedReader{
 		"photo": p.Photo.File,
 	}
 }
@@ -499,8 +499,8 @@ type SendAudioParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendAudioParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SendAudioParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	fp["audio"] = p.Audio.File
 	if p.Thumbnail != nil {
@@ -586,8 +586,8 @@ type SendDocumentParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendDocumentParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SendDocumentParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	fp["document"] = p.Document.File
 	if p.Thumbnail != nil {
@@ -682,8 +682,8 @@ type SendVideoParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendVideoParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SendVideoParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	fp["video"] = p.Video.File
 	if p.Thumbnail != nil {
@@ -776,8 +776,8 @@ type SendAnimationParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendAnimationParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SendAnimationParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	fp["animation"] = p.Animation.File
 	if p.Thumbnail != nil {
@@ -851,8 +851,8 @@ type SendVoiceParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendVoiceParams) fileParameters() map[string]telegoapi.NamedReader {
-	return map[string]telegoapi.NamedReader{
+func (p *SendVoiceParams) fileParameters() map[string]ta.NamedReader {
+	return map[string]ta.NamedReader{
 		"voice": p.Voice.File,
 	}
 }
@@ -923,8 +923,8 @@ type SendVideoNoteParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendVideoNoteParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SendVideoNoteParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	fp["video_note"] = p.VideoNote.File
 	if p.Thumbnail != nil {
@@ -975,8 +975,8 @@ type SendMediaGroupParams struct {
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 }
 
-func (p *SendMediaGroupParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SendMediaGroupParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	for _, m := range p.Media {
 		for _, v := range m.fileParameters() {
@@ -1856,8 +1856,8 @@ type SetChatPhotoParams struct {
 	Photo InputFile `json:"photo"`
 }
 
-func (p *SetChatPhotoParams) fileParameters() map[string]telegoapi.NamedReader {
-	return map[string]telegoapi.NamedReader{
+func (p *SetChatPhotoParams) fileParameters() map[string]ta.NamedReader {
+	return map[string]ta.NamedReader{
 		"photo": p.Photo.File,
 	}
 }
@@ -2844,8 +2844,8 @@ type EditMessageMediaParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *EditMessageMediaParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	for _, v := range p.Media.fileParameters() {
 		if isNil(v) {
@@ -3088,8 +3088,8 @@ type SendStickerParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-func (p *SendStickerParams) fileParameters() map[string]telegoapi.NamedReader {
-	return map[string]telegoapi.NamedReader{
+func (p *SendStickerParams) fileParameters() map[string]ta.NamedReader {
+	return map[string]ta.NamedReader{
 		"sticker": p.Sticker.File,
 	}
 }
@@ -3164,8 +3164,8 @@ const (
 	StickerFormatVideo    = "video"
 )
 
-func (p *UploadStickerFileParams) fileParameters() map[string]telegoapi.NamedReader {
-	return map[string]telegoapi.NamedReader{
+func (p *UploadStickerFileParams) fileParameters() map[string]ta.NamedReader {
+	return map[string]ta.NamedReader{
 		"sticker": p.Sticker.File,
 	}
 }
@@ -3213,8 +3213,8 @@ type CreateNewStickerSetParams struct {
 	NeedsRepainting bool `json:"needs_repainting,omitempty"`
 }
 
-func (p *CreateNewStickerSetParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *CreateNewStickerSetParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	for i, s := range p.Stickers {
 		p.Stickers[i].Sticker.needAttach = true
@@ -3254,14 +3254,14 @@ type AddStickerToSetParams struct {
 	Sticker InputSticker `json:"sticker"`
 }
 
-func (p *AddStickerToSetParams) fileParameters() map[string]telegoapi.NamedReader {
+func (p *AddStickerToSetParams) fileParameters() map[string]ta.NamedReader {
 	file := p.Sticker.Sticker.File
 	if isNil(file) {
-		return map[string]telegoapi.NamedReader{}
+		return map[string]ta.NamedReader{}
 	}
 
 	p.Sticker.Sticker.needAttach = true
-	return map[string]telegoapi.NamedReader{
+	return map[string]ta.NamedReader{
 		file.Name(): file,
 	}
 }
@@ -3421,8 +3421,8 @@ type SetStickerSetThumbnailParams struct {
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 }
 
-func (p *SetStickerSetThumbnailParams) fileParameters() map[string]telegoapi.NamedReader {
-	fp := make(map[string]telegoapi.NamedReader)
+func (p *SetStickerSetThumbnailParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
 
 	if p.Thumbnail != nil {
 		fp["thumbnail"] = p.Thumbnail.File

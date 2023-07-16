@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 type testCallerType struct{}
 
-func (c testCallerType) Call(_ string, _ *telegoapi.RequestData) (*telegoapi.Response, error) {
+func (c testCallerType) Call(_ string, _ *ta.RequestData) (*ta.Response, error) {
 	panic("implement me")
 }
 
@@ -45,12 +45,12 @@ func TestWithHTTPClient(t *testing.T) {
 
 type testConstructorType struct{}
 
-func (testConstructorType) JSONRequest(_ any) (*telegoapi.RequestData, error) {
+func (testConstructorType) JSONRequest(_ any) (*ta.RequestData, error) {
 	panic("implement me")
 }
 
-func (testConstructorType) MultipartRequest(_ map[string]string, _ map[string]telegoapi.NamedReader,
-) (*telegoapi.RequestData, error) {
+func (testConstructorType) MultipartRequest(_ map[string]string, _ map[string]ta.NamedReader,
+) (*ta.RequestData, error) {
 	panic("implement me")
 }
 

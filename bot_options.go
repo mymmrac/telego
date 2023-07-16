@@ -8,11 +8,11 @@ import (
 
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 // WithAPICaller sets custom API caller to use
-func WithAPICaller(caller telegoapi.Caller) BotOption {
+func WithAPICaller(caller ta.Caller) BotOption {
 	return func(bot *Bot) error {
 		bot.api = caller
 		return nil
@@ -22,7 +22,7 @@ func WithAPICaller(caller telegoapi.Caller) BotOption {
 // WithFastHTTPClient sets fasthttp client to use
 func WithFastHTTPClient(client *fasthttp.Client) BotOption {
 	return func(bot *Bot) error {
-		bot.api = telegoapi.FastHTTPCaller{Client: client}
+		bot.api = ta.FastHTTPCaller{Client: client}
 		return nil
 	}
 }
@@ -30,13 +30,13 @@ func WithFastHTTPClient(client *fasthttp.Client) BotOption {
 // WithHTTPClient sets http client to use
 func WithHTTPClient(client *http.Client) BotOption {
 	return func(bot *Bot) error {
-		bot.api = telegoapi.HTTPCaller{Client: client}
+		bot.api = ta.HTTPCaller{Client: client}
 		return nil
 	}
 }
 
 // WithRequestConstructor sets custom request constructor to use
-func WithRequestConstructor(constructor telegoapi.RequestConstructor) BotOption {
+func WithRequestConstructor(constructor ta.RequestConstructor) BotOption {
 	return func(bot *Bot) error {
 		bot.constructor = constructor
 		return nil

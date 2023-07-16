@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/telegoapi"
+	ta "github.com/mymmrac/telego/telegoapi"
 )
 
 func testWebhookBot(t *testing.T) *Bot {
@@ -186,7 +186,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		require.NoError(t, err)
 
 		go func() {
-			resp, errHTTP := http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
+			resp, errHTTP := http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
 				bytes.NewBuffer([]byte{}))
 			assert.NoError(t, errHTTP)
 			assert.NoError(t, resp.Body.Close())
@@ -194,7 +194,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
 
-			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), telegoapi.ContentTypeJSON,
+			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
 				bytes.NewBuffer(expectedUpdateBytes))
 			assert.NoError(t, errHTTP)
 			assert.NoError(t, resp.Body.Close())
@@ -335,11 +335,11 @@ func TestWithWebhookSet(t *testing.T) {
 	m := newMockedBot(ctrl)
 	ctx := &webhookContext{}
 
-	m.MockRequestConstructor.EXPECT().JSONRequest(gomock.Any()).Return(&telegoapi.RequestData{
+	m.MockRequestConstructor.EXPECT().JSONRequest(gomock.Any()).Return(&ta.RequestData{
 		Buffer: bytes.NewBuffer(nil),
 	}, nil)
 
-	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any()).Return(&telegoapi.Response{Ok: true}, nil)
+	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any()).Return(&ta.Response{Ok: true}, nil)
 
 	err := WithWebhookSet(&SetWebhookParams{})(m.Bot, ctx)
 	assert.NoError(t, err)
