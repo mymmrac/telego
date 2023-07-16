@@ -62,8 +62,9 @@ tasks:
 
   build:examples:
     desc: "Build examples"
+    dir: ./examples
     cmds:
-      - go build -o bin/ ./examples/*
+      - go build -o ../bin/ ./...
 
   generate:
     desc: "Generate (used for mock generation)"
