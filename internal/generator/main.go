@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"time"
 )
 
@@ -17,17 +18,17 @@ const (
 	omitemptySuffix = ",omitempty"
 	optionalPrefix  = "Optional. "
 
-	typesFilename   = "./types.go"
-	methodsFilename = "./methods.go"
+	typesFilename   = "../../types.go"
+	methodsFilename = "../../methods.go"
 
-	generatedTypesFilename               = "./types.go.generated"
-	generatedTypesTestsFilename          = "./types_test.go.generated"
-	generatedTypesSettersFilename        = "./types_setters.go.generated"
-	generatedTypesSettersTestsFilename   = "./types_setters_test.go.generated"
-	generatedMethodsFilename             = "./methods.go.generated"
-	generatedMethodsTestsFilename        = "./methods_test.go.generated"
-	generatedMethodsSettersFilename      = "./methods_setters.go.generated"
-	generatedMethodsSettersTestsFilename = "./methods_setters_test.go.generated"
+	generatedTypesFilename               = "types.go.generated"
+	generatedTypesTestsFilename          = "types_test.go.generated"
+	generatedTypesSettersFilename        = "types_setters.go.generated"
+	generatedTypesSettersTestsFilename   = "types_setters_test.go.generated"
+	generatedMethodsFilename             = "methods.go.generated"
+	generatedMethodsTestsFilename        = "methods_test.go.generated"
+	generatedMethodsSettersFilename      = "methods_setters.go.generated"
+	generatedMethodsSettersTestsFilename = "methods_setters_test.go.generated"
 )
 
 const (
@@ -267,7 +268,7 @@ func (r *sharedResources) TypesSetters(types string) tgSetters {
 }
 
 func openFile(filename string) *os.File {
-	file, err := os.Create(filename)
+	file, err := os.Create(filepath.Join("../../", filename))
 	exitOnErr(err)
 	logInfo("File %q created", file.Name())
 

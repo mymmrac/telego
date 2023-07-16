@@ -2,16 +2,21 @@ module github.com/mymmrac/telego
 
 go 1.20
 
+// Main
 require (
 	github.com/fasthttp/router v1.4.19
 	github.com/goccy/go-json v0.10.2
-	github.com/joho/godotenv v1.5.1
-	github.com/stretchr/testify v1.8.4
 	github.com/valyala/fasthttp v1.48.0
-	go.uber.org/mock v0.2.0
-	golang.org/x/text v0.11.0
 )
 
+// Testing
+require (
+	github.com/joho/godotenv v1.5.1
+	github.com/stretchr/testify v1.8.4
+	go.uber.org/mock v0.2.0
+)
+
+// Indirect
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

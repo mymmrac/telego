@@ -74,8 +74,9 @@ tasks:
 
   generator:
     desc: "Run specific generation"
+    dir: ./internal/generator
     cmds:
-      - go run ./internal/generator {{.CLI_ARGS}}
+      - go run . {{.CLI_ARGS}}
 
   generator:all:
     desc: "Run all generators"
