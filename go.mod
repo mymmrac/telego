@@ -4,7 +4,7 @@ go 1.20
 
 // Main
 require (
-	github.com/fasthttp/router v1.4.19
+	github.com/fasthttp/router v1.4.20
 	github.com/goccy/go-json v0.10.2
 	github.com/valyala/fasthttp v1.48.0
 )
