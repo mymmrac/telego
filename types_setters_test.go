@@ -47,6 +47,38 @@ func TestKeyboardButton_Setters(t *testing.T) {
 	}, k)
 }
 
+func TestKeyboardButtonRequestUser_Setters(t *testing.T) {
+	k := (&KeyboardButtonRequestUser{}).
+		WithUserIsBot(true).
+		WithUserIsPremium(true)
+
+	assert.Equal(t, &KeyboardButtonRequestUser{
+		UserIsBot:     ToPtr(true),
+		UserIsPremium: ToPtr(true),
+	}, k)
+}
+
+func TestKeyboardButtonRequestChat_Setters(t *testing.T) {
+	k := (&KeyboardButtonRequestChat{}).
+		WithChatIsChannel().
+		WithChatIsForum(true).
+		WithChatHasUsername(true).
+		WithChatIsCreated(true).
+		WithUserAdministratorRights(&ChatAdministratorRights{IsAnonymous: true}).
+		WithBotAdministratorRights(&ChatAdministratorRights{IsAnonymous: true}).
+		WithBotIsMember(true)
+
+	assert.Equal(t, &KeyboardButtonRequestChat{
+		ChatIsChannel:           true,
+		ChatIsForum:             ToPtr(true),
+		ChatHasUsername:         ToPtr(true),
+		ChatIsCreated:           ToPtr(true),
+		UserAdministratorRights: &ChatAdministratorRights{IsAnonymous: true},
+		BotAdministratorRights:  &ChatAdministratorRights{IsAnonymous: true},
+		BotIsMember:             ToPtr(true),
+	}, k)
+}
+
 func TestReplyKeyboardRemove_Setters(t *testing.T) {
 	r := (&ReplyKeyboardRemove{}).
 		WithRemoveKeyboard().

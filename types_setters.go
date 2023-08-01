@@ -78,6 +78,62 @@ func (k KeyboardButton) WithWebApp(webApp *WebAppInfo) KeyboardButton {
 	return k
 }
 
+// WithUserIsBot adds user is bot parameter
+func (k *KeyboardButtonRequestUser) WithUserIsBot(userIsBot bool) *KeyboardButtonRequestUser {
+	k.UserIsBot = ToPtr(userIsBot)
+	return k
+}
+
+// WithUserIsPremium adds user is premium parameter
+func (k *KeyboardButtonRequestUser) WithUserIsPremium(userIsPremium bool) *KeyboardButtonRequestUser {
+	k.UserIsPremium = ToPtr(userIsPremium)
+	return k
+}
+
+// WithChatIsChannel adds chat is channel parameter
+func (k *KeyboardButtonRequestChat) WithChatIsChannel() *KeyboardButtonRequestChat {
+	k.ChatIsChannel = true
+	return k
+}
+
+// WithChatIsForum adds chat is forum parameter
+func (k *KeyboardButtonRequestChat) WithChatIsForum(chatIsForum bool) *KeyboardButtonRequestChat {
+	k.ChatIsForum = ToPtr(chatIsForum)
+	return k
+}
+
+// WithChatHasUsername adds chat has username parameter
+func (k *KeyboardButtonRequestChat) WithChatHasUsername(chatHasUsername bool) *KeyboardButtonRequestChat {
+	k.ChatHasUsername = ToPtr(chatHasUsername)
+	return k
+}
+
+// WithChatIsCreated adds chat is created parameter
+func (k *KeyboardButtonRequestChat) WithChatIsCreated(chatIsCreated bool) *KeyboardButtonRequestChat {
+	k.ChatIsCreated = ToPtr(chatIsCreated)
+	return k
+}
+
+// WithUserAdministratorRights adds user administrator rights parameter
+func (k *KeyboardButtonRequestChat) WithUserAdministratorRights(userAdministratorRights *ChatAdministratorRights,
+) *KeyboardButtonRequestChat {
+	k.UserAdministratorRights = userAdministratorRights
+	return k
+}
+
+// WithBotAdministratorRights adds bot administrator rights parameter
+func (k *KeyboardButtonRequestChat) WithBotAdministratorRights(botAdministratorRights *ChatAdministratorRights,
+) *KeyboardButtonRequestChat {
+	k.BotAdministratorRights = botAdministratorRights
+	return k
+}
+
+// WithBotIsMember adds bot is member parameter
+func (k *KeyboardButtonRequestChat) WithBotIsMember(botIsMember bool) *KeyboardButtonRequestChat {
+	k.BotIsMember = ToPtr(botIsMember)
+	return k
+}
+
 // WithRemoveKeyboard adds remove keyboard parameter
 func (r *ReplyKeyboardRemove) WithRemoveKeyboard() *ReplyKeyboardRemove {
 	r.RemoveKeyboard = true

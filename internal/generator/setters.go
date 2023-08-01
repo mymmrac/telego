@@ -109,10 +109,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 		noPointer := contains(noPointerStructs, setter.structType)
 
-		convertToPtr := setter.fieldType == "*bool" && setter.structType == "PromoteChatMemberParams" ||
-			setter.fieldType == "*bool" && setter.structType == "SendPollParams" ||
-			setter.fieldType == "*string" && setter.structType == "InlineKeyboardButton" ||
-			setter.fieldType == "*string" && setter.structType == "EditForumTopicParams"
+		convertToPtr := setter.fieldType == "*bool" || setter.fieldType == "*string"
 
 		var s string
 		if setter.fieldType != "bool" {
