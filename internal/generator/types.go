@@ -285,7 +285,9 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		field.typ = "InputMessageContent"
 	}
 
-	if typeName == "ChatPermissions" {
+	if typeName == "ChatPermissions" ||
+		((typeName == "KeyboardButtonRequestUser" || typeName == "KeyboardButtonRequestChat") &&
+			field.typ == "bool" && field.optional) {
 		field.typ = "*bool"
 	}
 

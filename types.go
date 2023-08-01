@@ -1272,11 +1272,11 @@ type KeyboardButtonRequestUser struct {
 
 	// UserIsBot - Optional. Pass True to request a bot, pass False to request a regular user. If not specified,
 	// no additional restrictions are applied.
-	UserIsBot bool `json:"user_is_bot,omitempty"`
+	UserIsBot *bool `json:"user_is_bot,omitempty"`
 
 	// UserIsPremium - Optional. Pass True to request a premium user, pass False to request a non-premium user.
 	// If not specified, no additional restrictions are applied.
-	UserIsPremium bool `json:"user_is_premium,omitempty"`
+	UserIsPremium *bool `json:"user_is_premium,omitempty"`
 }
 
 // KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. The
@@ -1292,15 +1292,15 @@ type KeyboardButtonRequestChat struct {
 
 	// ChatIsForum - Optional. Pass True to request a forum supergroup, pass False to request a non-forum chat.
 	// If not specified, no additional restrictions are applied.
-	ChatIsForum bool `json:"chat_is_forum,omitempty"`
+	ChatIsForum *bool `json:"chat_is_forum,omitempty"`
 
 	// ChatHasUsername - Optional. Pass True to request a supergroup or a channel with a username, pass False to
 	// request a chat without a username. If not specified, no additional restrictions are applied.
-	ChatHasUsername bool `json:"chat_has_username,omitempty"`
+	ChatHasUsername *bool `json:"chat_has_username,omitempty"`
 
 	// ChatIsCreated - Optional. Pass True to request a chat owned by the user. Otherwise, no additional
 	// restrictions are applied.
-	ChatIsCreated bool `json:"chat_is_created,omitempty"`
+	ChatIsCreated *bool `json:"chat_is_created,omitempty"`
 
 	// UserAdministratorRights - Optional. A JSON-serialized object listing the required administrator rights of
 	// the user in the chat. The rights must be a superset of bot_administrator_rights. If not specified, no
@@ -1314,7 +1314,7 @@ type KeyboardButtonRequestChat struct {
 
 	// BotIsMember - Optional. Pass True to request a chat with the bot as a member. Otherwise, no additional
 	// restrictions are applied.
-	BotIsMember bool `json:"bot_is_member,omitempty"`
+	BotIsMember *bool `json:"bot_is_member,omitempty"`
 }
 
 // KeyboardButtonPollType - This object represents type of a poll, which is allowed to be created and sent
@@ -2877,7 +2877,8 @@ type InlineQueryResultsButton struct {
 
 	// WebApp - Optional. Description of the Web App (https://core.telegram.org/bots/webapps) that will be
 	// launched when the user presses the button. The Web App will be able to switch back to the inline mode using
-	// the method web_app_switch_inline_query inside the Web App.
+	// the method switchInlineQuery (https://core.telegram.org/bots/webapps#initializing-web-apps) inside the Web
+	// App.
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 
 	// StartParameter - Optional. Deep-linking (https://core.telegram.org/bots/features#deep-linking) parameter
