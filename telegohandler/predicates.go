@@ -615,6 +615,13 @@ func CaptionMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
+// AnyCaptionCommand is true if the message isn't nil, and its caption matches to command regexp
+func AnyCaptionCommand() Predicate {
+	return func(update telego.Update) bool {
+		return update.Message != nil && CommandRegexp.MatchString(update.Message.Caption)
+	}
+}
+
 // CaptionCommandEqual is true if the message isn't nil, and its caption contains specified command
 func CaptionCommandEqual(command string) Predicate {
 	return func(update telego.Update) bool {
