@@ -563,8 +563,8 @@ func baseCaptionEqualFold(message *telego.Message, text string) bool {
 	return message != nil && strings.EqualFold(message.Caption, text)
 }
 
-// CaptionEqualFold is true if the message isn't nil, and its caption equal fold (more general form of case-insensitivity
-// equal) to the specified text
+// CaptionEqualFold is true if the message isn't nil, and its caption equal fold (more general form of
+// case-insensitivity equal) to the specified text
 func CaptionEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return baseCaptionEqualFold(update.Message, text)
@@ -638,7 +638,8 @@ func CaptionCommandEqual(command string) Predicate {
 	}
 }
 
-// CaptionCommandEqualArgc is true if the message isn't nil, and its caption contains specified command with a number of args
+// CaptionCommandEqualArgc is true if the message isn't nil, and its caption contains specified
+// command with a number of args
 func CaptionCommandEqualArgc(command string, argc int) Predicate {
 	return func(update telego.Update) bool {
 		if update.Message == nil {
@@ -736,8 +737,8 @@ func PostCaptionEqual(text string) Predicate {
 	}
 }
 
-// PostCaptionEqualFold is true if channel post isn't nil, and its caption equal fold (more general form of case-insensitivity
-// equal) to the specified text
+// PostCaptionEqualFold is true if channel post isn't nil, and its caption equal fold (more general form of
+// case-insensitivity equal) to the specified text
 func PostCaptionEqualFold(text string) Predicate {
 	return func(update telego.Update) bool {
 		return baseCaptionEqualFold(update.ChannelPost, text)
