@@ -536,3 +536,281 @@ func AnyChatJoinRequest() Predicate {
 		return update.ChatJoinRequest != nil
 	}
 }
+
+func anyMassageWithCaption(message *telego.Message) bool {
+	return message != nil && message.Caption != ""
+}
+
+// AnyMessageWithCaption is true if the message isn't nil and its caption is not empty
+func AnyMessageWithCaption() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithCaption(update.Message)
+	}
+}
+
+func baseCaptionEqual(message *telego.Message, text string) bool {
+	return message != nil && message.Caption == text
+}
+
+// CaptionEqual is true if the message isn't nil, and its caption is equal to the specified text
+func CaptionEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqual(update.Message, text)
+	}
+}
+
+func baseCaptionEqualFold(message *telego.Message, text string) bool {
+	return message != nil && strings.EqualFold(message.Caption, text)
+}
+
+// CaptionEqualFold is true if the message isn't nil, and its caption equal fold (more general form of case-insensitivity
+// equal) to the specified text
+func CaptionEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqualFold(update.Message, text)
+	}
+}
+
+func baseCaptionContains(message *telego.Message, text string) bool {
+	return message != nil && strings.Contains(message.Caption, text)
+}
+
+// CaptionContains is true if the message isn't nil, and its caption contains specified text
+func CaptionContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionContains(update.Message, text)
+	}
+}
+
+func baseCaptionPrefix(message *telego.Message, prefix string) bool {
+	return message != nil && strings.HasPrefix(message.Caption, prefix)
+}
+
+// CaptionPrefix is true if the message isn't nil, and its caption has specified prefix
+func CaptionPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionPrefix(update.Message, prefix)
+	}
+}
+
+func baseCaptionSuffix(message *telego.Message, suffix string) bool {
+	return message != nil && strings.HasSuffix(message.Caption, suffix)
+}
+
+// CaptionSuffix is true if the message isn't nil, and its caption has specified suffix
+func CaptionSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionSuffix(update.Message, suffix)
+	}
+}
+
+func baseCaptionMatches(message *telego.Message, pattern *regexp.Regexp) bool {
+	return message != nil && pattern.MatchString(message.Caption)
+}
+
+// CaptionMatches is true if the message isn't nil, and its caption matches specified regexp
+func CaptionMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionMatches(update.Message, pattern)
+	}
+}
+
+// CaptionCommandEqual is true if the message isn't nil, and its caption contains specified command
+func CaptionCommandEqual(command string) Predicate {
+	return func(update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Caption)
+		if len(matches) != CommandMatchGroupsLen {
+			return false
+		}
+
+		return strings.EqualFold(matches[1], command)
+	}
+}
+
+// CaptionCommandEqualArgc is true if the message isn't nil, and its caption contains specified command with a number of args
+func CaptionCommandEqualArgc(command string, argc int) Predicate {
+	return func(update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Caption)
+		if len(matches) != CommandMatchGroupsLen {
+			return false
+		}
+
+		return strings.EqualFold(matches[1], command) &&
+			(argc == 0 && matches[2] == "" || len(strings.Split(matches[2], " ")) == argc)
+	}
+}
+
+// CaptionCommandEqualArgv is true if the message isn't nil, and its caption contains specified command and args
+func CaptionCommandEqualArgv(command string, argv ...string) Predicate {
+	return func(update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Caption)
+		if len(matches) != CommandMatchGroupsLen {
+			return false
+		}
+
+		return strings.EqualFold(matches[1], command) &&
+			(len(argv) == 0 && matches[2] == "" || matches[2] == strings.Join(argv, " "))
+	}
+}
+
+// AnyEditedMessageWithCaption is true if the edited message isn't nil and its caption is not empty
+func AnyEditedMessageWithCaption() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithCaption(update.EditedMessage)
+	}
+}
+
+// EditedCaptionEqual is true if the edited message isn't nil, and its caption equals to the specified text
+func EditedCaptionEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqual(update.EditedMessage, text)
+	}
+}
+
+// EditedCaptionEqualFold is true if the edited message isn't nil, and its caption equal fold (more general form of
+// case-insensitivity equal) to the specified text
+func EditedCaptionEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqualFold(update.EditedMessage, text)
+	}
+}
+
+// EditedCaptionContains is true if the edited message isn't nil, and its caption contains specified text
+func EditedCaptionContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionContains(update.EditedMessage, text)
+	}
+}
+
+// EditedCaptionPrefix is true if the edited message isn't nil, and its caption has specified prefix
+func EditedCaptionPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionPrefix(update.EditedMessage, prefix)
+	}
+}
+
+// EditedCaptionSuffix is true if the edited message isn't nil, and its caption has specified suffix
+func EditedCaptionSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionSuffix(update.EditedMessage, suffix)
+	}
+}
+
+// EditedCaptionMatches is true if the edited message isn't nil, and its caption matches specified regexp
+func EditedCaptionMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionMatches(update.EditedMessage, pattern)
+	}
+}
+
+// AnyChannelPostWithCaption is true if channel post isn't nil and its caption is not empty
+func AnyChannelPostWithCaption() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithCaption(update.ChannelPost)
+	}
+}
+
+// PostCaptionEqual is true if channel post isn't nil, and its caption equals to the specified text
+func PostCaptionEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqual(update.ChannelPost, text)
+	}
+}
+
+// PostCaptionEqualFold is true if channel post isn't nil, and its caption equal fold (more general form of case-insensitivity
+// equal) to the specified text
+func PostCaptionEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqualFold(update.ChannelPost, text)
+	}
+}
+
+// PostCaptionContains is true if channel post isn't nil, and its caption contains specified text
+func PostCaptionContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionContains(update.ChannelPost, text)
+	}
+}
+
+// PostCaptionPrefix is true if channel post isn't nil, and its caption has specified prefix
+func PostCaptionPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionPrefix(update.ChannelPost, prefix)
+	}
+}
+
+// PostCaptionSuffix is true if channel post isn't nil, and its caption has specified suffix
+func PostCaptionSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionSuffix(update.ChannelPost, suffix)
+	}
+}
+
+// PostCaptionMatches is true if channel post isn't nil, and its caption matches specified regexp
+func PostCaptionMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionMatches(update.ChannelPost, pattern)
+	}
+}
+
+// AnyEditedChannelPostWithCaption is true if edited channel post isn't nil and its caption is not empty
+func AnyEditedChannelPostWithCaption() Predicate {
+	return func(update telego.Update) bool {
+		return anyMassageWithCaption(update.EditedChannelPost)
+	}
+}
+
+// EditedPostCaptionEqual is true if edited channel post isn't nil, and its caption equals to the specified text
+func EditedPostCaptionEqual(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqual(update.EditedChannelPost, text)
+	}
+}
+
+// EditedPostCaptionEqualFold is true if edited channel post isn't nil, and its caption equal fold (more general form of
+// case-insensitivity equal) to the specified text
+func EditedPostCaptionEqualFold(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionEqualFold(update.EditedChannelPost, text)
+	}
+}
+
+// EditedPostCaptionContains is true if edited channel post isn't nil, and its caption contains specified text
+func EditedPostCaptionContains(text string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionContains(update.EditedChannelPost, text)
+	}
+}
+
+// EditedPostCaptionPrefix is true if edited channel post isn't nil, and its caption has specified prefix
+func EditedPostCaptionPrefix(prefix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionPrefix(update.EditedChannelPost, prefix)
+	}
+}
+
+// EditedPostCaptionSuffix is true if edited channel post isn't nil, and its caption has specified suffix
+func EditedPostCaptionSuffix(suffix string) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionSuffix(update.EditedChannelPost, suffix)
+	}
+}
+
+// EditedPostCaptionMatches is true if edited channel post isn't nil, and its caption matches specified regexp
+func EditedPostCaptionMatches(pattern *regexp.Regexp) Predicate {
+	return func(update telego.Update) bool {
+		return baseCaptionMatches(update.EditedChannelPost, pattern)
+	}
+}
