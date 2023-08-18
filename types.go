@@ -250,6 +250,10 @@ type Chat struct {
 	// private chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
 
+	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status of the other party in a private
+	// chat, if any. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	EmojiStatusExpirationDate int64 `json:"emoji_status_expiration_date,omitempty"`
+
 	// Bio - Optional. Bio of the other party in a private chat. Returned only in getChat
 	// (https://core.telegram.org/bots/api#getchat).
 	Bio string `json:"bio,omitempty"`
@@ -434,6 +438,9 @@ type Message struct {
 
 	// Sticker - Optional. Message is a sticker, information about the sticker
 	Sticker *Sticker `json:"sticker,omitempty"`
+
+	// Story - Optional. Message is a forwarded story
+	Story *Story `json:"story,omitempty"`
 
 	// Video - Optional. Message is a video, information about the video
 	Video *Video `json:"video,omitempty"`
@@ -766,6 +773,10 @@ type Document struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
+// Story - This object represents a message about a forwarded story in the chat. Currently holds no
+// information.
+type Story struct{}
+
 // Video - This object represents a video file.
 type Video struct {
 	// FileID - Identifier for this file, which can be used to download or reuse the file
@@ -899,11 +910,13 @@ type PollAnswer struct {
 	// PollID - Unique poll identifier
 	PollID string `json:"poll_id"`
 
-	// User - The user, who changed the answer to the poll
-	User User `json:"user"`
+	// VoterChat - Optional. The chat that changed the answer to the poll, if the voter is anonymous
+	VoterChat *Chat `json:"voter_chat,omitempty"`
 
-	// OptionIDs - 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted
-	// their vote.
+	// User - Optional. The user that changed the answer to the poll, if the voter isn't anonymous
+	User *User `json:"user,omitempty"`
+
+	// OptionIDs - 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
 	OptionIDs []int `json:"option_ids"`
 }
 
@@ -1391,10 +1404,6 @@ type InlineKeyboardButton struct {
 	// SwitchInlineQuery - Optional. If set, pressing the button will prompt the user to select one of their
 	// chats, open that chat and insert the bot's username and the specified inline query in the input field. May be
 	// empty, in which case just the bot's username will be inserted.
-	// Note: This offers an easy way for users to start using your bot in inline mode
-	// (https://core.telegram.org/bots/inline) when they are currently in a private chat with it. Especially useful
-	// when combined with switch_pm… (https://core.telegram.org/bots/api#answerinlinequery) actions - in this case
-	// the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
 	SwitchInlineQuery *string `json:"switch_inline_query,omitempty"`
 
 	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and
