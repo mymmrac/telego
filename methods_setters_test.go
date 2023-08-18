@@ -1022,6 +1022,15 @@ func TestUnhideGeneralForumTopicParams_Setters(t *testing.T) {
 	}, u)
 }
 
+func TestUnpinAllGeneralForumTopicMessagesParams_Setters(t *testing.T) {
+	u := (&UnpinAllGeneralForumTopicMessagesParams{}).
+		WithChatID(ChatID{ID: 1})
+
+	assert.Equal(t, &UnpinAllGeneralForumTopicMessagesParams{
+		ChatID: ChatID{ID: 1},
+	}, u)
+}
+
 func TestAnswerCallbackQueryParams_Setters(t *testing.T) {
 	a := (&AnswerCallbackQueryParams{}).
 		WithCallbackQueryID("CallbackQueryID").

@@ -1935,6 +1935,33 @@ func TestBot_UnhideGeneralForumTopic(t *testing.T) {
 	})
 }
 
+func TestBot_UnpinAllGeneralForumTopicMessages(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.UnpinAllGeneralForumTopicMessages(nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.UnpinAllGeneralForumTopicMessages(nil)
+		assert.Error(t, err)
+	})
+}
+
 func TestBot_AnswerCallbackQuery(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)

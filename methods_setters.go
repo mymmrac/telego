@@ -1765,6 +1765,12 @@ func (p *UnhideGeneralForumTopicParams) WithChatID(chatID ChatID) *UnhideGeneral
 	return p
 }
 
+// WithChatID adds chat ID parameter
+func (p *UnpinAllGeneralForumTopicMessagesParams) WithChatID(chatID ChatID) *UnpinAllGeneralForumTopicMessagesParams {
+	p.ChatID = chatID
+	return p
+}
+
 // WithCallbackQueryID adds callback query ID parameter
 func (p *AnswerCallbackQueryParams) WithCallbackQueryID(callbackQueryID string) *AnswerCallbackQueryParams {
 	p.CallbackQueryID = callbackQueryID

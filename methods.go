@@ -2416,6 +2416,26 @@ func (b *Bot) UnhideGeneralForumTopic(params *UnhideGeneralForumTopicParams) err
 	return nil
 }
 
+// UnpinAllGeneralForumTopicMessagesParams - Represents parameters of unpinAllGeneralForumTopicMessages
+// method.
+type UnpinAllGeneralForumTopicMessagesParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// UnpinAllGeneralForumTopicMessages - Use this method to clear the list of pinned messages in a General
+// forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages
+// administrator right in the supergroup. Returns True on success.
+func (b *Bot) UnpinAllGeneralForumTopicMessages(params *UnpinAllGeneralForumTopicMessagesParams) error {
+	err := b.performRequest("unpinAllGeneralForumTopicMessages", params)
+	if err != nil {
+		return fmt.Errorf("telego: unpinAllGeneralForumTopicMessages(): %w", err)
+	}
+
+	return nil
+}
+
 // AnswerCallbackQueryParams - Represents parameters of answerCallbackQuery method.
 type AnswerCallbackQueryParams struct {
 	// CallbackQueryID - Unique identifier for the query to be answered
