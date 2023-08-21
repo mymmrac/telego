@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/fasthttp/router v1.4.20
-	github.com/mymmrac/telego v0.26.0
+	github.com/mymmrac/telego v0.26.1
 	github.com/valyala/fasthttp v1.48.0
 	golang.ngrok.com/ngrok v1.3.1
 )

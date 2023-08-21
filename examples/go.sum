@@ -23,8 +23,8 @@ github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxec
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
 github.com/mattn/go-isatty v0.0.16 h1:bq3VjFmv/sOjHtdEhmkEV4x1AJtvUvOJ2PFAZ5+peKQ=
 github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=
-github.com/mymmrac/telego v0.26.0 h1:m4B3SW9dxL4uHpyjBnmhQeiFO7GWCxFjsUKUvFx3mf0=
-github.com/mymmrac/telego v0.26.0/go.mod h1:kizipjY3MhxmkcGvyz8jiw/26vEKAhR2V7YTE69iqvw=
+github.com/mymmrac/telego v0.26.1 h1:BzWWzDOkov0SMVnSF+mLJ5ChYcTqmhTIyBWBGyi51hw=
+github.com/mymmrac/telego v0.26.1/go.mod h1:kizipjY3MhxmkcGvyz8jiw/26vEKAhR2V7YTE69iqvw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee h1:8Iv5m6xEo1NR1AvpV+7XmhI4r39LGNzwUL4YpMuL5vk=
 github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee/go.mod h1:qwtSXrKuJh/zsFQ12yEE89xfCrGKK63Rr7ctU/uCo4g=
