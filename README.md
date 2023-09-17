@@ -99,6 +99,7 @@ More examples can be seen here:
 - [Multi bot webhook](examples/multi_bot_webhook/main.go)
 - [Retry caller](examples/retry_caller/main.go)
 - [Menu bot](examples/menu_bot/main.go)
+- [Test server](examples/test_server/main.go)
 
 </details>
 
