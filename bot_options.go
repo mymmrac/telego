@@ -108,6 +108,17 @@ func WithAPIServer(apiURL string) BotOption {
 	}
 }
 
+// WithTestServerPath use the test server API path instead of regular API path
+//
+// Regular API: https://<api-server>/bot<token>/<method-name>
+// Test API:    https://<api-server>/bot<token>/test/<method-name>
+func WithTestServerPath() BotOption {
+	return func(bot *Bot) error {
+		bot.useTestServerPath = true
+		return nil
+	}
+}
+
 // WithHealthCheck enables health check using [Bot.GetMe] method on start
 func WithHealthCheck() BotOption {
 	return func(bot *Bot) error {
@@ -120,7 +131,7 @@ func WithHealthCheck() BotOption {
 // Note: Any request that has a non-empty error will return both result and error
 func WithWarnings() BotOption {
 	return func(bot *Bot) error {
-		bot.warningAsErrors = true
+		bot.reportWarningAsErrors = true
 		return nil
 	}
 }

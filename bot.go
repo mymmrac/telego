@@ -40,8 +40,9 @@ type Bot struct {
 	api         ta.Caller
 	constructor ta.RequestConstructor
 
-	healthCheckRequested bool
-	warningAsErrors      bool
+	useTestServerPath     bool
+	healthCheckRequested  bool
+	reportWarningAsErrors bool
 
 	longPollingContext *longPollingContext
 	webhookContext     *webhookContext
@@ -124,7 +125,7 @@ func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error
 		}
 	}
 
-	if b.warningAsErrors && resp.Error != nil {
+	if b.reportWarningAsErrors && resp.Error != nil {
 		return resp.Error
 	}
 
@@ -160,7 +161,12 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Re
 		_, _ = debug.WriteString(data.Buffer.String())
 	}
 
-	url := b.apiURL + "/bot" + b.token + "/" + methodName
+	var url string
+	if b.useTestServerPath {
+		url = b.apiURL + "/bot" + b.token + "/test/" + methodName
+	} else {
+		url = b.apiURL + "/bot" + b.token + "/" + methodName
+	}
 
 	debugData := strings.TrimSuffix(debug.String(), "\n")
 	b.log.Debugf("API call to: %q, with data: %s", url, debugData)

@@ -167,6 +167,15 @@ func TestWithDefaultDebugLogger(t *testing.T) {
 	assert.NotNil(t, log.Replacer)
 }
 
+func TestWithTestServerPath(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithTestServerPath()(bot)
+	assert.NoError(t, err)
+
+	assert.True(t, bot.useTestServerPath)
+}
+
 func TestWithHealthCheck(t *testing.T) {
 	bot := &Bot{}
 
@@ -182,5 +191,5 @@ func TestWithWarnings(t *testing.T) {
 	err := WithWarnings()(bot)
 	assert.NoError(t, err)
 
-	assert.True(t, bot.warningAsErrors)
+	assert.True(t, bot.reportWarningAsErrors)
 }
