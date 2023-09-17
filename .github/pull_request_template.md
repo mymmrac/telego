@@ -18,9 +18,9 @@
 
 [//]: # (Please make sure to check all tasks)
 
-- [ ] My code follows the [style guidelines](../docs/CONTRIBUTING.md#art-style-guidelines) of this project
+- [ ] My code follows the [style guidelines](/docs/CONTRIBUTING.md#art-style-guidelines) of this project
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented on my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] I have added unit tests that prove my fix is effective or that my feature works
-- [ ] Feature or fix that I was working on is in "[releasable](../docs/CONTRIBUTING.md#always-releasable)" state
+- [ ] Feature or fix that I was working on is in "[releasable](/docs/CONTRIBUTING.md#always-releasable)" state
