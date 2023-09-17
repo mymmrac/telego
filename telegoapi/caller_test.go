@@ -242,3 +242,43 @@ func TestRetryCaller_Call(t *testing.T) {
 		assert.Nil(t, resp)
 	})
 }
+
+type testTestServerCaller struct {
+	resp *Response
+	err  error
+}
+
+func (t *testTestServerCaller) Call(url string, _ *RequestData) (*Response, error) {
+	return &Response{Ok: true, Result: []byte(url)}, t.err
+}
+
+func TestTestServerCaller_Call(t *testing.T) {
+	expectedResp := &Response{
+		Ok:     true,
+		Result: []byte("http://localhost/bot12345678:ASDFGHJKL/test/getMe"),
+	}
+
+	t.Run("success", func(t *testing.T) {
+		testServerCaller := &TestServerCaller{
+			Caller: &testTestServerCaller{
+				resp: expectedResp,
+				err:  nil,
+			},
+		}
+		resp, err := testServerCaller.Call("http://localhost/bot12345678:ASDFGHJKL/getMe", nil)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResp, resp)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		testServerCaller := &TestServerCaller{
+			Caller: &testTestServerCaller{
+				resp: nil,
+				err:  errors.New("test"),
+			},
+		}
+		resp, err := testServerCaller.Call("http://localhost/bot12345678:ASDFGHJKL/getMe", nil)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+	})
+}

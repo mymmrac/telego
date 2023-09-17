@@ -7,11 +7,14 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"regexp"
 	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
 )
+
+var testServerRewriteRegexp = regexp.MustCompile(`(bot[^\/]+)/([^\/]+)$`)
 
 // FastHTTPCaller fasthttp implementation of Caller
 type FastHTTPCaller struct {
@@ -126,4 +129,20 @@ func (r *RetryCaller) Call(url string, data *RequestData) (resp *Response, err e
 		time.Sleep(delay)
 	}
 	return nil, errors.Join(err, ErrMaxRetryAttempts)
+}
+
+// TestServerCaller decorator over Caller that is used to intercept
+// calls and modify the URL to redirect them to a test server.
+type TestServerCaller struct {
+	Caller Caller
+}
+
+// Call makes calls with the rewritten url to a test server
+func (r *TestServerCaller) Call(url string, data *RequestData) (resp *Response, err error) {
+	modifiedURL := testServerRewriteRegexp.ReplaceAllString(url, `$1/test/$2`)
+	resp, err = r.Caller.Call(modifiedURL, data)
+	if err == nil {
+		return resp, nil
+	}
+	return nil, err
 }

@@ -98,6 +98,7 @@ More examples can be seen here:
 - [Message entities](examples/message_entity/main.go)
 - [Multi bot webhook](examples/multi_bot_webhook/main.go)
 - [Retry caller](examples/retry_caller/main.go)
+- [Test server caller](examples/test_server_caller/main.go)
 - [Menu bot](examples/menu_bot/main.go)
 
 </details>
