@@ -7,6 +7,9 @@ import (
 	"github.com/mymmrac/telego"
 )
 
+// Using bots in the test environment:
+// https://core.telegram.org/bots/webapps#using-bots-in-the-test-environment
+
 func main() {
 	// Get test Bot token from environment variables
 	botToken := os.Getenv("TEST_TOKEN")
