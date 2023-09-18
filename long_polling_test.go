@@ -97,15 +97,15 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			ctx, cansel := context.WithCancel(context.Background())
-			defer cansel()
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
 
 			updates, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingContext(ctx))
 			assert.NoError(t, err)
 
 			time.Sleep(time.Millisecond * 10)
 
-			cansel()
+			cancel()
 			<-updates
 
 			assert.True(t, m.Bot.IsRunningLongPolling())
