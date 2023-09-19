@@ -91,7 +91,7 @@ func WithLongPollingContext(ctx context.Context) LongPollingOption {
 // Calling if already running (before [Bot.StopLongPolling] method) will return an error.
 // Note: After you done with getting updates, you should call [Bot.StopLongPolling] method which will close update chan.
 //
-// Warning: If nil is passed as get update parameters, then the default timout of 8s will be applied,
+// Warning: If nil is passed as get update parameters, then the default timeout of 8s will be applied,
 // but if a non-nil parameter is passed, you should remember to explicitly specify timeout
 func (b *Bot) UpdatesViaLongPolling(params *GetUpdatesParams, options ...LongPollingOption) (<-chan Update, error) {
 	if b.longPollingContext != nil {

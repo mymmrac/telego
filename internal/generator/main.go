@@ -234,12 +234,12 @@ func (r *sharedResources) MethodsData() string {
 	if r.methodsData == "" {
 		logInfo("Reading methods from: %q", methodsFilename)
 
-		mehtodsBytes, err := os.ReadFile(methodsFilename)
+		methodsBytes, err := os.ReadFile(methodsFilename)
 		exitOnErr(err)
 
-		logInfo("Methods length: %d", len(mehtodsBytes))
+		logInfo("Methods length: %d", len(methodsBytes))
 
-		r.methodsData = string(mehtodsBytes)
+		r.methodsData = string(methodsBytes)
 	} else {
 		logInfo("Reusing methods data")
 	}

@@ -28,7 +28,7 @@ The goal of this library was to create API with the same types and methods as ac
 Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly
 all documentation from Telegram.
 
-:warning: Telego is still in v0.x.x version, so do expect braking changes! :warning:
+:warning: Telego is still in v0.x.x version, so do expect breaking changes! :warning:
 
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
