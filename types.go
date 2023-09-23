@@ -251,7 +251,7 @@ type Chat struct {
 	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
 
 	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status of the other party in a private
-	// chat, if any. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// chat in Unix time, if any. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	EmojiStatusExpirationDate int64 `json:"emoji_status_expiration_date,omitempty"`
 
 	// Bio - Optional. Bio of the other party in a private chat. Returned only in getChat
@@ -550,8 +550,9 @@ type Message struct {
 	// Telegram Login » (https://core.telegram.org/widgets/login)
 	ConnectedWebsite string `json:"connected_website,omitempty"`
 
-	// WriteAccessAllowed - Optional. Service message: the user allowed the bot added to the attachment menu to
-	// write messages
+	// WriteAccessAllowed - Optional. Service message: the user allowed the bot to write messages after adding
+	// it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a
+	// Web App sent by the method requestWriteAccess (https://core.telegram.org/bots/webapps#initializing-mini-apps)
 	WriteAccessAllowed *WriteAccessAllowed `json:"write_access_allowed,omitempty"`
 
 	// PassportData - Optional. Telegram Passport data
@@ -1118,10 +1119,22 @@ type ChatShared struct {
 }
 
 // WriteAccessAllowed - This object represents a service message about a user allowing a bot to write
-// messages after adding the bot to the attachment menu or launching a Web App from a link.
+// messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit
+// request from a Web App sent by the method requestWriteAccess
+// (https://core.telegram.org/bots/webapps#initializing-mini-apps).
 type WriteAccessAllowed struct {
-	// WebAppName - Optional. Name of the Web App which was launched from a link
+	// FromRequest - Optional. True, if the access was granted after the user accepted an explicit request from
+	// a Web App sent by the method requestWriteAccess
+	// (https://core.telegram.org/bots/webapps#initializing-mini-apps)
+	FromRequest bool `json:"from_request,omitempty"`
+
+	// WebAppName - Optional. Name of the Web App, if the access was granted when the Web App was launched from
+	// a link
 	WebAppName string `json:"web_app_name,omitempty"`
+
+	// FromAttachmentMenu - Optional. True, if the access was granted when the bot was added to the attachment
+	// or side menu
+	FromAttachmentMenu bool `json:"from_attachment_menu,omitempty"`
 }
 
 // VideoChatScheduled - This object represents a service message about a video chat scheduled in the chat.
@@ -1182,7 +1195,7 @@ type File struct {
 // WebAppInfo - Describes a Web App (https://core.telegram.org/bots/webapps).
 type WebAppInfo struct {
 	// URL - An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps
-	// (https://core.telegram.org/bots/webapps#initializing-web-apps)
+	// (https://core.telegram.org/bots/webapps#initializing-mini-apps)
 	URL string `json:"url"`
 }
 
@@ -1595,9 +1608,9 @@ type ChatAdministratorRights struct {
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
 
-	// CanManageChat - True, if the administrator can access the chat event log, chat statistics, message
-	// statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow
-	// mode. Implied by any other administrator privilege
+	// CanManageChat - True, if the administrator can access the chat event log, chat statistics, boost list in
+	// channels, message statistics in channels, see channel members, see anonymous administrators in supergroups
+	// and ignore slow mode. Implied by any other administrator privilege
 	CanManageChat bool `json:"can_manage_chat"`
 
 	// CanDeleteMessages - True, if the administrator can delete messages of other users
@@ -1620,7 +1633,7 @@ type ChatAdministratorRights struct {
 	// CanInviteUsers - True, if the user is allowed to invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users"`
 
-	// CanPostMessages - Optional. True, if the administrator can post in the channel; channels only
+	// CanPostMessages - Optional. True, if the administrator can post messages in the channel; channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. True, if the administrator can edit messages of other users and can pin
@@ -1629,6 +1642,17 @@ type ChatAdministratorRights struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+
+	// CanPostStories - Optional. True, if the administrator can post stories in the channel; channels only
+	CanPostStories bool `json:"can_post_stories,omitempty"`
+
+	// CanEditStories - Optional. True, if the administrator can edit stories posted by other users; channels
+	// only
+	CanEditStories bool `json:"can_edit_stories,omitempty"`
+
+	// CanDeleteStories - Optional. True, if the administrator can delete stories posted by other users;
+	// channels only
+	CanDeleteStories bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
 	// topics; supergroups only
@@ -1745,9 +1769,9 @@ type ChatMemberAdministrator struct {
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
 
-	// CanManageChat - True, if the administrator can access the chat event log, chat statistics, message
-	// statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow
-	// mode. Implied by any other administrator privilege
+	// CanManageChat - True, if the administrator can access the chat event log, chat statistics, boost list in
+	// channels, message statistics in channels, see channel members, see anonymous administrators in supergroups
+	// and ignore slow mode. Implied by any other administrator privilege
 	CanManageChat bool `json:"can_manage_chat"`
 
 	// CanDeleteMessages - True, if the administrator can delete messages of other users
@@ -1770,7 +1794,7 @@ type ChatMemberAdministrator struct {
 	// CanInviteUsers - True, if the user is allowed to invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users"`
 
-	// CanPostMessages - Optional. True, if the administrator can post in the channel; channels only
+	// CanPostMessages - Optional. True, if the administrator can post messages in the channel; channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. True, if the administrator can edit messages of other users and can pin
@@ -1779,6 +1803,17 @@ type ChatMemberAdministrator struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+
+	// CanPostStories - Optional. True, if the administrator can post stories in the channel; channels only
+	CanPostStories bool `json:"can_post_stories,omitempty"`
+
+	// CanEditStories - Optional. True, if the administrator can edit stories posted by other users; channels
+	// only
+	CanEditStories bool `json:"can_edit_stories,omitempty"`
+
+	// CanDeleteStories - Optional. True, if the administrator can delete stories posted by other users;
+	// channels only
+	CanDeleteStories bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
 	// topics; supergroups only
@@ -1874,7 +1909,7 @@ type ChatMemberRestricted struct {
 	// CanManageTopics - True, if the user is allowed to create forum topics
 	CanManageTopics bool `json:"can_manage_topics"`
 
-	// UntilDate - Date when restrictions will be lifted for this user; unix time. If 0, then the user is
+	// UntilDate - Date when restrictions will be lifted for this user; Unix time. If 0, then the user is
 	// restricted forever
 	UntilDate int64 `json:"until_date"`
 }
@@ -1918,7 +1953,7 @@ type ChatMemberBanned struct {
 	// User - Information about the user
 	User User `json:"user"`
 
-	// UntilDate - Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned
+	// UntilDate - Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned
 	// forever
 	UntilDate int64 `json:"until_date"`
 }
@@ -2886,7 +2921,7 @@ type InlineQueryResultsButton struct {
 
 	// WebApp - Optional. Description of the Web App (https://core.telegram.org/bots/webapps) that will be
 	// launched when the user presses the button. The Web App will be able to switch back to the inline mode using
-	// the method switchInlineQuery (https://core.telegram.org/bots/webapps#initializing-web-apps) inside the Web
+	// the method switchInlineQuery (https://core.telegram.org/bots/webapps#initializing-mini-apps) inside the Web
 	// App.
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 
