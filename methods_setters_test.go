@@ -624,6 +624,9 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		WithCanPostMessages(true).
 		WithCanEditMessages(true).
 		WithCanDeleteMessages(true).
+		WithCanPostStories(true).
+		WithCanEditStories(true).
+		WithCanDeleteStories(true).
 		WithCanManageVideoChats(true).
 		WithCanRestrictMembers(true).
 		WithCanPromoteMembers(true).
@@ -639,6 +642,9 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		CanPostMessages:     ToPtr(true),
 		CanEditMessages:     ToPtr(true),
 		CanDeleteMessages:   ToPtr(true),
+		CanPostStories:      ToPtr(true),
+		CanEditStories:      ToPtr(true),
+		CanDeleteStories:    ToPtr(true),
 		CanManageVideoChats: ToPtr(true),
 		CanRestrictMembers:  ToPtr(true),
 		CanPromoteMembers:   ToPtr(true),

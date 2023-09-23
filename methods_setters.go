@@ -1338,6 +1338,24 @@ func (p *PromoteChatMemberParams) WithCanDeleteMessages(canDeleteMessages bool) 
 	return p
 }
 
+// WithCanPostStories adds can post stories parameter
+func (p *PromoteChatMemberParams) WithCanPostStories(canPostStories bool) *PromoteChatMemberParams {
+	p.CanPostStories = ToPtr(canPostStories)
+	return p
+}
+
+// WithCanEditStories adds can edit stories parameter
+func (p *PromoteChatMemberParams) WithCanEditStories(canEditStories bool) *PromoteChatMemberParams {
+	p.CanEditStories = ToPtr(canEditStories)
+	return p
+}
+
+// WithCanDeleteStories adds can delete stories parameter
+func (p *PromoteChatMemberParams) WithCanDeleteStories(canDeleteStories bool) *PromoteChatMemberParams {
+	p.CanDeleteStories = ToPtr(canDeleteStories)
+	return p
+}
+
 // WithCanManageVideoChats adds can manage video chats parameter
 func (p *PromoteChatMemberParams) WithCanManageVideoChats(canManageVideoChats bool) *PromoteChatMemberParams {
 	p.CanManageVideoChats = ToPtr(canManageVideoChats)

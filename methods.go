@@ -1439,7 +1439,7 @@ type BanChatMemberParams struct {
 	// UserID - Unique identifier of the target user
 	UserID int64 `json:"user_id"`
 
-	// UntilDate - Optional. Date when the user will be unbanned, unix time. If user is banned for more than 366
+	// UntilDate - Optional. Date when the user will be unbanned; Unix time. If user is banned for more than 366
 	// days or less than 30 seconds from the current time they are considered to be banned forever. Applied for
 	// supergroups and channels only.
 	UntilDate int64 `json:"until_date,omitempty"`
@@ -1509,7 +1509,7 @@ type RestrictChatMemberParams struct {
 	// can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.
 	UseIndependentChatPermissions bool `json:"use_independent_chat_permissions,omitempty"`
 
-	// UntilDate - Optional. Date when restrictions will be lifted for the user, unix time. If user is
+	// UntilDate - Optional. Date when restrictions will be lifted for the user; Unix time. If user is
 	// restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be
 	// restricted forever
 	UntilDate int64 `json:"until_date,omitempty"`
@@ -1540,19 +1540,31 @@ type PromoteChatMemberParams struct {
 	IsAnonymous *bool `json:"is_anonymous,omitempty"`
 
 	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, chat statistics,
-	// message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore
-	// slow mode. Implied by any other administrator privilege
+	// boost list in channels, message statistics in channels, see channel members, see anonymous administrators in
+	// supergroups and ignore slow mode. Implied by any other administrator privilege
 	CanManageChat *bool `json:"can_manage_chat,omitempty"`
 
-	// CanPostMessages - Optional. Pass True if the administrator can create channel posts, channels only
+	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel; channels
+	// only
 	CanPostMessages *bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
-	// messages, channels only
+	// messages; channels only
 	CanEditMessages *bool `json:"can_edit_messages,omitempty"`
 
 	// CanDeleteMessages - Optional. Pass True if the administrator can delete messages of other users
 	CanDeleteMessages *bool `json:"can_delete_messages,omitempty"`
+
+	// CanPostStories - Optional. Pass True if the administrator can post stories in the channel; channels only
+	CanPostStories *bool `json:"can_post_stories,omitempty"`
+
+	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users;
+	// channels only
+	CanEditStories *bool `json:"can_edit_stories,omitempty"`
+
+	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users;
+	// channels only
+	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageVideoChats - Optional. Pass True if the administrator can manage video chats
 	CanManageVideoChats *bool `json:"can_manage_video_chats,omitempty"`
