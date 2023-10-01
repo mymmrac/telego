@@ -58,7 +58,7 @@ For more detailed documentation, see docs at [telego.pixelbox.dev](https://teleg
 How to get the library:
 
 ```shell
-go get -u github.com/mymmrac/telego
+go get github.com/mymmrac/telego
 ```
 
 Make sure you get the latest version to have all new features & fixes.
