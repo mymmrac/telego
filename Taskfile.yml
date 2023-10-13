@@ -15,6 +15,7 @@ tasks:
       - task: generate
       - task: lint
       - task: test
+      - task: build:lib
       - task: build:examples
 
   lint:
@@ -59,6 +60,11 @@ tasks:
     desc: "Run benchmarks"
     cmds:
       - go test -bench=. -benchtime=10s -benchmem
+
+  build:lib:
+    desc: "Build library"
+    cmds:
+      - go build -o ./bin ./...
 
   build:examples:
     desc: "Build examples"
