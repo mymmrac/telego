@@ -11,7 +11,6 @@ import (
 	ta "github.com/mymmrac/telego/telegoapi"
 )
 
-//nolint:funlen
 func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*ReplyMarkup)(nil), &ReplyKeyboardMarkup{})
 	assert.Equal(t, MarkupTypeReplyKeyboard, (&ReplyKeyboardMarkup{}).ReplyType())

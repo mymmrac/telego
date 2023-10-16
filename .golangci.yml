@@ -216,6 +216,13 @@ issues:
         - lll
       source: "^//go:generate "
 
+    # Exclude liters for test files
+    - path: "_test\\.go$"
+      linters:
+        - dupl
+        - funlen
+        - maintidx
+
   # Independently of option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
   # excluded by default patterns execute `golangci-lint run --help`.

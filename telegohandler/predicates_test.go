@@ -20,7 +20,6 @@ const (
 	testCommandName = `test`
 )
 
-//nolint:funlen,maintidx
 func TestPredicates(t *testing.T) {
 	tests := []struct {
 		name      string

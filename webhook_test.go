@@ -94,7 +94,6 @@ func TestBot_StopWebhook(t *testing.T) {
 	})
 }
 
-//nolint:funlen
 func TestBot_UpdatesViaWebhook(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		b, err := NewBot(token, WithDiscardLogger())

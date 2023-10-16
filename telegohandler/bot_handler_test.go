@@ -129,7 +129,7 @@ func TestBotHandler_Start(t *testing.T) {
 }
 
 //revive:disable:cognitive-complexity
-//nolint:funlen,gocognit
+//nolint:gocognit
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		bh := newTestBotHandler(t)

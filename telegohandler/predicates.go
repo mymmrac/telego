@@ -126,11 +126,18 @@ func TextMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
-// CommandRegexp matches to command and has match groups on command and arguments
-var CommandRegexp = regexp.MustCompile(`^/(\w+) ?(.*)$`)
+// CommandRegexp matches to command and has match groups on command, bot username and arguments
+var CommandRegexp = regexp.MustCompile(`^/(\w+)(@\w+)?(?: (.+))?$`)
 
-// CommandMatchGroupsLen represents the length of match groups in the CommandRegexp
-const CommandMatchGroupsLen = 3
+// Command match group indexes in the [CommandRegexp]
+const (
+	CommandMatchCmdGroup         = 1
+	CommandMatchBotUsernameGroup = 2
+	CommandMatchArgsGroup        = 3
+)
+
+// CommandMatchGroupsLen represents the length of match groups in the [CommandRegexp]
+const CommandMatchGroupsLen = 4
 
 // AnyCommand is true if the message isn't nil, and it matches to command regexp
 func AnyCommand() Predicate {
@@ -151,7 +158,7 @@ func CommandEqual(command string) Predicate {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command)
+		return strings.EqualFold(matches[CommandMatchCmdGroup], command)
 	}
 }
 
@@ -167,8 +174,9 @@ func CommandEqualArgc(command string, argc int) Predicate {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command) &&
-			(argc == 0 && matches[2] == "" || len(strings.Split(matches[2], " ")) == argc)
+		return strings.EqualFold(matches[CommandMatchCmdGroup], command) &&
+			(argc == 0 && matches[CommandMatchArgsGroup] == "" ||
+				len(strings.Split(matches[CommandMatchArgsGroup], " ")) == argc)
 	}
 }
 
@@ -184,8 +192,9 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command) &&
-			(len(argv) == 0 && matches[2] == "" || matches[2] == strings.Join(argv, " "))
+		return strings.EqualFold(matches[CommandMatchCmdGroup], command) &&
+			(len(argv) == 0 && matches[CommandMatchArgsGroup] == "" ||
+				matches[CommandMatchArgsGroup] == strings.Join(argv, " "))
 	}
 }
 
@@ -634,7 +643,7 @@ func CaptionCommandEqual(command string) Predicate {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command)
+		return strings.EqualFold(matches[CommandMatchCmdGroup], command)
 	}
 }
 
@@ -651,8 +660,9 @@ func CaptionCommandEqualArgc(command string, argc int) Predicate {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command) &&
-			(argc == 0 && matches[2] == "" || len(strings.Split(matches[2], " ")) == argc)
+		return strings.EqualFold(matches[CommandMatchCmdGroup], command) &&
+			(argc == 0 && matches[CommandMatchArgsGroup] == "" ||
+				len(strings.Split(matches[CommandMatchArgsGroup], " ")) == argc)
 	}
 }
 
@@ -668,8 +678,9 @@ func CaptionCommandEqualArgv(command string, argv ...string) Predicate {
 			return false
 		}
 
-		return strings.EqualFold(matches[1], command) &&
-			(len(argv) == 0 && matches[2] == "" || matches[2] == strings.Join(argv, " "))
+		return strings.EqualFold(matches[CommandMatchCmdGroup], command) &&
+			(len(argv) == 0 && matches[CommandMatchArgsGroup] == "" ||
+				matches[CommandMatchArgsGroup] == strings.Join(argv, " "))
 	}
 }
 

@@ -182,7 +182,6 @@ func (t testEmptyMarshal) MarshalJSON() ([]byte, error) {
 	return []byte(`""`), nil
 }
 
-//nolint:funlen
 func Test_parseParameters(t *testing.T) {
 	n := 1
 
@@ -500,7 +499,6 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 	})
 }
 
-//nolint:funlen
 func TestBot_performRequest(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
