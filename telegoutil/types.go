@@ -71,6 +71,73 @@ func KeyboardRow(buttons ...telego.KeyboardButton) []telego.KeyboardButton {
 	return buttons
 }
 
+// KeyboardGrid creates a telego.ReplyKeyboardMarkup from grid of buttons
+func KeyboardGrid(buttons [][]telego.KeyboardButton) *telego.ReplyKeyboardMarkup {
+	return &telego.ReplyKeyboardMarkup{
+		Keyboard: buttons,
+	}
+}
+
+// KeyboardCols creates a grid of buttons containing specified number of columns
+func KeyboardCols(cols int, buttons ...telego.KeyboardButton) [][]telego.KeyboardButton {
+	if cols <= 0 {
+		return nil
+	}
+
+	col := 0
+	row := 0
+
+	rows := len(buttons) / cols
+	if len(buttons)%cols != 0 {
+		rows++
+	}
+
+	grid := make([][]telego.KeyboardButton, 0, rows)
+	for i := 0; i < len(buttons); i++ {
+		if col >= cols {
+			col = 0
+			row++
+		}
+		if col == 0 {
+			grid = append(grid, make([]telego.KeyboardButton, 0, cols))
+		}
+		grid[row] = append(grid[row], buttons[i])
+		col++
+	}
+
+	return grid
+}
+
+// KeyboardRows creates a grid of buttons containing specified number of rows
+func KeyboardRows(rows int, buttons ...telego.KeyboardButton) [][]telego.KeyboardButton {
+	if rows <= 0 {
+		return nil
+	}
+
+	col := 0
+	row := 0
+
+	cols := len(buttons) / rows
+	if len(buttons)%rows != 0 {
+		cols++
+	}
+
+	grid := make([][]telego.KeyboardButton, 0, rows)
+	for i := 0; i < len(buttons); i++ {
+		if col >= cols {
+			col = 0
+			row++
+		}
+		if col == 0 {
+			grid = append(grid, make([]telego.KeyboardButton, 0, cols))
+		}
+		grid[row] = append(grid[row], buttons[i])
+		col++
+	}
+
+	return grid
+}
+
 // KeyboardButton creates telego.KeyboardButton with required fields
 func KeyboardButton(text string) telego.KeyboardButton {
 	return telego.KeyboardButton{
@@ -111,7 +178,7 @@ func PollTypeQuiz() *telego.KeyboardButtonPollType {
 	}
 }
 
-// InlineKeyboard creates telego.InlineKeyboardMarkup from slice of keyboard buttons
+// InlineKeyboard creates telego.InlineKeyboardMarkup from slice of keyboard buttons rows
 func InlineKeyboard(rows ...[]telego.InlineKeyboardButton) *telego.InlineKeyboardMarkup {
 	return &telego.InlineKeyboardMarkup{
 		InlineKeyboard: rows,
@@ -121,6 +188,73 @@ func InlineKeyboard(rows ...[]telego.InlineKeyboardButton) *telego.InlineKeyboar
 // InlineKeyboardRow creates a slice of telego.InlineKeyboardButton
 func InlineKeyboardRow(buttons ...telego.InlineKeyboardButton) []telego.InlineKeyboardButton {
 	return buttons
+}
+
+// InlineKeyboardGrid creates a telego.InlineKeyboardMarkup from grid of buttons
+func InlineKeyboardGrid(buttons [][]telego.InlineKeyboardButton) *telego.InlineKeyboardMarkup {
+	return &telego.InlineKeyboardMarkup{
+		InlineKeyboard: buttons,
+	}
+}
+
+// InlineKeyboardCols creates a grid of buttons containing specified number of columns
+func InlineKeyboardCols(cols int, buttons ...telego.InlineKeyboardButton) [][]telego.InlineKeyboardButton {
+	if cols <= 0 {
+		return nil
+	}
+
+	col := 0
+	row := 0
+
+	rows := len(buttons) / cols
+	if len(buttons)%cols != 0 {
+		rows++
+	}
+
+	grid := make([][]telego.InlineKeyboardButton, 0, rows)
+	for i := 0; i < len(buttons); i++ {
+		if col >= cols {
+			col = 0
+			row++
+		}
+		if col == 0 {
+			grid = append(grid, make([]telego.InlineKeyboardButton, 0, cols))
+		}
+		grid[row] = append(grid[row], buttons[i])
+		col++
+	}
+
+	return grid
+}
+
+// InlineKeyboardRows creates a grid of buttons containing specified number of rows
+func InlineKeyboardRows(rows int, buttons ...telego.InlineKeyboardButton) [][]telego.InlineKeyboardButton {
+	if rows <= 0 {
+		return nil
+	}
+
+	col := 0
+	row := 0
+
+	cols := len(buttons) / rows
+	if len(buttons)%rows != 0 {
+		cols++
+	}
+
+	grid := make([][]telego.InlineKeyboardButton, 0, rows)
+	for i := 0; i < len(buttons); i++ {
+		if col >= cols {
+			col = 0
+			row++
+		}
+		if col == 0 {
+			grid = append(grid, make([]telego.InlineKeyboardButton, 0, cols))
+		}
+		grid[row] = append(grid[row], buttons[i])
+		col++
+	}
+
+	return grid
 }
 
 // InlineKeyboardButton creates telego.InlineKeyboardButton with required fields

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/mymmrac/telego"
 )
@@ -167,6 +168,62 @@ func TestInlineKeyboardRow(t *testing.T) {
 	assert.Equal(t, 2, len(i))
 }
 
+func TestInlineKeyboardGrid(t *testing.T) {
+	i := InlineKeyboardGrid([][]telego.InlineKeyboardButton{
+		{{}},
+		{{}, {}, {}},
+	})
+	require.Equal(t, 2, len(i.InlineKeyboard))
+	assert.Equal(t, 1, len(i.InlineKeyboard[0]))
+	assert.Equal(t, 3, len(i.InlineKeyboard[1]))
+}
+
+func TestInlineKeyboardCols(t *testing.T) {
+	t.Run("full", func(t *testing.T) {
+		b := telego.InlineKeyboardButton{}
+		i := InlineKeyboardCols(2, b, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 2, len(i[1]))
+	})
+
+	t.Run("one_off", func(t *testing.T) {
+		b := telego.InlineKeyboardButton{}
+		i := InlineKeyboardCols(2, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 1, len(i[1]))
+	})
+
+	t.Run("nil", func(t *testing.T) {
+		i := InlineKeyboardCols(0)
+		assert.Nil(t, i)
+	})
+}
+
+func TestInlineKeyboardRows(t *testing.T) {
+	t.Run("full", func(t *testing.T) {
+		b := telego.InlineKeyboardButton{}
+		i := InlineKeyboardRows(2, b, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 2, len(i[1]))
+	})
+
+	t.Run("one_off", func(t *testing.T) {
+		b := telego.InlineKeyboardButton{}
+		i := InlineKeyboardRows(2, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 1, len(i[1]))
+	})
+
+	t.Run("nil", func(t *testing.T) {
+		i := InlineKeyboardRows(0)
+		assert.Nil(t, i)
+	})
+}
+
 func TestKeyboard(t *testing.T) {
 	k := Keyboard([]telego.KeyboardButton{}, []telego.KeyboardButton{})
 	assert.Equal(t, 2, len(k.Keyboard))
@@ -180,6 +237,62 @@ func TestKeyboardButton(t *testing.T) {
 func TestKeyboardRow(t *testing.T) {
 	k := KeyboardRow(telego.KeyboardButton{}, telego.KeyboardButton{})
 	assert.Equal(t, 2, len(k))
+}
+
+func TestKeyboardGrid(t *testing.T) {
+	i := KeyboardGrid([][]telego.KeyboardButton{
+		{{}},
+		{{}, {}, {}},
+	})
+	require.Equal(t, 2, len(i.Keyboard))
+	assert.Equal(t, 1, len(i.Keyboard[0]))
+	assert.Equal(t, 3, len(i.Keyboard[1]))
+}
+
+func TestKeyboardCols(t *testing.T) {
+	t.Run("full", func(t *testing.T) {
+		b := telego.KeyboardButton{}
+		i := KeyboardCols(2, b, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 2, len(i[1]))
+	})
+
+	t.Run("one_off", func(t *testing.T) {
+		b := telego.KeyboardButton{}
+		i := KeyboardCols(2, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 1, len(i[1]))
+	})
+
+	t.Run("nil", func(t *testing.T) {
+		i := KeyboardCols(0)
+		assert.Nil(t, i)
+	})
+}
+
+func TestKeyboardRows(t *testing.T) {
+	t.Run("full", func(t *testing.T) {
+		b := telego.KeyboardButton{}
+		i := KeyboardRows(2, b, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 2, len(i[1]))
+	})
+
+	t.Run("one_off", func(t *testing.T) {
+		b := telego.KeyboardButton{}
+		i := KeyboardRows(2, b, b, b)
+		require.Equal(t, 2, len(i))
+		assert.Equal(t, 2, len(i[0]))
+		assert.Equal(t, 1, len(i[1]))
+	})
+
+	t.Run("nil", func(t *testing.T) {
+		i := KeyboardRows(0)
+		assert.Nil(t, i)
+	})
 }
 
 func TestReplyKeyboardRemove(t *testing.T) {
