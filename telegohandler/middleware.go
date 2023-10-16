@@ -1,16 +1,35 @@
 package telegohandler
 
 import (
+	"context"
+	"time"
+
 	"github.com/mymmrac/telego"
 )
 
-// PanicRecovery is a middleware that will recover handler from panic
-func PanicRecovery(bot *telego.Bot, update telego.Update, next Handler) {
-	defer func() {
-		if err := recover(); err != nil {
-			bot.Logger().Errorf("Panic recovered: %v", err)
-		}
-	}()
+// PanicRecovery returns a middleware that will recover handler from panic
+// Note: It's not recommend to ignore panics, use [PanicRecoveryHandler] instead to handle them
+func PanicRecovery() Middleware {
+	return PanicRecoveryHandler(nil)
+}
 
-	next(bot, update)
+// PanicRecoveryHandler returns a middleware that will recover handler from panic and call panic handler
+func PanicRecoveryHandler(panicHandler func(recovered any)) Middleware {
+	return func(bot *telego.Bot, update telego.Update, next Handler) {
+		defer func() {
+			if recovered := recover(); recovered != nil && panicHandler != nil {
+				panicHandler(recovered)
+			}
+		}()
+		next(bot, update)
+	}
+}
+
+// Timeout returns a middleware that will add timeout to context
+func Timeout(timeout time.Duration) Middleware {
+	return func(bot *telego.Bot, update telego.Update, next Handler) {
+		ctx, cancel := context.WithTimeout(update.Context(), timeout)
+		next(bot, update.WithContext(ctx))
+		cancel()
+	}
 }

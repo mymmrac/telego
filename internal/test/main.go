@@ -699,7 +699,7 @@ func main() {
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
-		bh.Use(th.PanicRecovery)
+		bh.Use(th.PanicRecovery())
 		bh.Use(
 			func(bot *telego.Bot, update telego.Update, next th.Handler) {
 				fmt.Println("M 2")
