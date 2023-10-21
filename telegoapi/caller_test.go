@@ -14,6 +14,11 @@ import (
 	"github.com/valyala/fasthttp/fasthttputil"
 )
 
+const (
+	errJSONPath = "/json_err"
+	err500Path  = "/500"
+)
+
 var _ Caller = DefaultFastHTTPCaller
 
 func TestFastHTTPCaller_Call(t *testing.T) {
@@ -33,7 +38,7 @@ func TestFastHTTPCaller_Call(t *testing.T) {
 	}()
 
 	teardown := func() {
-		assert.NoError(t, ln.Close())
+		require.NoError(t, ln.Close())
 	}
 
 	client := &fasthttp.Client{
@@ -59,19 +64,19 @@ func TestFastHTTPCaller_Call(t *testing.T) {
 
 	t.Run("error_fasthttp_do_request", func(t *testing.T) {
 		resp, err := caller.Call("abc", data)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_500", func(t *testing.T) {
 		resp, err := caller.Call("http://localhost/500", data)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_json", func(t *testing.T) {
 		resp, err := caller.Call("http://localhost/json_err", data)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 }
@@ -85,16 +90,16 @@ func (s *fasthttpServer) Handle(ctx *fasthttp.RequestCtx) {
 	assert.Equal(s.t, ContentTypeJSON, string(ctx.Request.Header.ContentType()))
 
 	switch string(ctx.Path()) {
-	case "/500":
+	case err500Path:
 		ctx.SetStatusCode(fasthttp.StatusInternalServerError)
-	case "/json_err":
+	case errJSONPath:
 		ctx.SetStatusCode(fasthttp.StatusOK)
 		_, err := ctx.WriteString("abc")
-		assert.NoError(s.t, err)
+		require.NoError(s.t, err)
 	default:
 		ctx.SetStatusCode(fasthttp.StatusOK)
 		_, err := ctx.WriteString("{\"ok\": true}")
-		assert.NoError(s.t, err)
+		require.NoError(s.t, err)
 	}
 }
 
@@ -123,25 +128,25 @@ func TestHTTPCaller_Call(t *testing.T) {
 
 	t.Run("error_http_create_request", func(t *testing.T) {
 		resp, err := caller.Call("\x00", data)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_http_do_request", func(t *testing.T) {
 		resp, err := caller.Call("abc", data)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_500", func(t *testing.T) {
-		resp, err := caller.Call(srv.URL+"/500", data)
-		assert.Error(t, err)
+		resp, err := caller.Call(srv.URL+err500Path, data)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_json", func(t *testing.T) {
-		resp, err := caller.Call(srv.URL+"/json_err", data)
-		assert.Error(t, err)
+		resp, err := caller.Call(srv.URL+errJSONPath, data)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 }
@@ -151,20 +156,20 @@ type httpServer struct {
 }
 
 func (h *httpServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
-	assert.True(h.t, req.Method == http.MethodPost)
+	assert.Equal(h.t, http.MethodPost, req.Method)
 	assert.Equal(h.t, ContentTypeJSON, req.Header.Get(ContentTypeHeader))
 
 	switch req.RequestURI {
-	case "/500":
+	case err500Path:
 		resp.WriteHeader(http.StatusInternalServerError)
-	case "/json_err":
+	case errJSONPath:
 		resp.WriteHeader(http.StatusOK)
 		_, err := resp.Write([]byte("abc"))
-		assert.NoError(h.t, err)
+		require.NoError(h.t, err)
 	default:
 		resp.WriteHeader(http.StatusOK)
 		_, err := resp.Write([]byte("{\"ok\": true}"))
-		assert.NoError(h.t, err)
+		require.NoError(h.t, err)
 	}
 }
 
@@ -195,7 +200,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 1,
 		}
 		resp, err := retryCaller.Call("", nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
 
@@ -209,7 +214,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 3,
 		}
 		resp, err := retryCaller.Call("", nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
 
@@ -222,7 +227,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 2,
 		}
 		resp, err := retryCaller.Call("", nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
@@ -238,7 +243,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxDelay:     1,
 		}
 		resp, err := retryCaller.Call("", nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 }

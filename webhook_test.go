@@ -46,20 +46,20 @@ func TestBot_StartWebhook(t *testing.T) {
 		assert.NotPanics(t, func() {
 			go func() {
 				err := b.StartWebhook(testAddr)
-				assert.NoError(t, err)
+				require.NoError(t, err)
 			}()
 			time.Sleep(time.Millisecond * 10)
 		})
 
 		assert.NotPanics(t, func() {
 			err := b.StartWebhook("test")
-			assert.Error(t, err)
+			require.Error(t, err)
 		})
 
 		b.webhookContext.running = false
 		assert.NotPanics(t, func() {
 			err := b.StartWebhook(testAddr)
-			assert.Error(t, err)
+			require.Error(t, err)
 		})
 	})
 
@@ -69,7 +69,7 @@ func TestBot_StartWebhook(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			err := b.StartWebhook("test")
-			assert.Error(t, err)
+			require.Error(t, err)
 		})
 	})
 }
@@ -80,7 +80,7 @@ func TestBot_StopWebhook(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			err := b.StopWebhook()
-			assert.NoError(t, err)
+			require.NoError(t, err)
 		})
 	})
 
@@ -89,7 +89,7 @@ func TestBot_StopWebhook(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			err := b.StopWebhook()
-			assert.NoError(t, err)
+			require.NoError(t, err)
 		})
 	})
 }
@@ -187,16 +187,16 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		go func() {
 			resp, errHTTP := http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
 				bytes.NewBuffer([]byte{}))
-			assert.NoError(t, errHTTP)
-			assert.NoError(t, resp.Body.Close())
+			require.NoError(t, errHTTP)
+			require.NoError(t, resp.Body.Close())
 
 			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
 
 			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
 				bytes.NewBuffer(expectedUpdateBytes))
-			assert.NoError(t, errHTTP)
-			assert.NoError(t, resp.Body.Close())
+			require.NoError(t, errHTTP)
+			require.NoError(t, resp.Body.Close())
 
 			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
@@ -209,7 +209,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		assert.Equal(t, expectedUpdate, update)
 
 		err = b.StopWebhook()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		assert.False(t, b.IsRunningWebhook())
 
@@ -283,24 +283,24 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 
 		go func() {
 			startErr := m.Bot.StartWebhook(testAddress(t))
-			assert.NoError(t, startErr)
+			require.NoError(t, startErr)
 		}()
 		time.Sleep(time.Millisecond * 10)
 
 		assert.True(t, m.Bot.IsRunningWebhook())
 
 		err = m.Bot.StopWebhook()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		assert.False(t, m.Bot.IsRunningWebhook())
 	})
 
 	t.Run("running_order_error", func(t *testing.T) {
 		err := m.Bot.StartWebhook(testAddress(t))
-		assert.Error(t, err)
+		require.Error(t, err)
 
 		_, err = m.Bot.UpdatesViaWebhook("/bot")
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 }
 
@@ -309,7 +309,7 @@ func TestWithWebhookBuffer(t *testing.T) {
 	buffer := uint(1)
 
 	err := WithWebhookBuffer(buffer)(nil, ctx)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
 }
 
@@ -319,13 +319,13 @@ func TestWithWebhookServer(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		err := WithWebhookServer(server)(nil, ctx)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.EqualValues(t, server, ctx.server)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		err := WithWebhookServer(nil)(nil, ctx)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -341,7 +341,7 @@ func TestWithWebhookSet(t *testing.T) {
 	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any()).Return(&ta.Response{Ok: true}, nil)
 
 	err := WithWebhookSet(&SetWebhookParams{})(m.Bot, ctx)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 func TestWithWebhookContext(t *testing.T) {
@@ -350,13 +350,13 @@ func TestWithWebhookContext(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 		err := WithWebhookContext(ctx)(nil, wCtx)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.EqualValues(t, ctx, wCtx.ctx)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		//nolint:staticcheck
 		err := WithWebhookContext(nil)(nil, wCtx)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }

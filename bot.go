@@ -21,6 +21,8 @@ const (
 	attachFile = `attach://`
 
 	omitEmptySuffix = ",omitempty"
+
+	botPathPrefix = "/bot"
 )
 
 // ErrInvalidToken Bot token is invalid according to token regexp
@@ -163,9 +165,9 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Re
 
 	var url string
 	if b.useTestServerPath {
-		url = b.apiURL + "/bot" + b.token + "/test/" + methodName
+		url = b.apiURL + botPathPrefix + b.token + "/test/" + methodName
 	} else {
-		url = b.apiURL + "/bot" + b.token + "/" + methodName
+		url = b.apiURL + botPathPrefix + b.token + "/" + methodName
 	}
 
 	debugData := strings.TrimSuffix(debug.String(), "\n")

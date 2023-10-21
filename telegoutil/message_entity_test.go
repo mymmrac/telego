@@ -127,7 +127,7 @@ func TestEntityLength(t *testing.T) {
 	)
 
 	assert.Equal(t, "😅 test 🌗 Україна \U0001FAE5 世界", text)
-	require.Equal(t, 6, len(entities))
+	require.Len(t, entities, 6)
 
 	assert.Equal(t, telego.MessageEntity{
 		Type:   telego.EntityTypeItalic,

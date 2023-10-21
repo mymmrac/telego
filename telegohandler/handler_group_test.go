@@ -31,7 +31,7 @@ func TestHandlerGroup_Handle(t *testing.T) {
 	t.Run("without_predicates", func(t *testing.T) {
 		gr.Handle(handler)
 
-		require.Equal(t, 1, len(gr.handlers))
+		require.Len(t, gr.handlers, 1)
 		assert.NotNil(t, gr.handlers[0].handler)
 		assert.Nil(t, gr.handlers[0].predicates)
 
@@ -43,7 +43,7 @@ func TestHandlerGroup_Handle(t *testing.T) {
 	t.Run("with_predicates", func(t *testing.T) {
 		gr.Handle(handler, predicate)
 
-		require.Equal(t, 1, len(gr.handlers))
+		require.Len(t, gr.handlers, 1)
 		assert.NotNil(t, gr.handlers[0].handler)
 		assert.NotNil(t, gr.handlers[0].predicates)
 
@@ -63,7 +63,7 @@ func TestHandlerGroup_Group(t *testing.T) {
 	t.Run("without_predicates", func(t *testing.T) {
 		newGr := gr.Group()
 
-		require.Equal(t, 1, len(gr.groups))
+		require.Len(t, gr.groups, 1)
 		assert.Equal(t, newGr, gr.groups[0])
 
 		gr.groups = nil
@@ -74,7 +74,7 @@ func TestHandlerGroup_Group(t *testing.T) {
 	t.Run("with_predicates", func(t *testing.T) {
 		newGr := gr.Group(predicate)
 
-		require.Equal(t, 1, len(gr.groups))
+		require.Len(t, gr.groups, 1)
 		assert.Equal(t, newGr, gr.groups[0])
 		assert.NotEmpty(t, gr.groups[0].predicates)
 
@@ -98,7 +98,7 @@ func TestHandlerGroup_Use(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		gr.Use(middleware)
 
-		require.Equal(t, 1, len(gr.middlewares))
+		require.Len(t, gr.middlewares, 1)
 		assert.NotNil(t, gr.middlewares[0])
 	})
 }

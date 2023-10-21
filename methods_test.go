@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
 	ta "github.com/mymmrac/telego/telegoapi"
@@ -28,7 +29,7 @@ func TestBot_GetUpdates(t *testing.T) {
 			Return(resp, nil)
 
 		updates, err := m.Bot.GetUpdates(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedUpdates, updates)
 	})
 
@@ -38,7 +39,7 @@ func TestBot_GetUpdates(t *testing.T) {
 			Return(nil, errTest)
 
 		updates, err := m.Bot.GetUpdates(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, updates)
 	})
 }
@@ -57,7 +58,7 @@ func TestBot_SetWebhook(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetWebhook(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -66,7 +67,7 @@ func TestBot_SetWebhook(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetWebhook(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -84,7 +85,7 @@ func TestBot_DeleteWebhook(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteWebhook(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -93,7 +94,7 @@ func TestBot_DeleteWebhook(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteWebhook(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -115,7 +116,7 @@ func TestBot_GetWebhookInfo(t *testing.T) {
 			Return(resp, nil)
 
 		webhookInfo, err := m.Bot.GetWebhookInfo()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedWebhookInfo, webhookInfo)
 	})
 
@@ -125,7 +126,7 @@ func TestBot_GetWebhookInfo(t *testing.T) {
 			Return(nil, errTest)
 
 		webhookInfo, err := m.Bot.GetWebhookInfo()
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, webhookInfo)
 	})
 }
@@ -148,7 +149,7 @@ func TestBot_GetMe(t *testing.T) {
 			Return(resp, nil)
 
 		user, err := m.Bot.GetMe()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedUser, user)
 	})
 
@@ -158,7 +159,7 @@ func TestBot_GetMe(t *testing.T) {
 			Return(nil, errTest)
 
 		user, err := m.Bot.GetMe()
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, user)
 	})
 }
@@ -177,7 +178,7 @@ func TestBot_LogOut(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.LogOut()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -186,7 +187,7 @@ func TestBot_LogOut(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.LogOut()
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -204,7 +205,7 @@ func TestBot_Close(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.Close()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -213,7 +214,7 @@ func TestBot_Close(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.Close()
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -232,7 +233,7 @@ func TestBot_SendMessage(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendMessage(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -242,7 +243,7 @@ func TestBot_SendMessage(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendMessage(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -262,7 +263,7 @@ func TestBot_ForwardMessage(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.ForwardMessage(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -272,7 +273,7 @@ func TestBot_ForwardMessage(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.ForwardMessage(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -295,7 +296,7 @@ func TestBot_CopyMessage(t *testing.T) {
 			Return(resp, nil)
 
 		messageID, err := m.Bot.CopyMessage(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessageID, messageID)
 	})
 
@@ -305,7 +306,7 @@ func TestBot_CopyMessage(t *testing.T) {
 			Return(nil, errTest)
 
 		messageID, err := m.Bot.CopyMessage(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, messageID)
 	})
 }
@@ -325,7 +326,7 @@ func TestBot_SendPhoto(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendPhoto(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -335,7 +336,7 @@ func TestBot_SendPhoto(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendPhoto(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -355,7 +356,7 @@ func TestBot_SendAudio(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendAudio(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -365,7 +366,7 @@ func TestBot_SendAudio(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendAudio(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -385,7 +386,7 @@ func TestBot_SendDocument(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendDocument(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -395,7 +396,7 @@ func TestBot_SendDocument(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendDocument(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -415,7 +416,7 @@ func TestBot_SendVideo(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendVideo(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -425,7 +426,7 @@ func TestBot_SendVideo(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendVideo(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -445,7 +446,7 @@ func TestBot_SendAnimation(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendAnimation(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -455,7 +456,7 @@ func TestBot_SendAnimation(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendAnimation(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -475,7 +476,7 @@ func TestBot_SendVoice(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendVoice(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -485,7 +486,7 @@ func TestBot_SendVoice(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendVoice(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -505,7 +506,7 @@ func TestBot_SendVideoNote(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendVideoNote(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -515,7 +516,7 @@ func TestBot_SendVideoNote(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendVideoNote(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -539,7 +540,7 @@ func TestBot_SendMediaGroup(t *testing.T) {
 			Return(resp, nil)
 
 		messages, err := m.Bot.SendMediaGroup(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessages, messages)
 	})
 
@@ -549,7 +550,7 @@ func TestBot_SendMediaGroup(t *testing.T) {
 			Return(nil, errTest)
 
 		messages, err := m.Bot.SendMediaGroup(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, messages)
 	})
 }
@@ -569,7 +570,7 @@ func TestBot_SendLocation(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendLocation(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -579,7 +580,7 @@ func TestBot_SendLocation(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendLocation(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -599,7 +600,7 @@ func TestBot_SendVenue(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendVenue(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -609,7 +610,7 @@ func TestBot_SendVenue(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendVenue(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -629,7 +630,7 @@ func TestBot_SendContact(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendContact(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -639,7 +640,7 @@ func TestBot_SendContact(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendContact(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -659,7 +660,7 @@ func TestBot_SendPoll(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendPoll(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -669,7 +670,7 @@ func TestBot_SendPoll(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendPoll(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -689,7 +690,7 @@ func TestBot_SendDice(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendDice(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -699,7 +700,7 @@ func TestBot_SendDice(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendDice(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -718,7 +719,7 @@ func TestBot_SendChatAction(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SendChatAction(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -727,7 +728,7 @@ func TestBot_SendChatAction(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SendChatAction(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -749,7 +750,7 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 			Return(resp, nil)
 
 		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedUserProfilePhotos, userProfilePhotos)
 	})
 
@@ -759,7 +760,7 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 			Return(nil, errTest)
 
 		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, userProfilePhotos)
 	})
 }
@@ -782,7 +783,7 @@ func TestBot_GetFile(t *testing.T) {
 			Return(resp, nil)
 
 		file, err := m.Bot.GetFile(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedFile, file)
 	})
 
@@ -792,7 +793,7 @@ func TestBot_GetFile(t *testing.T) {
 			Return(nil, errTest)
 
 		file, err := m.Bot.GetFile(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, file)
 	})
 }
@@ -811,7 +812,7 @@ func TestBot_BanChatMember(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.BanChatMember(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -820,7 +821,7 @@ func TestBot_BanChatMember(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.BanChatMember(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -838,7 +839,7 @@ func TestBot_UnbanChatMember(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnbanChatMember(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -847,7 +848,7 @@ func TestBot_UnbanChatMember(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnbanChatMember(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -865,7 +866,7 @@ func TestBot_RestrictChatMember(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.RestrictChatMember(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -874,7 +875,7 @@ func TestBot_RestrictChatMember(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.RestrictChatMember(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -892,7 +893,7 @@ func TestBot_PromoteChatMember(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.PromoteChatMember(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -901,7 +902,7 @@ func TestBot_PromoteChatMember(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.PromoteChatMember(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -919,7 +920,7 @@ func TestBot_SetChatAdministratorCustomTitle(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatAdministratorCustomTitle(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -928,7 +929,7 @@ func TestBot_SetChatAdministratorCustomTitle(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatAdministratorCustomTitle(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -946,7 +947,7 @@ func TestBot_BanChatSenderChat(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.BanChatSenderChat(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -955,7 +956,7 @@ func TestBot_BanChatSenderChat(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.BanChatSenderChat(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -973,7 +974,7 @@ func TestBot_UnbanChatSenderChat(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnbanChatSenderChat(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -982,7 +983,7 @@ func TestBot_UnbanChatSenderChat(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnbanChatSenderChat(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1000,7 +1001,7 @@ func TestBot_SetChatPermissions(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatPermissions(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1009,7 +1010,7 @@ func TestBot_SetChatPermissions(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatPermissions(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1029,7 +1030,7 @@ func TestBot_ExportChatInviteLink(t *testing.T) {
 			Return(resp, nil)
 
 		inviteLink, err := m.Bot.ExportChatInviteLink(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, &expectedInviteLink, inviteLink)
 	})
 
@@ -1039,7 +1040,7 @@ func TestBot_ExportChatInviteLink(t *testing.T) {
 			Return(nil, errTest)
 
 		inviteLink, err := m.Bot.ExportChatInviteLink(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, inviteLink)
 	})
 }
@@ -1062,7 +1063,7 @@ func TestBot_CreateChatInviteLink(t *testing.T) {
 			Return(resp, nil)
 
 		chatInviteLink, err := m.Bot.CreateChatInviteLink(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
 
@@ -1072,7 +1073,7 @@ func TestBot_CreateChatInviteLink(t *testing.T) {
 			Return(nil, errTest)
 
 		chatInviteLink, err := m.Bot.CreateChatInviteLink(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
 }
@@ -1095,7 +1096,7 @@ func TestBot_EditChatInviteLink(t *testing.T) {
 			Return(resp, nil)
 
 		chatInviteLink, err := m.Bot.EditChatInviteLink(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
 
@@ -1105,7 +1106,7 @@ func TestBot_EditChatInviteLink(t *testing.T) {
 			Return(nil, errTest)
 
 		chatInviteLink, err := m.Bot.EditChatInviteLink(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
 }
@@ -1128,7 +1129,7 @@ func TestBot_RevokeChatInviteLink(t *testing.T) {
 			Return(resp, nil)
 
 		chatInviteLink, err := m.Bot.RevokeChatInviteLink(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
 
@@ -1138,7 +1139,7 @@ func TestBot_RevokeChatInviteLink(t *testing.T) {
 			Return(nil, errTest)
 
 		chatInviteLink, err := m.Bot.RevokeChatInviteLink(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
 }
@@ -1157,7 +1158,7 @@ func TestBot_ApproveChatJoinRequest(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.ApproveChatJoinRequest(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1166,7 +1167,7 @@ func TestBot_ApproveChatJoinRequest(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.ApproveChatJoinRequest(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1184,7 +1185,7 @@ func TestBot_DeclineChatJoinRequest(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeclineChatJoinRequest(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1193,7 +1194,7 @@ func TestBot_DeclineChatJoinRequest(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeclineChatJoinRequest(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1211,7 +1212,7 @@ func TestBot_SetChatPhoto(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatPhoto(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1220,7 +1221,7 @@ func TestBot_SetChatPhoto(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatPhoto(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1238,7 +1239,7 @@ func TestBot_DeleteChatPhoto(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteChatPhoto(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1247,7 +1248,7 @@ func TestBot_DeleteChatPhoto(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteChatPhoto(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1265,7 +1266,7 @@ func TestBot_SetChatTitle(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatTitle(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1274,7 +1275,7 @@ func TestBot_SetChatTitle(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatTitle(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1292,7 +1293,7 @@ func TestBot_SetChatDescription(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatDescription(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1301,7 +1302,7 @@ func TestBot_SetChatDescription(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatDescription(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1319,7 +1320,7 @@ func TestBot_PinChatMessage(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.PinChatMessage(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1328,7 +1329,7 @@ func TestBot_PinChatMessage(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.PinChatMessage(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1346,7 +1347,7 @@ func TestBot_UnpinChatMessage(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnpinChatMessage(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1355,7 +1356,7 @@ func TestBot_UnpinChatMessage(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnpinChatMessage(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1373,7 +1374,7 @@ func TestBot_UnpinAllChatMessages(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnpinAllChatMessages(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1382,7 +1383,7 @@ func TestBot_UnpinAllChatMessages(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnpinAllChatMessages(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1400,7 +1401,7 @@ func TestBot_LeaveChat(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.LeaveChat(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1409,7 +1410,7 @@ func TestBot_LeaveChat(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.LeaveChat(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1431,7 +1432,7 @@ func TestBot_GetChat(t *testing.T) {
 			Return(resp, nil)
 
 		chat, err := m.Bot.GetChat(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChat, chat)
 	})
 
@@ -1441,7 +1442,7 @@ func TestBot_GetChat(t *testing.T) {
 			Return(nil, errTest)
 
 		chat, err := m.Bot.GetChat(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chat)
 	})
 }
@@ -1465,7 +1466,7 @@ func TestBot_GetChatAdministrators(t *testing.T) {
 			Return(resp, nil)
 
 		chatMembers, err := m.Bot.GetChatAdministrators(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChatMembers, chatMembers)
 	})
 
@@ -1475,7 +1476,7 @@ func TestBot_GetChatAdministrators(t *testing.T) {
 			Return(nil, errTest)
 
 		chatMembers, err := m.Bot.GetChatAdministrators(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chatMembers)
 	})
 }
@@ -1496,7 +1497,7 @@ func TestBot_GetChatMemberCount(t *testing.T) {
 			Return(resp, nil)
 
 		chatMemberCount, err := m.Bot.GetChatMemberCount(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, &expectedChatMemberCount, chatMemberCount)
 	})
 
@@ -1506,7 +1507,7 @@ func TestBot_GetChatMemberCount(t *testing.T) {
 			Return(nil, errTest)
 
 		nt, err := m.Bot.GetChatMemberCount(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, nt)
 	})
 }
@@ -1529,7 +1530,7 @@ func TestBot_GetChatMember(t *testing.T) {
 			Return(resp, nil)
 
 		chatMember, err := m.Bot.GetChatMember(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChatMember, chatMember)
 	})
 
@@ -1539,7 +1540,7 @@ func TestBot_GetChatMember(t *testing.T) {
 			Return(nil, errTest)
 
 		chatMember, err := m.Bot.GetChatMember(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chatMember)
 	})
 }
@@ -1558,7 +1559,7 @@ func TestBot_SetChatStickerSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatStickerSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1567,7 +1568,7 @@ func TestBot_SetChatStickerSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatStickerSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1585,7 +1586,7 @@ func TestBot_DeleteChatStickerSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteChatStickerSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1594,7 +1595,7 @@ func TestBot_DeleteChatStickerSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteChatStickerSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1616,7 +1617,7 @@ func TestBot_GetForumTopicIconStickers(t *testing.T) {
 			Return(resp, nil)
 
 		stickers, err := m.Bot.GetForumTopicIconStickers()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedStickers, stickers)
 	})
 
@@ -1626,7 +1627,7 @@ func TestBot_GetForumTopicIconStickers(t *testing.T) {
 			Return(nil, errTest)
 
 		stickers, err := m.Bot.GetForumTopicIconStickers()
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, stickers)
 	})
 }
@@ -1649,7 +1650,7 @@ func TestBot_CreateForumTopic(t *testing.T) {
 			Return(resp, nil)
 
 		forumTopic, err := m.Bot.CreateForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedForumTopic, forumTopic)
 	})
 
@@ -1659,7 +1660,7 @@ func TestBot_CreateForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		forumTopic, err := m.Bot.CreateForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, forumTopic)
 	})
 }
@@ -1678,7 +1679,7 @@ func TestBot_EditForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.EditForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1687,7 +1688,7 @@ func TestBot_EditForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.EditForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1705,7 +1706,7 @@ func TestBot_CloseForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.CloseForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1714,7 +1715,7 @@ func TestBot_CloseForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.CloseForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1732,7 +1733,7 @@ func TestBot_ReopenForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.ReopenForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1741,7 +1742,7 @@ func TestBot_ReopenForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.ReopenForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1759,7 +1760,7 @@ func TestBot_DeleteForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1768,7 +1769,7 @@ func TestBot_DeleteForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1786,7 +1787,7 @@ func TestBot_UnpinAllForumTopicMessages(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnpinAllForumTopicMessages(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1795,7 +1796,7 @@ func TestBot_UnpinAllForumTopicMessages(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnpinAllForumTopicMessages(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1813,7 +1814,7 @@ func TestBot_EditGeneralForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.EditGeneralForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1822,7 +1823,7 @@ func TestBot_EditGeneralForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.EditGeneralForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1840,7 +1841,7 @@ func TestBot_CloseGeneralForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.CloseGeneralForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1849,7 +1850,7 @@ func TestBot_CloseGeneralForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.CloseGeneralForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1867,7 +1868,7 @@ func TestBot_ReopenGeneralForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.ReopenGeneralForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1876,7 +1877,7 @@ func TestBot_ReopenGeneralForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.ReopenGeneralForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1894,7 +1895,7 @@ func TestBot_HideGeneralForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.HideGeneralForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1903,7 +1904,7 @@ func TestBot_HideGeneralForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.HideGeneralForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1921,7 +1922,7 @@ func TestBot_UnhideGeneralForumTopic(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnhideGeneralForumTopic(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1930,7 +1931,7 @@ func TestBot_UnhideGeneralForumTopic(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnhideGeneralForumTopic(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1948,7 +1949,7 @@ func TestBot_UnpinAllGeneralForumTopicMessages(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.UnpinAllGeneralForumTopicMessages(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1957,7 +1958,7 @@ func TestBot_UnpinAllGeneralForumTopicMessages(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.UnpinAllGeneralForumTopicMessages(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -1975,7 +1976,7 @@ func TestBot_AnswerCallbackQuery(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerCallbackQuery(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -1984,7 +1985,7 @@ func TestBot_AnswerCallbackQuery(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.AnswerCallbackQuery(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2002,7 +2003,7 @@ func TestBot_SetMyCommands(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyCommands(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2011,7 +2012,7 @@ func TestBot_SetMyCommands(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetMyCommands(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2029,7 +2030,7 @@ func TestBot_DeleteMyCommands(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteMyCommands(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2038,7 +2039,7 @@ func TestBot_DeleteMyCommands(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteMyCommands(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2061,7 +2062,7 @@ func TestBot_GetMyCommands(t *testing.T) {
 			Return(resp, nil)
 
 		botCommands, err := m.Bot.GetMyCommands(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedBotCommands, botCommands)
 	})
 
@@ -2071,7 +2072,7 @@ func TestBot_GetMyCommands(t *testing.T) {
 			Return(nil, errTest)
 
 		botCommands, err := m.Bot.GetMyCommands(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, botCommands)
 	})
 }
@@ -2090,7 +2091,7 @@ func TestBot_SetMyName(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyName(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2099,7 +2100,7 @@ func TestBot_SetMyName(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetMyName(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2121,7 +2122,7 @@ func TestBot_GetMyName(t *testing.T) {
 			Return(resp, nil)
 
 		botName, err := m.Bot.GetMyName(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedBotName, botName)
 	})
 
@@ -2131,7 +2132,7 @@ func TestBot_GetMyName(t *testing.T) {
 			Return(nil, errTest)
 
 		botName, err := m.Bot.GetMyName(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, botName)
 	})
 }
@@ -2150,7 +2151,7 @@ func TestBot_SetMyDescription(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyDescription(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2159,7 +2160,7 @@ func TestBot_SetMyDescription(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetMyDescription(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2181,7 +2182,7 @@ func TestBot_GetMyDescription(t *testing.T) {
 			Return(resp, nil)
 
 		botDescription, err := m.Bot.GetMyDescription(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedBotDescription, botDescription)
 	})
 
@@ -2191,7 +2192,7 @@ func TestBot_GetMyDescription(t *testing.T) {
 			Return(nil, errTest)
 
 		botDescription, err := m.Bot.GetMyDescription(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, botDescription)
 	})
 }
@@ -2210,7 +2211,7 @@ func TestBot_SetMyShortDescription(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyShortDescription(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2219,7 +2220,7 @@ func TestBot_SetMyShortDescription(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetMyShortDescription(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2241,7 +2242,7 @@ func TestBot_GetMyShortDescription(t *testing.T) {
 			Return(resp, nil)
 
 		botShortDescription, err := m.Bot.GetMyShortDescription(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedBotShortDescription, botShortDescription)
 	})
 
@@ -2251,7 +2252,7 @@ func TestBot_GetMyShortDescription(t *testing.T) {
 			Return(nil, errTest)
 
 		botShortDescription, err := m.Bot.GetMyShortDescription(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, botShortDescription)
 	})
 }
@@ -2270,7 +2271,7 @@ func TestBot_SetChatMenuButton(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetChatMenuButton(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2279,7 +2280,7 @@ func TestBot_SetChatMenuButton(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetChatMenuButton(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2301,7 +2302,7 @@ func TestBot_GetChatMenuButton(t *testing.T) {
 			Return(resp, nil)
 
 		menuButton, err := m.Bot.GetChatMenuButton(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMenuButton, menuButton)
 	})
 
@@ -2311,7 +2312,7 @@ func TestBot_GetChatMenuButton(t *testing.T) {
 			Return(nil, errTest)
 
 		menuButton, err := m.Bot.GetChatMenuButton(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, menuButton)
 	})
 }
@@ -2330,7 +2331,7 @@ func TestBot_SetMyDefaultAdministratorRights(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetMyDefaultAdministratorRights(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2339,7 +2340,7 @@ func TestBot_SetMyDefaultAdministratorRights(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetMyDefaultAdministratorRights(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2361,7 +2362,7 @@ func TestBot_GetMyDefaultAdministratorRights(t *testing.T) {
 			Return(resp, nil)
 
 		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedChatAdministratorRights, chatAdministratorRights)
 	})
 
@@ -2371,7 +2372,7 @@ func TestBot_GetMyDefaultAdministratorRights(t *testing.T) {
 			Return(nil, errTest)
 
 		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, chatAdministratorRights)
 	})
 }
@@ -2391,7 +2392,7 @@ func TestBot_EditMessageText(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.EditMessageText(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2401,7 +2402,7 @@ func TestBot_EditMessageText(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.EditMessageText(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2421,7 +2422,7 @@ func TestBot_EditMessageCaption(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.EditMessageCaption(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2431,7 +2432,7 @@ func TestBot_EditMessageCaption(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.EditMessageCaption(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2451,7 +2452,7 @@ func TestBot_EditMessageMedia(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.EditMessageMedia(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2461,7 +2462,7 @@ func TestBot_EditMessageMedia(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.EditMessageMedia(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2481,7 +2482,7 @@ func TestBot_EditMessageLiveLocation(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.EditMessageLiveLocation(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2491,7 +2492,7 @@ func TestBot_EditMessageLiveLocation(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.EditMessageLiveLocation(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2511,7 +2512,7 @@ func TestBot_StopMessageLiveLocation(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.StopMessageLiveLocation(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2521,7 +2522,7 @@ func TestBot_StopMessageLiveLocation(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.StopMessageLiveLocation(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2541,7 +2542,7 @@ func TestBot_EditMessageReplyMarkup(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.EditMessageReplyMarkup(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2551,7 +2552,7 @@ func TestBot_EditMessageReplyMarkup(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.EditMessageReplyMarkup(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2574,7 +2575,7 @@ func TestBot_StopPoll(t *testing.T) {
 			Return(resp, nil)
 
 		poll, err := m.Bot.StopPoll(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedPoll, poll)
 	})
 
@@ -2584,7 +2585,7 @@ func TestBot_StopPoll(t *testing.T) {
 			Return(nil, errTest)
 
 		poll, err := m.Bot.StopPoll(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, poll)
 	})
 }
@@ -2603,7 +2604,7 @@ func TestBot_DeleteMessage(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteMessage(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2612,7 +2613,7 @@ func TestBot_DeleteMessage(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteMessage(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2631,7 +2632,7 @@ func TestBot_SendSticker(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendSticker(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -2641,7 +2642,7 @@ func TestBot_SendSticker(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendSticker(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -2664,7 +2665,7 @@ func TestBot_GetStickerSet(t *testing.T) {
 			Return(resp, nil)
 
 		stickerSet, err := m.Bot.GetStickerSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedStickerSet, stickerSet)
 	})
 
@@ -2674,7 +2675,7 @@ func TestBot_GetStickerSet(t *testing.T) {
 			Return(nil, errTest)
 
 		stickerSet, err := m.Bot.GetStickerSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, stickerSet)
 	})
 }
@@ -2697,7 +2698,7 @@ func TestBot_GetCustomEmojiStickers(t *testing.T) {
 			Return(resp, nil)
 
 		stickers, err := m.Bot.GetCustomEmojiStickers(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedStickers, stickers)
 	})
 
@@ -2707,7 +2708,7 @@ func TestBot_GetCustomEmojiStickers(t *testing.T) {
 			Return(nil, errTest)
 
 		stickers, err := m.Bot.GetCustomEmojiStickers(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, stickers)
 	})
 }
@@ -2730,7 +2731,7 @@ func TestBot_UploadStickerFile(t *testing.T) {
 			Return(resp, nil)
 
 		file, err := m.Bot.UploadStickerFile(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedFile, file)
 	})
 
@@ -2740,7 +2741,7 @@ func TestBot_UploadStickerFile(t *testing.T) {
 			Return(nil, errTest)
 
 		file, err := m.Bot.UploadStickerFile(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, file)
 	})
 }
@@ -2759,7 +2760,7 @@ func TestBot_CreateNewStickerSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.CreateNewStickerSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2768,7 +2769,7 @@ func TestBot_CreateNewStickerSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.CreateNewStickerSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2786,7 +2787,7 @@ func TestBot_AddStickerToSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.AddStickerToSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2795,7 +2796,7 @@ func TestBot_AddStickerToSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.AddStickerToSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2813,7 +2814,7 @@ func TestBot_SetStickerPositionInSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerPositionInSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2822,7 +2823,7 @@ func TestBot_SetStickerPositionInSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerPositionInSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2840,7 +2841,7 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteStickerFromSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2849,7 +2850,7 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteStickerFromSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2867,7 +2868,7 @@ func TestBot_SetStickerEmojiList(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerEmojiList(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2876,7 +2877,7 @@ func TestBot_SetStickerEmojiList(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerEmojiList(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2894,7 +2895,7 @@ func TestBot_SetStickerKeywords(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerKeywords(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2903,7 +2904,7 @@ func TestBot_SetStickerKeywords(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerKeywords(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2921,7 +2922,7 @@ func TestBot_SetStickerMaskPosition(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerMaskPosition(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2930,7 +2931,7 @@ func TestBot_SetStickerMaskPosition(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerMaskPosition(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2948,7 +2949,7 @@ func TestBot_SetStickerSetTitle(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerSetTitle(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2957,7 +2958,7 @@ func TestBot_SetStickerSetTitle(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerSetTitle(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -2975,7 +2976,7 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetStickerSetThumbnail(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -2984,7 +2985,7 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetStickerSetThumbnail(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3002,7 +3003,7 @@ func TestBot_SetCustomEmojiStickerSetThumbnail(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetCustomEmojiStickerSetThumbnail(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -3011,7 +3012,7 @@ func TestBot_SetCustomEmojiStickerSetThumbnail(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetCustomEmojiStickerSetThumbnail(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3029,7 +3030,7 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.DeleteStickerSet(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -3038,7 +3039,7 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteStickerSet(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3056,7 +3057,7 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerInlineQuery(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -3065,7 +3066,7 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.AnswerInlineQuery(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3087,7 +3088,7 @@ func TestBot_AnswerWebAppQuery(t *testing.T) {
 			Return(resp, nil)
 
 		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedSentWebAppMessage, sentWebAppMessage)
 	})
 
@@ -3097,7 +3098,7 @@ func TestBot_AnswerWebAppQuery(t *testing.T) {
 			Return(nil, errTest)
 
 		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, sentWebAppMessage)
 	})
 }
@@ -3117,7 +3118,7 @@ func TestBot_SendInvoice(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendInvoice(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -3127,7 +3128,7 @@ func TestBot_SendInvoice(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendInvoice(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -3148,7 +3149,7 @@ func TestBot_CreateInvoiceLink(t *testing.T) {
 			Return(resp, nil)
 
 		invoiceLink, err := m.Bot.CreateInvoiceLink(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, &expectedInvoiceLink, invoiceLink)
 	})
 
@@ -3158,7 +3159,7 @@ func TestBot_CreateInvoiceLink(t *testing.T) {
 			Return(nil, errTest)
 
 		invoiceLink, err := m.Bot.CreateInvoiceLink(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, invoiceLink)
 	})
 }
@@ -3177,7 +3178,7 @@ func TestBot_AnswerShippingQuery(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerShippingQuery(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -3186,7 +3187,7 @@ func TestBot_AnswerShippingQuery(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.AnswerShippingQuery(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3204,7 +3205,7 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.AnswerPreCheckoutQuery(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -3213,7 +3214,7 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.AnswerPreCheckoutQuery(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3231,7 +3232,7 @@ func TestBot_SetPassportDataErrors(t *testing.T) {
 			Return(emptyResp, nil)
 
 		err := m.Bot.SetPassportDataErrors(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -3240,7 +3241,7 @@ func TestBot_SetPassportDataErrors(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetPassportDataErrors(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -3259,7 +3260,7 @@ func TestBot_SendGame(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SendGame(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -3269,7 +3270,7 @@ func TestBot_SendGame(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SendGame(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -3289,7 +3290,7 @@ func TestBot_SetGameScore(t *testing.T) {
 			Return(resp, nil)
 
 		message, err := m.Bot.SetGameScore(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
 
@@ -3299,7 +3300,7 @@ func TestBot_SetGameScore(t *testing.T) {
 			Return(nil, errTest)
 
 		message, err := m.Bot.SetGameScore(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, message)
 	})
 }
@@ -3323,7 +3324,7 @@ func TestBot_GetGameHighScores(t *testing.T) {
 			Return(resp, nil)
 
 		gameHighScores, err := m.Bot.GetGameHighScores(nil)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedGameHighScores, gameHighScores)
 	})
 
@@ -3333,7 +3334,7 @@ func TestBot_GetGameHighScores(t *testing.T) {
 			Return(nil, errTest)
 
 		gameHighScores, err := m.Bot.GetGameHighScores(nil)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, gameHighScores)
 	})
 }
@@ -3549,9 +3550,9 @@ func TestMethodsConstants(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		assert.True(t, len(tt) > 0)
+		assert.NotEmpty(t, tt)
 		for _, ct := range tt {
-			assert.True(t, len(ct) > 0)
+			assert.NotEmpty(t, ct)
 		}
 	}
 }

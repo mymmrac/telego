@@ -109,8 +109,8 @@ func TestInvoice(t *testing.T) {
 func TestLocation(t *testing.T) {
 	l := Location(id1, latitude, longitude)
 	assert.Equal(t, id1, l.ChatID)
-	assert.Equal(t, latitude, l.Latitude)
-	assert.Equal(t, longitude, l.Longitude)
+	assert.InEpsilon(t, latitude, l.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, l.Longitude, epsilon)
 }
 
 func TestMediaGroup(t *testing.T) {
@@ -162,8 +162,8 @@ func TestSticker(t *testing.T) {
 func TestVenue(t *testing.T) {
 	v := Venue(id1, latitude, longitude, text1, text2)
 	assert.Equal(t, id1, v.ChatID)
-	assert.Equal(t, latitude, v.Latitude)
-	assert.Equal(t, longitude, v.Longitude)
+	assert.InEpsilon(t, latitude, v.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, v.Longitude, epsilon)
 	assert.Equal(t, text1, v.Title)
 	assert.Equal(t, text2, v.Address)
 }
@@ -211,14 +211,14 @@ func TestInlineQuery(t *testing.T) {
 func TestShippingQuery(t *testing.T) {
 	c := ShippingQuery(text1, true, telego.ShippingOption{ID: text2}, telego.ShippingOption{ID: text3})
 	assert.Equal(t, text1, c.ShippingQueryID)
-	assert.Equal(t, true, c.Ok)
+	assert.True(t, c.Ok)
 	assert.Equal(t, []telego.ShippingOption{{ID: text2}, {ID: text3}}, c.ShippingOptions)
 }
 
 func TestPreCheckoutQuery(t *testing.T) {
 	c := PreCheckoutQuery(text1, true)
 	assert.Equal(t, text1, c.PreCheckoutQueryID)
-	assert.Equal(t, true, c.Ok)
+	assert.True(t, c.Ok)
 }
 
 func TestWebAppQuery(t *testing.T) {

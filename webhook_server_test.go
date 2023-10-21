@@ -39,7 +39,7 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 
 		return errTest
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	t.Run("success", func(t *testing.T) {
 		ctx := &fasthttp.RequestCtx{}
@@ -81,7 +81,7 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 	})
 
 	err = s.Stop(context.Background())
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
@@ -126,7 +126,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 
 			return errTest
 		})
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		t.Run("success", func(t *testing.T) {
 			rc := httptest.NewRecorder()
@@ -187,7 +187,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		})
 
 		err = s.Stop(context.Background())
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	})
 }
 
@@ -222,27 +222,27 @@ func TestMultiBotWebhookServer_RegisterHandler(t *testing.T) {
 	assert.Equal(t, 0, ts.registered)
 
 	err := s.Start("")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 1, ts.started)
 
 	err = s.Start("")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 1, ts.started)
 
 	err = s.RegisterHandler("", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 1, ts.registered)
 
 	err = s.RegisterHandler("", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 2, ts.registered)
 
 	err = s.Stop(context.Background())
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 1, ts.stopped)
 
 	err = s.Stop(context.Background())
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 1, ts.stopped)
 }
 
@@ -279,11 +279,11 @@ func TestNoOpWebhookServer(t *testing.T) {
 	}
 
 	err := s.Start("")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	err = s.Stop(nil) //nolint:staticcheck
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	err = s.RegisterHandler("", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.True(t, registered)
 }
 
@@ -300,13 +300,13 @@ func TestFuncWebhookServer(t *testing.T) {
 	assert.Equal(t, 0, ts.registered)
 
 	err := s1.Start("")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	err = s1.RegisterHandler("", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	err = s1.Stop(context.Background())
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, 1, ts.started)
 	assert.Equal(t, 1, ts.stopped)
@@ -332,13 +332,13 @@ func TestFuncWebhookServer(t *testing.T) {
 	}
 
 	err = s2.Start("")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	err = s2.RegisterHandler("", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	err = s2.Stop(context.Background())
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, 1, ts.started)
 	assert.Equal(t, 1, ts.stopped)

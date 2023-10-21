@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDefaultConstructor_JSONRequest(t *testing.T) {
@@ -39,11 +40,11 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 			d := DefaultConstructor{}
 			data, err := d.JSONRequest(tt.parameters)
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, data)
 				return
 			}
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, tt.data, data,
 				fmt.Sprintf("Expected: %q, actual: %q", tt.data.Buffer.String(), data.Buffer.String()))
 		})
@@ -82,11 +83,11 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 			d := DefaultConstructor{}
 			data, err := d.MultipartRequest(tt.parameters, tt.filesParameters)
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, data)
 				return
 			}
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Contains(t, data.ContentType, tt.contentType)
 
 			for _, expectedData := range tt.data {

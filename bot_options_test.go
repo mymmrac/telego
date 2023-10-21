@@ -23,7 +23,7 @@ func TestWithAPICaller(t *testing.T) {
 	caller := testCallerType{}
 
 	err := WithAPICaller(caller)(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.EqualValues(t, caller, bot.api)
 }
 
@@ -32,7 +32,7 @@ func TestWithFastHTTPClient(t *testing.T) {
 	client := &fasthttp.Client{}
 
 	err := WithFastHTTPClient(client)(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 func TestWithHTTPClient(t *testing.T) {
@@ -40,7 +40,7 @@ func TestWithHTTPClient(t *testing.T) {
 	client := &http.Client{}
 
 	err := WithHTTPClient(client)(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 type testConstructorType struct{}
@@ -59,7 +59,7 @@ func TestWithRequestConstructor(t *testing.T) {
 	constructor := &testConstructorType{}
 
 	err := WithRequestConstructor(constructor)(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.EqualValues(t, constructor, bot.constructor)
 }
 
@@ -67,7 +67,7 @@ func TestWithDefaultLogger(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithDefaultLogger(true, false)(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	log, ok := bot.log.(*logger)
 	require.True(t, ok)
@@ -82,7 +82,7 @@ func TestWithExtendedDefaultLogger(t *testing.T) {
 
 	t.Run("nil_replacer", func(t *testing.T) {
 		err := WithExtendedDefaultLogger(true, true, nil)(bot)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		log, ok := bot.log.(*logger)
 		require.True(t, ok)
@@ -94,7 +94,7 @@ func TestWithExtendedDefaultLogger(t *testing.T) {
 
 	t.Run("not_nil_replacer", func(t *testing.T) {
 		err := WithExtendedDefaultLogger(true, true, strings.NewReplacer("old", "new"))(bot)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		log, ok := bot.log.(*logger)
 		require.True(t, ok)
@@ -109,7 +109,7 @@ func TestWithDiscardLogger(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithDiscardLogger()(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	log, ok := bot.log.(*logger)
 	require.True(t, ok)
@@ -134,7 +134,7 @@ func TestWithLogger(t *testing.T) {
 	log := &testLoggerType{}
 
 	err := WithLogger(log)(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.EqualValues(t, log, bot.log)
 }
 
@@ -143,13 +143,13 @@ func TestWithAPIServer(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		err := WithAPIServer("test")(bot)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, "test", bot.apiURL)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		err := WithAPIServer("")(bot)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -157,7 +157,7 @@ func TestWithDefaultDebugLogger(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithDefaultDebugLogger()(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	log, ok := bot.log.(*logger)
 	require.True(t, ok)
@@ -171,7 +171,7 @@ func TestWithTestServerPath(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithTestServerPath()(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.True(t, bot.useTestServerPath)
 }
@@ -180,7 +180,7 @@ func TestWithHealthCheck(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithHealthCheck()(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.True(t, bot.healthCheckRequested)
 }
@@ -189,7 +189,7 @@ func TestWithWarnings(t *testing.T) {
 	bot := &Bot{}
 
 	err := WithWarnings()(bot)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.True(t, bot.reportWarningAsErrors)
 }

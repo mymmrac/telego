@@ -37,10 +37,10 @@ func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
 func testHandlerSetup(t *testing.T, bh *BotHandler) {
 	t.Helper()
 
-	require.Equal(t, 1, len(bh.baseGroup.handlers))
+	require.Len(t, bh.baseGroup.handlers, 1)
 	require.NotNil(t, bh.baseGroup.handlers[0].handler)
 	require.NotNil(t, bh.baseGroup.handlers[0].predicates)
-	require.Equal(t, 1, len(bh.baseGroup.handlers[0].predicates))
+	require.Len(t, bh.baseGroup.handlers[0].predicates, 1)
 }
 
 func TestBotHandler_HandleMessage(t *testing.T) {

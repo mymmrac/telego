@@ -4,17 +4,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestWithDone(t *testing.T) {
 	bh := &BotHandler{}
 	err := WithStopTimeout(-time.Second)(bh)
-	assert.Error(t, err)
+	require.Error(t, err)
 }
 
 func TestWithStopTimeout(t *testing.T) {
 	bh := &BotHandler{}
 	err := WithDone(nil)(bh)
-	assert.Error(t, err)
+	require.Error(t, err)
 }

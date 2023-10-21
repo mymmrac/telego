@@ -11,7 +11,7 @@ import (
 	"go.uber.org/mock/gomock"
 
 	ta "github.com/mymmrac/telego/telegoapi"
-	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
+	mockapi "github.com/mymmrac/telego/telegoapi/mock"
 )
 
 const (
@@ -64,34 +64,34 @@ func TestNewBot(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		bot, err := NewBot(token)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.NotNil(t, bot)
 	})
 
 	t.Run("success_with_options", func(t *testing.T) {
 		bot, err := NewBot(token, func(_ *Bot) error { return nil })
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.NotNil(t, bot)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		bot, err := NewBot(invalidToken)
 
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, bot)
 	})
 
 	t.Run("error_with_options", func(t *testing.T) {
 		bot, err := NewBot(token, func(_ *Bot) error { return errTest })
 
-		assert.ErrorIs(t, err, errTest)
+		require.ErrorIs(t, err, errTest)
 		assert.Nil(t, bot)
 	})
 
 	t.Run("with_health_check", func(t *testing.T) {
-		caller := mockAPI.NewMockCaller(ctrl)
-		constructor := mockAPI.NewMockRequestConstructor(ctrl)
+		caller := mockapi.NewMockCaller(ctrl)
+		constructor := mockapi.NewMockRequestConstructor(ctrl)
 
 		expectedData := &ta.RequestData{
 			ContentType: ta.ContentTypeJSON,
@@ -109,13 +109,13 @@ func TestNewBot(t *testing.T) {
 				Times(1)
 
 			caller.EXPECT().
-				Call(defaultBotAPIServer+"/bot"+token+"/getMe", expectedData).
+				Call(defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
 				Return(expectedResp, nil).
 				Times(1)
 
 			bot, err := NewBot(token, WithHealthCheck(), WithAPICaller(caller), WithRequestConstructor(constructor))
 
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.NotNil(t, bot)
 		})
 
@@ -131,13 +131,13 @@ func TestNewBot(t *testing.T) {
 				Times(1)
 
 			caller.EXPECT().
-				Call(defaultBotAPIServer+"/bot"+token+"/getMe", expectedData).
+				Call(defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
 				Return(expectedResp, nil).
 				Times(1)
 
 			bot, err := NewBot(token, WithHealthCheck(), WithAPICaller(caller), WithRequestConstructor(constructor))
 
-			assert.Error(t, err)
+			require.Error(t, err)
 			assert.Nil(t, bot)
 		})
 	})
@@ -163,7 +163,7 @@ func TestBot_FileDownloadURL(t *testing.T) {
 
 	filepath := "file.txt"
 	url := bot.FileDownloadURL(filepath)
-	assert.Equal(t, bot.apiURL+"/file/bot"+bot.token+"/"+filepath, url)
+	assert.Equal(t, bot.apiURL+"/file"+botPathPrefix+bot.token+"/"+filepath, url)
 }
 
 type testErrorMarshal struct {
@@ -310,12 +310,12 @@ func Test_parseParameters(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			parsedParameters, err := parseParameters(tt.parameters)
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, parsedParameters)
 				return
 			}
 
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, tt.parsedParameters, parsedParameters)
 		})
 	}
@@ -388,14 +388,14 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		N: 1,
 	}
 
-	url := m.Bot.apiURL + "/bot" + m.Bot.token + "/" + methodName
+	url := m.Bot.apiURL + botPathPrefix + m.Bot.token + "/" + methodName
 
 	expectedResp := &ta.Response{
 		Ok: true,
 	}
 
 	paramsBytes, err := json.Marshal(params)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	expectedData := &ta.RequestData{
 		ContentType: ta.ContentTypeJSON,
@@ -414,7 +414,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		resp, err := m.Bot.constructAndCallRequest(methodName, params)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
 
@@ -425,7 +425,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		resp, err := m.Bot.constructAndCallRequest(methodName, params)
-		assert.ErrorIs(t, err, errTest)
+		require.ErrorIs(t, err, errTest)
 		assert.Nil(t, resp)
 	})
 
@@ -436,7 +436,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		}
 
 		paramsBytesFile, err := json.Marshal(paramsFile)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		expectedDataFile := &ta.RequestData{
 			ContentType: ta.ContentTypeJSON,
@@ -454,7 +454,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		resp, err := m.Bot.constructAndCallRequest(methodName, paramsFile)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
 
@@ -470,7 +470,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		resp, err := m.Bot.constructAndCallRequest(methodName, paramsFile)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
@@ -478,7 +478,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 		notStruct := notStructParamsWithFile("test")
 
 		resp, err := m.Bot.constructAndCallRequest(methodName, &notStruct)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
@@ -494,7 +494,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		resp, err := m.Bot.constructAndCallRequest(methodName, params)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 }
@@ -526,7 +526,7 @@ func TestBot_performRequest(t *testing.T) {
 			}, nil)
 
 		err := m.Bot.performRequest(methodName, params, &result)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, 1, result)
 	})
 
@@ -548,9 +548,9 @@ func TestBot_performRequest(t *testing.T) {
 			}, nil)
 
 		err := m.Bot.performRequest(methodName, params, &result1, &result2)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, 0, result1)
-		assert.Equal(t, true, result2)
+		assert.True(t, result2)
 	})
 
 	t.Run("error_not_ok", func(t *testing.T) {
@@ -570,7 +570,7 @@ func TestBot_performRequest(t *testing.T) {
 			}, nil)
 
 		err := m.Bot.performRequest(methodName, params, &result)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 
 	t.Run("error_construct_and_call", func(t *testing.T) {
@@ -582,7 +582,7 @@ func TestBot_performRequest(t *testing.T) {
 			Times(1)
 
 		err := m.Bot.performRequest(methodName, params, &result)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 
 	t.Run("error_unmarshal", func(t *testing.T) {
@@ -601,7 +601,7 @@ func TestBot_performRequest(t *testing.T) {
 
 		var stringResult string
 		err := m.Bot.performRequest(methodName, params, &stringResult)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Equal(t, "", stringResult)
 	})
 

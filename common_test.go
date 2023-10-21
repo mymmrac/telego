@@ -10,7 +10,7 @@ import (
 	"go.uber.org/mock/gomock"
 
 	ta "github.com/mymmrac/telego/telegoapi"
-	mockAPI "github.com/mymmrac/telego/telegoapi/mock"
+	mockapi "github.com/mymmrac/telego/telegoapi/mock"
 )
 
 var (
@@ -49,15 +49,15 @@ func telegoResponse(t *testing.T, v any) *ta.Response {
 }
 
 type mockedBot struct {
-	MockAPICaller          *mockAPI.MockCaller
-	MockRequestConstructor *mockAPI.MockRequestConstructor
+	MockAPICaller          *mockapi.MockCaller
+	MockRequestConstructor *mockapi.MockRequestConstructor
 	Bot                    *Bot
 }
 
 func newMockedBot(ctrl *gomock.Controller) mockedBot {
 	mb := mockedBot{
-		MockAPICaller:          mockAPI.NewMockCaller(ctrl),
-		MockRequestConstructor: mockAPI.NewMockRequestConstructor(ctrl),
+		MockAPICaller:          mockapi.NewMockCaller(ctrl),
+		MockRequestConstructor: mockapi.NewMockRequestConstructor(ctrl),
 	}
 
 	//nolint:errcheck

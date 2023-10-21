@@ -66,7 +66,7 @@ func TestNewBotHandler(t *testing.T) {
 	t.Run("error_with_options", func(t *testing.T) {
 		bh, err = NewBotHandler(bot, updates, func(_ *BotHandler) error { return errTest })
 
-		assert.ErrorIs(t, err, errTest)
+		require.ErrorIs(t, err, errTest)
 		assert.Nil(t, bh)
 	})
 }
@@ -300,7 +300,7 @@ func TestBotHandler_Handle(t *testing.T) {
 
 	bh.Handle(handler, predicate)
 
-	require.Equal(t, 1, len(bh.baseGroup.handlers))
+	require.Len(t, bh.baseGroup.handlers, 1)
 	assert.NotNil(t, bh.baseGroup.handlers[0].handler)
 	assert.NotNil(t, bh.baseGroup.handlers[0].predicates)
 
@@ -314,7 +314,7 @@ func TestBotHandler_Group(t *testing.T) {
 
 	newGr := bh.Group(predicate)
 
-	require.Equal(t, 1, len(bh.baseGroup.groups))
+	require.Len(t, bh.baseGroup.groups, 1)
 	assert.Equal(t, newGr, bh.baseGroup.groups[0])
 	assert.NotEmpty(t, bh.baseGroup.groups[0].predicates)
 }
@@ -328,7 +328,7 @@ func TestBotHandler_Use(t *testing.T) {
 
 	bh.Use(middleware)
 
-	require.Equal(t, 1, len(bh.baseGroup.middlewares))
+	require.Len(t, bh.baseGroup.middlewares, 1)
 	assert.NotNil(t, bh.baseGroup.middlewares[0])
 }
 

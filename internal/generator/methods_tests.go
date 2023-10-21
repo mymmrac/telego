@@ -63,11 +63,11 @@ import (
 
 		if m.hasReturnValue() {
 			data.WriteString(fmt.Sprintf(`		%s, err := m.Bot.%s(%s)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, %s, %s)`, actualVar, m.nameTitle, parameters, expectedVar, actualVar))
 		} else {
 			data.WriteString(fmt.Sprintf(`		err := m.Bot.%s(%s)
-		assert.NoError(t, err)`, m.nameTitle, parameters))
+		require.NoError(t, err)`, m.nameTitle, parameters))
 		}
 
 		data.WriteString("\n\t})\n\n")
@@ -80,11 +80,11 @@ import (
 
 		if m.hasReturnValue() {
 			data.WriteString(fmt.Sprintf(`		%s, err := m.Bot.%s(%s)
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, %s)`, actualVar, m.nameTitle, parameters, actualVar))
 		} else {
 			data.WriteString(fmt.Sprintf(`		err := m.Bot.%s(%s)
-		assert.Error(t, err)`, m.nameTitle, parameters))
+		require.Error(t, err)`, m.nameTitle, parameters))
 		}
 
 		data.WriteString("\n\t})\n}\n\n")

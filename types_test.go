@@ -7,6 +7,7 @@ import (
 
 	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	ta "github.com/mymmrac/telego/telegoapi"
 )
@@ -263,11 +264,11 @@ func Test_chatMemberData_UnmarshalJSON(t *testing.T) {
 			c := &chatMemberData{}
 			err := c.UnmarshalJSON([]byte(tt.json))
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, c.Data)
 				return
 			}
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.EqualValues(t, tt.data, c.Data)
 		})
 	}
@@ -311,18 +312,18 @@ func TestChatMemberUpdated_UnmarshalJSON(t *testing.T) {
 			InviteLink:    nil,
 		}
 		jsonData, err := json.Marshal(expectedCMU)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		cmu := &ChatMemberUpdated{}
 		err = cmu.UnmarshalJSON(jsonData)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.EqualValues(t, expectedCMU, cmu)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		cmu := &ChatMemberUpdated{}
 		err := cmu.UnmarshalJSON([]byte("test"))
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -375,11 +376,11 @@ func Test_menuButtonData_UnmarshalJSON(t *testing.T) {
 			m := &menuButtonData{}
 			err := m.UnmarshalJSON([]byte(tt.json))
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, m.Data)
 				return
 			}
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.EqualValues(t, tt.data, m.Data)
 		})
 	}
@@ -419,11 +420,11 @@ func TestChatID_MarshalJSON(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			data, err := tt.chatID.MarshalJSON()
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, data)
 				return
 			}
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, tt.jsonData, string(data))
 		})
 	}
@@ -480,11 +481,11 @@ func TestInputFile_MarshalJSON(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			data, err := tt.inputFile.MarshalJSON()
 			if tt.isError {
-				assert.Error(t, err)
+				require.Error(t, err)
 				assert.Nil(t, data)
 				return
 			}
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, tt.jsonData, string(data))
 		})
 	}
@@ -618,9 +619,9 @@ func TestTypesConstants(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		assert.True(t, len(tt) > 0)
+		assert.NotEmpty(t, tt)
 		for _, ct := range tt {
-			assert.True(t, len(ct) > 0)
+			assert.NotEmpty(t, ct)
 		}
 	}
 }
@@ -765,13 +766,13 @@ func TestUpdate_CloneSafe(t *testing.T) {
 		}
 
 		uc, err := u.CloneSafe()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, u, uc)
 	})
 
 	t.Run("error_unmarshal", func(t *testing.T) {
 		uc, err := (Update{ChatMember: &ChatMemberUpdated{}}).CloneSafe()
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Zero(t, uc)
 	})
 
@@ -782,7 +783,7 @@ func TestUpdate_CloneSafe(t *testing.T) {
 			},
 		}
 		uc, err := u.CloneSafe()
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Zero(t, uc)
 	})
 }

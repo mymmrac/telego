@@ -11,6 +11,8 @@ import (
 	"github.com/mymmrac/telego"
 )
 
+const epsilon = 0.00001
+
 type testNamedReade struct{}
 
 func (t testNamedReade) Read(_ []byte) (n int, err error) {
@@ -53,19 +55,19 @@ func TestDownloadFile(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		data, err := DownloadFile(srv.URL + "/")
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, expectedData, data)
 	})
 
 	t.Run("error_request", func(t *testing.T) {
 		data, err := DownloadFile("")
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, data)
 	})
 
 	t.Run("error_status", func(t *testing.T) {
 		data, err := DownloadFile(srv.URL + "/error")
-		assert.Error(t, err)
+		require.Error(t, err)
 		assert.Nil(t, data)
 	})
 }
@@ -155,7 +157,7 @@ func TestErrorUnspecified(t *testing.T) {
 
 func TestInlineKeyboard(t *testing.T) {
 	i := InlineKeyboard([]telego.InlineKeyboardButton{}, []telego.InlineKeyboardButton{})
-	assert.Equal(t, 2, len(i.InlineKeyboard))
+	assert.Len(t, i.InlineKeyboard, 2)
 }
 
 func TestInlineKeyboardButton(t *testing.T) {
@@ -165,7 +167,7 @@ func TestInlineKeyboardButton(t *testing.T) {
 
 func TestInlineKeyboardRow(t *testing.T) {
 	i := InlineKeyboardRow(telego.InlineKeyboardButton{}, telego.InlineKeyboardButton{})
-	assert.Equal(t, 2, len(i))
+	assert.Len(t, i, 2)
 }
 
 func TestInlineKeyboardGrid(t *testing.T) {
@@ -173,26 +175,26 @@ func TestInlineKeyboardGrid(t *testing.T) {
 		{{}},
 		{{}, {}, {}},
 	})
-	require.Equal(t, 2, len(i.InlineKeyboard))
-	assert.Equal(t, 1, len(i.InlineKeyboard[0]))
-	assert.Equal(t, 3, len(i.InlineKeyboard[1]))
+	require.Len(t, i.InlineKeyboard, 2)
+	assert.Len(t, i.InlineKeyboard[0], 1)
+	assert.Len(t, i.InlineKeyboard[1], 3)
 }
 
 func TestInlineKeyboardCols(t *testing.T) {
 	t.Run("full", func(t *testing.T) {
 		b := telego.InlineKeyboardButton{}
 		i := InlineKeyboardCols(2, b, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 2, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 2)
 	})
 
 	t.Run("one_off", func(t *testing.T) {
 		b := telego.InlineKeyboardButton{}
 		i := InlineKeyboardCols(2, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 1, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 1)
 	})
 
 	t.Run("nil", func(t *testing.T) {
@@ -205,17 +207,17 @@ func TestInlineKeyboardRows(t *testing.T) {
 	t.Run("full", func(t *testing.T) {
 		b := telego.InlineKeyboardButton{}
 		i := InlineKeyboardRows(2, b, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 2, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 2)
 	})
 
 	t.Run("one_off", func(t *testing.T) {
 		b := telego.InlineKeyboardButton{}
 		i := InlineKeyboardRows(2, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 1, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 1)
 	})
 
 	t.Run("nil", func(t *testing.T) {
@@ -226,7 +228,7 @@ func TestInlineKeyboardRows(t *testing.T) {
 
 func TestKeyboard(t *testing.T) {
 	k := Keyboard([]telego.KeyboardButton{}, []telego.KeyboardButton{})
-	assert.Equal(t, 2, len(k.Keyboard))
+	assert.Len(t, k.Keyboard, 2)
 }
 
 func TestKeyboardButton(t *testing.T) {
@@ -236,7 +238,7 @@ func TestKeyboardButton(t *testing.T) {
 
 func TestKeyboardRow(t *testing.T) {
 	k := KeyboardRow(telego.KeyboardButton{}, telego.KeyboardButton{})
-	assert.Equal(t, 2, len(k))
+	assert.Len(t, k, 2)
 }
 
 func TestKeyboardGrid(t *testing.T) {
@@ -244,26 +246,26 @@ func TestKeyboardGrid(t *testing.T) {
 		{{}},
 		{{}, {}, {}},
 	})
-	require.Equal(t, 2, len(i.Keyboard))
-	assert.Equal(t, 1, len(i.Keyboard[0]))
-	assert.Equal(t, 3, len(i.Keyboard[1]))
+	require.Len(t, i.Keyboard, 2)
+	assert.Len(t, i.Keyboard[0], 1)
+	assert.Len(t, i.Keyboard[1], 3)
 }
 
 func TestKeyboardCols(t *testing.T) {
 	t.Run("full", func(t *testing.T) {
 		b := telego.KeyboardButton{}
 		i := KeyboardCols(2, b, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 2, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 2)
 	})
 
 	t.Run("one_off", func(t *testing.T) {
 		b := telego.KeyboardButton{}
 		i := KeyboardCols(2, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 1, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 1)
 	})
 
 	t.Run("nil", func(t *testing.T) {
@@ -276,17 +278,17 @@ func TestKeyboardRows(t *testing.T) {
 	t.Run("full", func(t *testing.T) {
 		b := telego.KeyboardButton{}
 		i := KeyboardRows(2, b, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 2, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 2)
 	})
 
 	t.Run("one_off", func(t *testing.T) {
 		b := telego.KeyboardButton{}
 		i := KeyboardRows(2, b, b, b)
-		require.Equal(t, 2, len(i))
-		assert.Equal(t, 2, len(i[0]))
-		assert.Equal(t, 1, len(i[1]))
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 1)
 	})
 
 	t.Run("nil", func(t *testing.T) {
@@ -461,8 +463,8 @@ func TestResultLocation(t *testing.T) {
 	r := ResultLocation(text1, latitude, longitude, text2)
 	assert.Equal(t, telego.ResultTypeLocation, r.Type)
 	assert.Equal(t, text1, r.ID)
-	assert.Equal(t, latitude, r.Latitude)
-	assert.Equal(t, longitude, r.Longitude)
+	assert.InEpsilon(t, latitude, r.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, r.Longitude, epsilon)
 	assert.Equal(t, text2, r.Title)
 }
 
@@ -486,8 +488,8 @@ func TestResultVenue(t *testing.T) {
 	r := ResultVenue(text1, latitude, longitude, text2, text3)
 	assert.Equal(t, telego.ResultTypeVenue, r.Type)
 	assert.Equal(t, text1, r.ID)
-	assert.Equal(t, latitude, r.Latitude)
-	assert.Equal(t, longitude, r.Longitude)
+	assert.InEpsilon(t, latitude, r.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, r.Longitude, epsilon)
 	assert.Equal(t, text2, r.Title)
 	assert.Equal(t, text3, r.Address)
 }
@@ -556,16 +558,16 @@ func TestTextMessage(t *testing.T) {
 
 func TestVenueMessage(t *testing.T) {
 	m := VenueMessage(latitude, longitude, text1, text2)
-	assert.Equal(t, latitude, m.Latitude)
-	assert.Equal(t, longitude, m.Longitude)
+	assert.InEpsilon(t, latitude, m.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, m.Longitude, epsilon)
 	assert.Equal(t, text1, m.Title)
 	assert.Equal(t, text2, m.Address)
 }
 
 func TestLocationMessage(t *testing.T) {
 	m := LocationMessage(latitude, longitude)
-	assert.Equal(t, latitude, m.Latitude)
-	assert.Equal(t, longitude, m.Longitude)
+	assert.InEpsilon(t, latitude, m.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, m.Longitude, epsilon)
 }
 
 func TestContactMessage(t *testing.T) {

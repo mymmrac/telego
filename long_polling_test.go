@@ -31,7 +31,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			_, err := m.Bot.UpdatesViaLongPolling(nil)
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 			m.Bot.StopLongPolling()
 			time.Sleep(time.Millisecond * 500)
@@ -47,7 +47,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			_, err := m.Bot.UpdatesViaLongPolling(nil)
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 			m.Bot.StopLongPolling()
 		})
@@ -62,10 +62,10 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			_, err := m.Bot.UpdatesViaLongPolling(nil)
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			_, err = m.Bot.UpdatesViaLongPolling(nil)
-			assert.Error(t, err)
+			require.Error(t, err)
 
 			m.Bot.StopLongPolling()
 		})
@@ -76,7 +76,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			_, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingUpdateInterval(-time.Second))
-			assert.Error(t, err)
+			require.Error(t, err)
 		})
 	})
 
@@ -101,7 +101,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			defer cancel()
 
 			updates, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingContext(ctx))
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			time.Sleep(time.Millisecond * 10)
 
@@ -173,13 +173,13 @@ func TestWithLongPollingUpdateInterval(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		err := WithLongPollingUpdateInterval(interval)(ctx)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.EqualValues(t, interval, ctx.updateInterval)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		err := WithLongPollingUpdateInterval(-interval)(ctx)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -189,13 +189,13 @@ func TestWithLongPollingRetryTimeout(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		err := WithLongPollingRetryTimeout(timeout)(ctx)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.EqualValues(t, timeout, ctx.retryTimeout)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		err := WithLongPollingRetryTimeout(-timeout)(ctx)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }
 
@@ -204,7 +204,7 @@ func TestWithLongPollingBuffer(t *testing.T) {
 	buffer := uint(1)
 
 	err := WithLongPollingBuffer(buffer)(ctx)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
 }
 
@@ -214,13 +214,13 @@ func TestWithLongPollingContext(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 		err := WithLongPollingContext(ctx)(lCtx)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.EqualValues(t, ctx, lCtx.ctx)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		//nolint:staticcheck
 		err := WithLongPollingContext(nil)(lCtx)
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 }

@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/mymmrac/telego"
 )
@@ -18,7 +19,7 @@ func TestNameReader(t *testing.T) {
 	nameReader := NameReader(buf, text2)
 
 	data, err := io.ReadAll(nameReader)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, text1, string(data))
 	assert.Equal(t, text2, nameReader.Name())
@@ -46,7 +47,7 @@ func TestUpdateProcessor(t *testing.T) {
 	count := 0
 	for update := range processedUpdates {
 		count++
-		assert.True(t, update.UpdateID%10 == 0)
+		assert.Equal(t, 0, update.UpdateID%10)
 
 		if count == updateCount {
 			close(updates)
@@ -66,9 +67,9 @@ func TestTypesConstants(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		assert.True(t, len(tt) > 0)
+		assert.NotEmpty(t, tt)
 		for _, ct := range tt {
-			assert.True(t, len(ct) > 0)
+			assert.NotEmpty(t, ct)
 		}
 	}
 }
