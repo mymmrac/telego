@@ -58,11 +58,12 @@ func main() {
 			text := u.Message.Text
 
 			// Parse text into command and its arguments
-			command, args := tu.ParseCommand(text)
+			command, username, args := tu.ParseCommand(text)
 
 			// Check if the text contains command
 			if command != "" {
 				fmt.Println("Command:", command)
+				fmt.Println("Username:", username)
 				fmt.Println("Args:", args)
 			} else {
 				fmt.Println("Not a command:", text)

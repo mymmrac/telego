@@ -3,10 +3,10 @@ module github.com/mymmrac/telego/examples
 go 1.20
 
 require (
-	github.com/fasthttp/router v1.4.20
-	github.com/mymmrac/telego v0.26.3
+	github.com/fasthttp/router v1.4.21
+	github.com/mymmrac/telego v0.27.0
 	github.com/valyala/fasthttp v1.50.0
-	golang.ngrok.com/ngrok v1.4.1
+	golang.ngrok.com/ngrok v1.5.1
 )
 
 require (
@@ -21,10 +21,11 @@ require (
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	go.uber.org/multierr v1.10.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	golang.ngrok.com/muxado/v2 v2.0.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
 )

@@ -31,7 +31,7 @@ func main() {
 	defer bot.StopLongPolling()
 
 	// Add global middleware, it will be applied in order of addition
-	bh.Use(th.PanicRecovery) // Will be called first
+	bh.Use(th.PanicRecovery()) // Will be called first
 	bh.Use(
 		func(bot *telego.Bot, update telego.Update, next th.Handler) {
 			fmt.Println("Global middleware") // Will be called second
