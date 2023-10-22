@@ -190,7 +190,6 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			require.NoError(t, errHTTP)
 			require.NoError(t, resp.Body.Close())
 
-			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
 
 			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
@@ -198,7 +197,6 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			require.NoError(t, errHTTP)
 			require.NoError(t, resp.Body.Close())
 
-			require.NotNil(t, resp)
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
 		}()
 
