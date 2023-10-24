@@ -38,7 +38,7 @@ type Error struct {
 }
 
 // Error converts Error to human-readable string
-func (a Error) Error() string {
+func (a *Error) Error() string {
 	if a.Parameters != nil {
 		return fmt.Sprintf("%d %q, migrate to chat ID: %d, retry after: %d",
 			a.ErrorCode, a.Description, a.Parameters.MigrateToChatID, a.Parameters.RetryAfter)

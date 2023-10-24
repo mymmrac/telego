@@ -1,6 +1,7 @@
 package telegoapi
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/goccy/go-json"
@@ -58,5 +59,18 @@ func Test_Response_String_and_Error_Error(t *testing.T) {
 			text := tt.resp.String()
 			assert.Equal(t, tt.text, text)
 		})
+	}
+}
+
+func Test_Error(t *testing.T) {
+	var err error = &Error{
+		ErrorCode: 1,
+	}
+
+	var apiErr *Error
+	if errors.As(err, &apiErr) {
+		assert.Equal(t, 1, apiErr.ErrorCode)
+	} else {
+		assert.Fail(t, "not an API error")
 	}
 }
