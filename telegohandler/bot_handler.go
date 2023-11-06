@@ -100,6 +100,7 @@ func (h *BotHandler) Start() {
 				go func() {
 					select {
 					case <-ctx.Done():
+						// Done processing
 					case <-h.stop:
 						cancel()
 					}

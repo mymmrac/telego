@@ -109,7 +109,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 		noPointer := contains(noPointerStructs, setter.structType)
 
-		convertToPtr := setter.fieldType == "*bool" || setter.fieldType == "*string"
+		convertToPtr := setter.fieldType == "*bool" || setter.fieldType == "*string" || setter.fieldType == "*int"
 
 		var s string
 		if setter.fieldType != "bool" {

@@ -25,10 +25,10 @@ type GetUpdatesParams struct {
 	Timeout int `json:"timeout,omitempty"`
 
 	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
-	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
-	// these types. See Update (https://core.telegram.org/bots/api#update) for a complete list of available update
-	// types. Specify an empty list to receive all update types except chat_member (default). If not specified, the
-	// previous setting will be used.
+	// example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types.
+	// See Update (https://core.telegram.org/bots/api#update) for a complete list of available update types. Specify
+	// an empty list to receive all update types except chat_member (default). If not specified, the previous
+	// setting will be used.
 	// Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted
 	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
@@ -85,10 +85,10 @@ type SetWebhookParams struct {
 	MaxConnections int `json:"max_connections,omitempty"`
 
 	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
-	// example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of
-	// these types. See Update (https://core.telegram.org/bots/api#update) for a complete list of available update
-	// types. Specify an empty list to receive all update types except chat_member (default). If not specified, the
-	// previous setting will be used.
+	// example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types.
+	// See Update (https://core.telegram.org/bots/api#update) for a complete list of available update types. Specify
+	// an empty list to receive all update types except chat_member (default). If not specified, the previous
+	// setting will be used.
 	// Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted
 	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
@@ -1220,7 +1220,7 @@ type SendPollParams struct {
 
 	// CorrectOptionID - Optional. 0-based identifier of the correct answer option, required for polls in quiz
 	// mode
-	CorrectOptionID int `json:"correct_option_id,omitempty"`
+	CorrectOptionID *int `json:"correct_option_id,omitempty"`
 
 	// Explanation - Optional. Text that is shown when a user chooses an incorrect answer or taps on the lamp
 	// icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing
@@ -1539,37 +1539,19 @@ type PromoteChatMemberParams struct {
 	// IsAnonymous - Optional. Pass True if the administrator's presence in the chat is hidden
 	IsAnonymous *bool `json:"is_anonymous,omitempty"`
 
-	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, chat statistics,
-	// boost list in channels, message statistics in channels, see channel members, see anonymous administrators in
-	// supergroups and ignore slow mode. Implied by any other administrator privilege
+	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, boost list in
+	// channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore
+	// slow mode. Implied by any other administrator privilege
 	CanManageChat *bool `json:"can_manage_chat,omitempty"`
-
-	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel; channels
-	// only
-	CanPostMessages *bool `json:"can_post_messages,omitempty"`
-
-	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
-	// messages; channels only
-	CanEditMessages *bool `json:"can_edit_messages,omitempty"`
 
 	// CanDeleteMessages - Optional. Pass True if the administrator can delete messages of other users
 	CanDeleteMessages *bool `json:"can_delete_messages,omitempty"`
 
-	// CanPostStories - Optional. Pass True if the administrator can post stories in the channel; channels only
-	CanPostStories *bool `json:"can_post_stories,omitempty"`
-
-	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users;
-	// channels only
-	CanEditStories *bool `json:"can_edit_stories,omitempty"`
-
-	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users;
-	// channels only
-	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
-
 	// CanManageVideoChats - Optional. Pass True if the administrator can manage video chats
 	CanManageVideoChats *bool `json:"can_manage_video_chats,omitempty"`
 
-	// CanRestrictMembers - Optional. Pass True if the administrator can restrict, ban or unban chat members
+	// CanRestrictMembers - Optional. Pass True if the administrator can restrict, ban or unban chat members, or
+	// access supergroup statistics
 	CanRestrictMembers *bool `json:"can_restrict_members,omitempty"`
 
 	// CanPromoteMembers - Optional. Pass True if the administrator can add new administrators with a subset of
@@ -1583,8 +1565,27 @@ type PromoteChatMemberParams struct {
 	// CanInviteUsers - Optional. Pass True if the administrator can invite new users to the chat
 	CanInviteUsers *bool `json:"can_invite_users,omitempty"`
 
+	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel, or access
+	// channel statistics; channels only
+	CanPostMessages *bool `json:"can_post_messages,omitempty"`
+
+	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
+	// messages; channels only
+	CanEditMessages *bool `json:"can_edit_messages,omitempty"`
+
 	// CanPinMessages - Optional. Pass True if the administrator can pin messages, supergroups only
 	CanPinMessages *bool `json:"can_pin_messages,omitempty"`
+
+	// CanPostStories - Optional. Pass True if the administrator can post stories in the channel; channels only
+	CanPostStories *bool `json:"can_post_stories,omitempty"`
+
+	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users;
+	// channels only
+	CanEditStories *bool `json:"can_edit_stories,omitempty"`
+
+	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users;
+	// channels only
+	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageTopics - Optional. Pass True if the user is allowed to create, rename, close, and reopen forum
 	// topics, supergroups only

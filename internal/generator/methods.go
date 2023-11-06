@@ -383,8 +383,13 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 		parameter.typ = "*string"
 	}
 
-	if methodName == "sendPoll" && parameter.nameSnakeCase == "is_anonymous" {
-		parameter.typ = "*bool"
+	if methodName == "sendPoll" {
+		switch parameter.nameSnakeCase {
+		case "is_anonymous":
+			parameter.typ = "*bool"
+		case "correct_option_id":
+			parameter.typ = "*int"
+		}
 	}
 }
 

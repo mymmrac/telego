@@ -11,14 +11,14 @@ func generateMethodsTests(methods tgMethods) {
 
 	data := strings.Builder{}
 
-	data.WriteString(`//nolint:dupl
-package telego
+	data.WriteString(`package telego
 
 import (
 	"testing"
 
-	"go.uber.org/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 
 	ta "github.com/mymmrac/telego/telegoapi"
 )

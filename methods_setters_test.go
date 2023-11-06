@@ -510,7 +510,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 		IsAnonymous:              ToPtr(true),
 		Type:                     "Type",
 		AllowsMultipleAnswers:    true,
-		CorrectOptionID:          2,
+		CorrectOptionID:          ToPtr(2),
 		Explanation:              "Explanation",
 		ExplanationParseMode:     "ExplanationParseMode",
 		ExplanationEntities:      []MessageEntity{{Type: "ExplanationEntities"}},
@@ -620,36 +620,36 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithIsAnonymous(true).
 		WithCanManageChat(true).
-		WithCanPostMessages(true).
-		WithCanEditMessages(true).
 		WithCanDeleteMessages(true).
-		WithCanPostStories(true).
-		WithCanEditStories(true).
-		WithCanDeleteStories(true).
 		WithCanManageVideoChats(true).
 		WithCanRestrictMembers(true).
 		WithCanPromoteMembers(true).
 		WithCanChangeInfo(true).
 		WithCanInviteUsers(true).
+		WithCanPostMessages(true).
+		WithCanEditMessages(true).
 		WithCanPinMessages(true).
+		WithCanPostStories(true).
+		WithCanEditStories(true).
+		WithCanDeleteStories(true).
 		WithCanManageTopics(true)
 
 	assert.Equal(t, &PromoteChatMemberParams{
 		ChatID:              ChatID{ID: 1},
 		IsAnonymous:         ToPtr(true),
 		CanManageChat:       ToPtr(true),
-		CanPostMessages:     ToPtr(true),
-		CanEditMessages:     ToPtr(true),
 		CanDeleteMessages:   ToPtr(true),
-		CanPostStories:      ToPtr(true),
-		CanEditStories:      ToPtr(true),
-		CanDeleteStories:    ToPtr(true),
 		CanManageVideoChats: ToPtr(true),
 		CanRestrictMembers:  ToPtr(true),
 		CanPromoteMembers:   ToPtr(true),
 		CanChangeInfo:       ToPtr(true),
 		CanInviteUsers:      ToPtr(true),
+		CanPostMessages:     ToPtr(true),
+		CanEditMessages:     ToPtr(true),
 		CanPinMessages:      ToPtr(true),
+		CanPostStories:      ToPtr(true),
+		CanEditStories:      ToPtr(true),
+		CanDeleteStories:    ToPtr(true),
 		CanManageTopics:     ToPtr(true),
 	}, p)
 }

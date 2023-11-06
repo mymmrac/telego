@@ -14,8 +14,7 @@ type setterTest struct {
 func writeSettersTests(file *os.File, setters tgSetters, noPointerStructs []string) {
 	data := strings.Builder{}
 
-	data.WriteString(`//nolint:dupl
-package telego
+	data.WriteString(`package telego
 
 import (
 	"testing"
@@ -106,6 +105,9 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "int":
 		*counter++
 		return fmt.Sprintf("%d", *counter)
+	case "*int":
+		*counter++
+		return fmt.Sprintf(" %d", *counter)
 	case "ChatID":
 		*counter++
 		return fmt.Sprintf("ChatID{ID: %d}", *counter)
