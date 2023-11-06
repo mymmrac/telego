@@ -195,4 +195,18 @@ func TestSendPoll(t *testing.T) {
 		require.NoError(t, err)
 		assert.NotNil(t, msg)
 	})
+
+	t.Run("correct_option_id", func(t *testing.T) {
+		msg, err := bot.SendPoll(&telego.SendPollParams{
+			ChatID:          tu.ID(chatID),
+			Question:        "Test",
+			Options:         []string{"Option 1", "Option 2"},
+			IsAnonymous:     telego.ToPtr(false),
+			Type:            telego.PollTypeQuiz,
+			CorrectOptionID: telego.ToPtr(0),
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
 }
