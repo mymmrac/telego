@@ -64,8 +64,7 @@ type Update struct {
 	MyChatMember *ChatMemberUpdated `json:"my_chat_member,omitempty"`
 
 	// ChatMember - Optional. A chat member's status was updated in a chat. The bot must be an administrator in
-	// the chat and must explicitly specify “chat_member” in the list of allowed_updates to receive these
-	// updates.
+	// the chat and must explicitly specify "chat_member" in the list of allowed_updates to receive these updates.
 	ChatMember *ChatMemberUpdated `json:"chat_member,omitempty"`
 
 	// ChatJoinRequest - Optional. A request to join the chat has been sent. The bot must have the
@@ -1608,9 +1607,9 @@ type ChatAdministratorRights struct {
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
 
-	// CanManageChat - True, if the administrator can access the chat event log, chat statistics, boost list in
-	// channels, message statistics in channels, see channel members, see anonymous administrators in supergroups
-	// and ignore slow mode. Implied by any other administrator privilege
+	// CanManageChat - True, if the administrator can access the chat event log, boost list in channels, see
+	// channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode.
+	// Implied by any other administrator privilege
 	CanManageChat bool `json:"can_manage_chat"`
 
 	// CanDeleteMessages - True, if the administrator can delete messages of other users
@@ -1619,7 +1618,8 @@ type ChatAdministratorRights struct {
 	// CanManageVideoChats - True, if the administrator can manage video chats
 	CanManageVideoChats bool `json:"can_manage_video_chats"`
 
-	// CanRestrictMembers - True, if the administrator can restrict, ban or unban chat members
+	// CanRestrictMembers - True, if the administrator can restrict, ban or unban chat members, or access
+	// supergroup statistics
 	CanRestrictMembers bool `json:"can_restrict_members"`
 
 	// CanPromoteMembers - True, if the administrator can add new administrators with a subset of their own
@@ -1633,7 +1633,8 @@ type ChatAdministratorRights struct {
 	// CanInviteUsers - True, if the user is allowed to invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users"`
 
-	// CanPostMessages - Optional. True, if the administrator can post messages in the channel; channels only
+	// CanPostMessages - Optional. True, if the administrator can post messages in the channel, or access
+	// channel statistics; channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. True, if the administrator can edit messages of other users and can pin
@@ -1769,9 +1770,9 @@ type ChatMemberAdministrator struct {
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
 
-	// CanManageChat - True, if the administrator can access the chat event log, chat statistics, boost list in
-	// channels, message statistics in channels, see channel members, see anonymous administrators in supergroups
-	// and ignore slow mode. Implied by any other administrator privilege
+	// CanManageChat - True, if the administrator can access the chat event log, boost list in channels, see
+	// channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode.
+	// Implied by any other administrator privilege
 	CanManageChat bool `json:"can_manage_chat"`
 
 	// CanDeleteMessages - True, if the administrator can delete messages of other users
@@ -1780,7 +1781,8 @@ type ChatMemberAdministrator struct {
 	// CanManageVideoChats - True, if the administrator can manage video chats
 	CanManageVideoChats bool `json:"can_manage_video_chats"`
 
-	// CanRestrictMembers - True, if the administrator can restrict, ban or unban chat members
+	// CanRestrictMembers - True, if the administrator can restrict, ban or unban chat members, or access
+	// supergroup statistics
 	CanRestrictMembers bool `json:"can_restrict_members"`
 
 	// CanPromoteMembers - True, if the administrator can add new administrators with a subset of their own
@@ -1794,7 +1796,8 @@ type ChatMemberAdministrator struct {
 	// CanInviteUsers - True, if the user is allowed to invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users"`
 
-	// CanPostMessages - Optional. True, if the administrator can post messages in the channel; channels only
+	// CanPostMessages - Optional. True, if the administrator can post messages in the channel, or access
+	// channel statistics; channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. True, if the administrator can edit messages of other users and can pin
@@ -2030,8 +2033,8 @@ type ChatJoinRequest struct {
 	// UserChatID - Identifier of a private chat with the user who sent the join request. This number may have
 	// more than 32 significant bits and some programming languages may have difficulty/silent defects in
 	// interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type
-	// are safe for storing this identifier. The bot can use this identifier for 24 hours to send messages until the
-	// join request is processed, assuming no other administrator contacted the user.
+	// are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until
+	// the join request is processed, assuming no other administrator contacted the user.
 	UserChatID int64 `json:"user_chat_id"`
 
 	// Date - Date the request was sent in Unix time
