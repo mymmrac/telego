@@ -28,6 +28,42 @@ func TestPredicates(t *testing.T) {
 		matches   bool
 	}{
 		{
+			name: "and_matches",
+			predicate: And(
+				func(update telego.Update) bool { return true },
+				func(update telego.Update) bool { return true },
+			),
+			update:  telego.Update{},
+			matches: true,
+		},
+		{
+			name: "and_not_matches",
+			predicate: And(
+				func(update telego.Update) bool { return true },
+				func(update telego.Update) bool { return false },
+			),
+			update:  telego.Update{},
+			matches: false,
+		},
+		{
+			name: "or_matches",
+			predicate: Or(
+				func(update telego.Update) bool { return true },
+				func(update telego.Update) bool { return false },
+			),
+			update:  telego.Update{},
+			matches: true,
+		},
+		{
+			name: "or_not_matches",
+			predicate: Or(
+				func(update telego.Update) bool { return false },
+				func(update telego.Update) bool { return false },
+			),
+			update:  telego.Update{},
+			matches: false,
+		},
+		{
 			name: "union_matches",
 			predicate: Union(
 				func(update telego.Update) bool { return true },

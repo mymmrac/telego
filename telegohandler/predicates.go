@@ -7,8 +7,20 @@ import (
 	"github.com/mymmrac/telego"
 )
 
-// Union is true if at least one of the predicates is true
-func Union(predicates ...Predicate) Predicate {
+// And is true if all the predicates are true
+func And(predicates ...Predicate) Predicate {
+	return func(update telego.Update) bool {
+		for _, p := range predicates {
+			if !p(update) {
+				return false
+			}
+		}
+		return true
+	}
+}
+
+// Or is true if at least one of the predicates is true
+func Or(predicates ...Predicate) Predicate {
 	return func(update telego.Update) bool {
 		for _, p := range predicates {
 			if p(update) {
@@ -17,6 +29,13 @@ func Union(predicates ...Predicate) Predicate {
 		}
 		return false
 	}
+}
+
+// Union is true if at least one of the predicates is true
+//
+// Deprecated: Use [Or] predicate instead
+func Union(predicates ...Predicate) Predicate {
+	return Or(predicates...)
 }
 
 // Not is true if predicate is false

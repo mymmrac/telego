@@ -385,7 +385,7 @@ func main() {
 			m := tu.Message(tu.ID(msg.Chat.ID), "Run usage:\n```/run test```\n```/run update```")
 			m.ParseMode = telego.ModeMarkdownV2
 			_, _ = bot.SendMessage(m)
-		}, th.Union(
+		}, th.Or(
 			th.CommandEqualArgc("run", 0),
 			th.CommandEqualArgv("help", "run"),
 		))
