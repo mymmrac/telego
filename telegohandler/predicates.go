@@ -7,6 +7,20 @@ import (
 	"github.com/mymmrac/telego"
 )
 
+// Any is always true
+func Any() Predicate {
+	return func(_ telego.Update) bool {
+		return true
+	}
+}
+
+// None is always false
+func None() Predicate {
+	return func(_ telego.Update) bool {
+		return false
+	}
+}
+
 // And is true if all the predicates are true
 func And(predicates ...Predicate) Predicate {
 	return func(update telego.Update) bool {
