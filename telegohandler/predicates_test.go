@@ -28,6 +28,18 @@ func TestPredicates(t *testing.T) {
 		matches   bool
 	}{
 		{
+			name:      "any_matches",
+			predicate: Any(),
+			update:    telego.Update{},
+			matches:   true,
+		},
+		{
+			name:      "none_not_matches",
+			predicate: None(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
 			name: "and_matches",
 			predicate: And(
 				func(update telego.Update) bool { return true },
