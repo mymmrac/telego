@@ -25,6 +25,7 @@ func (h conditionalHandler) match(update telego.Update) bool {
 
 // HandlerGroup represents a group of handlers, middlewares and child groups
 type HandlerGroup struct {
+	lock        sync.RWMutex
 	predicates  []Predicate
 	middlewares []Middleware
 	groups      []*HandlerGroup
@@ -45,7 +46,9 @@ func (h *HandlerGroup) match(update telego.Update) bool {
 // processUpdate checks all group predicates, runs middlewares, checks handler predicates,
 // tries to process update in first matched handler
 func (h *HandlerGroup) processUpdate(bot *telego.Bot, update telego.Update) {
+	h.lock.RLock()
 	_ = h.processUpdateWithMiddlewares(bot, update, h.middlewares)
+	h.lock.RUnlock()
 }
 
 func (h *HandlerGroup) processUpdateWithMiddlewares(
@@ -119,10 +122,12 @@ func (h *HandlerGroup) Handle(handler Handler, predicates ...Predicate) {
 		}
 	}
 
+	h.lock.Lock()
 	h.handlers = append(h.handlers, conditionalHandler{
 		handler:    handler,
 		predicates: predicates,
 	})
+	h.lock.Unlock()
 }
 
 // Group creates a new group of handlers and middlewares from the parent group
@@ -139,7 +144,10 @@ func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
 	group := &HandlerGroup{
 		predicates: predicates,
 	}
+
+	h.lock.Lock()
 	h.groups = append(h.groups, group)
+	h.lock.Unlock()
 
 	return group
 }
@@ -157,5 +165,7 @@ func (h *HandlerGroup) Use(middlewares ...Middleware) {
 		}
 	}
 
+	h.lock.Lock()
 	h.middlewares = append(h.middlewares, middlewares...)
+	h.lock.Unlock()
 }

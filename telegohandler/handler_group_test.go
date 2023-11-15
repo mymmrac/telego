@@ -272,3 +272,45 @@ func TestHandlerGroup_processUpdate(t *testing.T) {
 	assert.Equal(t, []int{1, 9, 11, 20, 14, 15, 19, 18, 16, 17, 13, 2, 5, 4, 3, 6, 12, 10}, order)
 	lock.Unlock()
 }
+
+func TestHandlerGroup_parallel(t *testing.T) {
+	gr := &HandlerGroup{}
+
+	wait := sync.WaitGroup{}
+	wait.Add(1)
+
+	h := func(bot *telego.Bot, update telego.Update) {}
+	p := func(update telego.Update) bool { return false }
+	m := func(bot *telego.Bot, update telego.Update, next Handler) { next(bot, update) }
+
+	wg := sync.WaitGroup{}
+
+	n := 64
+	for i := 0; i < n; i++ {
+		wg.Add(1)
+		go func() {
+			wait.Wait()
+			gr.Handle(h, p)
+			wg.Done()
+		}()
+		wg.Add(1)
+		go func() {
+			wait.Wait()
+			gr.Group(p)
+			wg.Done()
+		}()
+		wg.Add(1)
+		go func() {
+			wait.Wait()
+			gr.Use(m)
+			wg.Done()
+		}()
+	}
+
+	wait.Done()
+	wg.Wait()
+
+	assert.Len(t, gr.handlers, n)
+	assert.Len(t, gr.groups, n)
+	assert.Len(t, gr.middlewares, n)
+}
