@@ -332,6 +332,13 @@ type Chat struct {
 	Location *ChatLocation `json:"location,omitempty"`
 }
 
+// ChatID returns [ChatID] of this chat
+func (c Chat) ChatID() ChatID {
+	return ChatID{
+		ID: c.ID,
+	}
+}
+
 // Chat types
 const (
 	ChatTypeSender     = "sender"

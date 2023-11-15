@@ -386,6 +386,13 @@ func Test_menuButtonData_UnmarshalJSON(t *testing.T) {
 	}
 }
 
+func TestChat_ChatID(t *testing.T) {
+	chat := Chat{ID: 1}
+	chatID := chat.ChatID()
+	assert.Empty(t, chatID.Username)
+	assert.Equal(t, chat.ID, chatID.ID)
+}
+
 func TestChatID_MarshalJSON(t *testing.T) {
 	tests := []struct {
 		name     string
