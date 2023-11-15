@@ -302,6 +302,11 @@ func TestReplyKeyboardRemove(t *testing.T) {
 	assert.True(t, r.RemoveKeyboard)
 }
 
+func TestWebAppInfo(t *testing.T) {
+	w := WebAppInfo(text1)
+	assert.Equal(t, text1, w.URL)
+}
+
 func TestForceReply(t *testing.T) {
 	f := ForceReply()
 	assert.True(t, f.ForceReply)

@@ -152,6 +152,13 @@ func ReplyKeyboardRemove() *telego.ReplyKeyboardRemove {
 	}
 }
 
+// WebAppInfo creates telego.WebAppInfo with required fields
+func WebAppInfo(url string) *telego.WebAppInfo {
+	return &telego.WebAppInfo{
+		URL: url,
+	}
+}
+
 // ForceReply creates telego.ForceReply with required fields
 func ForceReply() *telego.ForceReply {
 	return &telego.ForceReply{
