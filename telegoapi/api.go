@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/goccy/go-json"
+	"github.com/mymmrac/telego/internal/json"
 )
 
 const (

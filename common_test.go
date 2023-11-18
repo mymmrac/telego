@@ -5,10 +5,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/mymmrac/telego/internal/json"
 	ta "github.com/mymmrac/telego/telegoapi"
 	mockapi "github.com/mymmrac/telego/telegoapi/mock"
 )

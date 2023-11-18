@@ -9,7 +9,7 @@ import (
 	"mime/multipart"
 	"reflect"
 
-	"github.com/goccy/go-json"
+	"github.com/mymmrac/telego/internal/json"
 )
 
 // DefaultConstructor default implementation of RequestConstructor
