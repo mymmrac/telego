@@ -14,7 +14,7 @@ import (
 const defaultWebhookUpdateChanBuffer = 128
 
 // WebhookHandler user handler for incoming updates
-type WebhookHandler func(data []byte) error
+type WebhookHandler func(ctx context.Context, data []byte) error
 
 // WebhookServer represents generic webhook server
 type WebhookServer interface {
@@ -91,21 +91,21 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 		return nil, errors.New("telego: webhook context already exists")
 	}
 
-	ctx, err := b.createWebhookContext(options)
+	webhookCtx, err := b.createWebhookContext(options)
 	if err != nil {
 		return nil, err
 	}
 
-	ctx.runningLock.Lock()
-	defer ctx.runningLock.Unlock()
+	webhookCtx.runningLock.Lock()
+	defer webhookCtx.runningLock.Unlock()
 
-	b.webhookContext = ctx
-	ctx.stop = make(chan struct{})
-	ctx.configured = true
+	b.webhookContext = webhookCtx
+	webhookCtx.stop = make(chan struct{})
+	webhookCtx.configured = true
 
-	updatesChan := make(chan Update, ctx.updateChanBuffer)
+	updatesChan := make(chan Update, webhookCtx.updateChanBuffer)
 
-	err = ctx.server.RegisterHandler(path, func(data []byte) error {
+	err = webhookCtx.server.RegisterHandler(path, func(ctx context.Context, data []byte) error {
 		b.log.Debugf("Webhook request with data: %s", string(data))
 
 		var update Update
@@ -116,12 +116,12 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 		}
 
 		select {
-		case <-ctx.stop:
+		case <-webhookCtx.stop:
 			return fmt.Errorf("telego: webhook stopped")
-		case <-ctx.ctx.Done():
-			return fmt.Errorf("telego: %w", ctx.ctx.Err())
+		case <-webhookCtx.ctx.Done():
+			return fmt.Errorf("telego: %w", webhookCtx.ctx.Err())
 		default:
-			if safeSend(updatesChan, update.WithContext(ctx.ctx)) {
+			if safeSend(updatesChan, update.WithContext(ctx)) {
 				return fmt.Errorf("telego: webhook stopped")
 			}
 			return nil
@@ -133,8 +133,8 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 
 	go func() {
 		select {
-		case <-ctx.stop:
-		case <-ctx.ctx.Done():
+		case <-webhookCtx.stop:
+		case <-webhookCtx.ctx.Done():
 		}
 		close(updatesChan)
 	}()

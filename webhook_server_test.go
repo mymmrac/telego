@@ -32,7 +32,7 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		require.NoError(t, err)
 	}()
 
-	err := s.RegisterHandler("/", func(data []byte) error {
+	err := s.RegisterHandler("/", func(ctx context.Context, data []byte) error {
 		if len(data) == 0 {
 			return nil
 		}
@@ -119,7 +119,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 			require.NoError(t, err)
 		}()
 
-		err := s.RegisterHandler("/", func(data []byte) error {
+		err := s.RegisterHandler("/", func(ctx context.Context, data []byte) error {
 			if len(data) == 0 {
 				return nil
 			}

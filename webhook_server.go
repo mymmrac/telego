@@ -13,6 +13,7 @@ import (
 
 // WebhookSecretTokenHeader represents secret token header name, see [SetWebhookParams.SecretToken] for more details
 const WebhookSecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token" //nolint:gosec
+const HTTPWebhookRequestContextKey = "github.com/mymmrac/telego.http_webhook_request"
 
 // FastHTTPWebhookServer represents fasthttp implementation of [WebhookServer].
 // The Server and Router are required fields, optional Logger and SecretToken can be provided.
@@ -49,7 +50,7 @@ func (f FastHTTPWebhookServer) RegisterHandler(path string, handler WebhookHandl
 			}
 		}
 
-		if err := handler(ctx.PostBody()); err != nil {
+		if err := handler(ctx, ctx.PostBody()); err != nil {
 			if f.Logger != nil {
 				f.Logger.Errorf("Webhook handler: %s", err)
 			}
@@ -102,13 +103,16 @@ func (h HTTPWebhookServer) RegisterHandler(path string, handler WebhookHandler) 
 			return
 		}
 
+		ctx := context.Background()
+		ctx = context.WithValue(ctx, HTTPWebhookRequestContextKey, request)
+
 		data, err := h.readData(request)
 		if err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		if err = handler(data); err != nil {
+		if err = handler(ctx, data); err != nil {
 			if h.Logger != nil {
 				h.Logger.Errorf("Webhook handler: %s", err)
 			}
