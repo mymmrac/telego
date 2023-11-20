@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/fasthttp/router v1.4.21
 	github.com/mymmrac/telego v0.27.1
-	github.com/valyala/fasthttp v1.50.0
+	github.com/valyala/fasthttp v1.51.0
 	golang.ngrok.com/ngrok v1.5.1
 )
 
@@ -16,7 +16,7 @@ require (
 	github.com/inconshreveable/log15 v3.0.0-testing.3+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
-	github.com/klauspost/compress v1.16.5 // indirect
+	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
