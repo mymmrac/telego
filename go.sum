@@ -15,8 +15,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/fasthttp/router v1.4.21 h1:Ysgck9aZwaovqxsfhv7nPx9EgsYvB7t3nthrBMQoeIg=
-github.com/fasthttp/router v1.4.21/go.mod h1:wtOlZHmOSGD048li7Nkuhw+ov40rr0tY2+IjT+mN9p4=
+github.com/fasthttp/router v1.4.22 h1:qwWcYBbndVDwts4dKaz+A2ehsnbKilmiP6pUhXBfYKo=
+github.com/fasthttp/router v1.4.22/go.mod h1:KeMvHLqhlB9vyDWD5TSvTccl9qeWrjSSiTJrJALHKV0=
 github.com/goccy/go-json v0.10.2 h1:CrxCmQqYDkv1z7lO7Wbh2HN93uovUHgrECaO5ZrCXAU=
 github.com/goccy/go-json v0.10.2/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
