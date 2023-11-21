@@ -44,6 +44,28 @@ tasks:
     generates:
       - bin/cover.out
 
+  test:all-tags:
+    desc: "Run tests for all tags"
+    cmds:
+      - mkdir -p bin
+      - |
+        go test -coverprofile bin/cover.out \
+          $(go list ./... | grep -v /examples | grep -v /internal | grep -v /mock)
+      - |
+        go test -tags sonic -coverprofile bin/cover-sonic.out \
+          $(go list ./... | grep -v /examples | grep -v /internal | grep -v /mock)
+      - |
+        go test -tags stdjson -coverprofile bin/cover-stdjson.out \
+          $(go list ./... | grep -v /examples | grep -v /internal | grep -v /mock)
+    sources:
+      - ./**/*.go
+      - go.mod
+      - go.sum
+    generates:
+      - bin/cover.out
+      - bin/cover-sonic.out
+      - bin/cover-stdjson.out
+
   test:cover:
     desc: "Run tests & show coverage"
     deps:
