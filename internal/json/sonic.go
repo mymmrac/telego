@@ -1,4 +1,4 @@
-//go:build sonic && avx && (linux || windows || darwin) && amd64
+//go:build sonic && !stdjson
 
 package json
 
