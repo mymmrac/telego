@@ -1,5 +1,4 @@
 //go:build sonic && amd64 && avx512 && !stdjson
-// +build sonic,amd64,avx512,!stdjson
 
 package json
 
