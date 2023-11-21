@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/goccy/go-json"
+	"github.com/mymmrac/telego/internal/json"
 	"github.com/valyala/fasthttp"
 )
 

@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/goccy/go-json"
-
+	"github.com/mymmrac/telego/internal/json"
 	"github.com/mymmrac/telego/telegoapi"
 )
 

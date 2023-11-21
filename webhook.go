@@ -7,8 +7,9 @@ import (
 	"sync"
 
 	"github.com/fasthttp/router"
-	"github.com/goccy/go-json"
 	"github.com/valyala/fasthttp"
+
+	"github.com/mymmrac/telego/internal/json"
 )
 
 const defaultWebhookUpdateChanBuffer = 128

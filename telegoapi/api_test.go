@@ -4,8 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/mymmrac/telego/internal/json"
 )
 
 func Test_Response_String_and_Error_Error(t *testing.T) {
