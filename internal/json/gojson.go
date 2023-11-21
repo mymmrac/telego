@@ -1,4 +1,4 @@
-//go:build !(sonic && amd64 && avx512) && !stdjson
+//go:build !(sonic && avx && (linux || windows || darwin) && amd64) && !stdjson
 
 package json
 
