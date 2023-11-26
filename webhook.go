@@ -15,6 +15,10 @@ import (
 const defaultWebhookUpdateChanBuffer = 128
 
 // WebhookHandler user handler for incoming updates, context will be passed into update
+//
+// Warning: Common approach of HTTP servers is to cancel context once request connection is closed,
+// but in webhook handler update is sent to the channel and not processed in request lifetime,
+// so remember to wrap context in [context.WithoutCancel] as webhook helper will not do that automatically
 type WebhookHandler func(ctx context.Context, data []byte) error
 
 // WebhookServer represents generic webhook server
