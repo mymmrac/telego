@@ -49,7 +49,7 @@ func (f FastHTTPWebhookServer) RegisterHandler(path string, handler WebhookHandl
 			}
 		}
 
-		if err := handler(ctx.PostBody()); err != nil {
+		if err := handler(context.WithoutCancel(ctx), ctx.PostBody()); err != nil {
 			if f.Logger != nil {
 				f.Logger.Errorf("Webhook handler: %s", err)
 			}
@@ -108,7 +108,7 @@ func (h HTTPWebhookServer) RegisterHandler(path string, handler WebhookHandler) 
 			return
 		}
 
-		if err = handler(data); err != nil {
+		if err = handler(context.WithoutCancel(request.Context()), data); err != nil {
 			if h.Logger != nil {
 				h.Logger.Errorf("Webhook handler: %s", err)
 			}
@@ -168,7 +168,7 @@ func (h HTTPWebhookServer) readData(request *http.Request) ([]byte, error) {
 }
 
 // MultiBotWebhookServer represents multi bot implementation of [WebhookServer],
-// suitable for running multiple bots from single server
+// suitable for running multiple bots from a single server
 type MultiBotWebhookServer struct {
 	Server WebhookServer
 
@@ -221,7 +221,7 @@ func (n NoOpWebhookServer) RegisterHandler(path string, handler WebhookHandler) 
 }
 
 // FuncWebhookServer represents func implementation of [WebhookServer],
-// uses provided functions instead of server's methods in order to override behavior if any of function are not
+// uses provided functions instead of server's methods to override behavior if any of function are not
 // provided respective server's methods will be used
 type FuncWebhookServer struct {
 	Server              WebhookServer
