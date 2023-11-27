@@ -65,7 +65,8 @@ func TestTypesConstants(t *testing.T) {
 			WebAppHash,
 		},
 		{
-			LoginWidgetID, LoginWidgetFirstName, LoginWidgetLastName, LoginWidgetUsername, LoginWidgetPhotoURL, LoginWidgetAuthDate, LoginWidgetHash,
+			LoginWidgetID, LoginWidgetFirstName, LoginWidgetLastName, LoginWidgetUsername, LoginWidgetPhotoURL,
+			LoginWidgetAuthDate, LoginWidgetHash,
 		},
 	}
 
