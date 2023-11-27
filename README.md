@@ -32,8 +32,8 @@ all documentation from Telegram.
 
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
-> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http` by default (can be changed)
-> and [go-json](https://github.com/goccy/go-json) instead of `encoding/json`.
+> Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http`
+> and [go-json](https://github.com/goccy/go-json) instead of `encoding/json` by default (both can be changed).
 
 ### :clipboard: Table Of Content
 
@@ -47,6 +47,7 @@ For more detailed documentation, see docs at [telego.pixelbox.dev](https://teleg
     - [:soap: Utility methods](#soap-utility-methods)
     - [:mechanical_arm: Helper `With...` methods](#mechanical_arm-helper-with-methods)
     - [:sun_behind_large_cloud: Bot handlers](#sun_behind_large_cloud-bot-handlers)
+    - [:gear: Build configuration](#gear-build-configuration)
 - [:art: Contribution](#art-contribution)
 - [:star: Stargazers over time](#star-stargazers-over-time)
 - [:closed_lock_with_key: License](#closed_lock_with_key-license)
@@ -598,6 +599,20 @@ func main() {
 }
 
 ```
+
+### :gear: Build configuration
+
+[▲ Go Up ▲](#telego--go-telegram-bot-api)
+
+Telego supports multiple build configurations via Go's build tags
+(right now only to change JSON encoding/decoding library):
+
+- No tags - use [goccy/go-json](https://github.com/goccy/go-json)
+- `sonic` - use [bytedance/sonic](https://github.com/bytedance/sonic)
+- `stdjson` - use `encoding/json`
+
+> Note: Use `sonic` only on supported platforms as it has its own limitations, more
+> [here](https://github.com/bytedance/sonic?tab=readme-ov-file#requirement).
 
 ## :art: Contribution
 
