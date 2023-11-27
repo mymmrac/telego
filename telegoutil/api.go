@@ -69,6 +69,7 @@ const (
 
 // ValidateWebAppData validates the integrity of value provided by `window.Telegram.WebApp.initData` from web app and
 // returns url.Values containing all fields that were provided
+// More info: https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
 func ValidateWebAppData(token string, data string) (url.Values, error) {
 	appData, err := url.ParseQuery(data)
 	if err != nil {
@@ -92,6 +93,46 @@ func ValidateWebAppData(token string, data string) (url.Values, error) {
 	}
 
 	appData.Add(WebAppHash, hash)
+	return appData, nil
+}
+
+// Login widget data query names
+const (
+	LoginWidgetID        = "id"
+	LoginWidgetFirstName = "first_name"
+	LoginWidgetLastName  = "last_name"
+	LoginWidgetUsername  = "username"
+	LoginWidgetPhotoURL  = "photo_url"
+	LoginWidgetAuthDate  = "auth_date"
+	LoginWidgetHash      = "hash"
+)
+
+// ValidateLoginWidgetData validates the integrity of value provided by Telegram Login Widget and
+// returns url.Values containing all fields that were provided
+// More info: https://core.telegram.org/widgets/login#checking-authorization
+func ValidateLoginWidgetData(token string, data string) (url.Values, error) {
+	appData, err := url.ParseQuery(data)
+	if err != nil {
+		return nil, errors.New("telego: parse query: bad data")
+	}
+
+	hash := appData.Get(LoginWidgetHash)
+	if hash == "" {
+		return nil, errors.New("telego: no hash found")
+	}
+
+	appData.Del(LoginWidgetHash)
+
+	// Can't return error because [url.Values.Encode] method always inescapable
+	//nolint:errcheck
+	appDataToCheck, _ := url.QueryUnescape(strings.ReplaceAll(appData.Encode(), "&", "\n"))
+
+	secretKey := sha256.Sum256([]byte(token))
+	if hex.EncodeToString(hmacHash([]byte(appDataToCheck), secretKey[:])) != hash {
+		return nil, errors.New("telego: invalid hash")
+	}
+
+	appData.Add(LoginWidgetHash, hash)
 	return appData, nil
 }
 

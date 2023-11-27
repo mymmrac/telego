@@ -64,6 +64,9 @@ func TestTypesConstants(t *testing.T) {
 			WebAppQueryID, WebAppUser, WebAppReceiver, WebAppChat, WebAppStartParam, WebAppCanSendAfter, WebAppAuthDate,
 			WebAppHash,
 		},
+		{
+			LoginWidgetID, LoginWidgetFirstName, LoginWidgetLastName, LoginWidgetUsername, LoginWidgetPhotoURL, LoginWidgetAuthDate, LoginWidgetHash,
+		},
 	}
 
 	for _, tt := range tests {
@@ -124,6 +127,64 @@ func TestValidateWebAppData(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			values, err := ValidateWebAppData(tt.token, tt.data)
+			if !tt.wantErr(t, err) {
+				return
+			}
+			assert.Equal(t, tt.values, values)
+		})
+	}
+}
+
+func TestValidateLoginWidgetData(t *testing.T) {
+	tests := []struct {
+		name    string
+		token   string
+		data    string
+		values  url.Values
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name:  "success",
+			token: "token",
+			data:  "hash=22414c1fdbad44e8156276e1c2a99b332daf5218a65731c745108e34d82c2348&ok=true",
+			values: map[string][]string{
+				"hash": {"22414c1fdbad44e8156276e1c2a99b332daf5218a65731c745108e34d82c2348"},
+				"ok":   {"true"},
+			},
+			wantErr: assert.NoError,
+		},
+		{
+			name:    "error_invalid_query",
+			token:   "",
+			data:    "%_",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+		{
+			name:    "error_empty_hash",
+			token:   "",
+			data:    "hash=",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+		{
+			name:    "error_no_hash",
+			token:   "",
+			data:    "abc=%a2",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+		{
+			name:    "error_invalid_hash",
+			token:   "",
+			data:    "hash=test",
+			values:  nil,
+			wantErr: assert.Error,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			values, err := ValidateLoginWidgetData(tt.token, tt.data)
 			if !tt.wantErr(t, err) {
 				return
 			}
