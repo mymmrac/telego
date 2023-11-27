@@ -89,7 +89,7 @@ func (h *BotHandler) Start() {
 			return
 		case update, ok := <-h.updates:
 			if !ok {
-				h.Stop()
+				go h.Stop()
 				return
 			}
 
@@ -123,8 +123,8 @@ func (h *BotHandler) IsRunning() bool {
 	return h.running
 }
 
-// Stop stops handling of updates, will block until all updates has been processes or on timeout. If timeout set to 0,
-// bot handler will not wait for all handlers to complete processing.
+// Stop stops handling of updates, will block until all updates has been processes or on timeout.
+// If timeout set to 0 (default), bot handler will stop immediately.
 // Note: Calling [BotHandler.Stop] method multiple times does nothing. Calling before [BotHandler.Start] method does
 // nothing.
 func (h *BotHandler) Stop() {
@@ -136,15 +136,24 @@ func (h *BotHandler) Stop() {
 
 	close(h.stop)
 
+	if h.stopTimeout <= 0 {
+		h.running = false
+		return
+	}
+
 	wait := make(chan struct{})
 	go func() {
 		h.handledUpdates.Wait()
-		wait <- struct{}{}
+		close(wait)
 	}()
 
+	waiter := time.NewTimer(h.stopTimeout)
 	select {
-	case <-time.After(h.stopTimeout):
+	case <-waiter.C:
+		// Wait for timeout
 	case <-wait:
+		// Wait for handler to complete
+		waiter.Stop()
 	}
 
 	h.running = false
