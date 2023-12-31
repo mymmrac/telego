@@ -210,12 +210,13 @@ func writeTypes(file *os.File, types tgTypes, currentTypes string) {
 	data.WriteString(`package telego
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
 
 	"github.com/mymmrac/telego/internal/json"
-	ta "github.com/mymmrac/telego/telegoapi"
+	"github.com/mymmrac/telego/telegoapi"
 )
 `)
 
@@ -275,6 +276,9 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if field.name == "UserId" && field.typ == "int" {
 		field.typ = "int64"
 	}
+	if field.name == "UserIds" && field.typ == "[]int" {
+		field.typ = "[]int64"
+	}
 
 	if field.name == "Media" && field.typ == "string" {
 		field.typ = "InputFile"
@@ -285,7 +289,7 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	}
 
 	if typeName == "ChatPermissions" ||
-		((typeName == "KeyboardButtonRequestUser" || typeName == "KeyboardButtonRequestChat") &&
+		((typeName == "KeyboardButtonRequestUsers" || typeName == "KeyboardButtonRequestChat") &&
 			field.typ == "bool" && field.optional) {
 		field.typ = "*bool"
 	}

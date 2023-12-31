@@ -50,7 +50,7 @@ var typeStructsSetters = []string{
 	"KeyboardButton",
 	"InlineKeyboardButton",
 	"MenuButtonWebApp",
-	"KeyboardButtonRequestUser",
+	"KeyboardButtonRequestUsers",
 	"KeyboardButtonRequestChat",
 
 	"InlineQueryResultCachedAudio",
