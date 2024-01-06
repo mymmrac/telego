@@ -32,6 +32,17 @@ type Update struct {
 	// EditedChannelPost - Optional. New version of a channel post that is known to the bot and was edited
 	EditedChannelPost *Message `json:"edited_channel_post,omitempty"`
 
+	// MessageReaction - Optional. A reaction to a message was changed by a user. The bot must be an
+	// administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to
+	// receive these updates. The update isn't received for reactions set by bots.
+	MessageReaction *MessageReactionUpdated `json:"message_reaction,omitempty"`
+
+	// MessageReactionCount - Optional. Reactions to a message with anonymous reactions were changed. The bot
+	// must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of
+	// allowed_updates to receive these updates. The updates are grouped and can be sent with delay up to a few
+	// minutes.
+	MessageReactionCount *MessageReactionCountUpdated `json:"message_reaction_count,omitempty"`
+
 	// InlineQuery - Optional. New incoming inline (https://core.telegram.org/bots/api#inline-mode) query
 	InlineQuery *InlineQuery `json:"inline_query,omitempty"`
 
@@ -69,6 +80,14 @@ type Update struct {
 	// ChatJoinRequest - Optional. A request to join the chat has been sent. The bot must have the
 	// can_invite_users administrator right in the chat to receive these updates.
 	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
+
+	// ChatBoost - Optional. A chat boost was added or changed. The bot must be an administrator in the chat to
+	// receive these updates.
+	ChatBoost *ChatBoostUpdated `json:"chat_boost,omitempty"`
+
+	// RemovedChatBoost - Optional. A boost was removed from a chat. The bot must be an administrator in the
+	// chat to receive these updates.
+	RemovedChatBoost *ChatBoostRemoved `json:"removed_chat_boost,omitempty"`
 
 	// ctx - Internal context value can be retrieved using [Update.Context] and set by [Update.WithContext].
 	// Value can't be cloned; thus, after calling [Update.Clone] or [Update.CloneSafe] ctx will be the same as in the
@@ -244,8 +263,32 @@ type Chat struct {
 	// supergroups and channels. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	ActiveUsernames []string `json:"active_usernames,omitempty"`
 
-	// EmojiStatusCustomEmojiID - Optional. Custom emoji identifier of emoji status of the other party in a
-	// private chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// AvailableReactions - Optional. List of available reactions allowed in the chat. If omitted, then all
+	// emoji reactions (https://core.telegram.org/bots/api#reactiontypeemoji) are allowed. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	AvailableReactions []ReactionType `json:"available_reactions,omitempty"`
+
+	// AccentColorID - Optional. Identifier of the accent color for the chat name and backgrounds of the chat
+	// photo, reply header, and link preview. See accent colors (https://core.telegram.org/bots/api#accent-colors)
+	// for more details. Returned only in getChat (https://core.telegram.org/bots/api#getchat). Always returned in
+	// getChat (https://core.telegram.org/bots/api#getchat).
+	AccentColorID int `json:"accent_color_id,omitempty"`
+
+	// BackgroundCustomEmojiID - Optional. Custom emoji identifier of emoji chosen by the chat for the reply
+	// header and link preview background. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	BackgroundCustomEmojiID string `json:"background_custom_emoji_id,omitempty"`
+
+	// ProfileAccentColorID - Optional. Identifier of the accent color for the chat's profile background. See
+	// profile accent colors (https://core.telegram.org/bots/api#profile-accent-colors) for more details. Returned
+	// only in getChat (https://core.telegram.org/bots/api#getchat).
+	ProfileAccentColorID int `json:"profile_accent_color_id,omitempty"`
+
+	// ProfileBackgroundCustomEmojiID - Optional. Custom emoji identifier of the emoji chosen by the chat for
+	// its profile background. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	ProfileBackgroundCustomEmojiID string `json:"profile_background_custom_emoji_id,omitempty"`
+
+	// EmojiStatusCustomEmojiID - Optional. Custom emoji identifier of the emoji status of the chat or the other
+	// party in a private chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
 
 	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status of the other party in a private
@@ -311,6 +354,10 @@ type Chat struct {
 	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	HasProtectedContent bool `json:"has_protected_content,omitempty"`
 
+	// HasVisibleHistory - Optional. True, if new chat members will have access to old messages; available only
+	// to chat administrators. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	HasVisibleHistory bool `json:"has_visible_history,omitempty"`
+
 	// StickerSetName - Optional. For supergroups, name of group sticker set. Returned only in getChat
 	// (https://core.telegram.org/bots/api#getchat).
 	StickerSetName string `json:"sticker_set_name,omitempty"`
@@ -366,33 +413,14 @@ type Message struct {
 	// contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
 	SenderChat *Chat `json:"sender_chat,omitempty"`
 
-	// Date - Date the message was sent in Unix time
+	// Date - Date the message was sent in Unix time. It is always a positive number, representing a valid date.
 	Date int64 `json:"date"`
 
-	// Chat - Conversation the message belongs to
+	// Chat - Chat the message belongs to
 	Chat Chat `json:"chat"`
 
-	// ForwardFrom - Optional. For forwarded messages, sender of the original message
-	ForwardFrom *User `json:"forward_from,omitempty"`
-
-	// ForwardFromChat - Optional. For messages forwarded from channels or from anonymous administrators,
-	// information about the original sender chat
-	ForwardFromChat *Chat `json:"forward_from_chat,omitempty"`
-
-	// ForwardFromMessageID - Optional. For messages forwarded from channels, identifier of the original message
-	// in the channel
-	ForwardFromMessageID int `json:"forward_from_message_id,omitempty"`
-
-	// ForwardSignature - Optional. For forwarded messages that were originally sent in channels or by an
-	// anonymous chat administrator, signature of the message sender if present
-	ForwardSignature string `json:"forward_signature,omitempty"`
-
-	// ForwardSenderName - Optional. Sender's name for messages forwarded from users who disallow adding a link
-	// to their account in forwarded messages
-	ForwardSenderName string `json:"forward_sender_name,omitempty"`
-
-	// ForwardDate - Optional. For forwarded messages, date the original message was sent in Unix time
-	ForwardDate int64 `json:"forward_date,omitempty"`
+	// ForwardOrigin - Optional. Information about the original message for forwarded messages
+	ForwardOrigin *MessageOrigin `json:"forward_origin,omitempty"`
 
 	// IsTopicMessage - Optional. True, if the message is sent to a forum topic
 	IsTopicMessage bool `json:"is_topic_message,omitempty"`
@@ -401,9 +429,17 @@ type Message struct {
 	// the connected discussion group
 	IsAutomaticForward bool `json:"is_automatic_forward,omitempty"`
 
-	// ReplyToMessage - Optional. For replies, the original message. Note that the Message object in this field
-	// will not contain further reply_to_message fields even if it itself is a reply.
+	// ReplyToMessage - Optional. For replies in the same chat and message thread, the original message. Note
+	// that the Message object in this field will not contain further reply_to_message fields even if it itself is a
+	// reply.
 	ReplyToMessage *Message `json:"reply_to_message,omitempty"`
+
+	// ExternalReply - Optional. Information about the message that is being replied to, which may come from
+	// another chat or forum topic
+	ExternalReply *ExternalReplyInfo `json:"external_reply,omitempty"`
+
+	// Quote - Optional. For replies that quote part of the original message, the quoted part of the message
+	Quote *TextQuote `json:"quote,omitempty"`
 
 	// ViaBot - Optional. Bot through which the message was sent
 	ViaBot *User `json:"via_bot,omitempty"`
@@ -427,6 +463,10 @@ type Message struct {
 	// Entities - Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that
 	// appear in the text
 	Entities []MessageEntity `json:"entities,omitempty"`
+
+	// LinkPreviewOptions - Optional. Options used for link preview generation for the message, if it is a text
+	// message and link preview options were changed
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
 	// Animation - Optional. Message is an animation, information about the animation. For backward
 	// compatibility, when this field is set, the document field will also be set
@@ -534,8 +574,8 @@ type Message struct {
 	MigrateFromChatID int64 `json:"migrate_from_chat_id,omitempty"`
 
 	// PinnedMessage - Optional. Specified message was pinned. Note that the Message object in this field will
-	// not contain further reply_to_message fields even if it is itself a reply.
-	PinnedMessage *Message `json:"pinned_message,omitempty"`
+	// not contain further reply_to_message fields even if it itself is a reply.
+	PinnedMessage *MaybeInaccessibleMessage `json:"pinned_message,omitempty"`
 
 	// Invoice - Optional. Message is an invoice for a payment (https://core.telegram.org/bots/api#payments),
 	// information about the invoice. More about payments » (https://core.telegram.org/bots/api#payments)
@@ -545,8 +585,8 @@ type Message struct {
 	// the payment. More about payments » (https://core.telegram.org/bots/api#payments)
 	SuccessfulPayment *SuccessfulPayment `json:"successful_payment,omitempty"`
 
-	// UserShared - Optional. Service message: a user was shared with the bot
-	UserShared *UserShared `json:"user_shared,omitempty"`
+	// UsersShared - Optional. Service message: users were shared with the bot
+	UsersShared *UsersShared `json:"users_shared,omitempty"`
 
 	// ChatShared - Optional. Service message: a chat was shared with the bot
 	ChatShared *ChatShared `json:"chat_shared,omitempty"`
@@ -585,6 +625,18 @@ type Message struct {
 	// GeneralForumTopicUnhidden - Optional. Service message: the 'General' forum topic unhidden
 	GeneralForumTopicUnhidden *GeneralForumTopicUnhidden `json:"general_forum_topic_unhidden,omitempty"`
 
+	// GiveawayCreated - Optional. Service message: a scheduled giveaway was created
+	GiveawayCreated *GiveawayCreated `json:"giveaway_created,omitempty"`
+
+	// Giveaway - Optional. The message is a scheduled giveaway message
+	Giveaway *Giveaway `json:"giveaway,omitempty"`
+
+	// GiveawayWinners - Optional. A giveaway with public winners was completed
+	GiveawayWinners *GiveawayWinners `json:"giveaway_winners,omitempty"`
+
+	// GiveawayCompleted - Optional. Service message: a giveaway without public winners was completed
+	GiveawayCompleted *GiveawayCompleted `json:"giveaway_completed,omitempty"`
+
 	// VideoChatScheduled - Optional. Service message: video chat scheduled
 	VideoChatScheduled *VideoChatScheduled `json:"video_chat_scheduled,omitempty"`
 
@@ -611,6 +663,25 @@ type MessageID struct {
 	MessageID int `json:"message_id"`
 }
 
+// InaccessibleMessage - This object describes a message that was deleted or is otherwise inaccessible to the
+// bot.
+type InaccessibleMessage struct {
+	// Chat - Chat the message belonged to
+	Chat Chat `json:"chat"`
+
+	// MessageID - Unique message identifier inside the chat
+	MessageID int `json:"message_id"`
+
+	// Date - Always 0. The field can be used to differentiate regular and inaccessible messages.
+	Date int64 `json:"date"`
+}
+
+// MaybeInaccessibleMessage - This object describes a message that can be inaccessible to the bot. It can be
+// one of
+// Message (https://core.telegram.org/bots/api#message)
+// InaccessibleMessage (https://core.telegram.org/bots/api#inaccessiblemessage)
+type MaybeInaccessibleMessage struct{} // FIXME
+
 // MessageEntity - This object represents one special entity in a text message. For example, hashtags,
 // usernames, URLs, etc.
 type MessageEntity struct {
@@ -618,9 +689,9 @@ type MessageEntity struct {
 	// “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email”
 	// (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic”
 	// (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler”
-	// (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable
-	// text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions)),
-	// “custom_emoji” (for inline custom emoji stickers)
+	// (spoiler message), “blockquote” (block quotation), “code” (monowidth string), “pre” (monowidth
+	// block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames
+	// (https://telegram.org/blog/edit#new-mentions)), “custom_emoji” (for inline custom emoji stickers)
 	Type string `json:"type"`
 
 	// Offset - Offset in UTF-16 code units (https://core.telegram.org/api/entities#entity-length) to the start
@@ -665,6 +736,201 @@ const (
 	EntityTypeTextMention   = "text_mention"
 	EntityTypeCustomEmoji   = "custom_emoji"
 )
+
+// TextQuote - This object contains information about the quoted part of a message that is replied to by the
+// given message.
+type TextQuote struct {
+	// Text - Text of the quoted part of a message that is replied to by the given message
+	Text string `json:"text"`
+
+	// Entities - Optional. Special entities that appear in the quote. Currently, only bold, italic, underline,
+	// strikethrough, spoiler, and custom_emoji entities are kept in quotes.
+	Entities []MessageEntity `json:"entities,omitempty"`
+
+	// Position - Approximate quote position in the original message in UTF-16 code units as specified by the
+	// sender
+	Position int `json:"position"`
+
+	// IsManual - Optional. True, if the quote was chosen manually by the message sender. Otherwise, the quote
+	// was added automatically by the server.
+	IsManual bool `json:"is_manual,omitempty"`
+}
+
+// ExternalReplyInfo - This object contains information about a message that is being replied to, which may
+// come from another chat or forum topic.
+type ExternalReplyInfo struct {
+	// Origin - Origin of the message replied to by the given message
+	Origin MessageOrigin `json:"origin"`
+
+	// Chat - Optional. Chat the original message belongs to. Available only if the chat is a supergroup or a
+	// channel.
+	Chat *Chat `json:"chat,omitempty"`
+
+	// MessageID - Optional. Unique message identifier inside the original chat. Available only if the original
+	// chat is a supergroup or a channel.
+	MessageID int `json:"message_id,omitempty"`
+
+	// LinkPreviewOptions - Optional. Options used for link preview generation for the original message, if it
+	// is a text message
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
+
+	// Animation - Optional. Message is an animation, information about the animation
+	Animation *Animation `json:"animation,omitempty"`
+
+	// Audio - Optional. Message is an audio file, information about the file
+	Audio *Audio `json:"audio,omitempty"`
+
+	// Document - Optional. Message is a general file, information about the file
+	Document *Document `json:"document,omitempty"`
+
+	// Photo - Optional. Message is a photo, available sizes of the photo
+	Photo []PhotoSize `json:"photo,omitempty"`
+
+	// Sticker - Optional. Message is a sticker, information about the sticker
+	Sticker *Sticker `json:"sticker,omitempty"`
+
+	// Story - Optional. Message is a forwarded story
+	Story *Story `json:"story,omitempty"`
+
+	// Video - Optional. Message is a video, information about the video
+	Video *Video `json:"video,omitempty"`
+
+	// VideoNote - Optional. Message is a video note (https://telegram.org/blog/video-messages-and-telescope),
+	// information about the video message
+	VideoNote *VideoNote `json:"video_note,omitempty"`
+
+	// Voice - Optional. Message is a voice message, information about the file
+	Voice *Voice `json:"voice,omitempty"`
+
+	// HasMediaSpoiler - Optional. True, if the message media is covered by a spoiler animation
+	HasMediaSpoiler bool `json:"has_media_spoiler,omitempty"`
+
+	// Contact - Optional. Message is a shared contact, information about the contact
+	Contact *Contact `json:"contact,omitempty"`
+
+	// Dice - Optional. Message is a dice with random value
+	Dice *Dice `json:"dice,omitempty"`
+
+	// Game - Optional. Message is a game, information about the game. More about games »
+	// (https://core.telegram.org/bots/api#games)
+	Game *Game `json:"game,omitempty"`
+
+	// Giveaway - Optional. Message is a scheduled giveaway, information about the giveaway
+	Giveaway *Giveaway `json:"giveaway,omitempty"`
+
+	// GiveawayWinners - Optional. A giveaway with public winners was completed
+	GiveawayWinners *GiveawayWinners `json:"giveaway_winners,omitempty"`
+
+	// Invoice - Optional. Message is an invoice for a payment (https://core.telegram.org/bots/api#payments),
+	// information about the invoice. More about payments » (https://core.telegram.org/bots/api#payments)
+	Invoice *Invoice `json:"invoice,omitempty"`
+
+	// Location - Optional. Message is a shared location, information about the location
+	Location *Location `json:"location,omitempty"`
+
+	// Poll - Optional. Message is a native poll, information about the poll
+	Poll *Poll `json:"poll,omitempty"`
+
+	// Venue - Optional. Message is a venue, information about the venue
+	Venue *Venue `json:"venue,omitempty"`
+}
+
+// ReplyParameters - Describes reply parameters for the message that is being sent.
+type ReplyParameters struct {
+	// MessageID - Identifier of the message that will be replied to in the current chat, or in the chat chat_id
+	// if it is specified
+	MessageID int `json:"message_id"`
+
+	// ChatID - Optional. If the message to be replied to is from a different chat, unique identifier for the
+	// chat or username of the channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
+	// message to be replied to is not found; can be used only for replies in the same chat and forum topic.
+	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+
+	// Quote - Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing.
+	// The quote must be an exact substring of the message to be replied to, including bold, italic, underline,
+	// strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in
+	// the original message.
+	Quote string `json:"quote,omitempty"`
+
+	// QuoteParseMode - Optional. Mode for parsing entities in the quote. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	QuoteParseMode string `json:"quote_parse_mode,omitempty"`
+
+	// QuoteEntities - Optional. A JSON-serialized list of special entities that appear in the quote. It can be
+	// specified instead of quote_parse_mode.
+	QuoteEntities []MessageEntity `json:"quote_entities,omitempty"`
+
+	// QuotePosition - Optional. Position of the quote in the original message in UTF-16 code units
+	QuotePosition int `json:"quote_position,omitempty"`
+}
+
+// MessageOrigin - This object describes the origin of a message. It can be one of
+// MessageOriginUser (https://core.telegram.org/bots/api#messageoriginuser)
+// MessageOriginHiddenUser (https://core.telegram.org/bots/api#messageoriginhiddenuser)
+// MessageOriginChat (https://core.telegram.org/bots/api#messageoriginchat)
+// MessageOriginChannel (https://core.telegram.org/bots/api#messageoriginchannel)
+type MessageOrigin struct{} // FIXME
+
+// MessageOriginUser - The message was originally sent by a known user.
+type MessageOriginUser struct {
+	// Type - Type of the message origin, always “user”
+	Type string `json:"type"`
+
+	// Date - Date the message was sent originally in Unix time
+	Date int64 `json:"date"`
+
+	// SenderUser - User that sent the message originally
+	SenderUser User `json:"sender_user"`
+}
+
+// MessageOriginHiddenUser - The message was originally sent by an unknown user.
+type MessageOriginHiddenUser struct {
+	// Type - Type of the message origin, always “hidden_user”
+	Type string `json:"type"`
+
+	// Date - Date the message was sent originally in Unix time
+	Date int64 `json:"date"`
+
+	// SenderUserName - Name of the user that sent the message originally
+	SenderUserName string `json:"sender_user_name"`
+}
+
+// MessageOriginChat - The message was originally sent on behalf of a chat to a group chat.
+type MessageOriginChat struct {
+	// Type - Type of the message origin, always “chat”
+	Type string `json:"type"`
+
+	// Date - Date the message was sent originally in Unix time
+	Date int64 `json:"date"`
+
+	// SenderChat - Chat that sent the message originally
+	SenderChat Chat `json:"sender_chat"`
+
+	// AuthorSignature - Optional. For messages originally sent by an anonymous chat administrator, original
+	// message author signature
+	AuthorSignature string `json:"author_signature,omitempty"`
+}
+
+// MessageOriginChannel - The message was originally sent to a channel chat.
+type MessageOriginChannel struct {
+	// Type - Type of the message origin, always “channel”
+	Type string `json:"type"`
+
+	// Date - Date the message was sent originally in Unix time
+	Date int64 `json:"date"`
+
+	// Chat - Channel chat to which the message was originally sent
+	Chat Chat `json:"chat"`
+
+	// MessageID - Unique message identifier inside the chat
+	MessageID int `json:"message_id"`
+
+	// AuthorSignature - Optional. Signature of the original post author
+	AuthorSignature string `json:"author_signature,omitempty"`
+}
 
 // PhotoSize - This object represents one size of a photo or a file
 // (https://core.telegram.org/bots/api#document) / sticker (https://core.telegram.org/bots/api#sticker)
@@ -1095,18 +1361,18 @@ type GeneralForumTopicHidden struct{}
 // the chat. Currently holds no information.
 type GeneralForumTopicUnhidden struct{}
 
-// UserShared - This object contains information about the user whose identifier was shared with the bot
-// using a KeyboardButtonRequestUser (https://core.telegram.org/bots/api#keyboardbuttonrequestuser) button.
-type UserShared struct {
+// UsersShared - This object contains information about the users whose identifiers were shared with the bot
+// using a KeyboardButtonRequestUsers (https://core.telegram.org/bots/api#keyboardbuttonrequestusers) button.
+type UsersShared struct {
 	// RequestID - Identifier of the request
 	RequestID int `json:"request_id"`
 
-	// UserID - Identifier of the shared user. This number may have more than 32 significant bits and some
-	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52
-	// significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
-	// The bot may not have access to the user and could be unable to use this identifier, unless the user is
+	// UserIDs - Identifiers of the shared users. These numbers may have more than 32 significant bits and some
+	// programming languages may have difficulty/silent defects in interpreting them. But they have at most 52
+	// significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers.
+	// The bot may not have access to the users and could be unable to use these identifiers, unless the users are
 	// already known to the bot by some other means.
-	UserID int64 `json:"user_id"`
+	UserIDs []int64 `json:"user_ids"`
 }
 
 // ChatShared - This object contains information about the chat whose identifier was shared with the bot
@@ -1164,6 +1430,116 @@ type VideoChatEnded struct {
 type VideoChatParticipantsInvited struct {
 	// Users - New members that were invited to the video chat
 	Users []User `json:"users"`
+}
+
+// GiveawayCreated - This object represents a service message about the creation of a scheduled giveaway.
+// Currently holds no information.
+type GiveawayCreated struct{}
+
+// Giveaway - This object represents a message about a scheduled giveaway.
+type Giveaway struct {
+	// Chats - The list of chats which the user must join to participate in the giveaway
+	Chats []Chat `json:"chats"`
+
+	// WinnersSelectionDate - Point in time (Unix timestamp) when winners of the giveaway will be selected
+	WinnersSelectionDate int64 `json:"winners_selection_date"`
+
+	// WinnerCount - The number of users which are supposed to be selected as winners of the giveaway
+	WinnerCount int `json:"winner_count"`
+
+	// OnlyNewMembers - Optional. True, if only users who join the chats after the giveaway started should be
+	// eligible to win
+	OnlyNewMembers bool `json:"only_new_members,omitempty"`
+
+	// HasPublicWinners - Optional. True, if the list of giveaway winners will be visible to everyone
+	HasPublicWinners bool `json:"has_public_winners,omitempty"`
+
+	// PrizeDescription - Optional. Description of additional giveaway prize
+	PrizeDescription string `json:"prize_description,omitempty"`
+
+	// CountryCodes - Optional. A list of two-letter ISO 3166-1 alpha-2
+	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes indicating the countries from which eligible
+	// users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a
+	// phone number that was bought on Fragment can always participate in giveaways.
+	CountryCodes []string `json:"country_codes,omitempty"`
+
+	// PremiumSubscriptionMonthCount - Optional. The number of months the Telegram Premium subscription won from
+	// the giveaway will be active for
+	PremiumSubscriptionMonthCount int `json:"premium_subscription_month_count,omitempty"`
+}
+
+// GiveawayWinners - This object represents a message about the completion of a giveaway with public winners.
+type GiveawayWinners struct {
+	// Chat - The chat that created the giveaway
+	Chat Chat `json:"chat"`
+
+	// GiveawayMessageID - Identifier of the messsage with the giveaway in the chat
+	GiveawayMessageID int `json:"giveaway_message_id"`
+
+	// WinnersSelectionDate - Point in time (Unix timestamp) when winners of the giveaway were selected
+	WinnersSelectionDate int64 `json:"winners_selection_date"`
+
+	// WinnerCount - Total number of winners in the giveaway
+	WinnerCount int `json:"winner_count"`
+
+	// Winners - List of up to 100 winners of the giveaway
+	Winners []User `json:"winners"`
+
+	// AdditionalChatCount - Optional. The number of other chats the user had to join in order to be eligible
+	// for the giveaway
+	AdditionalChatCount int `json:"additional_chat_count,omitempty"`
+
+	// PremiumSubscriptionMonthCount - Optional. The number of months the Telegram Premium subscription won from
+	// the giveaway will be active for
+	PremiumSubscriptionMonthCount int `json:"premium_subscription_month_count,omitempty"`
+
+	// UnclaimedPrizeCount - Optional. Number of undistributed prizes
+	UnclaimedPrizeCount int `json:"unclaimed_prize_count,omitempty"`
+
+	// OnlyNewMembers - Optional. True, if only users who had joined the chats after the giveaway started were
+	// eligible to win
+	OnlyNewMembers bool `json:"only_new_members,omitempty"`
+
+	// WasRefunded - Optional. True, if the giveaway was canceled because the payment for it was refunded
+	WasRefunded bool `json:"was_refunded,omitempty"`
+
+	// PrizeDescription - Optional. Description of additional giveaway prize
+	PrizeDescription string `json:"prize_description,omitempty"`
+}
+
+// GiveawayCompleted - This object represents a service message about the completion of a giveaway without
+// public winners.
+type GiveawayCompleted struct {
+	// WinnerCount - Number of winners in the giveaway
+	WinnerCount int `json:"winner_count"`
+
+	// UnclaimedPrizeCount - Optional. Number of undistributed prizes
+	UnclaimedPrizeCount int `json:"unclaimed_prize_count,omitempty"`
+
+	// GiveawayMessage - Optional. Message with the giveaway that was completed, if it wasn't deleted
+	GiveawayMessage *Message `json:"giveaway_message,omitempty"`
+}
+
+// LinkPreviewOptions - Describes the options used for link preview generation.
+type LinkPreviewOptions struct {
+	// IsDisabled - Optional. True, if the link preview is disabled
+	IsDisabled bool `json:"is_disabled,omitempty"`
+
+	// URL - Optional. URL to use for the link preview. If empty, then the first URL found in the message text
+	// will be used
+	URL string `json:"url,omitempty"`
+
+	// PreferSmallMedia - Optional. True, if the media in the link preview is suppposed to be shrunk; ignored if
+	// the URL isn't explicitly specified or media size change isn't supported for the preview
+	PreferSmallMedia bool `json:"prefer_small_media,omitempty"`
+
+	// PreferLargeMedia - Optional. True, if the media in the link preview is suppposed to be enlarged; ignored
+	// if the URL isn't explicitly specified or media size change isn't supported for the preview
+	PreferLargeMedia bool `json:"prefer_large_media,omitempty"`
+
+	// ShowAboveText - Optional. True, if the link preview must be shown above the message text; otherwise, the
+	// link preview will be shown below the message text
+	ShowAboveText bool `json:"show_above_text,omitempty"`
 }
 
 // UserProfilePhotos - This object represent a user's profile pictures.
@@ -1246,7 +1622,8 @@ type ReplyKeyboardMarkup struct {
 
 	// Selective - Optional. Use this parameter if you want to show the keyboard to specific users only.
 	// Targets: 1) users that are @mentioned in the text of the Message (https://core.telegram.org/bots/api#message)
-	// object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+	// object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the
+	// original message.
 	// Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select
 	// the new language. Other users in the group don't see the keyboard.
 	Selective bool `json:"selective,omitempty"`
@@ -1258,17 +1635,17 @@ func (r *ReplyKeyboardMarkup) ReplyType() string {
 }
 
 // KeyboardButton - This object represents one button of the reply keyboard. For simple text buttons, String
-// can be used instead of this object to specify the button text. The optional fields web_app, request_user,
+// can be used instead of this object to specify the button text. The optional fields web_app, request_users,
 // request_chat, request_contact, request_location, and request_poll are mutually exclusive.
 type KeyboardButton struct {
 	// Text - Text of the button. If none of the optional fields are used, it will be sent as a message when the
 	// button is pressed
 	Text string `json:"text"`
 
-	// RequestUser - Optional. If specified, pressing the button will open a list of suitable users. Tapping on
-	// any user will send their identifier to the bot in a “user_shared” service message. Available in private
-	// chats only.
-	RequestUser *KeyboardButtonRequestUser `json:"request_user,omitempty"`
+	// RequestUsers - Optional. If specified, pressing the button will open a list of suitable users.
+	// Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in
+	// private chats only.
+	RequestUsers *KeyboardButtonRequestUsers `json:"request_users,omitempty"`
 
 	// RequestChat - Optional. If specified, pressing the button will open a list of suitable chats. Tapping on
 	// a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats
@@ -1293,21 +1670,24 @@ type KeyboardButton struct {
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 }
 
-// KeyboardButtonRequestUser - This object defines the criteria used to request a suitable user. The
-// identifier of the selected user will be shared with the bot when the corresponding button is pressed. More
+// KeyboardButtonRequestUsers - This object defines the criteria used to request suitable users. The
+// identifiers of the selected users will be shared with the bot when the corresponding button is pressed. More
 // about requesting users » (https://core.telegram.org/bots/features#chat-and-user-selection)
-type KeyboardButtonRequestUser struct {
-	// RequestID - Signed 32-bit identifier of the request, which will be received back in the UserShared
-	// (https://core.telegram.org/bots/api#usershared) object. Must be unique within the message
+type KeyboardButtonRequestUsers struct {
+	// RequestID - Signed 32-bit identifier of the request that will be received back in the UsersShared
+	// (https://core.telegram.org/bots/api#usersshared) object. Must be unique within the message
 	RequestID int32 `json:"request_id"`
 
-	// UserIsBot - Optional. Pass True to request a bot, pass False to request a regular user. If not specified,
+	// UserIsBot - Optional. Pass True to request bots, pass False to request regular users. If not specified,
 	// no additional restrictions are applied.
 	UserIsBot *bool `json:"user_is_bot,omitempty"`
 
-	// UserIsPremium - Optional. Pass True to request a premium user, pass False to request a non-premium user.
-	// If not specified, no additional restrictions are applied.
+	// UserIsPremium - Optional. Pass True to request premium users, pass False to request non-premium users. If
+	// not specified, no additional restrictions are applied.
 	UserIsPremium *bool `json:"user_is_premium,omitempty"`
+
+	// MaxQuantity - Optional. The maximum number of users to be selected; 1-10. Defaults to 1.
+	MaxQuantity int `json:"max_quantity,omitempty"`
 }
 
 // KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. The
@@ -1369,7 +1749,8 @@ type ReplyKeyboardRemove struct {
 
 	// Selective - Optional. Use this parameter if you want to remove the keyboard for specific users only.
 	// Targets: 1) users that are @mentioned in the text of the Message (https://core.telegram.org/bots/api#message)
-	// object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+	// object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the
+	// original message.
 	// Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the
 	// keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
 	Selective bool `json:"selective,omitempty"`
@@ -1511,9 +1892,8 @@ type CallbackQuery struct {
 	// From - Sender
 	From User `json:"from"`
 
-	// Message - Optional. Message with the callback button that originated the query. Note that message content
-	// and message date will not be available if the message is too old
-	Message *Message `json:"message,omitempty"`
+	// Message - Optional. Message sent by the bot with the callback button that originated the query
+	Message *MaybeInaccessibleMessage `json:"message,omitempty"`
 
 	// InlineMessageID - Optional. Identifier of the message sent via the bot in inline mode, that originated
 	// the query.
@@ -1547,7 +1927,8 @@ type ForceReply struct {
 
 	// Selective - Optional. Use this parameter if you want to force reply from specific users only. Targets: 1)
 	// users that are @mentioned in the text of the Message (https://core.telegram.org/bots/api#message) object; 2)
-	// if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+	// if the bot's message is a reply to a message in the same chat and forum topic, sender of the original
+	// message.
 	Selective bool `json:"selective,omitempty"`
 }
 
