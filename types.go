@@ -291,8 +291,9 @@ type Chat struct {
 	// party in a private chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
 
-	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status of the other party in a private
-	// chat in Unix time, if any. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status of the chat or the other party
+	// in a private chat, in Unix time, if any. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
 	EmojiStatusExpirationDate int64 `json:"emoji_status_expiration_date,omitempty"`
 
 	// Bio - Optional. Bio of the other party in a private chat. Returned only in getChat
@@ -2255,8 +2256,8 @@ type ChatMemberRestricted struct {
 	// IsMember - True, if the user is a member of the chat at the moment of the request
 	IsMember bool `json:"is_member"`
 
-	// CanSendMessages - True, if the user is allowed to send text messages, contacts, invoices, locations and
-	// venues
+	// CanSendMessages - True, if the user is allowed to send text messages, contacts, giveaways, giveaway
+	// winners, invoices, locations and venues
 	CanSendMessages bool `json:"can_send_messages"`
 
 	// CanSendAudios - True, if the user is allowed to send audios
@@ -2436,8 +2437,8 @@ type ChatJoinRequest struct {
 
 // ChatPermissions - Describes actions that a non-administrator user is allowed to take in a chat.
 type ChatPermissions struct {
-	// CanSendMessages - Optional. True, if the user is allowed to send text messages, contacts, invoices,
-	// locations and venues
+	// CanSendMessages - Optional. True, if the user is allowed to send text messages, contacts, giveaways,
+	// giveaway winners, invoices, locations and venues
 	CanSendMessages *bool `json:"can_send_messages,omitempty"`
 
 	// CanSendAudios - Optional. True, if the user is allowed to send audios
@@ -2490,6 +2491,84 @@ type ChatLocation struct {
 
 	// Address - Location address; 1-64 characters, as defined by the chat owner
 	Address string `json:"address"`
+}
+
+// ReactionType - This object describes the type of a reaction. Currently, it can be one of
+// ReactionTypeEmoji (https://core.telegram.org/bots/api#reactiontypeemoji)
+// ReactionTypeCustomEmoji (https://core.telegram.org/bots/api#reactiontypecustomemoji)
+type ReactionType struct{} // FIXME
+
+// ReactionTypeEmoji - The reaction is based on an emoji.
+type ReactionTypeEmoji struct {
+	// Type - Type of the reaction, always “emoji”
+	Type string `json:"type"`
+
+	// Emoji - Reaction emoji. Currently, it can be one of "👍", "👎", "❤", "🔥", "🥰", "👏",
+	// "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊",
+	// "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆",
+	// "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻",
+	// "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃",
+	// "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂",
+	// "🤷", "🤷‍♀", "😡"
+	Emoji string `json:"emoji"`
+}
+
+// ReactionTypeCustomEmoji - The reaction is based on a custom emoji.
+type ReactionTypeCustomEmoji struct {
+	// Type - Type of the reaction, always “custom_emoji”
+	Type string `json:"type"`
+
+	// CustomEmojiID - Custom emoji identifier
+	CustomEmojiID string `json:"custom_emoji_id"`
+}
+
+// ReactionCount - Represents a reaction added to a message along with the number of times it was added.
+type ReactionCount struct {
+	// Type - Type of the reaction
+	Type ReactionType `json:"type"`
+
+	// TotalCount - Number of times the reaction was added
+	TotalCount int `json:"total_count"`
+}
+
+// MessageReactionUpdated - This object represents a change of a reaction on a message performed by a user.
+type MessageReactionUpdated struct {
+	// Chat - The chat containing the message the user reacted to
+	Chat Chat `json:"chat"`
+
+	// MessageID - Unique identifier of the message inside the chat
+	MessageID int `json:"message_id"`
+
+	// User - Optional. The user that changed the reaction, if the user isn't anonymous
+	User *User `json:"user,omitempty"`
+
+	// ActorChat - Optional. The chat on behalf of which the reaction was changed, if the user is anonymous
+	ActorChat *Chat `json:"actor_chat,omitempty"`
+
+	// Date - Date of the change in Unix time
+	Date int64 `json:"date"`
+
+	// OldReaction - Previous list of reaction types that were set by the user
+	OldReaction []ReactionType `json:"old_reaction"`
+
+	// NewReaction - New list of reaction types that have been set by the user
+	NewReaction []ReactionType `json:"new_reaction"`
+}
+
+// MessageReactionCountUpdated - This object represents reaction changes on a message with anonymous
+// reactions.
+type MessageReactionCountUpdated struct {
+	// Chat - The chat containing the message
+	Chat Chat `json:"chat"`
+
+	// MessageID - Unique message identifier inside the chat
+	MessageID int `json:"message_id"`
+
+	// Date - Date of the change in Unix time
+	Date int64 `json:"date"`
+
+	// Reactions - List of reactions that are present on the message
+	Reactions []ReactionCount `json:"reactions"`
 }
 
 // ForumTopic - This object represents a forum topic.
