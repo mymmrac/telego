@@ -2871,6 +2871,96 @@ func (m *MenuButtonDefault) ButtonType() string {
 	return ButtonTypeDefault
 }
 
+// ChatBoostSource - This object describes the source of a chat boost. It can be one of
+// ChatBoostSourcePremium (https://core.telegram.org/bots/api#chatboostsourcepremium)
+// ChatBoostSourceGiftCode (https://core.telegram.org/bots/api#chatboostsourcegiftcode)
+// ChatBoostSourceGiveaway (https://core.telegram.org/bots/api#chatboostsourcegiveaway)
+type ChatBoostSource struct{} // FIXME
+
+// ChatBoostSourcePremium - The boost was obtained by subscribing to Telegram Premium or by gifting a
+// Telegram Premium subscription to another user.
+type ChatBoostSourcePremium struct {
+	// Source - Source of the boost, always “premium”
+	Source string `json:"source"`
+
+	// User - User that boosted the chat
+	User User `json:"user"`
+}
+
+// ChatBoostSourceGiftCode - The boost was obtained by the creation of Telegram Premium gift codes to boost a
+// chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium
+// subscription.
+type ChatBoostSourceGiftCode struct {
+	// Source - Source of the boost, always “gift_code”
+	Source string `json:"source"`
+
+	// User - User for which the gift code was created
+	User User `json:"user"`
+}
+
+// ChatBoostSourceGiveaway - The boost was obtained by the creation of a Telegram Premium giveaway. This
+// boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+type ChatBoostSourceGiveaway struct {
+	// Source - Source of the boost, always “giveaway”
+	Source string `json:"source"`
+
+	// GiveawayMessageID - Identifier of a message in the chat with the giveaway; the message could have been
+	// deleted already. May be 0 if the message isn't sent yet.
+	GiveawayMessageID int `json:"giveaway_message_id"`
+
+	// User - Optional. User that won the prize in the giveaway if any
+	User *User `json:"user,omitempty"`
+
+	// IsUnclaimed - Optional. True, if the giveaway was completed, but there was no user to win the prize
+	IsUnclaimed bool `json:"is_unclaimed,omitempty"`
+}
+
+// ChatBoost - This object contains information about a chat boost.
+type ChatBoost struct {
+	// BoostID - Unique identifier of the boost
+	BoostID string `json:"boost_id"`
+
+	// AddDate - Point in time (Unix timestamp) when the chat was boosted
+	AddDate int64 `json:"add_date"`
+
+	// ExpirationDate - Point in time (Unix timestamp) when the boost will automatically expire, unless the
+	// booster's Telegram Premium subscription is prolonged
+	ExpirationDate int64 `json:"expiration_date"`
+
+	// Source - Source of the added boost
+	Source ChatBoostSource `json:"source"`
+}
+
+// ChatBoostUpdated - This object represents a boost added to a chat or changed.
+type ChatBoostUpdated struct {
+	// Chat - Chat which was boosted
+	Chat Chat `json:"chat"`
+
+	// Boost - Infomation about the chat boost
+	Boost ChatBoost `json:"boost"`
+}
+
+// ChatBoostRemoved - This object represents a boost removed from a chat.
+type ChatBoostRemoved struct {
+	// Chat - Chat which was boosted
+	Chat Chat `json:"chat"`
+
+	// BoostID - Unique identifier of the boost
+	BoostID string `json:"boost_id"`
+
+	// RemoveDate - Point in time (Unix timestamp) when the boost was removed
+	RemoveDate int64 `json:"remove_date"`
+
+	// Source - Source of the removed boost
+	Source ChatBoostSource `json:"source"`
+}
+
+// UserChatBoosts - This object represents a list of boosts added to a chat by a user.
+type UserChatBoosts struct {
+	// Boosts - The list of boosts added to the chat by the user
+	Boosts []ChatBoost `json:"boosts"`
+}
+
 // fileCompatible - Represents types that can be sent as files
 type fileCompatible interface {
 	fileParameters() map[string]telegoapi.NamedReader
