@@ -9,8 +9,12 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.4
 	github.com/valyala/fasthttp v1.51.0
+	github.com/valyala/fastjson v1.6.4
 	go.uber.org/mock v0.4.0
 )
+
+// Temporary fix for issue https://github.com/goccy/go-json/issues/405
+replace github.com/goccy/go-json => github.com/cmetallo42/go-json v0.0.0-20221114111108-7fed434e8044
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect

@@ -576,7 +576,7 @@ type Message struct {
 
 	// PinnedMessage - Optional. Specified message was pinned. Note that the Message object in this field will
 	// not contain further reply_to_message fields even if it itself is a reply.
-	PinnedMessage *MaybeInaccessibleMessage `json:"pinned_message,omitempty"`
+	PinnedMessage MaybeInaccessibleMessage `json:"pinned_message,omitempty"`
 
 	// Invoice - Optional. Message is an invoice for a payment (https://core.telegram.org/bots/api#payments),
 	// information about the invoice. More about payments » (https://core.telegram.org/bots/api#payments)
@@ -658,6 +658,50 @@ type Message struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+func (m *Message) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uMessage Message
+	var um uMessage
+	if value.Exists("pinned_message") {
+		if value.GetInt("pinned_message", "date") == 0 {
+			um.PinnedMessage = &InaccessibleMessage{}
+		} else {
+			um.PinnedMessage = &Message{}
+		}
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &um); err != nil {
+		return err
+	}
+	*m = Message(um)
+
+	return nil
+}
+
+func (m *Message) IsAccessible() bool {
+	return true
+}
+
+func (m *Message) GetChat() Chat {
+	return m.Chat
+}
+
+func (m *Message) GetMessageID() int {
+	return m.MessageID
+}
+
+func (m *Message) GetDate() int64 {
+	return m.Date
+}
+
 // MessageID - This object represents a unique message identifier.
 type MessageID struct {
 	// MessageID - Unique message identifier
@@ -677,11 +721,32 @@ type InaccessibleMessage struct {
 	Date int64 `json:"date"`
 }
 
+func (m *InaccessibleMessage) IsAccessible() bool {
+	return false
+}
+
+func (m *InaccessibleMessage) GetChat() Chat {
+	return m.Chat
+}
+
+func (m *InaccessibleMessage) GetMessageID() int {
+	return m.MessageID
+}
+
+func (m *InaccessibleMessage) GetDate() int64 {
+	return m.Date
+}
+
 // MaybeInaccessibleMessage - This object describes a message that can be inaccessible to the bot. It can be
 // one of
 // Message (https://core.telegram.org/bots/api#message)
 // InaccessibleMessage (https://core.telegram.org/bots/api#inaccessiblemessage)
-type MaybeInaccessibleMessage struct{} // FIXME
+type MaybeInaccessibleMessage interface {
+	IsAccessible() bool
+	GetChat() Chat
+	GetMessageID() int
+	GetDate() int64
+}
 
 // MessageEntity - This object represents one special entity in a text message. For example, hashtags,
 // usernames, URLs, etc.
@@ -1894,7 +1959,7 @@ type CallbackQuery struct {
 	From User `json:"from"`
 
 	// Message - Optional. Message sent by the bot with the callback button that originated the query
-	Message *MaybeInaccessibleMessage `json:"message,omitempty"`
+	Message MaybeInaccessibleMessage `json:"message,omitempty"`
 
 	// InlineMessageID - Optional. Identifier of the message sent via the bot in inline mode, that originated
 	// the query.
@@ -1911,6 +1976,34 @@ type CallbackQuery struct {
 	// GameShortName - Optional. Short name of a Game (https://core.telegram.org/bots/api#games) to be returned,
 	// serves as the unique identifier for the game
 	GameShortName string `json:"game_short_name,omitempty"`
+}
+
+func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uCallbackQuery CallbackQuery
+	var uq uCallbackQuery
+	if value.Exists("message") {
+		if value.GetInt("message", "date") == 0 {
+			uq.Message = &InaccessibleMessage{}
+		} else {
+			uq.Message = &Message{}
+		}
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &uq); err != nil {
+		return err
+	}
+	*q = CallbackQuery(uq)
+
+	return nil
 }
 
 // ForceReply - Upon receiving a message with this object, Telegram clients will display a reply interface to

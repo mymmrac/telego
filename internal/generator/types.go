@@ -298,4 +298,8 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		(field.name == "SwitchInlineQuery" || field.name == "SwitchInlineQueryCurrentChat") {
 		field.typ = "*string"
 	}
+
+	if field.typ == "*MaybeInaccessibleMessage" {
+		field.typ = "MaybeInaccessibleMessage"
+	}
 }
