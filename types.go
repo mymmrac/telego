@@ -14,7 +14,7 @@ import (
 // At most one of the optional parameters can be present in any given update.
 type Update struct {
 	// UpdateID - The update's unique identifier. Update identifiers start from a certain positive number and
-	// increase sequentially. This ID becomes especially handy if you're using webhooks
+	// increase sequentially. This identifier becomes especially handy if you're using webhooks
 	// (https://core.telegram.org/bots/api#setwebhook), since it allows you to ignore repeated updates or to restore
 	// the correct update sequence, should they get out of order. If there are no new updates for at least a week,
 	// then identifier of the next update will be chosen randomly instead of sequentially.
@@ -23,13 +23,17 @@ type Update struct {
 	// Message - Optional. New incoming message of any kind - text, photo, sticker, etc.
 	Message *Message `json:"message,omitempty"`
 
-	// EditedMessage - Optional. New version of a message that is known to the bot and was edited
+	// EditedMessage - Optional. New version of a message that is known to the bot and was edited. This update
+	// may at times be triggered by changes to message fields that are either unavailable or not actively used by
+	// your bot.
 	EditedMessage *Message `json:"edited_message,omitempty"`
 
 	// ChannelPost - Optional. New incoming channel post of any kind - text, photo, sticker, etc.
 	ChannelPost *Message `json:"channel_post,omitempty"`
 
-	// EditedChannelPost - Optional. New version of a channel post that is known to the bot and was edited
+	// EditedChannelPost - Optional. New version of a channel post that is known to the bot and was edited. This
+	// update may at times be triggered by changes to message fields that are either unavailable or not actively
+	// used by your bot.
 	EditedChannelPost *Message `json:"edited_channel_post,omitempty"`
 
 	// MessageReaction - Optional. A reaction to a message was changed by a user. The bot must be an
@@ -61,8 +65,8 @@ type Update struct {
 	// PreCheckoutQuery - Optional. New incoming pre-checkout query. Contains full information about checkout
 	PreCheckoutQuery *PreCheckoutQuery `json:"pre_checkout_query,omitempty"`
 
-	// Poll - Optional. New poll state. Bots receive only updates about stopped polls and polls, which are sent
-	// by the bot
+	// Poll - Optional. New poll state. Bots receive only updates about manually stopped polls and polls, which
+	// are sent by the bot
 	Poll *Poll `json:"poll,omitempty"`
 
 	// PollAnswer - Optional. A user changed their answer in a non-anonymous poll. Bots receive new votes only
@@ -1983,8 +1987,8 @@ type InlineKeyboardButton struct {
 	Text string `json:"text"`
 
 	// URL - Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id>
-	// can be used to mention a user by their ID without using a username, if this is allowed by their privacy
-	// settings.
+	// can be used to mention a user by their identifier without using a username, if this is allowed by their
+	// privacy settings.
 	URL string `json:"url,omitempty"`
 
 	// CallbackData - Optional. Data to be sent in a callback query
@@ -4917,8 +4921,8 @@ type InputTextMessageContent struct {
 	// of parse_mode
 	Entities []MessageEntity `json:"entities,omitempty"`
 
-	// DisableWebPagePreview - Optional. Disables link previews for links in the sent message
-	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
+	// LinkPreviewOptions - Optional. Link preview generation options for the message
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 }
 
 // ContentType returns InputMessageContent type
@@ -5164,7 +5168,8 @@ type Invoice struct {
 
 // ShippingAddress - This object represents a shipping address.
 type ShippingAddress struct {
-	// CountryCode - Two-letter ISO 3166-1 alpha-2 country code
+	// CountryCode - Two-letter ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country
+	// code
 	CountryCode string `json:"country_code"`
 
 	// State - State, if applicable
