@@ -59,7 +59,7 @@ const typeFieldPattern = `
 </tr>
 `
 
-const curTypePattern = `^type (\w+) struct {`
+const curTypePattern = `^type (\w+) (?:struct|interface) {`
 const curConstPattern = `^const \(`
 const curFuncPattern = `^func \(`
 const curInterfacePattern = `^type \w+ interface {`

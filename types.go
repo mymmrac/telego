@@ -2280,28 +2280,56 @@ type ChatAdministratorRights struct {
 	CanManageTopics bool `json:"can_manage_topics,omitempty"`
 }
 
-// ChatMember - This object contains information about one member of a chat. Currently, the following 6 types
-// of chat members are supported:
-// ChatMemberOwner (https://core.telegram.org/bots/api#chatmemberowner)
-// ChatMemberAdministrator (https://core.telegram.org/bots/api#chatmemberadministrator)
-// ChatMemberMember (https://core.telegram.org/bots/api#chatmembermember)
-// ChatMemberRestricted (https://core.telegram.org/bots/api#chatmemberrestricted)
-// ChatMemberLeft (https://core.telegram.org/bots/api#chatmemberleft)
-// ChatMemberBanned (https://core.telegram.org/bots/api#chatmemberbanned)
-type ChatMember interface {
-	MemberStatus() string
-	MemberUser() User
+// ChatMemberUpdated - This object represents changes in the status of a chat member.
+type ChatMemberUpdated struct {
+	// Chat - Chat the user belongs to
+	Chat Chat `json:"chat"`
+
+	// From - Performer of the action, which resulted in the change
+	From User `json:"from"`
+
+	// Date - Date the change was done in Unix time
+	Date int64 `json:"date"`
+
+	// OldChatMember - Previous information about the chat member
+	OldChatMember ChatMember `json:"old_chat_member"`
+
+	// NewChatMember - New information about the chat member
+	NewChatMember ChatMember `json:"new_chat_member"`
+
+	// InviteLink - Optional. Chat invite link, which was used by the user to join the chat; for joining by
+	// invite link events only.
+	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
+
+	// ViaChatFolderInviteLink - Optional. True, if the user joined the chat via a chat folder invite link
+	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
 }
 
-// ChatMember statuses
-const (
-	MemberStatusCreator       = "creator"
-	MemberStatusAdministrator = "administrator"
-	MemberStatusMember        = "member"
-	MemberStatusRestricted    = "restricted"
-	MemberStatusLeft          = "left"
-	MemberStatusBanned        = "kicked"
-)
+// UnmarshalJSON converts JSON to ChatMemberUpdated
+func (c *ChatMemberUpdated) UnmarshalJSON(bytes []byte) error {
+	var chatMemberUpdatedData struct {
+		Chat          Chat            `json:"chat"`
+		From          User            `json:"from"`
+		Date          int64           `json:"date"`
+		OldChatMember chatMemberData  `json:"old_chat_member"`
+		NewChatMember chatMemberData  `json:"new_chat_member"`
+		InviteLink    *ChatInviteLink `json:"invite_link,omitempty"`
+	}
+
+	err := json.Unmarshal(bytes, &chatMemberUpdatedData)
+	if err != nil {
+		return err
+	}
+
+	c.Chat = chatMemberUpdatedData.Chat
+	c.From = chatMemberUpdatedData.From
+	c.Date = chatMemberUpdatedData.Date
+	c.OldChatMember = chatMemberUpdatedData.OldChatMember.Data
+	c.NewChatMember = chatMemberUpdatedData.NewChatMember.Data
+	c.InviteLink = chatMemberUpdatedData.InviteLink
+
+	return nil
+}
 
 type chatMemberData struct {
 	Data ChatMember
@@ -2348,6 +2376,29 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 
 	return err
 }
+
+// ChatMember - This object contains information about one member of a chat. Currently, the following 6 types
+// of chat members are supported:
+// ChatMemberOwner (https://core.telegram.org/bots/api#chatmemberowner)
+// ChatMemberAdministrator (https://core.telegram.org/bots/api#chatmemberadministrator)
+// ChatMemberMember (https://core.telegram.org/bots/api#chatmembermember)
+// ChatMemberRestricted (https://core.telegram.org/bots/api#chatmemberrestricted)
+// ChatMemberLeft (https://core.telegram.org/bots/api#chatmemberleft)
+// ChatMemberBanned (https://core.telegram.org/bots/api#chatmemberbanned)
+type ChatMember interface {
+	MemberStatus() string
+	MemberUser() User
+}
+
+// ChatMember statuses
+const (
+	MemberStatusCreator       = "creator"
+	MemberStatusAdministrator = "administrator"
+	MemberStatusMember        = "member"
+	MemberStatusRestricted    = "restricted"
+	MemberStatusLeft          = "left"
+	MemberStatusBanned        = "kicked"
+)
 
 // ChatMemberOwner - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that owns the
 // chat and has all administrator privileges.
@@ -2589,57 +2640,6 @@ func (c *ChatMemberBanned) MemberStatus() string {
 // MemberUser returns ChatMember User
 func (c *ChatMemberBanned) MemberUser() User {
 	return c.User
-}
-
-// ChatMemberUpdated - This object represents changes in the status of a chat member.
-type ChatMemberUpdated struct {
-	// Chat - Chat the user belongs to
-	Chat Chat `json:"chat"`
-
-	// From - Performer of the action, which resulted in the change
-	From User `json:"from"`
-
-	// Date - Date the change was done in Unix time
-	Date int64 `json:"date"`
-
-	// OldChatMember - Previous information about the chat member
-	OldChatMember ChatMember `json:"old_chat_member"`
-
-	// NewChatMember - New information about the chat member
-	NewChatMember ChatMember `json:"new_chat_member"`
-
-	// InviteLink - Optional. Chat invite link, which was used by the user to join the chat; for joining by
-	// invite link events only.
-	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
-
-	// ViaChatFolderInviteLink - Optional. True, if the user joined the chat via a chat folder invite link
-	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
-}
-
-// UnmarshalJSON converts JSON to ChatMemberUpdated
-func (c *ChatMemberUpdated) UnmarshalJSON(bytes []byte) error {
-	var chatMemberUpdatedData struct {
-		Chat          Chat            `json:"chat"`
-		From          User            `json:"from"`
-		Date          int64           `json:"date"`
-		OldChatMember chatMemberData  `json:"old_chat_member"`
-		NewChatMember chatMemberData  `json:"new_chat_member"`
-		InviteLink    *ChatInviteLink `json:"invite_link,omitempty"`
-	}
-
-	err := json.Unmarshal(bytes, &chatMemberUpdatedData)
-	if err != nil {
-		return err
-	}
-
-	c.Chat = chatMemberUpdatedData.Chat
-	c.From = chatMemberUpdatedData.From
-	c.Date = chatMemberUpdatedData.Date
-	c.OldChatMember = chatMemberUpdatedData.OldChatMember.Data
-	c.NewChatMember = chatMemberUpdatedData.NewChatMember.Data
-	c.InviteLink = chatMemberUpdatedData.InviteLink
-
-	return nil
 }
 
 // ChatJoinRequest - Represents a join request sent to a chat.
