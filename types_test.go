@@ -13,6 +13,18 @@ import (
 )
 
 func TestTypesInterfaces(t *testing.T) {
+	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginUser{})
+	assert.Equal(t, OriginTypeUser, (&MessageOriginUser{}).OriginType())
+
+	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginHiddenUser{})
+	assert.Equal(t, OriginTypeHiddenUser, (&MessageOriginHiddenUser{}).OriginType())
+
+	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginChat{})
+	assert.Equal(t, OriginTypeChat, (&MessageOriginChat{}).OriginType())
+
+	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginChannel{})
+	assert.Equal(t, OriginTypeChannel, (&MessageOriginChannel{}).OriginType())
+
 	assert.Implements(t, (*ReplyMarkup)(nil), &ReplyKeyboardMarkup{})
 	assert.Equal(t, MarkupTypeReplyKeyboard, (&ReplyKeyboardMarkup{}).ReplyType())
 
@@ -43,6 +55,12 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*ChatMember)(nil), &ChatMemberBanned{})
 	assert.Equal(t, MemberStatusBanned, (&ChatMemberBanned{}).MemberStatus())
 
+	assert.Implements(t, (*ReactionType)(nil), &ReactionTypeEmoji{})
+	assert.Equal(t, ReactionEmoji, (&ReactionTypeEmoji{}).ReactionType())
+
+	assert.Implements(t, (*ReactionType)(nil), &ReactionTypeCustomEmoji{})
+	assert.Equal(t, ReactionCustomEmoji, (&ReactionTypeCustomEmoji{}).ReactionType())
+
 	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeDefault{})
 	assert.Equal(t, ScopeTypeDefault, (&BotCommandScopeDefault{}).ScopeType())
 
@@ -72,6 +90,15 @@ func TestTypesInterfaces(t *testing.T) {
 
 	assert.Implements(t, (*MenuButton)(nil), &MenuButtonDefault{})
 	assert.Equal(t, ButtonTypeDefault, (&MenuButtonDefault{}).ButtonType())
+
+	assert.Implements(t, (*ChatBoostSource)(nil), &ChatBoostSourcePremium{})
+	assert.Equal(t, BoostSourcePremium, (&ChatBoostSourcePremium{}).BoostSource())
+
+	assert.Implements(t, (*ChatBoostSource)(nil), &ChatBoostSourceGiftCode{})
+	assert.Equal(t, BoostSourceGiftCode, (&ChatBoostSourceGiftCode{}).BoostSource())
+
+	assert.Implements(t, (*ChatBoostSource)(nil), &ChatBoostSourceGiveaway{})
+	assert.Equal(t, BoostSourceGiveaway, (&ChatBoostSourceGiveaway{}).BoostSource())
 
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaPhoto{})
 	assert.Equal(t, MediaTypePhoto, (&InputMediaPhoto{}).MediaType())
@@ -638,8 +665,32 @@ func TestUpdate_Clone(t *testing.T) {
 		UpdateID: 1,
 		Message: &Message{
 			Text: "ok",
+			Chat: Chat{
+				AvailableReactions: []ReactionType{
+					&ReactionTypeEmoji{
+						Type: ReactionEmoji,
+					},
+					&ReactionTypeCustomEmoji{
+						Type: ReactionCustomEmoji,
+					},
+				},
+			},
 			Contact: &Contact{
 				PhoneNumber: "123",
+			},
+			ForwardOrigin: &MessageOriginUser{
+				Type: OriginTypeUser,
+				Date: 123,
+				SenderUser: User{
+					ID: 1,
+				},
+			},
+			PinnedMessage: &InaccessibleMessage{
+				Chat: Chat{
+					ID: 1,
+				},
+				MessageID: 1,
+				Date:      0,
 			},
 		},
 	}
@@ -724,17 +775,17 @@ func BenchmarkUpdate_Clone(b *testing.B) {
 	u := Update{
 		UpdateID: n1,
 		Message: &Message{
-			MessageID:             n1,
-			From:                  &u1,
-			SenderChat:            &c1,
-			Date:                  n1,
-			Chat:                  c1,
-			ForwardFrom:           &u1,
-			ForwardFromChat:       &c1,
-			ForwardFromMessageID:  n1,
-			ForwardSignature:      s1,
-			ForwardSenderName:     s1,
-			ForwardDate:           n1,
+			MessageID:  n1,
+			From:       &u1,
+			SenderChat: &c1,
+			Date:       n1,
+			Chat:       c1,
+			ForwardOrigin: &MessageOriginChat{
+				Type:            OriginTypeChat,
+				Date:            n1,
+				SenderChat:      c1,
+				AuthorSignature: s1,
+			},
 			IsAutomaticForward:    b1,
 			ViaBot:                &u1,
 			EditDate:              n1,
