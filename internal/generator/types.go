@@ -302,4 +302,8 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if field.typ == "*MaybeInaccessibleMessage" {
 		field.typ = "MaybeInaccessibleMessage"
 	}
+
+	if field.typ == "*MessageOrigin" {
+		field.typ = "MessageOrigin"
+	}
 }

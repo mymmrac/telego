@@ -421,7 +421,7 @@ type Message struct {
 	Chat Chat `json:"chat"`
 
 	// ForwardOrigin - Optional. Information about the original message for forwarded messages
-	ForwardOrigin *MessageOrigin `json:"forward_origin,omitempty"`
+	ForwardOrigin MessageOrigin `json:"forward_origin,omitempty"`
 
 	// IsTopicMessage - Optional. True, if the message is sent to a forum topic
 	IsTopicMessage bool `json:"is_topic_message,omitempty"`
@@ -668,11 +668,28 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 
 	type uMessage Message
 	var um uMessage
+
 	if value.Exists("pinned_message") {
 		if value.GetInt("pinned_message", "date") == 0 {
 			um.PinnedMessage = &InaccessibleMessage{}
 		} else {
 			um.PinnedMessage = &Message{}
+		}
+	}
+
+	if value.Exists("forward_origin") {
+		forwardOriginType := string(value.GetStringBytes("forward_origin", "type"))
+		switch forwardOriginType {
+		case OriginTypeUser:
+			um.ForwardOrigin = &MessageOriginUser{}
+		case OriginTypeHiddenUser:
+			um.ForwardOrigin = &MessageOriginHiddenUser{}
+		case OriginTypeChat:
+			um.ForwardOrigin = &MessageOriginChat{}
+		case OriginTypeChannel:
+			um.ForwardOrigin = &MessageOriginChannel{}
+		default:
+			return fmt.Errorf("unknown forward message origin: %s", forwardOriginType)
 		}
 	}
 
@@ -901,6 +918,45 @@ type ExternalReplyInfo struct {
 	Venue *Venue `json:"venue,omitempty"`
 }
 
+func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	if !value.Exists("origin") {
+		return errors.New("no origin")
+	}
+
+	type uExternalReplyInfo ExternalReplyInfo
+	var ue uExternalReplyInfo
+
+	originType := string(value.GetStringBytes("origin", "type"))
+	switch originType {
+	case OriginTypeUser:
+		ue.Origin = &MessageOriginUser{}
+	case OriginTypeHiddenUser:
+		ue.Origin = &MessageOriginHiddenUser{}
+	case OriginTypeChat:
+		ue.Origin = &MessageOriginChat{}
+	case OriginTypeChannel:
+		ue.Origin = &MessageOriginChannel{}
+	default:
+		return fmt.Errorf("unknown origin: %s", originType)
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &ue); err != nil {
+		return err
+	}
+	*e = ExternalReplyInfo(ue)
+
+	return nil
+}
+
 // ReplyParameters - Describes reply parameters for the message that is being sent.
 type ReplyParameters struct {
 	// MessageID - Identifier of the message that will be replied to in the current chat, or in the chat chat_id
@@ -938,7 +994,18 @@ type ReplyParameters struct {
 // MessageOriginHiddenUser (https://core.telegram.org/bots/api#messageoriginhiddenuser)
 // MessageOriginChat (https://core.telegram.org/bots/api#messageoriginchat)
 // MessageOriginChannel (https://core.telegram.org/bots/api#messageoriginchannel)
-type MessageOrigin struct{} // FIXME
+type MessageOrigin interface {
+	OriginType() string
+	OriginalDate() int64
+}
+
+// Message origin types
+const ( // TODO: Add to tests
+	OriginTypeUser       = "user"
+	OriginTypeHiddenUser = "hidden_user"
+	OriginTypeChat       = "chat"
+	OriginTypeChannel    = "channel"
+)
 
 // MessageOriginUser - The message was originally sent by a known user.
 type MessageOriginUser struct {
@@ -952,6 +1019,14 @@ type MessageOriginUser struct {
 	SenderUser User `json:"sender_user"`
 }
 
+func (m *MessageOriginUser) OriginType() string {
+	return OriginTypeUser
+}
+
+func (m *MessageOriginUser) OriginalDate() int64 {
+	return m.Date
+}
+
 // MessageOriginHiddenUser - The message was originally sent by an unknown user.
 type MessageOriginHiddenUser struct {
 	// Type - Type of the message origin, always “hidden_user”
@@ -962,6 +1037,14 @@ type MessageOriginHiddenUser struct {
 
 	// SenderUserName - Name of the user that sent the message originally
 	SenderUserName string `json:"sender_user_name"`
+}
+
+func (m *MessageOriginHiddenUser) OriginType() string {
+	return OriginTypeHiddenUser
+}
+
+func (m *MessageOriginHiddenUser) OriginalDate() int64 {
+	return m.Date
 }
 
 // MessageOriginChat - The message was originally sent on behalf of a chat to a group chat.
@@ -980,6 +1063,14 @@ type MessageOriginChat struct {
 	AuthorSignature string `json:"author_signature,omitempty"`
 }
 
+func (m *MessageOriginChat) OriginType() string {
+	return OriginTypeChat
+}
+
+func (m *MessageOriginChat) OriginalDate() int64 {
+	return m.Date
+}
+
 // MessageOriginChannel - The message was originally sent to a channel chat.
 type MessageOriginChannel struct {
 	// Type - Type of the message origin, always “channel”
@@ -996,6 +1087,14 @@ type MessageOriginChannel struct {
 
 	// AuthorSignature - Optional. Signature of the original post author
 	AuthorSignature string `json:"author_signature,omitempty"`
+}
+
+func (m *MessageOriginChannel) OriginType() string {
+	return OriginTypeChannel
+}
+
+func (m *MessageOriginChannel) OriginalDate() int64 {
+	return m.Date
 }
 
 // PhotoSize - This object represents one size of a photo or a file
@@ -2169,7 +2268,7 @@ type chatMemberData struct {
 }
 
 func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
-	var memberStatus struct {
+	var memberStatus struct { // TODO: Update using fastjson
 		Status string `json:"status"`
 	}
 
@@ -2893,7 +2992,7 @@ type menuButtonData struct {
 }
 
 func (m *menuButtonData) UnmarshalJSON(bytes []byte) error {
-	var buttonType struct {
+	var buttonType struct { // TODO: Update using fastjson
 		Type string `json:"type"`
 	}
 
