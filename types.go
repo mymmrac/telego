@@ -3209,7 +3209,16 @@ func (m *MenuButtonDefault) ButtonType() string {
 // ChatBoostSourcePremium (https://core.telegram.org/bots/api#chatboostsourcepremium)
 // ChatBoostSourceGiftCode (https://core.telegram.org/bots/api#chatboostsourcegiftcode)
 // ChatBoostSourceGiveaway (https://core.telegram.org/bots/api#chatboostsourcegiveaway)
-type ChatBoostSource struct{} // FIXME
+type ChatBoostSource interface {
+	BoostSource() string
+}
+
+// Boost sources
+const ( // TODO: Add to tests
+	BoostSourcePremium  = "premium"
+	BoostSourceGiftCode = "gift_code"
+	BoostSourceGiveaway = "giveaway"
+)
 
 // ChatBoostSourcePremium - The boost was obtained by subscribing to Telegram Premium or by gifting a
 // Telegram Premium subscription to another user.
@@ -3221,6 +3230,10 @@ type ChatBoostSourcePremium struct {
 	User User `json:"user"`
 }
 
+func (b *ChatBoostSourcePremium) BoostSource() string {
+	return BoostSourcePremium
+}
+
 // ChatBoostSourceGiftCode - The boost was obtained by the creation of Telegram Premium gift codes to boost a
 // chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium
 // subscription.
@@ -3230,6 +3243,10 @@ type ChatBoostSourceGiftCode struct {
 
 	// User - User for which the gift code was created
 	User User `json:"user"`
+}
+
+func (b *ChatBoostSourceGiftCode) BoostSource() string {
+	return BoostSourceGiftCode
 }
 
 // ChatBoostSourceGiveaway - The boost was obtained by the creation of a Telegram Premium giveaway. This
@@ -3249,6 +3266,10 @@ type ChatBoostSourceGiveaway struct {
 	IsUnclaimed bool `json:"is_unclaimed,omitempty"`
 }
 
+func (b *ChatBoostSourceGiveaway) BoostSource() string {
+	return BoostSourceGiveaway
+}
+
 // ChatBoost - This object contains information about a chat boost.
 type ChatBoost struct {
 	// BoostID - Unique identifier of the boost
@@ -3263,6 +3284,43 @@ type ChatBoost struct {
 
 	// Source - Source of the added boost
 	Source ChatBoostSource `json:"source"`
+}
+
+func (b *ChatBoost) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uChatBoost ChatBoost
+	var ub uChatBoost
+
+	if !value.Exists("source") {
+		return errors.New("no source")
+	}
+
+	source := string(value.GetStringBytes("source", "source"))
+	switch source {
+	case BoostSourcePremium:
+		ub.Source = &ChatBoostSourcePremium{}
+	case BoostSourceGiftCode:
+		ub.Source = &ChatBoostSourceGiftCode{}
+	case BoostSourceGiveaway:
+		ub.Source = &ChatBoostSourceGiveaway{}
+	default:
+		return fmt.Errorf("unknown chat boost source: %s", source)
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &ub); err != nil {
+		return err
+	}
+	*b = ChatBoost(ub)
+
+	return nil
 }
 
 // ChatBoostUpdated - This object represents a boost added to a chat or changed.
@@ -3287,6 +3345,43 @@ type ChatBoostRemoved struct {
 
 	// Source - Source of the removed boost
 	Source ChatBoostSource `json:"source"`
+}
+
+func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uChatBoostRemoved ChatBoostRemoved
+	var ub uChatBoostRemoved
+
+	if !value.Exists("source") {
+		return errors.New("no source")
+	}
+
+	source := string(value.GetStringBytes("source", "source"))
+	switch source {
+	case BoostSourcePremium:
+		ub.Source = &ChatBoostSourcePremium{}
+	case BoostSourceGiftCode:
+		ub.Source = &ChatBoostSourceGiftCode{}
+	case BoostSourceGiveaway:
+		ub.Source = &ChatBoostSourceGiveaway{}
+	default:
+		return fmt.Errorf("unknown chat boost source: %s", source)
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &ub); err != nil {
+		return err
+	}
+	*b = ChatBoostRemoved(ub)
+
+	return nil
 }
 
 // UserChatBoosts - This object represents a list of boosts added to a chat by a user.

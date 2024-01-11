@@ -310,4 +310,8 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if field.typ == "*ReactionType" {
 		field.typ = "ReactionType"
 	}
+
+	if field.typ == "*ChatBoostSource" {
+		field.typ = "ChatBoostSource"
+	}
 }
