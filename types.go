@@ -380,10 +380,46 @@ type Chat struct {
 }
 
 // ChatID returns [ChatID] of this chat
-func (c Chat) ChatID() ChatID {
+func (c *Chat) ChatID() ChatID {
 	return ChatID{
 		ID: c.ID,
 	}
+}
+
+func (c *Chat) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uChat Chat
+	var uc uChat
+
+	if value.Exists("available_reactions") {
+		availableReactions := value.GetArray("available_reactions")
+		for _, reaction := range availableReactions {
+			reactionType := string(reaction.GetStringBytes("type"))
+			switch reactionType {
+			case ReactionEmoji:
+				uc.AvailableReactions = append(uc.AvailableReactions, &ReactionTypeEmoji{})
+			case ReactionCustomEmoji:
+				uc.AvailableReactions = append(uc.AvailableReactions, &ReactionTypeCustomEmoji{})
+			default:
+				return fmt.Errorf("unknown reaction type: %s", reactionType)
+			}
+		}
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &uc); err != nil {
+		return err
+	}
+	*c = Chat(uc)
+
+	return nil
 }
 
 // Chat types
@@ -2688,7 +2724,15 @@ type ChatLocation struct {
 // ReactionType - This object describes the type of a reaction. Currently, it can be one of
 // ReactionTypeEmoji (https://core.telegram.org/bots/api#reactiontypeemoji)
 // ReactionTypeCustomEmoji (https://core.telegram.org/bots/api#reactiontypecustomemoji)
-type ReactionType struct{} // FIXME
+type ReactionType interface {
+	ReactionType() string
+}
+
+// Reaction types
+const ( // TODO: Add to tests
+	ReactionEmoji       = "emoji"
+	ReactionCustomEmoji = "custom_emoji"
+)
 
 // ReactionTypeEmoji - The reaction is based on an emoji.
 type ReactionTypeEmoji struct {
@@ -2705,6 +2749,10 @@ type ReactionTypeEmoji struct {
 	Emoji string `json:"emoji"`
 }
 
+func (r *ReactionTypeEmoji) ReactionType() string {
+	return ReactionEmoji
+}
+
 // ReactionTypeCustomEmoji - The reaction is based on a custom emoji.
 type ReactionTypeCustomEmoji struct {
 	// Type - Type of the reaction, always “custom_emoji”
@@ -2714,6 +2762,10 @@ type ReactionTypeCustomEmoji struct {
 	CustomEmojiID string `json:"custom_emoji_id"`
 }
 
+func (r *ReactionTypeCustomEmoji) ReactionType() string {
+	return ReactionCustomEmoji
+}
+
 // ReactionCount - Represents a reaction added to a message along with the number of times it was added.
 type ReactionCount struct {
 	// Type - Type of the reaction
@@ -2721,6 +2773,41 @@ type ReactionCount struct {
 
 	// TotalCount - Number of times the reaction was added
 	TotalCount int `json:"total_count"`
+}
+
+func (c *ReactionCount) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uReactionCount ReactionCount
+	var uc uReactionCount
+
+	if !value.Exists("type") {
+		return errors.New("no type")
+	}
+
+	reactionType := string(value.GetStringBytes("type", "type"))
+	switch reactionType {
+	case ReactionEmoji:
+		uc.Type = &ReactionTypeEmoji{}
+	case ReactionCustomEmoji:
+		uc.Type = &ReactionTypeCustomEmoji{}
+	default:
+		return fmt.Errorf("unknown reaction type: %s", reactionType)
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &uc); err != nil {
+		return err
+	}
+	*c = ReactionCount(uc)
+
+	return nil
 }
 
 // MessageReactionUpdated - This object represents a change of a reaction on a message performed by a user.
@@ -2745,6 +2832,61 @@ type MessageReactionUpdated struct {
 
 	// NewReaction - New list of reaction types that have been set by the user
 	NewReaction []ReactionType `json:"new_reaction"`
+}
+
+func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	if !value.Exists("old_reaction") {
+		return errors.New("no old reactions")
+	}
+
+	if !value.Exists("new_reaction") {
+		return errors.New("no new reactions")
+	}
+
+	type uMessageReactionUpdated MessageReactionUpdated
+	var uu uMessageReactionUpdated
+
+	oldReactions := value.GetArray("old_reaction")
+	for _, reaction := range oldReactions {
+		reactionType := string(reaction.GetStringBytes("type"))
+		switch reactionType {
+		case ReactionEmoji:
+			uu.OldReaction = append(uu.OldReaction, &ReactionTypeEmoji{})
+		case ReactionCustomEmoji:
+			uu.OldReaction = append(uu.OldReaction, &ReactionTypeCustomEmoji{})
+		default:
+			return fmt.Errorf("unknown reaction type: %s", reactionType)
+		}
+	}
+
+	newReactions := value.GetArray("new_reaction")
+	for _, reaction := range newReactions {
+		reactionType := string(reaction.GetStringBytes("type"))
+		switch reactionType {
+		case ReactionEmoji:
+			uu.NewReaction = append(uu.NewReaction, &ReactionTypeEmoji{})
+		case ReactionCustomEmoji:
+			uu.NewReaction = append(uu.NewReaction, &ReactionTypeCustomEmoji{})
+		default:
+			return fmt.Errorf("unknown reaction type: %s", reactionType)
+		}
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &uu); err != nil {
+		return err
+	}
+	*u = MessageReactionUpdated(uu)
+
+	return nil
 }
 
 // MessageReactionCountUpdated - This object represents reaction changes on a message with anonymous
