@@ -596,8 +596,11 @@ func TestTypesConstants(t *testing.T) {
 		{
 			EntityTypeMention, EntityTypeHashtag, EntityTypeCashtag, EntityTypeBotCommand, EntityTypeURL,
 			EntityTypeEmail, EntityTypePhoneNumber, EntityTypeBold, EntityTypeItalic, EntityTypeUnderline,
-			EntityTypeStrikethrough, EntityTypeSpoiler, EntityTypeCode, EntityTypePre, EntityTypeTextLink,
-			EntityTypeTextMention, EntityTypeCustomEmoji,
+			EntityTypeStrikethrough, EntityTypeSpoiler, EntityTypeBlockquote, EntityTypeCode, EntityTypePre,
+			EntityTypeTextLink, EntityTypeTextMention, EntityTypeCustomEmoji,
+		},
+		{
+			OriginTypeUser, OriginTypeHiddenUser, OriginTypeChat, OriginTypeChannel,
 		},
 		{
 			EmojiDice, EmojiDarts, EmojiBowling, EmojiBasketball, EmojiSoccer, EmojiSlotMachine,
@@ -613,11 +616,17 @@ func TestTypesConstants(t *testing.T) {
 			MemberStatusLeft, MemberStatusBanned,
 		},
 		{
+			ReactionEmoji, ReactionCustomEmoji,
+		},
+		{
 			ScopeTypeDefault, ScopeTypeAllPrivateChats, ScopeTypeAllGroupChats, ScopeTypeAllChatAdministrators,
 			ScopeTypeChat, ScopeTypeChatAdministrators, ScopeTypeChatMember,
 		},
 		{
 			ButtonTypeCommands, ButtonTypeWebApp, ButtonTypeDefault,
+		},
+		{
+			BoostSourcePremium, BoostSourceGiftCode, BoostSourceGiveaway,
 		},
 		{
 			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,

@@ -853,6 +853,7 @@ const (
 	EntityTypeUnderline     = "underline"
 	EntityTypeStrikethrough = "strikethrough"
 	EntityTypeSpoiler       = "spoiler"
+	EntityTypeBlockquote    = "blockquote"
 	EntityTypeCode          = "code"
 	EntityTypePre           = "pre"
 	EntityTypeTextLink      = "text_link"
@@ -1040,7 +1041,7 @@ type MessageOrigin interface {
 }
 
 // Message origin types
-const ( // TODO: Add to tests
+const (
 	OriginTypeUser       = "user"
 	OriginTypeHiddenUser = "hidden_user"
 	OriginTypeChat       = "chat"
@@ -2336,16 +2337,17 @@ type chatMemberData struct {
 }
 
 func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
-	var memberStatus struct { // TODO: Update using fastjson
-		Status string `json:"status"`
-	}
+	parser := json.ParserPoll.Get()
 
-	err := json.Unmarshal(bytes, &memberStatus)
+	value, err := parser.ParseBytes(bytes)
 	if err != nil {
 		return err
 	}
 
-	switch memberStatus.Status {
+	memberStatus := string(value.GetStringBytes("status"))
+	json.ParserPoll.Put(parser)
+
+	switch memberStatus {
 	case MemberStatusCreator:
 		var cm *ChatMemberOwner
 		err = json.Unmarshal(bytes, &cm)
@@ -2371,7 +2373,7 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 		err = json.Unmarshal(bytes, &cm)
 		c.Data = cm
 	default:
-		return fmt.Errorf("unknown member status: %q", memberStatus.Status)
+		return fmt.Errorf("unknown member status: %q", memberStatus)
 	}
 
 	return err
@@ -2733,7 +2735,7 @@ type ReactionType interface {
 }
 
 // Reaction types
-const ( // TODO: Add to tests
+const (
 	ReactionEmoji       = "emoji"
 	ReactionCustomEmoji = "custom_emoji"
 )
@@ -3138,16 +3140,17 @@ type menuButtonData struct {
 }
 
 func (m *menuButtonData) UnmarshalJSON(bytes []byte) error {
-	var buttonType struct { // TODO: Update using fastjson
-		Type string `json:"type"`
-	}
+	parser := json.ParserPoll.Get()
 
-	err := json.Unmarshal(bytes, &buttonType)
+	value, err := parser.ParseBytes(bytes)
 	if err != nil {
 		return err
 	}
 
-	switch buttonType.Type {
+	buttonType := string(value.GetStringBytes("type"))
+	json.ParserPoll.Put(parser)
+
+	switch buttonType {
 	case ButtonTypeCommands:
 		var mb *MenuButtonCommands
 		err = json.Unmarshal(bytes, &mb)
@@ -3161,7 +3164,7 @@ func (m *menuButtonData) UnmarshalJSON(bytes []byte) error {
 		err = json.Unmarshal(bytes, &mb)
 		m.Data = mb
 	default:
-		return fmt.Errorf("unknown menu button type: %q", buttonType.Type)
+		return fmt.Errorf("unknown menu button type: %q", buttonType)
 	}
 
 	return err
@@ -3218,7 +3221,7 @@ type ChatBoostSource interface {
 }
 
 // Boost sources
-const ( // TODO: Add to tests
+const (
 	BoostSourcePremium  = "premium"
 	BoostSourceGiftCode = "gift_code"
 	BoostSourceGiveaway = "giveaway"
