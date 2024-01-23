@@ -390,6 +390,8 @@ func (c *Chat) ChatID() ChatID {
 	}
 }
 
+const unknownReactionTypeErr = "unknown reaction type: %s"
+
 // UnmarshalJSON converts JSON to Chat
 func (c *Chat) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
@@ -412,7 +414,7 @@ func (c *Chat) UnmarshalJSON(data []byte) error {
 			case ReactionCustomEmoji:
 				uc.AvailableReactions = append(uc.AvailableReactions, &ReactionTypeCustomEmoji{})
 			default:
-				return fmt.Errorf("unknown reaction type: %s", reactionType)
+				return fmt.Errorf(unknownReactionTypeErr, reactionType)
 			}
 		}
 	}
@@ -2827,7 +2829,7 @@ func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 	case ReactionCustomEmoji:
 		uc.Type = &ReactionTypeCustomEmoji{}
 	default:
-		return fmt.Errorf("unknown reaction type: %s", reactionType)
+		return fmt.Errorf(unknownReactionTypeErr, reactionType)
 	}
 
 	json.ParserPoll.Put(parser)
@@ -2893,7 +2895,7 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 		case ReactionCustomEmoji:
 			uu.OldReaction = append(uu.OldReaction, &ReactionTypeCustomEmoji{})
 		default:
-			return fmt.Errorf("unknown reaction type: %s", reactionType)
+			return fmt.Errorf(unknownReactionTypeErr, reactionType)
 		}
 	}
 
@@ -2906,7 +2908,7 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 		case ReactionCustomEmoji:
 			uu.NewReaction = append(uu.NewReaction, &ReactionTypeCustomEmoji{})
 		default:
-			return fmt.Errorf("unknown reaction type: %s", reactionType)
+			return fmt.Errorf(unknownReactionTypeErr, reactionType)
 		}
 	}
 
