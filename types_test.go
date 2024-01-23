@@ -958,3 +958,352 @@ func TestUpdate_Context(t *testing.T) {
 		u.WithContext(nil) //nolint:staticcheck
 	})
 }
+
+func Test_Chat_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *Chat
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"id": 1}`,
+			data: &Chat{
+				ID: 1,
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_available_reactions",
+			json:    `{"available_reactions": [{}]}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Chat{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
+
+func Test_ExternalReplyInfo_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *ExternalReplyInfo
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"message_id": 1, "origin": {"type": "user"}}`,
+			data: &ExternalReplyInfo{
+				MessageID: 1,
+				Origin: &MessageOriginUser{
+					Type: OriginTypeUser,
+				},
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_origin",
+			json:    `{}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_origin",
+			json:    `{"origin": {}}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &ExternalReplyInfo{}
+			err := e.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, e)
+		})
+	}
+}
+
+func Test_CallbackQuery_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *CallbackQuery
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"id": "1"}`,
+			data: &CallbackQuery{
+				ID: "1",
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_message",
+			json:    `{"message": {"date": "a"}}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &CallbackQuery{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
+
+func Test_ReactionCount_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *ReactionCount
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"total_count": 1, "type": {"type": "emoji"}}`,
+			data: &ReactionCount{
+				TotalCount: 1,
+				Type: &ReactionTypeEmoji{
+					Type: ReactionEmoji,
+				},
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_type",
+			json:    `{}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_type",
+			json:    `{"type": {}}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &ReactionCount{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
+
+func Test_MessageReactionUpdated_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *MessageReactionUpdated
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"old_reaction": [], "new_reaction": []}`,
+			data: &MessageReactionUpdated{
+				OldReaction: make([]ReactionType, 0),
+				NewReaction: make([]ReactionType, 0),
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_old_reaction",
+			json:    `{"new_reaction": []}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_new_reaction",
+			json:    `{"old_reaction": []}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_old_reaction",
+			json:    `{"old_reaction": [{"type": 1}], "new_reaction": []}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_new_reaction",
+			json:    `{"old_reaction": [],  "new_reaction": [{"type": 1}]}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := &MessageReactionUpdated{}
+			err := m.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, m)
+		})
+	}
+}
+
+func Test_ChatBoost_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *ChatBoost
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"boost_id": "1", "source": {"source": "premium"}}`,
+			data: &ChatBoost{
+				BoostID: "1",
+				Source: &ChatBoostSourcePremium{
+					Source: BoostSourcePremium,
+				},
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_source",
+			json:    `{}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_source",
+			json:    `{"source": {"source": ""}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &ChatBoost{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
+
+func Test_ChatBoostRemoved_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *ChatBoostRemoved
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"boost_id": "1", "source": {"source": "premium"}}`,
+			data: &ChatBoostRemoved{
+				BoostID: "1",
+				Source: &ChatBoostSourcePremium{
+					Source: BoostSourcePremium,
+				},
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_source",
+			json:    `{}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_source",
+			json:    `{"source": {"source": ""}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &ChatBoostRemoved{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
