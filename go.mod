@@ -5,7 +5,6 @@ go 1.21
 require (
 	github.com/bytedance/sonic v1.10.2
 	github.com/fasthttp/router v1.4.22
-	github.com/goccy/go-json v0.10.2
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.4
 	github.com/valyala/fasthttp v1.51.0
@@ -14,7 +13,8 @@ require (
 )
 
 // Temporary fix for issue https://github.com/goccy/go-json/issues/405
-replace github.com/goccy/go-json => github.com/cmetallo42/go-json v0.0.0-20221114111108-7fed434e8044
+// require github.com/goccy/go-json v0.10.2
+require github.com/grbit/go-json v0.11.0
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect

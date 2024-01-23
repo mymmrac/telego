@@ -390,6 +390,7 @@ func (c *Chat) ChatID() ChatID {
 	}
 }
 
+// UnmarshalJSON converts JSON to Chat
 func (c *Chat) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -698,6 +699,7 @@ type Message struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to Message
 func (m *Message) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -743,18 +745,22 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// IsAccessible returns true if message accessible for bot
 func (m *Message) IsAccessible() bool {
 	return true
 }
 
+// GetChat returns message chat
 func (m *Message) GetChat() Chat {
 	return m.Chat
 }
 
+// GetMessageID returns message ID
 func (m *Message) GetMessageID() int {
 	return m.MessageID
 }
 
+// GetDate returns message date
 func (m *Message) GetDate() int64 {
 	return m.Date
 }
@@ -778,18 +784,22 @@ type InaccessibleMessage struct {
 	Date int64 `json:"date"`
 }
 
+// IsAccessible returns true if message accessible for bot
 func (m *InaccessibleMessage) IsAccessible() bool {
 	return false
 }
 
+// GetChat returns message chat
 func (m *InaccessibleMessage) GetChat() Chat {
 	return m.Chat
 }
 
+// GetMessageID returns message ID
 func (m *InaccessibleMessage) GetMessageID() int {
 	return m.MessageID
 }
 
+// GetDate returns message date
 func (m *InaccessibleMessage) GetDate() int64 {
 	return m.Date
 }
@@ -959,6 +969,7 @@ type ExternalReplyInfo struct {
 	Venue *Venue `json:"venue,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to ExternalReplyInfo
 func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -1060,10 +1071,12 @@ type MessageOriginUser struct {
 	SenderUser User `json:"sender_user"`
 }
 
+// OriginType returns original message type
 func (m *MessageOriginUser) OriginType() string {
 	return OriginTypeUser
 }
 
+// OriginalDate returns original message date
 func (m *MessageOriginUser) OriginalDate() int64 {
 	return m.Date
 }
@@ -1080,10 +1093,12 @@ type MessageOriginHiddenUser struct {
 	SenderUserName string `json:"sender_user_name"`
 }
 
+// OriginType returns original message type
 func (m *MessageOriginHiddenUser) OriginType() string {
 	return OriginTypeHiddenUser
 }
 
+// OriginalDate returns original message date
 func (m *MessageOriginHiddenUser) OriginalDate() int64 {
 	return m.Date
 }
@@ -1104,10 +1119,12 @@ type MessageOriginChat struct {
 	AuthorSignature string `json:"author_signature,omitempty"`
 }
 
+// OriginType returns original message type
 func (m *MessageOriginChat) OriginType() string {
 	return OriginTypeChat
 }
 
+// OriginalDate returns original message date
 func (m *MessageOriginChat) OriginalDate() int64 {
 	return m.Date
 }
@@ -1130,10 +1147,12 @@ type MessageOriginChannel struct {
 	AuthorSignature string `json:"author_signature,omitempty"`
 }
 
+// OriginType returns original message type
 func (m *MessageOriginChannel) OriginType() string {
 	return OriginTypeChannel
 }
 
+// OriginalDate returns original message date
 func (m *MessageOriginChannel) OriginalDate() int64 {
 	return m.Date
 }
@@ -2118,6 +2137,7 @@ type CallbackQuery struct {
 	GameShortName string `json:"game_short_name,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to CallbackQuery
 func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -2336,6 +2356,7 @@ type chatMemberData struct {
 	Data ChatMember
 }
 
+// UnmarshalJSON converts JSON to chatMemberData
 func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -2755,6 +2776,7 @@ type ReactionTypeEmoji struct {
 	Emoji string `json:"emoji"`
 }
 
+// ReactionType returns reaction type
 func (r *ReactionTypeEmoji) ReactionType() string {
 	return ReactionEmoji
 }
@@ -2768,6 +2790,7 @@ type ReactionTypeCustomEmoji struct {
 	CustomEmojiID string `json:"custom_emoji_id"`
 }
 
+// ReactionType returns reaction type
 func (r *ReactionTypeCustomEmoji) ReactionType() string {
 	return ReactionCustomEmoji
 }
@@ -2781,6 +2804,7 @@ type ReactionCount struct {
 	TotalCount int `json:"total_count"`
 }
 
+// UnmarshalJSON converts JSON to ReactionCount
 func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -2840,6 +2864,7 @@ type MessageReactionUpdated struct {
 	NewReaction []ReactionType `json:"new_reaction"`
 }
 
+// UnmarshalJSON converts JSON to MessageReactionUpdated
 func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -3139,6 +3164,7 @@ type menuButtonData struct {
 	Data MenuButton
 }
 
+// UnmarshalJSON converts JSON to menuButtonData
 func (m *menuButtonData) UnmarshalJSON(bytes []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -3237,6 +3263,7 @@ type ChatBoostSourcePremium struct {
 	User User `json:"user"`
 }
 
+// BoostSource returns boost source
 func (b *ChatBoostSourcePremium) BoostSource() string {
 	return BoostSourcePremium
 }
@@ -3252,6 +3279,7 @@ type ChatBoostSourceGiftCode struct {
 	User User `json:"user"`
 }
 
+// BoostSource returns boost source
 func (b *ChatBoostSourceGiftCode) BoostSource() string {
 	return BoostSourceGiftCode
 }
@@ -3273,6 +3301,7 @@ type ChatBoostSourceGiveaway struct {
 	IsUnclaimed bool `json:"is_unclaimed,omitempty"`
 }
 
+// BoostSource returns boost source
 func (b *ChatBoostSourceGiveaway) BoostSource() string {
 	return BoostSourceGiveaway
 }
@@ -3293,6 +3322,7 @@ type ChatBoost struct {
 	Source ChatBoostSource `json:"source"`
 }
 
+// UnmarshalJSON converts JSON to ChatBoost
 func (b *ChatBoost) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
@@ -3335,7 +3365,7 @@ type ChatBoostUpdated struct {
 	// Chat - Chat which was boosted
 	Chat Chat `json:"chat"`
 
-	// Boost - Infomation about the chat boost
+	// Boost - Information about the chat boost
 	Boost ChatBoost `json:"boost"`
 }
 
@@ -3354,6 +3384,7 @@ type ChatBoostRemoved struct {
 	Source ChatBoostSource `json:"source"`
 }
 
+// UnmarshalJSON converts JSON to ChatBoostRemoved
 func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
