@@ -27,8 +27,8 @@ type GetUpdatesParams struct {
 	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
 	// example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types.
 	// See Update (https://core.telegram.org/bots/api#update) for a complete list of available update types. Specify
-	// an empty list to receive all update types except chat_member (default). If not specified, the previous
-	// setting will be used.
+	// an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count
+	// (default). If not specified, the previous setting will be used.
 	// Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted
 	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
@@ -89,8 +89,8 @@ type SetWebhookParams struct {
 	// AllowedUpdates - Optional. A JSON-serialized list of the update types you want your bot to receive. For
 	// example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types.
 	// See Update (https://core.telegram.org/bots/api#update) for a complete list of available update types. Specify
-	// an empty list to receive all update types except chat_member (default). If not specified, the previous
-	// setting will be used.
+	// an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count
+	// (default). If not specified, the previous setting will be used.
 	// Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted
 	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
@@ -219,8 +219,8 @@ type SendMessageParams struct {
 	// specified instead of parse_mode
 	Entities []MessageEntity `json:"entities,omitempty"`
 
-	// DisableWebPagePreview - Optional. Disables link previews for links in this message
-	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
+	// LinkPreviewOptions - Optional. Link preview generation options for the message
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -229,12 +229,8 @@ type SendMessageParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -287,8 +283,9 @@ type ForwardMessageParams struct {
 	MessageID int `json:"message_id"`
 }
 
-// ForwardMessage - Use this method to forward messages of any kind. Service messages can't be forwarded. On
-// success, the sent Message (https://core.telegram.org/bots/api#message) is returned.
+// ForwardMessage - Use this method to forward messages of any kind. Service messages and messages with
+// protected content can't be forwarded. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
 func (b *Bot) ForwardMessage(params *ForwardMessageParams) (*Message, error) {
 	var message *Message
 	err := b.performRequest("forwardMessage", params, &message)
@@ -297,6 +294,46 @@ func (b *Bot) ForwardMessage(params *ForwardMessageParams) (*Message, error) {
 	}
 
 	return message, nil
+}
+
+// ForwardMessagesParams - Represents parameters of forwardMessages method.
+type ForwardMessagesParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// FromChatID - Unique identifier for the chat where the original messages were sent (or channel username in
+	// the format @channel_username)
+	FromChatID ChatID `json:"from_chat_id"`
+
+	// MessageIDs - Identifiers of 1-100 messages in the chat from_chat_id to forward. The identifiers must be
+	// specified in a strictly increasing order.
+	MessageIDs []int `json:"message_ids"`
+
+	// DisableNotification - Optional. Sends the messages silently
+	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the forwarded messages from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+}
+
+// ForwardMessages - Use this method to forward multiple messages of any kind. If some of the specified
+// messages can't be found or forwarded, they are skipped. Service messages and messages with protected content
+// can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageID
+// (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
+func (b *Bot) ForwardMessages(params *ForwardMessagesParams) (*MessageID, error) {
+	var messageID *MessageID
+	err := b.performRequest("forwardMessages", params, &messageID)
+	if err != nil {
+		return nil, fmt.Errorf("telego: forwardMessages(): %w", err)
+	}
+
+	return messageID, nil
 }
 
 // CopyMessageParams - Represents parameters of copyMessage method.
@@ -335,12 +372,8 @@ type CopyMessageParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -349,17 +382,63 @@ type CopyMessageParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// CopyMessage - Use this method to copy messages of any kind. Service messages and invoice messages can't be
-// copied. A quiz poll (https://core.telegram.org/bots/api#poll) can be copied only if the value of the field
-// correct_option_id is known to the bot. The method is analogous to the method forwardMessage
-// (https://core.telegram.org/bots/api#forwardmessage), but the copied message doesn't have a link to the
-// original message. Returns the MessageID (https://core.telegram.org/bots/api#messageid) of the sent message on
-// success.
+// CopyMessage - Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway
+// winners messages, and invoice messages can't be copied. A quiz poll (https://core.telegram.org/bots/api#poll)
+// can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous
+// to the method forwardMessage (https://core.telegram.org/bots/api#forwardmessage), but the copied message
+// doesn't have a link to the original message. Returns the MessageID
+// (https://core.telegram.org/bots/api#messageid) of the sent message on success.
 func (b *Bot) CopyMessage(params *CopyMessageParams) (*MessageID, error) {
 	var messageID *MessageID
 	err := b.performRequest("copyMessage", params, &messageID)
 	if err != nil {
 		return nil, fmt.Errorf("telego: copyMessage(): %w", err)
+	}
+
+	return messageID, nil
+}
+
+// CopyMessagesParams - Represents parameters of copyMessages method.
+type CopyMessagesParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// FromChatID - Unique identifier for the chat where the original messages were sent (or channel username in
+	// the format @channel_username)
+	FromChatID ChatID `json:"from_chat_id"`
+
+	// MessageIDs - Identifiers of 1-100 messages in the chat from_chat_id to copy. The identifiers must be
+	// specified in a strictly increasing order.
+	MessageIDs []int `json:"message_ids"`
+
+	// DisableNotification - Optional. Sends the messages silently
+	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent messages from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// RemoveCaption - Optional. Pass True to copy the messages without their captions
+	RemoveCaption bool `json:"remove_caption,omitempty"`
+}
+
+// CopyMessages - Use this method to copy messages of any kind. If some of the specified messages can't be
+// found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and
+// invoice messages can't be copied. A quiz poll (https://core.telegram.org/bots/api#poll) can be copied only if
+// the value of the field correct_option_id is known to the bot. The method is analogous to the method
+// forwardMessages (https://core.telegram.org/bots/api#forwardmessages), but the copied messages don't have a
+// link to the original message. Album grouping is kept for copied messages. On success, an array of MessageID
+// (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
+func (b *Bot) CopyMessages(params *CopyMessagesParams) (*MessageID, error) {
+	var messageID *MessageID
+	err := b.performRequest("copyMessages", params, &messageID)
+	if err != nil {
+		return nil, fmt.Errorf("telego: copyMessages(): %w", err)
 	}
 
 	return messageID, nil
@@ -404,12 +483,8 @@ type SendPhotoParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -487,12 +562,8 @@ type SendAudioParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -574,12 +645,8 @@ type SendDocumentParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -670,12 +737,8 @@ type SendVideoParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -764,12 +827,8 @@ type SendAnimationParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -839,12 +898,8 @@ type SendVoiceParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -911,12 +966,8 @@ type SendVideoNoteParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -969,12 +1020,8 @@ type SendMediaGroupParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent messages from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the messages are a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 }
 
 func (p *SendMediaGroupParams) fileParameters() map[string]ta.NamedReader {
@@ -1043,12 +1090,8 @@ type SendLocationParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -1112,12 +1155,8 @@ type SendVenueParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -1168,12 +1207,8 @@ type SendContactParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -1255,12 +1290,8 @@ type SendPollParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -1304,12 +1335,8 @@ type SendDiceParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -1379,6 +1406,37 @@ func (b *Bot) SendChatAction(params *SendChatActionParams) error {
 	err := b.performRequest("sendChatAction", params)
 	if err != nil {
 		return fmt.Errorf("telego: sendChatAction(): %w", err)
+	}
+
+	return nil
+}
+
+// SetMessageReactionParams - Represents parameters of setMessageReaction method.
+type SetMessageReactionParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageID - Identifier of the target message. If the message belongs to a media group, the reaction is
+	// set to the first non-deleted message in the group instead.
+	MessageID int `json:"message_id"`
+
+	// Reaction - Optional. New list of reaction types to set on the message. Currently, as non-premium users,
+	// bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already
+	// present on the message or explicitly allowed by chat administrators.
+	Reaction []ReactionType `json:"reaction,omitempty"`
+
+	// IsBig - Optional. Pass True to set the reaction with a big animation
+	IsBig bool `json:"is_big,omitempty"`
+}
+
+// SetMessageReaction - Use this method to change the chosen reactions on a message. Service messages can't
+// be reacted to. Automatically forwarded messages from a channel to its discussion group have the same
+// available reactions as messages in the channel. Returns True on success.
+func (b *Bot) SetMessageReaction(params *SetMessageReactionParams) error {
+	err := b.performRequest("setMessageReaction", params)
+	if err != nil {
+		return fmt.Errorf("telego: setMessageReaction(): %w", err)
 	}
 
 	return nil
@@ -2047,8 +2105,7 @@ type GetChatParams struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-// GetChat - Use this method to get up to date information about the chat (current name of the user for
-// one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat
+// GetChat - Use this method to get up to date information about the chat. Returns a Chat
 // (https://core.telegram.org/bots/api#chat) object on success.
 func (b *Bot) GetChat(params *GetChatParams) (*Chat, error) {
 	var chat *Chat
@@ -2491,6 +2548,28 @@ func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
 	return nil
 }
 
+// GetUserChatBoostsParams - Represents parameters of getUserChatBoosts method.
+type GetUserChatBoostsParams struct {
+	// ChatID - Unique identifier for the chat or username of the channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+}
+
+// GetUserChatBoosts - Use this method to get the list of boosts added to a chat by a user. Requires
+// administrator rights in the chat. Returns a UserChatBoosts
+// (https://core.telegram.org/bots/api#userchatboosts) object.
+func (b *Bot) GetUserChatBoosts(params *GetUserChatBoostsParams) (*UserChatBoosts, error) {
+	var userChatBoosts *UserChatBoosts
+	err := b.performRequest("getUserChatBoosts", params, &userChatBoosts)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getUserChatBoosts(): %w", err)
+	}
+
+	return userChatBoosts, nil
+}
+
 // SetMyCommandsParams - Represents parameters of setMyCommands method.
 type SetMyCommandsParams struct {
 	// Commands - A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most
@@ -2757,9 +2836,9 @@ type GetMyDefaultAdministratorRightsParams struct {
 
 // GetMyDefaultAdministratorRights - Use this method to get the current default administrator rights of the
 // bot. Returns ChatAdministratorRights (https://core.telegram.org/bots/api#chatadministratorrights) on success.
-func (b *Bot) GetMyDefaultAdministratorRights(params *GetMyDefaultAdministratorRightsParams) (
-	*ChatAdministratorRights, error,
-) {
+func (b *Bot) GetMyDefaultAdministratorRights(
+	params *GetMyDefaultAdministratorRightsParams,
+) (*ChatAdministratorRights, error) {
 	var chatAdministratorRights *ChatAdministratorRights
 	err := b.performRequest("getMyDefaultAdministratorRights", params, &chatAdministratorRights)
 	if err != nil {
@@ -2793,8 +2872,8 @@ type EditMessageTextParams struct {
 	// specified instead of parse_mode
 	Entities []MessageEntity `json:"entities,omitempty"`
 
-	// DisableWebPagePreview - Optional. Disables link previews for links in this message
-	DisableWebPagePreview bool `json:"disable_web_page_preview,omitempty"`
+	// LinkPreviewOptions - Optional. Link preview generation options for the message
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards).
@@ -3082,6 +3161,28 @@ func (b *Bot) DeleteMessage(params *DeleteMessageParams) error {
 	return nil
 }
 
+// DeleteMessagesParams - Represents parameters of deleteMessages method.
+type DeleteMessagesParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageIDs - Identifiers of 1-100 messages to delete. See deleteMessage
+	// (https://core.telegram.org/bots/api#deletemessage) for limitations on which messages can be deleted
+	MessageIDs []int `json:"message_ids"`
+}
+
+// DeleteMessages - Use this method to delete multiple messages simultaneously. If some of the specified
+// messages can't be found, they are skipped. Returns True on success.
+func (b *Bot) DeleteMessages(params *DeleteMessagesParams) error {
+	err := b.performRequest("deleteMessages", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteMessages(): %w", err)
+	}
+
+	return nil
+}
+
 // SendStickerParams - Represents parameters of sendSticker method.
 type SendStickerParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
@@ -3109,12 +3210,8 @@ type SendStickerParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
@@ -3670,12 +3767,8 @@ type SendInvoiceParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Pay total price' button will be
@@ -3888,12 +3981,8 @@ type SendGameParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
-	// ReplyToMessageID - Optional. If the message is a reply, ID of the original message
-	ReplyToMessageID int `json:"reply_to_message_id,omitempty"`
-
-	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// replied-to message is not found
-	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game_title' button will be
