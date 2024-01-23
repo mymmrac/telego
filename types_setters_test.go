@@ -6,6 +6,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestReplyParameters_Setters(t *testing.T) {
+	r := (&ReplyParameters{}).
+		WithMessageID(1).
+		WithChatID(ChatID{ID: 2}).
+		WithAllowSendingWithoutReply().
+		WithQuote("Quote").
+		WithQuoteParseMode("QuoteParseMode").
+		WithQuoteEntities([]MessageEntity{{Type: "QuoteEntities"}}...).
+		WithQuotePosition(3)
+
+	assert.Equal(t, &ReplyParameters{
+		MessageID:                1,
+		ChatID:                   ChatID{ID: 2},
+		AllowSendingWithoutReply: true,
+		Quote:                    "Quote",
+		QuoteParseMode:           "QuoteParseMode",
+		QuoteEntities:            []MessageEntity{{Type: "QuoteEntities"}},
+		QuotePosition:            3,
+	}, r)
+}
+
 func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 	r := (&ReplyKeyboardMarkup{}).
 		WithKeyboard([][]KeyboardButton{{}}...).

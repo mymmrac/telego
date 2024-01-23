@@ -1,5 +1,47 @@
 package telego
 
+// WithMessageID adds message ID parameter
+func (r *ReplyParameters) WithMessageID(messageID int) *ReplyParameters {
+	r.MessageID = messageID
+	return r
+}
+
+// WithChatID adds chat ID parameter
+func (r *ReplyParameters) WithChatID(chatID ChatID) *ReplyParameters {
+	r.ChatID = chatID
+	return r
+}
+
+// WithAllowSendingWithoutReply adds allow sending without reply parameter
+func (r *ReplyParameters) WithAllowSendingWithoutReply() *ReplyParameters {
+	r.AllowSendingWithoutReply = true
+	return r
+}
+
+// WithQuote adds quote parameter
+func (r *ReplyParameters) WithQuote(quote string) *ReplyParameters {
+	r.Quote = quote
+	return r
+}
+
+// WithQuoteParseMode adds quote parse mode parameter
+func (r *ReplyParameters) WithQuoteParseMode(quoteParseMode string) *ReplyParameters {
+	r.QuoteParseMode = quoteParseMode
+	return r
+}
+
+// WithQuoteEntities adds quote entities parameter
+func (r *ReplyParameters) WithQuoteEntities(quoteEntities ...MessageEntity) *ReplyParameters {
+	r.QuoteEntities = quoteEntities
+	return r
+}
+
+// WithQuotePosition adds quote position parameter
+func (r *ReplyParameters) WithQuotePosition(quotePosition int) *ReplyParameters {
+	r.QuotePosition = quotePosition
+	return r
+}
+
 // WithKeyboard adds keyboard parameter
 func (r *ReplyKeyboardMarkup) WithKeyboard(keyboard ...[]KeyboardButton) *ReplyKeyboardMarkup {
 	r.Keyboard = keyboard
