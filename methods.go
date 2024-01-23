@@ -40,6 +40,8 @@ const (
 	EditedMessageUpdates      = "edited_message"
 	ChannelPostUpdates        = "channel_post"
 	EditedChannelPostUpdates  = "edited_channel_post"
+	MessageReaction           = "message_reaction"
+	MessageReactionCount      = "message_reaction_count"
 	InlineQueryUpdates        = "inline_query"
 	ChosenInlineResultUpdates = "chosen_inline_result"
 	CallbackQueryUpdates      = "callback_query"

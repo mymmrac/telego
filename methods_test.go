@@ -3532,9 +3532,10 @@ func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {
 func TestMethodsConstants(t *testing.T) {
 	tests := [][]string{
 		{
-			MessageUpdates, EditedMessageUpdates, ChannelPostUpdates, EditedChannelPostUpdates, InlineQueryUpdates,
-			ChosenInlineResultUpdates, CallbackQueryUpdates, ShippingQueryUpdates, PreCheckoutQueryUpdates,
-			PollUpdates, PollAnswerUpdates, MyChatMemberUpdates, ChatMemberUpdates, ChatJoinRequestUpdates,
+			MessageUpdates, EditedMessageUpdates, ChannelPostUpdates, EditedChannelPostUpdates, MessageReaction,
+			MessageReactionCount, InlineQueryUpdates, ChosenInlineResultUpdates, CallbackQueryUpdates,
+			ShippingQueryUpdates, PreCheckoutQueryUpdates, PollUpdates, PollAnswerUpdates, MyChatMemberUpdates,
+			ChatMemberUpdates, ChatJoinRequestUpdates,
 		},
 		{
 			ModeHTML, ModeMarkdown, ModeMarkdownV2,
