@@ -42,9 +42,9 @@ func (k KeyboardButton) WithText(text string) KeyboardButton {
 	return k
 }
 
-// WithRequestUser adds request user parameter
-func (k KeyboardButton) WithRequestUser(requestUser *KeyboardButtonRequestUser) KeyboardButton {
-	k.RequestUser = requestUser
+// WithRequestUsers adds request users parameter
+func (k KeyboardButton) WithRequestUsers(requestUsers *KeyboardButtonRequestUsers) KeyboardButton {
+	k.RequestUsers = requestUsers
 	return k
 }
 
@@ -79,14 +79,20 @@ func (k KeyboardButton) WithWebApp(webApp *WebAppInfo) KeyboardButton {
 }
 
 // WithUserIsBot adds user is bot parameter
-func (k *KeyboardButtonRequestUser) WithUserIsBot(userIsBot bool) *KeyboardButtonRequestUser {
+func (k *KeyboardButtonRequestUsers) WithUserIsBot(userIsBot bool) *KeyboardButtonRequestUsers {
 	k.UserIsBot = ToPtr(userIsBot)
 	return k
 }
 
 // WithUserIsPremium adds user is premium parameter
-func (k *KeyboardButtonRequestUser) WithUserIsPremium(userIsPremium bool) *KeyboardButtonRequestUser {
+func (k *KeyboardButtonRequestUsers) WithUserIsPremium(userIsPremium bool) *KeyboardButtonRequestUsers {
 	k.UserIsPremium = ToPtr(userIsPremium)
+	return k
+}
+
+// WithMaxQuantity adds max quantity parameter
+func (k *KeyboardButtonRequestUsers) WithMaxQuantity(maxQuantity int) *KeyboardButtonRequestUsers {
+	k.MaxQuantity = maxQuantity
 	return k
 }
 
@@ -189,14 +195,16 @@ func (i InlineKeyboardButton) WithSwitchInlineQuery(switchInlineQuery string) In
 }
 
 // WithSwitchInlineQueryCurrentChat adds switch inline query current chat parameter
-func (i InlineKeyboardButton) WithSwitchInlineQueryCurrentChat(switchInlineQueryCurrentChat string,
+func (i InlineKeyboardButton) WithSwitchInlineQueryCurrentChat(
+	switchInlineQueryCurrentChat string,
 ) InlineKeyboardButton {
 	i.SwitchInlineQueryCurrentChat = ToPtr(switchInlineQueryCurrentChat)
 	return i
 }
 
 // WithSwitchInlineQueryChosenChat adds switch inline query chosen chat parameter
-func (i InlineKeyboardButton) WithSwitchInlineQueryChosenChat(switchInlineQueryChosenChat *SwitchInlineQueryChosenChat,
+func (i InlineKeyboardButton) WithSwitchInlineQueryChosenChat(
+	switchInlineQueryChosenChat *SwitchInlineQueryChosenChat,
 ) InlineKeyboardButton {
 	i.SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
 	return i
@@ -1691,9 +1699,11 @@ func (i *InputTextMessageContent) WithEntities(entities ...MessageEntity) *Input
 	return i
 }
 
-// WithDisableWebPagePreview adds disable web page preview parameter
-func (i *InputTextMessageContent) WithDisableWebPagePreview() *InputTextMessageContent {
-	i.DisableWebPagePreview = true
+// WithLinkPreviewOptions adds link preview options parameter
+func (i *InputTextMessageContent) WithLinkPreviewOptions(
+	linkPreviewOptions *LinkPreviewOptions,
+) *InputTextMessageContent {
+	i.LinkPreviewOptions = linkPreviewOptions
 	return i
 }
 

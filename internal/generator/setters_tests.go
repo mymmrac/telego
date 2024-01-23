@@ -168,9 +168,9 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "&ChatAdministratorRights{IsAnonymous: true}"
 	case "InlineQueryResult":
 		return fmt.Sprintf("&InlineQueryResultArticle{Type: \"%s\"}", setter.fieldName)
-	case "*KeyboardButtonRequestUser":
+	case "*KeyboardButtonRequestUsers":
 		*counter++
-		return fmt.Sprintf("&KeyboardButtonRequestUser{RequestID: %d}", *counter)
+		return fmt.Sprintf("&KeyboardButtonRequestUsers{RequestID: %d}", *counter)
 	case "*KeyboardButtonRequestChat":
 		*counter++
 		return fmt.Sprintf("&KeyboardButtonRequestChat{RequestID: %d}", *counter)
@@ -182,6 +182,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "&SwitchInlineQueryChosenChat{AllowUserChats: true}"
 	case "*InlineQueryResultsButton":
 		return "&InlineQueryResultsButton{}"
+	case "*LinkPreviewOptions":
+		return "&LinkPreviewOptions{IsDisabled: true}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
