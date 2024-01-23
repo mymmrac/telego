@@ -184,6 +184,11 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "&InlineQueryResultsButton{}"
 	case "*LinkPreviewOptions":
 		return "&LinkPreviewOptions{IsDisabled: true}"
+	case "*ReplyParameters":
+		*counter++
+		return fmt.Sprintf("&ReplyParameters{MessageID: %d}", *counter)
+	case "[]ReactionType":
+		return "[]ReactionType{&ReactionTypeEmoji{Type: ReactionEmoji}}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
