@@ -152,6 +152,15 @@ func (c MessageEntityCollection) Spoiler() MessageEntityCollection {
 	return c
 }
 
+// Blockquote assigns blockquote entity and returns new collection
+func (c MessageEntityCollection) Blockquote() MessageEntityCollection {
+	c.entities = append(c.entities, telego.MessageEntity{
+		Type:   telego.EntityTypeBlockquote,
+		Length: UTF16TextLen(c.text),
+	})
+	return c
+}
+
 // Code assigns code entity and returns new collection
 func (c MessageEntityCollection) Code() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{

@@ -6,6 +6,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestReplyParameters_Setters(t *testing.T) {
+	r := (&ReplyParameters{}).
+		WithMessageID(1).
+		WithChatID(ChatID{ID: 2}).
+		WithAllowSendingWithoutReply().
+		WithQuote("Quote").
+		WithQuoteParseMode("QuoteParseMode").
+		WithQuoteEntities([]MessageEntity{{Type: "QuoteEntities"}}...).
+		WithQuotePosition(3)
+
+	assert.Equal(t, &ReplyParameters{
+		MessageID:                1,
+		ChatID:                   ChatID{ID: 2},
+		AllowSendingWithoutReply: true,
+		Quote:                    "Quote",
+		QuoteParseMode:           "QuoteParseMode",
+		QuoteEntities:            []MessageEntity{{Type: "QuoteEntities"}},
+		QuotePosition:            3,
+	}, r)
+}
+
 func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 	r := (&ReplyKeyboardMarkup{}).
 		WithKeyboard([][]KeyboardButton{{}}...).
@@ -28,7 +49,7 @@ func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 func TestKeyboardButton_Setters(t *testing.T) {
 	k := (KeyboardButton{}).
 		WithText("Text").
-		WithRequestUser(&KeyboardButtonRequestUser{RequestID: 1}).
+		WithRequestUsers(&KeyboardButtonRequestUsers{RequestID: 1}).
 		WithRequestChat(&KeyboardButtonRequestChat{RequestID: 2}).
 		WithRequestContact().
 		WithRequestLocation().
@@ -37,7 +58,7 @@ func TestKeyboardButton_Setters(t *testing.T) {
 
 	assert.Equal(t, KeyboardButton{
 		Text:            "Text",
-		RequestUser:     &KeyboardButtonRequestUser{RequestID: 1},
+		RequestUsers:    &KeyboardButtonRequestUsers{RequestID: 1},
 		RequestChat:     &KeyboardButtonRequestChat{RequestID: 2},
 		RequestContact:  true,
 		RequestLocation: true,
@@ -46,14 +67,16 @@ func TestKeyboardButton_Setters(t *testing.T) {
 	}, k)
 }
 
-func TestKeyboardButtonRequestUser_Setters(t *testing.T) {
-	k := (&KeyboardButtonRequestUser{}).
+func TestKeyboardButtonRequestUsers_Setters(t *testing.T) {
+	k := (&KeyboardButtonRequestUsers{}).
 		WithUserIsBot(true).
-		WithUserIsPremium(true)
+		WithUserIsPremium(true).
+		WithMaxQuantity(1)
 
-	assert.Equal(t, &KeyboardButtonRequestUser{
+	assert.Equal(t, &KeyboardButtonRequestUsers{
 		UserIsBot:     ToPtr(true),
 		UserIsPremium: ToPtr(true),
+		MaxQuantity:   1,
 	}, k)
 }
 
@@ -802,13 +825,13 @@ func TestInputTextMessageContent_Setters(t *testing.T) {
 		WithMessageText("MessageText").
 		WithParseMode("ParseMode").
 		WithEntities([]MessageEntity{{Type: "Entities"}}...).
-		WithDisableWebPagePreview()
+		WithLinkPreviewOptions(&LinkPreviewOptions{IsDisabled: true})
 
 	assert.Equal(t, &InputTextMessageContent{
-		MessageText:           "MessageText",
-		ParseMode:             "ParseMode",
-		Entities:              []MessageEntity{{Type: "Entities"}},
-		DisableWebPagePreview: true,
+		MessageText:        "MessageText",
+		ParseMode:          "ParseMode",
+		Entities:           []MessageEntity{{Type: "Entities"}},
+		LinkPreviewOptions: &LinkPreviewOptions{IsDisabled: true},
 	}, i)
 }
 

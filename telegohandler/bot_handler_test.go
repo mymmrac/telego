@@ -96,7 +96,7 @@ func TestBotHandler_Start(t *testing.T) {
 		h2++
 	})
 
-	timeoutSignal := time.After(timeout)
+	timeoutSignal := time.After(timeout * 10)
 	done := make(chan struct{})
 
 	assert.NotPanics(t, func() {

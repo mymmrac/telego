@@ -59,7 +59,7 @@ const typeFieldPattern = `
 </tr>
 `
 
-const curTypePattern = `^type (\w+) struct {`
+const curTypePattern = `^type (\w+) (?:struct|interface) {`
 const curConstPattern = `^const \(`
 const curFuncPattern = `^func \(`
 const curInterfacePattern = `^type \w+ interface {`
@@ -297,5 +297,21 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if typeName == "InlineKeyboardButton" && field.typ == "string" &&
 		(field.name == "SwitchInlineQuery" || field.name == "SwitchInlineQueryCurrentChat") {
 		field.typ = "*string"
+	}
+
+	if field.typ == "*MaybeInaccessibleMessage" {
+		field.typ = "MaybeInaccessibleMessage"
+	}
+
+	if field.typ == "*MessageOrigin" {
+		field.typ = "MessageOrigin"
+	}
+
+	if field.typ == "*ReactionType" {
+		field.typ = "ReactionType"
+	}
+
+	if field.typ == "*ChatBoostSource" {
+		field.typ = "ChatBoostSource"
 	}
 }

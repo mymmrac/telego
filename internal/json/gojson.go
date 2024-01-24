@@ -2,7 +2,7 @@
 
 package json
 
-import "github.com/goccy/go-json"
+import "github.com/grbit/go-json"
 
 var Marshal = json.Marshal
 var Unmarshal = json.Unmarshal
