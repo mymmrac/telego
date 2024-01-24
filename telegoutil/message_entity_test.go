@@ -66,9 +66,10 @@ func TestMessageEntities(t *testing.T) {
 		Entity(text1).Spoiler().Email(),
 
 		Entity(text2).CustomEmoji(text1),
+		Entity(text3).Blockquote(),
 	)
 
-	assert.Equal(t, strings.Repeat(text1+text2+text3+text4, 5)+text1+text2, text)
+	assert.Equal(t, strings.Repeat(text1+text2+text3+text4, 5)+text1+text2+text3, text)
 	assert.Equal(t, []telego.MessageEntity{
 		{Type: "italic", Offset: 4, Length: 5, URL: "", User: nil, Language: ""},
 		{Type: "bold", Offset: 9, Length: 5, URL: "", User: nil, Language: ""},
@@ -95,6 +96,7 @@ func TestMessageEntities(t *testing.T) {
 		{Type: "spoiler", Offset: 95, Length: 4, URL: "", User: nil, Language: ""},
 		{Type: "email", Offset: 95, Length: 4, URL: "", User: nil, Language: ""},
 		{Type: "custom_emoji", Offset: 99, Length: 5, URL: "", User: nil, Language: "", CustomEmojiID: text1},
+		{Type: "blockquote", Offset: 104, Length: 5, URL: "", User: nil, Language: ""},
 	}, entities)
 
 	t.Run("non_ascii", func(t *testing.T) {
