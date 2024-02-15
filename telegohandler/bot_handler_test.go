@@ -158,7 +158,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() { //nolint:revive
+			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 
@@ -193,7 +193,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() { //nolint:revive
+			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 
@@ -227,7 +227,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() { //nolint:revive
+			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 
@@ -253,7 +253,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() { //nolint:revive
+			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 
@@ -280,7 +280,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go bh.Start()
-			for !bh.IsRunning() { //nolint:revive
+			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 

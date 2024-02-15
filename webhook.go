@@ -67,7 +67,7 @@ func WithWebhookServer(server WebhookServer) WebhookOption {
 // WithWebhookSet calls [Bot.SetWebhook] method before starting webhook
 // Note: Calling [Bot.SetWebhook] method multiple times in a row may give "too many requests" errors
 func WithWebhookSet(params *SetWebhookParams) WebhookOption {
-	return func(bot *Bot, ctx *webhookContext) error {
+	return func(bot *Bot, _ *webhookContext) error {
 		return bot.SetWebhook(params)
 	}
 }
@@ -87,6 +87,9 @@ func WithWebhookContext(ctx context.Context) WebhookOption {
 		return nil
 	}
 }
+
+// errWebhookStopped returned if webhook is stopped
+var errWebhookStopped = errors.New("telego: webhook stopped")
 
 // UpdatesViaWebhook receive updates in chan from webhook.
 // A new handler with a provided path will be registered on server.
@@ -123,14 +126,14 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 
 		select {
 		case <-webhookCtx.stop:
-			return fmt.Errorf("telego: webhook stopped")
+			return errWebhookStopped
 		case <-webhookCtx.ctx.Done():
 			return fmt.Errorf("telego: webhook context: %w", webhookCtx.ctx.Err())
 		case <-ctx.Done():
 			return fmt.Errorf("telego: webhook handler context: %w", ctx.Err())
 		default:
 			if safeSend(updatesChan, update.WithContext(ctx)) {
-				return fmt.Errorf("telego: webhook stopped")
+				return errWebhookStopped
 			}
 			return nil
 		}

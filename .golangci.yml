@@ -222,6 +222,7 @@ issues:
         - dupl
         - funlen
         - maintidx
+        - revive
 
   # Independently of option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all

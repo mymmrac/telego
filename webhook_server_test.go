@@ -29,7 +29,7 @@ func TestFastHTTPWebhookServer_RegisterHandler(t *testing.T) {
 
 	go func() {
 		err := s.Start(addr)
-		require.NoError(t, err)
+		assert.NoError(t, err)
 	}()
 
 	err := s.RegisterHandler("/", func(_ context.Context, data []byte) error {
@@ -97,7 +97,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 		testAddr := testAddress(t)
 		go func() {
 			err := http.ListenAndServe(testAddr, nil) //nolint:gosec
-			require.NoError(t, err)
+			assert.NoError(t, err)
 		}()
 
 		time.Sleep(time.Millisecond * 10)
@@ -116,7 +116,7 @@ func TestHTTPWebhookServer_RegisterHandler(t *testing.T) {
 
 		go func() {
 			err := s.Start(testAddress(t))
-			require.NoError(t, err)
+			assert.NoError(t, err)
 		}()
 
 		err := s.RegisterHandler("/", func(_ context.Context, data []byte) error {
