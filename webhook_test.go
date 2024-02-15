@@ -3,7 +3,6 @@ package telego
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"net/http"
 	"testing"
 	"time"
@@ -46,7 +45,7 @@ func TestBot_StartWebhook(t *testing.T) {
 		assert.NotPanics(t, func() {
 			go func() {
 				err := b.StartWebhook(testAddr)
-				require.NoError(t, err)
+				assert.NoError(t, err)
 			}()
 			time.Sleep(time.Millisecond * 10)
 		})
@@ -171,7 +170,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		addr := testAddress(t)
 		go func() {
 			startErr := b.StartWebhook(addr)
-			require.NoError(t, startErr)
+			assert.NoError(t, startErr)
 		}()
 		time.Sleep(time.Millisecond * 10)
 
@@ -185,17 +184,17 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		require.NoError(t, err)
 
 		go func() {
-			resp, errHTTP := http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
+			resp, errHTTP := http.Post("http://"+addr, ta.ContentTypeJSON,
 				bytes.NewBuffer([]byte{}))
-			require.NoError(t, errHTTP)
-			require.NoError(t, resp.Body.Close())
+			assert.NoError(t, errHTTP)
+			assert.NoError(t, resp.Body.Close())
 
 			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
 
-			resp, errHTTP = http.Post(fmt.Sprintf("http://%s", addr), ta.ContentTypeJSON,
+			resp, errHTTP = http.Post("http://"+addr, ta.ContentTypeJSON,
 				bytes.NewBuffer(expectedUpdateBytes))
-			require.NoError(t, errHTTP)
-			require.NoError(t, resp.Body.Close())
+			assert.NoError(t, errHTTP)
+			assert.NoError(t, resp.Body.Close())
 
 			assert.Equal(t, http.StatusOK, resp.StatusCode)
 		}()
@@ -281,7 +280,7 @@ func TestBot_IsRunningWebhook(t *testing.T) {
 
 		go func() {
 			startErr := m.Bot.StartWebhook(testAddress(t))
-			require.NoError(t, startErr)
+			assert.NoError(t, startErr)
 		}()
 		time.Sleep(time.Millisecond * 10)
 
