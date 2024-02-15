@@ -30,7 +30,9 @@ func main() {
 
 	// Create a message and change optional parameters
 	msg := tu.Message(chatID, "Hello World").
-		WithReplyToMessageID(1234).
+		WithReplyParameters(&telego.ReplyParameters{
+			MessageID: 123,
+		}).
 		WithDisableNotification().
 		WithProtectContent()
 	_, _ = bot.SendMessage(msg)

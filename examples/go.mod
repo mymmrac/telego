@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/fasthttp/router v1.4.22
-	github.com/mymmrac/telego v0.28.0
+	github.com/mymmrac/telego v0.28.1-0.20240215103418-2d5ed0705897
 	github.com/valyala/fasthttp v1.52.0
 	golang.ngrok.com/ngrok v1.8.1
 )
@@ -15,7 +15,7 @@ require (
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
-	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/grbit/go-json v0.11.0 // indirect
 	github.com/inconshreveable/log15 v3.0.0-testing.3+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
@@ -28,6 +28,7 @@ require (
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/valyala/fastjson v1.6.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.ngrok.com/muxado/v2 v2.0.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
