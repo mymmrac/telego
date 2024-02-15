@@ -2413,6 +2413,7 @@ func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
 type ChatMember interface {
 	MemberStatus() string
 	MemberUser() User
+	MemberIsMember() bool
 }
 
 // ChatMember statuses
@@ -2449,6 +2450,11 @@ func (c *ChatMemberOwner) MemberStatus() string {
 // MemberUser returns ChatMember User
 func (c *ChatMemberOwner) MemberUser() User {
 	return c.User
+}
+
+// MemberIsMember returns ChatMember is_member
+func (c *ChatMemberOwner) MemberIsMember() bool {
+	return true
 }
 
 // ChatMemberAdministrator - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that
@@ -2532,6 +2538,11 @@ func (c *ChatMemberAdministrator) MemberUser() User {
 	return c.User
 }
 
+// MemberIsMember returns ChatMember is_member
+func (c *ChatMemberAdministrator) MemberIsMember() bool {
+	return true
+}
+
 // ChatMemberMember - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that has no
 // additional privileges or restrictions.
 type ChatMemberMember struct {
@@ -2550,6 +2561,11 @@ func (c *ChatMemberMember) MemberStatus() string {
 // MemberUser returns ChatMember User
 func (c *ChatMemberMember) MemberUser() User {
 	return c.User
+}
+
+// MemberIsMember returns ChatMember is_member
+func (c *ChatMemberMember) MemberIsMember() bool {
+	return true
 }
 
 // ChatMemberRestricted - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that is
@@ -2623,6 +2639,11 @@ func (c *ChatMemberRestricted) MemberUser() User {
 	return c.User
 }
 
+// MemberIsMember returns ChatMember is_member
+func (c *ChatMemberRestricted) MemberIsMember() bool {
+	return c.IsMember
+}
+
 // ChatMemberLeft - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that isn't
 // currently a member of the chat, but may join it themselves.
 type ChatMemberLeft struct {
@@ -2641,6 +2662,11 @@ func (c *ChatMemberLeft) MemberStatus() string {
 // MemberUser returns ChatMember User
 func (c *ChatMemberLeft) MemberUser() User {
 	return c.User
+}
+
+// MemberIsMember returns ChatMember is_member
+func (c *ChatMemberLeft) MemberIsMember() bool {
+	return false
 }
 
 // ChatMemberBanned - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that was
@@ -2665,6 +2691,11 @@ func (c *ChatMemberBanned) MemberStatus() string {
 // MemberUser returns ChatMember User
 func (c *ChatMemberBanned) MemberUser() User {
 	return c.User
+}
+
+// MemberIsMember returns ChatMember is_member
+func (c *ChatMemberBanned) MemberIsMember() bool {
+	return false
 }
 
 // ChatJoinRequest - Represents a join request sent to a chat.
