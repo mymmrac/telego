@@ -339,8 +339,13 @@ type Chat struct {
 	Permissions *ChatPermissions `json:"permissions,omitempty"`
 
 	// SlowModeDelay - Optional. For supergroups, the minimum allowed delay between consecutive messages sent by
-	// each unpriviledged user; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// each unprivileged user; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	SlowModeDelay int `json:"slow_mode_delay,omitempty"`
+
+	// UnrestrictBoostCount - Optional. For supergroups, the minimum number of boosts that a non-administrator
+	// user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	UnrestrictBoostCount int `json:"unrestrict_boost_count,omitempty"`
 
 	// MessageAutoDeleteTime - Optional. The time after which all messages sent to the chat will be
 	// automatically deleted; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
@@ -370,6 +375,11 @@ type Chat struct {
 	// CanSetStickerSet - Optional. True, if the bot can change the group sticker set. Returned only in getChat
 	// (https://core.telegram.org/bots/api#getchat).
 	CanSetStickerSet bool `json:"can_set_sticker_set,omitempty"`
+
+	// CustomEmojiStickerSetName - Optional. For supergroups, the name of the group's custom emoji sticker set.
+	// Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	CustomEmojiStickerSetName string `json:"custom_emoji_sticker_set_name,omitempty"`
 
 	// LinkedChatID - Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for
 	// a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and
@@ -457,6 +467,10 @@ type Message struct {
 	// contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
 	SenderChat *Chat `json:"sender_chat,omitempty"`
 
+	// SenderBoostCount - Optional. If the sender of the message boosted the chat, the number of boosts added by
+	// the user
+	SenderBoostCount int `json:"sender_boost_count,omitempty"`
+
 	// Date - Date the message was sent in Unix time. It is always a positive number, representing a valid date.
 	Date int64 `json:"date"`
 
@@ -484,6 +498,9 @@ type Message struct {
 
 	// Quote - Optional. For replies that quote part of the original message, the quoted part of the message
 	Quote *TextQuote `json:"quote,omitempty"`
+
+	// ReplyToStory - Optional. For replies to a story, the original story
+	ReplyToStory *Story `json:"reply_to_story,omitempty"`
 
 	// ViaBot - Optional. Bot through which the message was sent
 	ViaBot *User `json:"via_bot,omitempty"`
@@ -650,6 +667,9 @@ type Message struct {
 	// ProximityAlertTriggered - Optional. Service message. A user in the chat triggered another user's
 	// proximity alert while sharing Live Location.
 	ProximityAlertTriggered *ProximityAlertTriggered `json:"proximity_alert_triggered,omitempty"`
+
+	// BoostAdded - Optional. Service message: user boosted the chat
+	BoostAdded *ChatBoostAdded `json:"boost_added,omitempty"`
 
 	// ForumTopicCreated - Optional. Service message: forum topic created
 	ForumTopicCreated *ForumTopicCreated `json:"forum_topic_created,omitempty"`
@@ -1272,9 +1292,14 @@ type Document struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
-// Story - This object represents a message about a forwarded story in the chat. Currently holds no
-// information.
-type Story struct{}
+// Story - This object represents a story.
+type Story struct {
+	// Chat - Chat that posted the story
+	Chat Chat `json:"chat"`
+
+	// ID - Unique identifier for the story in the chat
+	ID int `json:"id"`
+}
 
 // Video - This object represents a video file.
 type Video struct {
@@ -1550,6 +1575,12 @@ type MessageAutoDeleteTimerChanged struct {
 	MessageAutoDeleteTime int `json:"message_auto_delete_time"`
 }
 
+// ChatBoostAdded - This object represents a service message about a user boosting a chat.
+type ChatBoostAdded struct {
+	// BoostCount - Number of boosts added by the user
+	BoostCount int `json:"boost_count"`
+}
+
 // ForumTopicCreated - This object represents a service message about a new forum topic created in the chat.
 type ForumTopicCreated struct {
 	// Name - Name of the topic
@@ -1700,7 +1731,7 @@ type GiveawayWinners struct {
 	// Chat - The chat that created the giveaway
 	Chat Chat `json:"chat"`
 
-	// GiveawayMessageID - Identifier of the messsage with the giveaway in the chat
+	// GiveawayMessageID - Identifier of the message with the giveaway in the chat
 	GiveawayMessageID int `json:"giveaway_message_id"`
 
 	// WinnersSelectionDate - Point in time (Unix timestamp) when winners of the giveaway were selected
@@ -1756,11 +1787,11 @@ type LinkPreviewOptions struct {
 	// will be used
 	URL string `json:"url,omitempty"`
 
-	// PreferSmallMedia - Optional. True, if the media in the link preview is suppposed to be shrunk; ignored if
+	// PreferSmallMedia - Optional. True, if the media in the link preview is supposed to be shrunk; ignored if
 	// the URL isn't explicitly specified or media size change isn't supported for the preview
 	PreferSmallMedia bool `json:"prefer_small_media,omitempty"`
 
-	// PreferLargeMedia - Optional. True, if the media in the link preview is suppposed to be enlarged; ignored
+	// PreferLargeMedia - Optional. True, if the media in the link preview is supposed to be enlarged; ignored
 	// if the URL isn't explicitly specified or media size change isn't supported for the preview
 	PreferLargeMedia bool `json:"prefer_large_media,omitempty"`
 
@@ -2250,9 +2281,9 @@ type ChatAdministratorRights struct {
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
 
-	// CanManageChat - True, if the administrator can access the chat event log, boost list in channels, see
-	// channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode.
-	// Implied by any other administrator privilege
+	// CanManageChat - True, if the administrator can access the chat event log, get boost list, see hidden
+	// supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator
+	// privilege.
 	CanManageChat bool `json:"can_manage_chat"`
 
 	// CanDeleteMessages - True, if the administrator can delete messages of other users
@@ -2276,6 +2307,15 @@ type ChatAdministratorRights struct {
 	// CanInviteUsers - True, if the user is allowed to invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users"`
 
+	// CanPostStories - True, if the administrator can post stories to the chat
+	CanPostStories bool `json:"can_post_stories"`
+
+	// CanEditStories - True, if the administrator can edit stories posted by other users
+	CanEditStories bool `json:"can_edit_stories"`
+
+	// CanDeleteStories - True, if the administrator can delete stories posted by other users
+	CanDeleteStories bool `json:"can_delete_stories"`
+
 	// CanPostMessages - Optional. True, if the administrator can post messages in the channel, or access
 	// channel statistics; channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
@@ -2286,17 +2326,6 @@ type ChatAdministratorRights struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
-
-	// CanPostStories - Optional. True, if the administrator can post stories in the channel; channels only
-	CanPostStories bool `json:"can_post_stories,omitempty"`
-
-	// CanEditStories - Optional. True, if the administrator can edit stories posted by other users; channels
-	// only
-	CanEditStories bool `json:"can_edit_stories,omitempty"`
-
-	// CanDeleteStories - Optional. True, if the administrator can delete stories posted by other users;
-	// channels only
-	CanDeleteStories bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
 	// topics; supergroups only
@@ -2472,9 +2501,9 @@ type ChatMemberAdministrator struct {
 	// IsAnonymous - True, if the user's presence in the chat is hidden
 	IsAnonymous bool `json:"is_anonymous"`
 
-	// CanManageChat - True, if the administrator can access the chat event log, boost list in channels, see
-	// channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode.
-	// Implied by any other administrator privilege
+	// CanManageChat - True, if the administrator can access the chat event log, get boost list, see hidden
+	// supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator
+	// privilege.
 	CanManageChat bool `json:"can_manage_chat"`
 
 	// CanDeleteMessages - True, if the administrator can delete messages of other users
@@ -2498,6 +2527,15 @@ type ChatMemberAdministrator struct {
 	// CanInviteUsers - True, if the user is allowed to invite new users to the chat
 	CanInviteUsers bool `json:"can_invite_users"`
 
+	// CanPostStories - True, if the administrator can post stories to the chat
+	CanPostStories bool `json:"can_post_stories"`
+
+	// CanEditStories - True, if the administrator can edit stories posted by other users
+	CanEditStories bool `json:"can_edit_stories"`
+
+	// CanDeleteStories - True, if the administrator can delete stories posted by other users
+	CanDeleteStories bool `json:"can_delete_stories"`
+
 	// CanPostMessages - Optional. True, if the administrator can post messages in the channel, or access
 	// channel statistics; channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
@@ -2508,17 +2546,6 @@ type ChatMemberAdministrator struct {
 
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
-
-	// CanPostStories - Optional. True, if the administrator can post stories in the channel; channels only
-	CanPostStories bool `json:"can_post_stories,omitempty"`
-
-	// CanEditStories - Optional. True, if the administrator can edit stories posted by other users; channels
-	// only
-	CanEditStories bool `json:"can_edit_stories,omitempty"`
-
-	// CanDeleteStories - Optional. True, if the administrator can delete stories posted by other users;
-	// channels only
-	CanDeleteStories bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
 	// topics; supergroups only
