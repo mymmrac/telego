@@ -1599,9 +1599,9 @@ type PromoteChatMemberParams struct {
 	// IsAnonymous - Optional. Pass True if the administrator's presence in the chat is hidden
 	IsAnonymous *bool `json:"is_anonymous,omitempty"`
 
-	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, boost list in
-	// channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore
-	// slow mode. Implied by any other administrator privilege
+	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, get boost list,
+	// see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other
+	// administrator privilege.
 	CanManageChat *bool `json:"can_manage_chat,omitempty"`
 
 	// CanDeleteMessages - Optional. Pass True if the administrator can delete messages of other users
@@ -1625,6 +1625,15 @@ type PromoteChatMemberParams struct {
 	// CanInviteUsers - Optional. Pass True if the administrator can invite new users to the chat
 	CanInviteUsers *bool `json:"can_invite_users,omitempty"`
 
+	// CanPostStories - Optional. Pass True if the administrator can post stories to the chat
+	CanPostStories *bool `json:"can_post_stories,omitempty"`
+
+	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users
+	CanEditStories *bool `json:"can_edit_stories,omitempty"`
+
+	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users
+	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
+
 	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel, or access
 	// channel statistics; channels only
 	CanPostMessages *bool `json:"can_post_messages,omitempty"`
@@ -1635,17 +1644,6 @@ type PromoteChatMemberParams struct {
 
 	// CanPinMessages - Optional. Pass True if the administrator can pin messages, supergroups only
 	CanPinMessages *bool `json:"can_pin_messages,omitempty"`
-
-	// CanPostStories - Optional. Pass True if the administrator can post stories in the channel; channels only
-	CanPostStories *bool `json:"can_post_stories,omitempty"`
-
-	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users;
-	// channels only
-	CanEditStories *bool `json:"can_edit_stories,omitempty"`
-
-	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users;
-	// channels only
-	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
 
 	// CanManageTopics - Optional. Pass True if the user is allowed to create, rename, close, and reopen forum
 	// topics, supergroups only
