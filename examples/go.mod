@@ -6,7 +6,7 @@ require (
 	github.com/fasthttp/router v1.4.22
 	github.com/mymmrac/telego v0.29.1
 	github.com/valyala/fasthttp v1.52.0
-	golang.ngrok.com/ngrok v1.8.1
+	golang.ngrok.com/ngrok v1.9.0
 )
 
 require (
