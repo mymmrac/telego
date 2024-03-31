@@ -5,6 +5,7 @@
 //
 //	mockgen -typed -package mock -destination=mock/caller.go github.com/mymmrac/telego/telegoapi Caller
 //
+
 // Package mock is a generated GoMock package.
 package mock
 
@@ -48,31 +49,31 @@ func (m *MockCaller) Call(arg0 string, arg1 *telegoapi.RequestData) (*telegoapi.
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockCallerMockRecorder) Call(arg0, arg1 any) *CallerCallCall {
+func (mr *MockCallerMockRecorder) Call(arg0, arg1 any) *MockCallerCallCall {
 	mr.mock.ctrl.T.Helper()
 	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), arg0, arg1)
-	return &CallerCallCall{Call: call}
+	return &MockCallerCallCall{Call: call}
 }
 
-// CallerCallCall wrap *gomock.Call
-type CallerCallCall struct {
+// MockCallerCallCall wrap *gomock.Call
+type MockCallerCallCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *CallerCallCall) Return(arg0 *telegoapi.Response, arg1 error) *CallerCallCall {
+func (c *MockCallerCallCall) Return(arg0 *telegoapi.Response, arg1 error) *MockCallerCallCall {
 	c.Call = c.Call.Return(arg0, arg1)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *CallerCallCall) Do(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *CallerCallCall {
+func (c *MockCallerCallCall) Do(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *MockCallerCallCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *CallerCallCall) DoAndReturn(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *CallerCallCall {
+func (c *MockCallerCallCall) DoAndReturn(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *MockCallerCallCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }

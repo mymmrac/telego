@@ -72,6 +72,12 @@ func (p *DeleteWebhookParams) WithDropPendingUpdates() *DeleteWebhookParams {
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendMessageParams) WithBusinessConnectionID(businessConnectionID string) *SendMessageParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendMessageParams) WithChatID(chatID ChatID) *SendMessageParams {
 	p.ChatID = chatID
@@ -312,6 +318,12 @@ func (p *CopyMessagesParams) WithRemoveCaption() *CopyMessagesParams {
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendPhotoParams) WithBusinessConnectionID(businessConnectionID string) *SendPhotoParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendPhotoParams) WithChatID(chatID ChatID) *SendPhotoParams {
 	p.ChatID = chatID
@@ -375,6 +387,12 @@ func (p *SendPhotoParams) WithReplyParameters(replyParameters *ReplyParameters) 
 // WithReplyMarkup adds reply markup parameter
 func (p *SendPhotoParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendPhotoParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendAudioParams) WithBusinessConnectionID(businessConnectionID string) *SendAudioParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -462,6 +480,12 @@ func (p *SendAudioParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendAudioPar
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendDocumentParams) WithBusinessConnectionID(businessConnectionID string) *SendDocumentParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendDocumentParams) WithChatID(chatID ChatID) *SendDocumentParams {
 	p.ChatID = chatID
@@ -531,6 +555,12 @@ func (p *SendDocumentParams) WithReplyParameters(replyParameters *ReplyParameter
 // WithReplyMarkup adds reply markup parameter
 func (p *SendDocumentParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendDocumentParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendVideoParams) WithBusinessConnectionID(businessConnectionID string) *SendVideoParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -630,6 +660,12 @@ func (p *SendVideoParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendVideoPar
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendAnimationParams) WithBusinessConnectionID(businessConnectionID string) *SendAnimationParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendAnimationParams) WithChatID(chatID ChatID) *SendAnimationParams {
 	p.ChatID = chatID
@@ -720,6 +756,12 @@ func (p *SendAnimationParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendAnim
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendVoiceParams) WithBusinessConnectionID(businessConnectionID string) *SendVoiceParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendVoiceParams) WithChatID(chatID ChatID) *SendVoiceParams {
 	p.ChatID = chatID
@@ -786,6 +828,12 @@ func (p *SendVoiceParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendVoicePar
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendVideoNoteParams) WithBusinessConnectionID(businessConnectionID string) *SendVideoNoteParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendVideoNoteParams) WithChatID(chatID ChatID) *SendVideoNoteParams {
 	p.ChatID = chatID
@@ -846,6 +894,12 @@ func (p *SendVideoNoteParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendVide
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendMediaGroupParams) WithBusinessConnectionID(businessConnectionID string) *SendMediaGroupParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendMediaGroupParams) WithChatID(chatID ChatID) *SendMediaGroupParams {
 	p.ChatID = chatID
@@ -879,6 +933,12 @@ func (p *SendMediaGroupParams) WithProtectContent() *SendMediaGroupParams {
 // WithReplyParameters adds reply parameters parameter
 func (p *SendMediaGroupParams) WithReplyParameters(replyParameters *ReplyParameters) *SendMediaGroupParams {
 	p.ReplyParameters = replyParameters
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendLocationParams) WithBusinessConnectionID(businessConnectionID string) *SendLocationParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -933,6 +993,12 @@ func (p *SendLocationParams) WithReplyParameters(replyParameters *ReplyParameter
 // WithReplyMarkup adds reply markup parameter
 func (p *SendLocationParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendLocationParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendVenueParams) WithBusinessConnectionID(businessConnectionID string) *SendVenueParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -1008,6 +1074,12 @@ func (p *SendVenueParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendVenuePar
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendContactParams) WithBusinessConnectionID(businessConnectionID string) *SendContactParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendContactParams) WithChatID(chatID ChatID) *SendContactParams {
 	p.ChatID = chatID
@@ -1065,6 +1137,12 @@ func (p *SendContactParams) WithReplyParameters(replyParameters *ReplyParameters
 // WithReplyMarkup adds reply markup parameter
 func (p *SendContactParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendContactParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendPollParams) WithBusinessConnectionID(businessConnectionID string) *SendPollParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -1170,6 +1248,12 @@ func (p *SendPollParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendPollParam
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendDiceParams) WithBusinessConnectionID(businessConnectionID string) *SendDiceParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendDiceParams) WithChatID(chatID ChatID) *SendDiceParams {
 	p.ChatID = chatID
@@ -1209,6 +1293,12 @@ func (p *SendDiceParams) WithReplyParameters(replyParameters *ReplyParameters) *
 // WithReplyMarkup adds reply markup parameter
 func (p *SendDiceParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendDiceParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendChatActionParams) WithBusinessConnectionID(businessConnectionID string) *SendChatActionParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -1368,24 +1458,6 @@ func (p *PromoteChatMemberParams) WithCanInviteUsers(canInviteUsers bool) *Promo
 	return p
 }
 
-// WithCanPostMessages adds can post messages parameter
-func (p *PromoteChatMemberParams) WithCanPostMessages(canPostMessages bool) *PromoteChatMemberParams {
-	p.CanPostMessages = ToPtr(canPostMessages)
-	return p
-}
-
-// WithCanEditMessages adds can edit messages parameter
-func (p *PromoteChatMemberParams) WithCanEditMessages(canEditMessages bool) *PromoteChatMemberParams {
-	p.CanEditMessages = ToPtr(canEditMessages)
-	return p
-}
-
-// WithCanPinMessages adds can pin messages parameter
-func (p *PromoteChatMemberParams) WithCanPinMessages(canPinMessages bool) *PromoteChatMemberParams {
-	p.CanPinMessages = ToPtr(canPinMessages)
-	return p
-}
-
 // WithCanPostStories adds can post stories parameter
 func (p *PromoteChatMemberParams) WithCanPostStories(canPostStories bool) *PromoteChatMemberParams {
 	p.CanPostStories = ToPtr(canPostStories)
@@ -1401,6 +1473,24 @@ func (p *PromoteChatMemberParams) WithCanEditStories(canEditStories bool) *Promo
 // WithCanDeleteStories adds can delete stories parameter
 func (p *PromoteChatMemberParams) WithCanDeleteStories(canDeleteStories bool) *PromoteChatMemberParams {
 	p.CanDeleteStories = ToPtr(canDeleteStories)
+	return p
+}
+
+// WithCanPostMessages adds can post messages parameter
+func (p *PromoteChatMemberParams) WithCanPostMessages(canPostMessages bool) *PromoteChatMemberParams {
+	p.CanPostMessages = ToPtr(canPostMessages)
+	return p
+}
+
+// WithCanEditMessages adds can edit messages parameter
+func (p *PromoteChatMemberParams) WithCanEditMessages(canEditMessages bool) *PromoteChatMemberParams {
+	p.CanEditMessages = ToPtr(canEditMessages)
+	return p
+}
+
+// WithCanPinMessages adds can pin messages parameter
+func (p *PromoteChatMemberParams) WithCanPinMessages(canPinMessages bool) *PromoteChatMemberParams {
+	p.CanPinMessages = ToPtr(canPinMessages)
 	return p
 }
 
@@ -1837,6 +1927,13 @@ func (p *GetUserChatBoostsParams) WithChatID(chatID ChatID) *GetUserChatBoostsPa
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *GetBusinessConnectionParams) WithBusinessConnectionID(businessConnectionID string,
+) *GetBusinessConnectionParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithCommands adds commands parameter
 func (p *SetMyCommandsParams) WithCommands(commands ...BotCommand) *SetMyCommandsParams {
 	p.Commands = commands
@@ -2208,6 +2305,12 @@ func (p *DeleteMessagesParams) WithMessageIDs(messageIDs ...int) *DeleteMessages
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendStickerParams) WithBusinessConnectionID(businessConnectionID string) *SendStickerParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SendStickerParams) WithChatID(chatID ChatID) *SendStickerParams {
 	p.ChatID = chatID
@@ -2298,12 +2401,6 @@ func (p *CreateNewStickerSetParams) WithStickers(stickers ...InputSticker) *Crea
 	return p
 }
 
-// WithStickerFormat adds sticker format parameter
-func (p *CreateNewStickerSetParams) WithStickerFormat(stickerFormat string) *CreateNewStickerSetParams {
-	p.StickerFormat = stickerFormat
-	return p
-}
-
 // WithStickerType adds sticker type parameter
 func (p *CreateNewStickerSetParams) WithStickerType(stickerType string) *CreateNewStickerSetParams {
 	p.StickerType = stickerType
@@ -2342,6 +2439,24 @@ func (p *SetStickerPositionInSetParams) WithPosition(position int) *SetStickerPo
 
 // WithSticker adds sticker parameter
 func (p *DeleteStickerFromSetParams) WithSticker(sticker string) *DeleteStickerFromSetParams {
+	p.Sticker = sticker
+	return p
+}
+
+// WithName adds name parameter
+func (p *ReplaceStickerInSetParams) WithName(name string) *ReplaceStickerInSetParams {
+	p.Name = name
+	return p
+}
+
+// WithOldSticker adds old sticker parameter
+func (p *ReplaceStickerInSetParams) WithOldSticker(oldSticker string) *ReplaceStickerInSetParams {
+	p.OldSticker = oldSticker
+	return p
+}
+
+// WithSticker adds sticker parameter
+func (p *ReplaceStickerInSetParams) WithSticker(sticker InputSticker) *ReplaceStickerInSetParams {
 	p.Sticker = sticker
 	return p
 }
@@ -2403,6 +2518,12 @@ func (p *SetStickerSetThumbnailParams) WithName(name string) *SetStickerSetThumb
 // WithThumbnail adds thumbnail parameter
 func (p *SetStickerSetThumbnailParams) WithThumbnail(thumbnail *InputFile) *SetStickerSetThumbnailParams {
 	p.Thumbnail = thumbnail
+	return p
+}
+
+// WithFormat adds format parameter
+func (p *SetStickerSetThumbnailParams) WithFormat(format string) *SetStickerSetThumbnailParams {
+	p.Format = format
 	return p
 }
 
@@ -2800,6 +2921,12 @@ func (p *AnswerPreCheckoutQueryParams) WithErrorMessage(errorMessage string) *An
 // WithErrors adds errors parameter
 func (p *SetPassportDataErrorsParams) WithErrors(errors ...PassportElementError) *SetPassportDataErrorsParams {
 	p.Errors = errors
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendGameParams) WithBusinessConnectionID(businessConnectionID string) *SendGameParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 

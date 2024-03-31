@@ -2109,6 +2109,37 @@ func TestBot_GetUserChatBoosts(t *testing.T) {
 	})
 }
 
+func TestBot_GetBusinessConnection(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedBusinessConnection := &BusinessConnection{}
+		resp := telegoResponse(t, expectedBusinessConnection)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		businessConnection, err := m.Bot.GetBusinessConnection(nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedBusinessConnection, businessConnection)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		businessConnection, err := m.Bot.GetBusinessConnection(nil)
+		require.Error(t, err)
+		assert.Nil(t, businessConnection)
+	})
+}
+
 func TestBot_SetMyCommands(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2997,6 +3028,33 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteStickerFromSet(nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_ReplaceStickerInSet(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.ReplaceStickerInSet(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.ReplaceStickerInSet(nil)
 		require.Error(t, err)
 	})
 }

@@ -738,10 +738,10 @@ func main() {
 			Stickers: []telego.InputSticker{
 				{
 					Sticker:   telego.InputFile{File: mustOpen("sticker1.png")},
+					Format:    telego.StickerFormatStatic,
 					EmojiList: []string{"⚡️"},
 				},
 			},
-			StickerFormat:   telego.StickerFormatStatic,
 			StickerType:     telego.StickerTypeRegular,
 			NeedsRepainting: false,
 		})

@@ -200,6 +200,10 @@ func (b *Bot) Close() error {
 
 // SendMessageParams - Represents parameters of sendMessage method.
 type SendMessageParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -234,8 +238,8 @@ type SendMessageParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -310,8 +314,8 @@ type ForwardMessagesParams struct {
 	// the format @channel_username)
 	FromChatID ChatID `json:"from_chat_id"`
 
-	// MessageIDs - Identifiers of 1-100 messages in the chat from_chat_id to forward. The identifiers must be
-	// specified in a strictly increasing order.
+	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to forward.
+	// The identifiers must be specified in a strictly increasing order.
 	MessageIDs []int `json:"message_ids"`
 
 	// DisableNotification - Optional. Sends the messages silently
@@ -412,8 +416,8 @@ type CopyMessagesParams struct {
 	// the format @channel_username)
 	FromChatID ChatID `json:"from_chat_id"`
 
-	// MessageIDs - Identifiers of 1-100 messages in the chat from_chat_id to copy. The identifiers must be
-	// specified in a strictly increasing order.
+	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to copy.
+	// The identifiers must be specified in a strictly increasing order.
 	MessageIDs []int `json:"message_ids"`
 
 	// DisableNotification - Optional. Sends the messages silently
@@ -446,6 +450,10 @@ func (b *Bot) CopyMessages(params *CopyMessagesParams) (*MessageID, error) {
 
 // SendPhotoParams - Represents parameters of sendPhoto method.
 type SendPhotoParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -488,8 +496,8 @@ type SendPhotoParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -513,6 +521,10 @@ func (b *Bot) SendPhoto(params *SendPhotoParams) (*Message, error) {
 
 // SendAudioParams - Represents parameters of sendAudio method.
 type SendAudioParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -567,8 +579,8 @@ type SendAudioParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -600,6 +612,10 @@ func (b *Bot) SendAudio(params *SendAudioParams) (*Message, error) {
 
 // SendDocumentParams - Represents parameters of sendDocument method.
 type SendDocumentParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -650,8 +666,8 @@ type SendDocumentParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -681,6 +697,10 @@ func (b *Bot) SendDocument(params *SendDocumentParams) (*Message, error) {
 
 // SendVideoParams - Represents parameters of sendVideo method.
 type SendVideoParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -742,8 +762,8 @@ type SendVideoParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -774,6 +794,10 @@ func (b *Bot) SendVideo(params *SendVideoParams) (*Message, error) {
 
 // SendAnimationParams - Represents parameters of sendAnimation method.
 type SendAnimationParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -832,8 +856,8 @@ type SendAnimationParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -863,6 +887,10 @@ func (b *Bot) SendAnimation(params *SendAnimationParams) (*Message, error) {
 
 // SendVoiceParams - Represents parameters of sendVoice method.
 type SendVoiceParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -903,8 +931,8 @@ type SendVoiceParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -932,6 +960,10 @@ func (b *Bot) SendVoice(params *SendVoiceParams) (*Message, error) {
 
 // SendVideoNoteParams - Represents parameters of sendVideoNote method.
 type SendVideoNoteParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -971,8 +1003,8 @@ type SendVideoNoteParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1002,6 +1034,10 @@ func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 
 // SendMediaGroupParams - Represents parameters of sendMediaGroup method.
 type SendMediaGroupParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -1054,6 +1090,10 @@ func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) ([]Message, error) {
 
 // SendLocationParams - Represents parameters of sendLocation method.
 type SendLocationParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -1095,8 +1135,8 @@ type SendLocationParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1114,6 +1154,10 @@ func (b *Bot) SendLocation(params *SendLocationParams) (*Message, error) {
 
 // SendVenueParams - Represents parameters of sendVenue method.
 type SendVenueParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -1160,8 +1204,8 @@ type SendVenueParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1179,6 +1223,10 @@ func (b *Bot) SendVenue(params *SendVenueParams) (*Message, error) {
 
 // SendContactParams - Represents parameters of sendContact method.
 type SendContactParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -1212,8 +1260,8 @@ type SendContactParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1231,6 +1279,10 @@ func (b *Bot) SendContact(params *SendContactParams) (*Message, error) {
 
 // SendPollParams - Represents parameters of sendPoll method.
 type SendPollParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -1295,8 +1347,8 @@ type SendPollParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1314,6 +1366,10 @@ func (b *Bot) SendPoll(params *SendPollParams) (*Message, error) {
 
 // SendDiceParams - Represents parameters of sendDice method.
 type SendDiceParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -1340,8 +1396,8 @@ type SendDiceParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user. Not supported for messages sent on behalf of a business account
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1359,11 +1415,15 @@ func (b *Bot) SendDice(params *SendDiceParams) (*Message, error) {
 
 // SendChatActionParams - Represents parameters of sendChatAction method.
 type SendChatActionParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// action will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread; supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread; for supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
@@ -1421,9 +1481,9 @@ type SetMessageReactionParams struct {
 	// set to the first non-deleted message in the group instead.
 	MessageID int `json:"message_id"`
 
-	// Reaction - Optional. New list of reaction types to set on the message. Currently, as non-premium users,
-	// bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already
-	// present on the message or explicitly allowed by chat administrators.
+	// Reaction - Optional. A JSON-serialized list of reaction types to set on the message. Currently, as
+	// non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is
+	// either already present on the message or explicitly allowed by chat administrators.
 	Reaction []ReactionType `json:"reaction,omitempty"`
 
 	// IsBig - Optional. Pass True to set the reaction with a big animation
@@ -1635,18 +1695,18 @@ type PromoteChatMemberParams struct {
 	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
 
 	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel, or access
-	// channel statistics; channels only
+	// channel statistics; for channels only
 	CanPostMessages *bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
-	// messages; channels only
+	// messages; for channels only
 	CanEditMessages *bool `json:"can_edit_messages,omitempty"`
 
-	// CanPinMessages - Optional. Pass True if the administrator can pin messages, supergroups only
+	// CanPinMessages - Optional. Pass True if the administrator can pin messages; for supergroups only
 	CanPinMessages *bool `json:"can_pin_messages,omitempty"`
 
 	// CanManageTopics - Optional. Pass True if the user is allowed to create, rename, close, and reopen forum
-	// topics, supergroups only
+	// topics; for supergroups only
 	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
 }
 
@@ -2568,6 +2628,25 @@ func (b *Bot) GetUserChatBoosts(params *GetUserChatBoostsParams) (*UserChatBoost
 	return userChatBoosts, nil
 }
 
+// GetBusinessConnectionParams - Represents parameters of getBusinessConnection method.
+type GetBusinessConnectionParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+}
+
+// GetBusinessConnection - Use this method to get information about the connection of the bot with a business
+// account. Returns a BusinessConnection (https://core.telegram.org/bots/api#businessconnection) object on
+// success.
+func (b *Bot) GetBusinessConnection(params *GetBusinessConnectionParams) (*BusinessConnection, error) {
+	var businessConnection *BusinessConnection
+	err := b.performRequest("getBusinessConnection", params, &businessConnection)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getBusinessConnection(): %w", err)
+	}
+
+	return businessConnection, nil
+}
+
 // SetMyCommandsParams - Represents parameters of setMyCommands method.
 type SetMyCommandsParams struct {
 	// Commands - A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most
@@ -3165,7 +3244,7 @@ type DeleteMessagesParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageIDs - Identifiers of 1-100 messages to delete. See deleteMessage
+	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage
 	// (https://core.telegram.org/bots/api#deletemessage) for limitations on which messages can be deleted
 	MessageIDs []int `json:"message_ids"`
 }
@@ -3183,6 +3262,10 @@ func (b *Bot) DeleteMessages(params *DeleteMessagesParams) error {
 
 // SendStickerParams - Represents parameters of sendSticker method.
 type SendStickerParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -3193,9 +3276,9 @@ type SendStickerParams struct {
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload
-	// a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files »
-	// (https://core.telegram.org/bots/api#sending-files). Video stickers can only be sent by a file_id. Animated
-	// stickers can't be sent via an HTTP URL.
+	// a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files). Video and animated stickers can't be sent via an HTTP
+	// URL.
 	Sticker InputFile `json:"sticker"`
 
 	// Emoji - Optional. Emoji associated with the sticker; only for just uploaded stickers
@@ -3214,7 +3297,7 @@ type SendStickerParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// reply from the user. Not supported for messages sent on behalf of a business account.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -3257,7 +3340,8 @@ func (b *Bot) GetStickerSet(params *GetStickerSetParams) (*StickerSet, error) {
 
 // GetCustomEmojiStickersParams - Represents parameters of getCustomEmojiStickers method.
 type GetCustomEmojiStickersParams struct {
-	// CustomEmojiIDs - List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
+	// CustomEmojiIDs - A JSON-serialized list of custom emoji identifiers. At most 200 custom emoji identifiers
+	// can be specified.
 	CustomEmojiIDs []string `json:"custom_emoji_ids"`
 }
 
@@ -3301,9 +3385,10 @@ func (p *UploadStickerFileParams) fileParameters() map[string]ta.NamedReader {
 }
 
 // UploadStickerFile - Use this method to upload a file with a sticker for later use in the
-// createNewStickerSet (https://core.telegram.org/bots/api#createnewstickerset) and addStickerToSet
-// (https://core.telegram.org/bots/api#addstickertoset) methods (the file can be used multiple times). Returns
-// the uploaded File (https://core.telegram.org/bots/api#file) on success.
+// createNewStickerSet (https://core.telegram.org/bots/api#createnewstickerset), addStickerToSet
+// (https://core.telegram.org/bots/api#addstickertoset), or replaceStickerInSet
+// (https://core.telegram.org/bots/api#replacestickerinset) methods (the file can be used multiple times).
+// Returns the uploaded File (https://core.telegram.org/bots/api#file) on success.
 func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) (*File, error) {
 	var file *File
 	err := b.performRequest("uploadStickerFile", params, &file)
@@ -3329,9 +3414,6 @@ type CreateNewStickerSetParams struct {
 
 	// Stickers - A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
 	Stickers []InputSticker `json:"stickers"`
-
-	// StickerFormat - Format of stickers in the set, must be one of “static”, “animated”, “video”
-	StickerFormat string `json:"sticker_format"`
 
 	// StickerType - Optional. Type of stickers in the set, pass “regular”, “mask”, or
 	// “custom_emoji”. By default, a regular sticker set is created.
@@ -3396,10 +3478,8 @@ func (p *AddStickerToSetParams) fileParameters() map[string]ta.NamedReader {
 	}
 }
 
-// AddStickerToSet - Use this method to add a new sticker to a set created by the bot. The format of the
-// added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200
-// stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120
-// stickers. Returns True on success.
+// AddStickerToSet - Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can
+// have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success.
 func (b *Bot) AddStickerToSet(params *AddStickerToSetParams) error {
 	err := b.performRequest("addStickerToSet", params)
 	if err != nil {
@@ -3441,6 +3521,36 @@ func (b *Bot) DeleteStickerFromSet(params *DeleteStickerFromSetParams) error {
 	err := b.performRequest("deleteStickerFromSet", params)
 	if err != nil {
 		return fmt.Errorf("telego: deleteStickerFromSet(): %w", err)
+	}
+
+	return nil
+}
+
+// ReplaceStickerInSetParams - Represents parameters of replaceStickerInSet method.
+type ReplaceStickerInSetParams struct {
+	// UserID - User identifier of the sticker set owner
+	UserID int64 `json:"user_id"`
+
+	// Name - Sticker set name
+	Name string `json:"name"`
+
+	// OldSticker - File identifier of the replaced sticker
+	OldSticker string `json:"old_sticker"`
+
+	// Sticker - A JSON-serialized object with information about the added sticker. If exactly the same sticker
+	// had already been added to the set, then the set remains unchanged.
+	Sticker InputSticker `json:"sticker"`
+}
+
+// ReplaceStickerInSet - Use this method to replace an existing sticker in a sticker set with a new one. The
+// method is equivalent to calling deleteStickerFromSet
+// (https://core.telegram.org/bots/api#deletestickerfromset), then addStickerToSet
+// (https://core.telegram.org/bots/api#addstickertoset), then setStickerPositionInSet
+// (https://core.telegram.org/bots/api#setstickerpositioninset). Returns True on success.
+func (b *Bot) ReplaceStickerInSet(params *ReplaceStickerInSetParams) error {
+	err := b.performRequest("replaceStickerInSet", params)
+	if err != nil {
+		return fmt.Errorf("telego: replaceStickerInSet(): %w", err)
 	}
 
 	return nil
@@ -3549,6 +3659,10 @@ type SetStickerSetThumbnailParams struct {
 	// sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the
 	// first sticker is used as the thumbnail.
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
+
+	// Format - Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated”
+	// for a .TGS animation, or “video” for a WEBM video
+	Format string `json:"format"`
 }
 
 func (p *SetStickerSetThumbnailParams) fileParameters() map[string]ta.NamedReader {
@@ -3960,6 +4074,10 @@ func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
 
 // SendGameParams - Represents parameters of sendGame method.
 type SendGameParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat
 	// Note: Should be int64 not ChatID according to documentation (https://core.telegram.org/bots/api#sendgame)
 	ChatID int64 `json:"chat_id"`
@@ -3984,7 +4102,8 @@ type SendGameParams struct {
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game_title' button will be
-	// shown. If not empty, the first button must launch the game.
+	// shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a
+	// business account.
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
