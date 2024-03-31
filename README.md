@@ -630,6 +630,6 @@ Telego is distributed under [MIT licence](LICENSE).
 
 [TelegramBotAPI]: https://core.telegram.org/bots/api
 
-[TelegramVersionBadge]: https://img.shields.io/static/v1?label=Supported%20Telegram%20Bot%20API&color=29a1d4&logo=telegram&message=v7.1
+[TelegramVersionBadge]: https://img.shields.io/static/v1?label=Supported%20Telegram%20Bot%20API&color=29a1d4&logo=telegram&message=v7.2
 
-[TelegramLastVersion]: https://core.telegram.org/bots/api#february-16-2024
+[TelegramLastVersion]: https://core.telegram.org/bots/api#march-31-2024
