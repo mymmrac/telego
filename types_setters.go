@@ -138,6 +138,24 @@ func (k *KeyboardButtonRequestUsers) WithMaxQuantity(maxQuantity int) *KeyboardB
 	return k
 }
 
+// WithRequestName adds request name parameter
+func (k *KeyboardButtonRequestUsers) WithRequestName(requestName bool) *KeyboardButtonRequestUsers {
+	k.RequestName = ToPtr(requestName)
+	return k
+}
+
+// WithRequestUsername adds request username parameter
+func (k *KeyboardButtonRequestUsers) WithRequestUsername(requestUsername bool) *KeyboardButtonRequestUsers {
+	k.RequestUsername = ToPtr(requestUsername)
+	return k
+}
+
+// WithRequestPhoto adds request photo parameter
+func (k *KeyboardButtonRequestUsers) WithRequestPhoto(requestPhoto bool) *KeyboardButtonRequestUsers {
+	k.RequestPhoto = ToPtr(requestPhoto)
+	return k
+}
+
 // WithChatIsChannel adds chat is channel parameter
 func (k *KeyboardButtonRequestChat) WithChatIsChannel() *KeyboardButtonRequestChat {
 	k.ChatIsChannel = true
@@ -179,6 +197,24 @@ func (k *KeyboardButtonRequestChat) WithBotAdministratorRights(botAdministratorR
 // WithBotIsMember adds bot is member parameter
 func (k *KeyboardButtonRequestChat) WithBotIsMember(botIsMember bool) *KeyboardButtonRequestChat {
 	k.BotIsMember = ToPtr(botIsMember)
+	return k
+}
+
+// WithRequestTitle adds request title parameter
+func (k *KeyboardButtonRequestChat) WithRequestTitle(requestTitle bool) *KeyboardButtonRequestChat {
+	k.RequestTitle = ToPtr(requestTitle)
+	return k
+}
+
+// WithRequestUsername adds request username parameter
+func (k *KeyboardButtonRequestChat) WithRequestUsername(requestUsername bool) *KeyboardButtonRequestChat {
+	k.RequestUsername = ToPtr(requestUsername)
+	return k
+}
+
+// WithRequestPhoto adds request photo parameter
+func (k *KeyboardButtonRequestChat) WithRequestPhoto(requestPhoto bool) *KeyboardButtonRequestChat {
+	k.RequestPhoto = ToPtr(requestPhoto)
 	return k
 }
 
@@ -525,6 +561,12 @@ func (i *InputMediaDocument) WithDisableContentTypeDetection() *InputMediaDocume
 // WithSticker adds sticker parameter
 func (i *InputSticker) WithSticker(sticker InputFile) *InputSticker {
 	i.Sticker = sticker
+	return i
+}
+
+// WithFormat adds format parameter
+func (i *InputSticker) WithFormat(format string) *InputSticker {
+	i.Format = format
 	return i
 }
 

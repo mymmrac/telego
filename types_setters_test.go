@@ -71,12 +71,18 @@ func TestKeyboardButtonRequestUsers_Setters(t *testing.T) {
 	k := (&KeyboardButtonRequestUsers{}).
 		WithUserIsBot(true).
 		WithUserIsPremium(true).
-		WithMaxQuantity(1)
+		WithMaxQuantity(1).
+		WithRequestName(true).
+		WithRequestUsername(true).
+		WithRequestPhoto(true)
 
 	assert.Equal(t, &KeyboardButtonRequestUsers{
-		UserIsBot:     ToPtr(true),
-		UserIsPremium: ToPtr(true),
-		MaxQuantity:   1,
+		UserIsBot:       ToPtr(true),
+		UserIsPremium:   ToPtr(true),
+		MaxQuantity:     1,
+		RequestName:     ToPtr(true),
+		RequestUsername: ToPtr(true),
+		RequestPhoto:    ToPtr(true),
 	}, k)
 }
 
@@ -88,7 +94,10 @@ func TestKeyboardButtonRequestChat_Setters(t *testing.T) {
 		WithChatIsCreated(true).
 		WithUserAdministratorRights(&ChatAdministratorRights{IsAnonymous: true}).
 		WithBotAdministratorRights(&ChatAdministratorRights{IsAnonymous: true}).
-		WithBotIsMember(true)
+		WithBotIsMember(true).
+		WithRequestTitle(true).
+		WithRequestUsername(true).
+		WithRequestPhoto(true)
 
 	assert.Equal(t, &KeyboardButtonRequestChat{
 		ChatIsChannel:           true,
@@ -98,6 +107,9 @@ func TestKeyboardButtonRequestChat_Setters(t *testing.T) {
 		UserAdministratorRights: &ChatAdministratorRights{IsAnonymous: true},
 		BotAdministratorRights:  &ChatAdministratorRights{IsAnonymous: true},
 		BotIsMember:             ToPtr(true),
+		RequestTitle:            ToPtr(true),
+		RequestUsername:         ToPtr(true),
+		RequestPhoto:            ToPtr(true),
 	}, k)
 }
 
@@ -286,12 +298,14 @@ func TestInputMediaDocument_Setters(t *testing.T) {
 func TestInputSticker_Setters(t *testing.T) {
 	i := (&InputSticker{}).
 		WithSticker(testInputFile).
+		WithFormat("Format").
 		WithEmojiList([]string{"EmojiList"}...).
 		WithMaskPosition(&MaskPosition{Point: "MaskPosition"}).
 		WithKeywords([]string{"Keywords"}...)
 
 	assert.Equal(t, &InputSticker{
 		Sticker:      testInputFile,
+		Format:       "Format",
 		EmojiList:    []string{"EmojiList"},
 		MaskPosition: &MaskPosition{Point: "MaskPosition"},
 		Keywords:     []string{"Keywords"},

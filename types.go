@@ -36,6 +36,19 @@ type Update struct {
 	// used by your bot.
 	EditedChannelPost *Message `json:"edited_channel_post,omitempty"`
 
+	// BusinessConnection - Optional. The bot was connected to or disconnected from a business account, or a
+	// user edited an existing connection with the bot
+	BusinessConnection *BusinessConnection `json:"business_connection,omitempty"`
+
+	// BusinessMessage - Optional. New non-service message from a connected business account
+	BusinessMessage *Message `json:"business_message,omitempty"`
+
+	// EditedBusinessMessage - Optional. New version of a message from a connected business account
+	EditedBusinessMessage *Message `json:"edited_business_message,omitempty"`
+
+	// DeletedBusinessMessages - Optional. Messages were deleted from a connected business account
+	DeletedBusinessMessages *BusinessMessagesDeleted `json:"deleted_business_messages,omitempty"`
+
 	// MessageReaction - Optional. A reaction to a message was changed by a user. The bot must be an
 	// administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to
 	// receive these updates. The update isn't received for reactions set by bots.
@@ -230,6 +243,10 @@ type User struct {
 	// SupportsInlineQueries - Optional. True, if the bot supports inline queries. Returned only in getMe
 	// (https://core.telegram.org/bots/api#getme).
 	SupportsInlineQueries bool `json:"supports_inline_queries,omitempty"`
+
+	// CanConnectToBusiness - Optional. True, if the bot can be connected to a Telegram Business account to
+	// receive its messages. Returned only in getMe (https://core.telegram.org/bots/api#getme).
+	CanConnectToBusiness bool `json:"can_connect_to_business,omitempty"`
 }
 
 // Chat - This object represents a chat.
@@ -266,6 +283,26 @@ type Chat struct {
 	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#collectible-usernames); for private chats,
 	// supergroups and channels. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	ActiveUsernames []string `json:"active_usernames,omitempty"`
+
+	// Birthdate - Optional. For private chats, the date of birth of the user. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	Birthdate *Birthdate `json:"birthdate,omitempty"`
+
+	// BusinessIntro - Optional. For private chats with business accounts, the intro of the business. Returned
+	// only in getChat (https://core.telegram.org/bots/api#getchat).
+	BusinessIntro *BusinessIntro `json:"business_intro,omitempty"`
+
+	// BusinessLocation - Optional. For private chats with business accounts, the location of the business.
+	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	BusinessLocation *BusinessLocation `json:"business_location,omitempty"`
+
+	// BusinessOpeningHours - Optional. For private chats with business accounts, the opening hours of the
+	// business. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	BusinessOpeningHours *BusinessOpeningHours `json:"business_opening_hours,omitempty"`
+
+	// PersonalChat - Optional. For private chats, the personal channel of the user. Returned only in getChat
+	// (https://core.telegram.org/bots/api#getchat).
+	PersonalChat *Chat `json:"personal_chat,omitempty"`
 
 	// AvailableReactions - Optional. List of available reactions allowed in the chat. If omitted, then all
 	// emoji reactions (https://core.telegram.org/bots/api#reactiontypeemoji) are allowed. Returned only in getChat
@@ -400,6 +437,7 @@ func (c *Chat) ChatID() ChatID {
 	}
 }
 
+// unknownReactionTypeErr is an error for unknown reaction type
 const unknownReactionTypeErr = "unknown reaction type: %s"
 
 // UnmarshalJSON converts JSON to Chat
@@ -471,8 +509,17 @@ type Message struct {
 	// the user
 	SenderBoostCount int `json:"sender_boost_count,omitempty"`
 
+	// SenderBusinessBot - Optional. The bot that actually sent the message on behalf of the business account.
+	// Available only for outgoing messages sent on behalf of the connected business account.
+	SenderBusinessBot *User `json:"sender_business_bot,omitempty"`
+
 	// Date - Date the message was sent in Unix time. It is always a positive number, representing a valid date.
 	Date int64 `json:"date"`
+
+	// BusinessConnectionID - Optional. Unique identifier of the business connection from which the message was
+	// received. If non-empty, the message belongs to a chat of the corresponding business account that is
+	// independent from any potential bot chat which might share the same identifier.
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
 	// Chat - Chat the message belongs to
 	Chat Chat `json:"chat"`
@@ -510,6 +557,10 @@ type Message struct {
 
 	// HasProtectedContent - Optional. True, if the message can't be forwarded
 	HasProtectedContent bool `json:"has_protected_content,omitempty"`
+
+	// IsFromOffline - Optional. True, if the message was sent by an implicit action, for example, as an away or
+	// a greeting business message, or as a scheduled message
+	IsFromOffline bool `json:"is_from_offline,omitempty"`
 
 	// MediaGroupID - Optional. The unique identifier of a media message group this message belongs to
 	MediaGroupID string `json:"media_group_id,omitempty"`
@@ -1038,11 +1089,13 @@ type ReplyParameters struct {
 	MessageID int `json:"message_id"`
 
 	// ChatID - Optional. If the message to be replied to is from a different chat, unique identifier for the
-	// chat or username of the channel (in the format @channel_username)
+	// chat or username of the channel (in the format @channel_username). Not supported for messages sent on behalf
+	// of a business account.
 	ChatID ChatID `json:"chat_id,omitempty"`
 
 	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// message to be replied to is not found; can be used only for replies in the same chat and forum topic.
+	// message to be replied to is not found. Always False for replies in another chat or forum topic. Always True
+	// for messages sent on behalf of a business account.
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// Quote - Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing.
@@ -1497,11 +1550,11 @@ const (
 
 // Location - This object represents a point on the map.
 type Location struct {
-	// Longitude - Longitude as defined by sender
-	Longitude float64 `json:"longitude"`
-
 	// Latitude - Latitude as defined by sender
 	Latitude float64 `json:"latitude"`
+
+	// Longitude - Longitude as defined by sender
+	Longitude float64 `json:"longitude"`
 
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
@@ -1619,22 +1672,41 @@ type GeneralForumTopicHidden struct{}
 // the chat. Currently holds no information.
 type GeneralForumTopicUnhidden struct{}
 
+// SharedUser - This object contains information about a user that was shared with the bot using a
+// KeyboardButtonRequestUser (https://core.telegram.org/bots/api#keyboardbuttonrequestuser) button.
+type SharedUser struct {
+	// UserID - Identifier of the shared user. This number may have more than 32 significant bits and some
+	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52
+	// significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers.
+	// The bot may not have access to the user and could be unable to use this identifier, unless the user is
+	// already known to the bot by some other means.
+	UserID int64 `json:"user_id"`
+
+	// FirstName - Optional. First name of the user, if the name was requested by the bot
+	FirstName string `json:"first_name,omitempty"`
+
+	// LastName - Optional. Last name of the user, if the name was requested by the bot
+	LastName string `json:"last_name,omitempty"`
+
+	// Username - Optional. Username of the user, if the username was requested by the bot
+	Username string `json:"username,omitempty"`
+
+	// Photo - Optional. Available sizes of the chat photo, if the photo was requested by the bot
+	Photo []PhotoSize `json:"photo,omitempty"`
+}
+
 // UsersShared - This object contains information about the users whose identifiers were shared with the bot
 // using a KeyboardButtonRequestUsers (https://core.telegram.org/bots/api#keyboardbuttonrequestusers) button.
 type UsersShared struct {
 	// RequestID - Identifier of the request
 	RequestID int `json:"request_id"`
 
-	// UserIDs - Identifiers of the shared users. These numbers may have more than 32 significant bits and some
-	// programming languages may have difficulty/silent defects in interpreting them. But they have at most 52
-	// significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers.
-	// The bot may not have access to the users and could be unable to use these identifiers, unless the users are
-	// already known to the bot by some other means.
-	UserIDs []int64 `json:"user_ids"`
+	// Users - Information about users shared with the bot.
+	Users []SharedUser `json:"users"`
 }
 
-// ChatShared - This object contains information about the chat whose identifier was shared with the bot
-// using a KeyboardButtonRequestChat (https://core.telegram.org/bots/api#keyboardbuttonrequestchat) button.
+// ChatShared - This object contains information about a chat that was shared with the bot using a
+// KeyboardButtonRequestChat (https://core.telegram.org/bots/api#keyboardbuttonrequestchat) button.
 type ChatShared struct {
 	// RequestID - Identifier of the request
 	RequestID int `json:"request_id"`
@@ -1645,6 +1717,15 @@ type ChatShared struct {
 	// The bot may not have access to the chat and could be unable to use this identifier, unless the chat is
 	// already known to the bot by some other means.
 	ChatID int64 `json:"chat_id"`
+
+	// Title - Optional. Title of the chat, if the title was requested by the bot.
+	Title string `json:"title,omitempty"`
+
+	// Username - Optional. Username of the chat, if the username was requested by the bot and available.
+	Username string `json:"username,omitempty"`
+
+	// Photo - Optional. Available sizes of the chat photo, if the photo was requested by the bot
+	Photo []PhotoSize `json:"photo,omitempty"`
 }
 
 // WriteAccessAllowed - This object represents a service message about a user allowing a bot to write
@@ -1928,9 +2009,9 @@ type KeyboardButton struct {
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 }
 
-// KeyboardButtonRequestUsers - This object defines the criteria used to request suitable users. The
-// identifiers of the selected users will be shared with the bot when the corresponding button is pressed. More
-// about requesting users » (https://core.telegram.org/bots/features#chat-and-user-selection)
+// KeyboardButtonRequestUsers - This object defines the criteria used to request suitable users. Information
+// about the selected users will be shared with the bot when the corresponding button is pressed. More about
+// requesting users » (https://core.telegram.org/bots/features#chat-and-user-selection)
 type KeyboardButtonRequestUsers struct {
 	// RequestID - Signed 32-bit identifier of the request that will be received back in the UsersShared
 	// (https://core.telegram.org/bots/api#usersshared) object. Must be unique within the message
@@ -1946,11 +2027,21 @@ type KeyboardButtonRequestUsers struct {
 
 	// MaxQuantity - Optional. The maximum number of users to be selected; 1-10. Defaults to 1.
 	MaxQuantity int `json:"max_quantity,omitempty"`
+
+	// RequestName - Optional. Pass True to request the users' first and last name
+	RequestName *bool `json:"request_name,omitempty"`
+
+	// RequestUsername - Optional. Pass True to request the users' username
+	RequestUsername *bool `json:"request_username,omitempty"`
+
+	// RequestPhoto - Optional. Pass True to request the users' photo
+	RequestPhoto *bool `json:"request_photo,omitempty"`
 }
 
-// KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. The
-// identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More
-// about requesting chats » (https://core.telegram.org/bots/features#chat-and-user-selection)
+// KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. Information
+// about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be
+// granted requested rights in the сhat if appropriate More about requesting chats »
+// (https://core.telegram.org/bots/features#chat-and-user-selection)
 type KeyboardButtonRequestChat struct {
 	// RequestID - Signed 32-bit identifier of the request, which will be received back in the ChatShared
 	// (https://core.telegram.org/bots/api#chatshared) object. Must be unique within the message
@@ -1984,6 +2075,15 @@ type KeyboardButtonRequestChat struct {
 	// BotIsMember - Optional. Pass True to request a chat with the bot as a member. Otherwise, no additional
 	// restrictions are applied.
 	BotIsMember *bool `json:"bot_is_member,omitempty"`
+
+	// RequestTitle - Optional. Pass True to request the chat's title
+	RequestTitle *bool `json:"request_title,omitempty"`
+
+	// RequestUsername - Optional. Pass True to request the chat's username
+	RequestUsername *bool `json:"request_username,omitempty"`
+
+	// RequestPhoto - Optional. Pass True to request the chat's photo
+	RequestPhoto *bool `json:"request_photo,omitempty"`
 }
 
 // KeyboardButtonPollType - This object represents type of a poll, which is allowed to be created and sent
@@ -2317,18 +2417,18 @@ type ChatAdministratorRights struct {
 	CanDeleteStories bool `json:"can_delete_stories"`
 
 	// CanPostMessages - Optional. True, if the administrator can post messages in the channel, or access
-	// channel statistics; channels only
+	// channel statistics; for channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. True, if the administrator can edit messages of other users and can pin
-	// messages; channels only
+	// messages; for channels only
 	CanEditMessages bool `json:"can_edit_messages,omitempty"`
 
-	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
+	// CanPinMessages - Optional. True, if the user is allowed to pin messages; for groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
-	// topics; supergroups only
+	// topics; for supergroups only
 	CanManageTopics bool `json:"can_manage_topics,omitempty"`
 }
 
@@ -2537,18 +2637,18 @@ type ChatMemberAdministrator struct {
 	CanDeleteStories bool `json:"can_delete_stories"`
 
 	// CanPostMessages - Optional. True, if the administrator can post messages in the channel, or access
-	// channel statistics; channels only
+	// channel statistics; for channels only
 	CanPostMessages bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. True, if the administrator can edit messages of other users and can pin
-	// messages; channels only
+	// messages; for channels only
 	CanEditMessages bool `json:"can_edit_messages,omitempty"`
 
-	// CanPinMessages - Optional. True, if the user is allowed to pin messages; groups and supergroups only
+	// CanPinMessages - Optional. True, if the user is allowed to pin messages; for groups and supergroups only
 	CanPinMessages bool `json:"can_pin_messages,omitempty"`
 
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
-	// topics; supergroups only
+	// topics; for supergroups only
 	CanManageTopics bool `json:"can_manage_topics,omitempty"`
 
 	// CustomTitle - Optional. Custom title for this user
@@ -2797,6 +2897,59 @@ type ChatPermissions struct {
 	// CanManageTopics - Optional. True, if the user is allowed to create forum topics. If omitted defaults to
 	// the value of can_pin_messages
 	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
+}
+
+// Birthdate - No description
+type Birthdate struct {
+	// Day - Day of the user's birth; 1-31
+	Day int `json:"day"`
+
+	// Month - Month of the user's birth; 1-12
+	Month int `json:"month"`
+
+	// Year - Optional. Year of the user's birth
+	Year int `json:"year,omitempty"`
+}
+
+// BusinessIntro - No description
+type BusinessIntro struct {
+	// Title - Optional. Title text of the business intro
+	Title string `json:"title,omitempty"`
+
+	// Message - Optional. Message text of the business intro
+	Message string `json:"message,omitempty"`
+
+	// Sticker - Optional. Sticker of the business intro
+	Sticker *Sticker `json:"sticker,omitempty"`
+}
+
+// BusinessLocation - No description
+type BusinessLocation struct {
+	// Address - Address of the business
+	Address string `json:"address"`
+
+	// Location - Optional. Location of the business
+	Location *Location `json:"location,omitempty"`
+}
+
+// BusinessOpeningHoursInterval - No description
+type BusinessOpeningHoursInterval struct {
+	// OpeningMinute - The minute's sequence number in a week, starting on Monday, marking the start of the time
+	// interval during which the business is open; 0 - 7 24 60
+	OpeningMinute int `json:"opening_minute"`
+
+	// ClosingMinute - The minute's sequence number in a week, starting on Monday, marking the end of the time
+	// interval during which the business is open; 0 - 8 24 60
+	ClosingMinute int `json:"closing_minute"`
+}
+
+// BusinessOpeningHours - No description
+type BusinessOpeningHours struct {
+	// TimeZoneName - Unique name of the time zone for which the opening hours are defined
+	TimeZoneName string `json:"time_zone_name"`
+
+	// OpeningHours - List of time intervals describing business opening hours
+	OpeningHours []BusinessOpeningHoursInterval `json:"opening_hours"`
 }
 
 // ChatLocation - Represents a location to which a chat is connected.
@@ -3488,6 +3641,46 @@ type UserChatBoosts struct {
 	Boosts []ChatBoost `json:"boosts"`
 }
 
+// BusinessConnection - Describes the connection of the bot with a business account.
+type BusinessConnection struct {
+	// ID - Unique identifier of the business connection
+	ID string `json:"id"`
+
+	// User - Business account user that created the business connection
+	User User `json:"user"`
+
+	// UserChatID - Identifier of a private chat with the user who created the business connection. This number
+	// may have more than 32 significant bits and some programming languages may have difficulty/silent defects in
+	// interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type
+	// are safe for storing this identifier.
+	UserChatID int64 `json:"user_chat_id"`
+
+	// Date - Date the connection was established in Unix time
+	Date int64 `json:"date"`
+
+	// CanReply - True, if the bot can act on behalf of the business account in chats that were active in the
+	// last 24 hours
+	CanReply bool `json:"can_reply"`
+
+	// IsEnabled - True, if the connection is active
+	IsEnabled bool `json:"is_enabled"`
+}
+
+// BusinessMessagesDeleted - This object is received when messages are deleted from a connected business
+// account.
+type BusinessMessagesDeleted struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// Chat - Information about a chat in the business account. The bot may not have access to the chat or the
+	// corresponding user.
+	Chat Chat `json:"chat"`
+
+	// MessageIDs - A JSON-serialized list of identifiers of deleted messages in the chat of the business
+	// account
+	MessageIDs []int `json:"message_ids"`
+}
+
 // fileCompatible - Represents types that can be sent as files
 type fileCompatible interface {
 	fileParameters() map[string]telegoapi.NamedReader
@@ -3913,14 +4106,6 @@ type StickerSet struct {
 	// StickerType - Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
 	StickerType string `json:"sticker_type"`
 
-	// IsAnimated - True, if the sticker set contains animated stickers
-	// (https://telegram.org/blog/animated-stickers)
-	IsAnimated bool `json:"is_animated"`
-
-	// IsVideo - True, if the sticker set contains video stickers
-	// (https://telegram.org/blog/video-stickers-better-reactions)
-	IsVideo bool `json:"is_video"`
-
 	// Stickers - List of all set stickers
 	Stickers []Sticker `json:"stickers"`
 
@@ -3963,6 +4148,10 @@ type InputSticker struct {
 	// URL. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Sticker InputFile `json:"sticker"`
 
+	// Format - Format of the added sticker, must be one of “static” for a .WEBP or .PNG image,
+	// “animated” for a .TGS animation, “video” for a WEBM video
+	Format string `json:"format"`
+
 	// EmojiList - List of 1-20 emoji associated with the sticker
 	EmojiList []string `json:"emoji_list"`
 
@@ -3973,6 +4162,13 @@ type InputSticker struct {
 	// characters. For “regular” and “custom_emoji” stickers only.
 	Keywords []string `json:"keywords,omitempty"`
 }
+
+// Sticker formats
+const (
+	StickerStatic   = "static"
+	StickerAnimated = "animated"
+	StickerVideo    = "video"
+)
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.
@@ -5416,43 +5612,43 @@ type EncryptedPassportElement struct {
 	// “email”.
 	Type string `json:"type"`
 
-	// Data - Optional. Base64-encoded encrypted Telegram Passport element data provided by the user, available
-	// for “personal_details”, “passport”, “driver_license”, “identity_card”,
+	// Data - Optional. Base64-encoded encrypted Telegram Passport element data provided by the user; available
+	// only for “personal_details”, “passport”, “driver_license”, “identity_card”,
 	// “internal_passport” and “address” types. Can be decrypted and verified using the accompanying
 	// EncryptedCredentials (https://core.telegram.org/bots/api#encryptedcredentials).
 	Data string `json:"data,omitempty"`
 
-	// PhoneNumber - Optional. User's verified phone number, available only for “phone_number” type
+	// PhoneNumber - Optional. User's verified phone number; available only for “phone_number” type
 	PhoneNumber string `json:"phone_number,omitempty"`
 
-	// Email - Optional. User's verified email address, available only for “email” type
+	// Email - Optional. User's verified email address; available only for “email” type
 	Email string `json:"email,omitempty"`
 
-	// Files - Optional. Array of encrypted files with documents provided by the user, available for
+	// Files - Optional. Array of encrypted files with documents provided by the user; available only for
 	// “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and
 	// “temporary_registration” types. Files can be decrypted and verified using the accompanying
 	// EncryptedCredentials (https://core.telegram.org/bots/api#encryptedcredentials).
 	Files []PassportFile `json:"files,omitempty"`
 
-	// FrontSide - Optional. Encrypted file with the front side of the document, provided by the user. Available
-	// for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be
-	// decrypted and verified using the accompanying EncryptedCredentials
+	// FrontSide - Optional. Encrypted file with the front side of the document, provided by the user; available
+	// only for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can
+	// be decrypted and verified using the accompanying EncryptedCredentials
 	// (https://core.telegram.org/bots/api#encryptedcredentials).
 	FrontSide *PassportFile `json:"front_side,omitempty"`
 
-	// ReverseSide - Optional. Encrypted file with the reverse side of the document, provided by the user.
-	// Available for “driver_license” and “identity_card”. The file can be decrypted and verified using the
-	// accompanying EncryptedCredentials (https://core.telegram.org/bots/api#encryptedcredentials).
+	// ReverseSide - Optional. Encrypted file with the reverse side of the document, provided by the user;
+	// available only for “driver_license” and “identity_card”. The file can be decrypted and verified using
+	// the accompanying EncryptedCredentials (https://core.telegram.org/bots/api#encryptedcredentials).
 	ReverseSide *PassportFile `json:"reverse_side,omitempty"`
 
 	// Selfie - Optional. Encrypted file with the selfie of the user holding a document, provided by the user;
-	// available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file
-	// can be decrypted and verified using the accompanying EncryptedCredentials
+	// available if requested for “passport”, “driver_license”, “identity_card” and
+	// “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials
 	// (https://core.telegram.org/bots/api#encryptedcredentials).
 	Selfie *PassportFile `json:"selfie,omitempty"`
 
 	// Translation - Optional. Array of encrypted files with translated versions of documents provided by the
-	// user. Available if requested for “passport”, “driver_license”, “identity_card”,
+	// user; available if requested for “passport”, “driver_license”, “identity_card”,
 	// “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”,
 	// “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using
 	// the accompanying EncryptedCredentials (https://core.telegram.org/bots/api#encryptedcredentials).

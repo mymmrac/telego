@@ -638,6 +638,9 @@ func TestTypesConstants(t *testing.T) {
 			PointForehead, PointEyes, PointMouth, PointChin,
 		},
 		{
+			StickerStatic, StickerAnimated, StickerVideo,
+		},
+		{
 			ResultTypeArticle, ResultTypePhoto, ResultTypeGif, ResultTypeMpeg4Gif, ResultTypeVideo, ResultTypeAudio,
 			ResultTypeVoice, ResultTypeDocument, ResultTypeLocation, ResultTypeVenue, ResultTypeContact,
 			ResultTypeGame, ResultTypeSticker,

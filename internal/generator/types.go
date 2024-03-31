@@ -78,10 +78,17 @@ func generateTypes(docs string) tgTypes {
 	types := make(tgTypes, len(typeGroups))
 
 	for i, typeGroup := range typeGroups {
+		description := typeGroup[2]
+		fieldDefinitions := typeGroup[3]
+		if fieldDefinitions == "" {
+			fieldDefinitions = typeGroup[2]
+			description = "No description"
+		}
+
 		typ := tgType{
 			name:        typeGroup[1],
-			description: replaceHTML(typeGroup[2]),
-			fields:      generateTypeFields(typeGroup[3], typeGroup[1]),
+			description: replaceHTML(description),
+			fields:      generateTypeFields(fieldDefinitions, typeGroup[1]),
 		}
 
 		types[i] = typ
