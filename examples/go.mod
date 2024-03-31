@@ -4,14 +4,14 @@ go 1.21
 
 require (
 	github.com/fasthttp/router v1.5.0
-	github.com/mymmrac/telego v0.29.1
+	github.com/mymmrac/telego v0.29.2
 	github.com/valyala/fasthttp v1.52.0
 	golang.ngrok.com/ngrok v1.9.1
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/bytedance/sonic v1.10.2 // indirect
+	github.com/bytedance/sonic v1.11.3 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
