@@ -23,7 +23,7 @@ func RegisterHandlers(bh *th.BotHandler) {
 		if err != nil {
 			log.Printf("Error on start: %s", err)
 		}
-	}, th.Union(th.CommandEqual("start"), th.TextEqual("Back")))
+	}, th.Or(th.CommandEqual("start"), th.TextEqual("Back")))
 
 	subMenu := bh.Group(th.TextPrefix("Sub menu"))
 	subMenu.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
