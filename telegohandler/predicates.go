@@ -160,7 +160,7 @@ func TextMatches(pattern *regexp.Regexp) Predicate {
 }
 
 // CommandRegexp matches to command and has match groups on command, bot username and arguments
-var CommandRegexp = regexp.MustCompile(`^/(\w+)(@\w+)?(?: (.+))?$`)
+var CommandRegexp = regexp.MustCompile(`(?s)^/(\w+)(@\w+)?(?:\s+(.+?)\s*)?$`)
 
 // Command match group indexes in the [CommandRegexp]
 const (
