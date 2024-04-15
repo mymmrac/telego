@@ -3,7 +3,7 @@ module github.com/mymmrac/telego
 go 1.21
 
 require (
-	github.com/bytedance/sonic v1.11.3
+	github.com/bytedance/sonic v1.11.4
 	github.com/fasthttp/router v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
@@ -18,8 +18,8 @@ require github.com/grbit/go-json v0.11.0
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
-	github.com/chenzhuoyu/iasm v0.9.1 // indirect
+	github.com/cloudwego/base64x v0.1.0 // indirect
+	github.com/cloudwego/iasm v0.0.9 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/klauspost/compress v1.17.6 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
