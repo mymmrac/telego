@@ -240,7 +240,7 @@ func MessageEntities(entityCollections ...MessageEntityCollection) (string, []te
 // UTF16TextLen returns length of a UTF-16 text
 // Credit: https://core.telegram.org/api/entities#computing-entity-length
 //
-//nolint:gomnd
+//nolint:mnd
 func UTF16TextLen(text string) int {
 	length := 0
 	for _, b := range []byte(text) {
