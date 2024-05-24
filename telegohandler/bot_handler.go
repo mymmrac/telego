@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	"time"
 
 	"github.com/mymmrac/telego"
 )
@@ -34,8 +33,6 @@ type BotHandler struct {
 	runningLock    sync.RWMutex
 	stop           chan struct{}
 	handledUpdates *sync.WaitGroup
-	stopTimeout    time.Duration
-	done           <-chan struct{}
 }
 
 // BotHandlerOption represents an option that can be applied to bot handler
@@ -48,7 +45,6 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 		updates:        updates,
 		baseGroup:      &HandlerGroup{},
 		handledUpdates: &sync.WaitGroup{},
-		done:           make(chan struct{}),
 	}
 
 	for _, option := range options {
@@ -61,9 +57,7 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 }
 
 // Start starts handling of updates, blocks execution
-// Calling [BotHandler.Start] method multiple times after the first one does nothing.
-// Note: After you done with handling updates, you should call [BotHandler.Stop] method,
-// because stopping updates chan will do nothing.
+// Note: Calling [BotHandler.Start] method multiple times after the first one does nothing.
 func (h *BotHandler) Start() {
 	h.runningLock.RLock()
 	if h.running {
@@ -83,9 +77,6 @@ func (h *BotHandler) Start() {
 	for {
 		select {
 		case <-h.stop:
-			return
-		case <-h.done:
-			h.Stop()
 			return
 		case update, ok := <-h.updates:
 			if !ok {
@@ -123,11 +114,9 @@ func (h *BotHandler) IsRunning() bool {
 	return h.running
 }
 
-// Stop stops handling of updates, will block until all updates has been processes or on timeout.
-// If timeout set to 0 (default), bot handler will stop immediately.
-// Note: Calling [BotHandler.Stop] method multiple times does nothing. Calling before [BotHandler.Start] method does
-// nothing.
-func (h *BotHandler) Stop() {
+// StopWithContext stops handling of updates, blocks until all updates have been processes or when context is canceled.
+// Note: Calling [BotHandler.StopWithContext] method multiple times or before [BotHandler.Start] does nothing.
+func (h *BotHandler) StopWithContext(ctx context.Context) {
 	h.runningLock.Lock()
 	defer h.runningLock.Unlock()
 	if !h.running {
@@ -136,9 +125,12 @@ func (h *BotHandler) Stop() {
 
 	close(h.stop)
 
-	if h.stopTimeout <= 0 {
+	select {
+	case <-ctx.Done():
 		h.running = false
 		return
+	default:
+		// Continue
 	}
 
 	wait := make(chan struct{})
@@ -147,16 +139,20 @@ func (h *BotHandler) Stop() {
 		close(wait)
 	}()
 
-	waiter := time.NewTimer(h.stopTimeout)
 	select {
-	case <-waiter.C:
-		// Wait for timeout
+	case <-ctx.Done():
+		// Wait for context to be done
 	case <-wait:
 		// Wait for handler to complete
-		waiter.Stop()
 	}
 
 	h.running = false
+}
+
+// Stop stops handling of updates, will block until all updates have been processes.
+// It's recommended to use [BotHandler.StopWithContext] if you want to force stop after some timeout.
+func (h *BotHandler) Stop() {
+	h.StopWithContext(context.Background())
 }
 
 // Handle registers new handler in the base group, update will be processed only by first-matched handler,

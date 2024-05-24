@@ -1,6 +1,7 @@
 package telegohandler
 
 import (
+	"context"
 	"errors"
 	"sync"
 	"testing"
@@ -145,7 +146,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		updates := make(chan telego.Update)
 
-		bh, err := NewBotHandler(bot, updates, WithStopTimeout(smallTimeout))
+		bh, err := NewBotHandler(bot, updates)
 		require.NoError(t, err)
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
@@ -164,9 +165,11 @@ func TestBotHandler_Stop(t *testing.T) {
 
 			updates <- telego.Update{}
 
+			ctx, cancel := context.WithTimeout(context.Background(), smallTimeout)
 			go func() {
-				bh.Stop()
+				bh.StopWithContext(ctx)
 				done <- struct{}{}
+				cancel()
 			}()
 
 			select {
@@ -183,7 +186,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		updates := make(chan telego.Update)
 
-		bh, err := NewBotHandler(bot, updates, WithStopTimeout(hugeTimeout))
+		bh, err := NewBotHandler(bot, updates)
 		require.NoError(t, err)
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {})
@@ -199,8 +202,50 @@ func TestBotHandler_Stop(t *testing.T) {
 
 			updates <- telego.Update{}
 
+			ctx, cancel := context.WithTimeout(context.Background(), hugeTimeout)
 			go func() {
-				bh.Stop()
+				bh.StopWithContext(ctx)
+				done <- struct{}{}
+				cancel()
+			}()
+
+			select {
+			case <-timeoutSignal:
+				t.Fatal("Timeout")
+			case <-done:
+			}
+		})
+	})
+
+	t.Run("with_canceled", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update)
+
+		bh, err := NewBotHandler(bot, updates)
+		require.NoError(t, err)
+
+		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+			time.Sleep(hugeTimeout)
+			t.Fatal("timeout didn't work")
+		})
+
+		timeoutSignal := time.After(timeout)
+		done := make(chan struct{})
+
+		assert.NotPanics(t, func() {
+			go bh.Start()
+			for !bh.IsRunning() {
+				// Wait for handler to start
+			}
+
+			updates <- telego.Update{}
+
+			ctx, cancel := context.WithCancel(context.Background())
+			cancel()
+			go func() {
+				bh.StopWithContext(ctx)
 				done <- struct{}{}
 			}()
 
@@ -235,34 +280,6 @@ func TestBotHandler_Stop(t *testing.T) {
 
 			updates <- telego.Update{}
 		})
-	})
-
-	t.Run("with_done", func(t *testing.T) {
-		bot, err := telego.NewBot(token)
-		require.NoError(t, err)
-
-		updates := make(chan telego.Update, 1)
-
-		done := make(chan struct{})
-		bh, err := NewBotHandler(bot, updates, WithDone(done))
-		require.NoError(t, err)
-
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
-			t.Fatal("handled after stop")
-		})
-
-		assert.NotPanics(t, func() {
-			go bh.Start()
-			for !bh.IsRunning() {
-				// Wait for handler to start
-			}
-
-			close(done)
-			time.Sleep(smallTimeout)
-
-			updates <- telego.Update{}
-		})
-		assert.False(t, bh.IsRunning())
 	})
 
 	t.Run("updates_close", func(t *testing.T) {
