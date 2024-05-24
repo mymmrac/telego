@@ -4,10 +4,10 @@ go 1.22.3
 
 require (
 	github.com/bytedance/sonic v1.11.7
-	github.com/fasthttp/router v1.5.0
+	github.com/fasthttp/router v1.5.1
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
-	github.com/valyala/fasthttp v1.53.0
+	github.com/valyala/fasthttp v1.54.0
 	github.com/valyala/fastjson v1.6.4
 	go.uber.org/mock v0.4.0
 )
