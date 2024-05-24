@@ -215,7 +215,7 @@ func parseType(text string, optional bool) string {
 func uppercaseWords(text string) string {
 	text = strings.ReplaceAll(text, "Id ", "ID ")
 	text = strings.ReplaceAll(text, "Id\n", "ID\n")
-	text = strings.ReplaceAll(text, "id\n", "ID\n")
+	text = strings.ReplaceAll(text, " id\n", " ID\n")
 	text = strings.ReplaceAll(text, "Id)", "ID)")
 	text = strings.ReplaceAll(text, "Ids", "IDs")
 	text = strings.ReplaceAll(text, "Id,", "ID,")

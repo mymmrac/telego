@@ -78,26 +78,21 @@ func generateTypes(docs string) tgTypes {
 	types := make(tgTypes, len(typeGroups))
 
 	for i, typeGroup := range typeGroups {
-		description := typeGroup[2]
-		fieldDefinitions := typeGroup[3]
-		if fieldDefinitions == "" {
-			fieldDefinitions = typeGroup[2]
-			description = "No description"
-		}
-
-		typ := tgType{
+		types[i] = tgType{
 			name:        typeGroup[1],
-			description: replaceHTML(description),
-			fields:      generateTypeFields(fieldDefinitions, typeGroup[1]),
+			description: replaceHTML(typeGroup[2]),
+			fields:      generateTypeFields(typeGroup[3], typeGroup[1]),
 		}
-
-		types[i] = typ
 	}
 
 	return types
 }
 
 func generateTypeFields(fieldDocs, typeName string) tgTypeFields {
+	if fieldDocs == "" {
+		return nil
+	}
+
 	fieldGroups := typeFieldRegexp.FindAllStringSubmatch(fieldDocs, -1)
 	fields := make(tgTypeFields, len(fieldGroups))
 
@@ -232,7 +227,11 @@ import (
 		typeDescription := fitTextToLine(fmt.Sprintf("%s - %s", t.name, t.description), "// ")
 		data.WriteString(typeDescription)
 
-		data.WriteString(fmt.Sprintf("\ntype %s struct {", t.name))
+		if len(t.fields) == 0 && !strings.Contains(t.description, "holds no information") {
+			data.WriteString(fmt.Sprintf("\ntype %s interface {\n\t// TODO: Add methods\n", t.name))
+		} else {
+			data.WriteString(fmt.Sprintf("\ntype %s struct {", t.name))
+		}
 
 		if len(t.fields) > 0 {
 			data.WriteString("\n")

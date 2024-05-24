@@ -40,7 +40,7 @@ type Update struct {
 	// user edited an existing connection with the bot
 	BusinessConnection *BusinessConnection `json:"business_connection,omitempty"`
 
-	// BusinessMessage - Optional. New non-service message from a connected business account
+	// BusinessMessage - Optional. New message from a connected business account
 	BusinessMessage *Message `json:"business_message,omitempty"`
 
 	// EditedBusinessMessage - Optional. New version of a message from a connected business account
@@ -257,7 +257,51 @@ type Chat struct {
 	// identifier.
 	ID int64 `json:"id"`
 
-	// Type - Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+	// Type - Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
+	Type string `json:"type"`
+
+	// Title - Optional. Title, for supergroups, channels and group chats
+	Title string `json:"title,omitempty"`
+
+	// Username - Optional. Username, for private chats, supergroups and channels if available
+	Username string `json:"username,omitempty"`
+
+	// FirstName - Optional. First name of the other party in a private chat
+	FirstName string `json:"first_name,omitempty"`
+
+	// LastName - Optional. Last name of the other party in a private chat
+	LastName string `json:"last_name,omitempty"`
+
+	// IsForum - Optional. True, if the supergroup chat is a forum (has topics
+	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
+	IsForum bool `json:"is_forum,omitempty"`
+}
+
+// ChatID returns [ChatID] of this chat
+func (c *Chat) ChatID() ChatID {
+	return ChatID{
+		ID: c.ID,
+	}
+}
+
+// Chat types
+const (
+	ChatTypeSender     = "sender"
+	ChatTypePrivate    = "private"
+	ChatTypeGroup      = "group"
+	ChatTypeSupergroup = "supergroup"
+	ChatTypeChannel    = "channel"
+)
+
+// ChatFullInfo - This object contains full information about a chat.
+type ChatFullInfo struct {
+	// ID - Unique identifier for this chat. This number may have more than 32 significant bits and some
+	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52
+	// significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this
+	// identifier.
+	ID int64 `json:"id"`
+
+	// Type - Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
 	Type string `json:"type"`
 
 	// Title - Optional. Title, for supergroups, channels and group chats
@@ -276,172 +320,144 @@ type Chat struct {
 	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
 	IsForum bool `json:"is_forum,omitempty"`
 
-	// Photo - Optional. Chat photo. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// AccentColorID - Identifier of the accent color for the chat name and backgrounds of the chat photo, reply
+	// header, and link preview. See accent colors (https://core.telegram.org/bots/api#accent-colors) for more
+	// details.
+	AccentColorID int `json:"accent_color_id"`
+
+	// MaxReactionCount - The maximum number of reactions that can be set on a message in the chat
+	MaxReactionCount int `json:"max_reaction_count"`
+
+	// Photo - Optional. Chat photo
 	Photo *ChatPhoto `json:"photo,omitempty"`
 
 	// ActiveUsernames - Optional. If non-empty, the list of all active chat usernames
 	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#collectible-usernames); for private chats,
-	// supergroups and channels. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// supergroups and channels
 	ActiveUsernames []string `json:"active_usernames,omitempty"`
 
-	// Birthdate - Optional. For private chats, the date of birth of the user. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// Birthdate - Optional. For private chats, the date of birth of the user
 	Birthdate *Birthdate `json:"birthdate,omitempty"`
 
-	// BusinessIntro - Optional. For private chats with business accounts, the intro of the business. Returned
-	// only in getChat (https://core.telegram.org/bots/api#getchat).
+	// BusinessIntro - Optional. For private chats with business accounts, the intro of the business
 	BusinessIntro *BusinessIntro `json:"business_intro,omitempty"`
 
-	// BusinessLocation - Optional. For private chats with business accounts, the location of the business.
-	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// BusinessLocation - Optional. For private chats with business accounts, the location of the business
 	BusinessLocation *BusinessLocation `json:"business_location,omitempty"`
 
 	// BusinessOpeningHours - Optional. For private chats with business accounts, the opening hours of the
-	// business. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// business
 	BusinessOpeningHours *BusinessOpeningHours `json:"business_opening_hours,omitempty"`
 
-	// PersonalChat - Optional. For private chats, the personal channel of the user. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// PersonalChat - Optional. For private chats, the personal channel of the user
 	PersonalChat *Chat `json:"personal_chat,omitempty"`
 
 	// AvailableReactions - Optional. List of available reactions allowed in the chat. If omitted, then all
-	// emoji reactions (https://core.telegram.org/bots/api#reactiontypeemoji) are allowed. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// emoji reactions (https://core.telegram.org/bots/api#reactiontypeemoji) are allowed.
 	AvailableReactions []ReactionType `json:"available_reactions,omitempty"`
 
-	// AccentColorID - Optional. Identifier of the accent color for the chat name and backgrounds of the chat
-	// photo, reply header, and link preview. See accent colors (https://core.telegram.org/bots/api#accent-colors)
-	// for more details. Returned only in getChat (https://core.telegram.org/bots/api#getchat). Always returned in
-	// getChat (https://core.telegram.org/bots/api#getchat).
-	AccentColorID int `json:"accent_color_id,omitempty"`
-
-	// BackgroundCustomEmojiID - Optional. Custom emoji identifier of emoji chosen by the chat for the reply
-	// header and link preview background. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// BackgroundCustomEmojiID - Optional. Custom emoji identifier of the emoji chosen by the chat for the reply
+	// header and link preview background
 	BackgroundCustomEmojiID string `json:"background_custom_emoji_id,omitempty"`
 
 	// ProfileAccentColorID - Optional. Identifier of the accent color for the chat's profile background. See
-	// profile accent colors (https://core.telegram.org/bots/api#profile-accent-colors) for more details. Returned
-	// only in getChat (https://core.telegram.org/bots/api#getchat).
+	// profile accent colors (https://core.telegram.org/bots/api#profile-accent-colors) for more details.
 	ProfileAccentColorID int `json:"profile_accent_color_id,omitempty"`
 
 	// ProfileBackgroundCustomEmojiID - Optional. Custom emoji identifier of the emoji chosen by the chat for
-	// its profile background. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// its profile background
 	ProfileBackgroundCustomEmojiID string `json:"profile_background_custom_emoji_id,omitempty"`
 
 	// EmojiStatusCustomEmojiID - Optional. Custom emoji identifier of the emoji status of the chat or the other
-	// party in a private chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// party in a private chat
 	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
 
 	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status of the chat or the other party
-	// in a private chat, in Unix time, if any. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// in a private chat, in Unix time, if any
 	EmojiStatusExpirationDate int64 `json:"emoji_status_expiration_date,omitempty"`
 
-	// Bio - Optional. Bio of the other party in a private chat. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// Bio - Optional. Bio of the other party in a private chat
 	Bio string `json:"bio,omitempty"`
 
 	// HasPrivateForwards - Optional. True, if privacy settings of the other party in the private chat allows to
-	// use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// use tg://user?id=<user_id> links only in chats with the user
 	HasPrivateForwards bool `json:"has_private_forwards,omitempty"`
 
 	// HasRestrictedVoiceAndVideoMessages - Optional. True, if the privacy settings of the other party restrict
-	// sending voice and video note messages in the private chat. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// sending voice and video note messages in the private chat
 	HasRestrictedVoiceAndVideoMessages bool `json:"has_restricted_voice_and_video_messages,omitempty"`
 
-	// JoinToSendMessages - Optional. True, if users need to join the supergroup before they can send messages.
-	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// JoinToSendMessages - Optional. True, if users need to join the supergroup before they can send messages
 	JoinToSendMessages bool `json:"join_to_send_messages,omitempty"`
 
-	// JoinByRequest - Optional. True, if all users directly joining the supergroup need to be approved by
-	// supergroup administrators. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// JoinByRequest - Optional. True, if all users directly joining the supergroup without using an invite link
+	// need to be approved by supergroup administrators
 	JoinByRequest bool `json:"join_by_request,omitempty"`
 
-	// Description - Optional. Description, for groups, supergroups and channel chats. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// Description - Optional. Description, for groups, supergroups and channel chats
 	Description string `json:"description,omitempty"`
 
-	// InviteLink - Optional. Primary invite link, for groups, supergroups and channel chats. Returned only in
-	// getChat (https://core.telegram.org/bots/api#getchat).
+	// InviteLink - Optional. Primary invite link, for groups, supergroups and channel chats
 	InviteLink string `json:"invite_link,omitempty"`
 
-	// PinnedMessage - Optional. The most recent pinned message (by sending date). Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// PinnedMessage - Optional. The most recent pinned message (by sending date)
 	PinnedMessage *Message `json:"pinned_message,omitempty"`
 
-	// Permissions - Optional. Default chat member permissions, for groups and supergroups. Returned only in
-	// getChat (https://core.telegram.org/bots/api#getchat).
+	// Permissions - Optional. Default chat member permissions, for groups and supergroups
 	Permissions *ChatPermissions `json:"permissions,omitempty"`
 
 	// SlowModeDelay - Optional. For supergroups, the minimum allowed delay between consecutive messages sent by
-	// each unprivileged user; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// each unprivileged user; in seconds
 	SlowModeDelay int `json:"slow_mode_delay,omitempty"`
 
 	// UnrestrictBoostCount - Optional. For supergroups, the minimum number of boosts that a non-administrator
-	// user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// user needs to add in order to ignore slow mode and chat permissions
 	UnrestrictBoostCount int `json:"unrestrict_boost_count,omitempty"`
 
 	// MessageAutoDeleteTime - Optional. The time after which all messages sent to the chat will be
-	// automatically deleted; in seconds. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// automatically deleted; in seconds
 	MessageAutoDeleteTime int `json:"message_auto_delete_time,omitempty"`
 
 	// HasAggressiveAntiSpamEnabled - Optional. True, if aggressive anti-spam checks are enabled in the
-	// supergroup. The field is only available to chat administrators. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// supergroup. The field is only available to chat administrators.
 	HasAggressiveAntiSpamEnabled bool `json:"has_aggressive_anti_spam_enabled,omitempty"`
 
 	// HasHiddenMembers - Optional. True, if non-administrators can only get the list of bots and administrators
-	// in the chat. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// in the chat
 	HasHiddenMembers bool `json:"has_hidden_members,omitempty"`
 
-	// HasProtectedContent - Optional. True, if messages from the chat can't be forwarded to other chats.
-	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// HasProtectedContent - Optional. True, if messages from the chat can't be forwarded to other chats
 	HasProtectedContent bool `json:"has_protected_content,omitempty"`
 
 	// HasVisibleHistory - Optional. True, if new chat members will have access to old messages; available only
-	// to chat administrators. Returned only in getChat (https://core.telegram.org/bots/api#getchat).
+	// to chat administrators
 	HasVisibleHistory bool `json:"has_visible_history,omitempty"`
 
-	// StickerSetName - Optional. For supergroups, name of group sticker set. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// StickerSetName - Optional. For supergroups, name of the group sticker set
 	StickerSetName string `json:"sticker_set_name,omitempty"`
 
-	// CanSetStickerSet - Optional. True, if the bot can change the group sticker set. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// CanSetStickerSet - Optional. True, if the bot can change the group sticker set
 	CanSetStickerSet bool `json:"can_set_sticker_set,omitempty"`
 
 	// CustomEmojiStickerSetName - Optional. For supergroups, the name of the group's custom emoji sticker set.
-	// Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat
-	// (https://core.telegram.org/bots/api#getchat).
+	// Custom emoji from this set can be used by all users and bots in the group.
 	CustomEmojiStickerSetName string `json:"custom_emoji_sticker_set_name,omitempty"`
 
 	// LinkedChatID - Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for
 	// a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and
 	// some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52
 	// bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
-	// Returned only in getChat (https://core.telegram.org/bots/api#getchat).
 	LinkedChatID int64 `json:"linked_chat_id,omitempty"`
 
-	// Location - Optional. For supergroups, the location to which the supergroup is connected. Returned only in
-	// getChat (https://core.telegram.org/bots/api#getchat).
+	// Location - Optional. For supergroups, the location to which the supergroup is connected
 	Location *ChatLocation `json:"location,omitempty"`
-}
-
-// ChatID returns [ChatID] of this chat
-func (c *Chat) ChatID() ChatID {
-	return ChatID{
-		ID: c.ID,
-	}
 }
 
 // unknownReactionTypeErr is an error for unknown reaction type
 const unknownReactionTypeErr = "unknown reaction type: %s"
 
 // UnmarshalJSON converts JSON to Chat
-func (c *Chat) UnmarshalJSON(data []byte) error {
+func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 
 	value, err := parser.ParseBytes(data)
@@ -449,8 +465,8 @@ func (c *Chat) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	type uChat Chat
-	var uc uChat
+	type uChatFullInfo ChatFullInfo
+	var uc uChatFullInfo
 
 	if value.Exists("available_reactions") {
 		availableReactions := value.GetArray("available_reactions")
@@ -472,19 +488,10 @@ func (c *Chat) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &uc); err != nil {
 		return err
 	}
-	*c = Chat(uc)
+	*c = ChatFullInfo(uc)
 
 	return nil
 }
-
-// Chat types
-const (
-	ChatTypeSender     = "sender"
-	ChatTypePrivate    = "private"
-	ChatTypeGroup      = "group"
-	ChatTypeSupergroup = "supergroup"
-	ChatTypeChannel    = "channel"
-)
 
 // Message - This object represents a message.
 type Message struct {
@@ -721,6 +728,9 @@ type Message struct {
 
 	// BoostAdded - Optional. Service message: user boosted the chat
 	BoostAdded *ChatBoostAdded `json:"boost_added,omitempty"`
+
+	// ChatBackgroundSet - Optional. Service message: chat background set
+	ChatBackgroundSet *ChatBackground `json:"chat_background_set,omitempty"`
 
 	// ForumTopicCreated - Optional. Service message: forum topic created
 	ForumTopicCreated *ForumTopicCreated `json:"forum_topic_created,omitempty"`
@@ -1478,8 +1488,27 @@ type PollOption struct {
 	// Text - Option text, 1-100 characters
 	Text string `json:"text"`
 
+	// TextEntities - Optional. Special entities that appear in the option text. Currently, only custom emoji
+	// entities are allowed in poll option texts
+	TextEntities []MessageEntity `json:"text_entities,omitempty"`
+
 	// VoterCount - Number of users that voted for this option
 	VoterCount int `json:"voter_count"`
+}
+
+// InputPollOption - This object contains information about one answer option in a poll to send.
+type InputPollOption struct {
+	// Text - Option text, 1-100 characters
+	Text string `json:"text"`
+
+	// TextParseMode - Optional. Mode for parsing entities in the text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details. Currently, only custom emoji
+	// entities are allowed
+	TextParseMode string `json:"text_parse_mode,omitempty"`
+
+	// TextEntities - Optional. A JSON-serialized list of special entities that appear in the poll option text.
+	// It can be specified instead of text_parse_mode
+	TextEntities []MessageEntity `json:"text_entities,omitempty"`
 }
 
 // PollAnswer - This object represents an answer of a user in a non-anonymous poll.
@@ -1504,6 +1533,10 @@ type Poll struct {
 
 	// Question - Poll question, 1-300 characters
 	Question string `json:"question"`
+
+	// QuestionEntities - Optional. Special entities that appear in the question. Currently, only custom emoji
+	// entities are allowed in poll questions
+	QuestionEntities []MessageEntity `json:"question_entities,omitempty"`
 
 	// Options - List of poll options
 	Options []PollOption `json:"options"`
@@ -1634,6 +1667,256 @@ type ChatBoostAdded struct {
 	BoostCount int `json:"boost_count"`
 }
 
+// BackgroundFill - This object describes the way a background is filled based on the selected colors.
+// Currently, it can be one of
+// BackgroundFillSolid (https://core.telegram.org/bots/api#backgroundfillsolid)
+// BackgroundFillGradient (https://core.telegram.org/bots/api#backgroundfillgradient)
+// BackgroundFillFreeformGradient (https://core.telegram.org/bots/api#backgroundfillfreeformgradient)
+type BackgroundFill interface {
+	BackgroundFilled() string
+}
+
+// Background fill types
+const (
+	BackgroundFilledSolid            = "solid"
+	BackgroundFilledGradient         = "gradient"
+	BackgroundFilledFreeformGradient = "freeform_gradient"
+)
+
+// BackgroundFillSolid - The background is filled using the selected color.
+type BackgroundFillSolid struct {
+	// Type - Type of the background fill, always “solid”
+	Type string `json:"type"`
+
+	// Color - The color of the background fill in the RGB24 format
+	Color int `json:"color"`
+}
+
+// BackgroundFilled - Returns BackgroundFill type
+func (b *BackgroundFillSolid) BackgroundFilled() string {
+	return BackgroundFilledSolid
+}
+
+// BackgroundFillGradient - The background is a gradient fill.
+type BackgroundFillGradient struct {
+	// Type - Type of the background fill, always “gradient”
+	Type string `json:"type"`
+
+	// TopColor - Top color of the gradient in the RGB24 format
+	TopColor int `json:"top_color"`
+
+	// BottomColor - Bottom color of the gradient in the RGB24 format
+	BottomColor int `json:"bottom_color"`
+
+	// RotationAngle - Clockwise rotation angle of the background fill in degrees; 0-359
+	RotationAngle int `json:"rotation_angle"`
+}
+
+// BackgroundFilled - Returns BackgroundFill type
+func (b *BackgroundFillGradient) BackgroundFilled() string {
+	return BackgroundFilledGradient
+}
+
+// BackgroundFillFreeformGradient - The background is a freeform gradient that rotates after every message in
+// the chat.
+type BackgroundFillFreeformGradient struct {
+	// Type - Type of the background fill, always “freeform_gradient”
+	Type string `json:"type"`
+
+	// Colors - A list of the 3 or 4 base colors that are used to generate the freeform gradient in the RGB24
+	// format
+	Colors []int `json:"colors"`
+}
+
+// BackgroundFilled - Returns BackgroundFill type
+func (b *BackgroundFillFreeformGradient) BackgroundFilled() string {
+	return BackgroundFilledFreeformGradient
+}
+
+// BackgroundType - This object describes the type of a background. Currently, it can be one of
+// BackgroundTypeFill (https://core.telegram.org/bots/api#backgroundtypefill)
+// BackgroundTypeWallpaper (https://core.telegram.org/bots/api#backgroundtypewallpaper)
+// BackgroundTypePattern (https://core.telegram.org/bots/api#backgroundtypepattern)
+// BackgroundTypeChatTheme (https://core.telegram.org/bots/api#backgroundtypechattheme)
+type BackgroundType interface {
+	BackgroundType() string
+}
+
+// Background type names
+const (
+	BackgroundTypeNameFill      = "fill"
+	BackgroundTypeNameWallpaper = "wallpaper"
+	BackgroundTypeNamePattern   = "pattern"
+	BackgroundTypeNameChatTheme = "chat_theme"
+)
+
+// BackgroundTypeFill - The background is automatically filled based on the selected colors.
+type BackgroundTypeFill struct {
+	// Type - Type of the background, always “fill”
+	Type string `json:"type"`
+
+	// Fill - The background fill
+	Fill BackgroundFill `json:"fill"`
+
+	// DarkThemeDimming - Dimming of the background in dark themes, as a percentage; 0-100
+	DarkThemeDimming int `json:"dark_theme_dimming"`
+}
+
+// BackgroundType - Returns BackgroundType type
+func (b *BackgroundTypeFill) BackgroundType() string {
+	return BackgroundTypeNameFill
+}
+
+// UnmarshalJSON converts JSON to BackgroundTypeFill
+func (b *BackgroundTypeFill) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uBackgroundTypeFill BackgroundTypeFill
+	var ub uBackgroundTypeFill
+
+	if !value.Exists("fill") {
+		return errors.New("no fill")
+	}
+
+	fillType := string(value.GetStringBytes("fill", "type"))
+	switch fillType {
+	case BackgroundFilledSolid:
+		ub.Fill = &BackgroundFillSolid{}
+	case BackgroundFilledGradient:
+		ub.Fill = &BackgroundFillGradient{}
+	case BackgroundFilledFreeformGradient:
+		ub.Fill = &BackgroundFillFreeformGradient{}
+	default:
+		return fmt.Errorf("unknown chat background fill type: %s", fillType)
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &ub); err != nil {
+		return err
+	}
+	*b = BackgroundTypeFill(ub)
+
+	return nil
+}
+
+// BackgroundTypeWallpaper - The background is a wallpaper in the JPEG format.
+type BackgroundTypeWallpaper struct {
+	// Type - Type of the background, always “wallpaper”
+	Type string `json:"type"`
+
+	// Document - Document with the wallpaper
+	Document Document `json:"document"`
+
+	// DarkThemeDimming - Dimming of the background in dark themes, as a percentage; 0-100
+	DarkThemeDimming int `json:"dark_theme_dimming"`
+
+	// IsBlurred - Optional. True, if the wallpaper is downscaled to fit in a 450x450 square and then
+	// box-blurred with radius 12
+	IsBlurred bool `json:"is_blurred,omitempty"`
+
+	// IsMoving - Optional. True, if the background moves slightly when the device is tilted
+	IsMoving bool `json:"is_moving,omitempty"`
+}
+
+// BackgroundType - Returns BackgroundType type
+func (b *BackgroundTypeWallpaper) BackgroundType() string {
+	return BackgroundTypeNameWallpaper
+}
+
+// BackgroundTypePattern - The background is a PNG or TGV (gzipped subset of SVG with MIME type
+// “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+type BackgroundTypePattern struct {
+	// Type - Type of the background, always “pattern”
+	Type string `json:"type"`
+
+	// Document - Document with the pattern
+	Document Document `json:"document"`
+
+	// Fill - The background fill that is combined with the pattern
+	Fill BackgroundFill `json:"fill"`
+
+	// Intensity - Intensity of the pattern when it is shown above the filled background; 0-100
+	Intensity int `json:"intensity"`
+
+	// IsInverted - Optional. True, if the background fill must be applied only to the pattern itself. All other
+	// pixels are black in this case. For dark themes only
+	IsInverted bool `json:"is_inverted,omitempty"`
+
+	// IsMoving - Optional. True, if the background moves slightly when the device is tilted
+	IsMoving bool `json:"is_moving,omitempty"`
+}
+
+// BackgroundType - Returns BackgroundType type
+func (b *BackgroundTypePattern) BackgroundType() string {
+	return BackgroundTypeNamePattern
+}
+
+// BackgroundTypeChatTheme - The background is taken directly from a built-in chat theme.
+type BackgroundTypeChatTheme struct {
+	// Type - Type of the background, always “chat_theme”
+	Type string `json:"type"`
+
+	// ThemeName - Name of the chat theme, which is usually an emoji
+	ThemeName string `json:"theme_name"`
+}
+
+// BackgroundType - Returns BackgroundType type
+func (b *BackgroundTypeChatTheme) BackgroundType() string {
+	return BackgroundTypeNameChatTheme
+}
+
+// ChatBackground - This object represents a chat background.
+type ChatBackground struct {
+	// Type - Type of the background
+	Type BackgroundType `json:"type"`
+}
+
+// UnmarshalJSON converts JSON to ChatBackground
+func (c *ChatBackground) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uChatBackground ChatBackground
+	var uc uChatBackground
+
+	if !value.Exists("type") {
+		return errors.New("no type")
+	}
+
+	backgroundType := string(value.GetStringBytes("type", "type"))
+	switch backgroundType {
+	case BackgroundTypeNameFill:
+		uc.Type = &BackgroundTypeFill{}
+	case BackgroundTypeNameWallpaper:
+		uc.Type = &BackgroundTypeWallpaper{}
+	case BackgroundTypeNamePattern:
+		uc.Type = &BackgroundTypePattern{}
+	case BackgroundTypeNameChatTheme:
+		uc.Type = &BackgroundTypeChatTheme{}
+	default:
+		return fmt.Errorf("unknown chat background type: %s", backgroundType)
+	}
+
+	json.ParserPoll.Put(parser)
+
+	if err = json.Unmarshal(data, &uc); err != nil {
+		return err
+	}
+	*c = ChatBackground(uc)
+
+	return nil
+}
+
 // ForumTopicCreated - This object represents a service message about a new forum topic created in the chat.
 type ForumTopicCreated struct {
 	// Name - Name of the topic
@@ -1673,7 +1956,7 @@ type GeneralForumTopicHidden struct{}
 type GeneralForumTopicUnhidden struct{}
 
 // SharedUser - This object contains information about a user that was shared with the bot using a
-// KeyboardButtonRequestUser (https://core.telegram.org/bots/api#keyboardbuttonrequestuser) button.
+// KeyboardButtonRequestUsers (https://core.telegram.org/bots/api#keyboardbuttonrequestusers) button.
 type SharedUser struct {
 	// UserID - Identifier of the shared user. This number may have more than 32 significant bits and some
 	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52
@@ -1935,7 +2218,8 @@ const (
 
 // ReplyKeyboardMarkup - This object represents a custom keyboard
 // (https://core.telegram.org/bots/features#keyboards) with reply options (see Introduction to bots
-// (https://core.telegram.org/bots/features#keyboards) for details and examples).
+// (https://core.telegram.org/bots/features#keyboards) for details and examples). Not supported in channels and
+// for messages sent on behalf of a Telegram Business account.
 type ReplyKeyboardMarkup struct {
 	// Keyboard - Array of button rows, each represented by an Array of KeyboardButton
 	// (https://core.telegram.org/bots/api#keyboardbutton) objects
@@ -2028,20 +2312,20 @@ type KeyboardButtonRequestUsers struct {
 	// MaxQuantity - Optional. The maximum number of users to be selected; 1-10. Defaults to 1.
 	MaxQuantity int `json:"max_quantity,omitempty"`
 
-	// RequestName - Optional. Pass True to request the users' first and last name
+	// RequestName - Optional. Pass True to request the users' first and last names
 	RequestName *bool `json:"request_name,omitempty"`
 
-	// RequestUsername - Optional. Pass True to request the users' username
+	// RequestUsername - Optional. Pass True to request the users' usernames
 	RequestUsername *bool `json:"request_username,omitempty"`
 
-	// RequestPhoto - Optional. Pass True to request the users' photo
+	// RequestPhoto - Optional. Pass True to request the users' photos
 	RequestPhoto *bool `json:"request_photo,omitempty"`
 }
 
 // KeyboardButtonRequestChat - This object defines the criteria used to request a suitable chat. Information
 // about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be
-// granted requested rights in the сhat if appropriate More about requesting chats »
-// (https://core.telegram.org/bots/features#chat-and-user-selection)
+// granted requested rights in the chat if appropriate. More about requesting chats »
+// (https://core.telegram.org/bots/features#chat-and-user-selection).
 type KeyboardButtonRequestChat struct {
 	// RequestID - Signed 32-bit identifier of the request, which will be received back in the ChatShared
 	// (https://core.telegram.org/bots/api#chatshared) object. Must be unique within the message
@@ -2099,6 +2383,7 @@ type KeyboardButtonPollType struct {
 // custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a
 // new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after
 // the user presses a button (see ReplyKeyboardMarkup (https://core.telegram.org/bots/api#replykeyboardmarkup)).
+// Not supported in channels and for messages sent on behalf of a Telegram Business account.
 type ReplyKeyboardRemove struct {
 	// RemoveKeyboard - Requests clients to remove the custom keyboard (user will not be able to summon this
 	// keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in
@@ -2145,13 +2430,15 @@ type InlineKeyboardButton struct {
 	URL string `json:"url,omitempty"`
 
 	// CallbackData - Optional. Data to be sent in a callback query
-	// (https://core.telegram.org/bots/api#callbackquery) to the bot when button is pressed, 1-64 bytes
+	// (https://core.telegram.org/bots/api#callbackquery) to the bot when button is pressed, 1-64 bytes. Not
+	// supported for messages sent on behalf of a Telegram Business account.
 	CallbackData string `json:"callback_data,omitempty"`
 
 	// WebApp - Optional. Description of the Web App (https://core.telegram.org/bots/webapps) that will be
 	// launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of
 	// the user using the method answerWebAppQuery (https://core.telegram.org/bots/api#answerwebappquery). Available
-	// only in private chats between a user and the bot.
+	// only in private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram
+	// Business account.
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 
 	// LoginURL - Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement
@@ -2160,19 +2447,21 @@ type InlineKeyboardButton struct {
 
 	// SwitchInlineQuery - Optional. If set, pressing the button will prompt the user to select one of their
 	// chats, open that chat and insert the bot's username and the specified inline query in the input field. May be
-	// empty, in which case just the bot's username will be inserted.
+	// empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a
+	// Telegram Business account.
 	SwitchInlineQuery *string `json:"switch_inline_query,omitempty"`
 
 	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and
 	// the specified inline query in the current chat's input field. May be empty, in which case only the bot's
 	// username will be inserted.
 	// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting
-	// something from multiple options.
+	// something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram
+	// Business account.
 	SwitchInlineQueryCurrentChat *string `json:"switch_inline_query_current_chat,omitempty"`
 
 	// SwitchInlineQueryChosenChat - Optional. If set, pressing the button will prompt the user to select one of
 	// their chats of the specified type, open that chat and insert the bot's username and the specified inline
-	// query in the input field
+	// query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
 	SwitchInlineQueryChosenChat *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`
 
 	// CallbackGame - Optional. Description of the game that will be launched when the user presses the button.
@@ -2302,7 +2591,8 @@ func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 // ForceReply - Upon receiving a message with this object, Telegram clients will display a reply interface to
 // the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful
 // if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode
-// (https://core.telegram.org/bots/features#privacy-mode).
+// (https://core.telegram.org/bots/features#privacy-mode). Not supported in channels and for messages sent on
+// behalf of a Telegram Business account.
 type ForceReply struct {
 	// ForceReply - Shows reply interface to the user, as if they manually selected the bot's message and tapped
 	// 'Reply'
@@ -2410,7 +2700,8 @@ type ChatAdministratorRights struct {
 	// CanPostStories - True, if the administrator can post stories to the chat
 	CanPostStories bool `json:"can_post_stories"`
 
-	// CanEditStories - True, if the administrator can edit stories posted by other users
+	// CanEditStories - True, if the administrator can edit stories posted by other users, post stories to the
+	// chat page, pin chat stories, and access the chat's story archive
 	CanEditStories bool `json:"can_edit_stories"`
 
 	// CanDeleteStories - True, if the administrator can delete stories posted by other users
@@ -2452,6 +2743,10 @@ type ChatMemberUpdated struct {
 	// InviteLink - Optional. Chat invite link, which was used by the user to join the chat; for joining by
 	// invite link events only.
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
+
+	// ViaJoinRequest - Optional. True, if the user joined the chat after sending a direct join request without
+	// using an invite link and being approved by an administrator
+	ViaJoinRequest bool `json:"via_join_request,omitempty"`
 
 	// ViaChatFolderInviteLink - Optional. True, if the user joined the chat via a chat folder invite link
 	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
@@ -2630,7 +2925,8 @@ type ChatMemberAdministrator struct {
 	// CanPostStories - True, if the administrator can post stories to the chat
 	CanPostStories bool `json:"can_post_stories"`
 
-	// CanEditStories - True, if the administrator can edit stories posted by other users
+	// CanEditStories - True, if the administrator can edit stories posted by other users, post stories to the
+	// chat page, pin chat stories, and access the chat's story archive
 	CanEditStories bool `json:"can_edit_stories"`
 
 	// CanDeleteStories - True, if the administrator can delete stories posted by other users
@@ -2899,7 +3195,7 @@ type ChatPermissions struct {
 	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
 }
 
-// Birthdate - No description
+// Birthdate - Describes the birthdate of a user.
 type Birthdate struct {
 	// Day - Day of the user's birth; 1-31
 	Day int `json:"day"`
@@ -2911,7 +3207,7 @@ type Birthdate struct {
 	Year int `json:"year,omitempty"`
 }
 
-// BusinessIntro - No description
+// BusinessIntro - Contains information about the start page settings of a Telegram Business account.
 type BusinessIntro struct {
 	// Title - Optional. Title text of the business intro
 	Title string `json:"title,omitempty"`
@@ -2923,7 +3219,7 @@ type BusinessIntro struct {
 	Sticker *Sticker `json:"sticker,omitempty"`
 }
 
-// BusinessLocation - No description
+// BusinessLocation - Contains information about the location of a Telegram Business account.
 type BusinessLocation struct {
 	// Address - Address of the business
 	Address string `json:"address"`
@@ -2932,18 +3228,18 @@ type BusinessLocation struct {
 	Location *Location `json:"location,omitempty"`
 }
 
-// BusinessOpeningHoursInterval - No description
+// BusinessOpeningHoursInterval - Describes an interval of time during which a business is open.
 type BusinessOpeningHoursInterval struct {
 	// OpeningMinute - The minute's sequence number in a week, starting on Monday, marking the start of the time
-	// interval during which the business is open; 0 - 7 24 60
+	// interval during which the business is open; 0 - 7 * 24 * 60
 	OpeningMinute int `json:"opening_minute"`
 
 	// ClosingMinute - The minute's sequence number in a week, starting on Monday, marking the end of the time
-	// interval during which the business is open; 0 - 8 24 60
+	// interval during which the business is open; 0 - 8 * 24 * 60
 	ClosingMinute int `json:"closing_minute"`
 }
 
-// BusinessOpeningHours - No description
+// BusinessOpeningHours - Describes the opening hours of a business.
 type BusinessOpeningHours struct {
 	// TimeZoneName - Unique name of the time zone for which the opening hours are defined
 	TimeZoneName string `json:"time_zone_name"`
@@ -3676,8 +3972,7 @@ type BusinessMessagesDeleted struct {
 	// corresponding user.
 	Chat Chat `json:"chat"`
 
-	// MessageIDs - A JSON-serialized list of identifiers of deleted messages in the chat of the business
-	// account
+	// MessageIDs - The list of identifiers of deleted messages in the chat of the business account
 	MessageIDs []int `json:"message_ids"`
 }
 
@@ -4706,8 +5001,8 @@ type InlineQueryResultLocation struct {
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
 
-	// LivePeriod - Optional. Period in seconds for which the location can be updated, should be between 60 and
-	// 86400.
+	// LivePeriod - Optional. Period in seconds during which the location can be updated, should be between 60
+	// and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// Heading - Optional. For live locations, a direction in which the user is moving, in degrees. Must be
@@ -5233,8 +5528,8 @@ type InputLocationMessageContent struct {
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
 
-	// LivePeriod - Optional. Period in seconds for which the location can be updated, should be between 60 and
-	// 86400.
+	// LivePeriod - Optional. Period in seconds during which the location can be updated, should be between 60
+	// and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// Heading - Optional. For live locations, a direction in which the user is moving, in degrees. Must be
