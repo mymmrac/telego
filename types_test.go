@@ -630,6 +630,12 @@ func TestTypesConstants(t *testing.T) {
 			PollTypeRegular, PollTypeQuiz,
 		},
 		{
+			BackgroundFilledSolid, BackgroundFilledGradient, BackgroundFilledFreeformGradient,
+		},
+		{
+			BackgroundTypeNameFill, BackgroundTypeNameWallpaper, BackgroundTypeNamePattern, BackgroundTypeNameChatTheme,
+		},
+		{
 			MarkupTypeReplyKeyboard, MarkupTypeReplyKeyboardRemove, MarkupTypeInlineKeyboard, MarkupTypeForceReply,
 		},
 		{
@@ -1279,6 +1285,107 @@ func Test_ChatBoostRemoved_UnmarshalJSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &ChatBoostRemoved{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
+
+func Test_BackgroundTypeFill_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *BackgroundTypeFill
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"type": "fill", "fill": {"type": "solid"}}`,
+			data: &BackgroundTypeFill{
+				Type: BackgroundTypeNameFill,
+				Fill: &BackgroundFillSolid{
+					Type: BackgroundFilledSolid,
+				},
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_fill",
+			json:    `{}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_fill",
+			json:    `{"fill": {"type": ""}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &BackgroundTypeFill{}
+			err := c.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.EqualValues(t, tt.data, c)
+		})
+	}
+}
+
+func Test_ChatBackground_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *ChatBackground
+		isError bool
+	}{
+		{
+			name: "success",
+			json: `{"type": {"type": "wallpaper"}}`,
+			data: &ChatBackground{
+				Type: &BackgroundTypeWallpaper{
+					Type: BackgroundTypeNameWallpaper,
+				},
+			},
+			isError: false,
+		},
+		{
+			name:    "error_invalid",
+			json:    "",
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_no_type",
+			json:    `{}`,
+			data:    nil,
+			isError: true,
+		},
+		{
+			name:    "error_invalid_type",
+			json:    `{"type": {"type": ""}`,
+			data:    nil,
+			isError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &ChatBackground{}
 			err := c.UnmarshalJSON([]byte(tt.json))
 			if tt.isError {
 				require.Error(t, err)
