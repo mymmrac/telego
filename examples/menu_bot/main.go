@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/mymmrac/telego"
@@ -38,13 +37,12 @@ func main() {
 		"/bot",
 		telego.WithWebhookServer(srv),
 		telego.WithWebhookSet(tu.Webhook(url+"/bot").WithSecretToken(secret)),
-		telego.WithWebhookContext(ctx),
 	)
 	if err != nil {
 		log.Fatalf("Updates via webhoo: %s", err)
 	}
 
-	bh, err := th.NewBotHandler(bot, updates, th.WithDone(ctx.Done()), th.WithStopTimeout(time.Second*10))
+	bh, err := th.NewBotHandler(bot, updates)
 	if err != nil {
 		log.Fatalf("Bot handler: %s", err)
 	}
@@ -53,17 +51,21 @@ func main() {
 
 	done := make(chan struct{}, 1)
 	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigs, os.Interrupt)
 
 	go func() {
 		<-sigs
 		log.Println("Stopping...")
 
-		err = bot.StopWebhook()
+		stopCtx, stopCancel := context.WithTimeout(context.Background(), time.Second*10)
+		defer stopCancel()
+
+		err = bot.StopWebhookWithContext(stopCtx)
 		if err != nil {
 			log.Println("Failed to stop webhook properly:", err)
 		}
-		bh.Stop()
+
+		bh.StopWithContext(stopCtx)
 
 		done <- struct{}{}
 	}()

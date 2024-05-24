@@ -1,10 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/mymmrac/telego"
@@ -23,7 +23,7 @@ func main() {
 
 	// Initialize signal handling
 	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigs, os.Interrupt)
 
 	// Initialize done chan
 	done := make(chan struct{}, 1)
@@ -32,7 +32,7 @@ func main() {
 	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
 
 	// Create bot handler with stop timeout
-	bh, _ := th.NewBotHandler(bot, updates, th.WithStopTimeout(time.Second*10))
+	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Handle updates
 	bh.Handle(func(bot *telego.Bot, update telego.Update) {
@@ -48,10 +48,13 @@ func main() {
 
 		fmt.Println("Stopping...")
 
-		_ = bot.StopWebhook()
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+		defer cancel()
+
+		_ = bot.StopWebhookWithContext(ctx)
 		fmt.Println("Webhook done")
 
-		bh.Stop()
+		bh.StopWithContext(ctx)
 		fmt.Println("Bot handler done")
 
 		// Notify that stop is done

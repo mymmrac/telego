@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"syscall"
+	"time"
 
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
@@ -27,7 +27,7 @@ func main() {
 
 	// Initialize signal handling
 	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigs, os.Interrupt)
 
 	// Initialize done chan
 	done := make(chan struct{}, 1)
@@ -76,8 +76,11 @@ func main() {
 
 		fmt.Println("Stopping...")
 
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+		defer cancel()
+
 		// Stop reviving updates from update channel and shutdown webhook server
-		_ = bot.StopWebhook()
+		_ = bot.StopWebhookWithContext(ctx)
 		fmt.Println("Webhook done")
 
 		// Notify that stop is done

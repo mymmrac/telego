@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/mymmrac/telego"
@@ -22,10 +21,13 @@ func main() {
 
 	// Initialize signal handling
 	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigs, os.Interrupt)
 
 	// Initialize done chan
 	done := make(chan struct{}, 1)
+
+	// Initialize updates processor chan
+	updatesProcessed := make(chan struct{}, 1)
 
 	// Handle stop signal (Ctrl+C)
 	go func() {
@@ -36,6 +38,9 @@ func main() {
 
 		bot.StopLongPolling()
 		fmt.Println("Long polling done")
+
+		<-updatesProcessed
+		fmt.Println("Updates processed")
 
 		// Notify that stop is done
 		done <- struct{}{}
@@ -51,6 +56,7 @@ func main() {
 			time.Sleep(time.Second * 5) // Simulate long process time
 			fmt.Println("Done update:", update.UpdateID)
 		}
+		updatesProcessed <- struct{}{}
 	}()
 
 	// Wait for the stop process to be completed
