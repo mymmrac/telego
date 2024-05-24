@@ -27,6 +27,19 @@ func TestReplyParameters_Setters(t *testing.T) {
 	}, r)
 }
 
+func TestInputPollOption_Setters(t *testing.T) {
+	i := (&InputPollOption{}).
+		WithText("Text").
+		WithTextParseMode("TextParseMode").
+		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...)
+
+	assert.Equal(t, &InputPollOption{
+		Text:          "Text",
+		TextParseMode: "TextParseMode",
+		TextEntities:  []MessageEntity{{Type: "TextEntities"}},
+	}, i)
+}
+
 func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 	r := (&ReplyKeyboardMarkup{}).
 		WithKeyboard([][]KeyboardButton{{}}...).

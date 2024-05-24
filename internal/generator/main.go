@@ -53,6 +53,7 @@ var typeStructsSetters = []string{
 	"KeyboardButtonRequestUsers",
 	"KeyboardButtonRequestChat",
 	"ReplyParameters",
+	"InputPollOption",
 
 	"InlineQueryResultCachedAudio",
 	"InlineQueryResultCachedDocument",

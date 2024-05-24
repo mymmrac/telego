@@ -239,7 +239,7 @@ type SendMessageParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -381,8 +381,8 @@ type CopyMessageParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -497,7 +497,7 @@ type SendPhotoParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -580,7 +580,7 @@ type SendAudioParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -667,7 +667,7 @@ type SendDocumentParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -763,7 +763,7 @@ type SendVideoParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -857,7 +857,7 @@ type SendAnimationParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -932,7 +932,7 @@ type SendVoiceParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -943,9 +943,9 @@ func (p *SendVoiceParams) fileParameters() map[string]ta.NamedReader {
 }
 
 // SendVoice - Use this method to send audio files, if you want Telegram clients to display the file as a
-// playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats
-// may be sent as Audio (https://core.telegram.org/bots/api#audio) or Document
-// (https://core.telegram.org/bots/api#document)). On success, the sent Message
+// playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3
+// format, or in .M4A format (other formats may be sent as Audio (https://core.telegram.org/bots/api#audio) or
+// Document (https://core.telegram.org/bots/api#document)). On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send voice messages of up to 50
 // MB in size, this limit may be changed in the future.
 func (b *Bot) SendVoice(params *SendVoiceParams) (*Message, error) {
@@ -1004,7 +1004,7 @@ type SendVideoNoteParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1111,8 +1111,9 @@ type SendLocationParams struct {
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
 
-	// LivePeriod - Optional. Period in seconds for which the location will be updated (see Live Locations
-	// (https://telegram.org/blog/live-locations), should be between 60 and 86400.
+	// LivePeriod - Optional. Period in seconds during which the location will be updated (see Live Locations
+	// (https://telegram.org/blog/live-locations), should be between 60 and 86400, or 0x7FFFFFFF for live locations
+	// that can be edited indefinitely.
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// Heading - Optional. For live locations, a direction in which the user is moving, in degrees. Must be
@@ -1136,7 +1137,7 @@ type SendLocationParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1205,7 +1206,7 @@ type SendVenueParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1261,7 +1262,7 @@ type SendContactParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1294,8 +1295,17 @@ type SendPollParams struct {
 	// Question - Poll question, 1-300 characters
 	Question string `json:"question"`
 
-	// Options - A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
-	Options []string `json:"options"`
+	// QuestionParseMode - Optional. Mode for parsing entities in the question. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details. Currently, only custom emoji
+	// entities are allowed
+	QuestionParseMode string `json:"question_parse_mode,omitempty"`
+
+	// QuestionEntities - Optional. A JSON-serialized list of special entities that appear in the poll question.
+	// It can be specified instead of question_parse_mode
+	QuestionEntities []MessageEntity `json:"question_entities,omitempty"`
+
+	// Options - A JSON-serialized list of 2-10 answer options
+	Options []InputPollOption `json:"options"`
 
 	// IsAnonymous - Optional. True, if the poll needs to be anonymous, defaults to True
 	IsAnonymous *bool `json:"is_anonymous,omitempty"`
@@ -1320,7 +1330,7 @@ type SendPollParams struct {
 	ExplanationParseMode string `json:"explanation_parse_mode,omitempty"`
 
 	// ExplanationEntities - Optional. A JSON-serialized list of special entities that appear in the poll
-	// explanation, which can be specified instead of parse_mode
+	// explanation. It can be specified instead of explanation_parse_mode
 	ExplanationEntities []MessageEntity `json:"explanation_entities,omitempty"`
 
 	// OpenPeriod - Optional. Amount of time in seconds the poll will be active after creation, 5-600. Can't be
@@ -1348,7 +1358,7 @@ type SendPollParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1397,7 +1407,7 @@ type SendDiceParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1688,7 +1698,8 @@ type PromoteChatMemberParams struct {
 	// CanPostStories - Optional. Pass True if the administrator can post stories to the chat
 	CanPostStories *bool `json:"can_post_stories,omitempty"`
 
-	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users
+	// CanEditStories - Optional. Pass True if the administrator can edit stories posted by other users, post
+	// stories to the chat page, pin chat stories, and access the chat's story archive
 	CanEditStories *bool `json:"can_edit_stories,omitempty"`
 
 	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users
@@ -2163,16 +2174,16 @@ type GetChatParams struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-// GetChat - Use this method to get up to date information about the chat. Returns a Chat
-// (https://core.telegram.org/bots/api#chat) object on success.
-func (b *Bot) GetChat(params *GetChatParams) (*Chat, error) {
-	var chat *Chat
-	err := b.performRequest("getChat", params, &chat)
+// GetChat - Use this method to get up-to-date information about the chat. Returns a ChatFullInfo
+// (https://core.telegram.org/bots/api#chatfullinfo) object on success.
+func (b *Bot) GetChat(params *GetChatParams) (*ChatFullInfo, error) {
+	var chatFullInfo *ChatFullInfo
+	err := b.performRequest("getChat", params, &chatFullInfo)
 	if err != nil {
 		return nil, fmt.Errorf("telego: getChat(): %w", err)
 	}
 
-	return chat, nil
+	return chatFullInfo, nil
 }
 
 // GetChatAdministratorsParams - Represents parameters of getChatAdministrators method.
@@ -3084,6 +3095,12 @@ type EditMessageLiveLocationParams struct {
 	// Longitude - Longitude of new location
 	Longitude float64 `json:"longitude"`
 
+	// LivePeriod - Optional. New period in seconds during which the location can be updated, starting from the
+	// message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new
+	// value must not exceed the current live_period by more than a day, and the live location expiration date must
+	// remain within the next 90 days. If not specified, then live_period remains unchanged
+	LivePeriod int `json:"live_period,omitempty"`
+
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
 
@@ -3296,8 +3313,8 @@ type SendStickerParams struct {
 
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
-	// (https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a
-	// reply from the user. Not supported for messages sent on behalf of a business account.
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4102,8 +4119,7 @@ type SendGameParams struct {
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game_title' button will be
-	// shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a
-	// business account.
+	// shown. If not empty, the first button must launch the game.
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 

@@ -1164,8 +1164,20 @@ func (p *SendPollParams) WithQuestion(question string) *SendPollParams {
 	return p
 }
 
+// WithQuestionParseMode adds question parse mode parameter
+func (p *SendPollParams) WithQuestionParseMode(questionParseMode string) *SendPollParams {
+	p.QuestionParseMode = questionParseMode
+	return p
+}
+
+// WithQuestionEntities adds question entities parameter
+func (p *SendPollParams) WithQuestionEntities(questionEntities ...MessageEntity) *SendPollParams {
+	p.QuestionEntities = questionEntities
+	return p
+}
+
 // WithOptions adds options parameter
-func (p *SendPollParams) WithOptions(options ...string) *SendPollParams {
+func (p *SendPollParams) WithOptions(options ...InputPollOption) *SendPollParams {
 	p.Options = options
 	return p
 }
@@ -2190,6 +2202,12 @@ func (p *EditMessageLiveLocationParams) WithMessageID(messageID int) *EditMessag
 // WithInlineMessageID adds inline message ID parameter
 func (p *EditMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *EditMessageLiveLocationParams {
 	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithLivePeriod adds live period parameter
+func (p *EditMessageLiveLocationParams) WithLivePeriod(livePeriod int) *EditMessageLiveLocationParams {
+	p.LivePeriod = livePeriod
 	return p
 }
 

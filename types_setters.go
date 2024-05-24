@@ -42,6 +42,24 @@ func (r *ReplyParameters) WithQuotePosition(quotePosition int) *ReplyParameters 
 	return r
 }
 
+// WithText adds text parameter
+func (i *InputPollOption) WithText(text string) *InputPollOption {
+	i.Text = text
+	return i
+}
+
+// WithTextParseMode adds text parse mode parameter
+func (i *InputPollOption) WithTextParseMode(textParseMode string) *InputPollOption {
+	i.TextParseMode = textParseMode
+	return i
+}
+
+// WithTextEntities adds text entities parameter
+func (i *InputPollOption) WithTextEntities(textEntities ...MessageEntity) *InputPollOption {
+	i.TextEntities = textEntities
+	return i
+}
+
 // WithKeyboard adds keyboard parameter
 func (r *ReplyKeyboardMarkup) WithKeyboard(keyboard ...[]KeyboardButton) *ReplyKeyboardMarkup {
 	r.Keyboard = keyboard

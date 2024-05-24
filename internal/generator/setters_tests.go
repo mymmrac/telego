@@ -189,6 +189,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return fmt.Sprintf("&ReplyParameters{MessageID: %d}", *counter)
 	case "[]ReactionType":
 		return "[]ReactionType{&ReactionTypeEmoji{Type: ReactionEmoji}}"
+	case "[]InputPollOption":
+		return "[]InputPollOption{{}}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

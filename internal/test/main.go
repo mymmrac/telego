@@ -480,7 +480,7 @@ func main() {
 
 		time.Sleep(time.Second * 3)
 
-		_, err = bot.SendPoll(tu.Poll(myID, "42?", "42", "24"))
+		_, err = bot.SendPoll(tu.Poll(myID, "42?", tu.PollOption("42"), tu.PollOption("24")))
 		assert(err == nil, err)
 
 		_, err = bot.SendDice(tu.Dice(myID, telego.EmojiBasketball))

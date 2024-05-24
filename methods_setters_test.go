@@ -525,7 +525,9 @@ func TestSendPollParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithQuestion("Question").
-		WithOptions([]string{"Options"}...).
+		WithQuestionParseMode("QuestionParseMode").
+		WithQuestionEntities([]MessageEntity{{Type: "QuestionEntities"}}...).
+		WithOptions([]InputPollOption{{}}...).
 		WithIsAnonymous(true).
 		WithType("Type").
 		WithAllowsMultipleAnswers().
@@ -545,7 +547,9 @@ func TestSendPollParams_Setters(t *testing.T) {
 		ChatID:                ChatID{ID: 1},
 		MessageThreadID:       2,
 		Question:              "Question",
-		Options:               []string{"Options"},
+		QuestionParseMode:     "QuestionParseMode",
+		QuestionEntities:      []MessageEntity{{Type: "QuestionEntities"}},
+		Options:               []InputPollOption{{}},
 		IsAnonymous:           ToPtr(true),
 		Type:                  "Type",
 		AllowsMultipleAnswers: true,
@@ -1316,29 +1320,31 @@ func TestEditMessageLiveLocationParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 2}).
 		WithMessageID(1).
 		WithInlineMessageID("InlineMessageID").
-		WithHeading(2).
-		WithProximityAlertRadius(3).
+		WithLivePeriod(2).
+		WithHeading(3).
+		WithProximityAlertRadius(4).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageLiveLocationParams{
 		ChatID:               ChatID{ID: 2},
 		MessageID:            1,
 		InlineMessageID:      "InlineMessageID",
-		Heading:              2,
-		ProximityAlertRadius: 3,
+		LivePeriod:           2,
+		Heading:              3,
+		ProximityAlertRadius: 4,
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, e)
 }
 
 func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
 	s := (&StopMessageLiveLocationParams{}).
-		WithChatID(ChatID{ID: 4}).
+		WithChatID(ChatID{ID: 5}).
 		WithMessageID(1).
 		WithInlineMessageID("InlineMessageID").
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &StopMessageLiveLocationParams{
-		ChatID:          ChatID{ID: 4},
+		ChatID:          ChatID{ID: 5},
 		MessageID:       1,
 		InlineMessageID: "InlineMessageID",
 		ReplyMarkup:     &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},

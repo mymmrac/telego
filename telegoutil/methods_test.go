@@ -23,10 +23,6 @@ var (
 
 	format1 = "%s %s"
 
-	texts = []string{
-		text2, text3,
-	}
-
 	latitude  = 123.0
 	longitude = 321.0
 
@@ -147,10 +143,19 @@ func TestPhoto(t *testing.T) {
 }
 
 func TestPoll(t *testing.T) {
-	p := Poll(id1, text1, texts...)
+	ops := []telego.InputPollOption{
+		{Text: text2},
+		{Text: text3},
+	}
+	p := Poll(id1, text1, ops...)
 	assert.Equal(t, id1, p.ChatID)
 	assert.Equal(t, text1, p.Question)
-	assert.Equal(t, texts, p.Options)
+	assert.Equal(t, ops, p.Options)
+}
+
+func TestPollOption(t *testing.T) {
+	p := PollOption(text1)
+	assert.Equal(t, text1, p.Text)
 }
 
 func TestSticker(t *testing.T) {

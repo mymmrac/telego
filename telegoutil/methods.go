@@ -126,11 +126,18 @@ func Contact(id telego.ChatID, phoneNumber, firstName string) *telego.SendContac
 }
 
 // Poll creates telego.SendPollParams with required parameters
-func Poll(id telego.ChatID, question string, options ...string) *telego.SendPollParams {
+func Poll(id telego.ChatID, question string, options ...telego.InputPollOption) *telego.SendPollParams {
 	return &telego.SendPollParams{
 		ChatID:   id,
 		Question: question,
 		Options:  options,
+	}
+}
+
+// PollOption creates telego.InputPollOption with required parameters
+func PollOption(text string) telego.InputPollOption {
+	return telego.InputPollOption{
+		Text: text,
 	}
 }
 
