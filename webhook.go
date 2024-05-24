@@ -34,7 +34,6 @@ type webhookContext struct {
 	configured  bool
 	runningLock sync.RWMutex
 	stop        chan struct{}
-	ctx         context.Context
 
 	server WebhookServer
 
@@ -69,22 +68,6 @@ func WithWebhookServer(server WebhookServer) WebhookOption {
 func WithWebhookSet(params *SetWebhookParams) WebhookOption {
 	return func(bot *Bot, _ *webhookContext) error {
 		return bot.SetWebhook(params)
-	}
-}
-
-// WithWebhookContext sets context used in webhook server to stop receiving new updates
-// Note: This context will not be propagated into updates
-//
-// Warning: Canceling the context doesn't stop webhook server, it only closes update chan,
-// be sure to stop server by calling [Bot.StopWebhook] or [Bot.StopWebhookWithContext] methods
-func WithWebhookContext(ctx context.Context) WebhookOption {
-	return func(_ *Bot, wCtx *webhookContext) error {
-		if ctx == nil {
-			return errors.New("context is nil")
-		}
-
-		wCtx.ctx = ctx
-		return nil
 	}
 }
 
@@ -127,8 +110,6 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 		select {
 		case <-webhookCtx.stop:
 			return errWebhookStopped
-		case <-webhookCtx.ctx.Done():
-			return fmt.Errorf("telego: webhook context: %w", webhookCtx.ctx.Err())
 		case <-ctx.Done():
 			return fmt.Errorf("telego: webhook handler context: %w", ctx.Err())
 		default:
@@ -143,10 +124,7 @@ func (b *Bot) UpdatesViaWebhook(path string, options ...WebhookOption) (<-chan U
 	}
 
 	go func() {
-		select {
-		case <-webhookCtx.stop:
-		case <-webhookCtx.ctx.Done():
-		}
+		<-webhookCtx.stop
 		close(updatesChan)
 	}()
 
@@ -161,7 +139,6 @@ func (b *Bot) createWebhookContext(options []WebhookOption) (*webhookContext, er
 			Router: router.New(),
 		},
 		updateChanBuffer: defaultWebhookUpdateChanBuffer,
-		ctx:              context.Background(),
 	}
 
 	for _, option := range options {

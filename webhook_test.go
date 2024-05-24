@@ -2,7 +2,6 @@ package telego
 
 import (
 	"bytes"
-	"context"
 	"net/http"
 	"testing"
 	"time"
@@ -213,57 +212,6 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		_, ok = <-updates
 		assert.False(t, ok)
 	})
-
-	t.Run("with_context", func(t *testing.T) {
-		b, err := NewBot(token, WithDiscardLogger())
-		require.NoError(t, err)
-
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-
-		srv := &fasthttp.Server{}
-		_, err = b.UpdatesViaWebhook("/bot", WithWebhookServer(FastHTTPWebhookServer{
-			Server: srv,
-			Router: router.New(),
-		}), WithWebhookContext(ctx))
-		require.NoError(t, err)
-
-		assert.NotPanics(t, func() {
-			t.Run("invalid_path_error", func(t *testing.T) {
-				c := &fasthttp.RequestCtx{}
-				srv.Handler(c)
-				assert.Equal(t, fasthttp.StatusNotFound, c.Response.StatusCode())
-			})
-
-			t.Run("invalid_method_error", func(t *testing.T) {
-				c := &fasthttp.RequestCtx{}
-				c.Request.SetRequestURI("/bot")
-				srv.Handler(c)
-				assert.Equal(t, fasthttp.StatusMethodNotAllowed, c.Response.StatusCode())
-			})
-
-			t.Run("success", func(t *testing.T) {
-				c := &fasthttp.RequestCtx{}
-				c.Request.SetRequestURI("/bot")
-				c.Request.Header.SetMethod(fasthttp.MethodPost)
-				c.Request.SetBody([]byte(`{}`))
-				srv.Handler(c)
-				assert.Equal(t, fasthttp.StatusOK, c.Response.StatusCode())
-			})
-
-			cancel()
-			<-ctx.Done()
-
-			t.Run("error_context_closed", func(t *testing.T) {
-				c := &fasthttp.RequestCtx{}
-				c.Request.SetRequestURI("/bot")
-				c.Request.Header.SetMethod(fasthttp.MethodPost)
-				c.Request.SetBody([]byte(`{}`))
-				srv.Handler(c)
-				assert.Equal(t, fasthttp.StatusInternalServerError, c.Response.StatusCode())
-			})
-		})
-	})
 }
 
 func TestBot_IsRunningWebhook(t *testing.T) {
@@ -339,21 +287,4 @@ func TestWithWebhookSet(t *testing.T) {
 
 	err := WithWebhookSet(&SetWebhookParams{})(m.Bot, ctx)
 	require.NoError(t, err)
-}
-
-func TestWithWebhookContext(t *testing.T) {
-	wCtx := &webhookContext{}
-
-	t.Run("success", func(t *testing.T) {
-		ctx := context.Background()
-		err := WithWebhookContext(ctx)(nil, wCtx)
-		require.NoError(t, err)
-		assert.EqualValues(t, ctx, wCtx.ctx)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		//nolint:staticcheck
-		err := WithWebhookContext(nil)(nil, wCtx)
-		require.Error(t, err)
-	})
 }
