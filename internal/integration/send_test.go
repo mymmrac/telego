@@ -176,7 +176,7 @@ func TestSendPoll(t *testing.T) {
 		msg, err := bot.SendPoll(&telego.SendPollParams{
 			ChatID:      tu.ID(chatID),
 			Question:    "Test",
-			Options:     []string{"Option 1", "Option 2"},
+			Options:     []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
 			IsAnonymous: nil,
 		})
 
@@ -188,7 +188,7 @@ func TestSendPoll(t *testing.T) {
 		msg, err := bot.SendPoll(&telego.SendPollParams{
 			ChatID:      tu.ID(chatID),
 			Question:    "Test",
-			Options:     []string{"Option 1", "Option 2"},
+			Options:     []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
 			IsAnonymous: telego.ToPtr(false),
 		})
 
@@ -200,7 +200,7 @@ func TestSendPoll(t *testing.T) {
 		msg, err := bot.SendPoll(&telego.SendPollParams{
 			ChatID:          tu.ID(chatID),
 			Question:        "Test",
-			Options:         []string{"Option 1", "Option 2"},
+			Options:         []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
 			IsAnonymous:     telego.ToPtr(false),
 			Type:            telego.PollTypeQuiz,
 			CorrectOptionID: telego.ToPtr(0),
