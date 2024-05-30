@@ -209,7 +209,7 @@ func CommandEqualArgc(command string, argc int) Predicate {
 
 		return strings.EqualFold(matches[CommandMatchCmdGroup], command) &&
 			(argc == 0 && matches[CommandMatchArgsGroup] == "" ||
-				len(strings.Split(matches[CommandMatchArgsGroup], " ")) == argc)
+				len(strings.Fields(matches[CommandMatchArgsGroup])) == argc)
 	}
 }
 
@@ -695,7 +695,7 @@ func CaptionCommandEqualArgc(command string, argc int) Predicate {
 
 		return strings.EqualFold(matches[CommandMatchCmdGroup], command) &&
 			(argc == 0 && matches[CommandMatchArgsGroup] == "" ||
-				len(strings.Split(matches[CommandMatchArgsGroup], " ")) == argc)
+				len(strings.Fields(matches[CommandMatchArgsGroup])) == argc)
 	}
 }
 
