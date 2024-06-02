@@ -233,6 +233,10 @@ type SendMessageParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -369,6 +373,10 @@ type CopyMessageParams struct {
 	// which can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media.
+	// Ignored if a new caption isn't specified.
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
@@ -481,6 +489,9 @@ type SendPhotoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// HasSpoiler - Optional. Pass True if the photo needs to be covered with a spoiler animation
 	HasSpoiler bool `json:"has_spoiler,omitempty"`
 
@@ -490,6 +501,10 @@ type SendPhotoParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -573,6 +588,10 @@ type SendAudioParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -661,6 +680,10 @@ type SendDocumentParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -744,6 +767,9 @@ type SendVideoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// HasSpoiler - Optional. Pass True if the video needs to be covered with a spoiler animation
 	HasSpoiler bool `json:"has_spoiler,omitempty"`
 
@@ -756,6 +782,10 @@ type SendVideoParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -841,6 +871,9 @@ type SendAnimationParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// HasSpoiler - Optional. Pass True if the animation needs to be covered with a spoiler animation
 	HasSpoiler bool `json:"has_spoiler,omitempty"`
 
@@ -850,6 +883,10 @@ type SendAnimationParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -926,6 +963,10 @@ type SendVoiceParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -998,6 +1039,10 @@ type SendVideoNoteParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1055,6 +1100,10 @@ type SendMediaGroupParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent messages from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -1131,6 +1180,10 @@ type SendLocationParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1200,6 +1253,10 @@ type SendVenueParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1255,6 +1312,10 @@ type SendContactParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -1352,6 +1413,10 @@ type SendPollParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1400,6 +1465,10 @@ type SendDiceParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -3006,6 +3075,10 @@ type EditMessageCaptionParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media.
+	// Supported only for animation, photo and video messages.
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards).
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
@@ -3307,6 +3380,10 @@ type SendStickerParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -3821,21 +3898,25 @@ type SendInvoiceParams struct {
 	// internal processes.
 	Payload string `json:"payload"`
 
-	// ProviderToken - Payment provider token, obtained via @BotFather (https://t.me/botfather)
-	ProviderToken string `json:"provider_token"`
+	// ProviderToken - Optional. Payment provider token, obtained via @BotFather (https://t.me/botfather). Pass
+	// an empty string for payments in Telegram Stars (https://t.me/BotNews/90).
+	ProviderToken string `json:"provider_token,omitempty"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
-	// (https://core.telegram.org/bots/payments#supported-currencies)
+	// (https://core.telegram.org/bots/payments#supported-currencies). Pass “XTR” for payments in Telegram Stars
+	// (https://t.me/BotNews/90).
 	Currency string `json:"currency"`
 
 	// Prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount,
-	// delivery cost, delivery tax, bonus, etc.)
+	// delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars
+	// (https://t.me/BotNews/90).
 	Prices []LabeledPrice `json:"prices"`
 
 	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency
 	// (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the
 	// exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the
-	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0.
+	// Not supported for payments in Telegram Stars (https://t.me/BotNews/90).
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
 	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest
@@ -3867,26 +3948,32 @@ type SendInvoiceParams struct {
 	// PhotoHeight - Optional. Photo height
 	PhotoHeight int `json:"photo_height,omitempty"`
 
-	// NeedName - Optional. Pass True if you require the user's full name to complete the order
+	// NeedName - Optional. Pass True if you require the user's full name to complete the order. Ignored for
+	// payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedName bool `json:"need_name,omitempty"`
 
-	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order
+	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order.
+	// Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
 
-	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order
+	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order. Ignored
+	// for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedEmail bool `json:"need_email,omitempty"`
 
 	// NeedShippingAddress - Optional. Pass True if you require the user's shipping address to complete the
-	// order
+	// order. Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to provider
+	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to the
+	// provider. Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to provider
+	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to the provider.
+	// Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
-	// IsFlexible - Optional. Pass True if the final price depends on the shipping method
+	// IsFlexible - Optional. Pass True if the final price depends on the shipping method. Ignored for payments
+	// in Telegram Stars (https://t.me/BotNews/90).
 	IsFlexible bool `json:"is_flexible,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -3895,6 +3982,10 @@ type SendInvoiceParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -3929,21 +4020,25 @@ type CreateInvoiceLinkParams struct {
 	// internal processes.
 	Payload string `json:"payload"`
 
-	// ProviderToken - Payment provider token, obtained via BotFather (https://t.me/botfather)
-	ProviderToken string `json:"provider_token"`
+	// ProviderToken - Optional. Payment provider token, obtained via @BotFather (https://t.me/botfather). Pass
+	// an empty string for payments in Telegram Stars (https://t.me/BotNews/90).
+	ProviderToken string `json:"provider_token,omitempty"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
-	// (https://core.telegram.org/bots/payments#supported-currencies)
+	// (https://core.telegram.org/bots/payments#supported-currencies). Pass “XTR” for payments in Telegram Stars
+	// (https://t.me/BotNews/90).
 	Currency string `json:"currency"`
 
 	// Prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount,
-	// delivery cost, delivery tax, bonus, etc.)
+	// delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars
+	// (https://t.me/BotNews/90).
 	Prices []LabeledPrice `json:"prices"`
 
 	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency
 	// (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the
 	// exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the
-	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0.
+	// Not supported for payments in Telegram Stars (https://t.me/BotNews/90).
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
 	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest
@@ -3969,26 +4064,32 @@ type CreateInvoiceLinkParams struct {
 	// PhotoHeight - Optional. Photo height
 	PhotoHeight int `json:"photo_height,omitempty"`
 
-	// NeedName - Optional. Pass True if you require the user's full name to complete the order
+	// NeedName - Optional. Pass True if you require the user's full name to complete the order. Ignored for
+	// payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedName bool `json:"need_name,omitempty"`
 
-	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order
+	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order.
+	// Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
 
-	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order
+	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order. Ignored
+	// for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedEmail bool `json:"need_email,omitempty"`
 
 	// NeedShippingAddress - Optional. Pass True if you require the user's shipping address to complete the
-	// order
+	// order. Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to the provider
+	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to the
+	// provider. Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to the provider
+	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to the provider.
+	// Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
-	// IsFlexible - Optional. Pass True if the final price depends on the shipping method
+	// IsFlexible - Optional. Pass True if the final price depends on the shipping method. Ignored for payments
+	// in Telegram Stars (https://t.me/BotNews/90).
 	IsFlexible bool `json:"is_flexible,omitempty"`
 }
 
@@ -4064,6 +4165,26 @@ func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error
 	return nil
 }
 
+// RefundStarPaymentParams - Represents parameters of refundStarPayment method.
+type RefundStarPaymentParams struct {
+	// UserID - Identifier of the user whose payment will be refunded
+	UserID int64 `json:"user_id"`
+
+	// TelegramPaymentChargeID - Telegram payment identifier
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+}
+
+// RefundStarPayment - Refunds a successful payment in Telegram Stars (https://t.me/BotNews/90). Returns True
+// on success.
+func (b *Bot) RefundStarPayment(params *RefundStarPaymentParams) error {
+	err := b.performRequest("refundStarPayment", params)
+	if err != nil {
+		return fmt.Errorf("telego: refundStarPayment(): %w", err)
+	}
+
+	return nil
+}
+
 // SetPassportDataErrorsParams - Represents parameters of setPassportDataErrors method.
 type SetPassportDataErrorsParams struct {
 	// UserID - User identifier
@@ -4113,6 +4234,10 @@ type SendGameParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
