@@ -165,11 +165,11 @@ func (h *httpServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	case errJSONPath:
 		resp.WriteHeader(http.StatusOK)
 		_, err := resp.Write([]byte("abc"))
-		require.NoError(h.t, err)
+		assert.NoError(h.t, err)
 	default:
 		resp.WriteHeader(http.StatusOK)
 		_, err := resp.Write([]byte("{\"ok\": true}"))
-		require.NoError(h.t, err)
+		assert.NoError(h.t, err)
 	}
 }
 
