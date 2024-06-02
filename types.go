@@ -587,6 +587,9 @@ type Message struct {
 	// message and link preview options were changed
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
+	// EffectID - Optional. Unique identifier of the message effect added to the message
+	EffectID string `json:"effect_id,omitempty"`
+
 	// Animation - Optional. Message is an animation, information about the animation. For backward
 	// compatibility, when this field is set, the document field will also be set
 	Animation *Animation `json:"animation,omitempty"`
@@ -622,6 +625,9 @@ type Message struct {
 	// CaptionEntities - Optional. For messages with a caption, special entities like usernames, URLs, bot
 	// commands, etc. that appear in the caption
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasMediaSpoiler - Optional. True, if the message media is covered by a spoiler animation
 	HasMediaSpoiler bool `json:"has_media_spoiler,omitempty"`
@@ -905,9 +911,10 @@ type MessageEntity struct {
 	// “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email”
 	// (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic”
 	// (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler”
-	// (spoiler message), “blockquote” (block quotation), “code” (monowidth string), “pre” (monowidth
-	// block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames
-	// (https://telegram.org/blog/edit#new-mentions)), “custom_emoji” (for inline custom emoji stickers)
+	// (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default
+	// block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable
+	// text URLs), “text_mention” (for users without usernames (https://telegram.org/blog/edit#new-mentions)),
+	// “custom_emoji” (for inline custom emoji stickers)
 	Type string `json:"type"`
 
 	// Offset - Offset in UTF-16 code units (https://core.telegram.org/api/entities#entity-length) to the start
@@ -2257,9 +2264,9 @@ func (r *ReplyKeyboardMarkup) ReplyType() string {
 	return MarkupTypeReplyKeyboard
 }
 
-// KeyboardButton - This object represents one button of the reply keyboard. For simple text buttons, String
-// can be used instead of this object to specify the button text. The optional fields web_app, request_users,
-// request_chat, request_contact, request_location, and request_poll are mutually exclusive.
+// KeyboardButton - This object represents one button of the reply keyboard. At most one of the optional
+// fields must be used to specify type of the button. For simple text buttons, String can be used instead of
+// this object to specify the button text.
 type KeyboardButton struct {
 	// Text - Text of the button. If none of the optional fields are used, it will be sent as a message when the
 	// button is pressed
@@ -2418,8 +2425,8 @@ func (i *InlineKeyboardMarkup) ReplyType() string {
 	return MarkupTypeInlineKeyboard
 }
 
-// InlineKeyboardButton - This object represents one button of an inline keyboard. You must use exactly one
-// of the optional fields.
+// InlineKeyboardButton - This object represents one button of an inline keyboard. Exactly one of the
+// optional fields must be used to specify type of the button.
 type InlineKeyboardButton struct {
 	// Text - Label text on the button
 	Text string `json:"text"`
@@ -2469,6 +2476,7 @@ type InlineKeyboardButton struct {
 	CallbackGame *CallbackGame `json:"callback_game,omitempty"`
 
 	// Pay - Optional. Specify True, to send a Pay button (https://core.telegram.org/bots/api#payments).
+	// Substrings “⭐” and “XTR” in the buttons's text will be replaced with a Telegram Star icon.
 	// NOTE: This type of button must always be the first button in the first row and can only be used in invoice
 	// messages.
 	Pay bool `json:"pay,omitempty"`
@@ -4023,6 +4031,9 @@ type InputMediaPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// HasSpoiler - Optional. Pass True if the photo needs to be covered with a spoiler animation
 	HasSpoiler bool `json:"has_spoiler,omitempty"`
 }
@@ -4068,6 +4079,9 @@ type InputMediaVideo struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// Width - Optional. Video width
 	Width int `json:"width,omitempty"`
@@ -4133,6 +4147,9 @@ type InputMediaAnimation struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// Width - Optional. Animation width
 	Width int `json:"width,omitempty"`
@@ -4640,6 +4657,9 @@ type InlineQueryResultPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
@@ -4695,6 +4715,9 @@ type InlineQueryResultGif struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
@@ -4762,6 +4785,9 @@ type InlineQueryResultMpeg4Gif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
@@ -4809,6 +4835,9 @@ type InlineQueryResultVideo struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// VideoWidth - Optional. Video width
 	VideoWidth int `json:"video_width,omitempty"`
@@ -5189,6 +5218,9 @@ type InlineQueryResultCachedPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
@@ -5228,6 +5260,9 @@ type InlineQueryResultCachedGif struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
@@ -5269,6 +5304,9 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
@@ -5381,6 +5419,9 @@ type InlineQueryResultCachedVideo struct {
 	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
 	// attached to the message
@@ -5618,21 +5659,25 @@ type InputInvoiceMessageContent struct {
 	// internal processes.
 	Payload string `json:"payload"`
 
-	// ProviderToken - Payment provider token, obtained via @BotFather (https://t.me/botfather)
-	ProviderToken string `json:"provider_token"`
+	// ProviderToken - Optional. Payment provider token, obtained via @BotFather (https://t.me/botfather). Pass
+	// an empty string for payments in Telegram Stars (https://t.me/BotNews/90).
+	ProviderToken string `json:"provider_token,omitempty"`
 
 	// Currency - Three-letter ISO 4217 currency code, see more on currencies
-	// (https://core.telegram.org/bots/payments#supported-currencies)
+	// (https://core.telegram.org/bots/payments#supported-currencies). Pass “XTR” for payments in Telegram Stars
+	// (https://t.me/BotNews/90).
 	Currency string `json:"currency"`
 
 	// Prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount,
-	// delivery cost, delivery tax, bonus, etc.)
+	// delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars
+	// (https://t.me/BotNews/90).
 	Prices []LabeledPrice `json:"prices"`
 
 	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency
 	// (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the
 	// exp parameter in currencies.json (https://core.telegram.org/bots/payments/currencies.json), it shows the
-	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+	// number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0.
+	// Not supported for payments in Telegram Stars (https://t.me/BotNews/90).
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
 	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tip in the smallest units
@@ -5658,26 +5703,32 @@ type InputInvoiceMessageContent struct {
 	// PhotoHeight - Optional. Photo height
 	PhotoHeight int `json:"photo_height,omitempty"`
 
-	// NeedName - Optional. Pass True if you require the user's full name to complete the order
+	// NeedName - Optional. Pass True if you require the user's full name to complete the order. Ignored for
+	// payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedName bool `json:"need_name,omitempty"`
 
-	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order
+	// NeedPhoneNumber - Optional. Pass True if you require the user's phone number to complete the order.
+	// Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedPhoneNumber bool `json:"need_phone_number,omitempty"`
 
-	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order
+	// NeedEmail - Optional. Pass True if you require the user's email address to complete the order. Ignored
+	// for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedEmail bool `json:"need_email,omitempty"`
 
 	// NeedShippingAddress - Optional. Pass True if you require the user's shipping address to complete the
-	// order
+	// order. Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	NeedShippingAddress bool `json:"need_shipping_address,omitempty"`
 
-	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to provider
+	// SendPhoneNumberToProvider - Optional. Pass True if the user's phone number should be sent to the
+	// provider. Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	SendPhoneNumberToProvider bool `json:"send_phone_number_to_provider,omitempty"`
 
-	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to provider
+	// SendEmailToProvider - Optional. Pass True if the user's email address should be sent to the provider.
+	// Ignored for payments in Telegram Stars (https://t.me/BotNews/90).
 	SendEmailToProvider bool `json:"send_email_to_provider,omitempty"`
 
-	// IsFlexible - Optional. Pass True if the final price depends on the shipping method
+	// IsFlexible - Optional. Pass True if the final price depends on the shipping method. Ignored for payments
+	// in Telegram Stars (https://t.me/BotNews/90).
 	IsFlexible bool `json:"is_flexible,omitempty"`
 }
 
@@ -5741,7 +5792,7 @@ type Invoice struct {
 	StartParameter string `json:"start_parameter"`
 
 	// Currency - Three-letter ISO 4217 currency (https://core.telegram.org/bots/payments#supported-currencies)
-	// code
+	// code, or “XTR” for payments in Telegram Stars (https://t.me/BotNews/90)
 	Currency string `json:"currency"`
 
 	// TotalAmount - Total price in the smallest units of the currency (integer, not float/double). For example,
@@ -5803,7 +5854,7 @@ type ShippingOption struct {
 // SuccessfulPayment - This object contains basic information about a successful payment.
 type SuccessfulPayment struct {
 	// Currency - Three-letter ISO 4217 currency (https://core.telegram.org/bots/payments#supported-currencies)
-	// code
+	// code, or “XTR” for payments in Telegram Stars (https://t.me/BotNews/90)
 	Currency string `json:"currency"`
 
 	// TotalAmount - Total price in the smallest units of the currency (integer, not float/double). For example,
@@ -5852,7 +5903,7 @@ type PreCheckoutQuery struct {
 	From User `json:"from"`
 
 	// Currency - Three-letter ISO 4217 currency (https://core.telegram.org/bots/payments#supported-currencies)
-	// code
+	// code, or “XTR” for payments in Telegram Stars (https://t.me/BotNews/90)
 	Currency string `json:"currency"`
 
 	// TotalAmount - Total price in the smallest units of the currency (integer, not float/double). For example,

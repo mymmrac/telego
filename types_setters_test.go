@@ -203,14 +203,16 @@ func TestInputMediaPhoto_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaPhoto{
-		Media:           testInputFile,
-		Caption:         "Caption",
-		ParseMode:       "ParseMode",
-		CaptionEntities: []MessageEntity{{Type: "CaptionEntities"}},
-		HasSpoiler:      true,
+		Media:                 testInputFile,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		HasSpoiler:            true,
 	}, i)
 }
 
@@ -221,6 +223,7 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithWidth(1).
 		WithHeight(2).
 		WithDuration(3).
@@ -228,16 +231,17 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaVideo{
-		Media:             testInputFile,
-		Thumbnail:         &testInputFile,
-		Caption:           "Caption",
-		ParseMode:         "ParseMode",
-		CaptionEntities:   []MessageEntity{{Type: "CaptionEntities"}},
-		Width:             1,
-		Height:            2,
-		Duration:          3,
-		SupportsStreaming: true,
-		HasSpoiler:        true,
+		Media:                 testInputFile,
+		Thumbnail:             &testInputFile,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		Width:                 1,
+		Height:                2,
+		Duration:              3,
+		SupportsStreaming:     true,
+		HasSpoiler:            true,
 	}, i)
 }
 
@@ -248,21 +252,23 @@ func TestInputMediaAnimation_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithWidth(1).
 		WithHeight(2).
 		WithDuration(3).
 		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaAnimation{
-		Media:           testInputFile,
-		Thumbnail:       &testInputFile,
-		Caption:         "Caption",
-		ParseMode:       "ParseMode",
-		CaptionEntities: []MessageEntity{{Type: "CaptionEntities"}},
-		Width:           1,
-		Height:          2,
-		Duration:        3,
-		HasSpoiler:      true,
+		Media:                 testInputFile,
+		Thumbnail:             &testInputFile,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		Width:                 1,
+		Height:                2,
+		Duration:              3,
+		HasSpoiler:            true,
 	}, i)
 }
 
@@ -364,22 +370,24 @@ func TestInlineQueryResultPhoto_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultPhoto{
-		ID:                  "ID",
-		PhotoURL:            "PhotoURL",
-		ThumbnailURL:        "ThumbnailURL",
-		PhotoWidth:          1,
-		PhotoHeight:         2,
-		Title:               "Title",
-		Description:         "Description",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		PhotoURL:              "PhotoURL",
+		ThumbnailURL:          "ThumbnailURL",
+		PhotoWidth:            1,
+		PhotoHeight:           2,
+		Title:                 "Title",
+		Description:           "Description",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -396,23 +404,25 @@ func TestInlineQueryResultGif_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultGif{
-		ID:                  "ID",
-		GifURL:              "GifURL",
-		GifWidth:            1,
-		GifHeight:           2,
-		GifDuration:         3,
-		ThumbnailURL:        "ThumbnailURL",
-		ThumbnailMimeType:   "ThumbnailMimeType",
-		Title:               "Title",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		GifURL:                "GifURL",
+		GifWidth:              1,
+		GifHeight:             2,
+		GifDuration:           3,
+		ThumbnailURL:          "ThumbnailURL",
+		ThumbnailMimeType:     "ThumbnailMimeType",
+		Title:                 "Title",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -429,23 +439,25 @@ func TestInlineQueryResultMpeg4Gif_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultMpeg4Gif{
-		ID:                  "ID",
-		Mpeg4URL:            "Mpeg4URL",
-		Mpeg4Width:          1,
-		Mpeg4Height:         2,
-		Mpeg4Duration:       3,
-		ThumbnailURL:        "ThumbnailURL",
-		ThumbnailMimeType:   "ThumbnailMimeType",
-		Title:               "Title",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		Mpeg4URL:              "Mpeg4URL",
+		Mpeg4Width:            1,
+		Mpeg4Height:           2,
+		Mpeg4Duration:         3,
+		ThumbnailURL:          "ThumbnailURL",
+		ThumbnailMimeType:     "ThumbnailMimeType",
+		Title:                 "Title",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -459,6 +471,7 @@ func TestInlineQueryResultVideo_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithVideoWidth(1).
 		WithVideoHeight(2).
 		WithVideoDuration(3).
@@ -467,20 +480,21 @@ func TestInlineQueryResultVideo_Setters(t *testing.T) {
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultVideo{
-		ID:                  "ID",
-		VideoURL:            "VideoURL",
-		MimeType:            "MimeType",
-		ThumbnailURL:        "ThumbnailURL",
-		Title:               "Title",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		VideoWidth:          1,
-		VideoHeight:         2,
-		VideoDuration:       3,
-		Description:         "Description",
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		VideoURL:              "VideoURL",
+		MimeType:              "MimeType",
+		ThumbnailURL:          "ThumbnailURL",
+		Title:                 "Title",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		VideoWidth:            1,
+		VideoHeight:           2,
+		VideoDuration:         3,
+		Description:           "Description",
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -676,19 +690,21 @@ func TestInlineQueryResultCachedPhoto_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultCachedPhoto{
-		ID:                  "ID",
-		PhotoFileID:         "PhotoFileID",
-		Title:               "Title",
-		Description:         "Description",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		PhotoFileID:           "PhotoFileID",
+		Title:                 "Title",
+		Description:           "Description",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -700,18 +716,20 @@ func TestInlineQueryResultCachedGif_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultCachedGif{
-		ID:                  "ID",
-		GifFileID:           "GifFileID",
-		Title:               "Title",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		GifFileID:             "GifFileID",
+		Title:                 "Title",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -723,18 +741,20 @@ func TestInlineQueryResultCachedMpeg4Gif_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultCachedMpeg4Gif{
-		ID:                  "ID",
-		Mpeg4FileID:         "Mpeg4FileID",
-		Title:               "Title",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		Mpeg4FileID:           "Mpeg4FileID",
+		Title:                 "Title",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
@@ -787,19 +807,21 @@ func TestInlineQueryResultCachedVideo_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithInputMessageContent(&InputTextMessageContent{})
 
 	assert.Equal(t, &InlineQueryResultCachedVideo{
-		ID:                  "ID",
-		VideoFileID:         "VideoFileID",
-		Title:               "Title",
-		Description:         "Description",
-		Caption:             "Caption",
-		ParseMode:           "ParseMode",
-		CaptionEntities:     []MessageEntity{{Type: "CaptionEntities"}},
-		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
-		InputMessageContent: &InputTextMessageContent{},
+		ID:                    "ID",
+		VideoFileID:           "VideoFileID",
+		Title:                 "Title",
+		Description:           "Description",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		ReplyMarkup:           &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		InputMessageContent:   &InputTextMessageContent{},
 	}, i)
 }
 
