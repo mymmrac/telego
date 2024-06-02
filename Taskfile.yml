@@ -94,6 +94,13 @@ tasks:
     cmds:
       - go build -o ../bin/ ./...
 
+  update:dependencies:
+    desc: "Update dependencies"
+    cmds:
+      - go mod tidy
+      - go list -f "{{if not (or .Main .Indirect)}}{{.Path}}{{end}}" -m all | xargs go get
+      - go mod tidy
+
   generate:
     desc: "Generate (used for mock generation)"
     deps: [ install:mock ]
