@@ -161,6 +161,15 @@ func (c MessageEntityCollection) Blockquote() MessageEntityCollection {
 	return c
 }
 
+// ExpandableBlockquote assigns expandable blockquote entity and returns new collection
+func (c MessageEntityCollection) ExpandableBlockquote() MessageEntityCollection {
+	c.entities = append(c.entities, telego.MessageEntity{
+		Type:   telego.EntityTypeExpandableBlockquote,
+		Length: UTF16TextLen(c.text),
+	})
+	return c
+}
+
 // Code assigns code entity and returns new collection
 func (c MessageEntityCollection) Code() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
