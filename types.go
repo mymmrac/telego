@@ -3559,7 +3559,7 @@ type ChatID struct {
 	// ID - Unique identifier for the target chat
 	ID int64
 
-	// Username - Channel or group username of the target chat (in the format @chanel_username)
+	// Username - Channel or group username of the target chat (in the format @channel_username)
 	// Note: User username can't be used here, you have to use integer chat ID
 	Username string
 }
@@ -4914,7 +4914,7 @@ func (i *InlineQueryResultAudio) ResultType() string {
 
 // InlineQueryResultVoice - Represents a link to a voice recording in an .OGG container encoded with OPUS. By
 // default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to
-// send a message with the specified content instead of the the voice message.
+// send a message with the specified content instead of the voice message.
 type InlineQueryResultVoice struct {
 	// Type - Type of the result, must be voice
 	Type string `json:"type"`
