@@ -3559,7 +3559,7 @@ type ChatID struct {
 	// ID - Unique identifier for the target chat
 	ID int64
 
-	// Username - Channel or group username of the target chat (in the format @chanel_username)
+	// Username - Channel or group username of the target chat (in the format @channel_username)
 	// Note: User username can't be used here, you have to use integer chat ID
 	Username string
 }
