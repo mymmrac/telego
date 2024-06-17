@@ -229,7 +229,7 @@ func (c MessageEntityCollection) CustomEmoji(emojiID string) MessageEntityCollec
 	return c
 }
 
-// MessageEntities coverts entity collections into the text and slice of [telego.MessageEntity] associated with text
+// MessageEntities converts entity collections into the text and slice of [telego.MessageEntity] associated with text
 // Note: Entity length is not trimmed as described in docs on purpose, Telegram still handles all entities perfectly
 // fine, but trimming their length actually limits what can be sent
 func MessageEntities(entityCollections ...MessageEntityCollection) (string, []telego.MessageEntity) {
