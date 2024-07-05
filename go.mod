@@ -4,7 +4,7 @@ go 1.22.3
 
 require (
 	github.com/bytedance/sonic v1.11.9
-	github.com/fasthttp/router v1.5.1
+	github.com/fasthttp/router v1.5.2
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.9.0
 	github.com/valyala/fasthttp v1.55.0
@@ -26,7 +26,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/savsgio/gotils v0.0.0-20240303185622-093b76447511 // indirect
+	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
