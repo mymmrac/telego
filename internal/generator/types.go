@@ -320,4 +320,12 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if field.typ == "*ChatBoostSource" {
 		field.typ = "ChatBoostSource"
 	}
+
+	if field.typ == "*RevenueWithdrawalState" {
+		field.typ = "RevenueWithdrawalState"
+	}
+
+	if field.typ == "*TransactionPartner" {
+		field.typ = "TransactionPartner"
+	}
 }

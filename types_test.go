@@ -25,6 +25,15 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginChannel{})
 	assert.Equal(t, OriginTypeChannel, (&MessageOriginChannel{}).OriginType())
 
+	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaPreview{})
+	assert.Equal(t, PaidMediaTypePreview, (&PaidMediaPreview{}).MediaType())
+
+	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaPhoto{})
+	assert.Equal(t, PaidMediaTypePhoto, (&PaidMediaPhoto{}).MediaType())
+
+	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaVideo{})
+	assert.Equal(t, PaidMediaTypeVideo, (&PaidMediaVideo{}).MediaType())
+
 	assert.Implements(t, (*BackgroundFill)(nil), &BackgroundFillSolid{})
 	assert.Equal(t, BackgroundFilledSolid, (&BackgroundFillSolid{}).BackgroundFilled())
 
@@ -136,6 +145,12 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaDocument{})
 	assert.Equal(t, MediaTypeDocument, (&InputMediaDocument{}).MediaType())
 
+	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaPhoto{})
+	assert.Equal(t, PaidMediaTypePhoto, (&InputPaidMediaPhoto{}).MediaType())
+
+	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaVideo{})
+	assert.Equal(t, PaidMediaTypeVideo, (&InputPaidMediaVideo{}).MediaType())
+
 	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultArticle{})
 	assert.Equal(t, ResultTypeArticle, (&InlineQueryResultArticle{}).ResultType())
 
@@ -210,6 +225,27 @@ func TestTypesInterfaces(t *testing.T) {
 
 	assert.Implements(t, (*InputMessageContent)(nil), &InputInvoiceMessageContent{})
 	assert.Equal(t, ContentTypeInvoice, (&InputInvoiceMessageContent{}).ContentType())
+
+	assert.Implements(t, (*RevenueWithdrawalState)(nil), &RevenueWithdrawalStatePending{})
+	assert.Equal(t, WithdrawalStatePending, (&RevenueWithdrawalStatePending{}).WithdrawalState())
+
+	assert.Implements(t, (*RevenueWithdrawalState)(nil), &RevenueWithdrawalStateSucceeded{})
+	assert.Equal(t, WithdrawalStateSucceeded, (&RevenueWithdrawalStateSucceeded{}).WithdrawalState())
+
+	assert.Implements(t, (*RevenueWithdrawalState)(nil), &RevenueWithdrawalStateFailed{})
+	assert.Equal(t, WithdrawalStateFailed, (&RevenueWithdrawalStateFailed{}).WithdrawalState())
+
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerUser{})
+	assert.Equal(t, PartnerTypeUser, (&TransactionPartnerUser{}).PartnerType())
+
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerFragment{})
+	assert.Equal(t, PartnerTypeFragment, (&TransactionPartnerFragment{}).PartnerType())
+
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerTelegramAds{})
+	assert.Equal(t, PartnerTypeTelegramAds, (&TransactionPartnerTelegramAds{}).PartnerType())
+
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerOther{})
+	assert.Equal(t, PartnerTypeOther, (&TransactionPartnerOther{}).PartnerType())
 
 	assert.Implements(t, (*PassportElementError)(nil), &PassportElementErrorDataField{})
 	assert.Equal(t, ErrorSourceDataField, (&PassportElementErrorDataField{}).ErrorSource())
@@ -659,6 +695,9 @@ func TestTypesConstants(t *testing.T) {
 			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,
 		},
 		{
+			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo,
+		},
+		{
 			StickerTypeRegular, StickerTypeMask, StickerTypeCustomEmoji,
 		},
 		{
@@ -678,6 +717,12 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			ContentTypeText, ContentTypeLocation, ContentTypeVenue, ContentTypeContact, ContentTypeInvoice,
+		},
+		{
+			WithdrawalStatePending, WithdrawalStateSucceeded, WithdrawalStateFailed,
+		},
+		{
+			PartnerTypeUser, PartnerTypeFragment, PartnerTypeTelegramAds, PartnerTypeOther,
 		},
 		{
 			ElementTypePersonalDetails, ElementTypePassport, ElementTypeDriverLicense, ElementTypeIdentityCard,

@@ -406,6 +406,10 @@ type ChatFullInfo struct {
 	// Permissions - Optional. Default chat member permissions, for groups and supergroups
 	Permissions *ChatPermissions `json:"permissions,omitempty"`
 
+	// CanSendPaidMedia - Optional. True, if paid media messages can be sent or forwarded to the channel chat.
+	// The field is available only for channel chats.
+	CanSendPaidMedia bool `json:"can_send_paid_media,omitempty"`
+
 	// SlowModeDelay - Optional. For supergroups, the minimum allowed delay between consecutive messages sent by
 	// each unprivileged user; in seconds
 	SlowModeDelay int `json:"slow_mode_delay,omitempty"`
@@ -600,6 +604,9 @@ type Message struct {
 	// Document - Optional. Message is a general file, information about the file
 	Document *Document `json:"document,omitempty"`
 
+	// PaidMedia - Optional. Message contains paid media; information about the paid media
+	PaidMedia *PaidMediaInfo `json:"paid_media,omitempty"`
+
 	// Photo - Optional. Message is a photo, available sizes of the photo
 	Photo []PhotoSize `json:"photo,omitempty"`
 
@@ -619,7 +626,7 @@ type Message struct {
 	// Voice - Optional. Message is a voice message, information about the file
 	Voice *Voice `json:"voice,omitempty"`
 
-	// Caption - Optional. Caption for the animation, audio, document, photo, video or voice
+	// Caption - Optional. Caption for the animation, audio, document, paid media, photo, video or voice
 	Caption string `json:"caption,omitempty"`
 
 	// CaptionEntities - Optional. For messages with a caption, special entities like usernames, URLs, bot
@@ -709,6 +716,10 @@ type Message struct {
 	// SuccessfulPayment - Optional. Message is a service message about a successful payment, information about
 	// the payment. More about payments » (https://core.telegram.org/bots/api#payments)
 	SuccessfulPayment *SuccessfulPayment `json:"successful_payment,omitempty"`
+
+	// RefundedPayment - Optional. Message is a service message about a refunded payment, information about the
+	// payment. More about payments » (https://core.telegram.org/bots/api#payments)
+	RefundedPayment *RefundedPayment `json:"refunded_payment,omitempty"`
 
 	// UsersShared - Optional. Service message: users were shared with the bot
 	UsersShared *UsersShared `json:"users_shared,omitempty"`
@@ -1007,6 +1018,9 @@ type ExternalReplyInfo struct {
 	// Document - Optional. Message is a general file, information about the file
 	Document *Document `json:"document,omitempty"`
 
+	// PaidMedia - Optional. Message contains paid media; information about the paid media
+	PaidMedia *PaidMediaInfo `json:"paid_media,omitempty"`
+
 	// Photo - Optional. Message is a photo, available sizes of the photo
 	Photo []PhotoSize `json:"photo,omitempty"`
 
@@ -1278,22 +1292,22 @@ type Animation struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Width - Video width as defined by sender
+	// Width - Video width as defined by the sender
 	Width int `json:"width"`
 
-	// Height - Video height as defined by sender
+	// Height - Video height as defined by the sender
 	Height int `json:"height"`
 
-	// Duration - Duration of the video in seconds as defined by sender
+	// Duration - Duration of the video in seconds as defined by the sender
 	Duration int `json:"duration"`
 
-	// Thumbnail - Optional. Animation thumbnail as defined by sender
+	// Thumbnail - Optional. Animation thumbnail as defined by the sender
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
-	// FileName - Optional. Original animation filename as defined by sender
+	// FileName - Optional. Original animation filename as defined by the sender
 	FileName string `json:"file_name,omitempty"`
 
-	// MimeType - Optional. MIME type of the file as defined by sender
+	// MimeType - Optional. MIME type of the file as defined by the sender
 	MimeType string `json:"mime_type,omitempty"`
 
 	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
@@ -1311,19 +1325,19 @@ type Audio struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Duration - Duration of the audio in seconds as defined by sender
+	// Duration - Duration of the audio in seconds as defined by the sender
 	Duration int `json:"duration"`
 
-	// Performer - Optional. Performer of the audio as defined by sender or by audio tags
+	// Performer - Optional. Performer of the audio as defined by the sender or by audio tags
 	Performer string `json:"performer,omitempty"`
 
-	// Title - Optional. Title of the audio as defined by sender or by audio tags
+	// Title - Optional. Title of the audio as defined by the sender or by audio tags
 	Title string `json:"title,omitempty"`
 
-	// FileName - Optional. Original filename as defined by sender
+	// FileName - Optional. Original filename as defined by the sender
 	FileName string `json:"file_name,omitempty"`
 
-	// MimeType - Optional. MIME type of the file as defined by sender
+	// MimeType - Optional. MIME type of the file as defined by the sender
 	MimeType string `json:"mime_type,omitempty"`
 
 	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
@@ -1346,13 +1360,13 @@ type Document struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Thumbnail - Optional. Document thumbnail as defined by sender
+	// Thumbnail - Optional. Document thumbnail as defined by the sender
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
-	// FileName - Optional. Original filename as defined by sender
+	// FileName - Optional. Original filename as defined by the sender
 	FileName string `json:"file_name,omitempty"`
 
-	// MimeType - Optional. MIME type of the file as defined by sender
+	// MimeType - Optional. MIME type of the file as defined by the sender
 	MimeType string `json:"mime_type,omitempty"`
 
 	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
@@ -1379,22 +1393,22 @@ type Video struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Width - Video width as defined by sender
+	// Width - Video width as defined by the sender
 	Width int `json:"width"`
 
-	// Height - Video height as defined by sender
+	// Height - Video height as defined by the sender
 	Height int `json:"height"`
 
-	// Duration - Duration of the video in seconds as defined by sender
+	// Duration - Duration of the video in seconds as defined by the sender
 	Duration int `json:"duration"`
 
 	// Thumbnail - Optional. Video thumbnail
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
-	// FileName - Optional. Original filename as defined by sender
+	// FileName - Optional. Original filename as defined by the sender
 	FileName string `json:"file_name,omitempty"`
 
-	// MimeType - Optional. MIME type of the file as defined by sender
+	// MimeType - Optional. MIME type of the file as defined by the sender
 	MimeType string `json:"mime_type,omitempty"`
 
 	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
@@ -1414,10 +1428,10 @@ type VideoNote struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Length - Video width and height (diameter of the video message) as defined by sender
+	// Length - Video width and height (diameter of the video message) as defined by the sender
 	Length int `json:"length"`
 
-	// Duration - Duration of the video in seconds as defined by sender
+	// Duration - Duration of the video in seconds as defined by the sender
 	Duration int `json:"duration"`
 
 	// Thumbnail - Optional. Video thumbnail
@@ -1436,16 +1450,127 @@ type Voice struct {
 	// different bots. Can't be used to download or reuse the file.
 	FileUniqueID string `json:"file_unique_id"`
 
-	// Duration - Duration of the audio in seconds as defined by sender
+	// Duration - Duration of the audio in seconds as defined by the sender
 	Duration int `json:"duration"`
 
-	// MimeType - Optional. MIME type of the file as defined by sender
+	// MimeType - Optional. MIME type of the file as defined by the sender
 	MimeType string `json:"mime_type,omitempty"`
 
 	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
 	// have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit
 	// integer or double-precision float type are safe for storing this value.
 	FileSize int64 `json:"file_size,omitempty"`
+}
+
+// PaidMediaInfo - Describes the paid media added to a message.
+type PaidMediaInfo struct {
+	// StarCount - The number of Telegram Stars that must be paid to buy access to the media
+	StarCount int `json:"star_count"`
+
+	// PaidMedia - Information about the paid media
+	PaidMedia []PaidMedia `json:"paid_media"`
+}
+
+// UnmarshalJSON converts JSON to PaidMediaInfo
+func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uPaidMediaInfo PaidMediaInfo
+	var um uPaidMediaInfo
+
+	if value.Exists("paid_media") {
+		paidMedia := value.GetArray("paid_media")
+		um.PaidMedia = make([]PaidMedia, len(paidMedia))
+		for i, media := range paidMedia {
+			mediaType := string(media.GetStringBytes("type"))
+			switch mediaType {
+			case PaidMediaTypePreview:
+				um.PaidMedia[i] = &PaidMediaPreview{}
+			case PaidMediaTypePhoto:
+				um.PaidMedia[i] = &PaidMediaPhoto{}
+			case PaidMediaTypeVideo:
+				um.PaidMedia[i] = &PaidMediaVideo{}
+			default:
+				return fmt.Errorf("unknown paid media type: %s", mediaType)
+			}
+		}
+	}
+
+	if err = json.Unmarshal(data, &um); err != nil {
+		return err
+	}
+	*m = PaidMediaInfo(um)
+
+	return nil
+}
+
+// PaidMedia - This object describes paid media. Currently, it can be one of
+// PaidMediaPreview (https://core.telegram.org/bots/api#paidmediapreview)
+// PaidMediaPhoto (https://core.telegram.org/bots/api#paidmediaphoto)
+// PaidMediaVideo (https://core.telegram.org/bots/api#paidmediavideo)
+type PaidMedia interface {
+	MediaType() string
+}
+
+// Paid media types
+const (
+	PaidMediaTypePreview = "preview"
+	PaidMediaTypePhoto   = "photo"
+	PaidMediaTypeVideo   = "video"
+)
+
+// PaidMediaPreview - The paid media isn't available before the payment.
+type PaidMediaPreview struct {
+	// Type - Type of the paid media, always “preview”
+	Type string `json:"type"`
+
+	// Width - Optional. Media width as defined by the sender
+	Width int `json:"width,omitempty"`
+
+	// Height - Optional. Media height as defined by the sender
+	Height int `json:"height,omitempty"`
+
+	// Duration - Optional. Duration of the media in seconds as defined by the sender
+	Duration int `json:"duration,omitempty"`
+}
+
+// MediaType returns PaidMedia type
+func (m *PaidMediaPreview) MediaType() string {
+	return PaidMediaTypePreview
+}
+
+// PaidMediaPhoto - The paid media is a photo.
+type PaidMediaPhoto struct {
+	// Type - Type of the paid media, always “photo”
+	Type string `json:"type"`
+
+	// Photo - The photo
+	Photo []PhotoSize `json:"photo"`
+}
+
+// MediaType returns PaidMedia type
+func (m *PaidMediaPhoto) MediaType() string {
+	return PaidMediaTypePhoto
+}
+
+// PaidMediaVideo - The paid media is a video.
+type PaidMediaVideo struct {
+	// Type - Type of the paid media, always “video”
+	Type string `json:"type"`
+
+	// Video - The video
+	Video Video `json:"video"`
+}
+
+// MediaType returns PaidMedia type
+func (m *PaidMediaVideo) MediaType() string {
+	return PaidMediaTypeVideo
 }
 
 // Contact - This object represents a phone contact.
@@ -1502,7 +1627,7 @@ type PollOption struct {
 	VoterCount int `json:"voter_count"`
 }
 
-// InputPollOption - This object contains information about one answer option in a poll to send.
+// InputPollOption - This object contains information about one answer option in a poll to be sent.
 type InputPollOption struct {
 	// Text - Option text, 1-100 characters
 	Text string `json:"text"`
@@ -1589,10 +1714,10 @@ const (
 
 // Location - This object represents a point on the map.
 type Location struct {
-	// Latitude - Latitude as defined by sender
+	// Latitude - Latitude as defined by the sender
 	Latitude float64 `json:"latitude"`
 
-	// Longitude - Longitude as defined by sender
+	// Longitude - Longitude as defined by the sender
 	Longitude float64 `json:"longitude"`
 
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
@@ -2434,8 +2559,7 @@ type InlineKeyboardButton struct {
 	URL string `json:"url,omitempty"`
 
 	// CallbackData - Optional. Data to be sent in a callback query
-	// (https://core.telegram.org/bots/api#callbackquery) to the bot when button is pressed, 1-64 bytes. Not
-	// supported for messages sent on behalf of a Telegram Business account.
+	// (https://core.telegram.org/bots/api#callbackquery) to the bot when the button is pressed, 1-64 bytes
 	CallbackData string `json:"callback_data,omitempty"`
 
 	// WebApp - Optional. Description of the Web App (https://core.telegram.org/bots/webapps) that will be
@@ -3773,7 +3897,9 @@ type MenuButtonWebApp struct {
 
 	// WebApp - Description of the Web App that will be launched when the user presses the button. The Web App
 	// will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery
-	// (https://core.telegram.org/bots/api#answerwebappquery).
+	// (https://core.telegram.org/bots/api#answerwebappquery). Alternatively, a t.me link to a Web App of the bot
+	// can be specified in the object instead of the Web App's URL, in which case the Web App will be opened as if
+	// the user pressed the link.
 	WebApp WebAppInfo `json:"web_app"`
 }
 
@@ -4381,6 +4507,78 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 	}
 
 	return nil, errors.New("telego: file ID, URL and file are empty")
+}
+
+// InputPaidMedia - This object describes the paid media to be sent. Currently, it can be one of
+// InputPaidMediaPhoto (https://core.telegram.org/bots/api#inputpaidmediaphoto)
+// InputPaidMediaVideo (https://core.telegram.org/bots/api#inputpaidmediavideo)
+type InputPaidMedia interface {
+	MediaType() string
+	MediaFile() InputFile
+}
+
+// InputPaidMediaPhoto - The paid media to send is a photo.
+type InputPaidMediaPhoto struct {
+	// Type - Type of the media, must be photo
+	Type string `json:"type"`
+
+	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
+	// pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to
+	// upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files
+	// » (https://core.telegram.org/bots/api#sending-files)
+	Media InputFile `json:"media"`
+}
+
+// MediaType returns InputPaidMedia type
+func (m *InputPaidMediaPhoto) MediaType() string {
+	return PaidMediaTypePhoto
+}
+
+// MediaFile returns InputPaidMedia file
+func (m *InputPaidMediaPhoto) MediaFile() InputFile {
+	return m.Media
+}
+
+// InputPaidMediaVideo - The paid media to send is a video.
+type InputPaidMediaVideo struct {
+	// Type - Type of the media, must be video
+	Type string `json:"type"`
+
+	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
+	// pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to
+	// upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files
+	// » (https://core.telegram.org/bots/api#sending-files)
+	Media InputFile `json:"media"`
+
+	// Thumbnail - Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is
+	// supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's
+	// width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data.
+	// Thumbnails can't be reused and can be only uploaded as a new file, so you can pass
+	// “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under
+	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Thumbnail *InputFile `json:"thumbnail,omitempty"`
+
+	// Width - Optional. Video width
+	Width int `json:"width,omitempty"`
+
+	// Height - Optional. Video height
+	Height int `json:"height,omitempty"`
+
+	// Duration - Optional. Video duration in seconds
+	Duration int `json:"duration,omitempty"`
+
+	// SupportsStreaming - Optional. Pass True if the uploaded video is suitable for streaming
+	SupportsStreaming bool `json:"supports_streaming,omitempty"`
+}
+
+// MediaType returns InputPaidMedia type
+func (m *InputPaidMediaVideo) MediaType() string {
+	return PaidMediaTypeVideo
+}
+
+// MediaFile returns InputPaidMedia file
+func (m *InputPaidMediaVideo) MediaFile() InputFile {
+	return m.Media
 }
 
 // Sticker - This object represents a sticker.
@@ -5899,7 +6097,7 @@ type SuccessfulPayment struct {
 	// point for each currency (2 for the majority of currencies).
 	TotalAmount int `json:"total_amount"`
 
-	// InvoicePayload - Bot specified invoice payload
+	// InvoicePayload - Bot-specified invoice payload
 	InvoicePayload string `json:"invoice_payload"`
 
 	// ShippingOptionID - Optional. Identifier of the shipping option chosen by the user
@@ -5915,6 +6113,28 @@ type SuccessfulPayment struct {
 	ProviderPaymentChargeID string `json:"provider_payment_charge_id"`
 }
 
+// RefundedPayment - This object contains basic information about a refunded payment.
+type RefundedPayment struct {
+	// Currency - Three-letter ISO 4217 currency (https://core.telegram.org/bots/payments#supported-currencies)
+	// code, or “XTR” for payments in Telegram Stars (https://t.me/BotNews/90). Currently, always “XTR”
+	Currency string `json:"currency"`
+
+	// TotalAmount - Total refunded price in the smallest units of the currency (integer, not float/double). For
+	// example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json
+	// (https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal
+	// point for each currency (2 for the majority of currencies).
+	TotalAmount int `json:"total_amount"`
+
+	// InvoicePayload - Bot-specified invoice payload
+	InvoicePayload string `json:"invoice_payload"`
+
+	// TelegramPaymentChargeID - Telegram payment identifier
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+
+	// ProviderPaymentChargeID - Optional. Provider payment identifier
+	ProviderPaymentChargeID string `json:"provider_payment_charge_id,omitempty"`
+}
+
 // ShippingQuery - This object contains information about an incoming shipping query.
 type ShippingQuery struct {
 	// ID - Unique query identifier
@@ -5923,7 +6143,7 @@ type ShippingQuery struct {
 	// From - User who sent the query
 	From User `json:"from"`
 
-	// InvoicePayload - Bot specified invoice payload
+	// InvoicePayload - Bot-specified invoice payload
 	InvoicePayload string `json:"invoice_payload"`
 
 	// ShippingAddress - User specified shipping address
@@ -5948,7 +6168,7 @@ type PreCheckoutQuery struct {
 	// point for each currency (2 for the majority of currencies).
 	TotalAmount int `json:"total_amount"`
 
-	// InvoicePayload - Bot specified invoice payload
+	// InvoicePayload - Bot-specified invoice payload
 	InvoicePayload string `json:"invoice_payload"`
 
 	// ShippingOptionID - Optional. Identifier of the shipping option chosen by the user
@@ -5956,6 +6176,213 @@ type PreCheckoutQuery struct {
 
 	// OrderInfo - Optional. Order information provided by the user
 	OrderInfo *OrderInfo `json:"order_info,omitempty"`
+}
+
+// RevenueWithdrawalState - This object describes the state of a revenue withdrawal operation. Currently, it
+// can be one of
+// RevenueWithdrawalStatePending (https://core.telegram.org/bots/api#revenuewithdrawalstatepending)
+// RevenueWithdrawalStateSucceeded (https://core.telegram.org/bots/api#revenuewithdrawalstatesucceeded)
+// RevenueWithdrawalStateFailed (https://core.telegram.org/bots/api#revenuewithdrawalstatefailed)
+type RevenueWithdrawalState interface {
+	WithdrawalState() string
+}
+
+// Revenue withdrawal state types
+const (
+	WithdrawalStatePending   = "pending"
+	WithdrawalStateSucceeded = "succeeded"
+	WithdrawalStateFailed    = "failed"
+)
+
+// RevenueWithdrawalStatePending - The withdrawal is in progress.
+type RevenueWithdrawalStatePending struct {
+	// Type - Type of the state, always “pending”
+	Type string `json:"type"`
+}
+
+// WithdrawalState returns RevenueWithdrawalState type
+func (r *RevenueWithdrawalStatePending) WithdrawalState() string {
+	return WithdrawalStatePending
+}
+
+// RevenueWithdrawalStateSucceeded - The withdrawal succeeded.
+type RevenueWithdrawalStateSucceeded struct {
+	// Type - Type of the state, always “succeeded”
+	Type string `json:"type"`
+
+	// Date - Date the withdrawal was completed in Unix time
+	Date int64 `json:"date"`
+
+	// URL - An HTTPS URL that can be used to see transaction details
+	URL string `json:"url"`
+}
+
+// WithdrawalState returns RevenueWithdrawalState type
+func (r *RevenueWithdrawalStateSucceeded) WithdrawalState() string {
+	return WithdrawalStateSucceeded
+}
+
+// RevenueWithdrawalStateFailed - The withdrawal failed and the transaction was refunded.
+type RevenueWithdrawalStateFailed struct {
+	// Type - Type of the state, always “failed”
+	Type string `json:"type"`
+}
+
+// WithdrawalState returns RevenueWithdrawalState type
+func (r *RevenueWithdrawalStateFailed) WithdrawalState() string {
+	return WithdrawalStateFailed
+}
+
+// TransactionPartner - This object describes the source of a transaction, or its recipient for outgoing
+// transactions. Currently, it can be one of
+// TransactionPartnerUser (https://core.telegram.org/bots/api#transactionpartneruser)
+// TransactionPartnerFragment (https://core.telegram.org/bots/api#transactionpartnerfragment)
+// TransactionPartnerTelegramAds (https://core.telegram.org/bots/api#transactionpartnertelegramads)
+// TransactionPartnerOther (https://core.telegram.org/bots/api#transactionpartnerother)
+type TransactionPartner interface {
+	PartnerType() string
+}
+
+// Transaction partner types
+const (
+	PartnerTypeUser        = "user"
+	PartnerTypeFragment    = "fragment"
+	PartnerTypeTelegramAds = "telegram_ads"
+	PartnerTypeOther       = "other"
+)
+
+// TransactionPartnerUser - Describes a transaction with a user.
+type TransactionPartnerUser struct {
+	// Type - Type of the transaction partner, always “user”
+	Type string `json:"type"`
+
+	// User - Information about the user
+	User User `json:"user"`
+
+	// InvoicePayload - Optional. Bot-specified invoice payload
+	InvoicePayload string `json:"invoice_payload,omitempty"`
+}
+
+// PartnerType returns TransactionPartner type
+func (p *TransactionPartnerUser) PartnerType() string {
+	return PartnerTypeUser
+}
+
+// TransactionPartnerFragment - Describes a withdrawal transaction with Fragment.
+type TransactionPartnerFragment struct {
+	// Type - Type of the transaction partner, always “fragment”
+	Type string `json:"type"`
+
+	// WithdrawalState - Optional. State of the transaction if the transaction is outgoing
+	WithdrawalState RevenueWithdrawalState `json:"withdrawal_state,omitempty"`
+}
+
+// PartnerType returns TransactionPartner type
+func (p *TransactionPartnerFragment) PartnerType() string {
+	return PartnerTypeFragment
+}
+
+// TransactionPartnerTelegramAds - Describes a withdrawal transaction to the Telegram Ads platform.
+type TransactionPartnerTelegramAds struct {
+	// Type - Type of the transaction partner, always “telegram_ads”
+	Type string `json:"type"`
+}
+
+// PartnerType returns TransactionPartner type
+func (p *TransactionPartnerTelegramAds) PartnerType() string {
+	return PartnerTypeTelegramAds
+}
+
+// TransactionPartnerOther - Describes a transaction with an unknown source or recipient.
+type TransactionPartnerOther struct {
+	// Type - Type of the transaction partner, always “other”
+	Type string `json:"type"`
+}
+
+// PartnerType returns TransactionPartner type
+func (p *TransactionPartnerOther) PartnerType() string {
+	return PartnerTypeOther
+}
+
+// StarTransaction - Describes a Telegram Star transaction.
+type StarTransaction struct {
+	// ID - Unique identifier of the transaction. Coincides with the identifier of the original transaction for
+	// refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming
+	// payments from users.
+	ID string `json:"id"`
+
+	// Amount - Number of Telegram Stars transferred by the transaction
+	Amount int `json:"amount"`
+
+	// Date - Date the transaction was created in Unix time
+	Date int64 `json:"date"`
+
+	// Source - Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment
+	// refunding a failed withdrawal). Only for incoming transactions
+	Source TransactionPartner `json:"source,omitempty"`
+
+	// Receiver - Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment
+	// for a withdrawal). Only for outgoing transactions
+	Receiver TransactionPartner `json:"receiver,omitempty"`
+}
+
+// UnmarshalJSON converts JSON to Chat
+func (t *StarTransaction) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uStarTransaction StarTransaction
+	var ut uStarTransaction
+
+	if value.Exists("source") {
+		partnerType := string(value.GetStringBytes("source", "type"))
+		switch partnerType {
+		case PartnerTypeUser:
+			ut.Source = &TransactionPartnerUser{}
+		case PartnerTypeFragment:
+			ut.Source = &TransactionPartnerFragment{}
+		case PartnerTypeTelegramAds:
+			ut.Source = &TransactionPartnerTelegramAds{}
+		case PartnerTypeOther:
+			ut.Source = &TransactionPartnerOther{}
+		default:
+			return fmt.Errorf("unknown source partner type: %s", partnerType)
+		}
+	}
+
+	if value.Exists("receiver") {
+		partnerType := string(value.GetStringBytes("receiver", "type"))
+		switch partnerType {
+		case PartnerTypeUser:
+			ut.Receiver = &TransactionPartnerUser{}
+		case PartnerTypeFragment:
+			ut.Receiver = &TransactionPartnerFragment{}
+		case PartnerTypeTelegramAds:
+			ut.Receiver = &TransactionPartnerTelegramAds{}
+		case PartnerTypeOther:
+			ut.Receiver = &TransactionPartnerOther{}
+		default:
+			return fmt.Errorf("unknown receiver partner type: %s", partnerType)
+		}
+	}
+
+	if err = json.Unmarshal(data, &ut); err != nil {
+		return err
+	}
+	*t = StarTransaction(ut)
+
+	return nil
+}
+
+// StarTransactions - Contains a list of Telegram Star transactions.
+type StarTransactions struct {
+	// Transactions - The list of transactions
+	Transactions []StarTransaction `json:"transactions"`
 }
 
 // PassportData - Describes Telegram Passport data shared with the bot by the user.
