@@ -966,6 +966,72 @@ func (p *SendVideoNoteParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendVide
 	return p
 }
 
+// WithChatID adds chat ID parameter
+func (p *SendPaidMediaParams) WithChatID(chatID ChatID) *SendPaidMediaParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithStarCount adds star count parameter
+func (p *SendPaidMediaParams) WithStarCount(starCount int) *SendPaidMediaParams {
+	p.StarCount = starCount
+	return p
+}
+
+// WithMedia adds media parameter
+func (p *SendPaidMediaParams) WithMedia(media ...InputPaidMedia) *SendPaidMediaParams {
+	p.Media = media
+	return p
+}
+
+// WithCaption adds caption parameter
+func (p *SendPaidMediaParams) WithCaption(caption string) *SendPaidMediaParams {
+	p.Caption = caption
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *SendPaidMediaParams) WithParseMode(parseMode string) *SendPaidMediaParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (p *SendPaidMediaParams) WithCaptionEntities(captionEntities ...MessageEntity) *SendPaidMediaParams {
+	p.CaptionEntities = captionEntities
+	return p
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (p *SendPaidMediaParams) WithShowCaptionAboveMedia() *SendPaidMediaParams {
+	p.ShowCaptionAboveMedia = true
+	return p
+}
+
+// WithDisableNotification adds disable notification parameter
+func (p *SendPaidMediaParams) WithDisableNotification() *SendPaidMediaParams {
+	p.DisableNotification = true
+	return p
+}
+
+// WithProtectContent adds protect content parameter
+func (p *SendPaidMediaParams) WithProtectContent() *SendPaidMediaParams {
+	p.ProtectContent = true
+	return p
+}
+
+// WithReplyParameters adds reply parameters parameter
+func (p *SendPaidMediaParams) WithReplyParameters(replyParameters *ReplyParameters) *SendPaidMediaParams {
+	p.ReplyParameters = replyParameters
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *SendPaidMediaParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendPaidMediaParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
 // WithBusinessConnectionID adds business connection ID parameter
 func (p *SendMediaGroupParams) WithBusinessConnectionID(businessConnectionID string) *SendMediaGroupParams {
 	p.BusinessConnectionID = businessConnectionID
@@ -2175,6 +2241,12 @@ func (p *GetMyDefaultAdministratorRightsParams) WithForChannels() *GetMyDefaultA
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageTextParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageTextParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *EditMessageTextParams) WithChatID(chatID ChatID) *EditMessageTextParams {
 	p.ChatID = chatID
@@ -2220,6 +2292,12 @@ func (p *EditMessageTextParams) WithLinkPreviewOptions(linkPreviewOptions *LinkP
 // WithReplyMarkup adds reply markup parameter
 func (p *EditMessageTextParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageTextParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageCaptionParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageCaptionParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -2271,6 +2349,12 @@ func (p *EditMessageCaptionParams) WithReplyMarkup(replyMarkup *InlineKeyboardMa
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageMediaParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageMediaParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *EditMessageMediaParams) WithChatID(chatID ChatID) *EditMessageMediaParams {
 	p.ChatID = chatID
@@ -2298,6 +2382,13 @@ func (p *EditMessageMediaParams) WithMedia(media InputMedia) *EditMessageMediaPa
 // WithReplyMarkup adds reply markup parameter
 func (p *EditMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageMediaParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
+) *EditMessageLiveLocationParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -2345,6 +2436,13 @@ func (p *EditMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeybo
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *StopMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
+) *StopMessageLiveLocationParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *StopMessageLiveLocationParams) WithChatID(chatID ChatID) *StopMessageLiveLocationParams {
 	p.ChatID = chatID
@@ -2370,6 +2468,13 @@ func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeybo
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageReplyMarkupParams) WithBusinessConnectionID(businessConnectionID string,
+) *EditMessageReplyMarkupParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *EditMessageReplyMarkupParams) WithChatID(chatID ChatID) *EditMessageReplyMarkupParams {
 	p.ChatID = chatID
@@ -2392,6 +2497,12 @@ func (p *EditMessageReplyMarkupParams) WithInlineMessageID(inlineMessageID strin
 func (p *EditMessageReplyMarkupParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
 ) *EditMessageReplyMarkupParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *StopPollParams) WithBusinessConnectionID(businessConnectionID string) *StopPollParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -3059,6 +3170,18 @@ func (p *AnswerPreCheckoutQueryParams) WithOk() *AnswerPreCheckoutQueryParams {
 // WithErrorMessage adds error message parameter
 func (p *AnswerPreCheckoutQueryParams) WithErrorMessage(errorMessage string) *AnswerPreCheckoutQueryParams {
 	p.ErrorMessage = errorMessage
+	return p
+}
+
+// WithOffset adds offset parameter
+func (p *GetStarTransactionsParams) WithOffset(offset int) *GetStarTransactionsParams {
+	p.Offset = offset
+	return p
+}
+
+// WithLimit adds limit parameter
+func (p *GetStarTransactionsParams) WithLimit(limit int) *GetStarTransactionsParams {
+	p.Limit = limit
 	return p
 }
 

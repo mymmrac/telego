@@ -583,6 +583,36 @@ func TestBot_SendVideoNote(t *testing.T) {
 	})
 }
 
+func TestBot_SendPaidMedia(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.SendPaidMedia(nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.SendPaidMedia(nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
 func TestBot_SendMediaGroup(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -3420,6 +3450,41 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 
 		err := m.Bot.AnswerPreCheckoutQuery(nil)
 		require.Error(t, err)
+	})
+}
+
+func TestBot_GetStarTransactions(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStarTransactions := &StarTransactions{
+			Transactions: []StarTransaction{
+				{},
+			},
+		}
+		resp := telegoResponse(t, expectedStarTransactions)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		starTransactions, err := m.Bot.GetStarTransactions(nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedStarTransactions, starTransactions)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		starTransactions, err := m.Bot.GetStarTransactions(nil)
+		require.Error(t, err)
+		assert.Nil(t, starTransactions)
 	})
 }
 

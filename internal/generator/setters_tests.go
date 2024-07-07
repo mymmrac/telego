@@ -191,6 +191,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]ReactionType{&ReactionTypeEmoji{Type: ReactionEmoji}}"
 	case "[]InputPollOption":
 		return "[]InputPollOption{{}}"
+	case "[]InputPaidMedia":
+		return "[]InputPaidMedia{&InputPaidMediaPhoto{}}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

@@ -394,12 +394,13 @@ type CopyMessageParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
-// CopyMessage - Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway
-// winners messages, and invoice messages can't be copied. A quiz poll (https://core.telegram.org/bots/api#poll)
-// can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous
-// to the method forwardMessage (https://core.telegram.org/bots/api#forwardmessage), but the copied message
-// doesn't have a link to the original message. Returns the MessageID
-// (https://core.telegram.org/bots/api#messageid) of the sent message on success.
+// CopyMessage - Use this method to copy messages of any kind. Service messages, paid media messages,
+// giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll
+// (https://core.telegram.org/bots/api#poll) can be copied only if the value of the field correct_option_id is
+// known to the bot. The method is analogous to the method forwardMessage
+// (https://core.telegram.org/bots/api#forwardmessage), but the copied message doesn't have a link to the
+// original message. Returns the MessageID (https://core.telegram.org/bots/api#messageid) of the sent message on
+// success.
 func (b *Bot) CopyMessage(params *CopyMessageParams) (*MessageID, error) {
 	var messageID *MessageID
 	err := b.performRequest("copyMessage", params, &messageID)
@@ -440,12 +441,12 @@ type CopyMessagesParams struct {
 }
 
 // CopyMessages - Use this method to copy messages of any kind. If some of the specified messages can't be
-// found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and
-// invoice messages can't be copied. A quiz poll (https://core.telegram.org/bots/api#poll) can be copied only if
-// the value of the field correct_option_id is known to the bot. The method is analogous to the method
-// forwardMessages (https://core.telegram.org/bots/api#forwardmessages), but the copied messages don't have a
-// link to the original message. Album grouping is kept for copied messages. On success, an array of MessageID
-// (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
+// found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners
+// messages, and invoice messages can't be copied. A quiz poll (https://core.telegram.org/bots/api#poll) can be
+// copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the
+// method forwardMessages (https://core.telegram.org/bots/api#forwardmessages), but the copied messages don't
+// have a link to the original message. Album grouping is kept for copied messages. On success, an array of
+// MessageID (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
 func (b *Bot) CopyMessages(params *CopyMessagesParams) (*MessageID, error) {
 	var messageID *MessageID
 	err := b.performRequest("copyMessages", params, &messageID)
@@ -1072,6 +1073,61 @@ func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
 	err := b.performRequest("sendVideoNote", params, &message)
 	if err != nil {
 		return nil, fmt.Errorf("telego: sendVideoNote(): %w", err)
+	}
+
+	return message, nil
+}
+
+// SendPaidMediaParams - Represents parameters of sendPaidMedia method.
+type SendPaidMediaParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// StarCount - The number of Telegram Stars that must be paid to buy access to the media
+	StarCount int `json:"star_count"`
+
+	// Media - A JSON-serialized array describing the media to be sent; up to 10 items
+	Media []InputPaidMedia `json:"media"`
+
+	// Caption - Optional. Media caption, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the media caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
+	// DisableNotification - Optional. Sends the message silently
+	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
+
+	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+// SendPaidMedia - Use this method to send paid media to channel chats. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
+func (b *Bot) SendPaidMedia(params *SendPaidMediaParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest("sendPaidMedia", params, &message)
+	if err != nil {
+		return nil, fmt.Errorf("telego: sendPaidMedia(): %w", err)
 	}
 
 	return message, nil
@@ -3007,6 +3063,10 @@ func (b *Bot) GetMyDefaultAdministratorRights(
 
 // EditMessageTextParams - Represents parameters of editMessageText method.
 type EditMessageTextParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
 	ChatID ChatID `json:"chat_id,omitempty"`
@@ -3039,7 +3099,9 @@ type EditMessageTextParams struct {
 
 // EditMessageText - Use this method to edit text and game (https://core.telegram.org/bots/api#games)
 // messages. On success, if the edited message is not an inline message, the edited Message
-// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
+// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
+// hours from the time they were sent.
 func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -3053,6 +3115,10 @@ func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
 
 // EditMessageCaptionParams - Represents parameters of editMessageCaption method.
 type EditMessageCaptionParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
 	ChatID ChatID `json:"chat_id,omitempty"`
@@ -3086,7 +3152,8 @@ type EditMessageCaptionParams struct {
 
 // EditMessageCaption - Use this method to edit captions of messages. On success, if the edited message is
 // not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise
-// True is returned.
+// True is returned. Note that business messages that were not sent by the bot and do not contain an inline
+// keyboard can only be edited within 48 hours from the time they were sent.
 func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -3100,6 +3167,10 @@ func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, er
 
 // EditMessageMediaParams - Represents parameters of editMessageMedia method.
 type EditMessageMediaParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
 	ChatID ChatID `json:"chat_id,omitempty"`
@@ -3137,7 +3208,8 @@ func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
 // document for document albums and to a photo or a video otherwise. When an inline message is edited, a new
 // file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the
 // edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
-// returned, otherwise True is returned.
+// returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not
+// contain an inline keyboard can only be edited within 48 hours from the time they were sent.
 func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -3151,6 +3223,10 @@ func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error)
 
 // EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
 type EditMessageLiveLocationParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
 	ChatID ChatID `json:"chat_id,omitempty"`
@@ -3208,6 +3284,10 @@ func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*M
 
 // StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
 type StopMessageLiveLocationParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
 	ChatID ChatID `json:"chat_id,omitempty"`
@@ -3241,6 +3321,10 @@ func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*M
 
 // EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
 type EditMessageReplyMarkupParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
 	ChatID ChatID `json:"chat_id,omitempty"`
@@ -3259,7 +3343,8 @@ type EditMessageReplyMarkupParams struct {
 
 // EditMessageReplyMarkup - Use this method to edit only the reply markup of messages. On success, if the
 // edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
-// returned, otherwise True is returned.
+// returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not
+// contain an inline keyboard can only be edited within 48 hours from the time they were sent.
 func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -3273,6 +3358,10 @@ func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Mes
 
 // StopPollParams - Represents parameters of stopPoll method.
 type StopPollParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -4163,6 +4252,28 @@ func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error
 	}
 
 	return nil
+}
+
+// GetStarTransactionsParams - Represents parameters of getStarTransactions method.
+type GetStarTransactionsParams struct {
+	// Offset - Optional. Number of transactions to skip in the response
+	Offset int `json:"offset,omitempty"`
+
+	// Limit - Optional. The maximum number of transactions to be retrieved. Values between 1-100 are accepted.
+	// Defaults to 100.
+	Limit int `json:"limit,omitempty"`
+}
+
+// GetStarTransactions - Returns the bot's Telegram Star transactions in chronological order. On success,
+// returns a StarTransactions (https://core.telegram.org/bots/api#startransactions) object.
+func (b *Bot) GetStarTransactions(params *GetStarTransactionsParams) (*StarTransactions, error) {
+	var starTransactions *StarTransactions
+	err := b.performRequest("getStarTransactions", params, &starTransactions)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getStarTransactions(): %w", err)
+	}
+
+	return starTransactions, nil
 }
 
 // RefundStarPaymentParams - Represents parameters of refundStarPayment method.

@@ -433,6 +433,35 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSendPaidMediaParams_Setters(t *testing.T) {
+	s := (&SendPaidMediaParams{}).
+		WithChatID(ChatID{ID: 6}).
+		WithStarCount(1).
+		WithMedia([]InputPaidMedia{&InputPaidMediaPhoto{}}...).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithDisableNotification().
+		WithProtectContent().
+		WithReplyParameters(&ReplyParameters{MessageID: 2}).
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendPaidMediaParams{
+		ChatID:                ChatID{ID: 6},
+		StarCount:             1,
+		Media:                 []InputPaidMedia{&InputPaidMediaPhoto{}},
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		DisableNotification:   true,
+		ProtectContent:        true,
+		ReplyParameters:       &ReplyParameters{MessageID: 2},
+		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
 func TestSendMediaGroupParams_Setters(t *testing.T) {
 	s := (&SendMediaGroupParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
@@ -1292,8 +1321,9 @@ func TestGetMyDefaultAdministratorRightsParams_Setters(t *testing.T) {
 
 func TestEditMessageTextParams_Setters(t *testing.T) {
 	e := (&EditMessageTextParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
 		WithChatID(ChatID{ID: 1}).
-		WithMessageID(1).
+		WithMessageID(2).
 		WithInlineMessageID("InlineMessageID").
 		WithText("Text").
 		WithParseMode("ParseMode").
@@ -1302,21 +1332,23 @@ func TestEditMessageTextParams_Setters(t *testing.T) {
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageTextParams{
-		ChatID:             ChatID{ID: 1},
-		MessageID:          1,
-		InlineMessageID:    "InlineMessageID",
-		Text:               "Text",
-		ParseMode:          "ParseMode",
-		Entities:           []MessageEntity{{Type: "Entities"}},
-		LinkPreviewOptions: &LinkPreviewOptions{IsDisabled: true},
-		ReplyMarkup:        &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
+		InlineMessageID:      "InlineMessageID",
+		Text:                 "Text",
+		ParseMode:            "ParseMode",
+		Entities:             []MessageEntity{{Type: "Entities"}},
+		LinkPreviewOptions:   &LinkPreviewOptions{IsDisabled: true},
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, e)
 }
 
 func TestEditMessageCaptionParams_Setters(t *testing.T) {
 	e := (&EditMessageCaptionParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithMessageID(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
 		WithInlineMessageID("InlineMessageID").
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -1325,8 +1357,9 @@ func TestEditMessageCaptionParams_Setters(t *testing.T) {
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageCaptionParams{
-		ChatID:                ChatID{ID: 2},
-		MessageID:             1,
+		BusinessConnectionID:  "BusinessConnectionID",
+		ChatID:                ChatID{ID: 1},
+		MessageID:             2,
 		InlineMessageID:       "InlineMessageID",
 		Caption:               "Caption",
 		ParseMode:             "ParseMode",
@@ -1338,92 +1371,102 @@ func TestEditMessageCaptionParams_Setters(t *testing.T) {
 
 func TestEditMessageMediaParams_Setters(t *testing.T) {
 	e := (&EditMessageMediaParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithMessageID(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
 		WithInlineMessageID("InlineMessageID").
 		WithMedia(&InputMediaAnimation{Type: "Media"}).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageMediaParams{
-		ChatID:          ChatID{ID: 2},
-		MessageID:       1,
-		InlineMessageID: "InlineMessageID",
-		Media:           &InputMediaAnimation{Type: "Media"},
-		ReplyMarkup:     &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
+		InlineMessageID:      "InlineMessageID",
+		Media:                &InputMediaAnimation{Type: "Media"},
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, e)
 }
 
 func TestEditMessageLiveLocationParams_Setters(t *testing.T) {
 	e := (&EditMessageLiveLocationParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithMessageID(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
 		WithInlineMessageID("InlineMessageID").
-		WithLivePeriod(2).
-		WithHeading(3).
-		WithProximityAlertRadius(4).
+		WithLivePeriod(3).
+		WithHeading(4).
+		WithProximityAlertRadius(5).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageLiveLocationParams{
-		ChatID:               ChatID{ID: 2},
-		MessageID:            1,
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
 		InlineMessageID:      "InlineMessageID",
-		LivePeriod:           2,
-		Heading:              3,
-		ProximityAlertRadius: 4,
+		LivePeriod:           3,
+		Heading:              4,
+		ProximityAlertRadius: 5,
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, e)
 }
 
 func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
 	s := (&StopMessageLiveLocationParams{}).
-		WithChatID(ChatID{ID: 5}).
-		WithMessageID(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
 		WithInlineMessageID("InlineMessageID").
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &StopMessageLiveLocationParams{
-		ChatID:          ChatID{ID: 5},
-		MessageID:       1,
-		InlineMessageID: "InlineMessageID",
-		ReplyMarkup:     &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
+		InlineMessageID:      "InlineMessageID",
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, s)
 }
 
 func TestEditMessageReplyMarkupParams_Setters(t *testing.T) {
 	e := (&EditMessageReplyMarkupParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithMessageID(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
 		WithInlineMessageID("InlineMessageID").
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageReplyMarkupParams{
-		ChatID:          ChatID{ID: 2},
-		MessageID:       1,
-		InlineMessageID: "InlineMessageID",
-		ReplyMarkup:     &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
+		InlineMessageID:      "InlineMessageID",
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, e)
 }
 
 func TestStopPollParams_Setters(t *testing.T) {
 	s := (&StopPollParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithMessageID(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &StopPollParams{
-		ChatID:      ChatID{ID: 2},
-		MessageID:   1,
-		ReplyMarkup: &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, s)
 }
 
 func TestDeleteMessageParams_Setters(t *testing.T) {
 	d := (&DeleteMessageParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 3}).
 		WithMessageID(1)
 
 	assert.Equal(t, &DeleteMessageParams{
-		ChatID:    ChatID{ID: 2},
+		ChatID:    ChatID{ID: 3},
 		MessageID: 1,
 	}, d)
 }
@@ -1799,6 +1842,17 @@ func TestAnswerPreCheckoutQueryParams_Setters(t *testing.T) {
 		Ok:                 true,
 		ErrorMessage:       "ErrorMessage",
 	}, a)
+}
+
+func TestGetStarTransactionsParams_Setters(t *testing.T) {
+	g := (&GetStarTransactionsParams{}).
+		WithOffset(1).
+		WithLimit(1)
+
+	assert.Equal(t, &GetStarTransactionsParams{
+		Offset: 1,
+		Limit:  1,
+	}, g)
 }
 
 func TestRefundStarPaymentParams_Setters(t *testing.T) {
