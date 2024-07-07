@@ -902,6 +902,8 @@ func (b badChatMember) MemberIsMember() bool {
 	panic("implement me")
 }
 
+func (b badChatMember) iChatMember() {}
+
 func TestChatID_String(t *testing.T) {
 	tests := []struct {
 		name        string

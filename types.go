@@ -864,6 +864,8 @@ func (m *Message) GetDate() int64 {
 	return m.Date
 }
 
+func (m *Message) iMaybeInaccessibleMessage() {}
+
 // MessageID - This object represents a unique message identifier.
 type MessageID struct {
 	// MessageID - Unique message identifier
@@ -903,6 +905,8 @@ func (m *InaccessibleMessage) GetDate() int64 {
 	return m.Date
 }
 
+func (m *InaccessibleMessage) iMaybeInaccessibleMessage() {}
+
 // MaybeInaccessibleMessage - This object describes a message that can be inaccessible to the bot. It can be
 // one of
 // Message (https://core.telegram.org/bots/api#message)
@@ -912,6 +916,8 @@ type MaybeInaccessibleMessage interface {
 	GetChat() Chat
 	GetMessageID() int
 	GetDate() int64
+	// Disallow external implementations
+	iMaybeInaccessibleMessage()
 }
 
 // MessageEntity - This object represents one special entity in a text message. For example, hashtags,
@@ -1074,7 +1080,7 @@ type ExternalReplyInfo struct {
 }
 
 // UnmarshalJSON converts JSON to ExternalReplyInfo
-func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error { //nolint:dupl
+func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -1154,6 +1160,8 @@ type ReplyParameters struct {
 type MessageOrigin interface {
 	OriginType() string
 	OriginalDate() int64
+	// Disallow external implementations
+	iMessageOrigin()
 }
 
 // Message origin types
@@ -1186,6 +1194,8 @@ func (m *MessageOriginUser) OriginalDate() int64 {
 	return m.Date
 }
 
+func (m *MessageOriginUser) iMessageOrigin() {}
+
 // MessageOriginHiddenUser - The message was originally sent by an unknown user.
 type MessageOriginHiddenUser struct {
 	// Type - Type of the message origin, always “hidden_user”
@@ -1207,6 +1217,8 @@ func (m *MessageOriginHiddenUser) OriginType() string {
 func (m *MessageOriginHiddenUser) OriginalDate() int64 {
 	return m.Date
 }
+
+func (m *MessageOriginHiddenUser) iMessageOrigin() {}
 
 // MessageOriginChat - The message was originally sent on behalf of a chat to a group chat.
 type MessageOriginChat struct {
@@ -1233,6 +1245,8 @@ func (m *MessageOriginChat) OriginType() string {
 func (m *MessageOriginChat) OriginalDate() int64 {
 	return m.Date
 }
+
+func (m *MessageOriginChat) iMessageOrigin() {}
 
 // MessageOriginChannel - The message was originally sent to a channel chat.
 type MessageOriginChannel struct {
@@ -1261,6 +1275,8 @@ func (m *MessageOriginChannel) OriginType() string {
 func (m *MessageOriginChannel) OriginalDate() int64 {
 	return m.Date
 }
+
+func (m *MessageOriginChannel) iMessageOrigin() {}
 
 // PhotoSize - This object represents one size of a photo or a file
 // (https://core.telegram.org/bots/api#document) / sticker (https://core.telegram.org/bots/api#sticker)
@@ -1516,6 +1532,8 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 // PaidMediaVideo (https://core.telegram.org/bots/api#paidmediavideo)
 type PaidMedia interface {
 	MediaType() string
+	// Disallow external implementations
+	iPaidMedia()
 }
 
 // Paid media types
@@ -1545,6 +1563,8 @@ func (m *PaidMediaPreview) MediaType() string {
 	return PaidMediaTypePreview
 }
 
+func (m *PaidMediaPreview) iPaidMedia() {}
+
 // PaidMediaPhoto - The paid media is a photo.
 type PaidMediaPhoto struct {
 	// Type - Type of the paid media, always “photo”
@@ -1559,6 +1579,8 @@ func (m *PaidMediaPhoto) MediaType() string {
 	return PaidMediaTypePhoto
 }
 
+func (m *PaidMediaPhoto) iPaidMedia() {}
+
 // PaidMediaVideo - The paid media is a video.
 type PaidMediaVideo struct {
 	// Type - Type of the paid media, always “video”
@@ -1572,6 +1594,8 @@ type PaidMediaVideo struct {
 func (m *PaidMediaVideo) MediaType() string {
 	return PaidMediaTypeVideo
 }
+
+func (m *PaidMediaVideo) iPaidMedia() {}
 
 // Contact - This object represents a phone contact.
 type Contact struct {
@@ -1805,6 +1829,8 @@ type ChatBoostAdded struct {
 // BackgroundFillFreeformGradient (https://core.telegram.org/bots/api#backgroundfillfreeformgradient)
 type BackgroundFill interface {
 	BackgroundFilled() string
+	// Disallow external implementations
+	iBackgroundFill()
 }
 
 // Background fill types
@@ -1828,6 +1854,8 @@ func (b *BackgroundFillSolid) BackgroundFilled() string {
 	return BackgroundFilledSolid
 }
 
+func (b *BackgroundFillSolid) iBackgroundFill() {}
+
 // BackgroundFillGradient - The background is a gradient fill.
 type BackgroundFillGradient struct {
 	// Type - Type of the background fill, always “gradient”
@@ -1848,6 +1876,8 @@ func (b *BackgroundFillGradient) BackgroundFilled() string {
 	return BackgroundFilledGradient
 }
 
+func (b *BackgroundFillGradient) iBackgroundFill() {}
+
 // BackgroundFillFreeformGradient - The background is a freeform gradient that rotates after every message in
 // the chat.
 type BackgroundFillFreeformGradient struct {
@@ -1864,6 +1894,8 @@ func (b *BackgroundFillFreeformGradient) BackgroundFilled() string {
 	return BackgroundFilledFreeformGradient
 }
 
+func (b *BackgroundFillFreeformGradient) iBackgroundFill() {}
+
 // BackgroundType - This object describes the type of a background. Currently, it can be one of
 // BackgroundTypeFill (https://core.telegram.org/bots/api#backgroundtypefill)
 // BackgroundTypeWallpaper (https://core.telegram.org/bots/api#backgroundtypewallpaper)
@@ -1871,6 +1903,8 @@ func (b *BackgroundFillFreeformGradient) BackgroundFilled() string {
 // BackgroundTypeChatTheme (https://core.telegram.org/bots/api#backgroundtypechattheme)
 type BackgroundType interface {
 	BackgroundType() string
+	// Disallow external implementations
+	iBackgroundType()
 }
 
 // Background type names
@@ -1897,6 +1931,8 @@ type BackgroundTypeFill struct {
 func (b *BackgroundTypeFill) BackgroundType() string {
 	return BackgroundTypeNameFill
 }
+
+func (b *BackgroundTypeFill) iBackgroundType() {}
 
 // UnmarshalJSON converts JSON to BackgroundTypeFill
 func (b *BackgroundTypeFill) UnmarshalJSON(data []byte) error {
@@ -1959,6 +1995,8 @@ func (b *BackgroundTypeWallpaper) BackgroundType() string {
 	return BackgroundTypeNameWallpaper
 }
 
+func (b *BackgroundTypeWallpaper) iBackgroundType() {}
+
 // BackgroundTypePattern - The background is a PNG or TGV (gzipped subset of SVG with MIME type
 // “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
 type BackgroundTypePattern struct {
@@ -1987,6 +2025,8 @@ func (b *BackgroundTypePattern) BackgroundType() string {
 	return BackgroundTypeNamePattern
 }
 
+func (b *BackgroundTypePattern) iBackgroundType() {}
+
 // BackgroundTypeChatTheme - The background is taken directly from a built-in chat theme.
 type BackgroundTypeChatTheme struct {
 	// Type - Type of the background, always “chat_theme”
@@ -2001,6 +2041,8 @@ func (b *BackgroundTypeChatTheme) BackgroundType() string {
 	return BackgroundTypeNameChatTheme
 }
 
+func (b *BackgroundTypeChatTheme) iBackgroundType() {}
+
 // ChatBackground - This object represents a chat background.
 type ChatBackground struct {
 	// Type - Type of the background
@@ -2011,7 +2053,7 @@ type ChatBackground struct {
 const noTypeErr = "no type"
 
 // UnmarshalJSON converts JSON to ChatBackground
-func (c *ChatBackground) UnmarshalJSON(data []byte) error { //nolint:dupl
+func (c *ChatBackground) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -2338,6 +2380,8 @@ type WebAppInfo struct {
 type ReplyMarkup interface {
 	// ReplyType - Returns type of reply
 	ReplyType() string
+	// Disallow external implementations
+	iReplyMarkup()
 }
 
 // ReplyMarkup types
@@ -2388,6 +2432,8 @@ type ReplyKeyboardMarkup struct {
 func (r *ReplyKeyboardMarkup) ReplyType() string {
 	return MarkupTypeReplyKeyboard
 }
+
+func (r *ReplyKeyboardMarkup) iReplyMarkup() {}
 
 // KeyboardButton - This object represents one button of the reply keyboard. At most one of the optional
 // fields must be used to specify type of the button. For simple text buttons, String can be used instead of
@@ -2536,6 +2582,8 @@ func (r *ReplyKeyboardRemove) ReplyType() string {
 	return MarkupTypeReplyKeyboardRemove
 }
 
+func (r *ReplyKeyboardRemove) iReplyMarkup() {}
+
 // InlineKeyboardMarkup - This object represents an inline keyboard
 // (https://core.telegram.org/bots/features#inline-keyboards) that appears right next to the message it belongs
 // to.
@@ -2549,6 +2597,8 @@ type InlineKeyboardMarkup struct {
 func (i *InlineKeyboardMarkup) ReplyType() string {
 	return MarkupTypeInlineKeyboard
 }
+
+func (i *InlineKeyboardMarkup) iReplyMarkup() {}
 
 // InlineKeyboardButton - This object represents one button of an inline keyboard. Exactly one of the
 // optional fields must be used to specify type of the button.
@@ -2745,6 +2795,8 @@ type ForceReply struct {
 func (f *ForceReply) ReplyType() string {
 	return MarkupTypeForceReply
 }
+
+func (f *ForceReply) iReplyMarkup() {}
 
 // ChatPhoto - This object represents a chat photo.
 type ChatPhoto struct {
@@ -3008,6 +3060,8 @@ type ChatMember interface {
 	MemberStatus() string
 	MemberUser() User
 	MemberIsMember() bool
+	// Disallow external implementations
+	iChatMember()
 }
 
 // ChatMember statuses
@@ -3050,6 +3104,8 @@ func (c *ChatMemberOwner) MemberUser() User {
 func (c *ChatMemberOwner) MemberIsMember() bool {
 	return true
 }
+
+func (c *ChatMemberOwner) iChatMember() {}
 
 // ChatMemberAdministrator - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that
 // has some additional privileges.
@@ -3136,6 +3192,8 @@ func (c *ChatMemberAdministrator) MemberIsMember() bool {
 	return true
 }
 
+func (c *ChatMemberAdministrator) iChatMember() {}
+
 // ChatMemberMember - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that has no
 // additional privileges or restrictions.
 type ChatMemberMember struct {
@@ -3160,6 +3218,8 @@ func (c *ChatMemberMember) MemberUser() User {
 func (c *ChatMemberMember) MemberIsMember() bool {
 	return true
 }
+
+func (c *ChatMemberMember) iChatMember() {}
 
 // ChatMemberRestricted - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that is
 // under certain restrictions in the chat. Supergroups only.
@@ -3237,6 +3297,8 @@ func (c *ChatMemberRestricted) MemberIsMember() bool {
 	return c.IsMember
 }
 
+func (c *ChatMemberRestricted) iChatMember() {}
+
 // ChatMemberLeft - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that isn't
 // currently a member of the chat, but may join it themselves.
 type ChatMemberLeft struct {
@@ -3261,6 +3323,8 @@ func (c *ChatMemberLeft) MemberUser() User {
 func (c *ChatMemberLeft) MemberIsMember() bool {
 	return false
 }
+
+func (c *ChatMemberLeft) iChatMember() {}
 
 // ChatMemberBanned - Represents a chat member (https://core.telegram.org/bots/api#chatmember) that was
 // banned in the chat and can't return to the chat or view chat messages.
@@ -3290,6 +3354,8 @@ func (c *ChatMemberBanned) MemberUser() User {
 func (c *ChatMemberBanned) MemberIsMember() bool {
 	return false
 }
+
+func (c *ChatMemberBanned) iChatMember() {}
 
 // ChatJoinRequest - Represents a join request sent to a chat.
 type ChatJoinRequest struct {
@@ -3432,6 +3498,8 @@ type ChatLocation struct {
 // ReactionTypeCustomEmoji (https://core.telegram.org/bots/api#reactiontypecustomemoji)
 type ReactionType interface {
 	ReactionType() string
+	// Disallow external implementations
+	iReactionType()
 }
 
 // Reaction types
@@ -3460,6 +3528,8 @@ func (r *ReactionTypeEmoji) ReactionType() string {
 	return ReactionEmoji
 }
 
+func (r *ReactionTypeEmoji) iReactionType() {}
+
 // ReactionTypeCustomEmoji - The reaction is based on a custom emoji.
 type ReactionTypeCustomEmoji struct {
 	// Type - Type of the reaction, always “custom_emoji”
@@ -3473,6 +3543,8 @@ type ReactionTypeCustomEmoji struct {
 func (r *ReactionTypeCustomEmoji) ReactionType() string {
 	return ReactionCustomEmoji
 }
+
+func (r *ReactionTypeCustomEmoji) iReactionType() {}
 
 // ReactionCount - Represents a reaction added to a message along with the number of times it was added.
 type ReactionCount struct {
@@ -3640,81 +3712,6 @@ type BotCommand struct {
 	Description string `json:"description"`
 }
 
-// BotCommandScope - This object represents the scope to which bot commands are applied. Currently, the
-// following 7 scopes are supported:
-// BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault)
-// BotCommandScopeAllPrivateChats (https://core.telegram.org/bots/api#botcommandscopeallprivatechats)
-// BotCommandScopeAllGroupChats (https://core.telegram.org/bots/api#botcommandscopeallgroupchats)
-// BotCommandScopeAllChatAdministrators
-// (https://core.telegram.org/bots/api#botcommandscopeallchatadministrators)
-// BotCommandScopeChat (https://core.telegram.org/bots/api#botcommandscopechat)
-// BotCommandScopeChatAdministrators (https://core.telegram.org/bots/api#botcommandscopechatadministrators)
-// BotCommandScopeChatMember (https://core.telegram.org/bots/api#botcommandscopechatmember)
-type BotCommandScope interface {
-	ScopeType() string
-}
-
-// BotCommandScope types
-const (
-	ScopeTypeDefault               = "default"
-	ScopeTypeAllPrivateChats       = "all_private_chats"
-	ScopeTypeAllGroupChats         = "all_group_chats"
-	ScopeTypeAllChatAdministrators = "all_chat_administrators"
-	ScopeTypeChat                  = "chat"
-	ScopeTypeChatAdministrators    = "chat_administrators"
-	ScopeTypeChatMember            = "chat_member"
-)
-
-// BotCommandScopeDefault - Represents the default scope (https://core.telegram.org/bots/api#botcommandscope)
-// of bot commands. Default commands are used if no commands with a narrower scope
-// (https://core.telegram.org/bots/api#determining-list-of-commands) are specified for the user.
-type BotCommandScopeDefault struct {
-	// Type - Scope type, must be default
-	Type string `json:"type"`
-}
-
-// ScopeType returns BotCommandScope type
-func (b *BotCommandScopeDefault) ScopeType() string {
-	return ScopeTypeDefault
-}
-
-// BotCommandScopeAllPrivateChats - Represents the scope (https://core.telegram.org/bots/api#botcommandscope)
-// of bot commands, covering all private chats.
-type BotCommandScopeAllPrivateChats struct {
-	// Type - Scope type, must be all_private_chats
-	Type string `json:"type"`
-}
-
-// ScopeType returns BotCommandScope type
-func (b *BotCommandScopeAllPrivateChats) ScopeType() string {
-	return ScopeTypeAllPrivateChats
-}
-
-// BotCommandScopeAllGroupChats - Represents the scope (https://core.telegram.org/bots/api#botcommandscope)
-// of bot commands, covering all group and supergroup chats.
-type BotCommandScopeAllGroupChats struct {
-	// Type - Scope type, must be all_group_chats
-	Type string `json:"type"`
-}
-
-// ScopeType returns BotCommandScope type
-func (b *BotCommandScopeAllGroupChats) ScopeType() string {
-	return ScopeTypeAllGroupChats
-}
-
-// BotCommandScopeAllChatAdministrators - Represents the scope
-// (https://core.telegram.org/bots/api#botcommandscope) of bot commands, covering all group and supergroup chat
-// administrators.
-type BotCommandScopeAllChatAdministrators struct {
-	// Type - Scope type, must be all_chat_administrators
-	Type string `json:"type"`
-}
-
-// ScopeType returns BotCommandScope type
-func (b *BotCommandScopeAllChatAdministrators) ScopeType() string {
-	return ScopeTypeAllChatAdministrators
-}
-
 // ChatID - Represents chat ID as int64 or string
 type ChatID struct {
 	// ID - Unique identifier for the target chat
@@ -3751,6 +3748,91 @@ func (c ChatID) MarshalJSON() ([]byte, error) {
 	return []byte(`""`), nil
 }
 
+// BotCommandScope - This object represents the scope to which bot commands are applied. Currently, the
+// following 7 scopes are supported:
+// BotCommandScopeDefault (https://core.telegram.org/bots/api#botcommandscopedefault)
+// BotCommandScopeAllPrivateChats (https://core.telegram.org/bots/api#botcommandscopeallprivatechats)
+// BotCommandScopeAllGroupChats (https://core.telegram.org/bots/api#botcommandscopeallgroupchats)
+// BotCommandScopeAllChatAdministrators
+// (https://core.telegram.org/bots/api#botcommandscopeallchatadministrators)
+// BotCommandScopeChat (https://core.telegram.org/bots/api#botcommandscopechat)
+// BotCommandScopeChatAdministrators (https://core.telegram.org/bots/api#botcommandscopechatadministrators)
+// BotCommandScopeChatMember (https://core.telegram.org/bots/api#botcommandscopechatmember)
+type BotCommandScope interface {
+	ScopeType() string
+	// Disallow external implementations
+	iBotCommandScope()
+}
+
+// BotCommandScope types
+const (
+	ScopeTypeDefault               = "default"
+	ScopeTypeAllPrivateChats       = "all_private_chats"
+	ScopeTypeAllGroupChats         = "all_group_chats"
+	ScopeTypeAllChatAdministrators = "all_chat_administrators"
+	ScopeTypeChat                  = "chat"
+	ScopeTypeChatAdministrators    = "chat_administrators"
+	ScopeTypeChatMember            = "chat_member"
+)
+
+// BotCommandScopeDefault - Represents the default scope (https://core.telegram.org/bots/api#botcommandscope)
+// of bot commands. Default commands are used if no commands with a narrower scope
+// (https://core.telegram.org/bots/api#determining-list-of-commands) are specified for the user.
+type BotCommandScopeDefault struct {
+	// Type - Scope type, must be default
+	Type string `json:"type"`
+}
+
+// ScopeType returns BotCommandScope type
+func (b *BotCommandScopeDefault) ScopeType() string {
+	return ScopeTypeDefault
+}
+
+func (b *BotCommandScopeDefault) iBotCommandScope() {}
+
+// BotCommandScopeAllPrivateChats - Represents the scope (https://core.telegram.org/bots/api#botcommandscope)
+// of bot commands, covering all private chats.
+type BotCommandScopeAllPrivateChats struct {
+	// Type - Scope type, must be all_private_chats
+	Type string `json:"type"`
+}
+
+// ScopeType returns BotCommandScope type
+func (b *BotCommandScopeAllPrivateChats) ScopeType() string {
+	return ScopeTypeAllPrivateChats
+}
+
+func (b *BotCommandScopeAllPrivateChats) iBotCommandScope() {}
+
+// BotCommandScopeAllGroupChats - Represents the scope (https://core.telegram.org/bots/api#botcommandscope)
+// of bot commands, covering all group and supergroup chats.
+type BotCommandScopeAllGroupChats struct {
+	// Type - Scope type, must be all_group_chats
+	Type string `json:"type"`
+}
+
+// ScopeType returns BotCommandScope type
+func (b *BotCommandScopeAllGroupChats) ScopeType() string {
+	return ScopeTypeAllGroupChats
+}
+
+func (b *BotCommandScopeAllGroupChats) iBotCommandScope() {}
+
+// BotCommandScopeAllChatAdministrators - Represents the scope
+// (https://core.telegram.org/bots/api#botcommandscope) of bot commands, covering all group and supergroup chat
+// administrators.
+type BotCommandScopeAllChatAdministrators struct {
+	// Type - Scope type, must be all_chat_administrators
+	Type string `json:"type"`
+}
+
+// ScopeType returns BotCommandScope type
+func (b *BotCommandScopeAllChatAdministrators) ScopeType() string {
+	return ScopeTypeAllChatAdministrators
+}
+
+func (b *BotCommandScopeAllChatAdministrators) iBotCommandScope() {}
+
 // BotCommandScopeChat - Represents the scope (https://core.telegram.org/bots/api#botcommandscope) of bot
 // commands, covering a specific chat.
 type BotCommandScopeChat struct {
@@ -3766,6 +3848,8 @@ type BotCommandScopeChat struct {
 func (b *BotCommandScopeChat) ScopeType() string {
 	return ScopeTypeChat
 }
+
+func (b *BotCommandScopeChat) iBotCommandScope() {}
 
 // BotCommandScopeChatAdministrators - Represents the scope
 // (https://core.telegram.org/bots/api#botcommandscope) of bot commands, covering all administrators of a
@@ -3783,6 +3867,8 @@ type BotCommandScopeChatAdministrators struct {
 func (b *BotCommandScopeChatAdministrators) ScopeType() string {
 	return ScopeTypeChatAdministrators
 }
+
+func (b *BotCommandScopeChatAdministrators) iBotCommandScope() {}
 
 // BotCommandScopeChatMember - Represents the scope (https://core.telegram.org/bots/api#botcommandscope) of
 // bot commands, covering a specific member of a group or supergroup chat.
@@ -3802,6 +3888,8 @@ type BotCommandScopeChatMember struct {
 func (b *BotCommandScopeChatMember) ScopeType() string {
 	return ScopeTypeChatMember
 }
+
+func (b *BotCommandScopeChatMember) iBotCommandScope() {}
 
 // BotName - This object represents the bot's name.
 type BotName struct {
@@ -3830,6 +3918,8 @@ type BotShortDescription struct {
 // the menu button opens the list of bot commands.
 type MenuButton interface {
 	ButtonType() string
+	// Disallow external implementations
+	iMenuButton()
 }
 
 // MenuButton types
@@ -3889,6 +3979,8 @@ func (m *MenuButtonCommands) ButtonType() string {
 	return ButtonTypeCommands
 }
 
+func (m *MenuButtonCommands) iMenuButton() {}
+
 // MenuButtonWebApp - Represents a menu button, which launches a Web App
 // (https://core.telegram.org/bots/webapps).
 type MenuButtonWebApp struct {
@@ -3911,6 +4003,8 @@ func (m *MenuButtonWebApp) ButtonType() string {
 	return ButtonTypeWebApp
 }
 
+func (m *MenuButtonWebApp) iMenuButton() {}
+
 // MenuButtonDefault - Describes that no specific value for the menu button was set.
 type MenuButtonDefault struct {
 	// Type - Type of the button, must be default
@@ -3922,12 +4016,16 @@ func (m *MenuButtonDefault) ButtonType() string {
 	return ButtonTypeDefault
 }
 
+func (m *MenuButtonDefault) iMenuButton() {}
+
 // ChatBoostSource - This object describes the source of a chat boost. It can be one of
 // ChatBoostSourcePremium (https://core.telegram.org/bots/api#chatboostsourcepremium)
 // ChatBoostSourceGiftCode (https://core.telegram.org/bots/api#chatboostsourcegiftcode)
 // ChatBoostSourceGiveaway (https://core.telegram.org/bots/api#chatboostsourcegiveaway)
 type ChatBoostSource interface {
 	BoostSource() string
+	// Disallow external implementations
+	iChatBoostSource()
 }
 
 // Boost sources
@@ -3952,6 +4050,8 @@ func (b *ChatBoostSourcePremium) BoostSource() string {
 	return BoostSourcePremium
 }
 
+func (b *ChatBoostSourcePremium) iChatBoostSource() {}
+
 // ChatBoostSourceGiftCode - The boost was obtained by the creation of Telegram Premium gift codes to boost a
 // chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium
 // subscription.
@@ -3967,6 +4067,8 @@ type ChatBoostSourceGiftCode struct {
 func (b *ChatBoostSourceGiftCode) BoostSource() string {
 	return BoostSourceGiftCode
 }
+
+func (b *ChatBoostSourceGiftCode) iChatBoostSource() {}
 
 // ChatBoostSourceGiveaway - The boost was obtained by the creation of a Telegram Premium giveaway. This
 // boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
@@ -3989,6 +4091,8 @@ type ChatBoostSourceGiveaway struct {
 func (b *ChatBoostSourceGiveaway) BoostSource() string {
 	return BoostSourceGiveaway
 }
+
+func (b *ChatBoostSourceGiveaway) iChatBoostSource() {}
 
 // ChatBoost - This object contains information about a chat boost.
 type ChatBoost struct {
@@ -4162,6 +4266,8 @@ type fileCompatible interface {
 // InputMediaVideo (https://core.telegram.org/bots/api#inputmediavideo)
 type InputMedia interface {
 	MediaType() string
+	// Disallow external implementations
+	iInputMedia()
 	fileCompatible
 }
 
@@ -4207,6 +4313,8 @@ type InputMediaPhoto struct {
 func (i *InputMediaPhoto) MediaType() string {
 	return MediaTypePhoto
 }
+
+func (i *InputMediaPhoto) iInputMedia() {}
 
 func (i *InputMediaPhoto) fileParameters() map[string]telegoapi.NamedReader {
 	i.Media.needAttach = true
@@ -4268,6 +4376,8 @@ type InputMediaVideo struct {
 func (i *InputMediaVideo) MediaType() string {
 	return MediaTypeVideo
 }
+
+func (i *InputMediaVideo) iInputMedia() {}
 
 func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
@@ -4334,6 +4444,8 @@ func (i *InputMediaAnimation) MediaType() string {
 	return MediaTypeAnimation
 }
 
+func (i *InputMediaAnimation) iInputMedia() {}
+
 func (i *InputMediaAnimation) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
@@ -4392,6 +4504,8 @@ func (i *InputMediaAudio) MediaType() string {
 	return MediaTypeAudio
 }
 
+func (i *InputMediaAudio) iInputMedia() {}
+
 func (i *InputMediaAudio) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
@@ -4444,6 +4558,8 @@ type InputMediaDocument struct {
 func (i *InputMediaDocument) MediaType() string {
 	return MediaTypeDocument
 }
+
+func (i *InputMediaDocument) iInputMedia() {}
 
 func (i *InputMediaDocument) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
@@ -4518,6 +4634,8 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 type InputPaidMedia interface {
 	MediaType() string
 	MediaFile() InputFile
+	// Disallow external implementations
+	iInputPaidMedia()
 }
 
 // InputPaidMediaPhoto - The paid media to send is a photo.
@@ -4541,6 +4659,8 @@ func (m *InputPaidMediaPhoto) MediaType() string {
 func (m *InputPaidMediaPhoto) MediaFile() InputFile {
 	return m.Media
 }
+
+func (m *InputPaidMediaPhoto) iInputPaidMedia() {}
 
 // InputPaidMediaVideo - The paid media to send is a video.
 type InputPaidMediaVideo struct {
@@ -4583,6 +4703,8 @@ func (m *InputPaidMediaVideo) MediaType() string {
 func (m *InputPaidMediaVideo) MediaFile() InputFile {
 	return m.Media
 }
+
+func (m *InputPaidMediaVideo) iInputPaidMedia() {}
 
 // Sticker - This object represents a sticker.
 type Sticker struct {
@@ -4794,6 +4916,8 @@ type InlineQueryResultsButton struct {
 // be public.
 type InlineQueryResult interface {
 	ResultType() string
+	// Disallow external implementations
+	iInlineQueryResult()
 }
 
 // InlineQueryResult types
@@ -4855,6 +4979,8 @@ func (i *InlineQueryResultArticle) ResultType() string {
 	return ResultTypeArticle
 }
 
+func (i *InlineQueryResultArticle) iInlineQueryResult() {}
+
 // InlineQueryResultPhoto - Represents a link to a photo. By default, this photo will be sent by the user
 // with optional caption. Alternatively, you can use input_message_content to send a message with the specified
 // content instead of the photo.
@@ -4909,6 +5035,8 @@ type InlineQueryResultPhoto struct {
 func (i *InlineQueryResultPhoto) ResultType() string {
 	return ResultTypePhoto
 }
+
+func (i *InlineQueryResultPhoto) iInlineQueryResult() {}
 
 // InlineQueryResultGif - Represents a link to an animated GIF file. By default, this animated GIF file will
 // be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message
@@ -4968,6 +5096,8 @@ type InlineQueryResultGif struct {
 func (i *InlineQueryResultGif) ResultType() string {
 	return ResultTypeGif
 }
+
+func (i *InlineQueryResultGif) iInlineQueryResult() {}
 
 // ThumbMimeType types
 const (
@@ -5038,6 +5168,8 @@ func (i *InlineQueryResultMpeg4Gif) ResultType() string {
 	return ResultTypeMpeg4Gif
 }
 
+func (i *InlineQueryResultMpeg4Gif) iInlineQueryResult() {}
+
 // InlineQueryResultVideo - Represents a link to a page containing an embedded video player or a video file.
 // By default, this video file will be sent by the user with an optional caption. Alternatively, you can use
 // input_message_content to send a message with the specified content instead of the video.
@@ -5102,6 +5234,8 @@ func (i *InlineQueryResultVideo) ResultType() string {
 	return ResultTypeVideo
 }
 
+func (i *InlineQueryResultVideo) iInlineQueryResult() {}
+
 // InlineQueryResultAudio - Represents a link to an MP3 audio file. By default, this audio file will be sent
 // by the user. Alternatively, you can use input_message_content to send a message with the specified content
 // instead of the audio.
@@ -5148,6 +5282,8 @@ func (i *InlineQueryResultAudio) ResultType() string {
 	return ResultTypeAudio
 }
 
+func (i *InlineQueryResultAudio) iInlineQueryResult() {}
+
 // InlineQueryResultVoice - Represents a link to a voice recording in an .OGG container encoded with OPUS. By
 // default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to
 // send a message with the specified content instead of the the voice message.
@@ -5190,6 +5326,8 @@ type InlineQueryResultVoice struct {
 func (i *InlineQueryResultVoice) ResultType() string {
 	return ResultTypeVoice
 }
+
+func (i *InlineQueryResultVoice) iInlineQueryResult() {}
 
 // InlineQueryResultDocument - Represents a link to a file. By default, this file will be sent by the user
 // with an optional caption. Alternatively, you can use input_message_content to send a message with the
@@ -5244,6 +5382,8 @@ type InlineQueryResultDocument struct {
 func (i *InlineQueryResultDocument) ResultType() string {
 	return ResultTypeDocument
 }
+
+func (i *InlineQueryResultDocument) iInlineQueryResult() {}
 
 // InlineQueryResultLocation - Represents a location on a map. By default, the location will be sent by the
 // user. Alternatively, you can use input_message_content to send a message with the specified content instead
@@ -5300,6 +5440,8 @@ type InlineQueryResultLocation struct {
 func (i *InlineQueryResultLocation) ResultType() string {
 	return ResultTypeLocation
 }
+
+func (i *InlineQueryResultLocation) iInlineQueryResult() {}
 
 // InlineQueryResultVenue - Represents a venue. By default, the venue will be sent by the user.
 // Alternatively, you can use input_message_content to send a message with the specified content instead of the
@@ -5359,6 +5501,8 @@ func (i *InlineQueryResultVenue) ResultType() string {
 	return ResultTypeVenue
 }
 
+func (i *InlineQueryResultVenue) iInlineQueryResult() {}
+
 // InlineQueryResultContact - Represents a contact with a phone number. By default, this contact will be sent
 // by the user. Alternatively, you can use input_message_content to send a message with the specified content
 // instead of the contact.
@@ -5404,6 +5548,8 @@ func (i *InlineQueryResultContact) ResultType() string {
 	return ResultTypeContact
 }
 
+func (i *InlineQueryResultContact) iInlineQueryResult() {}
+
 // InlineQueryResultGame - Represents a Game (https://core.telegram.org/bots/api#games).
 type InlineQueryResultGame struct {
 	// Type - Type of the result, must be game
@@ -5424,6 +5570,8 @@ type InlineQueryResultGame struct {
 func (i *InlineQueryResultGame) ResultType() string {
 	return ResultTypeGame
 }
+
+func (i *InlineQueryResultGame) iInlineQueryResult() {}
 
 // InlineQueryResultCachedPhoto - Represents a link to a photo stored on the Telegram servers. By default,
 // this photo will be sent by the user with an optional caption. Alternatively, you can use
@@ -5471,6 +5619,8 @@ func (i *InlineQueryResultCachedPhoto) ResultType() string {
 	return ResultTypePhoto
 }
 
+func (i *InlineQueryResultCachedPhoto) iInlineQueryResult() {}
+
 // InlineQueryResultCachedGif - Represents a link to an animated GIF file stored on the Telegram servers. By
 // default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use
 // input_message_content to send a message with specified content instead of the animation.
@@ -5513,6 +5663,8 @@ type InlineQueryResultCachedGif struct {
 func (i *InlineQueryResultCachedGif) ResultType() string {
 	return ResultTypeGif
 }
+
+func (i *InlineQueryResultCachedGif) iInlineQueryResult() {}
 
 // InlineQueryResultCachedMpeg4Gif - Represents a link to a video animation (H.264/MPEG-4 AVC video without
 // sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an
@@ -5558,6 +5710,8 @@ func (i *InlineQueryResultCachedMpeg4Gif) ResultType() string {
 	return ResultTypeMpeg4Gif
 }
 
+func (i *InlineQueryResultCachedMpeg4Gif) iInlineQueryResult() {}
+
 // InlineQueryResultCachedSticker - Represents a link to a sticker stored on the Telegram servers. By
 // default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a
 // message with the specified content instead of the sticker.
@@ -5583,6 +5737,8 @@ type InlineQueryResultCachedSticker struct {
 func (i *InlineQueryResultCachedSticker) ResultType() string {
 	return ResultTypeSticker
 }
+
+func (i *InlineQueryResultCachedSticker) iInlineQueryResult() {}
 
 // InlineQueryResultCachedDocument - Represents a link to a file stored on the Telegram servers. By default,
 // this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content
@@ -5626,6 +5782,8 @@ type InlineQueryResultCachedDocument struct {
 func (i *InlineQueryResultCachedDocument) ResultType() string {
 	return ResultTypeDocument
 }
+
+func (i *InlineQueryResultCachedDocument) iInlineQueryResult() {}
 
 // InlineQueryResultCachedVideo - Represents a link to a video file stored on the Telegram servers. By
 // default, this video file will be sent by the user with an optional caption. Alternatively, you can use
@@ -5673,6 +5831,8 @@ func (i *InlineQueryResultCachedVideo) ResultType() string {
 	return ResultTypeVideo
 }
 
+func (i *InlineQueryResultCachedVideo) iInlineQueryResult() {}
+
 // InlineQueryResultCachedVoice - Represents a link to a voice message stored on the Telegram servers. By
 // default, this voice message will be sent by the user. Alternatively, you can use input_message_content to
 // send a message with the specified content instead of the voice message.
@@ -5713,6 +5873,8 @@ func (i *InlineQueryResultCachedVoice) ResultType() string {
 	return ResultTypeVoice
 }
 
+func (i *InlineQueryResultCachedVoice) iInlineQueryResult() {}
+
 // InlineQueryResultCachedAudio - Represents a link to an MP3 audio file stored on the Telegram servers. By
 // default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a
 // message with the specified content instead of the audio.
@@ -5750,6 +5912,8 @@ func (i *InlineQueryResultCachedAudio) ResultType() string {
 	return ResultTypeAudio
 }
 
+func (i *InlineQueryResultCachedAudio) iInlineQueryResult() {}
+
 // InputMessageContent - This object represents the content of a message to be sent as a result of an inline
 // query. Telegram clients currently support the following 5 types:
 // InputTextMessageContent (https://core.telegram.org/bots/api#inputtextmessagecontent)
@@ -5759,6 +5923,8 @@ func (i *InlineQueryResultCachedAudio) ResultType() string {
 // InputInvoiceMessageContent (https://core.telegram.org/bots/api#inputinvoicemessagecontent)
 type InputMessageContent interface {
 	ContentType() string
+	// Disallow external implementations
+	iInputMessageContent()
 }
 
 // InputMessageContent types
@@ -5793,6 +5959,8 @@ func (i *InputTextMessageContent) ContentType() string {
 	return ContentTypeText
 }
 
+func (i *InputTextMessageContent) iInputMessageContent() {}
+
 // InputLocationMessageContent - Represents the content
 // (https://core.telegram.org/bots/api#inputmessagecontent) of a location message to be sent as the result of an
 // inline query.
@@ -5823,6 +5991,8 @@ type InputLocationMessageContent struct {
 func (i *InputLocationMessageContent) ContentType() string {
 	return ContentTypeLocation
 }
+
+func (i *InputLocationMessageContent) iInputMessageContent() {}
 
 // InputVenueMessageContent - Represents the content (https://core.telegram.org/bots/api#inputmessagecontent)
 // of a venue message to be sent as the result of an inline query.
@@ -5859,6 +6029,8 @@ func (i *InputVenueMessageContent) ContentType() string {
 	return ContentTypeVenue
 }
 
+func (i *InputVenueMessageContent) iInputMessageContent() {}
+
 // InputContactMessageContent - Represents the content
 // (https://core.telegram.org/bots/api#inputmessagecontent) of a contact message to be sent as the result of an
 // inline query.
@@ -5881,6 +6053,8 @@ type InputContactMessageContent struct {
 func (i *InputContactMessageContent) ContentType() string {
 	return ContentTypeContact
 }
+
+func (i *InputContactMessageContent) iInputMessageContent() {}
 
 // InputInvoiceMessageContent - Represents the content
 // (https://core.telegram.org/bots/api#inputmessagecontent) of an invoice message to be sent as the result of an
@@ -5973,6 +6147,8 @@ type InputInvoiceMessageContent struct {
 func (i *InputInvoiceMessageContent) ContentType() string {
 	return ContentTypeInvoice
 }
+
+func (i *InputInvoiceMessageContent) iInputMessageContent() {}
 
 // ChosenInlineResult - Represents a result (https://core.telegram.org/bots/api#inlinequeryresult) of an
 // inline query that was chosen by the user and sent to their chat partner.
@@ -6188,6 +6364,8 @@ type PreCheckoutQuery struct {
 // RevenueWithdrawalStateFailed (https://core.telegram.org/bots/api#revenuewithdrawalstatefailed)
 type RevenueWithdrawalState interface {
 	WithdrawalState() string
+	// Disallow external implementations
+	iRevenueWithdrawalState()
 }
 
 // Revenue withdrawal state types
@@ -6208,6 +6386,8 @@ func (r *RevenueWithdrawalStatePending) WithdrawalState() string {
 	return WithdrawalStatePending
 }
 
+func (r *RevenueWithdrawalStatePending) iRevenueWithdrawalState() {}
+
 // RevenueWithdrawalStateSucceeded - The withdrawal succeeded.
 type RevenueWithdrawalStateSucceeded struct {
 	// Type - Type of the state, always “succeeded”
@@ -6225,6 +6405,8 @@ func (r *RevenueWithdrawalStateSucceeded) WithdrawalState() string {
 	return WithdrawalStateSucceeded
 }
 
+func (r *RevenueWithdrawalStateSucceeded) iRevenueWithdrawalState() {}
+
 // RevenueWithdrawalStateFailed - The withdrawal failed and the transaction was refunded.
 type RevenueWithdrawalStateFailed struct {
 	// Type - Type of the state, always “failed”
@@ -6236,6 +6418,8 @@ func (r *RevenueWithdrawalStateFailed) WithdrawalState() string {
 	return WithdrawalStateFailed
 }
 
+func (r *RevenueWithdrawalStateFailed) iRevenueWithdrawalState() {}
+
 // TransactionPartner - This object describes the source of a transaction, or its recipient for outgoing
 // transactions. Currently, it can be one of
 // TransactionPartnerUser (https://core.telegram.org/bots/api#transactionpartneruser)
@@ -6244,6 +6428,8 @@ func (r *RevenueWithdrawalStateFailed) WithdrawalState() string {
 // TransactionPartnerOther (https://core.telegram.org/bots/api#transactionpartnerother)
 type TransactionPartner interface {
 	PartnerType() string
+	// Disallow external implementations
+	iTransactionPartner()
 }
 
 // Transaction partner types
@@ -6271,6 +6457,8 @@ func (p *TransactionPartnerUser) PartnerType() string {
 	return PartnerTypeUser
 }
 
+func (p *TransactionPartnerUser) iTransactionPartner() {}
+
 // TransactionPartnerFragment - Describes a withdrawal transaction with Fragment.
 type TransactionPartnerFragment struct {
 	// Type - Type of the transaction partner, always “fragment”
@@ -6285,6 +6473,8 @@ func (p *TransactionPartnerFragment) PartnerType() string {
 	return PartnerTypeFragment
 }
 
+func (p *TransactionPartnerFragment) iTransactionPartner() {}
+
 // TransactionPartnerTelegramAds - Describes a withdrawal transaction to the Telegram Ads platform.
 type TransactionPartnerTelegramAds struct {
 	// Type - Type of the transaction partner, always “telegram_ads”
@@ -6296,6 +6486,8 @@ func (p *TransactionPartnerTelegramAds) PartnerType() string {
 	return PartnerTypeTelegramAds
 }
 
+func (p *TransactionPartnerTelegramAds) iTransactionPartner() {}
+
 // TransactionPartnerOther - Describes a transaction with an unknown source or recipient.
 type TransactionPartnerOther struct {
 	// Type - Type of the transaction partner, always “other”
@@ -6306,6 +6498,8 @@ type TransactionPartnerOther struct {
 func (p *TransactionPartnerOther) PartnerType() string {
 	return PartnerTypeOther
 }
+
+func (p *TransactionPartnerOther) iTransactionPartner() {}
 
 // StarTransaction - Describes a Telegram Star transaction.
 type StarTransaction struct {
@@ -6519,6 +6713,8 @@ type EncryptedCredentials struct {
 // PassportElementErrorUnspecified (https://core.telegram.org/bots/api#passportelementerrorunspecified)
 type PassportElementError interface {
 	ErrorSource() string
+	// Disallow external implementations
+	iPassportElementError()
 }
 
 // PassportElementError sources
@@ -6559,6 +6755,8 @@ func (p *PassportElementErrorDataField) ErrorSource() string {
 	return ErrorSourceDataField
 }
 
+func (p *PassportElementErrorDataField) iPassportElementError() {}
+
 // PassportElementErrorFrontSide - Represents an issue with the front side of a document. The error is
 // considered resolved when the file with the front side of the document changes.
 type PassportElementErrorFrontSide struct {
@@ -6580,6 +6778,8 @@ type PassportElementErrorFrontSide struct {
 func (p *PassportElementErrorFrontSide) ErrorSource() string {
 	return ErrorSourceFrontSide
 }
+
+func (p *PassportElementErrorFrontSide) iPassportElementError() {}
 
 // PassportElementErrorReverseSide - Represents an issue with the reverse side of a document. The error is
 // considered resolved when the file with reverse side of the document changes.
@@ -6603,6 +6803,8 @@ func (p *PassportElementErrorReverseSide) ErrorSource() string {
 	return ErrorSourceReverseSide
 }
 
+func (p *PassportElementErrorReverseSide) iPassportElementError() {}
+
 // PassportElementErrorSelfie - Represents an issue with the selfie with a document. The error is considered
 // resolved when the file with the selfie changes.
 type PassportElementErrorSelfie struct {
@@ -6624,6 +6826,8 @@ type PassportElementErrorSelfie struct {
 func (p *PassportElementErrorSelfie) ErrorSource() string {
 	return ErrorSourceSelfie
 }
+
+func (p *PassportElementErrorSelfie) iPassportElementError() {}
 
 // PassportElementErrorFile - Represents an issue with a document scan. The error is considered resolved when
 // the file with the document scan changes.
@@ -6647,6 +6851,8 @@ func (p *PassportElementErrorFile) ErrorSource() string {
 	return ErrorSourceFile
 }
 
+func (p *PassportElementErrorFile) iPassportElementError() {}
+
 // PassportElementErrorFiles - Represents an issue with a list of scans. The error is considered resolved
 // when the list of files containing the scans changes.
 type PassportElementErrorFiles struct {
@@ -6668,6 +6874,8 @@ type PassportElementErrorFiles struct {
 func (p *PassportElementErrorFiles) ErrorSource() string {
 	return ErrorSourceFiles
 }
+
+func (p *PassportElementErrorFiles) iPassportElementError() {}
 
 // PassportElementErrorTranslationFile - Represents an issue with one of the files that constitute the
 // translation of a document. The error is considered resolved when the file changes.
@@ -6692,6 +6900,8 @@ func (p *PassportElementErrorTranslationFile) ErrorSource() string {
 	return ErrorSourceTranslationFile
 }
 
+func (p *PassportElementErrorTranslationFile) iPassportElementError() {}
+
 // PassportElementErrorTranslationFiles - Represents an issue with the translated version of a document. The
 // error is considered resolved when a file with the document translation change.
 type PassportElementErrorTranslationFiles struct {
@@ -6715,6 +6925,8 @@ func (p *PassportElementErrorTranslationFiles) ErrorSource() string {
 	return ErrorSourceTranslationFiles
 }
 
+func (p *PassportElementErrorTranslationFiles) iPassportElementError() {}
+
 // PassportElementErrorUnspecified - Represents an issue in an unspecified place. The error is considered
 // resolved when new data is added.
 type PassportElementErrorUnspecified struct {
@@ -6735,6 +6947,8 @@ type PassportElementErrorUnspecified struct {
 func (p *PassportElementErrorUnspecified) ErrorSource() string {
 	return ErrorSourceUnspecified
 }
+
+func (p *PassportElementErrorUnspecified) iPassportElementError() {}
 
 // Game - This object represents a game. Use BotFather to create and edit games, their short names will act
 // as unique identifiers.

@@ -228,7 +228,10 @@ import (
 		data.WriteString(typeDescription)
 
 		if len(t.fields) == 0 && !strings.Contains(t.description, "holds no information") {
-			data.WriteString(fmt.Sprintf("\ntype %s interface {\n\t// TODO: Add methods\n", t.name))
+			data.WriteString(fmt.Sprintf(
+				"\ntype %s interface {\n\t// TODO: Add methods\n\t// Disallow external implementations\n\ti%s()\n",
+				t.name, t.name,
+			))
 		} else {
 			data.WriteString(fmt.Sprintf("\ntype %s struct {", t.name))
 		}
