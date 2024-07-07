@@ -459,6 +459,7 @@ const unknownReactionTypeErr = "unknown reaction type: %s"
 // UnmarshalJSON converts JSON to Chat
 func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
@@ -470,20 +471,19 @@ func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 
 	if value.Exists("available_reactions") {
 		availableReactions := value.GetArray("available_reactions")
-		for _, reaction := range availableReactions {
+		uc.AvailableReactions = make([]ReactionType, len(availableReactions))
+		for i, reaction := range availableReactions {
 			reactionType := string(reaction.GetStringBytes("type"))
 			switch reactionType {
 			case ReactionEmoji:
-				uc.AvailableReactions = append(uc.AvailableReactions, &ReactionTypeEmoji{})
+				uc.AvailableReactions[i] = &ReactionTypeEmoji{}
 			case ReactionCustomEmoji:
-				uc.AvailableReactions = append(uc.AvailableReactions, &ReactionTypeCustomEmoji{})
+				uc.AvailableReactions[i] = &ReactionTypeCustomEmoji{}
 			default:
 				return fmt.Errorf(unknownReactionTypeErr, reactionType)
 			}
 		}
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &uc); err != nil {
 		return err
@@ -791,6 +791,7 @@ type Message struct {
 // UnmarshalJSON converts JSON to Message
 func (m *Message) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
@@ -823,8 +824,6 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 			return fmt.Errorf("unknown forward message origin: %s", forwardOriginType)
 		}
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &um); err != nil {
 		return err
@@ -1061,8 +1060,9 @@ type ExternalReplyInfo struct {
 }
 
 // UnmarshalJSON converts JSON to ExternalReplyInfo
-func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
+func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error { //nolint:dupl
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
@@ -1089,8 +1089,6 @@ func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf("unknown origin: %s", originType)
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &ue); err != nil {
 		return err
@@ -1778,18 +1776,19 @@ func (b *BackgroundTypeFill) BackgroundType() string {
 // UnmarshalJSON converts JSON to BackgroundTypeFill
 func (b *BackgroundTypeFill) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	type uBackgroundTypeFill BackgroundTypeFill
-	var ub uBackgroundTypeFill
-
 	if !value.Exists("fill") {
 		return errors.New("no fill")
 	}
+
+	type uBackgroundTypeFill BackgroundTypeFill
+	var ub uBackgroundTypeFill
 
 	fillType := string(value.GetStringBytes("fill", "type"))
 	switch fillType {
@@ -1802,8 +1801,6 @@ func (b *BackgroundTypeFill) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf("unknown chat background fill type: %s", fillType)
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &ub); err != nil {
 		return err
@@ -1886,20 +1883,21 @@ type ChatBackground struct {
 }
 
 // UnmarshalJSON converts JSON to ChatBackground
-func (c *ChatBackground) UnmarshalJSON(data []byte) error {
+func (c *ChatBackground) UnmarshalJSON(data []byte) error { //nolint:dupl
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	type uChatBackground ChatBackground
-	var uc uChatBackground
-
 	if !value.Exists("type") {
 		return errors.New("no type")
 	}
+
+	type uChatBackground ChatBackground
+	var uc uChatBackground
 
 	backgroundType := string(value.GetStringBytes("type", "type"))
 	switch backgroundType {
@@ -1914,8 +1912,6 @@ func (c *ChatBackground) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf("unknown chat background type: %s", backgroundType)
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &uc); err != nil {
 		return err
@@ -2571,6 +2567,7 @@ type CallbackQuery struct {
 // UnmarshalJSON converts JSON to CallbackQuery
 func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
@@ -2579,6 +2576,7 @@ func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 
 	type uCallbackQuery CallbackQuery
 	var uq uCallbackQuery
+
 	if value.Exists("message") {
 		if value.GetInt("message", "date") == 0 {
 			uq.Message = &InaccessibleMessage{}
@@ -2586,8 +2584,6 @@ func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 			uq.Message = &Message{}
 		}
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &uq); err != nil {
 		return err
@@ -2762,27 +2758,66 @@ type ChatMemberUpdated struct {
 }
 
 // UnmarshalJSON converts JSON to ChatMemberUpdated
-func (c *ChatMemberUpdated) UnmarshalJSON(bytes []byte) error {
-	var chatMemberUpdatedData struct {
-		Chat          Chat            `json:"chat"`
-		From          User            `json:"from"`
-		Date          int64           `json:"date"`
-		OldChatMember chatMemberData  `json:"old_chat_member"`
-		NewChatMember chatMemberData  `json:"new_chat_member"`
-		InviteLink    *ChatInviteLink `json:"invite_link,omitempty"`
-	}
+func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error { //nolint:funlen,revive,cyclop,gocyclo
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
-	err := json.Unmarshal(bytes, &chatMemberUpdatedData)
+	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	c.Chat = chatMemberUpdatedData.Chat
-	c.From = chatMemberUpdatedData.From
-	c.Date = chatMemberUpdatedData.Date
-	c.OldChatMember = chatMemberUpdatedData.OldChatMember.Data
-	c.NewChatMember = chatMemberUpdatedData.NewChatMember.Data
-	c.InviteLink = chatMemberUpdatedData.InviteLink
+	if !value.Exists("old_chat_member") {
+		return errors.New("no old chat member")
+	}
+
+	if !value.Exists("new_chat_member") {
+		return errors.New("no new chat member")
+	}
+
+	type uChatMemberUpdated ChatMemberUpdated
+	var uc uChatMemberUpdated
+
+	oldMemberStatus := string(value.GetStringBytes("old_chat_member", "status"))
+	switch oldMemberStatus {
+	case MemberStatusCreator:
+		uc.OldChatMember = &ChatMemberOwner{}
+	case MemberStatusAdministrator:
+		uc.OldChatMember = &ChatMemberAdministrator{}
+	case MemberStatusMember:
+		uc.OldChatMember = &ChatMemberMember{}
+	case MemberStatusRestricted:
+		uc.OldChatMember = &ChatMemberRestricted{}
+	case MemberStatusLeft:
+		uc.OldChatMember = &ChatMemberLeft{}
+	case MemberStatusBanned:
+		uc.OldChatMember = &ChatMemberBanned{}
+	default:
+		return fmt.Errorf("unknown chat member status: %s", oldMemberStatus)
+	}
+
+	newMemberStatus := string(value.GetStringBytes("new_chat_member", "status"))
+	switch newMemberStatus {
+	case MemberStatusCreator:
+		uc.NewChatMember = &ChatMemberOwner{}
+	case MemberStatusAdministrator:
+		uc.NewChatMember = &ChatMemberAdministrator{}
+	case MemberStatusMember:
+		uc.NewChatMember = &ChatMemberMember{}
+	case MemberStatusRestricted:
+		uc.NewChatMember = &ChatMemberRestricted{}
+	case MemberStatusLeft:
+		uc.NewChatMember = &ChatMemberLeft{}
+	case MemberStatusBanned:
+		uc.NewChatMember = &ChatMemberBanned{}
+	default:
+		return fmt.Errorf("unknown chat member status: %s", newMemberStatus)
+	}
+
+	if err = json.Unmarshal(data, &uc); err != nil {
+		return err
+	}
+	*c = ChatMemberUpdated(uc)
 
 	return nil
 }
@@ -2792,41 +2827,40 @@ type chatMemberData struct {
 }
 
 // UnmarshalJSON converts JSON to chatMemberData
-func (c *chatMemberData) UnmarshalJSON(bytes []byte) error {
+func (c *chatMemberData) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
-	value, err := parser.ParseBytes(bytes)
+	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
 	memberStatus := string(value.GetStringBytes("status"))
-	json.ParserPoll.Put(parser)
-
 	switch memberStatus {
 	case MemberStatusCreator:
 		var cm *ChatMemberOwner
-		err = json.Unmarshal(bytes, &cm)
+		err = json.Unmarshal(data, &cm)
 		c.Data = cm
 	case MemberStatusAdministrator:
 		var cm *ChatMemberAdministrator
-		err = json.Unmarshal(bytes, &cm)
+		err = json.Unmarshal(data, &cm)
 		c.Data = cm
 	case MemberStatusMember:
 		var cm *ChatMemberMember
-		err = json.Unmarshal(bytes, &cm)
+		err = json.Unmarshal(data, &cm)
 		c.Data = cm
 	case MemberStatusRestricted:
 		var cm *ChatMemberRestricted
-		err = json.Unmarshal(bytes, &cm)
+		err = json.Unmarshal(data, &cm)
 		c.Data = cm
 	case MemberStatusLeft:
 		var cm *ChatMemberLeft
-		err = json.Unmarshal(bytes, &cm)
+		err = json.Unmarshal(data, &cm)
 		c.Data = cm
 	case MemberStatusBanned:
 		var cm *ChatMemberBanned
-		err = json.Unmarshal(bytes, &cm)
+		err = json.Unmarshal(data, &cm)
 		c.Data = cm
 	default:
 		return fmt.Errorf("unknown member status: %q", memberStatus)
@@ -3325,18 +3359,19 @@ type ReactionCount struct {
 // UnmarshalJSON converts JSON to ReactionCount
 func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	type uReactionCount ReactionCount
-	var uc uReactionCount
-
 	if !value.Exists("type") {
 		return errors.New("no type")
 	}
+
+	type uReactionCount ReactionCount
+	var uc uReactionCount
 
 	reactionType := string(value.GetStringBytes("type", "type"))
 	switch reactionType {
@@ -3347,8 +3382,6 @@ func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf(unknownReactionTypeErr, reactionType)
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &uc); err != nil {
 		return err
@@ -3385,6 +3418,7 @@ type MessageReactionUpdated struct {
 // UnmarshalJSON converts JSON to MessageReactionUpdated
 func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
@@ -3403,32 +3437,32 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 	var uu uMessageReactionUpdated
 
 	oldReactions := value.GetArray("old_reaction")
-	for _, reaction := range oldReactions {
+	uu.OldReaction = make([]ReactionType, len(oldReactions))
+	for i, reaction := range oldReactions {
 		reactionType := string(reaction.GetStringBytes("type"))
 		switch reactionType {
 		case ReactionEmoji:
-			uu.OldReaction = append(uu.OldReaction, &ReactionTypeEmoji{})
+			uu.OldReaction[i] = &ReactionTypeEmoji{}
 		case ReactionCustomEmoji:
-			uu.OldReaction = append(uu.OldReaction, &ReactionTypeCustomEmoji{})
+			uu.OldReaction[i] = &ReactionTypeCustomEmoji{}
 		default:
 			return fmt.Errorf(unknownReactionTypeErr, reactionType)
 		}
 	}
 
 	newReactions := value.GetArray("new_reaction")
-	for _, reaction := range newReactions {
+	uu.NewReaction = make([]ReactionType, len(newReactions))
+	for i, reaction := range newReactions {
 		reactionType := string(reaction.GetStringBytes("type"))
 		switch reactionType {
 		case ReactionEmoji:
-			uu.NewReaction = append(uu.NewReaction, &ReactionTypeEmoji{})
+			uu.NewReaction[i] = &ReactionTypeEmoji{}
 		case ReactionCustomEmoji:
-			uu.NewReaction = append(uu.NewReaction, &ReactionTypeCustomEmoji{})
+			uu.NewReaction[i] = &ReactionTypeCustomEmoji{}
 		default:
 			return fmt.Errorf(unknownReactionTypeErr, reactionType)
 		}
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &uu); err != nil {
 		return err
@@ -3683,29 +3717,32 @@ type menuButtonData struct {
 }
 
 // UnmarshalJSON converts JSON to menuButtonData
-func (m *menuButtonData) UnmarshalJSON(bytes []byte) error {
+func (m *menuButtonData) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
-	value, err := parser.ParseBytes(bytes)
+	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	buttonType := string(value.GetStringBytes("type"))
-	json.ParserPoll.Put(parser)
+	if !value.Exists("type") {
+		return errors.New("no type")
+	}
 
+	buttonType := string(value.GetStringBytes("type"))
 	switch buttonType {
 	case ButtonTypeCommands:
 		var mb *MenuButtonCommands
-		err = json.Unmarshal(bytes, &mb)
+		err = json.Unmarshal(data, &mb)
 		m.Data = mb
 	case ButtonTypeWebApp:
 		var mb *MenuButtonWebApp
-		err = json.Unmarshal(bytes, &mb)
+		err = json.Unmarshal(data, &mb)
 		m.Data = mb
 	case ButtonTypeDefault:
 		var mb *MenuButtonDefault
-		err = json.Unmarshal(bytes, &mb)
+		err = json.Unmarshal(data, &mb)
 		m.Data = mb
 	default:
 		return fmt.Errorf("unknown menu button type: %q", buttonType)
@@ -3843,18 +3880,19 @@ type ChatBoost struct {
 // UnmarshalJSON converts JSON to ChatBoost
 func (b *ChatBoost) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	type uChatBoost ChatBoost
-	var ub uChatBoost
-
 	if !value.Exists("source") {
 		return errors.New("no source")
 	}
+
+	type uChatBoost ChatBoost
+	var ub uChatBoost
 
 	source := string(value.GetStringBytes("source", "source"))
 	switch source {
@@ -3867,8 +3905,6 @@ func (b *ChatBoost) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf("unknown chat boost source: %s", source)
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &ub); err != nil {
 		return err
@@ -3905,18 +3941,19 @@ type ChatBoostRemoved struct {
 // UnmarshalJSON converts JSON to ChatBoostRemoved
 func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
 
 	value, err := parser.ParseBytes(data)
 	if err != nil {
 		return err
 	}
 
-	type uChatBoostRemoved ChatBoostRemoved
-	var ub uChatBoostRemoved
-
 	if !value.Exists("source") {
 		return errors.New("no source")
 	}
+
+	type uChatBoostRemoved ChatBoostRemoved
+	var ub uChatBoostRemoved
 
 	source := string(value.GetStringBytes("source", "source"))
 	switch source {
@@ -3929,8 +3966,6 @@ func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
 	default:
 		return fmt.Errorf("unknown chat boost source: %s", source)
 	}
-
-	json.ParserPoll.Put(parser)
 
 	if err = json.Unmarshal(data, &ub); err != nil {
 		return err
