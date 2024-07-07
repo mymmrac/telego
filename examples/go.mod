@@ -3,7 +3,7 @@ module github.com/mymmrac/telego/examples
 go 1.22.3
 
 require (
-	github.com/fasthttp/router v1.5.1
+	github.com/fasthttp/router v1.5.2
 	github.com/mymmrac/telego v0.30.2
 	github.com/valyala/fasthttp v1.55.0
 	golang.ngrok.com/ngrok v1.9.1
@@ -26,7 +26,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
-	github.com/savsgio/gotils v0.0.0-20240303185622-093b76447511 // indirect
+	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fastjson v1.6.4 // indirect
