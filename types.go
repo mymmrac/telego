@@ -2007,6 +2007,9 @@ type ChatBackground struct {
 	Type BackgroundType `json:"type"`
 }
 
+// noTypeErr error
+const noTypeErr = "no type"
+
 // UnmarshalJSON converts JSON to ChatBackground
 func (c *ChatBackground) UnmarshalJSON(data []byte) error { //nolint:dupl
 	parser := json.ParserPoll.Get()
@@ -2018,7 +2021,7 @@ func (c *ChatBackground) UnmarshalJSON(data []byte) error { //nolint:dupl
 	}
 
 	if !value.Exists("type") {
-		return errors.New("no type")
+		return errors.New(noTypeErr)
 	}
 
 	type uChatBackground ChatBackground
@@ -3491,7 +3494,7 @@ func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 	}
 
 	if !value.Exists("type") {
-		return errors.New("no type")
+		return errors.New(noTypeErr)
 	}
 
 	type uReactionCount ReactionCount
@@ -3851,7 +3854,7 @@ func (m *menuButtonData) UnmarshalJSON(data []byte) error {
 	}
 
 	if !value.Exists("type") {
-		return errors.New("no type")
+		return errors.New(noTypeErr)
 	}
 
 	buttonType := string(value.GetStringBytes("type"))
