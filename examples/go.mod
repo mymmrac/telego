@@ -6,7 +6,7 @@ require (
 	github.com/fasthttp/router v1.5.2
 	github.com/mymmrac/telego v0.31.0
 	github.com/valyala/fasthttp v1.55.0
-	golang.ngrok.com/ngrok v1.9.1
+	golang.ngrok.com/ngrok v1.10.0
 )
 
 require (
@@ -39,4 +39,5 @@ require (
 	golang.org/x/term v0.21.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
