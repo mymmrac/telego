@@ -8,9 +8,9 @@ import (
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
-	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/chococola/telego"
+	th "github.com/chococola/telego/telegohandler"
+	tu "github.com/chococola/telego/telegoutil"
 )
 
 var (

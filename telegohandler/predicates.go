@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 // Any is always true

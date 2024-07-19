@@ -114,7 +114,7 @@ linters-settings:
     sections:
       - standard
       - default
-      - prefix(github.com/mymmrac/telego)
+      - prefix(github.com/chococola/telego)
   exhaustive: # check exhaustiveness of enum switch statements
     # Presence of "default" case in switch statements satisfies exhaustiveness,
     # even if all enum members are not listed

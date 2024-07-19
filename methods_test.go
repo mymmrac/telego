@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	ta "github.com/mymmrac/telego/telegoapi"
+	ta "github.com/chococola/telego/telegoapi"
 )
 
 func TestBot_GetUpdates(t *testing.T) {

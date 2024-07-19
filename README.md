@@ -1,18 +1,18 @@
 # Telego • Go Telegram Bot API
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/mymmrac/telego#section-readme.svg)](https://pkg.go.dev/github.com/mymmrac/telego)
+[![Go Reference](https://pkg.go.dev/badge/github.com/chococola/telego#section-readme.svg)](https://pkg.go.dev/github.com/chococola/telego)
 [![Telego Docs](https://img.shields.io/static/v1?label=Telego&message=docs&color=8ed6fb&logo=hugo)](https://telego.pixelbox.dev)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/mymmrac/telego?logo=go)](go.mod)
 [![Telegram Bot API Version][TelegramVersionBadge]][TelegramLastVersion]
 <br>
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
-[![Discussions](https://img.shields.io/github/discussions/mymmrac/telego?color=58a6ff&label=Discussions&logo=github)](https://github.com/mymmrac/telego/discussions)
+[![Discussions](https://img.shields.io/github/discussions/mymmrac/telego?color=58a6ff&label=Discussions&logo=github)](https://github.com/chococola/telego/discussions)
 [![Telegram Chat](https://img.shields.io/static/v1?label=Discussion&message=chat&color=29a1d4&logo=telegram)](https://t.me/telegoLibrary)
 
-[![CI Status](https://github.com/mymmrac/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/ci.yml)
-[![Race Testing](https://github.com/mymmrac/telego/actions/workflows/race-tests.yml/badge.svg)](https://github.com/mymmrac/telego/actions/workflows/race-tests.yml)
+[![CI Status](https://github.com/chococola/telego/actions/workflows/ci.yml/badge.svg)](https://github.com/chococola/telego/actions/workflows/ci.yml)
+[![Race Testing](https://github.com/chococola/telego/actions/workflows/race-tests.yml/badge.svg)](https://github.com/chococola/telego/actions/workflows/race-tests.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=alert_status)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
-[![Go Report](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=flat)](https://goreportcard.com/report/github.com/mymmrac/telego)
+[![Go Report](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=flat)](https://goreportcard.com/report/github.com/chococola/telego)
 <br>
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=coverage)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mymmrac_telego&metric=code_smells)](https://sonarcloud.io/dashboard?id=mymmrac_telego)
@@ -59,7 +59,7 @@ For more detailed documentation, see docs at [telego.pixelbox.dev](https://teleg
 How to get the library:
 
 ```shell
-go get github.com/mymmrac/telego
+go get github.com/chococola/telego
 ```
 
 Make sure you get the latest version to have all new features & fixes.
@@ -140,7 +140,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 func main() {
@@ -186,7 +186,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 func main() {
@@ -223,7 +223,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 func main() {
@@ -296,8 +296,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mymmrac/telego"
-	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/chococola/telego"
+	tu "github.com/chococola/telego/telegoutil"
 )
 
 func main() {
@@ -350,7 +350,7 @@ utility-helper function that will make your life a bit easier.
 I suggest including it with alias to get cleaner code:
 
 ```go
-import tu "github.com/mymmrac/telego/telegoutil"
+import tu "github.com/chococola/telego/telegoutil"
 ```
 
 The package contains couple methods for creating send parameters with all required parameters like:
@@ -386,8 +386,8 @@ Here is a simple example of creating a message with a keyboard that has 4 button
 package main
 
 import (
-	"github.com/mymmrac/telego"
-	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/chococola/telego"
+	tu "github.com/chococola/telego/telegoutil"
 )
 
 func main() {
@@ -441,7 +441,7 @@ Also, all handlers (but not their predicates) are processed in parallel.
 I suggest including it with alias to get cleaner code:
 
 ```go
-import th "github.com/mymmrac/telego/telegohandler"
+import th "github.com/chococola/telego/telegohandler"
 ```
 
 Here is an example of using handlers with long polling updates.
@@ -455,9 +455,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
-	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/chococola/telego"
+	th "github.com/chococola/telego/telegohandler"
+	tu "github.com/chococola/telego/telegoutil"
 )
 
 func main() {
@@ -520,9 +520,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
-	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/chococola/telego"
+	th "github.com/chococola/telego/telegohandler"
+	tu "github.com/chococola/telego/telegoutil"
 )
 
 func main() {
@@ -565,8 +565,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
+	"github.com/chococola/telego"
+	th "github.com/chococola/telego/telegohandler"
 )
 
 func main() {

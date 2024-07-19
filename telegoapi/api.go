@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/mymmrac/telego/internal/json"
+	"github.com/chococola/telego/internal/json"
 )
 
 const (

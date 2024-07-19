@@ -55,8 +55,8 @@ Simple echo bot:
 		"fmt"
 		"os"
 
-		"github.com/mymmrac/telego"
-		tu "github.com/mymmrac/telego/telegoutil"
+		"github.com/chococola/telego"
+		tu "github.com/chococola/telego/telegoutil"
 	)
 
 	func main() {

@@ -7,8 +7,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
+	"github.com/chococola/telego"
+	th "github.com/chococola/telego/telegohandler"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/mymmrac/telego"
-	ta "github.com/mymmrac/telego/telegoapi"
+	"github.com/chococola/telego"
+	ta "github.com/chococola/telego/telegoapi"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package telego
 import (
 	"fmt"
 
-	ta "github.com/mymmrac/telego/telegoapi"
+	ta "github.com/chococola/telego/telegoapi"
 )
 
 // GetUpdatesParams - Represents parameters of getUpdates method.

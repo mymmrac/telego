@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 // Handler handles update that came from bot

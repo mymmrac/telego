@@ -1,4 +1,4 @@
-//go:generate mockgen -typed -package mock -destination=mock/request_constructor.go github.com/mymmrac/telego/telegoapi RequestConstructor
+//go:generate mockgen -typed -package mock -destination=mock/request_constructor.go github.com/chococola/telego/telegoapi RequestConstructor
 
 package telegoapi
 
@@ -9,7 +9,7 @@ import (
 	"mime/multipart"
 	"reflect"
 
-	"github.com/mymmrac/telego/internal/json"
+	"github.com/chococola/telego/internal/json"
 )
 
 // DefaultConstructor default implementation of RequestConstructor

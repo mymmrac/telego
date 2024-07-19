@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/mymmrac/telego/internal/json"
-	"github.com/mymmrac/telego/telegoapi"
+	"github.com/chococola/telego/internal/json"
+	"github.com/chococola/telego/telegoapi"
 )
 
 // Update - This object (https://core.telegram.org/bots/api#available-types) represents an incoming update.

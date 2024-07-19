@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 const (

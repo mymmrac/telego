@@ -12,7 +12,7 @@ import (
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 func main() {

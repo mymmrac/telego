@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
 
-	ta "github.com/mymmrac/telego/telegoapi"
+	ta "github.com/chococola/telego/telegoapi"
 )
 
 type testCallerType struct{}

@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mymmrac/telego"
-	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/chococola/telego"
+	tu "github.com/chococola/telego/telegoutil"
 )
 
 func TestSendMessage(t *testing.T) {

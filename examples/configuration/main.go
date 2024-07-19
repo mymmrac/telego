@@ -8,7 +8,7 @@ import (
 
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 func main() {

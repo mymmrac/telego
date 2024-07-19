@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 // PanicRecovery returns a middleware that will recover handler from panic

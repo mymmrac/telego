@@ -217,8 +217,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/mymmrac/telego/internal/json"
-	"github.com/mymmrac/telego/telegoapi"
+	"github.com/chococola/telego/internal/json"
+	"github.com/chococola/telego/telegoapi"
 )
 `)
 

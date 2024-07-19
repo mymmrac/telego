@@ -5,8 +5,8 @@ package main
 import (
 	"context"
 
+	"github.com/chococola/telego"
 	"github.com/fasthttp/router"
-	"github.com/mymmrac/telego"
 	"github.com/valyala/fasthttp"
 )
 

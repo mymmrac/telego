@@ -9,8 +9,8 @@ import (
 
 	"github.com/valyala/fasthttp"
 
-	"github.com/mymmrac/telego/internal/json"
-	ta "github.com/mymmrac/telego/telegoapi"
+	"github.com/chococola/telego/internal/json"
+	ta "github.com/chococola/telego/telegoapi"
 )
 
 const (
@@ -179,6 +179,81 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Re
 	}
 
 	return resp, nil
+}
+
+func (b *Bot) PrepareRawRequest(parameters any) (*ta.RequestData, error) {
+	filesParams, hasFiles := filesParameters(parameters)
+	var data *ta.RequestData
+
+	if hasFiles {
+		parsedParameters, err := parseParameters(parameters)
+		if err != nil {
+			return nil, fmt.Errorf("parsing parameters: %w", err)
+		}
+
+		data, err = b.constructor.MultipartRequest(parsedParameters, filesParams)
+		if err != nil {
+			return nil, fmt.Errorf("multipart request: %w", err)
+		}
+
+	} else {
+		var err error
+		data, err = b.constructor.JSONRequest(parameters)
+		if err != nil {
+			return nil, fmt.Errorf("json request: %w", err)
+		}
+	}
+
+	return data, nil
+}
+
+func (b *Bot) callRawRequest(methodName string, data *ta.RequestData) (*ta.Response, error) {
+	var url string
+	if b.useTestServerPath {
+		url = b.apiURL + botPathPrefix + b.token + "/test/" + methodName
+	} else {
+		url = b.apiURL + botPathPrefix + b.token + "/" + methodName
+	}
+
+	resp, err := b.api.Call(url, data)
+	if err != nil {
+		return nil, fmt.Errorf("request call: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (b *Bot) PerformRawRequest(methodName string, data *ta.RequestData, vs ...any) error {
+	resp, err := b.callRawRequest(methodName, data)
+	if err != nil {
+		b.log.Errorf("Execution error %s: %s", methodName, err)
+		return fmt.Errorf("internal execution: %w", err)
+	}
+	b.log.Debugf("API response %s: %s", methodName, resp.String())
+
+	if !resp.Ok {
+		return fmt.Errorf("api: %w", resp.Error)
+	}
+
+	if resp.Result != nil {
+		var unmarshalErr error
+		for i := range vs {
+			unmarshalErr = json.Unmarshal(resp.Result, &vs[i])
+			if unmarshalErr == nil {
+				break
+			}
+		}
+
+		if unmarshalErr != nil {
+			return fmt.Errorf("unmarshal to %s: %w", reflect.TypeOf(vs[len(vs)-1]), unmarshalErr)
+		}
+	}
+
+	if b.reportWarningAsErrors && resp.Error != nil {
+		return resp.Error
+	}
+
+	return nil
 }
 
 // filesParameters gets all files from parameters

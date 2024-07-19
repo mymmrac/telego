@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
+	"github.com/chococola/telego"
+	th "github.com/chococola/telego/telegohandler"
 )
 
 func TestMiddleware(t *testing.T) {

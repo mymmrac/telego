@@ -6,8 +6,8 @@ import (
 	"context"
 	"log"
 
+	"github.com/chococola/telego"
 	"github.com/fasthttp/router"
-	"github.com/mymmrac/telego"
 	"github.com/valyala/fasthttp"
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"

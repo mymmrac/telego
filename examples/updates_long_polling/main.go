@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/mymmrac/telego"
+	"github.com/chococola/telego"
 )
 
 func main() {

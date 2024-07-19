@@ -9,6 +9,6 @@ If you see some bugs or security concerns, please always update to the latest ve
 
 If you see any security vulnerability, please report it immediately using any method:
 
-- Report in the security tab: https://github.com/mymmrac/telego/security/advisories
-- Create an issue: https://github.com/mymmrac/telego/issues
+- Report in the security tab: https://github.com/chococola/telego/security/advisories
+- Create an issue: https://github.com/chococola/telego/issues
 - Contact [me](https://github.com/mymmrac) on email or any other communication channel
