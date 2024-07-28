@@ -78,6 +78,7 @@ More examples can be seen here:
 - [Echo bot](examples/echo_bot/main.go)
 - [Echo bot (with handlers)](examples/echo_bot_with_handlers/main.go)
 - [Echo bot (handlers + webhook + graceful shutdown + docker)](https://github.com/mymmrac/echo-bot)
+- [Conversation bot (state machine)](examples/conversation_bot/main.go)
 - [Sending files (documents, photos, media groups)](examples/sending_files/main.go)
 - [Downloading files](examples/download_file/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
