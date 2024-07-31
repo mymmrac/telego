@@ -16,7 +16,7 @@ import (
 const (
 	defaultBotAPIServer = "https://api.telegram.org"
 
-	tokenRegexp = `^\d{9,10}:[\w-]{35}$` //nolint:gosec
+	tokenRegexp = `^\d+:[\w-]{35}$` //nolint:gosec
 
 	attachFile = `attach://`
 
@@ -25,8 +25,11 @@ const (
 	botPathPrefix = "/bot"
 )
 
+// ErrEmptyToken Bot token is empty
+var ErrEmptyToken = errors.New("telego: empty token")
+
 // ErrInvalidToken Bot token is invalid according to token regexp
-var ErrInvalidToken = errors.New("telego: invalid token")
+var ErrInvalidToken = errors.New("telego: invalid token format")
 
 // validateToken validates if token matches format
 func validateToken(token string) bool {
@@ -58,6 +61,9 @@ type BotOption func(bot *Bot) error
 // Note: Default logger (that logs only errors if not configured) will hide your bot token, but it still may log
 // sensitive information, it's only safe to use default logger in testing environment.
 func NewBot(token string, options ...BotOption) (*Bot, error) {
+	if token == "" {
+		return nil, ErrEmptyToken
+	}
 	if !validateToken(token) {
 		return nil, ErrInvalidToken
 	}
