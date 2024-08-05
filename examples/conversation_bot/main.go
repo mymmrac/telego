@@ -113,7 +113,7 @@ func main() {
 			panic("unknown state")
 		}
 
-		lock.Lock()
+		lock.RLock()
 		users[userID] = user
 		lock.RUnlock()
 
