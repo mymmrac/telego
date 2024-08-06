@@ -115,7 +115,7 @@ func main() {
 
 		lock.Lock()
 		users[userID] = user
-		lock.RUnlock()
+		lock.Unlock()
 
 		_, _ = bot.SendMessage(tu.Message(msg.Chat.ChatID(), text))
 	})
