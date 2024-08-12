@@ -1855,6 +1855,12 @@ func (p *SetChatDescriptionParams) WithDescription(description string) *SetChatD
 	return p
 }
 
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *PinChatMessageParams) WithBusinessConnectionID(businessConnectionID string) *PinChatMessageParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *PinChatMessageParams) WithChatID(chatID ChatID) *PinChatMessageParams {
 	p.ChatID = chatID
@@ -1870,6 +1876,12 @@ func (p *PinChatMessageParams) WithMessageID(messageID int) *PinChatMessageParam
 // WithDisableNotification adds disable notification parameter
 func (p *PinChatMessageParams) WithDisableNotification() *PinChatMessageParams {
 	p.DisableNotification = true
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *UnpinChatMessageParams) WithBusinessConnectionID(businessConnectionID string) *UnpinChatMessageParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 

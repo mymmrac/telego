@@ -6507,7 +6507,7 @@ func (p *TransactionPartnerOther) iTransactionPartner() {}
 
 // StarTransaction - Describes a Telegram Star transaction.
 type StarTransaction struct {
-	// ID - Unique identifier of the transaction. Coincides with the identifer of the original transaction for
+	// ID - Unique identifier of the transaction. Coincides with the identifier of the original transaction for
 	// refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming
 	// payments from users.
 	ID string `json:"id"`

@@ -934,34 +934,38 @@ func TestSetChatDescriptionParams_Setters(t *testing.T) {
 
 func TestPinChatMessageParams_Setters(t *testing.T) {
 	p := (&PinChatMessageParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
 		WithChatID(ChatID{ID: 1}).
-		WithMessageID(1).
+		WithMessageID(2).
 		WithDisableNotification()
 
 	assert.Equal(t, &PinChatMessageParams{
-		ChatID:              ChatID{ID: 1},
-		MessageID:           1,
-		DisableNotification: true,
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
+		DisableNotification:  true,
 	}, p)
 }
 
 func TestUnpinChatMessageParams_Setters(t *testing.T) {
 	u := (&UnpinChatMessageParams{}).
-		WithChatID(ChatID{ID: 2}).
-		WithMessageID(1)
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2)
 
 	assert.Equal(t, &UnpinChatMessageParams{
-		ChatID:    ChatID{ID: 2},
-		MessageID: 1,
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               ChatID{ID: 1},
+		MessageID:            2,
 	}, u)
 }
 
 func TestUnpinAllChatMessagesParams_Setters(t *testing.T) {
 	u := (&UnpinAllChatMessagesParams{}).
-		WithChatID(ChatID{ID: 2})
+		WithChatID(ChatID{ID: 3})
 
 	assert.Equal(t, &UnpinAllChatMessagesParams{
-		ChatID: ChatID{ID: 2},
+		ChatID: ChatID{ID: 3},
 	}, u)
 }
 

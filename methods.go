@@ -2206,6 +2206,10 @@ func (b *Bot) SetChatDescription(params *SetChatDescriptionParams) error {
 
 // PinChatMessageParams - Represents parameters of pinChatMessage method.
 type PinChatMessageParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be pinned
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
@@ -2233,12 +2237,16 @@ func (b *Bot) PinChatMessage(params *PinChatMessageParams) error {
 
 // UnpinChatMessageParams - Represents parameters of unpinChatMessage method.
 type UnpinChatMessageParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be unpinned
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageID - Optional. Identifier of a message to unpin. If not specified, the most recent pinned message
-	// (by sending date) will be unpinned.
+	// MessageID - Optional. Identifier of the message to unpin. Required if business_connection_id is
+	// specified. If not specified, the most recent pinned message (by sending date) will be unpinned.
 	MessageID int `json:"message_id,omitempty"`
 }
 
@@ -3831,16 +3839,16 @@ type SetStickerSetThumbnailParams struct {
 
 	// Thumbnail - Optional. A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and
 	// have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size
-	// (see https://core.telegram.org/stickers#animated-sticker-requirements
-	// (https://core.telegram.org/stickers#animated-sticker-requirements) for animated sticker technical
-	// requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see
-	// https://core.telegram.org/stickers#video-sticker-requirements
-	// (https://core.telegram.org/stickers#video-sticker-requirements) for video sticker technical requirements.
-	// Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a
-	// String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More
-	// information on Sending Files » (https://core.telegram.org/bots/api#sending-files). Animated and video
-	// sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the
-	// first sticker is used as the thumbnail.
+	// (see https://core.telegram.org/stickers#animation-requirements
+	// (https://core.telegram.org/stickers#animation-requirements) for animated sticker technical requirements), or
+	// a WEBM video with the thumbnail up to 32 kilobytes in size; see
+	// https://core.telegram.org/stickers#video-requirements (https://core.telegram.org/stickers#video-requirements)
+	// for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on
+	// the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a
+	// new one using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files). Animated and video sticker set thumbnails can't be
+	// uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the
+	// thumbnail.
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Format - Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated”
