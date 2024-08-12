@@ -31,7 +31,7 @@ var (
 
 func generateSetters(typesData string, desiredStructs []string) tgSetters {
 	structsGroups := typeStructRegexp.FindAllStringSubmatch(typesData, -1)
-	logInfo("Structs count: %d", len(structsGroups))
+	logInfof("Structs count: %d", len(structsGroups))
 
 	var setters tgSetters
 
@@ -68,7 +68,7 @@ func generateSetters(typesData string, desiredStructs []string) tgSetters {
 		}
 	}
 
-	logInfo("Setters count: %d", len(setters))
+	logInfof("Setters count: %d", len(setters))
 
 	return setters
 }

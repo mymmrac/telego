@@ -196,8 +196,8 @@ func parseCurrentTypes(types string) map[string][]string {
 		}
 	}
 
-	logInfo("Const count: %d", constCount)
-	logInfo("Func & interface count: %d", funcOrInterfaceCount)
+	logInfof("Const count: %d", constCount)
+	logInfof("Func & interface count: %d", funcOrInterfaceCount)
 
 	return additional
 }
@@ -207,7 +207,7 @@ func writeTypes(file *os.File, types tgTypes, currentTypes string) {
 
 	data := strings.Builder{}
 
-	logInfo("Types: %d", len(types))
+	logInfof("Types: %d", len(types))
 
 	data.WriteString(`package telego
 
@@ -262,7 +262,7 @@ import (
 		}
 	}
 
-	logInfo("Type fields: %d", fieldsCount)
+	logInfof("Type fields: %d", fieldsCount)
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)

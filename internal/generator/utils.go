@@ -42,17 +42,17 @@ var (
 	multiSpaceRegexp = regexp.MustCompile(multiSpacePattern)
 )
 
-func logInfo(format string, args ...any) {
+func logInfof(format string, args ...any) {
 	fmt.Printf("[INFO] "+format+"\n", args...)
 }
 
-func logError(format string, args ...any) {
+func logErrorf(format string, args ...any) {
 	fmt.Printf("[ERROR] "+format+"\n", args...)
 }
 
 func exitOnErr(err error) {
 	if err != nil {
-		logError("%v", err)
+		logErrorf("%v", err)
 		os.Exit(1)
 	}
 }

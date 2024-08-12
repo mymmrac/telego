@@ -33,7 +33,7 @@ func TestTypesInterfaces(t *testing.T) {
 
 	funcs := funcRegexp.FindAllStringSubmatch(types, -1)
 
-	logInfo("Func count: %d", len(funcs))
+	logInfof("Func count: %d", len(funcs))
 
 	for _, f := range funcs {
 		funcType := f[1]

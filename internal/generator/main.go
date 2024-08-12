@@ -98,7 +98,7 @@ var typeStructsNoPointerSetters = []string{
 
 func main() {
 	if len(os.Args) <= 1 {
-		logError("Generation args not specified")
+		logErrorf("Generation args not specified")
 		os.Exit(1)
 	}
 	args := os.Args[1:]
@@ -106,7 +106,7 @@ func main() {
 	sr := sharedResources{}
 
 	for _, arg := range args {
-		logInfo("==== %s ====", arg)
+		logInfof("==== %s ====", arg)
 		start := time.Now()
 		switch arg {
 		case runTypesGeneration:
@@ -175,15 +175,15 @@ func main() {
 
 			formatFile(typesSettersTestsFile.Name())
 		default:
-			logError("Unknown generation arg: %q", arg)
+			logErrorf("Unknown generation arg: %q", arg)
 			os.Exit(1)
 		}
 
-		logInfo("Generated %s in: %s\n", arg, time.Since(start))
+		logInfof("Generated %s in: %s\n", arg, time.Since(start))
 	}
 
-	logInfo("==== end ====")
-	logInfo("Generation successful")
+	logInfof("==== end ====")
+	logInfof("Generation successful")
 }
 
 type sharedResources struct {
@@ -201,7 +201,7 @@ func (r *sharedResources) Docs() string {
 	if r.docs == "" {
 		r.docs = readDocs()
 	} else {
-		logInfo("Reusing docs")
+		logInfof("Reusing docs")
 	}
 	return r.docs
 }
@@ -210,23 +210,23 @@ func (r *sharedResources) Methods(docs string) tgMethods {
 	if r.methods == nil {
 		r.methods = generateMethods(docs)
 	} else {
-		logInfo("Reusing methods")
+		logInfof("Reusing methods")
 	}
 	return r.methods
 }
 
 func (r *sharedResources) TypesData() string {
 	if r.typesData == "" {
-		logInfo("Reading types from: %q", typesFilename)
+		logInfof("Reading types from: %q", typesFilename)
 
 		typesBytes, err := os.ReadFile(typesFilename)
 		exitOnErr(err)
 
-		logInfo("Types length: %d", len(typesBytes))
+		logInfof("Types length: %d", len(typesBytes))
 
 		r.typesData = string(typesBytes)
 	} else {
-		logInfo("Reusing types data")
+		logInfof("Reusing types data")
 	}
 
 	return r.typesData
@@ -234,16 +234,16 @@ func (r *sharedResources) TypesData() string {
 
 func (r *sharedResources) MethodsData() string {
 	if r.methodsData == "" {
-		logInfo("Reading methods from: %q", methodsFilename)
+		logInfof("Reading methods from: %q", methodsFilename)
 
 		methodsBytes, err := os.ReadFile(methodsFilename)
 		exitOnErr(err)
 
-		logInfo("Methods length: %d", len(methodsBytes))
+		logInfof("Methods length: %d", len(methodsBytes))
 
 		r.methodsData = string(methodsBytes)
 	} else {
-		logInfo("Reusing methods data")
+		logInfof("Reusing methods data")
 	}
 
 	return r.methodsData
@@ -255,7 +255,7 @@ func (r *sharedResources) MethodsSetters() tgSetters {
 
 		r.methodsSetters = generateSetters(methods, nil)
 	} else {
-		logInfo("Reusing methods setters")
+		logInfof("Reusing methods setters")
 	}
 
 	return r.methodsSetters
@@ -265,7 +265,7 @@ func (r *sharedResources) TypesSetters(types string) tgSetters {
 	if r.typesSetters == nil {
 		r.typesSetters = generateSetters(types, typeStructsSetters)
 	} else {
-		logInfo("Reusing types setters")
+		logInfof("Reusing types setters")
 	}
 
 	return r.typesSetters
@@ -274,19 +274,19 @@ func (r *sharedResources) TypesSetters(types string) tgSetters {
 func openFile(filename string) *os.File {
 	file, err := os.Create(filepath.Join("../../", filename))
 	exitOnErr(err)
-	logInfo("File %q created", file.Name())
+	logInfof("File %q created", file.Name())
 
 	return file
 }
 
 func readDocs() string {
-	logInfo("Reading docs...")
+	logInfof("Reading docs...")
 	start := time.Now()
 	docs, err := docsText()
 	exitOnErr(err)
 
 	docs = removeNl(docs)
-	logInfo("Downloaded docs in: %s", time.Since(start))
+	logInfof("Downloaded docs in: %s", time.Since(start))
 	return docs
 }
 
@@ -312,7 +312,7 @@ func formatFile(filename string) {
 	cmd.Stderr = &buf
 
 	if err := cmd.Run(); err != nil {
-		logError("Gofmt: %v\n%s", err, buf.String())
+		logErrorf("Gofmt: %v\n%s", err, buf.String())
 		os.Exit(1)
 	}
 
@@ -322,7 +322,7 @@ func formatFile(filename string) {
 	cmd.Stderr = &buf
 
 	if err := cmd.Run(); err != nil {
-		logError("Gofumpt: %v\n%s", err, buf.String())
+		logErrorf("Gofumpt: %v\n%s", err, buf.String())
 		os.Exit(1)
 	}
 }

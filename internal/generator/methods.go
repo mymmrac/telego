@@ -202,8 +202,8 @@ func parseCurrentMethods(methods string) map[string][]string {
 		}
 	}
 
-	logInfo("Const count: %d", constCount)
-	logInfo("Internal func count: %d", internalFuncCount)
+	logInfof("Const count: %d", constCount)
+	logInfof("Internal func count: %d", internalFuncCount)
 
 	return additional
 }
@@ -213,7 +213,7 @@ func writeMethods(file *os.File, methods tgMethods, currentMethods string) {
 
 	data := strings.Builder{}
 
-	logInfo("Methods: %d", len(methods))
+	logInfof("Methods: %d", len(methods))
 
 	data.WriteString(`package telego
 
@@ -334,10 +334,10 @@ import (
 		}
 	}
 
-	logInfo("Method parameters: %d", parametersCount)
-	logInfo("Method returns: %d", returnsCount)
-	logInfo("Method returns not found: %d", returnsNotFoundCount)
-	logInfo("Method returns success: %d", successValuesCount)
+	logInfof("Method parameters: %d", parametersCount)
+	logInfof("Method returns: %d", returnsCount)
+	logInfof("Method returns not found: %d", returnsNotFoundCount)
+	logInfof("Method returns success: %d", successValuesCount)
 
 	_, err := file.WriteString(uppercaseWords(data.String()))
 	exitOnErr(err)
