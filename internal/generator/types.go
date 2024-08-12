@@ -171,14 +171,15 @@ func parseCurrentTypes(types string) map[string][]string {
 				}
 			}
 
-			end := i + 1
+			end := i
 			for ; ; end++ {
 				if end >= len(lines) {
 					end = -1
 					break
 				}
 
-				if lines[end] == "}" {
+				if lines[end] == "}" ||
+					(strings.HasPrefix(lines[end], "func (") && strings.HasSuffix(lines[end], "() {}")) {
 					break
 				}
 			}

@@ -247,6 +247,10 @@ type User struct {
 	// CanConnectToBusiness - Optional. True, if the bot can be connected to a Telegram Business account to
 	// receive its messages. Returned only in getMe (https://core.telegram.org/bots/api#getme).
 	CanConnectToBusiness bool `json:"can_connect_to_business,omitempty"`
+
+	// HasMainWebApp - Optional. True, if the bot has a main Web App. Returned only in getMe
+	// (https://core.telegram.org/bots/api#getme).
+	HasMainWebApp bool `json:"has_main_web_app,omitempty"`
 }
 
 // Chat - This object represents a chat.
@@ -6503,7 +6507,7 @@ func (p *TransactionPartnerOther) iTransactionPartner() {}
 
 // StarTransaction - Describes a Telegram Star transaction.
 type StarTransaction struct {
-	// ID - Unique identifier of the transaction. Coincides with the identifier of the original transaction for
+	// ID - Unique identifier of the transaction. Coincides with the identifer of the original transaction for
 	// refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming
 	// payments from users.
 	ID string `json:"id"`
