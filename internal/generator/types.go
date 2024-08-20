@@ -275,7 +275,8 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	}
 
 	if (strings.Contains(field.description, "64-bit integer") ||
-		strings.Contains(field.description, "64 bit integer")) && field.typ == "int" {
+		strings.Contains(field.description, "64 bit integer") ||
+		strings.Contains(field.description, "number of seconds")) && field.typ == "int" {
 		field.typ = "int64"
 	}
 

@@ -24,7 +24,7 @@ type Response struct {
 }
 
 func (r Response) String() string {
-	if r.Result == nil || len(r.Result) == 0 {
+	if len(r.Result) == 0 {
 		return fmt.Sprintf("Ok: %t, Err: [%v]", r.Ok, r.Error)
 	}
 	return fmt.Sprintf("Ok: %t, Err: [%v], Result: %s", r.Ok, r.Error, r.Result)

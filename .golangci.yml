@@ -11,6 +11,7 @@ linters:
     - containedctx # containedctx is a linter that detects struct contained context.Context field
     - depguard # Go linter that checks if package imports are in a list of acceptable packages
     - dupword # checks for duplicate words in the source code
+    - dupl # Tool for code clone detection
     - exhaustruct # Checks if all structure fields are initialized
     - gochecknoglobals # check that no global variables exist
     - godot # Check if comments end in a period
@@ -193,7 +194,6 @@ issues:
     # Exclude liters for test files
     - path: "_test\\.go$"
       linters:
-        - dupl
         - funlen
         - maintidx
         - revive

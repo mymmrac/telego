@@ -91,6 +91,9 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*ReactionType)(nil), &ReactionTypeCustomEmoji{})
 	assert.Equal(t, ReactionCustomEmoji, (&ReactionTypeCustomEmoji{}).ReactionType())
 
+	assert.Implements(t, (*ReactionType)(nil), &ReactionTypePaid{})
+	assert.Equal(t, ReactionPaid, (&ReactionTypePaid{}).ReactionType())
+
 	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeDefault{})
 	assert.Equal(t, ScopeTypeDefault, (&BotCommandScopeDefault{}).ScopeType())
 
@@ -679,7 +682,7 @@ func TestTypesConstants(t *testing.T) {
 			MemberStatusLeft, MemberStatusBanned,
 		},
 		{
-			ReactionEmoji, ReactionCustomEmoji,
+			ReactionEmoji, ReactionCustomEmoji, ReactionPaid,
 		},
 		{
 			ScopeTypeDefault, ScopeTypeAllPrivateChats, ScopeTypeAllGroupChats, ScopeTypeAllChatAdministrators,

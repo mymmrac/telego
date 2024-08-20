@@ -2,7 +2,6 @@ package telegoapi
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -45,8 +44,7 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.Equal(t, tt.data, data,
-				fmt.Sprintf("Expected: %q, actual: %q", tt.data.Buffer.String(), data.Buffer.String()))
+			assert.Equalf(t, tt.data, data, "Expected: %q, actual: %q", tt.data.Buffer.String(), data.Buffer.String())
 		})
 	}
 }

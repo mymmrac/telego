@@ -487,6 +487,8 @@ func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 				uc.AvailableReactions[i] = &ReactionTypeEmoji{}
 			case ReactionCustomEmoji:
 				uc.AvailableReactions[i] = &ReactionTypeCustomEmoji{}
+			case ReactionPaid:
+				uc.AvailableReactions[i] = &ReactionTypePaid{}
 			default:
 				return fmt.Errorf(unknownReactionTypeErr, reactionType)
 			}
@@ -510,14 +512,15 @@ type Message struct {
 	// supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
-	// From - Optional. Sender of the message; empty for messages sent to channels. For backward compatibility,
-	// the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+	// From - Optional. Sender of the message; may be empty for messages sent to channels. For backward
+	// compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in
+	// non-channel chats
 	From *User `json:"from,omitempty"`
 
-	// SenderChat - Optional. Sender of the message, sent on behalf of a chat. For example, the channel itself
-	// for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel
-	// for messages automatically forwarded to the discussion group. For backward compatibility, the field from
-	// contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+	// SenderChat - Optional. Sender of the message when sent on behalf of a chat. For example, the supergroup
+	// itself for messages sent by its anonymous administrators or a linked channel for messages automatically
+	// forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of
+	// a chat, the field from contains a fake sender user in non-channel chats.
 	SenderChat *Chat `json:"sender_chat,omitempty"`
 
 	// SenderBoostCount - Optional. If the sender of the message boosted the chat, the number of boosts added by
@@ -2852,6 +2855,14 @@ type ChatInviteLink struct {
 
 	// PendingJoinRequestCount - Optional. Number of pending join requests created using this link
 	PendingJoinRequestCount int `json:"pending_join_request_count,omitempty"`
+
+	// SubscriptionPeriod - Optional. The number of seconds the subscription will be active for before the next
+	// payment
+	SubscriptionPeriod int64 `json:"subscription_period,omitempty"`
+
+	// SubscriptionPrice - Optional. The amount of Telegram Stars a user must pay initially and after each
+	// subsequent subscription period to be a member of the chat using the link
+	SubscriptionPrice int `json:"subscription_price,omitempty"`
 }
 
 // ChatAdministratorRights - Represents the rights of an administrator in a chat.
@@ -3206,6 +3217,9 @@ type ChatMemberMember struct {
 
 	// User - Information about the user
 	User User `json:"user"`
+
+	// UntilDate - Optional. Date when the user's subscription will expire; Unix time
+	UntilDate int64 `json:"until_date,omitempty"`
 }
 
 // MemberStatus returns ChatMember status
@@ -3500,6 +3514,7 @@ type ChatLocation struct {
 // ReactionType - This object describes the type of a reaction. Currently, it can be one of
 // ReactionTypeEmoji (https://core.telegram.org/bots/api#reactiontypeemoji)
 // ReactionTypeCustomEmoji (https://core.telegram.org/bots/api#reactiontypecustomemoji)
+// ReactionTypePaid (https://core.telegram.org/bots/api#reactiontypepaid)
 type ReactionType interface {
 	ReactionType() string
 	// Disallow external implementations
@@ -3510,6 +3525,7 @@ type ReactionType interface {
 const (
 	ReactionEmoji       = "emoji"
 	ReactionCustomEmoji = "custom_emoji"
+	ReactionPaid        = "paid"
 )
 
 // ReactionTypeEmoji - The reaction is based on an emoji.
@@ -3550,6 +3566,19 @@ func (r *ReactionTypeCustomEmoji) ReactionType() string {
 
 func (r *ReactionTypeCustomEmoji) iReactionType() {}
 
+// ReactionTypePaid - The reaction is paid.
+type ReactionTypePaid struct {
+	// Type - Type of the reaction, always “paid”
+	Type string `json:"type"`
+}
+
+// ReactionType returns reaction type
+func (r *ReactionTypePaid) ReactionType() string {
+	return ReactionPaid
+}
+
+func (r *ReactionTypePaid) iReactionType() {}
+
 // ReactionCount - Represents a reaction added to a message along with the number of times it was added.
 type ReactionCount struct {
 	// Type - Type of the reaction
@@ -3582,6 +3611,8 @@ func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 		uc.Type = &ReactionTypeEmoji{}
 	case ReactionCustomEmoji:
 		uc.Type = &ReactionTypeCustomEmoji{}
+	case ReactionPaid:
+		uc.Type = &ReactionTypePaid{}
 	default:
 		return fmt.Errorf(unknownReactionTypeErr, reactionType)
 	}
@@ -3619,7 +3650,7 @@ type MessageReactionUpdated struct {
 }
 
 // UnmarshalJSON converts JSON to MessageReactionUpdated
-func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
+func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error { //nolint:funlen
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -3648,6 +3679,8 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 			uu.OldReaction[i] = &ReactionTypeEmoji{}
 		case ReactionCustomEmoji:
 			uu.OldReaction[i] = &ReactionTypeCustomEmoji{}
+		case ReactionPaid:
+			uu.OldReaction[i] = &ReactionTypePaid{}
 		default:
 			return fmt.Errorf(unknownReactionTypeErr, reactionType)
 		}
@@ -3662,6 +3695,8 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 			uu.NewReaction[i] = &ReactionTypeEmoji{}
 		case ReactionCustomEmoji:
 			uu.NewReaction[i] = &ReactionTypeCustomEmoji{}
+		case ReactionPaid:
+			uu.NewReaction[i] = &ReactionTypePaid{}
 		default:
 			return fmt.Errorf(unknownReactionTypeErr, reactionType)
 		}
@@ -6454,6 +6489,9 @@ type TransactionPartnerUser struct {
 
 	// InvoicePayload - Optional. Bot-specified invoice payload
 	InvoicePayload string `json:"invoice_payload,omitempty"`
+
+	// PaidMedia - Optional. Information about the paid media bought by the user
+	PaidMedia []PaidMedia `json:"paid_media,omitempty"`
 }
 
 // PartnerType returns TransactionPartner type
@@ -6462,6 +6500,45 @@ func (p *TransactionPartnerUser) PartnerType() string {
 }
 
 func (p *TransactionPartnerUser) iTransactionPartner() {}
+
+// UnmarshalJSON converts JSON to PaidMediaInfo
+func (p *TransactionPartnerUser) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uTransactionPartnerUser TransactionPartnerUser
+	var up uTransactionPartnerUser
+
+	if value.Exists("paid_media") {
+		paidMedia := value.GetArray("paid_media")
+		up.PaidMedia = make([]PaidMedia, len(paidMedia))
+		for i, media := range paidMedia {
+			mediaType := string(media.GetStringBytes("type"))
+			switch mediaType {
+			case PaidMediaTypePreview:
+				up.PaidMedia[i] = &PaidMediaPreview{}
+			case PaidMediaTypePhoto:
+				up.PaidMedia[i] = &PaidMediaPhoto{}
+			case PaidMediaTypeVideo:
+				up.PaidMedia[i] = &PaidMediaVideo{}
+			default:
+				return fmt.Errorf("unknown paid media type: %s", mediaType)
+			}
+		}
+	}
+
+	if err = json.Unmarshal(data, &up); err != nil {
+		return err
+	}
+	*p = TransactionPartnerUser(up)
+
+	return nil
+}
 
 // TransactionPartnerFragment - Describes a withdrawal transaction with Fragment.
 type TransactionPartnerFragment struct {
