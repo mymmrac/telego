@@ -435,8 +435,9 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 
 func TestSendPaidMediaParams_Setters(t *testing.T) {
 	s := (&SendPaidMediaParams{}).
-		WithChatID(ChatID{ID: 6}).
-		WithStarCount(1).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithStarCount(2).
 		WithMedia([]InputPaidMedia{&InputPaidMediaPhoto{}}...).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -444,12 +445,13 @@ func TestSendPaidMediaParams_Setters(t *testing.T) {
 		WithShowCaptionAboveMedia().
 		WithDisableNotification().
 		WithProtectContent().
-		WithReplyParameters(&ReplyParameters{MessageID: 2}).
+		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendPaidMediaParams{
-		ChatID:                ChatID{ID: 6},
-		StarCount:             1,
+		BusinessConnectionID:  "BusinessConnectionID",
+		ChatID:                ChatID{ID: 1},
+		StarCount:             2,
 		Media:                 []InputPaidMedia{&InputPaidMediaPhoto{}},
 		Caption:               "Caption",
 		ParseMode:             "ParseMode",
@@ -457,7 +459,7 @@ func TestSendPaidMediaParams_Setters(t *testing.T) {
 		ShowCaptionAboveMedia: true,
 		DisableNotification:   true,
 		ProtectContent:        true,
-		ReplyParameters:       &ReplyParameters{MessageID: 2},
+		ReplyParameters:       &ReplyParameters{MessageID: 3},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -861,13 +863,39 @@ func TestEditChatInviteLinkParams_Setters(t *testing.T) {
 	}, e)
 }
 
+func TestCreateChatSubscriptionInviteLinkParams_Setters(t *testing.T) {
+	c := (&CreateChatSubscriptionInviteLinkParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithName("Name").
+		WithSubscriptionPrice(1)
+
+	assert.Equal(t, &CreateChatSubscriptionInviteLinkParams{
+		ChatID:            ChatID{ID: 2},
+		Name:              "Name",
+		SubscriptionPrice: 1,
+	}, c)
+}
+
+func TestEditChatSubscriptionInviteLinkParams_Setters(t *testing.T) {
+	e := (&EditChatSubscriptionInviteLinkParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithInviteLink("InviteLink").
+		WithName("Name")
+
+	assert.Equal(t, &EditChatSubscriptionInviteLinkParams{
+		ChatID:     ChatID{ID: 2},
+		InviteLink: "InviteLink",
+		Name:       "Name",
+	}, e)
+}
+
 func TestRevokeChatInviteLinkParams_Setters(t *testing.T) {
 	r := (&RevokeChatInviteLinkParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 1}).
 		WithInviteLink("InviteLink")
 
 	assert.Equal(t, &RevokeChatInviteLinkParams{
-		ChatID:     ChatID{ID: 2},
+		ChatID:     ChatID{ID: 1},
 		InviteLink: "InviteLink",
 	}, r)
 }

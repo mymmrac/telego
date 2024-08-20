@@ -358,7 +358,8 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 		parameter.typ = "[]InputMedia"
 	}
 
-	if (parameter.name == "UserId" || parameter.name == "ChatId" || parameter.name == "SenderChatId") &&
+	if (parameter.name == "UserId" || parameter.name == "ChatId" || parameter.name == "SenderChatId" ||
+		strings.Contains(parameter.description, "number of seconds")) &&
 		parameter.typ == "int" {
 		parameter.typ = "int64"
 	}

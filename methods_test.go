@@ -1230,6 +1230,72 @@ func TestBot_EditChatInviteLink(t *testing.T) {
 	})
 }
 
+func TestBot_CreateChatSubscriptionInviteLink(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedChatInviteLink := &ChatInviteLink{
+			InviteLink: "InviteLink",
+		}
+		resp := telegoResponse(t, expectedChatInviteLink)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		chatInviteLink, err := m.Bot.CreateChatSubscriptionInviteLink(nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		chatInviteLink, err := m.Bot.CreateChatSubscriptionInviteLink(nil)
+		require.Error(t, err)
+		assert.Nil(t, chatInviteLink)
+	})
+}
+
+func TestBot_EditChatSubscriptionInviteLink(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedChatInviteLink := &ChatInviteLink{
+			InviteLink: "InviteLink",
+		}
+		resp := telegoResponse(t, expectedChatInviteLink)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		chatInviteLink, err := m.Bot.EditChatSubscriptionInviteLink(nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		chatInviteLink, err := m.Bot.EditChatSubscriptionInviteLink(nil)
+		require.Error(t, err)
+		assert.Nil(t, chatInviteLink)
+	})
+}
+
 func TestBot_RevokeChatInviteLink(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
