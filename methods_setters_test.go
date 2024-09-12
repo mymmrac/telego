@@ -439,6 +439,7 @@ func TestSendPaidMediaParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithStarCount(2).
 		WithMedia([]InputPaidMedia{&InputPaidMediaPhoto{}}...).
+		WithPayload("Payload").
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -453,6 +454,7 @@ func TestSendPaidMediaParams_Setters(t *testing.T) {
 		ChatID:                ChatID{ID: 1},
 		StarCount:             2,
 		Media:                 []InputPaidMedia{&InputPaidMediaPhoto{}},
+		Payload:               "Payload",
 		Caption:               "Caption",
 		ParseMode:             "ParseMode",
 		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},

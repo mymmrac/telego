@@ -990,6 +990,12 @@ func (p *SendPaidMediaParams) WithMedia(media ...InputPaidMedia) *SendPaidMediaP
 	return p
 }
 
+// WithPayload adds payload parameter
+func (p *SendPaidMediaParams) WithPayload(payload string) *SendPaidMediaParams {
+	p.Payload = payload
+	return p
+}
+
 // WithCaption adds caption parameter
 func (p *SendPaidMediaParams) WithCaption(caption string) *SendPaidMediaParams {
 	p.Caption = caption
