@@ -78,6 +78,10 @@ type Update struct {
 	// PreCheckoutQuery - Optional. New incoming pre-checkout query. Contains full information about checkout
 	PreCheckoutQuery *PreCheckoutQuery `json:"pre_checkout_query,omitempty"`
 
+	// PurchasedPaidMedia - Optional. A user purchased paid media with a non-empty payload sent by the bot in a
+	// non-channel chat
+	PurchasedPaidMedia *PaidMediaPurchased `json:"purchased_paid_media,omitempty"`
+
 	// Poll - Optional. New poll state. Bots receive only updates about manually stopped polls and polls, which
 	// are sent by the bot
 	Poll *Poll `json:"poll,omitempty"`
@@ -2236,8 +2240,11 @@ type VideoChatParticipantsInvited struct {
 }
 
 // GiveawayCreated - This object represents a service message about the creation of a scheduled giveaway.
-// Currently holds no information.
-type GiveawayCreated struct{}
+type GiveawayCreated struct {
+	// PrizeStarCount - Optional. The number of Telegram Stars to be split between giveaway winners; for
+	// Telegram Star giveaways only
+	PrizeStarCount int `json:"prize_star_count,omitempty"`
+}
 
 // Giveaway - This object represents a message about a scheduled giveaway.
 type Giveaway struct {
@@ -2266,8 +2273,12 @@ type Giveaway struct {
 	// phone number that was bought on Fragment can always participate in giveaways.
 	CountryCodes []string `json:"country_codes,omitempty"`
 
+	// PrizeStarCount - Optional. The number of Telegram Stars to be split between giveaway winners; for
+	// Telegram Star giveaways only
+	PrizeStarCount int `json:"prize_star_count,omitempty"`
+
 	// PremiumSubscriptionMonthCount - Optional. The number of months the Telegram Premium subscription won from
-	// the giveaway will be active for
+	// the giveaway will be active for; for Telegram Premium giveaways only
 	PremiumSubscriptionMonthCount int `json:"premium_subscription_month_count,omitempty"`
 }
 
@@ -2292,8 +2303,12 @@ type GiveawayWinners struct {
 	// for the giveaway
 	AdditionalChatCount int `json:"additional_chat_count,omitempty"`
 
+	// PrizeStarCount - Optional. The number of Telegram Stars that were split between giveaway winners; for
+	// Telegram Star giveaways only
+	PrizeStarCount int `json:"prize_star_count,omitempty"`
+
 	// PremiumSubscriptionMonthCount - Optional. The number of months the Telegram Premium subscription won from
-	// the giveaway will be active for
+	// the giveaway will be active for; for Telegram Premium giveaways only
 	PremiumSubscriptionMonthCount int `json:"premium_subscription_month_count,omitempty"`
 
 	// UnclaimedPrizeCount - Optional. Number of undistributed prizes
@@ -2321,6 +2336,10 @@ type GiveawayCompleted struct {
 
 	// GiveawayMessage - Optional. Message with the giveaway that was completed, if it wasn't deleted
 	GiveawayMessage *Message `json:"giveaway_message,omitempty"`
+
+	// IsStarGiveaway - Optional. True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the
+	// giveaway is a Telegram Premium giveaway.
+	IsStarGiveaway bool `json:"is_star_giveaway,omitempty"`
 }
 
 // LinkPreviewOptions - Describes the options used for link preview generation.
@@ -4109,8 +4128,9 @@ func (b *ChatBoostSourceGiftCode) BoostSource() string {
 
 func (b *ChatBoostSourceGiftCode) iChatBoostSource() {}
 
-// ChatBoostSourceGiveaway - The boost was obtained by the creation of a Telegram Premium giveaway. This
-// boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+// ChatBoostSourceGiveaway - The boost was obtained by the creation of a Telegram Premium or a Telegram Star
+// giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription
+// for Telegram Premium giveaways and prize_star_count / 500 times for one year for Telegram Star giveaways.
 type ChatBoostSourceGiveaway struct {
 	// Source - Source of the boost, always “giveaway”
 	Source string `json:"source"`
@@ -4119,8 +4139,12 @@ type ChatBoostSourceGiveaway struct {
 	// deleted already. May be 0 if the message isn't sent yet.
 	GiveawayMessageID int `json:"giveaway_message_id"`
 
-	// User - Optional. User that won the prize in the giveaway if any
+	// User - Optional. User that won the prize in the giveaway if any; for Telegram Premium giveaways only
 	User *User `json:"user,omitempty"`
+
+	// PrizeStarCount - Optional. The number of Telegram Stars to be split between giveaway winners; for
+	// Telegram Star giveaways only
+	PrizeStarCount int `json:"prize_star_count,omitempty"`
 
 	// IsUnclaimed - Optional. True, if the giveaway was completed, but there was no user to win the prize
 	IsUnclaimed bool `json:"is_unclaimed,omitempty"`
@@ -6105,8 +6129,8 @@ type InputInvoiceMessageContent struct {
 	// Description - Product description, 1-255 characters
 	Description string `json:"description"`
 
-	// Payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your
-	// internal processes.
+	// Payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for
+	// your internal processes.
 	Payload string `json:"payload"`
 
 	// ProviderToken - Optional. Payment provider token, obtained via @BotFather (https://t.me/botfather). Pass
@@ -6396,6 +6420,15 @@ type PreCheckoutQuery struct {
 	OrderInfo *OrderInfo `json:"order_info,omitempty"`
 }
 
+// PaidMediaPurchased - This object contains information about a paid media purchase.
+type PaidMediaPurchased struct {
+	// From - User who purchased the media
+	From User `json:"from"`
+
+	// PaidMediaPayload - Bot-specified paid media payload
+	PaidMediaPayload string `json:"paid_media_payload"`
+}
+
 // RevenueWithdrawalState - This object describes the state of a revenue withdrawal operation. Currently, it
 // can be one of
 // RevenueWithdrawalStatePending (https://core.telegram.org/bots/api#revenuewithdrawalstatepending)
@@ -6492,6 +6525,9 @@ type TransactionPartnerUser struct {
 
 	// PaidMedia - Optional. Information about the paid media bought by the user
 	PaidMedia []PaidMedia `json:"paid_media,omitempty"`
+
+	// PaidMediaPayload - Optional. Bot-specified paid media payload
+	PaidMediaPayload string `json:"paid_media_payload,omitempty"`
 }
 
 // PartnerType returns TransactionPartner type

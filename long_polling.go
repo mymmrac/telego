@@ -82,7 +82,7 @@ func WithLongPollingContext(ctx context.Context) LongPollingOption {
 			return errors.New("context is nil")
 		}
 
-		lCtx.ctx = ctx
+		lCtx.ctx = ctx //nolint:fatcontext
 		return nil
 	}
 }
