@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	th "github.com/mymmrac/telego/telegohandler"
 	"os"
 
 	"github.com/mymmrac/telego"
@@ -17,6 +18,16 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	updates, _ := bot.UpdatesViaLongPolling(nil)
+
+	// Create bot handler and specify from where to get updates
+	bh, _ := th.NewBotHandler(bot, updates)
+
+	// Stop handling updates
+	defer bh.Stop()
+
+	// Stop getting updates
+	defer bot.StopLongPolling()
 
 	// Inline keyboard parameters
 	inlineKeyboard := tu.InlineKeyboard(
@@ -30,23 +41,25 @@ func main() {
 			tu.InlineKeyboardButton("URL button").WithURL("https://example.com"), // Column 1
 		),
 	)
+	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		message := tu.Message(
+			tu.ID(update.Message.Chat.ID),
+			"My message",
+		).WithReplyMarkup(inlineKeyboard)
 
-	// Message parameters
-	message := tu.Message(
-		tu.ID(1234567),
-		"My message",
-	).WithReplyMarkup(inlineKeyboard)
+		// Sending message
+		_, _ = bot.SendMessage(message)
+	}, th.AnyMessage())
+	// Register new handler with match on a call back query with data equal to `go` and non-nil message
+	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
+		// Send message
+		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.GetChat().ID), "GO"))
 
-	// Sending message
-	_, _ = bot.SendMessage(message)
+		// Answer callback query
+		_ = bot.AnswerCallbackQuery(tu.CallbackQuery(query.ID).WithText("Done"))
+	}, th.AnyCallbackQueryWithMessage())
 
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-	defer bot.StopLongPolling()
+	// Start handling updates
+	bh.Start()
 
-	// Receiving callback data
-	for update := range updates {
-		if update.CallbackQuery != nil {
-			fmt.Println("Received callback with data:", update.CallbackQuery.Data)
-		}
-	}
 }
