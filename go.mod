@@ -9,7 +9,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/valyala/fasthttp v1.56.0
 	github.com/valyala/fastjson v1.6.4
-	go.uber.org/mock v0.4.0
+	go.uber.org/mock v0.5.0
 )
 
 // Temporary fix for issue https://github.com/goccy/go-json/issues/405
