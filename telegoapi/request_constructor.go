@@ -17,17 +17,15 @@ type DefaultConstructor struct{}
 
 // JSONRequest is default implementation
 func (d DefaultConstructor) JSONRequest(parameters any) (*RequestData, error) {
-	data := &RequestData{
-		ContentType: ContentTypeJSON,
-		Buffer:      &bytes.Buffer{},
-	}
-
-	err := json.NewEncoder(data.Buffer).Encode(parameters)
+	data, err := json.Marshal(parameters)
 	if err != nil {
 		return nil, fmt.Errorf("encode json: %w", err)
 	}
 
-	return data, nil
+	return &RequestData{
+		ContentType: ContentTypeJSON,
+		Buffer:      bytes.NewBuffer(data),
+	}, nil
 }
 
 // MultipartRequest is default implementation

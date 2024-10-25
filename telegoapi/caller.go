@@ -5,6 +5,7 @@ package telegoapi
 import (
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"time"
@@ -77,19 +78,21 @@ func (h HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("http do request: %w", err)
 	}
+	defer func() { _ = resp.Body.Close() }() //nolint:errcheck
 
 	if resp.StatusCode >= http.StatusInternalServerError {
 		return nil, fmt.Errorf("internal server error: %d", resp.StatusCode)
 	}
 
-	apiResp := &Response{}
-	err = json.NewDecoder(resp.Body).Decode(apiResp)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("decode json: %w", err)
+		return nil, fmt.Errorf("read body: %w", err)
 	}
 
-	if err = resp.Body.Close(); err != nil {
-		return nil, fmt.Errorf("close body: %w", err)
+	apiResp := &Response{}
+	err = json.Unmarshal(body, apiResp)
+	if err != nil {
+		return nil, fmt.Errorf("decode json: %w", err)
 	}
 
 	return apiResp, nil

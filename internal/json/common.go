@@ -9,3 +9,8 @@ import (
 type RawMessage = json.RawMessage
 
 var ParserPoll = &fastjson.ParserPool{}
+
+var (
+	Marshal   func(v any) ([]byte, error)
+	Unmarshal func(data []byte, v any) error
+)

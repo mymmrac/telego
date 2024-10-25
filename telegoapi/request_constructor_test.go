@@ -29,7 +29,7 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 			},
 			data: &RequestData{
 				ContentType: ContentTypeJSON,
-				Buffer:      bytes.NewBufferString(`{"n":1,"s":"test"}` + "\n"),
+				Buffer:      bytes.NewBufferString(`{"n":1,"s":"test"}`),
 			},
 			isError: false,
 		},
