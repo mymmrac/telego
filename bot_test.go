@@ -158,12 +158,23 @@ func TestBot_Logger(t *testing.T) {
 }
 
 func TestBot_FileDownloadURL(t *testing.T) {
-	bot, err := NewBot(token)
-	require.NoError(t, err)
+	t.Run("regular", func(t *testing.T) {
+		bot, err := NewBot(token)
+		require.NoError(t, err)
 
-	filepath := "file.txt"
-	url := bot.FileDownloadURL(filepath)
-	assert.Equal(t, bot.apiURL+"/file"+botPathPrefix+bot.token+"/"+filepath, url)
+		filepath := "file.txt"
+		url := bot.FileDownloadURL(filepath)
+		assert.Equal(t, bot.apiURL+"/file"+botPathPrefix+bot.token+"/"+filepath, url)
+	})
+
+	t.Run("test", func(t *testing.T) {
+		bot, err := NewBot(token, WithTestServerPath())
+		require.NoError(t, err)
+
+		filepath := "file.txt"
+		url := bot.FileDownloadURL(filepath)
+		assert.Equal(t, bot.apiURL+"/file"+botPathPrefix+bot.token+"/test/"+filepath, url)
+	})
 }
 
 type testErrorMarshal struct {
