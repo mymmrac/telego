@@ -4,14 +4,14 @@ go 1.22.6
 
 require (
 	github.com/fasthttp/router v1.5.2
-	github.com/mymmrac/telego v0.31.3
-	github.com/valyala/fasthttp v1.56.0
+	github.com/mymmrac/telego v0.31.4
+	github.com/valyala/fasthttp v1.57.0
 	golang.ngrok.com/ngrok v1.11.0
 )
 
 require (
-	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/bytedance/sonic v1.12.2 // indirect
+	github.com/andybalholm/brotli v1.1.1 // indirect
+	github.com/bytedance/sonic v1.12.3 // indirect
 	github.com/bytedance/sonic/loader v0.2.0 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
@@ -20,7 +20,7 @@ require (
 	github.com/inconshreveable/log15 v3.0.0-testing.5+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
-	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -33,10 +33,10 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.ngrok.com/muxado/v2 v2.0.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/term v0.24.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/term v0.25.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
