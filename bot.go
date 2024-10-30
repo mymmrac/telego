@@ -103,6 +103,9 @@ func (b *Bot) Logger() Logger {
 
 // FileDownloadURL returns URL used to download file by its file path retrieved from GetFile method
 func (b *Bot) FileDownloadURL(filepath string) string {
+	if b.useTestServerPath {
+		return b.apiURL + "/file/bot" + b.token + "/test/" + filepath
+	}
 	return b.apiURL + "/file/bot" + b.token + "/" + filepath
 }
 
