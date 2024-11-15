@@ -3805,6 +3805,18 @@ type ReplaceStickerInSetParams struct {
 	Sticker InputSticker `json:"sticker"`
 }
 
+func (p *ReplaceStickerInSetParams) fileParameters() map[string]ta.NamedReader {
+	file := p.Sticker.Sticker.File
+	if isNil(file) {
+		return map[string]ta.NamedReader{}
+	}
+
+	p.Sticker.Sticker.needAttach = true
+	return map[string]ta.NamedReader{
+		file.Name(): file,
+	}
+}
+
 // ReplaceStickerInSet - Use this method to replace an existing sticker in a sticker set with a new one. The
 // method is equivalent to calling deleteStickerFromSet
 // (https://core.telegram.org/bots/api#deletestickerfromset), then addStickerToSet
