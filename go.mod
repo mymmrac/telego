@@ -6,7 +6,7 @@ require (
 	github.com/bytedance/sonic v1.12.4
 	github.com/fasthttp/router v1.5.2
 	github.com/joho/godotenv v1.5.1
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/valyala/fasthttp v1.57.0
 	github.com/valyala/fastjson v1.6.4
 	go.uber.org/mock v0.5.0
