@@ -3,7 +3,7 @@ module github.com/mymmrac/telego/examples
 go 1.22.6
 
 require (
-	github.com/fasthttp/router v1.5.2
+	github.com/fasthttp/router v1.5.3
 	github.com/mymmrac/telego v0.31.4
 	github.com/valyala/fasthttp v1.57.0
 	golang.ngrok.com/ngrok v1.11.0
