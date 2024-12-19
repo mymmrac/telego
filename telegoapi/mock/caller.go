@@ -20,6 +20,7 @@ import (
 type MockCaller struct {
 	ctrl     *gomock.Controller
 	recorder *MockCallerMockRecorder
+	isgomock struct{}
 }
 
 // MockCallerMockRecorder is the mock recorder for MockCaller.
@@ -40,18 +41,18 @@ func (m *MockCaller) EXPECT() *MockCallerMockRecorder {
 }
 
 // Call mocks base method.
-func (m *MockCaller) Call(arg0 string, arg1 *telegoapi.RequestData) (*telegoapi.Response, error) {
+func (m *MockCaller) Call(url string, data *telegoapi.RequestData) (*telegoapi.Response, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Call", arg0, arg1)
+	ret := m.ctrl.Call(m, "Call", url, data)
 	ret0, _ := ret[0].(*telegoapi.Response)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockCallerMockRecorder) Call(arg0, arg1 any) *MockCallerCallCall {
+func (mr *MockCallerMockRecorder) Call(url, data any) *MockCallerCallCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), arg0, arg1)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), url, data)
 	return &MockCallerCallCall{Call: call}
 }
 

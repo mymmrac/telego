@@ -29,8 +29,6 @@ linters:
     - wsl # Whitespace Linter - Forces you to use empty lines!
 
     # Disabled because deprecated
-    - execinquery # Execinquery is a linter about query string checker in Query function which reads your Go src files and warning it finds
-    - gomnd # An analyzer to detect magic numbers
     - exportloopref # An analyzer that finds exporting pointers for loop variables
 
     # To see a list of enabled/disabled by current configuration linters:

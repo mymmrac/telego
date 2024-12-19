@@ -87,7 +87,7 @@ type fasthttpServer struct {
 
 func (s *fasthttpServer) Handle(ctx *fasthttp.RequestCtx) {
 	assert.True(s.t, ctx.IsPost())
-	assert.Equal(s.t, ContentTypeJSON, string(ctx.Request.Header.ContentType()))
+	assert.Equal(s.t, ContentTypeJSON, string(ctx.Request.Header.ContentType())) //nolint:testifylint
 
 	switch string(ctx.Path()) {
 	case err500Path:
@@ -157,7 +157,7 @@ type httpServer struct {
 
 func (h *httpServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	assert.Equal(h.t, http.MethodPost, req.Method)
-	assert.Equal(h.t, ContentTypeJSON, req.Header.Get(ContentTypeHeader))
+	assert.Equal(h.t, ContentTypeJSON, req.Header.Get(ContentTypeHeader)) //nolint:testifylint
 
 	switch req.RequestURI {
 	case err500Path:

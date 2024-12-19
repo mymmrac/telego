@@ -20,6 +20,7 @@ import (
 type MockRequestConstructor struct {
 	ctrl     *gomock.Controller
 	recorder *MockRequestConstructorMockRecorder
+	isgomock struct{}
 }
 
 // MockRequestConstructorMockRecorder is the mock recorder for MockRequestConstructor.
@@ -40,18 +41,18 @@ func (m *MockRequestConstructor) EXPECT() *MockRequestConstructorMockRecorder {
 }
 
 // JSONRequest mocks base method.
-func (m *MockRequestConstructor) JSONRequest(arg0 any) (*telegoapi.RequestData, error) {
+func (m *MockRequestConstructor) JSONRequest(parameters any) (*telegoapi.RequestData, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "JSONRequest", arg0)
+	ret := m.ctrl.Call(m, "JSONRequest", parameters)
 	ret0, _ := ret[0].(*telegoapi.RequestData)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // JSONRequest indicates an expected call of JSONRequest.
-func (mr *MockRequestConstructorMockRecorder) JSONRequest(arg0 any) *MockRequestConstructorJSONRequestCall {
+func (mr *MockRequestConstructorMockRecorder) JSONRequest(parameters any) *MockRequestConstructorJSONRequestCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONRequest", reflect.TypeOf((*MockRequestConstructor)(nil).JSONRequest), arg0)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONRequest", reflect.TypeOf((*MockRequestConstructor)(nil).JSONRequest), parameters)
 	return &MockRequestConstructorJSONRequestCall{Call: call}
 }
 
@@ -79,18 +80,18 @@ func (c *MockRequestConstructorJSONRequestCall) DoAndReturn(f func(any) (*telego
 }
 
 // MultipartRequest mocks base method.
-func (m *MockRequestConstructor) MultipartRequest(arg0 map[string]string, arg1 map[string]telegoapi.NamedReader) (*telegoapi.RequestData, error) {
+func (m *MockRequestConstructor) MultipartRequest(parameters map[string]string, filesParameters map[string]telegoapi.NamedReader) (*telegoapi.RequestData, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MultipartRequest", arg0, arg1)
+	ret := m.ctrl.Call(m, "MultipartRequest", parameters, filesParameters)
 	ret0, _ := ret[0].(*telegoapi.RequestData)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // MultipartRequest indicates an expected call of MultipartRequest.
-func (mr *MockRequestConstructorMockRecorder) MultipartRequest(arg0, arg1 any) *MockRequestConstructorMultipartRequestCall {
+func (mr *MockRequestConstructorMockRecorder) MultipartRequest(parameters, filesParameters any) *MockRequestConstructorMultipartRequestCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultipartRequest", reflect.TypeOf((*MockRequestConstructor)(nil).MultipartRequest), arg0, arg1)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultipartRequest", reflect.TypeOf((*MockRequestConstructor)(nil).MultipartRequest), parameters, filesParameters)
 	return &MockRequestConstructorMultipartRequestCall{Call: call}
 }
 
