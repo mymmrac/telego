@@ -4,7 +4,7 @@ go 1.22.3
 
 require (
 	github.com/bytedance/sonic v1.12.6
-	github.com/fasthttp/router v1.5.3
+	github.com/fasthttp/router v1.5.4
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.10.0
 	github.com/valyala/fasthttp v1.58.0
