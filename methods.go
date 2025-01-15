@@ -334,14 +334,14 @@ type ForwardMessagesParams struct {
 // messages can't be found or forwarded, they are skipped. Service messages and messages with protected content
 // can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageID
 // (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
-func (b *Bot) ForwardMessages(params *ForwardMessagesParams) (*MessageID, error) {
-	var messageID *MessageID
-	err := b.performRequest("forwardMessages", params, &messageID)
+func (b *Bot) ForwardMessages(params *ForwardMessagesParams) ([]MessageID, error) {
+	var messageIDs []MessageID
+	err := b.performRequest("forwardMessages", params, &messageIDs)
 	if err != nil {
 		return nil, fmt.Errorf("telego: forwardMessages(): %w", err)
 	}
 
-	return messageID, nil
+	return messageIDs, nil
 }
 
 // CopyMessageParams - Represents parameters of copyMessage method.
@@ -447,14 +447,14 @@ type CopyMessagesParams struct {
 // method forwardMessages (https://core.telegram.org/bots/api#forwardmessages), but the copied messages don't
 // have a link to the original message. Album grouping is kept for copied messages. On success, an array of
 // MessageID (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
-func (b *Bot) CopyMessages(params *CopyMessagesParams) (*MessageID, error) {
-	var messageID *MessageID
-	err := b.performRequest("copyMessages", params, &messageID)
+func (b *Bot) CopyMessages(params *CopyMessagesParams) ([]MessageID, error) {
+	var messageIDs []MessageID
+	err := b.performRequest("copyMessages", params, &messageIDs)
 	if err != nil {
 		return nil, fmt.Errorf("telego: copyMessages(): %w", err)
 	}
 
-	return messageID, nil
+	return messageIDs, nil
 }
 
 // SendPhotoParams - Represents parameters of sendPhoto method.

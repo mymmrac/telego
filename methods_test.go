@@ -287,15 +287,18 @@ func TestBot_ForwardMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		expectedMessageID := &MessageID{}
-		resp := telegoResponse(t, expectedMessageID)
+		expectedMessageIDs := []MessageID{
+			{MessageID: 3},
+			{MessageID: 4},
+		}
+		resp := telegoResponse(t, expectedMessageIDs)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
 		messageID, err := m.Bot.ForwardMessages(nil)
 		require.NoError(t, err)
-		assert.Equal(t, expectedMessageID, messageID)
+		assert.Equal(t, expectedMessageIDs, messageID)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -351,15 +354,18 @@ func TestBot_CopyMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		expectedMessageID := &MessageID{}
-		resp := telegoResponse(t, expectedMessageID)
+		expectedMessageIDs := []MessageID{
+			{MessageID: 1},
+			{MessageID: 2},
+		}
+		resp := telegoResponse(t, expectedMessageIDs)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
 		messageID, err := m.Bot.CopyMessages(nil)
 		require.NoError(t, err)
-		assert.Equal(t, expectedMessageID, messageID)
+		assert.Equal(t, expectedMessageIDs, messageID)
 	})
 
 	t.Run("error", func(t *testing.T) {

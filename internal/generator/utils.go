@@ -200,8 +200,8 @@ func parseType(text string, optional bool) string {
 		}
 		return "InputFile"
 	default:
-		if strings.HasPrefix(text, "Array of ") {
-			text = strings.Replace(text, "Array of ", "", 1)
+		if strings.HasPrefix(text, "Array of ") || strings.HasPrefix(text, "array of ") {
+			text = strings.TrimPrefix(strings.TrimPrefix(text, "Array of "), "array of ")
 			return "[]" + parseType(text, false)
 		}
 

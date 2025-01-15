@@ -71,8 +71,8 @@ const methodParameterPattern = `
 `
 
 const (
-	returnTypePattern1 = `[Rr]eturns [a-z ]*?((?:Array of |)[A-Z]\w+)`
-	returnTypePattern2 = `((?:Array of |)[A-Z]\w+)[a-z ]*?returned`
+	returnTypePattern1 = `[Rr]eturns [a-z ]*?((?:[Aa]rray of |)[A-Z]\w+)`
+	returnTypePattern2 = `((?:[Aa]rray of |)[A-Z]\w+)[a-z ]*?returned`
 )
 
 const returnTypeNotFound = "NOT_FOUND"
