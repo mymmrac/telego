@@ -3771,7 +3771,7 @@ type BotCommand struct {
 }
 
 // ChatID - Represents chat ID as int64 or string
-type ChatID struct {
+type ChatID struct { //nolint:recvcheck
 	// ID - Unique identifier for the target chat
 	ID int64
 
@@ -3804,6 +3804,14 @@ func (c ChatID) MarshalJSON() ([]byte, error) {
 	}
 
 	return []byte(`""`), nil
+}
+
+// UnmarshalJSON parses JSON to ChatID
+func (c *ChatID) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, &c.ID); err == nil {
+		return nil
+	}
+	return json.Unmarshal(data, &c.Username)
 }
 
 // BotCommandScope - This object represents the scope to which bot commands are applied. Currently, the

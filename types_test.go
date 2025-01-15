@@ -524,6 +524,51 @@ func TestChatID_MarshalJSON(t *testing.T) {
 	}
 }
 
+func TestChatID_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name     string
+		jsonData string
+		chatID   ChatID
+		isError  bool
+	}{
+		{
+			name:     "empty",
+			jsonData: `""`,
+			chatID:   ChatID{},
+			isError:  false,
+		},
+		{
+			name:     "success_id",
+			jsonData: "123",
+			chatID: ChatID{
+				ID: 123,
+			},
+			isError: false,
+		},
+		{
+			name:     "success_username",
+			jsonData: `"test"`,
+			chatID: ChatID{
+				Username: "test",
+			},
+			isError: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var chatID ChatID
+			err := chatID.UnmarshalJSON([]byte(tt.jsonData))
+			if tt.isError {
+				require.Error(t, err)
+				assert.Nil(t, data)
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.chatID, chatID)
+		})
+	}
+}
+
 func TestInputFile_MarshalJSON(t *testing.T) {
 	tests := []struct {
 		name      string
