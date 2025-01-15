@@ -156,6 +156,7 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		WithSwitchInlineQuery("SwitchInlineQuery").
 		WithSwitchInlineQueryCurrentChat("SwitchInlineQueryCurrentChat").
 		WithSwitchInlineQueryChosenChat(&SwitchInlineQueryChosenChat{AllowUserChats: true}).
+		WithCopyText(&CopyTextButton{}).
 		WithCallbackGame(&CallbackGame{}).
 		WithPay()
 
@@ -168,6 +169,7 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		SwitchInlineQuery:            ToPtr("SwitchInlineQuery"),
 		SwitchInlineQueryCurrentChat: ToPtr("SwitchInlineQueryCurrentChat"),
 		SwitchInlineQueryChosenChat:  &SwitchInlineQueryChosenChat{AllowUserChats: true},
+		CopyText:                     &CopyTextButton{},
 		CallbackGame:                 &CallbackGame{},
 		Pay:                          true,
 	}, i)
@@ -338,7 +340,6 @@ func TestInlineQueryResultArticle_Setters(t *testing.T) {
 		WithInputMessageContent(&InputTextMessageContent{}).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}}).
 		WithURL("URL").
-		WithHideURL().
 		WithDescription("Description").
 		WithThumbnailURL("ThumbnailURL").
 		WithThumbnailWidth(1).
@@ -350,7 +351,6 @@ func TestInlineQueryResultArticle_Setters(t *testing.T) {
 		InputMessageContent: &InputTextMessageContent{},
 		ReplyMarkup:         &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 		URL:                 "URL",
-		HideURL:             true,
 		Description:         "Description",
 		ThumbnailURL:        "ThumbnailURL",
 		ThumbnailWidth:      1,

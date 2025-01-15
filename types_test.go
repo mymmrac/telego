@@ -241,11 +241,17 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerUser{})
 	assert.Equal(t, PartnerTypeUser, (&TransactionPartnerUser{}).PartnerType())
 
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerAffiliateProgram{})
+	assert.Equal(t, PartnerTypeAffiliateProgram, (&TransactionPartnerAffiliateProgram{}).PartnerType())
+
 	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerFragment{})
 	assert.Equal(t, PartnerTypeFragment, (&TransactionPartnerFragment{}).PartnerType())
 
 	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerTelegramAds{})
 	assert.Equal(t, PartnerTypeTelegramAds, (&TransactionPartnerTelegramAds{}).PartnerType())
+
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerTelegramApi{})
+	assert.Equal(t, PartnerTypeTelegramApi, (&TransactionPartnerTelegramApi{}).PartnerType())
 
 	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerOther{})
 	assert.Equal(t, PartnerTypeOther, (&TransactionPartnerOther{}).PartnerType())
@@ -770,7 +776,8 @@ func TestTypesConstants(t *testing.T) {
 			WithdrawalStatePending, WithdrawalStateSucceeded, WithdrawalStateFailed,
 		},
 		{
-			PartnerTypeUser, PartnerTypeFragment, PartnerTypeTelegramAds, PartnerTypeOther,
+			PartnerTypeUser, PartnerTypeAffiliateProgram, PartnerTypeFragment, PartnerTypeTelegramAds,
+			PartnerTypeTelegramApi, PartnerTypeOther,
 		},
 		{
 			ElementTypePersonalDetails, ElementTypePassport, ElementTypeDriverLicense, ElementTypeIdentityCard,

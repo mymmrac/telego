@@ -306,6 +306,12 @@ func (i InlineKeyboardButton) WithSwitchInlineQueryChosenChat(
 	return i
 }
 
+// WithCopyText adds copy text parameter
+func (i InlineKeyboardButton) WithCopyText(copyText *CopyTextButton) InlineKeyboardButton {
+	i.CopyText = copyText
+	return i
+}
+
 // WithCallbackGame adds callback game parameter
 func (i InlineKeyboardButton) WithCallbackGame(callbackGame *CallbackGame) InlineKeyboardButton {
 	i.CallbackGame = callbackGame
@@ -652,12 +658,6 @@ func (i *InlineQueryResultArticle) WithReplyMarkup(replyMarkup *InlineKeyboardMa
 // WithURL adds URL parameter
 func (i *InlineQueryResultArticle) WithURL(url string) *InlineQueryResultArticle {
 	i.URL = url
-	return i
-}
-
-// WithHideURL adds hide URL parameter
-func (i *InlineQueryResultArticle) WithHideURL() *InlineQueryResultArticle {
-	i.HideURL = true
 	return i
 }
 

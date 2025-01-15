@@ -193,6 +193,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputPollOption{{}}"
 	case "[]InputPaidMedia":
 		return "[]InputPaidMedia{&InputPaidMediaPhoto{}}"
+	case "*CopyTextButton":
+		return "&CopyTextButton{}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
