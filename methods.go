@@ -29,7 +29,7 @@ type GetUpdatesParams struct {
 	// See Update (https://core.telegram.org/bots/api#update) for a complete list of available update types. Specify
 	// an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count
 	// (default). If not specified, the previous setting will be used.
-	// Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted
+	// Please note that this parameter doesn't affect updates created before the call to getUpdates, so unwanted
 	// updates may be received for a short period of time.
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
 }
@@ -116,8 +116,10 @@ func (p *SetWebhookParams) fileParameters() map[string]ta.NamedReader {
 
 // SetWebhook - Use this method to specify a URL and receive incoming updates via an outgoing webhook.
 // Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing
-// a JSON-serialized Update (https://core.telegram.org/bots/api#update). In case of an unsuccessful request, we
-// will give up after a reasonable amount of attempts. Returns True on success.
+// a JSON-serialized Update (https://core.telegram.org/bots/api#update). In case of an unsuccessful request (a
+// request with response HTTP status code (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) different
+// from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on
+// success.
 // If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter
 // secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the
 // secret token as content.
@@ -232,6 +234,11 @@ type SendMessageParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -384,6 +391,11 @@ type CopyMessageParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -503,6 +515,11 @@ type SendPhotoParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -589,6 +606,11 @@ type SendAudioParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -680,6 +702,11 @@ type SendDocumentParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -784,6 +811,11 @@ type SendVideoParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -885,6 +917,11 @@ type SendAnimationParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -964,6 +1001,11 @@ type SendVoiceParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -1039,6 +1081,11 @@ type SendVideoNoteParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -1120,6 +1167,11 @@ type SendPaidMediaParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1165,6 +1217,11 @@ type SendMediaGroupParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent messages from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -1245,6 +1302,11 @@ type SendLocationParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -1318,6 +1380,11 @@ type SendVenueParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -1377,6 +1444,11 @@ type SendContactParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -1478,6 +1550,11 @@ type SendPollParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -1530,6 +1607,11 @@ type SendDiceParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -1671,6 +1753,31 @@ func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) (*UserPro
 	}
 
 	return userProfilePhotos, nil
+}
+
+// SetUserEmojiStatusParams - Represents parameters of setUserEmojiStatus method.
+type SetUserEmojiStatusParams struct {
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+
+	// EmojiStatusCustomEmojiID - Optional. Custom emoji identifier of the emoji status to set. Pass an empty
+	// string to remove the status.
+	EmojiStatusCustomEmojiID string `json:"emoji_status_custom_emoji_id,omitempty"`
+
+	// EmojiStatusExpirationDate - Optional. Expiration date of the emoji status, if any
+	EmojiStatusExpirationDate int64 `json:"emoji_status_expiration_date,omitempty"`
+}
+
+// SetUserEmojiStatus - Changes the emoji status for a given user that previously allowed the bot to manage
+// their emoji status via the Mini App method requestEmojiStatusAccess
+// (https://core.telegram.org/bots/webapps#initializing-mini-apps). Returns True on success.
+func (b *Bot) SetUserEmojiStatus(params *SetUserEmojiStatusParams) error {
+	err := b.performRequest("setUserEmojiStatus", params)
+	if err != nil {
+		return fmt.Errorf("telego: setUserEmojiStatus(): %w", err)
+	}
+
+	return nil
 }
 
 // GetFileParams - Represents parameters of getFile method.
@@ -3283,13 +3390,14 @@ func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
 	return fp
 }
 
-// EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages. If a
-// message is part of a message album, then it can be edited only to an audio for audio albums, only to a
-// document for document albums and to a photo or a video otherwise. When an inline message is edited, a new
-// file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the
-// edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
-// returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not
-// contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+// EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages, or to add
+// media to text messages. If a message is part of a message album, then it can be edited only to an audio for
+// audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline
+// message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a
+// URL. On success, if the edited message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
+// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
+// hours from the time they were sent.
 func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -3549,6 +3657,11 @@ type SendStickerParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
@@ -3925,7 +4038,7 @@ type SetStickerSetThumbnailParams struct {
 	// have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size
 	// (see https://core.telegram.org/stickers#animation-requirements
 	// (https://core.telegram.org/stickers#animation-requirements) for animated sticker technical requirements), or
-	// a WEBM video with the thumbnail up to 32 kilobytes in size; see
+	// a .WEBM video with the thumbnail up to 32 kilobytes in size; see
 	// https://core.telegram.org/stickers#video-requirements (https://core.telegram.org/stickers#video-requirements)
 	// for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on
 	// the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a
@@ -3936,7 +4049,7 @@ type SetStickerSetThumbnailParams struct {
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
 	// Format - Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated”
-	// for a .TGS animation, or “video” for a WEBM video
+	// for a .TGS animation, or “video” for a .WEBM video
 	Format string `json:"format"`
 }
 
@@ -4000,6 +4113,137 @@ func (b *Bot) DeleteStickerSet(params *DeleteStickerSetParams) error {
 	return nil
 }
 
+// GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users. Requires no
+// parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
+func (b *Bot) GetAvailableGifts() (*Gifts, error) {
+	var gifts *Gifts
+	err := b.performRequest("getAvailableGifts", nil, &gifts)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getAvailableGifts(): %w", err)
+	}
+
+	return gifts, nil
+}
+
+// SendGiftParams - Represents parameters of sendGift method.
+type SendGiftParams struct {
+	// UserID - Unique identifier of the target user that will receive the gift
+	UserID int64 `json:"user_id"`
+
+	// GiftID - Identifier of the gift
+	GiftID string `json:"gift_id"`
+
+	// PayForUpgrade - Optional. Pass True to pay for the gift upgrade from the bot's balance, thereby making
+	// the upgrade free for the receiver
+	PayForUpgrade bool `json:"pay_for_upgrade,omitempty"`
+
+	// Text - Optional. Text that will be shown along with the gift; 0-255 characters
+	Text string `json:"text,omitempty"`
+
+	// TextParseMode - Optional. Mode for parsing entities in the text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details. Entities other than “bold”,
+	// “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+	TextParseMode string `json:"text_parse_mode,omitempty"`
+
+	// TextEntities - Optional. A JSON-serialized list of special entities that appear in the gift text. It can
+	// be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”,
+	// “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+	TextEntities []MessageEntity `json:"text_entities,omitempty"`
+}
+
+// SendGift - Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+// Returns True on success.
+func (b *Bot) SendGift(params *SendGiftParams) error {
+	err := b.performRequest("sendGift", params)
+	if err != nil {
+		return fmt.Errorf("telego: sendGift(): %w", err)
+	}
+
+	return nil
+}
+
+// VerifyUserParams - Represents parameters of verifyUser method.
+type VerifyUserParams struct {
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+
+	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
+	// the organization isn't allowed to provide a custom verification description.
+	CustomDescription string `json:"custom_description,omitempty"`
+}
+
+// VerifyUser - Verifies a user on behalf of the organization
+// (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
+// success.
+func (b *Bot) VerifyUser(params *VerifyUserParams) error {
+	err := b.performRequest("verifyUser", params)
+	if err != nil {
+		return fmt.Errorf("telego: verifyUser(): %w", err)
+	}
+
+	return nil
+}
+
+// VerifyChatParams - Represents parameters of verifyChat method.
+type VerifyChatParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
+	// the organization isn't allowed to provide a custom verification description.
+	CustomDescription string `json:"custom_description,omitempty"`
+}
+
+// VerifyChat - Verifies a chat on behalf of the organization
+// (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
+// success.
+func (b *Bot) VerifyChat(params *VerifyChatParams) error {
+	err := b.performRequest("verifyChat", params)
+	if err != nil {
+		return fmt.Errorf("telego: verifyChat(): %w", err)
+	}
+
+	return nil
+}
+
+// RemoveUserVerificationParams - Represents parameters of removeUserVerification method.
+type RemoveUserVerificationParams struct {
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+}
+
+// RemoveUserVerification - Removes verification from a user who is currently verified on behalf of the
+// organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
+// success.
+func (b *Bot) RemoveUserVerification(params *RemoveUserVerificationParams) error {
+	err := b.performRequest("removeUserVerification", params)
+	if err != nil {
+		return fmt.Errorf("telego: removeUserVerification(): %w", err)
+	}
+
+	return nil
+}
+
+// RemoveChatVerificationParams - Represents parameters of removeChatVerification method.
+type RemoveChatVerificationParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// RemoveChatVerification - Removes verification from a chat that is currently verified on behalf of the
+// organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
+// success.
+func (b *Bot) RemoveChatVerification(params *RemoveChatVerificationParams) error {
+	err := b.performRequest("removeChatVerification", params)
+	if err != nil {
+		return fmt.Errorf("telego: removeChatVerification(): %w", err)
+	}
+
+	return nil
+}
+
 // AnswerInlineQueryParams - Represents parameters of answerInlineQuery method.
 type AnswerInlineQueryParams struct {
 	// InlineQueryID - Unique identifier for the answered query
@@ -4057,6 +4301,39 @@ func (b *Bot) AnswerWebAppQuery(params *AnswerWebAppQueryParams) (*SentWebAppMes
 	}
 
 	return sentWebAppMessage, nil
+}
+
+// SavePreparedInlineMessageParams - Represents parameters of savePreparedInlineMessage method.
+type SavePreparedInlineMessageParams struct {
+	// UserID - Unique identifier of the target user that can use the prepared message
+	UserID int64 `json:"user_id"`
+
+	// Result - A JSON-serialized object describing the message to be sent
+	Result InlineQueryResult `json:"result"`
+
+	// AllowUserChats - Optional. Pass True if the message can be sent to private chats with users
+	AllowUserChats bool `json:"allow_user_chats,omitempty"`
+
+	// AllowBotChats - Optional. Pass True if the message can be sent to private chats with bots
+	AllowBotChats bool `json:"allow_bot_chats,omitempty"`
+
+	// AllowGroupChats - Optional. Pass True if the message can be sent to group and supergroup chats
+	AllowGroupChats bool `json:"allow_group_chats,omitempty"`
+
+	// AllowChannelChats - Optional. Pass True if the message can be sent to channel chats
+	AllowChannelChats bool `json:"allow_channel_chats,omitempty"`
+}
+
+// SavePreparedInlineMessage - Stores a message that can be sent by a user of a Mini App. Returns a
+// PreparedInlineMessage (https://core.telegram.org/bots/api#preparedinlinemessage) object.
+func (b *Bot) SavePreparedInlineMessage(params *SavePreparedInlineMessageParams) (*PreparedInlineMessage, error) {
+	var preparedInlineMessage *PreparedInlineMessage
+	err := b.performRequest("savePreparedInlineMessage", params, &preparedInlineMessage)
+	if err != nil {
+		return nil, fmt.Errorf("telego: savePreparedInlineMessage(): %w", err)
+	}
+
+	return preparedInlineMessage, nil
 }
 
 // SendInvoiceParams - Represents parameters of sendInvoice method.
@@ -4164,6 +4441,11 @@ type SendInvoiceParams struct {
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
 
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
@@ -4191,6 +4473,10 @@ func (b *Bot) SendInvoice(params *SendInvoiceParams) (*Message, error) {
 
 // CreateInvoiceLinkParams - Represents parameters of createInvoiceLink method.
 type CreateInvoiceLinkParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the link
+	// will be created. For payments in Telegram Stars (https://t.me/BotNews/90) only.
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
 	// Title - Product name, 1-32 characters
 	Title string `json:"title"`
 
@@ -4214,6 +4500,13 @@ type CreateInvoiceLinkParams struct {
 	// delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars
 	// (https://t.me/BotNews/90).
 	Prices []LabeledPrice `json:"prices"`
+
+	// SubscriptionPeriod - Optional. The number of seconds the subscription will be active for before the next
+	// payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must
+	// always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the
+	// same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed
+	// 2500 Telegram Stars.
+	SubscriptionPeriod int64 `json:"subscription_period,omitempty"`
 
 	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency
 	// (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the
@@ -4300,7 +4593,7 @@ type AnswerShippingQueryParams struct {
 	ShippingOptions []ShippingOption `json:"shipping_options,omitempty"`
 
 	// ErrorMessage - Optional. Required if ok is False. Error message in human readable form that explains why
-	// it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable').
+	// it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”).
 	// Telegram will display this message to the user.
 	ErrorMessage string `json:"error_message,omitempty"`
 }
@@ -4388,6 +4681,31 @@ func (b *Bot) RefundStarPayment(params *RefundStarPaymentParams) error {
 	return nil
 }
 
+// EditUserStarSubscriptionParams - Represents parameters of editUserStarSubscription method.
+type EditUserStarSubscriptionParams struct {
+	// UserID - Identifier of the user whose subscription will be edited
+	UserID int64 `json:"user_id"`
+
+	// TelegramPaymentChargeID - Telegram payment identifier for the subscription
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+
+	// IsCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up
+	// to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that
+	// was previously canceled by the bot.
+	IsCanceled bool `json:"is_canceled"`
+}
+
+// EditUserStarSubscription - Allows the bot to cancel or re-enable extension of a subscription paid in
+// Telegram Stars. Returns True on success.
+func (b *Bot) EditUserStarSubscription(params *EditUserStarSubscriptionParams) error {
+	err := b.performRequest("editUserStarSubscription", params)
+	if err != nil {
+		return fmt.Errorf("telego: editUserStarSubscription(): %w", err)
+	}
+
+	return nil
+}
+
 // SetPassportDataErrorsParams - Represents parameters of setPassportDataErrors method.
 type SetPassportDataErrorsParams struct {
 	// UserID - User identifier
@@ -4437,6 +4755,11 @@ type SendGameParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only

@@ -126,6 +126,12 @@ func (p *SendMessageParams) WithProtectContent() *SendMessageParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendMessageParams) WithAllowPaidBroadcast() *SendMessageParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendMessageParams) WithMessageEffectID(messageEffectID string) *SendMessageParams {
 	p.MessageEffectID = messageEffectID
@@ -276,6 +282,12 @@ func (p *CopyMessageParams) WithProtectContent() *CopyMessageParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *CopyMessageParams) WithAllowPaidBroadcast() *CopyMessageParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *CopyMessageParams) WithReplyParameters(replyParameters *ReplyParameters) *CopyMessageParams {
 	p.ReplyParameters = replyParameters
@@ -396,6 +408,12 @@ func (p *SendPhotoParams) WithProtectContent() *SendPhotoParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendPhotoParams) WithAllowPaidBroadcast() *SendPhotoParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendPhotoParams) WithMessageEffectID(messageEffectID string) *SendPhotoParams {
 	p.MessageEffectID = messageEffectID
@@ -492,6 +510,12 @@ func (p *SendAudioParams) WithProtectContent() *SendAudioParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendAudioParams) WithAllowPaidBroadcast() *SendAudioParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendAudioParams) WithMessageEffectID(messageEffectID string) *SendAudioParams {
 	p.MessageEffectID = messageEffectID
@@ -573,6 +597,12 @@ func (p *SendDocumentParams) WithDisableNotification() *SendDocumentParams {
 // WithProtectContent adds protect content parameter
 func (p *SendDocumentParams) WithProtectContent() *SendDocumentParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendDocumentParams) WithAllowPaidBroadcast() *SendDocumentParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 
@@ -690,6 +720,12 @@ func (p *SendVideoParams) WithProtectContent() *SendVideoParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendVideoParams) WithAllowPaidBroadcast() *SendVideoParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendVideoParams) WithMessageEffectID(messageEffectID string) *SendVideoParams {
 	p.MessageEffectID = messageEffectID
@@ -798,6 +834,12 @@ func (p *SendAnimationParams) WithProtectContent() *SendAnimationParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendAnimationParams) WithAllowPaidBroadcast() *SendAnimationParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendAnimationParams) WithMessageEffectID(messageEffectID string) *SendAnimationParams {
 	p.MessageEffectID = messageEffectID
@@ -876,6 +918,12 @@ func (p *SendVoiceParams) WithProtectContent() *SendVoiceParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendVoiceParams) WithAllowPaidBroadcast() *SendVoiceParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendVoiceParams) WithMessageEffectID(messageEffectID string) *SendVoiceParams {
 	p.MessageEffectID = messageEffectID
@@ -945,6 +993,12 @@ func (p *SendVideoNoteParams) WithDisableNotification() *SendVideoNoteParams {
 // WithProtectContent adds protect content parameter
 func (p *SendVideoNoteParams) WithProtectContent() *SendVideoNoteParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendVideoNoteParams) WithAllowPaidBroadcast() *SendVideoNoteParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 
@@ -1032,6 +1086,12 @@ func (p *SendPaidMediaParams) WithProtectContent() *SendPaidMediaParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendPaidMediaParams) WithAllowPaidBroadcast() *SendPaidMediaParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendPaidMediaParams) WithReplyParameters(replyParameters *ReplyParameters) *SendPaidMediaParams {
 	p.ReplyParameters = replyParameters
@@ -1077,6 +1137,12 @@ func (p *SendMediaGroupParams) WithDisableNotification() *SendMediaGroupParams {
 // WithProtectContent adds protect content parameter
 func (p *SendMediaGroupParams) WithProtectContent() *SendMediaGroupParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendMediaGroupParams) WithAllowPaidBroadcast() *SendMediaGroupParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 
@@ -1137,6 +1203,12 @@ func (p *SendLocationParams) WithDisableNotification() *SendLocationParams {
 // WithProtectContent adds protect content parameter
 func (p *SendLocationParams) WithProtectContent() *SendLocationParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendLocationParams) WithAllowPaidBroadcast() *SendLocationParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 
@@ -1224,6 +1296,12 @@ func (p *SendVenueParams) WithProtectContent() *SendVenueParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendVenueParams) WithAllowPaidBroadcast() *SendVenueParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendVenueParams) WithMessageEffectID(messageEffectID string) *SendVenueParams {
 	p.MessageEffectID = messageEffectID
@@ -1293,6 +1371,12 @@ func (p *SendContactParams) WithDisableNotification() *SendContactParams {
 // WithProtectContent adds protect content parameter
 func (p *SendContactParams) WithProtectContent() *SendContactParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendContactParams) WithAllowPaidBroadcast() *SendContactParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 
@@ -1422,6 +1506,12 @@ func (p *SendPollParams) WithProtectContent() *SendPollParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendPollParams) WithAllowPaidBroadcast() *SendPollParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendPollParams) WithMessageEffectID(messageEffectID string) *SendPollParams {
 	p.MessageEffectID = messageEffectID
@@ -1473,6 +1563,12 @@ func (p *SendDiceParams) WithDisableNotification() *SendDiceParams {
 // WithProtectContent adds protect content parameter
 func (p *SendDiceParams) WithProtectContent() *SendDiceParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendDiceParams) WithAllowPaidBroadcast() *SendDiceParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 
@@ -1551,6 +1647,13 @@ func (p *GetUserProfilePhotosParams) WithOffset(offset int) *GetUserProfilePhoto
 // WithLimit adds limit parameter
 func (p *GetUserProfilePhotosParams) WithLimit(limit int) *GetUserProfilePhotosParams {
 	p.Limit = limit
+	return p
+}
+
+// WithEmojiStatusCustomEmojiID adds emoji status custom emoji ID parameter
+func (p *SetUserEmojiStatusParams) WithEmojiStatusCustomEmojiID(emojiStatusCustomEmojiID string,
+) *SetUserEmojiStatusParams {
+	p.EmojiStatusCustomEmojiID = emojiStatusCustomEmojiID
 	return p
 }
 
@@ -2651,6 +2754,12 @@ func (p *SendStickerParams) WithProtectContent() *SendStickerParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendStickerParams) WithAllowPaidBroadcast() *SendStickerParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendStickerParams) WithMessageEffectID(messageEffectID string) *SendStickerParams {
 	p.MessageEffectID = messageEffectID
@@ -2856,6 +2965,60 @@ func (p *DeleteStickerSetParams) WithName(name string) *DeleteStickerSetParams {
 	return p
 }
 
+// WithGiftID adds gift ID parameter
+func (p *SendGiftParams) WithGiftID(giftID string) *SendGiftParams {
+	p.GiftID = giftID
+	return p
+}
+
+// WithPayForUpgrade adds pay for upgrade parameter
+func (p *SendGiftParams) WithPayForUpgrade() *SendGiftParams {
+	p.PayForUpgrade = true
+	return p
+}
+
+// WithText adds text parameter
+func (p *SendGiftParams) WithText(text string) *SendGiftParams {
+	p.Text = text
+	return p
+}
+
+// WithTextParseMode adds text parse mode parameter
+func (p *SendGiftParams) WithTextParseMode(textParseMode string) *SendGiftParams {
+	p.TextParseMode = textParseMode
+	return p
+}
+
+// WithTextEntities adds text entities parameter
+func (p *SendGiftParams) WithTextEntities(textEntities ...MessageEntity) *SendGiftParams {
+	p.TextEntities = textEntities
+	return p
+}
+
+// WithCustomDescription adds custom description parameter
+func (p *VerifyUserParams) WithCustomDescription(customDescription string) *VerifyUserParams {
+	p.CustomDescription = customDescription
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *VerifyChatParams) WithChatID(chatID ChatID) *VerifyChatParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithCustomDescription adds custom description parameter
+func (p *VerifyChatParams) WithCustomDescription(customDescription string) *VerifyChatParams {
+	p.CustomDescription = customDescription
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *RemoveChatVerificationParams) WithChatID(chatID ChatID) *RemoveChatVerificationParams {
+	p.ChatID = chatID
+	return p
+}
+
 // WithInlineQueryID adds inline query ID parameter
 func (p *AnswerInlineQueryParams) WithInlineQueryID(inlineQueryID string) *AnswerInlineQueryParams {
 	p.InlineQueryID = inlineQueryID
@@ -2901,6 +3064,36 @@ func (p *AnswerWebAppQueryParams) WithWebAppQueryID(webAppQueryID string) *Answe
 // WithResult adds result parameter
 func (p *AnswerWebAppQueryParams) WithResult(result InlineQueryResult) *AnswerWebAppQueryParams {
 	p.Result = result
+	return p
+}
+
+// WithResult adds result parameter
+func (p *SavePreparedInlineMessageParams) WithResult(result InlineQueryResult) *SavePreparedInlineMessageParams {
+	p.Result = result
+	return p
+}
+
+// WithAllowUserChats adds allow user chats parameter
+func (p *SavePreparedInlineMessageParams) WithAllowUserChats() *SavePreparedInlineMessageParams {
+	p.AllowUserChats = true
+	return p
+}
+
+// WithAllowBotChats adds allow bot chats parameter
+func (p *SavePreparedInlineMessageParams) WithAllowBotChats() *SavePreparedInlineMessageParams {
+	p.AllowBotChats = true
+	return p
+}
+
+// WithAllowGroupChats adds allow group chats parameter
+func (p *SavePreparedInlineMessageParams) WithAllowGroupChats() *SavePreparedInlineMessageParams {
+	p.AllowGroupChats = true
+	return p
+}
+
+// WithAllowChannelChats adds allow channel chats parameter
+func (p *SavePreparedInlineMessageParams) WithAllowChannelChats() *SavePreparedInlineMessageParams {
+	p.AllowChannelChats = true
 	return p
 }
 
@@ -3054,6 +3247,12 @@ func (p *SendInvoiceParams) WithProtectContent() *SendInvoiceParams {
 	return p
 }
 
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendInvoiceParams) WithAllowPaidBroadcast() *SendInvoiceParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendInvoiceParams) WithMessageEffectID(messageEffectID string) *SendInvoiceParams {
 	p.MessageEffectID = messageEffectID
@@ -3069,6 +3268,12 @@ func (p *SendInvoiceParams) WithReplyParameters(replyParameters *ReplyParameters
 // WithReplyMarkup adds reply markup parameter
 func (p *SendInvoiceParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *SendInvoiceParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *CreateInvoiceLinkParams) WithBusinessConnectionID(businessConnectionID string) *CreateInvoiceLinkParams {
+	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
@@ -3252,6 +3457,19 @@ func (p *RefundStarPaymentParams) WithTelegramPaymentChargeID(telegramPaymentCha
 	return p
 }
 
+// WithTelegramPaymentChargeID adds telegram payment charge ID parameter
+func (p *EditUserStarSubscriptionParams) WithTelegramPaymentChargeID(telegramPaymentChargeID string,
+) *EditUserStarSubscriptionParams {
+	p.TelegramPaymentChargeID = telegramPaymentChargeID
+	return p
+}
+
+// WithIsCanceled adds is canceled parameter
+func (p *EditUserStarSubscriptionParams) WithIsCanceled() *EditUserStarSubscriptionParams {
+	p.IsCanceled = true
+	return p
+}
+
 // WithErrors adds errors parameter
 func (p *SetPassportDataErrorsParams) WithErrors(errors ...PassportElementError) *SetPassportDataErrorsParams {
 	p.Errors = errors
@@ -3285,6 +3503,12 @@ func (p *SendGameParams) WithDisableNotification() *SendGameParams {
 // WithProtectContent adds protect content parameter
 func (p *SendGameParams) WithProtectContent() *SendGameParams {
 	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendGameParams) WithAllowPaidBroadcast() *SendGameParams {
+	p.AllowPaidBroadcast = true
 	return p
 }
 

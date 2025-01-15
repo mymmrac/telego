@@ -296,9 +296,9 @@ func TestBot_ForwardMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		messageID, err := m.Bot.ForwardMessages(nil)
+		messageIDs, err := m.Bot.ForwardMessages(nil)
 		require.NoError(t, err)
-		assert.Equal(t, expectedMessageIDs, messageID)
+		assert.Equal(t, expectedMessageIDs, messageIDs)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -306,9 +306,9 @@ func TestBot_ForwardMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		messageID, err := m.Bot.ForwardMessages(nil)
+		messageIDs, err := m.Bot.ForwardMessages(nil)
 		require.Error(t, err)
-		assert.Nil(t, messageID)
+		assert.Nil(t, messageIDs)
 	})
 }
 
@@ -363,9 +363,9 @@ func TestBot_CopyMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		messageID, err := m.Bot.CopyMessages(nil)
+		messageIDs, err := m.Bot.CopyMessages(nil)
 		require.NoError(t, err)
-		assert.Equal(t, expectedMessageIDs, messageID)
+		assert.Equal(t, expectedMessageIDs, messageIDs)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -373,9 +373,9 @@ func TestBot_CopyMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		messageID, err := m.Bot.CopyMessages(nil)
+		messageIDs, err := m.Bot.CopyMessages(nil)
 		require.Error(t, err)
-		assert.Nil(t, messageID)
+		assert.Nil(t, messageIDs)
 	})
 }
 
@@ -887,6 +887,33 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(nil)
 		require.Error(t, err)
 		assert.Nil(t, userProfilePhotos)
+	})
+}
+
+func TestBot_SetUserEmojiStatus(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetUserEmojiStatus(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetUserEmojiStatus(nil)
+		require.Error(t, err)
 	})
 }
 
@@ -3350,6 +3377,174 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 	})
 }
 
+func TestBot_GetAvailableGifts(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedGifts := &Gifts{
+			Gifts: []Gift{{}},
+		}
+		resp := telegoResponse(t, expectedGifts)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		gifts, err := m.Bot.GetAvailableGifts()
+		require.NoError(t, err)
+		assert.Equal(t, expectedGifts, gifts)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		gifts, err := m.Bot.GetAvailableGifts()
+		require.Error(t, err)
+		assert.Nil(t, gifts)
+	})
+}
+
+func TestBot_SendGift(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SendGift(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SendGift(nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_VerifyUser(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.VerifyUser(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.VerifyUser(nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_VerifyChat(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.VerifyChat(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.VerifyChat(nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_RemoveUserVerification(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.RemoveUserVerification(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.RemoveUserVerification(nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_RemoveChatVerification(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.RemoveChatVerification(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.RemoveChatVerification(nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_AnswerInlineQuery(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -3407,6 +3602,39 @@ func TestBot_AnswerWebAppQuery(t *testing.T) {
 		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(nil)
 		require.Error(t, err)
 		assert.Nil(t, sentWebAppMessage)
+	})
+}
+
+func TestBot_SavePreparedInlineMessage(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedPreparedInlineMessage := &PreparedInlineMessage{
+			ID: "123",
+		}
+		resp := telegoResponse(t, expectedPreparedInlineMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		preparedInlineMessage, err := m.Bot.SavePreparedInlineMessage(nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedPreparedInlineMessage, preparedInlineMessage)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		preparedInlineMessage, err := m.Bot.SavePreparedInlineMessage(nil)
+		require.Error(t, err)
+		assert.Nil(t, preparedInlineMessage)
 	})
 }
 
@@ -3583,6 +3811,33 @@ func TestBot_RefundStarPayment(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.RefundStarPayment(nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_EditUserStarSubscription(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditUserStarSubscription(nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditUserStarSubscription(nil)
 		require.Error(t, err)
 	})
 }

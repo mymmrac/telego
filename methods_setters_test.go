@@ -62,6 +62,7 @@ func TestSendMessageParams_Setters(t *testing.T) {
 		WithLinkPreviewOptions(&LinkPreviewOptions{IsDisabled: true}).
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -76,6 +77,7 @@ func TestSendMessageParams_Setters(t *testing.T) {
 		LinkPreviewOptions:   &LinkPreviewOptions{IsDisabled: true},
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 3},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -132,6 +134,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		WithShowCaptionAboveMedia().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithReplyParameters(&ReplyParameters{MessageID: 4}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
@@ -146,6 +149,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		ShowCaptionAboveMedia: true,
 		DisableNotification:   true,
 		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
 		ReplyParameters:       &ReplyParameters{MessageID: 4},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, c)
@@ -185,6 +189,7 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		WithHasSpoiler().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -201,6 +206,7 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		HasSpoiler:            true,
 		DisableNotification:   true,
 		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
 		MessageEffectID:       "MessageEffectID",
 		ReplyParameters:       &ReplyParameters{MessageID: 3},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -222,6 +228,7 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		WithThumbnail(&testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 4}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -240,6 +247,7 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		Thumbnail:            &testInputFile,
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 4},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -259,6 +267,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		WithDisableContentTypeDetection().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -275,6 +284,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		DisableContentTypeDetection: true,
 		DisableNotification:         true,
 		ProtectContent:              true,
+		AllowPaidBroadcast:          true,
 		MessageEffectID:             "MessageEffectID",
 		ReplyParameters:             &ReplyParameters{MessageID: 3},
 		ReplyMarkup:                 &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -299,6 +309,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithSupportsStreaming().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 6}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -320,6 +331,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		SupportsStreaming:     true,
 		DisableNotification:   true,
 		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
 		MessageEffectID:       "MessageEffectID",
 		ReplyParameters:       &ReplyParameters{MessageID: 6},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -343,6 +355,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		WithHasSpoiler().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 6}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -363,6 +376,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		HasSpoiler:            true,
 		DisableNotification:   true,
 		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
 		MessageEffectID:       "MessageEffectID",
 		ReplyParameters:       &ReplyParameters{MessageID: 6},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -381,6 +395,7 @@ func TestSendVoiceParams_Setters(t *testing.T) {
 		WithDuration(3).
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 4}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -396,6 +411,7 @@ func TestSendVoiceParams_Setters(t *testing.T) {
 		Duration:             3,
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 4},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -413,6 +429,7 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 		WithThumbnail(&testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -427,6 +444,7 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 		Thumbnail:            &testInputFile,
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 5},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -446,6 +464,7 @@ func TestSendPaidMediaParams_Setters(t *testing.T) {
 		WithShowCaptionAboveMedia().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
@@ -461,6 +480,7 @@ func TestSendPaidMediaParams_Setters(t *testing.T) {
 		ShowCaptionAboveMedia: true,
 		DisableNotification:   true,
 		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
 		ReplyParameters:       &ReplyParameters{MessageID: 3},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
@@ -474,6 +494,7 @@ func TestSendMediaGroupParams_Setters(t *testing.T) {
 		WithMedia([]InputMedia{&InputMediaAnimation{Type: "Media"}}...).
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3})
 
@@ -484,6 +505,7 @@ func TestSendMediaGroupParams_Setters(t *testing.T) {
 		Media:                []InputMedia{&InputMediaAnimation{Type: "Media"}},
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 3},
 	}, s)
@@ -499,6 +521,7 @@ func TestSendLocationParams_Setters(t *testing.T) {
 		WithProximityAlertRadius(5).
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 6}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -512,6 +535,7 @@ func TestSendLocationParams_Setters(t *testing.T) {
 		ProximityAlertRadius: 5,
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 6},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -531,6 +555,7 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		WithGooglePlaceType("GooglePlaceType").
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -547,6 +572,7 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		GooglePlaceType:      "GooglePlaceType",
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 3},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -564,6 +590,7 @@ func TestSendContactParams_Setters(t *testing.T) {
 		WithVcard("Vcard").
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -578,6 +605,7 @@ func TestSendContactParams_Setters(t *testing.T) {
 		Vcard:                "Vcard",
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 3},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -604,6 +632,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 		WithIsClosed().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -627,6 +656,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 		IsClosed:              true,
 		DisableNotification:   true,
 		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
 		MessageEffectID:       "MessageEffectID",
 		ReplyParameters:       &ReplyParameters{MessageID: 5},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -641,6 +671,7 @@ func TestSendDiceParams_Setters(t *testing.T) {
 		WithEmoji("Emoji").
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -652,6 +683,7 @@ func TestSendDiceParams_Setters(t *testing.T) {
 		Emoji:                "Emoji",
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 3},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -697,6 +729,15 @@ func TestGetUserProfilePhotosParams_Setters(t *testing.T) {
 		Offset: 2,
 		Limit:  1,
 	}, g)
+}
+
+func TestSetUserEmojiStatusParams_Setters(t *testing.T) {
+	s := (&SetUserEmojiStatusParams{}).
+		WithEmojiStatusCustomEmojiID("EmojiStatusCustomEmojiID")
+
+	assert.Equal(t, &SetUserEmojiStatusParams{
+		EmojiStatusCustomEmojiID: "EmojiStatusCustomEmojiID",
+	}, s)
 }
 
 func TestGetFileParams_Setters(t *testing.T) {
@@ -1525,6 +1566,7 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		WithEmoji("Emoji").
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 3}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -1537,6 +1579,7 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		Emoji:                "Emoji",
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 3},
 		ReplyMarkup:          &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -1710,6 +1753,52 @@ func TestDeleteStickerSetParams_Setters(t *testing.T) {
 	}, d)
 }
 
+func TestSendGiftParams_Setters(t *testing.T) {
+	s := (&SendGiftParams{}).
+		WithGiftID("GiftID").
+		WithPayForUpgrade().
+		WithText("Text").
+		WithTextParseMode("TextParseMode").
+		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...)
+
+	assert.Equal(t, &SendGiftParams{
+		GiftID:        "GiftID",
+		PayForUpgrade: true,
+		Text:          "Text",
+		TextParseMode: "TextParseMode",
+		TextEntities:  []MessageEntity{{Type: "TextEntities"}},
+	}, s)
+}
+
+func TestVerifyUserParams_Setters(t *testing.T) {
+	v := (&VerifyUserParams{}).
+		WithCustomDescription("CustomDescription")
+
+	assert.Equal(t, &VerifyUserParams{
+		CustomDescription: "CustomDescription",
+	}, v)
+}
+
+func TestVerifyChatParams_Setters(t *testing.T) {
+	v := (&VerifyChatParams{}).
+		WithChatID(ChatID{ID: 1}).
+		WithCustomDescription("CustomDescription")
+
+	assert.Equal(t, &VerifyChatParams{
+		ChatID:            ChatID{ID: 1},
+		CustomDescription: "CustomDescription",
+	}, v)
+}
+
+func TestRemoveChatVerificationParams_Setters(t *testing.T) {
+	r := (&RemoveChatVerificationParams{}).
+		WithChatID(ChatID{ID: 1})
+
+	assert.Equal(t, &RemoveChatVerificationParams{
+		ChatID: ChatID{ID: 1},
+	}, r)
+}
+
 func TestAnswerInlineQueryParams_Setters(t *testing.T) {
 	a := (&AnswerInlineQueryParams{}).
 		WithInlineQueryID("InlineQueryID").
@@ -1740,6 +1829,23 @@ func TestAnswerWebAppQueryParams_Setters(t *testing.T) {
 	}, a)
 }
 
+func TestSavePreparedInlineMessageParams_Setters(t *testing.T) {
+	s := (&SavePreparedInlineMessageParams{}).
+		WithResult(&InlineQueryResultArticle{Type: "Result"}).
+		WithAllowUserChats().
+		WithAllowBotChats().
+		WithAllowGroupChats().
+		WithAllowChannelChats()
+
+	assert.Equal(t, &SavePreparedInlineMessageParams{
+		Result:            &InlineQueryResultArticle{Type: "Result"},
+		AllowUserChats:    true,
+		AllowBotChats:     true,
+		AllowGroupChats:   true,
+		AllowChannelChats: true,
+	}, s)
+}
+
 func TestSendInvoiceParams_Setters(t *testing.T) {
 	s := (&SendInvoiceParams{}).
 		WithChatID(ChatID{ID: 1}).
@@ -1767,6 +1873,7 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 		WithIsFlexible().
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 7}).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
@@ -1797,6 +1904,7 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 		IsFlexible:                true,
 		DisableNotification:       true,
 		ProtectContent:            true,
+		AllowPaidBroadcast:        true,
 		MessageEffectID:           "MessageEffectID",
 		ReplyParameters:           &ReplyParameters{MessageID: 7},
 		ReplyMarkup:               &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
@@ -1805,6 +1913,7 @@ func TestSendInvoiceParams_Setters(t *testing.T) {
 
 func TestCreateInvoiceLinkParams_Setters(t *testing.T) {
 	c := (&CreateInvoiceLinkParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
 		WithTitle("Title").
 		WithDescription("Description").
 		WithPayload("Payload").
@@ -1827,6 +1936,7 @@ func TestCreateInvoiceLinkParams_Setters(t *testing.T) {
 		WithIsFlexible()
 
 	assert.Equal(t, &CreateInvoiceLinkParams{
+		BusinessConnectionID:      "BusinessConnectionID",
 		Title:                     "Title",
 		Description:               "Description",
 		Payload:                   "Payload",
@@ -1898,6 +2008,17 @@ func TestRefundStarPaymentParams_Setters(t *testing.T) {
 	}, r)
 }
 
+func TestEditUserStarSubscriptionParams_Setters(t *testing.T) {
+	e := (&EditUserStarSubscriptionParams{}).
+		WithTelegramPaymentChargeID("TelegramPaymentChargeID").
+		WithIsCanceled()
+
+	assert.Equal(t, &EditUserStarSubscriptionParams{
+		TelegramPaymentChargeID: "TelegramPaymentChargeID",
+		IsCanceled:              true,
+	}, e)
+}
+
 func TestSetPassportDataErrorsParams_Setters(t *testing.T) {
 	s := (&SetPassportDataErrorsParams{}).
 		WithErrors([]PassportElementError{&PassportElementErrorDataField{}}...)
@@ -1914,6 +2035,7 @@ func TestSendGameParams_Setters(t *testing.T) {
 		WithGameShortName("GameShortName").
 		WithDisableNotification().
 		WithProtectContent().
+		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithReplyParameters(&ReplyParameters{MessageID: 2}).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
@@ -1924,6 +2046,7 @@ func TestSendGameParams_Setters(t *testing.T) {
 		GameShortName:        "GameShortName",
 		DisableNotification:  true,
 		ProtectContent:       true,
+		AllowPaidBroadcast:   true,
 		MessageEffectID:      "MessageEffectID",
 		ReplyParameters:      &ReplyParameters{MessageID: 2},
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},

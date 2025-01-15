@@ -413,7 +413,7 @@ func parseReturnType(methodDescription string) string {
 		return returnTypeNotFound
 	case "True", "error":
 		return ""
-	case "Messages":
+	case "Messages", "array of Messages":
 		return "[]Message"
 	default:
 		return parseType(returnType, true)
