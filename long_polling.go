@@ -137,7 +137,7 @@ func (b *Bot) doLongPolling(ctx *longPollingContext, params *GetUpdatesParams, u
 		}
 
 		var updates []Update
-		updates, err := b.GetUpdates(params)
+		updates, err := b.GetUpdates(context.Background(), params)
 		if err != nil {
 			b.log.Errorf("Getting updates: %s", err)
 			b.log.Errorf("Retrying to get updates in %s", ctx.retryTimeout.String())

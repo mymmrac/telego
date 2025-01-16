@@ -26,7 +26,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 		}
 		resp := telegoResponse(t, expectedUpdates)
 		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
@@ -93,7 +93,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 		}
 		resp := telegoResponse(t, expectedUpdates)
 		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
@@ -130,7 +130,7 @@ func TestBot_IsRunningLongPolling(t *testing.T) {
 
 		resp := telegoResponse(t, []Update{})
 		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil).AnyTimes()
 
 		_, err := m.Bot.UpdatesViaLongPolling(nil)

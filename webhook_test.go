@@ -283,7 +283,7 @@ func TestWithWebhookSet(t *testing.T) {
 		Buffer: bytes.NewBuffer(nil),
 	}, nil)
 
-	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any()).Return(&ta.Response{Ok: true}, nil)
+	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any(), gomock.Any()).Return(&ta.Response{Ok: true}, nil)
 
 	err := WithWebhookSet(&SetWebhookParams{})(m.Bot, ctx)
 	require.NoError(t, err)

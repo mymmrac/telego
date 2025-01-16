@@ -84,7 +84,7 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 	}
 
 	if b.healthCheckRequested {
-		if _, err := b.GetMe(); err != nil {
+		if _, err := b.GetMe(context.Background()); err != nil {
 			return nil, fmt.Errorf("telego: health check: %w", err)
 		}
 	}
