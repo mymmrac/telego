@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"fmt"
 
 	ta "github.com/mymmrac/telego/telegoapi"
@@ -57,13 +58,12 @@ const (
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki
 // (https://en.wikipedia.org/wiki/Push_technology#Long_polling)). Returns an Array of Update
 // (https://core.telegram.org/bots/api#update) objects.
-func (b *Bot) GetUpdates(params *GetUpdatesParams) ([]Update, error) {
+func (b *Bot) GetUpdates(ctx context.Context, params *GetUpdatesParams) ([]Update, error) {
 	var updates []Update
-	err := b.performRequest("getUpdates", params, &updates)
+	err := b.performRequest(ctx, "getUpdates", params, &updates)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getUpdates(): %w", err)
+		return nil, fmt.Errorf("telego: getUpdates: %w", err)
 	}
-
 	return updates, nil
 }
 
@@ -123,12 +123,11 @@ func (p *SetWebhookParams) fileParameters() map[string]ta.NamedReader {
 // If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter
 // secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the
 // secret token as content.
-func (b *Bot) SetWebhook(params *SetWebhookParams) error {
-	err := b.performRequest("setWebhook", params)
+func (b *Bot) SetWebhook(ctx context.Context, params *SetWebhookParams) error {
+	err := b.performRequest(ctx, "setWebhook", params)
 	if err != nil {
-		return fmt.Errorf("telego: setWebhook(): %w", err)
+		return fmt.Errorf("telego: setWebhook: %w", err)
 	}
-
 	return nil
 }
 
@@ -140,37 +139,34 @@ type DeleteWebhookParams struct {
 
 // DeleteWebhook - Use this method to remove webhook integration if you decide to switch back to getUpdates
 // (https://core.telegram.org/bots/api#getupdates). Returns True on success.
-func (b *Bot) DeleteWebhook(params *DeleteWebhookParams) error {
-	err := b.performRequest("deleteWebhook", params)
+func (b *Bot) DeleteWebhook(ctx context.Context, params *DeleteWebhookParams) error {
+	err := b.performRequest(ctx, "deleteWebhook", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteWebhook(): %w", err)
+		return fmt.Errorf("telego: deleteWebhook: %w", err)
 	}
-
 	return nil
 }
 
 // GetWebhookInfo - Use this method to get current webhook status. Requires no parameters. On success,
 // returns a WebhookInfo (https://core.telegram.org/bots/api#webhookinfo) object. If the bot is using getUpdates
 // (https://core.telegram.org/bots/api#getupdates), will return an object with the URL field empty.
-func (b *Bot) GetWebhookInfo() (*WebhookInfo, error) {
+func (b *Bot) GetWebhookInfo(ctx context.Context) (*WebhookInfo, error) {
 	var webhookInfo *WebhookInfo
-	err := b.performRequest("getWebhookInfo", nil, &webhookInfo)
+	err := b.performRequest(ctx, "getWebhookInfo", nil, &webhookInfo)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getWebhookInfo(): %w", err)
+		return nil, fmt.Errorf("telego: getWebhookInfo: %w", err)
 	}
-
 	return webhookInfo, nil
 }
 
 // GetMe - A simple method for testing your bot's authentication token. Requires no parameters. Returns basic
 // information about the bot in form of a User (https://core.telegram.org/bots/api#user) object.
-func (b *Bot) GetMe() (*User, error) {
+func (b *Bot) GetMe(ctx context.Context) (*User, error) {
 	var user *User
-	err := b.performRequest("getMe", nil, &user)
+	err := b.performRequest(ctx, "getMe", nil, &user)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getMe(): %w", err)
+		return nil, fmt.Errorf("telego: getMe: %w", err)
 	}
-
 	return user, nil
 }
 
@@ -178,12 +174,11 @@ func (b *Bot) GetMe() (*User, error) {
 // must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive
 // updates. After a successful call, you can immediately log in on a local server, but will not be able to log
 // in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
-func (b *Bot) LogOut() error {
-	err := b.performRequest("logOut", nil)
+func (b *Bot) LogOut(ctx context.Context) error {
+	err := b.performRequest(ctx, "logOut", nil)
 	if err != nil {
-		return fmt.Errorf("telego: logOut(): %w", err)
+		return fmt.Errorf("telego: logOut: %w", err)
 	}
-
 	return nil
 }
 
@@ -191,12 +186,11 @@ func (b *Bot) LogOut() error {
 // need to delete the webhook before calling this method to ensure that the bot isn't launched again after
 // server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns
 // True on success. Requires no parameters.
-func (b *Bot) Close() error {
-	err := b.performRequest("close", nil)
+func (b *Bot) Close(ctx context.Context) error {
+	err := b.performRequest(ctx, "close", nil)
 	if err != nil {
-		return fmt.Errorf("telego: close(): %w", err)
+		return fmt.Errorf("telego: close: %w", err)
 	}
-
 	return nil
 }
 
@@ -263,13 +257,12 @@ const (
 
 // SendMessage - Use this method to send text messages. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendMessage(params *SendMessageParams) (*Message, error) {
+func (b *Bot) SendMessage(ctx context.Context, params *SendMessageParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendMessage", params, &message)
+	err := b.performRequest(ctx, "sendMessage", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendMessage(): %w", err)
+		return nil, fmt.Errorf("telego: sendMessage: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -301,13 +294,12 @@ type ForwardMessageParams struct {
 // ForwardMessage - Use this method to forward messages of any kind. Service messages and messages with
 // protected content can't be forwarded. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) ForwardMessage(params *ForwardMessageParams) (*Message, error) {
+func (b *Bot) ForwardMessage(ctx context.Context, params *ForwardMessageParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("forwardMessage", params, &message)
+	err := b.performRequest(ctx, "forwardMessage", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: forwardMessage(): %w", err)
+		return nil, fmt.Errorf("telego: forwardMessage: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -341,13 +333,12 @@ type ForwardMessagesParams struct {
 // messages can't be found or forwarded, they are skipped. Service messages and messages with protected content
 // can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageID
 // (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
-func (b *Bot) ForwardMessages(params *ForwardMessagesParams) ([]MessageID, error) {
+func (b *Bot) ForwardMessages(ctx context.Context, params *ForwardMessagesParams) ([]MessageID, error) {
 	var messageIDs []MessageID
-	err := b.performRequest("forwardMessages", params, &messageIDs)
+	err := b.performRequest(ctx, "forwardMessages", params, &messageIDs)
 	if err != nil {
-		return nil, fmt.Errorf("telego: forwardMessages(): %w", err)
+		return nil, fmt.Errorf("telego: forwardMessages: %w", err)
 	}
-
 	return messageIDs, nil
 }
 
@@ -413,13 +404,12 @@ type CopyMessageParams struct {
 // (https://core.telegram.org/bots/api#forwardmessage), but the copied message doesn't have a link to the
 // original message. Returns the MessageID (https://core.telegram.org/bots/api#messageid) of the sent message on
 // success.
-func (b *Bot) CopyMessage(params *CopyMessageParams) (*MessageID, error) {
+func (b *Bot) CopyMessage(ctx context.Context, params *CopyMessageParams) (*MessageID, error) {
 	var messageID *MessageID
-	err := b.performRequest("copyMessage", params, &messageID)
+	err := b.performRequest(ctx, "copyMessage", params, &messageID)
 	if err != nil {
-		return nil, fmt.Errorf("telego: copyMessage(): %w", err)
+		return nil, fmt.Errorf("telego: copyMessage: %w", err)
 	}
-
 	return messageID, nil
 }
 
@@ -459,13 +449,12 @@ type CopyMessagesParams struct {
 // method forwardMessages (https://core.telegram.org/bots/api#forwardmessages), but the copied messages don't
 // have a link to the original message. Album grouping is kept for copied messages. On success, an array of
 // MessageID (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
-func (b *Bot) CopyMessages(params *CopyMessagesParams) ([]MessageID, error) {
+func (b *Bot) CopyMessages(ctx context.Context, params *CopyMessagesParams) ([]MessageID, error) {
 	var messageIDs []MessageID
-	err := b.performRequest("copyMessages", params, &messageIDs)
+	err := b.performRequest(ctx, "copyMessages", params, &messageIDs)
 	if err != nil {
-		return nil, fmt.Errorf("telego: copyMessages(): %w", err)
+		return nil, fmt.Errorf("telego: copyMessages: %w", err)
 	}
-
 	return messageIDs, nil
 }
 
@@ -542,13 +531,12 @@ func (p *SendPhotoParams) fileParameters() map[string]ta.NamedReader {
 
 // SendPhoto - Use this method to send photos. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendPhoto(params *SendPhotoParams) (*Message, error) {
+func (b *Bot) SendPhoto(ctx context.Context, params *SendPhotoParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendPhoto", params, &message)
+	err := b.performRequest(ctx, "sendPhoto", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendPhoto(): %w", err)
+		return nil, fmt.Errorf("telego: sendPhoto: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -642,13 +630,12 @@ func (p *SendAudioParams) fileParameters() map[string]ta.NamedReader {
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send audio files of up to 50 MB
 // in size, this limit may be changed in the future.
 // For sending voice messages, use the sendVoice (https://core.telegram.org/bots/api#sendvoice) method instead.
-func (b *Bot) SendAudio(params *SendAudioParams) (*Message, error) {
+func (b *Bot) SendAudio(ctx context.Context, params *SendAudioParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendAudio", params, &message)
+	err := b.performRequest(ctx, "sendAudio", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendAudio(): %w", err)
+		return nil, fmt.Errorf("telego: sendAudio: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -736,13 +723,12 @@ func (p *SendDocumentParams) fileParameters() map[string]ta.NamedReader {
 // SendDocument - Use this method to send general files. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send files of any type of up to
 // 50 MB in size, this limit may be changed in the future.
-func (b *Bot) SendDocument(params *SendDocumentParams) (*Message, error) {
+func (b *Bot) SendDocument(ctx context.Context, params *SendDocumentParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendDocument", params, &message)
+	err := b.performRequest(ctx, "sendDocument", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendDocument(): %w", err)
+		return nil, fmt.Errorf("telego: sendDocument: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -845,13 +831,12 @@ func (p *SendVideoParams) fileParameters() map[string]ta.NamedReader {
 // be sent as Document (https://core.telegram.org/bots/api#document)). On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send video files of up to 50 MB
 // in size, this limit may be changed in the future.
-func (b *Bot) SendVideo(params *SendVideoParams) (*Message, error) {
+func (b *Bot) SendVideo(ctx context.Context, params *SendVideoParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendVideo", params, &message)
+	err := b.performRequest(ctx, "sendVideo", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendVideo(): %w", err)
+		return nil, fmt.Errorf("telego: sendVideo: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -950,13 +935,12 @@ func (p *SendAnimationParams) fileParameters() map[string]ta.NamedReader {
 // SendAnimation - Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On
 // success, the sent Message (https://core.telegram.org/bots/api#message) is returned. Bots can currently send
 // animation files of up to 50 MB in size, this limit may be changed in the future.
-func (b *Bot) SendAnimation(params *SendAnimationParams) (*Message, error) {
+func (b *Bot) SendAnimation(ctx context.Context, params *SendAnimationParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendAnimation", params, &message)
+	err := b.performRequest(ctx, "sendAnimation", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendAnimation(): %w", err)
+		return nil, fmt.Errorf("telego: sendAnimation: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1032,13 +1016,12 @@ func (p *SendVoiceParams) fileParameters() map[string]ta.NamedReader {
 // Document (https://core.telegram.org/bots/api#document)). On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned. Bots can currently send voice messages of up to 50
 // MB in size, this limit may be changed in the future.
-func (b *Bot) SendVoice(params *SendVoiceParams) (*Message, error) {
+func (b *Bot) SendVoice(ctx context.Context, params *SendVoiceParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendVoice", params, &message)
+	err := b.performRequest(ctx, "sendVoice", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendVoice(): %w", err)
+		return nil, fmt.Errorf("telego: sendVoice: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1115,13 +1098,12 @@ func (p *SendVideoNoteParams) fileParameters() map[string]ta.NamedReader {
 // SendVideoNote - As of v.4.0 (https://telegram.org/blog/video-messages-and-telescope), Telegram clients
 // support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On
 // success, the sent Message (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendVideoNote(params *SendVideoNoteParams) (*Message, error) {
+func (b *Bot) SendVideoNote(ctx context.Context, params *SendVideoNoteParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendVideoNote", params, &message)
+	err := b.performRequest(ctx, "sendVideoNote", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendVideoNote(): %w", err)
+		return nil, fmt.Errorf("telego: sendVideoNote: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1184,13 +1166,12 @@ type SendPaidMediaParams struct {
 
 // SendPaidMedia - Use this method to send paid media. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendPaidMedia(params *SendPaidMediaParams) (*Message, error) {
+func (b *Bot) SendPaidMedia(ctx context.Context, params *SendPaidMediaParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendPaidMedia", params, &message)
+	err := b.performRequest(ctx, "sendPaidMedia", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendPaidMedia(): %w", err)
+		return nil, fmt.Errorf("telego: sendPaidMedia: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1249,13 +1230,12 @@ func (p *SendMediaGroupParams) fileParameters() map[string]ta.NamedReader {
 // SendMediaGroup - Use this method to send a group of photos, videos, documents or audios as an album.
 // Documents and audio files can be only grouped in an album with messages of the same type. On success, an
 // array of Messages (https://core.telegram.org/bots/api#message) that were sent is returned.
-func (b *Bot) SendMediaGroup(params *SendMediaGroupParams) ([]Message, error) {
+func (b *Bot) SendMediaGroup(ctx context.Context, params *SendMediaGroupParams) ([]Message, error) {
 	var messages []Message
-	err := b.performRequest("sendMediaGroup", params, &messages)
+	err := b.performRequest(ctx, "sendMediaGroup", params, &messages)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendMediaGroup(): %w", err)
+		return nil, fmt.Errorf("telego: sendMediaGroup: %w", err)
 	}
-
 	return messages, nil
 }
 
@@ -1323,13 +1303,12 @@ type SendLocationParams struct {
 
 // SendLocation - Use this method to send point on the map. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendLocation(params *SendLocationParams) (*Message, error) {
+func (b *Bot) SendLocation(ctx context.Context, params *SendLocationParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendLocation", params, &message)
+	err := b.performRequest(ctx, "sendLocation", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendLocation(): %w", err)
+		return nil, fmt.Errorf("telego: sendLocation: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1401,13 +1380,12 @@ type SendVenueParams struct {
 
 // SendVenue - Use this method to send information about a venue. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendVenue(params *SendVenueParams) (*Message, error) {
+func (b *Bot) SendVenue(ctx context.Context, params *SendVenueParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendVenue", params, &message)
+	err := b.performRequest(ctx, "sendVenue", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendVenue(): %w", err)
+		return nil, fmt.Errorf("telego: sendVenue: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1466,13 +1444,12 @@ type SendContactParams struct {
 
 // SendContact - Use this method to send phone contacts. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendContact(params *SendContactParams) (*Message, error) {
+func (b *Bot) SendContact(ctx context.Context, params *SendContactParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendContact", params, &message)
+	err := b.performRequest(ctx, "sendContact", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendContact(): %w", err)
+		return nil, fmt.Errorf("telego: sendContact: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1571,13 +1548,12 @@ type SendPollParams struct {
 
 // SendPoll - Use this method to send a native poll. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendPoll(params *SendPollParams) (*Message, error) {
+func (b *Bot) SendPoll(ctx context.Context, params *SendPollParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendPoll", params, &message)
+	err := b.performRequest(ctx, "sendPoll", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendPoll(): %w", err)
+		return nil, fmt.Errorf("telego: sendPoll: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1629,13 +1605,12 @@ type SendDiceParams struct {
 
 // SendDice - Use this method to send an animated emoji that will display a random value. On success, the
 // sent Message (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendDice(params *SendDiceParams) (*Message, error) {
+func (b *Bot) SendDice(ctx context.Context, params *SendDiceParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendDice", params, &message)
+	err := b.performRequest(ctx, "sendDice", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendDice(): %w", err)
+		return nil, fmt.Errorf("telego: sendDice: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -1688,12 +1663,11 @@ const (
 // see a “sending photo” status for the bot.
 // We only recommend using this method when a response from the bot will take a noticeable amount of time to
 // arrive.
-func (b *Bot) SendChatAction(params *SendChatActionParams) error {
-	err := b.performRequest("sendChatAction", params)
+func (b *Bot) SendChatAction(ctx context.Context, params *SendChatActionParams) error {
+	err := b.performRequest(ctx, "sendChatAction", params)
 	if err != nil {
-		return fmt.Errorf("telego: sendChatAction(): %w", err)
+		return fmt.Errorf("telego: sendChatAction: %w", err)
 	}
-
 	return nil
 }
 
@@ -1720,12 +1694,11 @@ type SetMessageReactionParams struct {
 // SetMessageReaction - Use this method to change the chosen reactions on a message. Service messages can't
 // be reacted to. Automatically forwarded messages from a channel to its discussion group have the same
 // available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
-func (b *Bot) SetMessageReaction(params *SetMessageReactionParams) error {
-	err := b.performRequest("setMessageReaction", params)
+func (b *Bot) SetMessageReaction(ctx context.Context, params *SetMessageReactionParams) error {
+	err := b.performRequest(ctx, "setMessageReaction", params)
 	if err != nil {
-		return fmt.Errorf("telego: setMessageReaction(): %w", err)
+		return fmt.Errorf("telego: setMessageReaction: %w", err)
 	}
-
 	return nil
 }
 
@@ -1745,13 +1718,12 @@ type GetUserProfilePhotosParams struct {
 
 // GetUserProfilePhotos - Use this method to get a list of profile pictures for a user. Returns a
 // UserProfilePhotos (https://core.telegram.org/bots/api#userprofilephotos) object.
-func (b *Bot) GetUserProfilePhotos(params *GetUserProfilePhotosParams) (*UserProfilePhotos, error) {
+func (b *Bot) GetUserProfilePhotos(ctx context.Context, params *GetUserProfilePhotosParams) (*UserProfilePhotos, error) {
 	var userProfilePhotos *UserProfilePhotos
-	err := b.performRequest("getUserProfilePhotos", params, &userProfilePhotos)
+	err := b.performRequest(ctx, "getUserProfilePhotos", params, &userProfilePhotos)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getUserProfilePhotos(): %w", err)
+		return nil, fmt.Errorf("telego: getUserProfilePhotos: %w", err)
 	}
-
 	return userProfilePhotos, nil
 }
 
@@ -1771,12 +1743,11 @@ type SetUserEmojiStatusParams struct {
 // SetUserEmojiStatus - Changes the emoji status for a given user that previously allowed the bot to manage
 // their emoji status via the Mini App method requestEmojiStatusAccess
 // (https://core.telegram.org/bots/webapps#initializing-mini-apps). Returns True on success.
-func (b *Bot) SetUserEmojiStatus(params *SetUserEmojiStatusParams) error {
-	err := b.performRequest("setUserEmojiStatus", params)
+func (b *Bot) SetUserEmojiStatus(ctx context.Context, params *SetUserEmojiStatusParams) error {
+	err := b.performRequest(ctx, "setUserEmojiStatus", params)
 	if err != nil {
-		return fmt.Errorf("telego: setUserEmojiStatus(): %w", err)
+		return fmt.Errorf("telego: setUserEmojiStatus: %w", err)
 	}
-
 	return nil
 }
 
@@ -1792,13 +1763,12 @@ type GetFileParams struct {
 // https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is
 // guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested
 // by calling getFile (https://core.telegram.org/bots/api#getfile) again.
-func (b *Bot) GetFile(params *GetFileParams) (*File, error) {
+func (b *Bot) GetFile(ctx context.Context, params *GetFileParams) (*File, error) {
 	var file *File
-	err := b.performRequest("getFile", params, &file)
+	err := b.performRequest(ctx, "getFile", params, &file)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getFile(): %w", err)
+		return nil, fmt.Errorf("telego: getFile: %w", err)
 	}
-
 	return file, nil
 }
 
@@ -1827,12 +1797,11 @@ type BanChatMemberParams struct {
 // etc., unless unbanned (https://core.telegram.org/bots/api#unbanchatmember) first. The bot must be an
 // administrator in the chat for this to work and must have the appropriate administrator rights. Returns True
 // on success.
-func (b *Bot) BanChatMember(params *BanChatMemberParams) error {
-	err := b.performRequest("banChatMember", params)
+func (b *Bot) BanChatMember(ctx context.Context, params *BanChatMemberParams) error {
+	err := b.performRequest(ctx, "banChatMember", params)
 	if err != nil {
-		return fmt.Errorf("telego: banChatMember(): %w", err)
+		return fmt.Errorf("telego: banChatMember: %w", err)
 	}
-
 	return nil
 }
 
@@ -1854,12 +1823,11 @@ type UnbanChatMemberParams struct {
 // be an administrator for this to work. By default, this method guarantees that after the call the user is not
 // a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be
 // removed from the chat. If you don't want this, use the parameter only_if_banned. Returns True on success.
-func (b *Bot) UnbanChatMember(params *UnbanChatMemberParams) error {
-	err := b.performRequest("unbanChatMember", params)
+func (b *Bot) UnbanChatMember(ctx context.Context, params *UnbanChatMemberParams) error {
+	err := b.performRequest(ctx, "unbanChatMember", params)
 	if err != nil {
-		return fmt.Errorf("telego: unbanChatMember(): %w", err)
+		return fmt.Errorf("telego: unbanChatMember: %w", err)
 	}
-
 	return nil
 }
 
@@ -1890,12 +1858,11 @@ type RestrictChatMemberParams struct {
 // RestrictChatMember - Use this method to restrict a user in a supergroup. The bot must be an administrator
 // in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all
 // permissions to lift restrictions from a user. Returns True on success.
-func (b *Bot) RestrictChatMember(params *RestrictChatMemberParams) error {
-	err := b.performRequest("restrictChatMember", params)
+func (b *Bot) RestrictChatMember(ctx context.Context, params *RestrictChatMemberParams) error {
+	err := b.performRequest(ctx, "restrictChatMember", params)
 	if err != nil {
-		return fmt.Errorf("telego: restrictChatMember(): %w", err)
+		return fmt.Errorf("telego: restrictChatMember: %w", err)
 	}
-
 	return nil
 }
 
@@ -1966,12 +1933,11 @@ type PromoteChatMemberParams struct {
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
 // be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass
 // False for all boolean parameters to demote a user. Returns True on success.
-func (b *Bot) PromoteChatMember(params *PromoteChatMemberParams) error {
-	err := b.performRequest("promoteChatMember", params)
+func (b *Bot) PromoteChatMember(ctx context.Context, params *PromoteChatMemberParams) error {
+	err := b.performRequest(ctx, "promoteChatMember", params)
 	if err != nil {
-		return fmt.Errorf("telego: promoteChatMember(): %w", err)
+		return fmt.Errorf("telego: promoteChatMember: %w", err)
 	}
-
 	return nil
 }
 
@@ -1990,12 +1956,11 @@ type SetChatAdministratorCustomTitleParams struct {
 
 // SetChatAdministratorCustomTitle - Use this method to set a custom title for an administrator in a
 // supergroup promoted by the bot. Returns True on success.
-func (b *Bot) SetChatAdministratorCustomTitle(params *SetChatAdministratorCustomTitleParams) error {
-	err := b.performRequest("setChatAdministratorCustomTitle", params)
+func (b *Bot) SetChatAdministratorCustomTitle(ctx context.Context, params *SetChatAdministratorCustomTitleParams) error {
+	err := b.performRequest(ctx, "setChatAdministratorCustomTitle", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatAdministratorCustomTitle(): %w", err)
+		return fmt.Errorf("telego: setChatAdministratorCustomTitle: %w", err)
 	}
-
 	return nil
 }
 
@@ -2013,12 +1978,11 @@ type BanChatSenderChatParams struct {
 // unbanned (https://core.telegram.org/bots/api#unbanchatsenderchat), the owner of the banned chat won't be able
 // to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or
 // channel for this to work and must have the appropriate administrator rights. Returns True on success.
-func (b *Bot) BanChatSenderChat(params *BanChatSenderChatParams) error {
-	err := b.performRequest("banChatSenderChat", params)
+func (b *Bot) BanChatSenderChat(ctx context.Context, params *BanChatSenderChatParams) error {
+	err := b.performRequest(ctx, "banChatSenderChat", params)
 	if err != nil {
-		return fmt.Errorf("telego: banChatSenderChat(): %w", err)
+		return fmt.Errorf("telego: banChatSenderChat: %w", err)
 	}
-
 	return nil
 }
 
@@ -2035,12 +1999,11 @@ type UnbanChatSenderChatParams struct {
 // UnbanChatSenderChat - Use this method to unban a previously banned channel chat in a supergroup or
 // channel. The bot must be an administrator for this to work and must have the appropriate administrator
 // rights. Returns True on success.
-func (b *Bot) UnbanChatSenderChat(params *UnbanChatSenderChatParams) error {
-	err := b.performRequest("unbanChatSenderChat", params)
+func (b *Bot) UnbanChatSenderChat(ctx context.Context, params *UnbanChatSenderChatParams) error {
+	err := b.performRequest(ctx, "unbanChatSenderChat", params)
 	if err != nil {
-		return fmt.Errorf("telego: unbanChatSenderChat(): %w", err)
+		return fmt.Errorf("telego: unbanChatSenderChat: %w", err)
 	}
-
 	return nil
 }
 
@@ -2063,12 +2026,11 @@ type SetChatPermissionsParams struct {
 // SetChatPermissions - Use this method to set default chat permissions for all members. The bot must be an
 // administrator in the group or a supergroup for this to work and must have the can_restrict_members
 // administrator rights. Returns True on success.
-func (b *Bot) SetChatPermissions(params *SetChatPermissionsParams) error {
-	err := b.performRequest("setChatPermissions", params)
+func (b *Bot) SetChatPermissions(ctx context.Context, params *SetChatPermissionsParams) error {
+	err := b.performRequest(ctx, "setChatPermissions", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatPermissions(): %w", err)
+		return fmt.Errorf("telego: setChatPermissions: %w", err)
 	}
-
 	return nil
 }
 
@@ -2082,13 +2044,12 @@ type ExportChatInviteLinkParams struct {
 // ExportChatInviteLink - Use this method to generate a new primary invite link for a chat; any previously
 // generated primary link is revoked. The bot must be an administrator in the chat for this to work and must
 // have the appropriate administrator rights. Returns the new invite link as String on success.
-func (b *Bot) ExportChatInviteLink(params *ExportChatInviteLinkParams) (*string, error) {
+func (b *Bot) ExportChatInviteLink(ctx context.Context, params *ExportChatInviteLinkParams) (*string, error) {
 	var inviteLink *string
-	err := b.performRequest("exportChatInviteLink", params, &inviteLink)
+	err := b.performRequest(ctx, "exportChatInviteLink", params, &inviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: exportChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: exportChatInviteLink: %w", err)
 	}
-
 	return inviteLink, nil
 }
 
@@ -2117,13 +2078,12 @@ type CreateChatInviteLinkParams struct {
 // administrator in the chat for this to work and must have the appropriate administrator rights. The link can
 // be revoked using the method revokeChatInviteLink (https://core.telegram.org/bots/api#revokechatinvitelink).
 // Returns the new invite link as ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
-func (b *Bot) CreateChatInviteLink(params *CreateChatInviteLinkParams) (*ChatInviteLink, error) {
+func (b *Bot) CreateChatInviteLink(ctx context.Context, params *CreateChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
-	err := b.performRequest("createChatInviteLink", params, &chatInviteLink)
+	err := b.performRequest(ctx, "createChatInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: createChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: createChatInviteLink: %w", err)
 	}
-
 	return chatInviteLink, nil
 }
 
@@ -2154,13 +2114,12 @@ type EditChatInviteLinkParams struct {
 // EditChatInviteLink - Use this method to edit a non-primary invite link created by the bot. The bot must be
 // an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the
 // edited invite link as a ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
-func (b *Bot) EditChatInviteLink(params *EditChatInviteLinkParams) (*ChatInviteLink, error) {
+func (b *Bot) EditChatInviteLink(ctx context.Context, params *EditChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
-	err := b.performRequest("editChatInviteLink", params, &chatInviteLink)
+	err := b.performRequest(ctx, "editChatInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: editChatInviteLink: %w", err)
 	}
-
 	return chatInviteLink, nil
 }
 
@@ -2188,15 +2147,12 @@ type CreateChatSubscriptionInviteLinkParams struct {
 // editChatSubscriptionInviteLink (https://core.telegram.org/bots/api#editchatsubscriptioninvitelink) or revoked
 // using the method revokeChatInviteLink (https://core.telegram.org/bots/api#revokechatinvitelink). Returns the
 // new invite link as a ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
-func (b *Bot) CreateChatSubscriptionInviteLink(
-	params *CreateChatSubscriptionInviteLinkParams,
-) (*ChatInviteLink, error) {
+func (b *Bot) CreateChatSubscriptionInviteLink(ctx context.Context, params *CreateChatSubscriptionInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
-	err := b.performRequest("createChatSubscriptionInviteLink", params, &chatInviteLink)
+	err := b.performRequest(ctx, "createChatSubscriptionInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: createChatSubscriptionInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: createChatSubscriptionInviteLink: %w", err)
 	}
-
 	return chatInviteLink, nil
 }
 
@@ -2216,13 +2172,12 @@ type EditChatSubscriptionInviteLinkParams struct {
 // EditChatSubscriptionInviteLink - Use this method to edit a subscription invite link created by the bot.
 // The bot must have the can_invite_users administrator rights. Returns the edited invite link as a
 // ChatInviteLink (https://core.telegram.org/bots/api#chatinvitelink) object.
-func (b *Bot) EditChatSubscriptionInviteLink(params *EditChatSubscriptionInviteLinkParams) (*ChatInviteLink, error) {
+func (b *Bot) EditChatSubscriptionInviteLink(ctx context.Context, params *EditChatSubscriptionInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
-	err := b.performRequest("editChatSubscriptionInviteLink", params, &chatInviteLink)
+	err := b.performRequest(ctx, "editChatSubscriptionInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editChatSubscriptionInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: editChatSubscriptionInviteLink: %w", err)
 	}
-
 	return chatInviteLink, nil
 }
 
@@ -2240,13 +2195,12 @@ type RevokeChatInviteLinkParams struct {
 // revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work
 // and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink
 // (https://core.telegram.org/bots/api#chatinvitelink) object.
-func (b *Bot) RevokeChatInviteLink(params *RevokeChatInviteLinkParams) (*ChatInviteLink, error) {
+func (b *Bot) RevokeChatInviteLink(ctx context.Context, params *RevokeChatInviteLinkParams) (*ChatInviteLink, error) {
 	var chatInviteLink *ChatInviteLink
-	err := b.performRequest("revokeChatInviteLink", params, &chatInviteLink)
+	err := b.performRequest(ctx, "revokeChatInviteLink", params, &chatInviteLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: revokeChatInviteLink(): %w", err)
+		return nil, fmt.Errorf("telego: revokeChatInviteLink: %w", err)
 	}
-
 	return chatInviteLink, nil
 }
 
@@ -2262,12 +2216,11 @@ type ApproveChatJoinRequestParams struct {
 
 // ApproveChatJoinRequest - Use this method to approve a chat join request. The bot must be an administrator
 // in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
-func (b *Bot) ApproveChatJoinRequest(params *ApproveChatJoinRequestParams) error {
-	err := b.performRequest("approveChatJoinRequest", params)
+func (b *Bot) ApproveChatJoinRequest(ctx context.Context, params *ApproveChatJoinRequestParams) error {
+	err := b.performRequest(ctx, "approveChatJoinRequest", params)
 	if err != nil {
-		return fmt.Errorf("telego: approveChatJoinRequest(): %w", err)
+		return fmt.Errorf("telego: approveChatJoinRequest: %w", err)
 	}
-
 	return nil
 }
 
@@ -2283,12 +2236,11 @@ type DeclineChatJoinRequestParams struct {
 
 // DeclineChatJoinRequest - Use this method to decline a chat join request. The bot must be an administrator
 // in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
-func (b *Bot) DeclineChatJoinRequest(params *DeclineChatJoinRequestParams) error {
-	err := b.performRequest("declineChatJoinRequest", params)
+func (b *Bot) DeclineChatJoinRequest(ctx context.Context, params *DeclineChatJoinRequestParams) error {
+	err := b.performRequest(ctx, "declineChatJoinRequest", params)
 	if err != nil {
-		return fmt.Errorf("telego: declineChatJoinRequest(): %w", err)
+		return fmt.Errorf("telego: declineChatJoinRequest: %w", err)
 	}
-
 	return nil
 }
 
@@ -2311,12 +2263,11 @@ func (p *SetChatPhotoParams) fileParameters() map[string]ta.NamedReader {
 // SetChatPhoto - Use this method to set a new profile photo for the chat. Photos can't be changed for
 // private chats. The bot must be an administrator in the chat for this to work and must have the appropriate
 // administrator rights. Returns True on success.
-func (b *Bot) SetChatPhoto(params *SetChatPhotoParams) error {
-	err := b.performRequest("setChatPhoto", params)
+func (b *Bot) SetChatPhoto(ctx context.Context, params *SetChatPhotoParams) error {
+	err := b.performRequest(ctx, "setChatPhoto", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatPhoto(): %w", err)
+		return fmt.Errorf("telego: setChatPhoto: %w", err)
 	}
-
 	return nil
 }
 
@@ -2330,12 +2281,11 @@ type DeleteChatPhotoParams struct {
 // DeleteChatPhoto - Use this method to delete a chat photo. Photos can't be changed for private chats. The
 // bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
 // Returns True on success.
-func (b *Bot) DeleteChatPhoto(params *DeleteChatPhotoParams) error {
-	err := b.performRequest("deleteChatPhoto", params)
+func (b *Bot) DeleteChatPhoto(ctx context.Context, params *DeleteChatPhotoParams) error {
+	err := b.performRequest(ctx, "deleteChatPhoto", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteChatPhoto(): %w", err)
+		return fmt.Errorf("telego: deleteChatPhoto: %w", err)
 	}
-
 	return nil
 }
 
@@ -2352,12 +2302,11 @@ type SetChatTitleParams struct {
 // SetChatTitle - Use this method to change the title of a chat. Titles can't be changed for private chats.
 // The bot must be an administrator in the chat for this to work and must have the appropriate administrator
 // rights. Returns True on success.
-func (b *Bot) SetChatTitle(params *SetChatTitleParams) error {
-	err := b.performRequest("setChatTitle", params)
+func (b *Bot) SetChatTitle(ctx context.Context, params *SetChatTitleParams) error {
+	err := b.performRequest(ctx, "setChatTitle", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatTitle(): %w", err)
+		return fmt.Errorf("telego: setChatTitle: %w", err)
 	}
-
 	return nil
 }
 
@@ -2374,12 +2323,11 @@ type SetChatDescriptionParams struct {
 // SetChatDescription - Use this method to change the description of a group, a supergroup or a channel. The
 // bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
 // Returns True on success.
-func (b *Bot) SetChatDescription(params *SetChatDescriptionParams) error {
-	err := b.performRequest("setChatDescription", params)
+func (b *Bot) SetChatDescription(ctx context.Context, params *SetChatDescriptionParams) error {
+	err := b.performRequest(ctx, "setChatDescription", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatDescription(): %w", err)
+		return fmt.Errorf("telego: setChatDescription: %w", err)
 	}
-
 	return nil
 }
 
@@ -2405,12 +2353,11 @@ type PinChatMessageParams struct {
 // not a private chat, the bot must be an administrator in the chat for this to work and must have the
 // 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
 // channel. Returns True on success.
-func (b *Bot) PinChatMessage(params *PinChatMessageParams) error {
-	err := b.performRequest("pinChatMessage", params)
+func (b *Bot) PinChatMessage(ctx context.Context, params *PinChatMessageParams) error {
+	err := b.performRequest(ctx, "pinChatMessage", params)
 	if err != nil {
-		return fmt.Errorf("telego: pinChatMessage(): %w", err)
+		return fmt.Errorf("telego: pinChatMessage: %w", err)
 	}
-
 	return nil
 }
 
@@ -2433,12 +2380,11 @@ type UnpinChatMessageParams struct {
 // chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the
 // 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
 // channel. Returns True on success.
-func (b *Bot) UnpinChatMessage(params *UnpinChatMessageParams) error {
-	err := b.performRequest("unpinChatMessage", params)
+func (b *Bot) UnpinChatMessage(ctx context.Context, params *UnpinChatMessageParams) error {
+	err := b.performRequest(ctx, "unpinChatMessage", params)
 	if err != nil {
-		return fmt.Errorf("telego: unpinChatMessage(): %w", err)
+		return fmt.Errorf("telego: unpinChatMessage: %w", err)
 	}
-
 	return nil
 }
 
@@ -2453,12 +2399,11 @@ type UnpinAllChatMessagesParams struct {
 // a private chat, the bot must be an administrator in the chat for this to work and must have the
 // 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
 // channel. Returns True on success.
-func (b *Bot) UnpinAllChatMessages(params *UnpinAllChatMessagesParams) error {
-	err := b.performRequest("unpinAllChatMessages", params)
+func (b *Bot) UnpinAllChatMessages(ctx context.Context, params *UnpinAllChatMessagesParams) error {
+	err := b.performRequest(ctx, "unpinAllChatMessages", params)
 	if err != nil {
-		return fmt.Errorf("telego: unpinAllChatMessages(): %w", err)
+		return fmt.Errorf("telego: unpinAllChatMessages: %w", err)
 	}
-
 	return nil
 }
 
@@ -2470,12 +2415,11 @@ type LeaveChatParams struct {
 }
 
 // LeaveChat - Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
-func (b *Bot) LeaveChat(params *LeaveChatParams) error {
-	err := b.performRequest("leaveChat", params)
+func (b *Bot) LeaveChat(ctx context.Context, params *LeaveChatParams) error {
+	err := b.performRequest(ctx, "leaveChat", params)
 	if err != nil {
-		return fmt.Errorf("telego: leaveChat(): %w", err)
+		return fmt.Errorf("telego: leaveChat: %w", err)
 	}
-
 	return nil
 }
 
@@ -2488,13 +2432,12 @@ type GetChatParams struct {
 
 // GetChat - Use this method to get up-to-date information about the chat. Returns a ChatFullInfo
 // (https://core.telegram.org/bots/api#chatfullinfo) object on success.
-func (b *Bot) GetChat(params *GetChatParams) (*ChatFullInfo, error) {
+func (b *Bot) GetChat(ctx context.Context, params *GetChatParams) (*ChatFullInfo, error) {
 	var chatFullInfo *ChatFullInfo
-	err := b.performRequest("getChat", params, &chatFullInfo)
+	err := b.performRequest(ctx, "getChat", params, &chatFullInfo)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getChat(): %w", err)
+		return nil, fmt.Errorf("telego: getChat: %w", err)
 	}
-
 	return chatFullInfo, nil
 }
 
@@ -2507,13 +2450,12 @@ type GetChatAdministratorsParams struct {
 
 // GetChatAdministrators - Use this method to get a list of administrators in a chat, which aren't bots.
 // Returns an Array of ChatMember (https://core.telegram.org/bots/api#chatmember) objects.
-func (b *Bot) GetChatAdministrators(params *GetChatAdministratorsParams) ([]ChatMember, error) {
+func (b *Bot) GetChatAdministrators(ctx context.Context, params *GetChatAdministratorsParams) ([]ChatMember, error) {
 	var chatMembersData []chatMemberData
-	err := b.performRequest("getChatAdministrators", params, &chatMembersData)
+	err := b.performRequest(ctx, "getChatAdministrators", params, &chatMembersData)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getChatAdministrators(): %w", err)
+		return nil, fmt.Errorf("telego: getChatAdministrators: %w", err)
 	}
-
 	chatMembers := make([]ChatMember, len(chatMembersData))
 	for i, d := range chatMembersData {
 		chatMembers[i] = d.Data
@@ -2529,13 +2471,12 @@ type GetChatMemberCountParams struct {
 }
 
 // GetChatMemberCount - Use this method to get the number of members in a chat. Returns Int on success.
-func (b *Bot) GetChatMemberCount(params *GetChatMemberCountParams) (*int, error) {
+func (b *Bot) GetChatMemberCount(ctx context.Context, params *GetChatMemberCountParams) (*int, error) {
 	var chatMemberCount *int
-	err := b.performRequest("getChatMemberCount", params, &chatMemberCount)
+	err := b.performRequest(ctx, "getChatMemberCount", params, &chatMemberCount)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getChatMemberCount(): %w", err)
+		return nil, fmt.Errorf("telego: getChatMemberCount: %w", err)
 	}
-
 	return chatMemberCount, nil
 }
 
@@ -2552,13 +2493,12 @@ type GetChatMemberParams struct {
 // GetChatMember - Use this method to get information about a member of a chat. The method is only guaranteed
 // to work for other users if the bot is an administrator in the chat. Returns a ChatMember
 // (https://core.telegram.org/bots/api#chatmember) object on success.
-func (b *Bot) GetChatMember(params *GetChatMemberParams) (ChatMember, error) {
+func (b *Bot) GetChatMember(ctx context.Context, params *GetChatMemberParams) (ChatMember, error) {
 	var memberData chatMemberData
-	err := b.performRequest("getChatMember", params, &memberData)
+	err := b.performRequest(ctx, "getChatMember", params, &memberData)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getChatMember(): %w", err)
+		return nil, fmt.Errorf("telego: getChatMember: %w", err)
 	}
-
 	return memberData.Data, nil
 }
 
@@ -2576,12 +2516,11 @@ type SetChatStickerSetParams struct {
 // administrator in the chat for this to work and must have the appropriate administrator rights. Use the field
 // can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
 // check if the bot can use this method. Returns True on success.
-func (b *Bot) SetChatStickerSet(params *SetChatStickerSetParams) error {
-	err := b.performRequest("setChatStickerSet", params)
+func (b *Bot) SetChatStickerSet(ctx context.Context, params *SetChatStickerSetParams) error {
+	err := b.performRequest(ctx, "setChatStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatStickerSet(): %w", err)
+		return fmt.Errorf("telego: setChatStickerSet: %w", err)
 	}
-
 	return nil
 }
 
@@ -2596,25 +2535,23 @@ type DeleteChatStickerSetParams struct {
 // administrator in the chat for this to work and must have the appropriate administrator rights. Use the field
 // can_set_sticker_set optionally returned in getChat (https://core.telegram.org/bots/api#getchat) requests to
 // check if the bot can use this method. Returns True on success.
-func (b *Bot) DeleteChatStickerSet(params *DeleteChatStickerSetParams) error {
-	err := b.performRequest("deleteChatStickerSet", params)
+func (b *Bot) DeleteChatStickerSet(ctx context.Context, params *DeleteChatStickerSetParams) error {
+	err := b.performRequest(ctx, "deleteChatStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteChatStickerSet(): %w", err)
+		return fmt.Errorf("telego: deleteChatStickerSet: %w", err)
 	}
-
 	return nil
 }
 
 // GetForumTopicIconStickers - Use this method to get custom emoji stickers, which can be used as a forum
 // topic icon by any user. Requires no parameters. Returns an Array of Sticker
 // (https://core.telegram.org/bots/api#sticker) objects.
-func (b *Bot) GetForumTopicIconStickers() ([]Sticker, error) {
+func (b *Bot) GetForumTopicIconStickers(ctx context.Context) ([]Sticker, error) {
 	var stickers []Sticker
-	err := b.performRequest("getForumTopicIconStickers", nil, &stickers)
+	err := b.performRequest(ctx, "getForumTopicIconStickers", nil, &stickers)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getForumTopicIconStickers(): %w", err)
+		return nil, fmt.Errorf("telego: getForumTopicIconStickers: %w", err)
 	}
-
 	return stickers, nil
 }
 
@@ -2641,13 +2578,12 @@ type CreateForumTopicParams struct {
 // CreateForumTopic - Use this method to create a topic in a forum supergroup chat. The bot must be an
 // administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns
 // information about the created topic as a ForumTopic (https://core.telegram.org/bots/api#forumtopic) object.
-func (b *Bot) CreateForumTopic(params *CreateForumTopicParams) (*ForumTopic, error) {
+func (b *Bot) CreateForumTopic(ctx context.Context, params *CreateForumTopicParams) (*ForumTopic, error) {
 	var forumTopic *ForumTopic
-	err := b.performRequest("createForumTopic", params, &forumTopic)
+	err := b.performRequest(ctx, "createForumTopic", params, &forumTopic)
 	if err != nil {
-		return nil, fmt.Errorf("telego: createForumTopic(): %w", err)
+		return nil, fmt.Errorf("telego: createForumTopic: %w", err)
 	}
-
 	return forumTopic, nil
 }
 
@@ -2674,12 +2610,11 @@ type EditForumTopicParams struct {
 // EditForumTopic - Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must
 // be an administrator in the chat for this to work and must have the can_manage_topics administrator rights,
 // unless it is the creator of the topic. Returns True on success.
-func (b *Bot) EditForumTopic(params *EditForumTopicParams) error {
-	err := b.performRequest("editForumTopic", params)
+func (b *Bot) EditForumTopic(ctx context.Context, params *EditForumTopicParams) error {
+	err := b.performRequest(ctx, "editForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: editForumTopic(): %w", err)
+		return fmt.Errorf("telego: editForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2696,12 +2631,11 @@ type CloseForumTopicParams struct {
 // CloseForumTopic - Use this method to close an open topic in a forum supergroup chat. The bot must be an
 // administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless
 // it is the creator of the topic. Returns True on success.
-func (b *Bot) CloseForumTopic(params *CloseForumTopicParams) error {
-	err := b.performRequest("closeForumTopic", params)
+func (b *Bot) CloseForumTopic(ctx context.Context, params *CloseForumTopicParams) error {
+	err := b.performRequest(ctx, "closeForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: closeForumTopic(): %w", err)
+		return fmt.Errorf("telego: closeForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2718,12 +2652,11 @@ type ReopenForumTopicParams struct {
 // ReopenForumTopic - Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an
 // administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless
 // it is the creator of the topic. Returns True on success.
-func (b *Bot) ReopenForumTopic(params *ReopenForumTopicParams) error {
-	err := b.performRequest("reopenForumTopic", params)
+func (b *Bot) ReopenForumTopic(ctx context.Context, params *ReopenForumTopicParams) error {
+	err := b.performRequest(ctx, "reopenForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: reopenForumTopic(): %w", err)
+		return fmt.Errorf("telego: reopenForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2740,12 +2673,11 @@ type DeleteForumTopicParams struct {
 // DeleteForumTopic - Use this method to delete a forum topic along with all its messages in a forum
 // supergroup chat. The bot must be an administrator in the chat for this to work and must have the
 // can_delete_messages administrator rights. Returns True on success.
-func (b *Bot) DeleteForumTopic(params *DeleteForumTopicParams) error {
-	err := b.performRequest("deleteForumTopic", params)
+func (b *Bot) DeleteForumTopic(ctx context.Context, params *DeleteForumTopicParams) error {
+	err := b.performRequest(ctx, "deleteForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteForumTopic(): %w", err)
+		return fmt.Errorf("telego: deleteForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2762,12 +2694,11 @@ type UnpinAllForumTopicMessagesParams struct {
 // UnpinAllForumTopicMessages - Use this method to clear the list of pinned messages in a forum topic. The
 // bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator
 // right in the supergroup. Returns True on success.
-func (b *Bot) UnpinAllForumTopicMessages(params *UnpinAllForumTopicMessagesParams) error {
-	err := b.performRequest("unpinAllForumTopicMessages", params)
+func (b *Bot) UnpinAllForumTopicMessages(ctx context.Context, params *UnpinAllForumTopicMessagesParams) error {
+	err := b.performRequest(ctx, "unpinAllForumTopicMessages", params)
 	if err != nil {
-		return fmt.Errorf("telego: unpinAllForumTopicMessages(): %w", err)
+		return fmt.Errorf("telego: unpinAllForumTopicMessages: %w", err)
 	}
-
 	return nil
 }
 
@@ -2784,12 +2715,11 @@ type EditGeneralForumTopicParams struct {
 // EditGeneralForumTopic - Use this method to edit the name of the 'General' topic in a forum supergroup
 // chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics
 // administrator rights. Returns True on success.
-func (b *Bot) EditGeneralForumTopic(params *EditGeneralForumTopicParams) error {
-	err := b.performRequest("editGeneralForumTopic", params)
+func (b *Bot) EditGeneralForumTopic(ctx context.Context, params *EditGeneralForumTopicParams) error {
+	err := b.performRequest(ctx, "editGeneralForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: editGeneralForumTopic(): %w", err)
+		return fmt.Errorf("telego: editGeneralForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2803,12 +2733,11 @@ type CloseGeneralForumTopicParams struct {
 // CloseGeneralForumTopic - Use this method to close an open 'General' topic in a forum supergroup chat. The
 // bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator
 // rights. Returns True on success.
-func (b *Bot) CloseGeneralForumTopic(params *CloseGeneralForumTopicParams) error {
-	err := b.performRequest("closeGeneralForumTopic", params)
+func (b *Bot) CloseGeneralForumTopic(ctx context.Context, params *CloseGeneralForumTopicParams) error {
+	err := b.performRequest(ctx, "closeGeneralForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: closeGeneralForumTopic(): %w", err)
+		return fmt.Errorf("telego: closeGeneralForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2822,12 +2751,11 @@ type ReopenGeneralForumTopicParams struct {
 // ReopenGeneralForumTopic - Use this method to reopen a closed 'General' topic in a forum supergroup chat.
 // The bot must be an administrator in the chat for this to work and must have the can_manage_topics
 // administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
-func (b *Bot) ReopenGeneralForumTopic(params *ReopenGeneralForumTopicParams) error {
-	err := b.performRequest("reopenGeneralForumTopic", params)
+func (b *Bot) ReopenGeneralForumTopic(ctx context.Context, params *ReopenGeneralForumTopicParams) error {
+	err := b.performRequest(ctx, "reopenGeneralForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: reopenGeneralForumTopic(): %w", err)
+		return fmt.Errorf("telego: reopenGeneralForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2841,12 +2769,11 @@ type HideGeneralForumTopicParams struct {
 // HideGeneralForumTopic - Use this method to hide the 'General' topic in a forum supergroup chat. The bot
 // must be an administrator in the chat for this to work and must have the can_manage_topics administrator
 // rights. The topic will be automatically closed if it was open. Returns True on success.
-func (b *Bot) HideGeneralForumTopic(params *HideGeneralForumTopicParams) error {
-	err := b.performRequest("hideGeneralForumTopic", params)
+func (b *Bot) HideGeneralForumTopic(ctx context.Context, params *HideGeneralForumTopicParams) error {
+	err := b.performRequest(ctx, "hideGeneralForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: hideGeneralForumTopic(): %w", err)
+		return fmt.Errorf("telego: hideGeneralForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2860,12 +2787,11 @@ type UnhideGeneralForumTopicParams struct {
 // UnhideGeneralForumTopic - Use this method to unhide the 'General' topic in a forum supergroup chat. The
 // bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator
 // rights. Returns True on success.
-func (b *Bot) UnhideGeneralForumTopic(params *UnhideGeneralForumTopicParams) error {
-	err := b.performRequest("unhideGeneralForumTopic", params)
+func (b *Bot) UnhideGeneralForumTopic(ctx context.Context, params *UnhideGeneralForumTopicParams) error {
+	err := b.performRequest(ctx, "unhideGeneralForumTopic", params)
 	if err != nil {
-		return fmt.Errorf("telego: unhideGeneralForumTopic(): %w", err)
+		return fmt.Errorf("telego: unhideGeneralForumTopic: %w", err)
 	}
-
 	return nil
 }
 
@@ -2880,12 +2806,11 @@ type UnpinAllGeneralForumTopicMessagesParams struct {
 // UnpinAllGeneralForumTopicMessages - Use this method to clear the list of pinned messages in a General
 // forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages
 // administrator right in the supergroup. Returns True on success.
-func (b *Bot) UnpinAllGeneralForumTopicMessages(params *UnpinAllGeneralForumTopicMessagesParams) error {
-	err := b.performRequest("unpinAllGeneralForumTopicMessages", params)
+func (b *Bot) UnpinAllGeneralForumTopicMessages(ctx context.Context, params *UnpinAllGeneralForumTopicMessagesParams) error {
+	err := b.performRequest(ctx, "unpinAllGeneralForumTopicMessages", params)
 	if err != nil {
-		return fmt.Errorf("telego: unpinAllGeneralForumTopicMessages(): %w", err)
+		return fmt.Errorf("telego: unpinAllGeneralForumTopicMessages: %w", err)
 	}
-
 	return nil
 }
 
@@ -2920,12 +2845,11 @@ type AnswerCallbackQueryParams struct {
 // Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first
 // create a game for your bot via @BotFather (https://t.me/botfather) and accept the terms. Otherwise, you may
 // use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
-func (b *Bot) AnswerCallbackQuery(params *AnswerCallbackQueryParams) error {
-	err := b.performRequest("answerCallbackQuery", params)
+func (b *Bot) AnswerCallbackQuery(ctx context.Context, params *AnswerCallbackQueryParams) error {
+	err := b.performRequest(ctx, "answerCallbackQuery", params)
 	if err != nil {
-		return fmt.Errorf("telego: answerCallbackQuery(): %w", err)
+		return fmt.Errorf("telego: answerCallbackQuery: %w", err)
 	}
-
 	return nil
 }
 
@@ -2941,13 +2865,12 @@ type GetUserChatBoostsParams struct {
 // GetUserChatBoosts - Use this method to get the list of boosts added to a chat by a user. Requires
 // administrator rights in the chat. Returns a UserChatBoosts
 // (https://core.telegram.org/bots/api#userchatboosts) object.
-func (b *Bot) GetUserChatBoosts(params *GetUserChatBoostsParams) (*UserChatBoosts, error) {
+func (b *Bot) GetUserChatBoosts(ctx context.Context, params *GetUserChatBoostsParams) (*UserChatBoosts, error) {
 	var userChatBoosts *UserChatBoosts
-	err := b.performRequest("getUserChatBoosts", params, &userChatBoosts)
+	err := b.performRequest(ctx, "getUserChatBoosts", params, &userChatBoosts)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getUserChatBoosts(): %w", err)
+		return nil, fmt.Errorf("telego: getUserChatBoosts: %w", err)
 	}
-
 	return userChatBoosts, nil
 }
 
@@ -2960,13 +2883,12 @@ type GetBusinessConnectionParams struct {
 // GetBusinessConnection - Use this method to get information about the connection of the bot with a business
 // account. Returns a BusinessConnection (https://core.telegram.org/bots/api#businessconnection) object on
 // success.
-func (b *Bot) GetBusinessConnection(params *GetBusinessConnectionParams) (*BusinessConnection, error) {
+func (b *Bot) GetBusinessConnection(ctx context.Context, params *GetBusinessConnectionParams) (*BusinessConnection, error) {
 	var businessConnection *BusinessConnection
-	err := b.performRequest("getBusinessConnection", params, &businessConnection)
+	err := b.performRequest(ctx, "getBusinessConnection", params, &businessConnection)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getBusinessConnection(): %w", err)
+		return nil, fmt.Errorf("telego: getBusinessConnection: %w", err)
 	}
-
 	return businessConnection, nil
 }
 
@@ -2988,12 +2910,11 @@ type SetMyCommandsParams struct {
 // SetMyCommands - Use this method to change the list of the bot's commands. See this manual
 // (https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns True on
 // success.
-func (b *Bot) SetMyCommands(params *SetMyCommandsParams) error {
-	err := b.performRequest("setMyCommands", params)
+func (b *Bot) SetMyCommands(ctx context.Context, params *SetMyCommandsParams) error {
+	err := b.performRequest(ctx, "setMyCommands", params)
 	if err != nil {
-		return fmt.Errorf("telego: setMyCommands(): %w", err)
+		return fmt.Errorf("telego: setMyCommands: %w", err)
 	}
-
 	return nil
 }
 
@@ -3012,12 +2933,11 @@ type DeleteMyCommandsParams struct {
 // language. After deletion, higher level commands
 // (https://core.telegram.org/bots/api#determining-list-of-commands) will be shown to affected users. Returns
 // True on success.
-func (b *Bot) DeleteMyCommands(params *DeleteMyCommandsParams) error {
-	err := b.performRequest("deleteMyCommands", params)
+func (b *Bot) DeleteMyCommands(ctx context.Context, params *DeleteMyCommandsParams) error {
+	err := b.performRequest(ctx, "deleteMyCommands", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteMyCommands(): %w", err)
+		return fmt.Errorf("telego: deleteMyCommands: %w", err)
 	}
-
 	return nil
 }
 
@@ -3034,13 +2954,12 @@ type GetMyCommandsParams struct {
 // GetMyCommands - Use this method to get the current list of the bot's commands for the given scope and user
 // language. Returns an Array of BotCommand (https://core.telegram.org/bots/api#botcommand) objects. If commands
 // aren't set, an empty list is returned.
-func (b *Bot) GetMyCommands(params *GetMyCommandsParams) ([]BotCommand, error) {
+func (b *Bot) GetMyCommands(ctx context.Context, params *GetMyCommandsParams) ([]BotCommand, error) {
 	var botCommands []BotCommand
-	err := b.performRequest("getMyCommands", params, &botCommands)
+	err := b.performRequest(ctx, "getMyCommands", params, &botCommands)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getMyCommands(): %w", err)
+		return nil, fmt.Errorf("telego: getMyCommands: %w", err)
 	}
-
 	return botCommands, nil
 }
 
@@ -3056,12 +2975,11 @@ type SetMyNameParams struct {
 }
 
 // SetMyName - Use this method to change the bot's name. Returns True on success.
-func (b *Bot) SetMyName(params *SetMyNameParams) error {
-	err := b.performRequest("setMyName", params)
+func (b *Bot) SetMyName(ctx context.Context, params *SetMyNameParams) error {
+	err := b.performRequest(ctx, "setMyName", params)
 	if err != nil {
-		return fmt.Errorf("telego: setMyName(): %w", err)
+		return fmt.Errorf("telego: setMyName: %w", err)
 	}
-
 	return nil
 }
 
@@ -3073,13 +2991,12 @@ type GetMyNameParams struct {
 
 // GetMyName - Use this method to get the current bot name for the given user language. Returns BotName
 // (https://core.telegram.org/bots/api#botname) on success.
-func (b *Bot) GetMyName(params *GetMyNameParams) (*BotName, error) {
+func (b *Bot) GetMyName(ctx context.Context, params *GetMyNameParams) (*BotName, error) {
 	var botName *BotName
-	err := b.performRequest("getMyName", params, &botName)
+	err := b.performRequest(ctx, "getMyName", params, &botName)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getMyName(): %w", err)
+		return nil, fmt.Errorf("telego: getMyName: %w", err)
 	}
-
 	return botName, nil
 }
 
@@ -3096,12 +3013,11 @@ type SetMyDescriptionParams struct {
 
 // SetMyDescription - Use this method to change the bot's description, which is shown in the chat with the
 // bot if the chat is empty. Returns True on success.
-func (b *Bot) SetMyDescription(params *SetMyDescriptionParams) error {
-	err := b.performRequest("setMyDescription", params)
+func (b *Bot) SetMyDescription(ctx context.Context, params *SetMyDescriptionParams) error {
+	err := b.performRequest(ctx, "setMyDescription", params)
 	if err != nil {
-		return fmt.Errorf("telego: setMyDescription(): %w", err)
+		return fmt.Errorf("telego: setMyDescription: %w", err)
 	}
-
 	return nil
 }
 
@@ -3113,13 +3029,12 @@ type GetMyDescriptionParams struct {
 
 // GetMyDescription - Use this method to get the current bot description for the given user language. Returns
 // BotDescription (https://core.telegram.org/bots/api#botdescription) on success.
-func (b *Bot) GetMyDescription(params *GetMyDescriptionParams) (*BotDescription, error) {
+func (b *Bot) GetMyDescription(ctx context.Context, params *GetMyDescriptionParams) (*BotDescription, error) {
 	var botDescription *BotDescription
-	err := b.performRequest("getMyDescription", params, &botDescription)
+	err := b.performRequest(ctx, "getMyDescription", params, &botDescription)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getMyDescription(): %w", err)
+		return nil, fmt.Errorf("telego: getMyDescription: %w", err)
 	}
-
 	return botDescription, nil
 }
 
@@ -3136,12 +3051,11 @@ type SetMyShortDescriptionParams struct {
 
 // SetMyShortDescription - Use this method to change the bot's short description, which is shown on the bot's
 // profile page and is sent together with the link when users share the bot. Returns True on success.
-func (b *Bot) SetMyShortDescription(params *SetMyShortDescriptionParams) error {
-	err := b.performRequest("setMyShortDescription", params)
+func (b *Bot) SetMyShortDescription(ctx context.Context, params *SetMyShortDescriptionParams) error {
+	err := b.performRequest(ctx, "setMyShortDescription", params)
 	if err != nil {
-		return fmt.Errorf("telego: setMyShortDescription(): %w", err)
+		return fmt.Errorf("telego: setMyShortDescription: %w", err)
 	}
-
 	return nil
 }
 
@@ -3153,13 +3067,12 @@ type GetMyShortDescriptionParams struct {
 
 // GetMyShortDescription - Use this method to get the current bot short description for the given user
 // language. Returns BotShortDescription (https://core.telegram.org/bots/api#botshortdescription) on success.
-func (b *Bot) GetMyShortDescription(params *GetMyShortDescriptionParams) (*BotShortDescription, error) {
+func (b *Bot) GetMyShortDescription(ctx context.Context, params *GetMyShortDescriptionParams) (*BotShortDescription, error) {
 	var botShortDescription *BotShortDescription
-	err := b.performRequest("getMyShortDescription", params, &botShortDescription)
+	err := b.performRequest(ctx, "getMyShortDescription", params, &botShortDescription)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getMyShortDescription(): %w", err)
+		return nil, fmt.Errorf("telego: getMyShortDescription: %w", err)
 	}
-
 	return botShortDescription, nil
 }
 
@@ -3176,12 +3089,11 @@ type SetChatMenuButtonParams struct {
 
 // SetChatMenuButton - Use this method to change the bot's menu button in a private chat, or the default menu
 // button. Returns True on success.
-func (b *Bot) SetChatMenuButton(params *SetChatMenuButtonParams) error {
-	err := b.performRequest("setChatMenuButton", params)
+func (b *Bot) SetChatMenuButton(ctx context.Context, params *SetChatMenuButtonParams) error {
+	err := b.performRequest(ctx, "setChatMenuButton", params)
 	if err != nil {
-		return fmt.Errorf("telego: setChatMenuButton(): %w", err)
+		return fmt.Errorf("telego: setChatMenuButton: %w", err)
 	}
-
 	return nil
 }
 
@@ -3194,13 +3106,12 @@ type GetChatMenuButtonParams struct {
 
 // GetChatMenuButton - Use this method to get the current value of the bot's menu button in a private chat,
 // or the default menu button. Returns MenuButton (https://core.telegram.org/bots/api#menubutton) on success.
-func (b *Bot) GetChatMenuButton(params *GetChatMenuButtonParams) (MenuButton, error) {
+func (b *Bot) GetChatMenuButton(ctx context.Context, params *GetChatMenuButtonParams) (MenuButton, error) {
 	var menuButton menuButtonData
-	err := b.performRequest("getChatMenuButton", params, &menuButton)
+	err := b.performRequest(ctx, "getChatMenuButton", params, &menuButton)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getChatMenuButton(): %w", err)
+		return nil, fmt.Errorf("telego: getChatMenuButton: %w", err)
 	}
-
 	return menuButton.Data, nil
 }
 
@@ -3218,12 +3129,11 @@ type SetMyDefaultAdministratorRightsParams struct {
 // SetMyDefaultAdministratorRights - Use this method to change the default administrator rights requested by
 // the bot when it's added as an administrator to groups or channels. These rights will be suggested to users,
 // but they are free to modify the list before adding the bot. Returns True on success.
-func (b *Bot) SetMyDefaultAdministratorRights(params *SetMyDefaultAdministratorRightsParams) error {
-	err := b.performRequest("setMyDefaultAdministratorRights", params)
+func (b *Bot) SetMyDefaultAdministratorRights(ctx context.Context, params *SetMyDefaultAdministratorRightsParams) error {
+	err := b.performRequest(ctx, "setMyDefaultAdministratorRights", params)
 	if err != nil {
-		return fmt.Errorf("telego: setMyDefaultAdministratorRights(): %w", err)
+		return fmt.Errorf("telego: setMyDefaultAdministratorRights: %w", err)
 	}
-
 	return nil
 }
 
@@ -3236,15 +3146,12 @@ type GetMyDefaultAdministratorRightsParams struct {
 
 // GetMyDefaultAdministratorRights - Use this method to get the current default administrator rights of the
 // bot. Returns ChatAdministratorRights (https://core.telegram.org/bots/api#chatadministratorrights) on success.
-func (b *Bot) GetMyDefaultAdministratorRights(
-	params *GetMyDefaultAdministratorRightsParams,
-) (*ChatAdministratorRights, error) {
+func (b *Bot) GetMyDefaultAdministratorRights(ctx context.Context, params *GetMyDefaultAdministratorRightsParams) (*ChatAdministratorRights, error) {
 	var chatAdministratorRights *ChatAdministratorRights
-	err := b.performRequest("getMyDefaultAdministratorRights", params, &chatAdministratorRights)
+	err := b.performRequest(ctx, "getMyDefaultAdministratorRights", params, &chatAdministratorRights)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getMyDefaultAdministratorRights(): %w", err)
+		return nil, fmt.Errorf("telego: getMyDefaultAdministratorRights: %w", err)
 	}
-
 	return chatAdministratorRights, nil
 }
 
@@ -3289,14 +3196,13 @@ type EditMessageTextParams struct {
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
 // messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
 // hours from the time they were sent.
-func (b *Bot) EditMessageText(params *EditMessageTextParams) (*Message, error) {
+func (b *Bot) EditMessageText(ctx context.Context, params *EditMessageTextParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("editMessageText", params, &message, &success)
+	err := b.performRequest(ctx, "editMessageText", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageText(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageText: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3341,14 +3247,13 @@ type EditMessageCaptionParams struct {
 // not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise
 // True is returned. Note that business messages that were not sent by the bot and do not contain an inline
 // keyboard can only be edited within 48 hours from the time they were sent.
-func (b *Bot) EditMessageCaption(params *EditMessageCaptionParams) (*Message, error) {
+func (b *Bot) EditMessageCaption(ctx context.Context, params *EditMessageCaptionParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("editMessageCaption", params, &message, &success)
+	err := b.performRequest(ctx, "editMessageCaption", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageCaption(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageCaption: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3398,14 +3303,13 @@ func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
 // messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
 // hours from the time they were sent.
-func (b *Bot) EditMessageMedia(params *EditMessageMediaParams) (*Message, error) {
+func (b *Bot) EditMessageMedia(ctx context.Context, params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("editMessageMedia", params, &message, &success)
+	err := b.performRequest(ctx, "editMessageMedia", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageMedia(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageMedia: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3459,14 +3363,13 @@ type EditMessageLiveLocationParams struct {
 // (https://core.telegram.org/bots/api#stopmessagelivelocation). On success, if the edited message is not an
 // inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True
 // is returned.
-func (b *Bot) EditMessageLiveLocation(params *EditMessageLiveLocationParams) (*Message, error) {
+func (b *Bot) EditMessageLiveLocation(ctx context.Context, params *EditMessageLiveLocationParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("editMessageLiveLocation", params, &message, &success)
+	err := b.performRequest(ctx, "editMessageLiveLocation", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageLiveLocation(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageLiveLocation: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3496,14 +3399,13 @@ type StopMessageLiveLocationParams struct {
 // StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
 // expires. On success, if the message is not an inline message, the edited Message
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
-func (b *Bot) StopMessageLiveLocation(params *StopMessageLiveLocationParams) (*Message, error) {
+func (b *Bot) StopMessageLiveLocation(ctx context.Context, params *StopMessageLiveLocationParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("stopMessageLiveLocation", params, &message, &success)
+	err := b.performRequest(ctx, "stopMessageLiveLocation", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: stopMessageLiveLocation(): %w", err)
+		return nil, fmt.Errorf("telego: stopMessageLiveLocation: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3533,14 +3435,13 @@ type EditMessageReplyMarkupParams struct {
 // edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
 // returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not
 // contain an inline keyboard can only be edited within 48 hours from the time they were sent.
-func (b *Bot) EditMessageReplyMarkup(params *EditMessageReplyMarkupParams) (*Message, error) {
+func (b *Bot) EditMessageReplyMarkup(ctx context.Context, params *EditMessageReplyMarkupParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("editMessageReplyMarkup", params, &message, &success)
+	err := b.performRequest(ctx, "editMessageReplyMarkup", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageReplyMarkup(): %w", err)
+		return nil, fmt.Errorf("telego: editMessageReplyMarkup: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3564,13 +3465,12 @@ type StopPollParams struct {
 
 // StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll
 // (https://core.telegram.org/bots/api#poll) is returned.
-func (b *Bot) StopPoll(params *StopPollParams) (*Poll, error) {
+func (b *Bot) StopPoll(ctx context.Context, params *StopPollParams) (*Poll, error) {
 	var poll *Poll
-	err := b.performRequest("stopPoll", params, &poll)
+	err := b.performRequest(ctx, "stopPoll", params, &poll)
 	if err != nil {
-		return nil, fmt.Errorf("telego: stopPoll(): %w", err)
+		return nil, fmt.Errorf("telego: stopPoll: %w", err)
 	}
-
 	return poll, nil
 }
 
@@ -3596,12 +3496,11 @@ type DeleteMessageParams struct {
 // - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message
 // there.
 // Returns True on success.
-func (b *Bot) DeleteMessage(params *DeleteMessageParams) error {
-	err := b.performRequest("deleteMessage", params)
+func (b *Bot) DeleteMessage(ctx context.Context, params *DeleteMessageParams) error {
+	err := b.performRequest(ctx, "deleteMessage", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteMessage(): %w", err)
+		return fmt.Errorf("telego: deleteMessage: %w", err)
 	}
-
 	return nil
 }
 
@@ -3618,12 +3517,11 @@ type DeleteMessagesParams struct {
 
 // DeleteMessages - Use this method to delete multiple messages simultaneously. If some of the specified
 // messages can't be found, they are skipped. Returns True on success.
-func (b *Bot) DeleteMessages(params *DeleteMessagesParams) error {
-	err := b.performRequest("deleteMessages", params)
+func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) error {
+	err := b.performRequest(ctx, "deleteMessages", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteMessages(): %w", err)
+		return fmt.Errorf("telego: deleteMessages: %w", err)
 	}
-
 	return nil
 }
 
@@ -3686,13 +3584,12 @@ func (p *SendStickerParams) fileParameters() map[string]ta.NamedReader {
 // SendSticker - Use this method to send static .WEBP, animated (https://telegram.org/blog/animated-stickers)
 // .TGS, or video (https://telegram.org/blog/video-stickers-better-reactions) .WEBM stickers. On success, the
 // sent Message (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendSticker(params *SendStickerParams) (*Message, error) {
+func (b *Bot) SendSticker(ctx context.Context, params *SendStickerParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendSticker", params, &message)
+	err := b.performRequest(ctx, "sendSticker", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendSticker(): %w", err)
+		return nil, fmt.Errorf("telego: sendSticker: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -3704,13 +3601,12 @@ type GetStickerSetParams struct {
 
 // GetStickerSet - Use this method to get a sticker set. On success, a StickerSet
 // (https://core.telegram.org/bots/api#stickerset) object is returned.
-func (b *Bot) GetStickerSet(params *GetStickerSetParams) (*StickerSet, error) {
+func (b *Bot) GetStickerSet(ctx context.Context, params *GetStickerSetParams) (*StickerSet, error) {
 	var stickerSet *StickerSet
-	err := b.performRequest("getStickerSet", params, &stickerSet)
+	err := b.performRequest(ctx, "getStickerSet", params, &stickerSet)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getStickerSet(): %w", err)
+		return nil, fmt.Errorf("telego: getStickerSet: %w", err)
 	}
-
 	return stickerSet, nil
 }
 
@@ -3723,13 +3619,12 @@ type GetCustomEmojiStickersParams struct {
 
 // GetCustomEmojiStickers - Use this method to get information about custom emoji stickers by their
 // identifiers. Returns an Array of Sticker (https://core.telegram.org/bots/api#sticker) objects.
-func (b *Bot) GetCustomEmojiStickers(params *GetCustomEmojiStickersParams) ([]Sticker, error) {
+func (b *Bot) GetCustomEmojiStickers(ctx context.Context, params *GetCustomEmojiStickersParams) ([]Sticker, error) {
 	var stickers []Sticker
-	err := b.performRequest("getCustomEmojiStickers", params, &stickers)
+	err := b.performRequest(ctx, "getCustomEmojiStickers", params, &stickers)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getCustomEmojiStickers(): %w", err)
+		return nil, fmt.Errorf("telego: getCustomEmojiStickers: %w", err)
 	}
-
 	return stickers, nil
 }
 
@@ -3765,13 +3660,12 @@ func (p *UploadStickerFileParams) fileParameters() map[string]ta.NamedReader {
 // (https://core.telegram.org/bots/api#addstickertoset), or replaceStickerInSet
 // (https://core.telegram.org/bots/api#replacestickerinset) methods (the file can be used multiple times).
 // Returns the uploaded File (https://core.telegram.org/bots/api#file) on success.
-func (b *Bot) UploadStickerFile(params *UploadStickerFileParams) (*File, error) {
+func (b *Bot) UploadStickerFile(ctx context.Context, params *UploadStickerFileParams) (*File, error) {
 	var file *File
-	err := b.performRequest("uploadStickerFile", params, &file)
+	err := b.performRequest(ctx, "uploadStickerFile", params, &file)
 	if err != nil {
-		return nil, fmt.Errorf("telego: uploadStickerFile(): %w", err)
+		return nil, fmt.Errorf("telego: uploadStickerFile: %w", err)
 	}
-
 	return file, nil
 }
 
@@ -3820,12 +3714,11 @@ func (p *CreateNewStickerSetParams) fileParameters() map[string]ta.NamedReader {
 
 // CreateNewStickerSet - Use this method to create a new sticker set owned by a user. The bot will be able to
 // edit the sticker set thus created. Returns True on success.
-func (b *Bot) CreateNewStickerSet(params *CreateNewStickerSetParams) error {
-	err := b.performRequest("createNewStickerSet", params)
+func (b *Bot) CreateNewStickerSet(ctx context.Context, params *CreateNewStickerSetParams) error {
+	err := b.performRequest(ctx, "createNewStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: createNewStickerSet(): %w", err)
+		return fmt.Errorf("telego: createNewStickerSet: %w", err)
 	}
-
 	return nil
 }
 
@@ -3856,12 +3749,11 @@ func (p *AddStickerToSetParams) fileParameters() map[string]ta.NamedReader {
 
 // AddStickerToSet - Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can
 // have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success.
-func (b *Bot) AddStickerToSet(params *AddStickerToSetParams) error {
-	err := b.performRequest("addStickerToSet", params)
+func (b *Bot) AddStickerToSet(ctx context.Context, params *AddStickerToSetParams) error {
+	err := b.performRequest(ctx, "addStickerToSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: addStickerToSet(): %w", err)
+		return fmt.Errorf("telego: addStickerToSet: %w", err)
 	}
-
 	return nil
 }
 
@@ -3876,12 +3768,11 @@ type SetStickerPositionInSetParams struct {
 
 // SetStickerPositionInSet - Use this method to move a sticker in a set created by the bot to a specific
 // position. Returns True on success.
-func (b *Bot) SetStickerPositionInSet(params *SetStickerPositionInSetParams) error {
-	err := b.performRequest("setStickerPositionInSet", params)
+func (b *Bot) SetStickerPositionInSet(ctx context.Context, params *SetStickerPositionInSetParams) error {
+	err := b.performRequest(ctx, "setStickerPositionInSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerPositionInSet(): %w", err)
+		return fmt.Errorf("telego: setStickerPositionInSet: %w", err)
 	}
-
 	return nil
 }
 
@@ -3893,12 +3784,11 @@ type DeleteStickerFromSetParams struct {
 
 // DeleteStickerFromSet - Use this method to delete a sticker from a set created by the bot. Returns True on
 // success.
-func (b *Bot) DeleteStickerFromSet(params *DeleteStickerFromSetParams) error {
-	err := b.performRequest("deleteStickerFromSet", params)
+func (b *Bot) DeleteStickerFromSet(ctx context.Context, params *DeleteStickerFromSetParams) error {
+	err := b.performRequest(ctx, "deleteStickerFromSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteStickerFromSet(): %w", err)
+		return fmt.Errorf("telego: deleteStickerFromSet: %w", err)
 	}
-
 	return nil
 }
 
@@ -3935,12 +3825,11 @@ func (p *ReplaceStickerInSetParams) fileParameters() map[string]ta.NamedReader {
 // (https://core.telegram.org/bots/api#deletestickerfromset), then addStickerToSet
 // (https://core.telegram.org/bots/api#addstickertoset), then setStickerPositionInSet
 // (https://core.telegram.org/bots/api#setstickerpositioninset). Returns True on success.
-func (b *Bot) ReplaceStickerInSet(params *ReplaceStickerInSetParams) error {
-	err := b.performRequest("replaceStickerInSet", params)
+func (b *Bot) ReplaceStickerInSet(ctx context.Context, params *ReplaceStickerInSetParams) error {
+	err := b.performRequest(ctx, "replaceStickerInSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: replaceStickerInSet(): %w", err)
+		return fmt.Errorf("telego: replaceStickerInSet: %w", err)
 	}
-
 	return nil
 }
 
@@ -3955,12 +3844,11 @@ type SetStickerEmojiListParams struct {
 
 // SetStickerEmojiList - Use this method to change the list of emoji assigned to a regular or custom emoji
 // sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
-func (b *Bot) SetStickerEmojiList(params *SetStickerEmojiListParams) error {
-	err := b.performRequest("setStickerEmojiList", params)
+func (b *Bot) SetStickerEmojiList(ctx context.Context, params *SetStickerEmojiListParams) error {
+	err := b.performRequest(ctx, "setStickerEmojiList", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerEmojiList(): %w", err)
+		return fmt.Errorf("telego: setStickerEmojiList: %w", err)
 	}
-
 	return nil
 }
 
@@ -3976,12 +3864,11 @@ type SetStickerKeywordsParams struct {
 
 // SetStickerKeywords - Use this method to change search keywords assigned to a regular or custom emoji
 // sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
-func (b *Bot) SetStickerKeywords(params *SetStickerKeywordsParams) error {
-	err := b.performRequest("setStickerKeywords", params)
+func (b *Bot) SetStickerKeywords(ctx context.Context, params *SetStickerKeywordsParams) error {
+	err := b.performRequest(ctx, "setStickerKeywords", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerKeywords(): %w", err)
+		return fmt.Errorf("telego: setStickerKeywords: %w", err)
 	}
-
 	return nil
 }
 
@@ -3998,12 +3885,11 @@ type SetStickerMaskPositionParams struct {
 // SetStickerMaskPosition - Use this method to change the mask position
 // (https://core.telegram.org/bots/api#maskposition) of a mask sticker. The sticker must belong to a sticker set
 // that was created by the bot. Returns True on success.
-func (b *Bot) SetStickerMaskPosition(params *SetStickerMaskPositionParams) error {
-	err := b.performRequest("setStickerMaskPosition", params)
+func (b *Bot) SetStickerMaskPosition(ctx context.Context, params *SetStickerMaskPositionParams) error {
+	err := b.performRequest(ctx, "setStickerMaskPosition", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerMaskPosition(): %w", err)
+		return fmt.Errorf("telego: setStickerMaskPosition: %w", err)
 	}
-
 	return nil
 }
 
@@ -4017,12 +3903,11 @@ type SetStickerSetTitleParams struct {
 }
 
 // SetStickerSetTitle - Use this method to set the title of a created sticker set. Returns True on success.
-func (b *Bot) SetStickerSetTitle(params *SetStickerSetTitleParams) error {
-	err := b.performRequest("setStickerSetTitle", params)
+func (b *Bot) SetStickerSetTitle(ctx context.Context, params *SetStickerSetTitleParams) error {
+	err := b.performRequest(ctx, "setStickerSetTitle", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerSetTitle(): %w", err)
+		return fmt.Errorf("telego: setStickerSetTitle: %w", err)
 	}
-
 	return nil
 }
 
@@ -4065,12 +3950,11 @@ func (p *SetStickerSetThumbnailParams) fileParameters() map[string]ta.NamedReade
 
 // SetStickerSetThumbnail - Use this method to set the thumbnail of a regular or mask sticker set. The format
 // of the thumbnail file must match the format of the stickers in the set. Returns True on success.
-func (b *Bot) SetStickerSetThumbnail(params *SetStickerSetThumbnailParams) error {
-	err := b.performRequest("setStickerSetThumbnail", params)
+func (b *Bot) SetStickerSetThumbnail(ctx context.Context, params *SetStickerSetThumbnailParams) error {
+	err := b.performRequest(ctx, "setStickerSetThumbnail", params)
 	if err != nil {
-		return fmt.Errorf("telego: setStickerSetThumbnail(): %w", err)
+		return fmt.Errorf("telego: setStickerSetThumbnail: %w", err)
 	}
-
 	return nil
 }
 
@@ -4087,12 +3971,11 @@ type SetCustomEmojiStickerSetThumbnailParams struct {
 
 // SetCustomEmojiStickerSetThumbnail - Use this method to set the thumbnail of a custom emoji sticker set.
 // Returns True on success.
-func (b *Bot) SetCustomEmojiStickerSetThumbnail(params *SetCustomEmojiStickerSetThumbnailParams) error {
-	err := b.performRequest("setCustomEmojiStickerSetThumbnail", params)
+func (b *Bot) SetCustomEmojiStickerSetThumbnail(ctx context.Context, params *SetCustomEmojiStickerSetThumbnailParams) error {
+	err := b.performRequest(ctx, "setCustomEmojiStickerSetThumbnail", params)
 	if err != nil {
-		return fmt.Errorf("telego: setCustomEmojiStickerSetThumbnail(): %w", err)
+		return fmt.Errorf("telego: setCustomEmojiStickerSetThumbnail: %w", err)
 	}
-
 	return nil
 }
 
@@ -4104,24 +3987,22 @@ type DeleteStickerSetParams struct {
 
 // DeleteStickerSet - Use this method to delete a sticker set that was created by the bot. Returns True on
 // success.
-func (b *Bot) DeleteStickerSet(params *DeleteStickerSetParams) error {
-	err := b.performRequest("deleteStickerSet", params)
+func (b *Bot) DeleteStickerSet(ctx context.Context, params *DeleteStickerSetParams) error {
+	err := b.performRequest(ctx, "deleteStickerSet", params)
 	if err != nil {
-		return fmt.Errorf("telego: deleteStickerSet(): %w", err)
+		return fmt.Errorf("telego: deleteStickerSet: %w", err)
 	}
-
 	return nil
 }
 
 // GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users. Requires no
 // parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
-func (b *Bot) GetAvailableGifts() (*Gifts, error) {
+func (b *Bot) GetAvailableGifts(ctx context.Context) (*Gifts, error) {
 	var gifts *Gifts
-	err := b.performRequest("getAvailableGifts", nil, &gifts)
+	err := b.performRequest(ctx, "getAvailableGifts", nil, &gifts)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getAvailableGifts(): %w", err)
+		return nil, fmt.Errorf("telego: getAvailableGifts: %w", err)
 	}
-
 	return gifts, nil
 }
 
@@ -4153,12 +4034,11 @@ type SendGiftParams struct {
 
 // SendGift - Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
 // Returns True on success.
-func (b *Bot) SendGift(params *SendGiftParams) error {
-	err := b.performRequest("sendGift", params)
+func (b *Bot) SendGift(ctx context.Context, params *SendGiftParams) error {
+	err := b.performRequest(ctx, "sendGift", params)
 	if err != nil {
-		return fmt.Errorf("telego: sendGift(): %w", err)
+		return fmt.Errorf("telego: sendGift: %w", err)
 	}
-
 	return nil
 }
 
@@ -4175,12 +4055,11 @@ type VerifyUserParams struct {
 // VerifyUser - Verifies a user on behalf of the organization
 // (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
 // success.
-func (b *Bot) VerifyUser(params *VerifyUserParams) error {
-	err := b.performRequest("verifyUser", params)
+func (b *Bot) VerifyUser(ctx context.Context, params *VerifyUserParams) error {
+	err := b.performRequest(ctx, "verifyUser", params)
 	if err != nil {
-		return fmt.Errorf("telego: verifyUser(): %w", err)
+		return fmt.Errorf("telego: verifyUser: %w", err)
 	}
-
 	return nil
 }
 
@@ -4198,12 +4077,11 @@ type VerifyChatParams struct {
 // VerifyChat - Verifies a chat on behalf of the organization
 // (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
 // success.
-func (b *Bot) VerifyChat(params *VerifyChatParams) error {
-	err := b.performRequest("verifyChat", params)
+func (b *Bot) VerifyChat(ctx context.Context, params *VerifyChatParams) error {
+	err := b.performRequest(ctx, "verifyChat", params)
 	if err != nil {
-		return fmt.Errorf("telego: verifyChat(): %w", err)
+		return fmt.Errorf("telego: verifyChat: %w", err)
 	}
-
 	return nil
 }
 
@@ -4216,12 +4094,11 @@ type RemoveUserVerificationParams struct {
 // RemoveUserVerification - Removes verification from a user who is currently verified on behalf of the
 // organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
 // success.
-func (b *Bot) RemoveUserVerification(params *RemoveUserVerificationParams) error {
-	err := b.performRequest("removeUserVerification", params)
+func (b *Bot) RemoveUserVerification(ctx context.Context, params *RemoveUserVerificationParams) error {
+	err := b.performRequest(ctx, "removeUserVerification", params)
 	if err != nil {
-		return fmt.Errorf("telego: removeUserVerification(): %w", err)
+		return fmt.Errorf("telego: removeUserVerification: %w", err)
 	}
-
 	return nil
 }
 
@@ -4235,12 +4112,11 @@ type RemoveChatVerificationParams struct {
 // RemoveChatVerification - Removes verification from a chat that is currently verified on behalf of the
 // organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
 // success.
-func (b *Bot) RemoveChatVerification(params *RemoveChatVerificationParams) error {
-	err := b.performRequest("removeChatVerification", params)
+func (b *Bot) RemoveChatVerification(ctx context.Context, params *RemoveChatVerificationParams) error {
+	err := b.performRequest(ctx, "removeChatVerification", params)
 	if err != nil {
-		return fmt.Errorf("telego: removeChatVerification(): %w", err)
+		return fmt.Errorf("telego: removeChatVerification: %w", err)
 	}
-
 	return nil
 }
 
@@ -4271,12 +4147,11 @@ type AnswerInlineQueryParams struct {
 
 // AnswerInlineQuery - Use this method to send answers to an inline query. On success, True is returned.
 // No more than 50 results per query are allowed.
-func (b *Bot) AnswerInlineQuery(params *AnswerInlineQueryParams) error {
-	err := b.performRequest("answerInlineQuery", params)
+func (b *Bot) AnswerInlineQuery(ctx context.Context, params *AnswerInlineQueryParams) error {
+	err := b.performRequest(ctx, "answerInlineQuery", params)
 	if err != nil {
-		return fmt.Errorf("telego: answerInlineQuery(): %w", err)
+		return fmt.Errorf("telego: answerInlineQuery: %w", err)
 	}
-
 	return nil
 }
 
@@ -4293,13 +4168,12 @@ type AnswerWebAppQueryParams struct {
 // (https://core.telegram.org/bots/webapps) and send a corresponding message on behalf of the user to the chat
 // from which the query originated. On success, a SentWebAppMessage
 // (https://core.telegram.org/bots/api#sentwebappmessage) object is returned.
-func (b *Bot) AnswerWebAppQuery(params *AnswerWebAppQueryParams) (*SentWebAppMessage, error) {
+func (b *Bot) AnswerWebAppQuery(ctx context.Context, params *AnswerWebAppQueryParams) (*SentWebAppMessage, error) {
 	var sentWebAppMessage *SentWebAppMessage
-	err := b.performRequest("answerWebAppQuery", params, &sentWebAppMessage)
+	err := b.performRequest(ctx, "answerWebAppQuery", params, &sentWebAppMessage)
 	if err != nil {
-		return nil, fmt.Errorf("telego: answerWebAppQuery(): %w", err)
+		return nil, fmt.Errorf("telego: answerWebAppQuery: %w", err)
 	}
-
 	return sentWebAppMessage, nil
 }
 
@@ -4326,13 +4200,12 @@ type SavePreparedInlineMessageParams struct {
 
 // SavePreparedInlineMessage - Stores a message that can be sent by a user of a Mini App. Returns a
 // PreparedInlineMessage (https://core.telegram.org/bots/api#preparedinlinemessage) object.
-func (b *Bot) SavePreparedInlineMessage(params *SavePreparedInlineMessageParams) (*PreparedInlineMessage, error) {
+func (b *Bot) SavePreparedInlineMessage(ctx context.Context, params *SavePreparedInlineMessageParams) (*PreparedInlineMessage, error) {
 	var preparedInlineMessage *PreparedInlineMessage
-	err := b.performRequest("savePreparedInlineMessage", params, &preparedInlineMessage)
+	err := b.performRequest(ctx, "savePreparedInlineMessage", params, &preparedInlineMessage)
 	if err != nil {
-		return nil, fmt.Errorf("telego: savePreparedInlineMessage(): %w", err)
+		return nil, fmt.Errorf("telego: savePreparedInlineMessage: %w", err)
 	}
-
 	return preparedInlineMessage, nil
 }
 
@@ -4461,13 +4334,12 @@ type SendInvoiceParams struct {
 
 // SendInvoice - Use this method to send invoices. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendInvoice(params *SendInvoiceParams) (*Message, error) {
+func (b *Bot) SendInvoice(ctx context.Context, params *SendInvoiceParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendInvoice", params, &message)
+	err := b.performRequest(ctx, "sendInvoice", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendInvoice(): %w", err)
+		return nil, fmt.Errorf("telego: sendInvoice: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -4569,13 +4441,12 @@ type CreateInvoiceLinkParams struct {
 
 // CreateInvoiceLink - Use this method to create a link for an invoice. Returns the created invoice link as
 // String on success.
-func (b *Bot) CreateInvoiceLink(params *CreateInvoiceLinkParams) (*string, error) {
+func (b *Bot) CreateInvoiceLink(ctx context.Context, params *CreateInvoiceLinkParams) (*string, error) {
 	var invoiceLink *string
-	err := b.performRequest("createInvoiceLink", params, &invoiceLink)
+	err := b.performRequest(ctx, "createInvoiceLink", params, &invoiceLink)
 	if err != nil {
-		return nil, fmt.Errorf("telego: createInvoiceLink(): %w", err)
+		return nil, fmt.Errorf("telego: createInvoiceLink: %w", err)
 	}
-
 	return invoiceLink, nil
 }
 
@@ -4601,12 +4472,11 @@ type AnswerShippingQueryParams struct {
 // AnswerShippingQuery - If you sent an invoice requesting a shipping address and the parameter is_flexible
 // was specified, the Bot API will send an Update (https://core.telegram.org/bots/api#update) with a
 // shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned.
-func (b *Bot) AnswerShippingQuery(params *AnswerShippingQueryParams) error {
-	err := b.performRequest("answerShippingQuery", params)
+func (b *Bot) AnswerShippingQuery(ctx context.Context, params *AnswerShippingQueryParams) error {
+	err := b.performRequest(ctx, "answerShippingQuery", params)
 	if err != nil {
-		return fmt.Errorf("telego: answerShippingQuery(): %w", err)
+		return fmt.Errorf("telego: answerShippingQuery: %w", err)
 	}
-
 	return nil
 }
 
@@ -4630,12 +4500,11 @@ type AnswerPreCheckoutQueryParams struct {
 // the final confirmation in the form of an Update (https://core.telegram.org/bots/api#update) with the field
 // pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned.
 // Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
-func (b *Bot) AnswerPreCheckoutQuery(params *AnswerPreCheckoutQueryParams) error {
-	err := b.performRequest("answerPreCheckoutQuery", params)
+func (b *Bot) AnswerPreCheckoutQuery(ctx context.Context, params *AnswerPreCheckoutQueryParams) error {
+	err := b.performRequest(ctx, "answerPreCheckoutQuery", params)
 	if err != nil {
-		return fmt.Errorf("telego: answerPreCheckoutQuery(): %w", err)
+		return fmt.Errorf("telego: answerPreCheckoutQuery: %w", err)
 	}
-
 	return nil
 }
 
@@ -4651,13 +4520,12 @@ type GetStarTransactionsParams struct {
 
 // GetStarTransactions - Returns the bot's Telegram Star transactions in chronological order. On success,
 // returns a StarTransactions (https://core.telegram.org/bots/api#startransactions) object.
-func (b *Bot) GetStarTransactions(params *GetStarTransactionsParams) (*StarTransactions, error) {
+func (b *Bot) GetStarTransactions(ctx context.Context, params *GetStarTransactionsParams) (*StarTransactions, error) {
 	var starTransactions *StarTransactions
-	err := b.performRequest("getStarTransactions", params, &starTransactions)
+	err := b.performRequest(ctx, "getStarTransactions", params, &starTransactions)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getStarTransactions(): %w", err)
+		return nil, fmt.Errorf("telego: getStarTransactions: %w", err)
 	}
-
 	return starTransactions, nil
 }
 
@@ -4672,12 +4540,11 @@ type RefundStarPaymentParams struct {
 
 // RefundStarPayment - Refunds a successful payment in Telegram Stars (https://t.me/BotNews/90). Returns True
 // on success.
-func (b *Bot) RefundStarPayment(params *RefundStarPaymentParams) error {
-	err := b.performRequest("refundStarPayment", params)
+func (b *Bot) RefundStarPayment(ctx context.Context, params *RefundStarPaymentParams) error {
+	err := b.performRequest(ctx, "refundStarPayment", params)
 	if err != nil {
-		return fmt.Errorf("telego: refundStarPayment(): %w", err)
+		return fmt.Errorf("telego: refundStarPayment: %w", err)
 	}
-
 	return nil
 }
 
@@ -4697,12 +4564,11 @@ type EditUserStarSubscriptionParams struct {
 
 // EditUserStarSubscription - Allows the bot to cancel or re-enable extension of a subscription paid in
 // Telegram Stars. Returns True on success.
-func (b *Bot) EditUserStarSubscription(params *EditUserStarSubscriptionParams) error {
-	err := b.performRequest("editUserStarSubscription", params)
+func (b *Bot) EditUserStarSubscription(ctx context.Context, params *EditUserStarSubscriptionParams) error {
+	err := b.performRequest(ctx, "editUserStarSubscription", params)
 	if err != nil {
-		return fmt.Errorf("telego: editUserStarSubscription(): %w", err)
+		return fmt.Errorf("telego: editUserStarSubscription: %w", err)
 	}
-
 	return nil
 }
 
@@ -4722,12 +4588,11 @@ type SetPassportDataErrorsParams struct {
 // reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence
 // of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the
 // issues.
-func (b *Bot) SetPassportDataErrors(params *SetPassportDataErrorsParams) error {
-	err := b.performRequest("setPassportDataErrors", params)
+func (b *Bot) SetPassportDataErrors(ctx context.Context, params *SetPassportDataErrorsParams) error {
+	err := b.performRequest(ctx, "setPassportDataErrors", params)
 	if err != nil {
-		return fmt.Errorf("telego: setPassportDataErrors(): %w", err)
+		return fmt.Errorf("telego: setPassportDataErrors: %w", err)
 	}
-
 	return nil
 }
 
@@ -4776,13 +4641,12 @@ type SendGameParams struct {
 
 // SendGame - Use this method to send a game. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) SendGame(params *SendGameParams) (*Message, error) {
+func (b *Bot) SendGame(ctx context.Context, params *SendGameParams) (*Message, error) {
 	var message *Message
-	err := b.performRequest("sendGame", params, &message)
+	err := b.performRequest(ctx, "sendGame", params, &message)
 	if err != nil {
-		return nil, fmt.Errorf("telego: sendGame(): %w", err)
+		return nil, fmt.Errorf("telego: sendGame: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -4817,14 +4681,13 @@ type SetGameScoreParams struct {
 // the message is not an inline message, the Message (https://core.telegram.org/bots/api#message) is returned,
 // otherwise True is returned. Returns an error, if the new score is not greater than the user's current score
 // in the chat and force is False.
-func (b *Bot) SetGameScore(params *SetGameScoreParams) (*Message, error) {
+func (b *Bot) SetGameScore(ctx context.Context, params *SetGameScoreParams) (*Message, error) {
 	var message *Message
 	var success *bool
-	err := b.performRequest("setGameScore", params, &message, &success)
+	err := b.performRequest(ctx, "setGameScore", params, &message, &success)
 	if err != nil {
-		return nil, fmt.Errorf("telego: setGameScore(): %w", err)
+		return nil, fmt.Errorf("telego: setGameScore: %w", err)
 	}
-
 	return message, nil
 }
 
@@ -4850,12 +4713,11 @@ type GetGameHighScoresParams struct {
 // This method will currently return scores for the target user, plus two of their closest neighbors on each
 // side. Will also return the top three users if the user and their neighbors are not among them. Please note
 // that this behavior is subject to change.
-func (b *Bot) GetGameHighScores(params *GetGameHighScoresParams) ([]GameHighScore, error) {
+func (b *Bot) GetGameHighScores(ctx context.Context, params *GetGameHighScoresParams) ([]GameHighScore, error) {
 	var gameHighScores []GameHighScore
-	err := b.performRequest("getGameHighScores", params, &gameHighScores)
+	err := b.performRequest(ctx, "getGameHighScores", params, &gameHighScores)
 	if err != nil {
-		return nil, fmt.Errorf("telego: getGameHighScores(): %w", err)
+		return nil, fmt.Errorf("telego: getGameHighScores: %w", err)
 	}
-
 	return gameHighScores, nil
 }
