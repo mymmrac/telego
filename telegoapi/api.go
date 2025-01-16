@@ -2,6 +2,7 @@ package telegoapi
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 
@@ -67,7 +68,7 @@ type RequestData struct {
 
 // Caller represents way to call API with request
 type Caller interface {
-	Call(url string, data *RequestData) (*Response, error)
+	Call(ctx context.Context, url string, data *RequestData) (*Response, error)
 }
 
 // NamedReader represents a way to send files (or other data).

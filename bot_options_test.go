@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"net/http"
 	"strings"
 	"testing"
@@ -14,7 +15,7 @@ import (
 
 type testCallerType struct{}
 
-func (c testCallerType) Call(_ string, _ *ta.RequestData) (*ta.Response, error) {
+func (c testCallerType) Call(_ context.Context, _ string, _ *ta.RequestData) (*ta.Response, error) {
 	panic("implement me")
 }
 

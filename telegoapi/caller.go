@@ -3,6 +3,7 @@
 package telegoapi
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -20,13 +21,20 @@ type FastHTTPCaller struct {
 	Client *fasthttp.Client
 }
 
-// DefaultFastHTTPCaller is a default fast http caller
+// DefaultFastHTTPCaller is a default fasthttp caller
 var DefaultFastHTTPCaller = &FastHTTPCaller{
 	Client: &fasthttp.Client{},
 }
 
 // Call is a fasthttp implementation
-func (a FastHTTPCaller) Call(url string, data *RequestData) (*Response, error) {
+func (a FastHTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*Response, error) {
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
+		// Continue
+	}
+
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
 
@@ -38,7 +46,13 @@ func (a FastHTTPCaller) Call(url string, data *RequestData) (*Response, error) {
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(resp)
 
-	err := a.Client.Do(req, resp)
+	var err error
+	deadline, ok := ctx.Deadline()
+	if ok {
+		err = a.Client.DoDeadline(req, resp, deadline)
+	} else {
+		err = a.Client.Do(req, resp)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("fasthttp do request: %w", err)
 	}
@@ -67,8 +81,8 @@ var DefaultHTTPCaller = &HTTPCaller{
 }
 
 // Call is a http implementation
-func (h HTTPCaller) Call(url string, data *RequestData) (*Response, error) {
-	req, err := http.NewRequest(http.MethodPost, url, data.Buffer)
+func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*Response, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, data.Buffer)
 	if err != nil {
 		return nil, fmt.Errorf("http create request: %w", err)
 	}
@@ -112,9 +126,9 @@ type RetryCaller struct {
 var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
 
 // Call makes calls using provided caller with retries
-func (r *RetryCaller) Call(url string, data *RequestData) (resp *Response, err error) {
+func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (resp *Response, err error) {
 	for i := 0; i < r.MaxAttempts; i++ {
-		resp, err = r.Caller.Call(url, data)
+		resp, err = r.Caller.Call(ctx, url, data)
 		if err == nil {
 			return resp, nil
 		}

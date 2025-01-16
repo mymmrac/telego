@@ -10,6 +10,7 @@
 package mock
 
 import (
+	context "context"
 	reflect "reflect"
 
 	telegoapi "github.com/mymmrac/telego/telegoapi"
@@ -41,18 +42,18 @@ func (m *MockCaller) EXPECT() *MockCallerMockRecorder {
 }
 
 // Call mocks base method.
-func (m *MockCaller) Call(url string, data *telegoapi.RequestData) (*telegoapi.Response, error) {
+func (m *MockCaller) Call(ctx context.Context, url string, data *telegoapi.RequestData) (*telegoapi.Response, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Call", url, data)
+	ret := m.ctrl.Call(m, "Call", ctx, url, data)
 	ret0, _ := ret[0].(*telegoapi.Response)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockCallerMockRecorder) Call(url, data any) *MockCallerCallCall {
+func (mr *MockCallerMockRecorder) Call(ctx, url, data any) *MockCallerCallCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), url, data)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockCaller)(nil).Call), ctx, url, data)
 	return &MockCallerCallCall{Call: call}
 }
 
@@ -68,13 +69,13 @@ func (c *MockCallerCallCall) Return(arg0 *telegoapi.Response, arg1 error) *MockC
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockCallerCallCall) Do(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *MockCallerCallCall {
+func (c *MockCallerCallCall) Do(f func(context.Context, string, *telegoapi.RequestData) (*telegoapi.Response, error)) *MockCallerCallCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockCallerCallCall) DoAndReturn(f func(string, *telegoapi.RequestData) (*telegoapi.Response, error)) *MockCallerCallCall {
+func (c *MockCallerCallCall) DoAndReturn(f func(context.Context, string, *telegoapi.RequestData) (*telegoapi.Response, error)) *MockCallerCallCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }

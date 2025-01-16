@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -110,8 +111,8 @@ func (b *Bot) FileDownloadURL(filepath string) string {
 }
 
 // performRequest executes and parses response of method
-func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error {
-	resp, err := b.constructAndCallRequest(methodName, parameters)
+func (b *Bot) performRequest(ctx context.Context, methodName string, parameters any, vs ...any) error {
+	resp, err := b.constructAndCallRequest(ctx, methodName, parameters)
 	if err != nil {
 		b.log.Errorf("Execution error %s: %s", methodName, err)
 		return fmt.Errorf("internal execution: %w", err)
@@ -144,7 +145,7 @@ func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error
 }
 
 // constructAndCallRequest creates and executes request with parsing of parameters
-func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Response, error) {
+func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, parameters any) (*ta.Response, error) {
 	filesParams, hasFiles := filesParameters(parameters)
 	var data *ta.RequestData
 
@@ -182,7 +183,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Re
 	debugData := strings.TrimSuffix(debug.String(), "\n")
 	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
 
-	resp, err := b.api.Call(url, data)
+	resp, err := b.api.Call(ctx, url, data)
 	if err != nil {
 		return nil, fmt.Errorf("request call: %w", err)
 	}
