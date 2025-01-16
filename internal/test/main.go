@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
@@ -24,6 +25,7 @@ var (
 const testCase = 34
 
 func main() {
+	ctx := context.Background()
 	testToken := os.Getenv("TOKEN")
 
 	bot, err := telego.NewBot(testToken,
@@ -33,7 +35,7 @@ func main() {
 		return
 	}
 
-	_, err = bot.GetMe()
+	_, err = bot.GetMe(ctx)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -66,7 +68,7 @@ func main() {
 			},
 		}
 
-		msg, err := bot.SendMessage(message)
+		msg, err := bot.SendMessage(ctx, message)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -85,7 +87,7 @@ func main() {
 			fmt.Println(bot.IsRunningLongPolling())
 
 			if upd.Message != nil {
-				_, err := bot.CopyMessage(&telego.CopyMessageParams{
+				_, err := bot.CopyMessage(ctx, &telego.CopyMessageParams{
 					ChatID:     telego.ChatID{ID: upd.Message.Chat.ID},
 					FromChatID: telego.ChatID{ID: upd.Message.Chat.ID},
 					MessageID:  upd.Message.MessageID,
@@ -97,7 +99,7 @@ func main() {
 		}
 	case 3:
 		p := &telego.ExportChatInviteLinkParams{ChatID: groupID}
-		link, err := bot.ExportChatInviteLink(p)
+		link, err := bot.ExportChatInviteLink(ctx, p)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -129,7 +131,7 @@ func main() {
 				},
 			},
 		}
-		msgs, err := bot.SendMediaGroup(p)
+		msgs, err := bot.SendMediaGroup(ctx, p)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -138,7 +140,7 @@ func main() {
 			fmt.Println(m)
 		}
 	case 5:
-		err = bot.SetMyCommands(&telego.SetMyCommandsParams{
+		err = bot.SetMyCommands(ctx, &telego.SetMyCommandsParams{
 			Commands: []telego.BotCommand{
 				{
 					Command:     "test",
@@ -152,7 +154,7 @@ func main() {
 			return
 		}
 	case 6:
-		commands, err := bot.GetMyCommands(nil)
+		commands, err := bot.GetMyCommands(ctx, nil)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -165,7 +167,7 @@ func main() {
 		updParams := &telego.GetUpdatesParams{
 			AllowedUpdates: []string{"chat_member"},
 		}
-		upd, err := bot.GetUpdates(updParams)
+		upd, err := bot.GetUpdates(ctx, updParams)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -175,7 +177,7 @@ func main() {
 		}
 	case 8:
 		p := &telego.GetChatAdministratorsParams{ChatID: telego.ChatID{ID: -1001516926498}}
-		admins, err := bot.GetChatAdministrators(p)
+		admins, err := bot.GetChatAdministrators(ctx, p)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -204,7 +206,7 @@ func main() {
 				},
 			}},
 		}
-		msg, err := bot.SendDocument(dp)
+		msg, err := bot.SendDocument(ctx, dp)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -216,7 +218,7 @@ func main() {
 			Document: telego.InputFile{File: mustOpen("doc.txt")},
 			Caption:  "Hello world",
 		}
-		msg, err := bot.SendDocument(dp)
+		msg, err := bot.SendDocument(ctx, dp)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -229,7 +231,7 @@ func main() {
 			Caption: "https://test.ua/test_url",
 		}
 
-		msg, err := bot.SendPhoto(photo)
+		msg, err := bot.SendPhoto(ctx, photo)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -240,7 +242,7 @@ func main() {
 			ChatID: channelUsername,
 			Text:   "Test msg",
 		}
-		_, err = bot.SendMessage(msg)
+		_, err = bot.SendMessage(ctx, msg)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -269,19 +271,19 @@ func main() {
 			},
 		}
 
-		_, err = bot.SendMessage(msg)
+		_, err = bot.SendMessage(ctx, msg)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 	case 14:
-		_, err := bot.SendMessage(tu.Message(groupUsername, "Test 1"))
+		_, err := bot.SendMessage(ctx, tu.Message(groupUsername, "Test 1"))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		_, err = bot.SendMessage(tu.Message(userUsername, "Test 2"))
+		_, err = bot.SendMessage(ctx, tu.Message(userUsername, "Test 2"))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -318,7 +320,7 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			fmt.Println("ZERO")
-			_, _ = bot.SendMessage(tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is zero")))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is zero")))
 			count = 1
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count == 0
@@ -326,7 +328,7 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			fmt.Println("ONE")
-			_, _ = bot.SendMessage(tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is one")))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is one")))
 			count = 2
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count == 1
@@ -334,7 +336,7 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			fmt.Println("BIG")
-			_, _ = bot.SendMessage(tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is big: %d", count)))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is big: %d", count)))
 			count++
 		}, func(update telego.Update) bool {
 			return update.Message != nil && count > 1
@@ -351,12 +353,12 @@ func main() {
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			matches := th.CommandRegexp.FindStringSubmatch(msg.Text)
-			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("%+v", matches)))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("%+v", matches)))
 		}, th.AnyCommand())
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
-			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("Whaaat? %s", msg.Text)))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("Whaaat? %s", msg.Text)))
 		}, th.AnyMessage(), th.Not(th.AnyCommand()))
 
 		bh.Start()
@@ -372,19 +374,19 @@ func main() {
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
-			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Running test"))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Running test"))
 		}, th.CommandEqualArgv("run", "test"))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
-			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Running update"))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Running update"))
 		}, th.CommandEqualArgv("run", "update"))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
 			m := tu.Message(tu.ID(msg.Chat.ID), "Run usage:\n```/run test```\n```/run update```")
 			m.ParseMode = telego.ModeMarkdownV2
-			_, _ = bot.SendMessage(m)
+			_, _ = bot.SendMessage(ctx, m)
 		}, th.Or(
 			th.CommandEqualArgc("run", 0),
 			th.CommandEqualArgv("help", "run"),
@@ -394,17 +396,17 @@ func main() {
 			msg := update.Message
 			m := tu.Message(tu.ID(msg.Chat.ID), "Unknown subcommand\nRun usage:\n```/run test```\n```/run update```")
 			m.ParseMode = telego.ModeMarkdownV2
-			_, _ = bot.SendMessage(m)
+			_, _ = bot.SendMessage(ctx, m)
 		}, th.CommandEqual("run"))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
-			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Help: /run"))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Help: /run"))
 		}, th.CommandEqual("help"))
 
 		bh.Handle(func(bot *telego.Bot, update telego.Update) {
 			msg := update.Message
-			_, _ = bot.SendMessage(tu.Message(tu.ID(msg.Chat.ID), "Unknown command, use: /run"))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Unknown command, use: /run"))
 		}, th.AnyCommand())
 
 		bh.Start()
@@ -416,11 +418,11 @@ func main() {
 		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-			_, _ = bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Hmm?"))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Hmm?"))
 		}, th.TextEqual("Hmm"))
 
 		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-			_, _ = bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Hello"))
+			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Hello"))
 		})
 
 		bh.Start()
@@ -435,30 +437,30 @@ func main() {
 		note := tu.File(mustOpen("note.mp4"))
 		gif := tu.File(mustOpen("cat.mp4"))
 
-		_, err = bot.SendMessage(tu.Message(myID, "Test"))
+		_, err = bot.SendMessage(ctx, tu.Message(myID, "Test"))
 		assert(err == nil, err)
 
-		_, err = bot.SendPhoto(tu.Photo(myID, img))
+		_, err = bot.SendPhoto(ctx, tu.Photo(myID, img))
 		assert(err == nil, err)
 
-		_, err = bot.SendAudio(tu.Audio(myID, audio))
+		_, err = bot.SendAudio(ctx, tu.Audio(myID, audio))
 		assert(err == nil, err)
 
-		_, err = bot.SendDocument(tu.Document(myID, doc))
+		_, err = bot.SendDocument(ctx, tu.Document(myID, doc))
 		assert(err == nil, err)
 
 		time.Sleep(time.Second * 3)
 
-		_, err = bot.SendVideo(tu.Video(myID, video))
+		_, err = bot.SendVideo(ctx, tu.Video(myID, video))
 		assert(err == nil, err)
 
-		_, err = bot.SendAnimation(tu.Animation(myID, gif))
+		_, err = bot.SendAnimation(ctx, tu.Animation(myID, gif))
 		assert(err == nil, err)
 
-		_, err = bot.SendVoice(tu.Voice(myID, voice))
+		_, err = bot.SendVoice(ctx, tu.Voice(myID, voice))
 		assert(err == nil, err)
 
-		_, err = bot.SendVideoNote(tu.VideoNote(myID, note))
+		_, err = bot.SendVideoNote(ctx, tu.VideoNote(myID, note))
 		assert(err == nil, err)
 
 		time.Sleep(time.Second * 3)
@@ -466,27 +468,27 @@ func main() {
 		img = tu.File(mustOpen("img1.jpg"))
 		img2 = tu.File(mustOpen("img2.jpg"))
 
-		_, err = bot.SendMediaGroup(tu.MediaGroup(myID, tu.MediaPhoto(img), tu.MediaPhoto(img2)))
+		_, err = bot.SendMediaGroup(ctx, tu.MediaGroup(myID, tu.MediaPhoto(img), tu.MediaPhoto(img2)))
 		assert(err == nil, err)
 
-		_, err = bot.SendLocation(tu.Location(myID, 42, 24))
+		_, err = bot.SendLocation(ctx, tu.Location(myID, 42, 24))
 		assert(err == nil, err)
 
-		_, err = bot.SendVenue(tu.Venue(myID, 42, 24, "The Thing", "Things str."))
+		_, err = bot.SendVenue(ctx, tu.Venue(myID, 42, 24, "The Thing", "Things str."))
 		assert(err == nil, err)
 
-		_, err = bot.SendContact(tu.Contact(myID, "+424242", "The 42"))
+		_, err = bot.SendContact(ctx, tu.Contact(myID, "+424242", "The 42"))
 		assert(err == nil, err)
 
 		time.Sleep(time.Second * 3)
 
-		_, err = bot.SendPoll(tu.Poll(myID, "42?", tu.PollOption("42"), tu.PollOption("24")))
+		_, err = bot.SendPoll(ctx, tu.Poll(myID, "42?", tu.PollOption("42"), tu.PollOption("24")))
 		assert(err == nil, err)
 
-		_, err = bot.SendDice(tu.Dice(myID, telego.EmojiBasketball))
+		_, err = bot.SendDice(ctx, tu.Dice(myID, telego.EmojiBasketball))
 		assert(err == nil, err)
 
-		err = bot.SendChatAction(tu.ChatAction(myID, telego.ChatActionTyping))
+		err = bot.SendChatAction(ctx, tu.ChatAction(myID, telego.ChatActionTyping))
 		assert(err == nil, err)
 	case 21:
 		updates, _ := bot.UpdatesViaLongPolling(nil, telego.WithLongPollingUpdateInterval(time.Second))
@@ -495,7 +497,7 @@ func main() {
 		bh, _ := th.NewBotHandler(bot, updates)
 
 		bh.HandleInlineQuery(func(bot *telego.Bot, query telego.InlineQuery) {
-			err = bot.AnswerInlineQuery(&telego.AnswerInlineQueryParams{
+			err = bot.AnswerInlineQuery(ctx, &telego.AnswerInlineQueryParams{
 				InlineQueryID: query.ID,
 				Results: []telego.InlineQueryResult{
 					&telego.InlineQueryResultArticle{
@@ -513,13 +515,13 @@ func main() {
 		})
 
 		bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
-			_, err = bot.EditMessageText(&telego.EditMessageTextParams{
+			_, err = bot.EditMessageText(ctx, &telego.EditMessageTextParams{
 				Text:            "GG?",
 				InlineMessageID: query.InlineMessageID,
 			})
 			assert(err == nil, err)
 
-			err = bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
+			err = bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
 				CallbackQueryID: query.ID,
 				Text:            "OK",
 			})
@@ -671,13 +673,13 @@ func main() {
 	case 27:
 		note := tu.File(mustOpen("note.mp4"))
 
-		_, err = bot.SendVideoNote(tu.VideoNote(myID, note))
+		_, err = bot.SendVideoNote(ctx, tu.VideoNote(myID, note))
 		assert(err == nil, err)
 	case 28:
-		err = bot.DeleteWebhook(nil)
+		err = bot.DeleteWebhook(ctx, nil)
 		fmt.Println(err)
 	case 29:
-		_, err = bot.SendMessage(
+		_, err = bot.SendMessage(ctx,
 			tu.Message(myID, "Hmm").
 				WithReplyMarkup(
 					tu.InlineKeyboard(
@@ -690,7 +692,7 @@ func main() {
 		)
 		assert(err == nil, err)
 	case 30:
-		_, err = bot.SendMessage(tu.Message(myID, "Reply?").
+		_, err = bot.SendMessage(ctx, tu.Message(myID, "Reply?").
 			WithReplyMarkup(tu.ForceReply().WithInputFieldPlaceholder("GG")))
 		assert(err == nil, err)
 	case 31:
@@ -731,7 +733,7 @@ func main() {
 		defer bh.Stop()
 		bh.Start()
 	case 32:
-		err = bot.CreateNewStickerSet(&telego.CreateNewStickerSetParams{
+		err = bot.CreateNewStickerSet(ctx, &telego.CreateNewStickerSetParams{
 			UserID: myID.ID,
 			Name:   "the_test_by_ThenWhyBot",
 			Title:  "The Test",
@@ -747,7 +749,7 @@ func main() {
 		})
 		assert(err == nil, err)
 	case 33:
-		err = bot.AddStickerToSet(&telego.AddStickerToSetParams{
+		err = bot.AddStickerToSet(ctx, &telego.AddStickerToSetParams{
 			UserID: myID.ID,
 			Name:   "the_test_by_ThenWhyBot",
 			Sticker: telego.InputSticker{
@@ -760,12 +762,12 @@ func main() {
 		})
 		assert(err == nil, err)
 	case 34:
-		err = bot.SetMyDescription(&telego.SetMyDescriptionParams{
+		err = bot.SetMyDescription(ctx, &telego.SetMyDescriptionParams{
 			Description: "",
 		})
 		assert(err == nil, err)
 
-		err = bot.SetMyShortDescription(&telego.SetMyShortDescriptionParams{
+		err = bot.SetMyShortDescription(ctx, &telego.SetMyShortDescriptionParams{
 			ShortDescription: "",
 		})
 		assert(err == nil, err)
