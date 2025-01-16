@@ -270,19 +270,21 @@ func parseField(field reflect.Value) (string, error) {
 	return value, nil
 }
 
-func isNil(i any) bool {
-	if i == nil {
+// isNil checks if the value, or it's underlying interface is nil
+func isNil(v any) bool {
+	if v == nil {
 		return true
 	}
 
-	switch reflect.TypeOf(i).Kind() {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-		return reflect.ValueOf(i).IsNil()
+	switch reflect.TypeOf(v).Kind() {
+	case reflect.Interface, reflect.Ptr, reflect.Slice, reflect.Map, reflect.Chan, reflect.Func:
+		return reflect.ValueOf(v).IsNil()
 	default:
 		return false
 	}
 }
 
+// logRequestWithFiles logs request with files
 func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, files map[string]ta.NamedReader) {
 	debugFiles := make([]string, 0, len(files))
 	for k, v := range files {
@@ -298,7 +300,6 @@ func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, f
 	}
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)
-
 	_, _ = debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 }
 
