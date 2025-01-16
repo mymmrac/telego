@@ -113,7 +113,11 @@ func TestNewBot(t *testing.T) {
 				Return(expectedResp, nil).
 				Times(1)
 
-			bot, err := NewBot(token, WithHealthCheck(), WithAPICaller(caller), WithRequestConstructor(constructor))
+			bot, err := NewBot(token,
+				WithHealthCheck(testCtx),
+				WithAPICaller(caller),
+				WithRequestConstructor(constructor),
+			)
 
 			require.NoError(t, err)
 			assert.NotNil(t, bot)
@@ -135,7 +139,11 @@ func TestNewBot(t *testing.T) {
 				Return(expectedResp, nil).
 				Times(1)
 
-			bot, err := NewBot(token, WithHealthCheck(), WithAPICaller(caller), WithRequestConstructor(constructor))
+			bot, err := NewBot(token,
+				WithHealthCheck(testCtx),
+				WithAPICaller(caller),
+				WithRequestConstructor(constructor),
+			)
 
 			require.Error(t, err)
 			assert.Nil(t, bot)

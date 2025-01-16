@@ -47,8 +47,8 @@ type Bot struct {
 	constructor ta.RequestConstructor
 
 	useTestServerPath     bool
-	healthCheckRequested  bool
 	reportWarningAsErrors bool
+	healthCheckContext    context.Context
 
 	longPollingContext *longPollingContext
 	webhookContext     *webhookContext
@@ -83,8 +83,8 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		}
 	}
 
-	if b.healthCheckRequested {
-		if _, err := b.GetMe(context.Background()); err != nil {
+	if b.healthCheckContext != nil {
+		if _, err := b.GetMe(b.healthCheckContext); err != nil {
 			return nil, fmt.Errorf("telego: health check: %w", err)
 		}
 	}

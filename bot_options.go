@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"os"
@@ -120,9 +121,9 @@ func WithTestServerPath() BotOption {
 }
 
 // WithHealthCheck enables health check using [Bot.GetMe] method on start
-func WithHealthCheck() BotOption {
+func WithHealthCheck(ctx context.Context) BotOption {
 	return func(bot *Bot) error {
-		bot.healthCheckRequested = true
+		bot.healthCheckContext = ctx //nolint:fatcontext
 		return nil
 	}
 }

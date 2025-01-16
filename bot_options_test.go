@@ -180,10 +180,10 @@ func TestWithTestServerPath(t *testing.T) {
 func TestWithHealthCheck(t *testing.T) {
 	bot := &Bot{}
 
-	err := WithHealthCheck()(bot)
+	err := WithHealthCheck(testCtx)(bot)
 	require.NoError(t, err)
 
-	assert.True(t, bot.healthCheckRequested)
+	assert.Equal(t, testCtx, bot.healthCheckContext)
 }
 
 func TestWithWarnings(t *testing.T) {
