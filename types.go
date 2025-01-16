@@ -2987,7 +2987,7 @@ type ChatMemberUpdated struct {
 }
 
 // UnmarshalJSON converts JSON to ChatMemberUpdated
-func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error { //nolint:funlen,revive,cyclop,gocyclo
+func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -3685,7 +3685,7 @@ type MessageReactionUpdated struct {
 }
 
 // UnmarshalJSON converts JSON to MessageReactionUpdated
-func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error { //nolint:funlen
+func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -6793,7 +6793,7 @@ type StarTransaction struct {
 }
 
 // UnmarshalJSON converts JSON to Chat
-func (t *StarTransaction) UnmarshalJSON(data []byte) error { //nolint:gocyclo,revive,cyclop,funlen
+func (t *StarTransaction) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 

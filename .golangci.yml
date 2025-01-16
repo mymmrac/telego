@@ -8,6 +8,7 @@ linters:
   enable-all: true
   disable:
     # Disabled because not relevant for this project
+    - cyclop # Checks function and package cyclomatic complexity
     - containedctx # containedctx is a linter that detects struct contained context.Context field
     - depguard # Go linter that checks if package imports are in a list of acceptable packages
     - dupword # checks for duplicate words in the source code
@@ -37,34 +38,14 @@ linters:
 # Settings of specific linters
 linters-settings:
   govet: # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not
-    # align with the format string
-    asmdecl: true # report mismatches between assembly files and Go declarations
-    assign: true # check for useless assignments
-    atomic: true # check for common mistakes using the sync/atomic package
-    bools: true # check for common mistakes involving boolean operators
-    buildtag: true # check that +build tags are well-formed and correctly located
-    cgocall: true # detect some violations of the cgo pointer passing rules
-    composites: true # check for unkeyed composite literals
-    copylocks: true # check for locks erroneously passed by value
-    errorsas: true # report passing non-pointer or non-error values to errors.As
-    framepointer: true # report assembly that clobbers the frame pointer before saving it
-    httpresponse: true # check for mistakes using HTTP responses
-    ifaceassert: true # detect impossible interface-to-interface type assertions
-    loopclosure: true # check references to loop variables from within nested functions
-    lostcancel: true # check cancel func returned by context.WithCancel is called
-    nilfunc: true # check for useless comparisons between functions and nil
-    printf: true # check consistency of Printf format strings and arguments
-    shift: true # check for shifts that equal or exceed the width of the integer
-    sigchanyzer: true # check for unbuffered channel of os.Signal
-    stdmethods: true # check signature of methods of well-known interfaces
-    stringintconv: true # check for string(int) conversions
-    structtag: true # check that struct field tags conform to reflect.StructTag.Get
-    testinggoroutine: true # report calls to (*testing.T).Fatal from goroutines started by a test.
-    tests: true # check for common mistaken usages of tests and examples
-    unmarshal: true # report passing non-pointer or non-interface values to unmarshal
-    unreachable: true # check for unreachable code
-    unsafeptr: true # check for invalid conversions of uintptr to unsafe.Pointer
-    unusedresult: true # check for unused results of calls to some functions
+    # Enable all analyzers.
+    # Default: false
+    enable-all: true
+    # Disable analyzers by name.
+    # Run `go tool vet help` to see all analyzers.
+    # Default: []
+    disable:
+      - fieldalignment # check for struct field alignments
   gocyclo: # Computes and checks the cyclomatic complexity of functions
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 15
@@ -104,9 +85,6 @@ linters-settings:
     # Make an issue if func has more lines of code than this setting, and it has naked returns; default is 30
     # decided to use 3 to exclude long functions with named returns which can be a potential source of many errors / bugs
     max-func-lines: 3
-  staticcheck: # Staticcheck is a go vet on steroids, applying a ton of static analysis checks
-    # Include tests in the analysis.
-    tests: true
   funlen: # Tool for detection of long functions
     lines: 120
     statements: 40
@@ -137,9 +115,7 @@ linters-settings:
         disabled: true
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cognitive-complexity
       - name: cognitive-complexity
-        severity: warning
-        disabled: false
-        arguments: [ 20 ]
+        disabled: true # Duplicate: gocognit
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#comment-spacings
       - name: comment-spacings
         severity: warning
@@ -148,9 +124,7 @@ linters-settings:
           - nolint
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cyclomatic
       - name: cyclomatic
-        severity: warning
-        disabled: false
-        arguments: [ 15 ]
+        disabled: true # Duplicate: gocyclo
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
       - name: file-header
         disabled: true
@@ -177,10 +151,6 @@ linters-settings:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unused-receiver
       - name: unused-receiver
         disabled: true
-  cyclop:
-    # The maximal code complexity to report.
-    # Default: 10
-    max-complexity: 15
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
@@ -196,6 +166,16 @@ issues:
         - funlen
         - maintidx
         - revive
+
+    # Exclude linters for types file
+    - path: "types.go"
+      linters:
+        - funlen
+
+    # Exclude linters for methods file
+    - path: "methods.go"
+      linters:
+        - lll
 
   # Which dirs to exclude: issues from them won't be reported.
   # Can use regexp here: `generated.*`, regexp is applied on full path,
