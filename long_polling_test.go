@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -9,6 +8,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 )
+
+const timeout = time.Second
 
 func TestBot_UpdatesViaLongPolling(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -30,11 +31,16 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(nil)
+			updates, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
 			require.NoError(t, err)
+
 			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopLongPolling()
-			time.Sleep(time.Millisecond * 500)
+			select {
+			case <-time.After(timeout):
+				t.Fatal("Timeout")
+			case update := <-updates:
+				assert.NotZero(t, update.UpdateID)
+			}
 		})
 	})
 
@@ -46,10 +52,9 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(nil, errTest).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(nil)
+			_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
 			require.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
-			m.Bot.StopLongPolling()
 		})
 	})
 
@@ -61,13 +66,11 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(nil, errTest).AnyTimes()
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(nil)
+			_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
 			require.NoError(t, err)
 
-			_, err = m.Bot.UpdatesViaLongPolling(nil)
+			_, err = m.Bot.UpdatesViaLongPolling(testCtx, nil)
 			require.Error(t, err)
-
-			m.Bot.StopLongPolling()
 		})
 	})
 
@@ -75,100 +78,14 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 		m := newMockedBot(ctrl)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingUpdateInterval(-time.Second))
+			_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil, WithLongPollingUpdateInterval(-time.Second))
 			require.Error(t, err)
-		})
-	})
-
-	t.Run("success_with_context", func(t *testing.T) {
-		m := newMockedBot(ctrl)
-
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil).MinTimes(1)
-
-		expectedUpdates := []Update{
-			{UpdateID: 1},
-			{UpdateID: 2},
-		}
-		resp := telegoResponse(t, expectedUpdates)
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(resp, nil).MinTimes(1)
-
-		assert.NotPanics(t, func() {
-			ctx, cancel := context.WithCancel(context.Background())
-			defer cancel()
-
-			updates, err := m.Bot.UpdatesViaLongPolling(nil, WithLongPollingContext(ctx))
-			require.NoError(t, err)
-
-			time.Sleep(time.Millisecond * 10)
-
-			cancel()
-			<-updates
-
-			assert.True(t, m.Bot.IsRunningLongPolling())
-			m.Bot.StopLongPolling()
-			assert.False(t, m.Bot.IsRunningLongPolling())
-		})
-	})
-}
-
-func TestBot_IsRunningLongPolling(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("stopped", func(t *testing.T) {
-		assert.False(t, m.Bot.IsRunningLongPolling())
-	})
-
-	t.Run("running", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil).AnyTimes()
-
-		resp := telegoResponse(t, []Update{})
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(resp, nil).AnyTimes()
-
-		_, err := m.Bot.UpdatesViaLongPolling(nil)
-		require.NoError(t, err)
-
-		assert.True(t, m.Bot.IsRunningLongPolling())
-
-		m.Bot.StopLongPolling()
-		assert.False(t, m.Bot.IsRunningLongPolling())
-	})
-}
-
-func TestBot_StopLongPolling(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		bot := &Bot{}
-
-		bot.longPollingContext = &longPollingContext{
-			running: true,
-			stop:    make(chan struct{}),
-		}
-		assert.NotPanics(t, func() {
-			bot.StopLongPolling()
-		})
-
-		assert.Nil(t, bot.longPollingContext)
-	})
-
-	t.Run("success_no_context", func(t *testing.T) {
-		bot := &Bot{}
-
-		assert.NotPanics(t, func() {
-			bot.StopLongPolling()
 		})
 	})
 }
 
 func TestWithLongPollingUpdateInterval(t *testing.T) {
-	ctx := &longPollingContext{}
+	ctx := &longPolling{}
 	interval := time.Second
 
 	t.Run("success", func(t *testing.T) {
@@ -184,8 +101,7 @@ func TestWithLongPollingUpdateInterval(t *testing.T) {
 }
 
 func TestWithLongPollingRetryTimeout(t *testing.T) {
-	ctx := &longPollingContext{}
-	timeout := time.Second
+	ctx := &longPolling{}
 
 	t.Run("success", func(t *testing.T) {
 		err := WithLongPollingRetryTimeout(timeout)(ctx)
@@ -200,27 +116,10 @@ func TestWithLongPollingRetryTimeout(t *testing.T) {
 }
 
 func TestWithLongPollingBuffer(t *testing.T) {
-	ctx := &longPollingContext{}
+	ctx := &longPolling{}
 	buffer := uint(1)
 
 	err := WithLongPollingBuffer(buffer)(ctx)
 	require.NoError(t, err)
 	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
-}
-
-func TestWithLongPollingContext(t *testing.T) {
-	lCtx := &longPollingContext{}
-
-	t.Run("success", func(t *testing.T) {
-		ctx := context.Background()
-		err := WithLongPollingContext(ctx)(lCtx)
-		require.NoError(t, err)
-		assert.EqualValues(t, ctx, lCtx.ctx)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		//nolint:staticcheck
-		err := WithLongPollingContext(nil)(lCtx)
-		require.Error(t, err)
-	})
 }

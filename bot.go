@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/valyala/fasthttp"
 
@@ -50,7 +51,9 @@ type Bot struct {
 	reportWarningAsErrors bool
 	healthCheckContext    context.Context
 
-	longPollingContext *longPollingContext
+	lock               sync.Mutex
+	longPollingRunning bool
+	webhookRunning     bool
 	webhookContext     *webhookContext
 }
 
