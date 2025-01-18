@@ -107,7 +107,7 @@ func (b *Bot) createWebhook(options []WebhookOption) (*webhook, error) {
 
 	for _, option := range options {
 		if err := option(b, wh); err != nil {
-			return nil, fmt.Errorf("telego: options: %w", err)
+			return nil, fmt.Errorf("telego: webhook options: %w", err)
 		}
 	}
 

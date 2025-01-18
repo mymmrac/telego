@@ -49,7 +49,7 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 
 	for _, option := range options {
 		if err := option(bh); err != nil {
-			return nil, fmt.Errorf("telego: options: %w", err)
+			return nil, fmt.Errorf("telego: bot handler options: %w", err)
 		}
 	}
 
