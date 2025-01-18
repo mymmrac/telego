@@ -83,6 +83,12 @@ tasks:
     cmds:
       - go test -bench=. -benchtime=10s -benchmem
 
+  vulnurability:
+    desc: "Check for vulnerabilities"
+    deps: [ install:govulncheck ]
+    cmds:
+      - govulncheck -show verbose ./...
+
   build:lib:
     desc: "Build library"
     cmds:
@@ -96,6 +102,14 @@ tasks:
 
   update:dependencies:
     desc: "Update dependencies"
+    cmds:
+      - go mod tidy
+      - go list -f "{{"{{if not (or .Main .Indirect)}}{{.Path}}{{end}}"}}" -m all | xargs go get
+      - go mod tidy
+
+  update:dependencies:examples:
+    desc: "Update dependencies for examples"
+    dir: ./examples
     cmds:
       - go mod tidy
       - go list -f "{{"{{if not (or .Main .Indirect)}}{{.Path}}{{end}}"}}" -m all | xargs go get
@@ -144,3 +158,10 @@ tasks:
       - go install go.uber.org/mock/mockgen@latest
     status:
       - command -v mockgen
+
+  install:govulncheck:
+    desc: "Install govulncheck"
+    cmds:
+      - go install golang.org/x/vuln/cmd/govulncheck@latest
+    status:
+      - command -v govulncheck
