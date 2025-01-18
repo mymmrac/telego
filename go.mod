@@ -4,7 +4,6 @@ go 1.22.3
 
 require (
 	github.com/bytedance/sonic v1.12.7
-	github.com/joho/godotenv v1.5.1 // TODO: Remove this dependency
 	github.com/stretchr/testify v1.10.0
 	github.com/valyala/fasthttp v1.58.0
 	github.com/valyala/fastjson v1.6.4

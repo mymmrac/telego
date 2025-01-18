@@ -7,10 +7,9 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
-
-	_ "github.com/joho/godotenv/autoload"
 
 	"github.com/mymmrac/telego"
 )
@@ -30,7 +29,22 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	var err error
+	envData, err := os.ReadFile(".env")
+	expect(err == nil, "Read env:", err)
+
+	for _, e := range strings.Split(string(envData), "\n") {
+		e = strings.TrimSpace(e)
+		if e == "" {
+			continue
+		}
+
+		key, value, ok := strings.Cut(e, "=")
+		expect(ok, "Parse env:", e)
+
+		err = os.Setenv(key, value)
+		expect(err == nil, "Set env:", err)
+	}
+
 	bot, err = telego.NewBot(env("TOKEN"), telego.WithDiscardLogger())
 	expect(err == nil, "Create bot:", err)
 
