@@ -70,6 +70,7 @@ Simple echo bot:
 		}
 
 		// Get updates channel
+		TODO: Update examples
 		updates, _ := bot.UpdatesViaLongPolling(nil)
 
 		// Stop reviving updates from updates channel

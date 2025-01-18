@@ -67,14 +67,15 @@ func (d DefaultConstructor) MultipartRequest(parameters map[string]string, files
 	return data, nil
 }
 
-func isNil(i any) bool {
-	if i == nil {
+// isNil checks if the value, or it's underlying interface is nil
+func isNil(v any) bool {
+	if v == nil {
 		return true
 	}
 
-	switch reflect.TypeOf(i).Kind() {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-		return reflect.ValueOf(i).IsNil()
+	switch reflect.TypeOf(v).Kind() {
+	case reflect.Interface, reflect.Ptr, reflect.Slice, reflect.Map, reflect.Chan, reflect.Func:
+		return reflect.ValueOf(v).IsNil()
 	default:
 		return false
 	}

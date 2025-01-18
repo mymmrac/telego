@@ -3,11 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"time"
-
-	"github.com/fasthttp/router"
-	"github.com/valyala/fasthttp"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
@@ -579,72 +578,40 @@ func main() {
 
 		defer bh.Stop()
 		bh.Start()
-	case 25:
-		fmt.Println(bot.IsRunningWebhook())
+	case 24:
+		mux := http.NewServeMux()
 
-		err = bot.StopWebhook()
-		assert(err == nil, err)
+		updates, err := bot.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "POST /"))
+		if err != nil {
+			panic(err)
+		}
 
-		_, err = bot.UpdatesViaWebhook("/")
-		assert(err == nil, err)
+		updates, err = bot.UpdatesViaWebhook(ctx, func(handler telego.WebhookHandler) error {
+			mux.HandleFunc("POST /", func(writer http.ResponseWriter, request *http.Request) {
+				data, err := io.ReadAll(request.Body)
+				if err != nil {
+					panic(err)
+				}
 
-		fmt.Println(bot.IsRunningWebhook())
+				err = handler(request.Context(), data)
+				if err != nil {
+					panic(err)
+				}
 
-		go func() {
-			err = bot.StartWebhook(":8080")
-			assert(err == nil, err)
-		}()
-
-		fmt.Println(bot.IsRunningWebhook())
-
-		err = bot.StopWebhook()
-		assert(err == nil, err)
-
-		err = bot.StopWebhook()
-		assert(err == nil, err)
-
-		fmt.Println(bot.IsRunningWebhook())
-
-		fmt.Println("====")
-
-		_, err = bot.UpdatesViaWebhook("/")
-		assert(err == nil, err)
-
-		fmt.Println(bot.IsRunningWebhook())
-
-		go func() {
-			err = bot.StartWebhook(":8080")
-			assert(err == nil, err)
-		}()
-
-		fmt.Println(bot.IsRunningWebhook())
-
-		err = bot.StopWebhook()
-		assert(err == nil, err)
-
-		fmt.Println(bot.IsRunningWebhook())
-	case 26:
-		r := router.New()
-		r.GET("/", func(ctx *fasthttp.RequestCtx) {
-			ctx.SetStatusCode(fasthttp.StatusAccepted)
+				writer.WriteHeader(http.StatusOK)
+			})
+			return nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
-		_, err = bot.UpdatesViaWebhook("/", telego.WithWebhookServer(telego.FastHTTPWebhookServer{
-			Logger: bot.Logger(),
-			Server: &fasthttp.Server{},
-			Router: r,
-		}))
-		assert(err == nil, err)
+		err = http.ListenAndServe(":8080", mux)
+		if err != nil {
+			panic(err)
+		}
 
-		go func() {
-			err = bot.StartWebhook(":8080")
-			assert(err == nil, err)
-		}()
-
-		defer func() {
-			_ = bot.StopWebhook()
-		}()
-		select {}
+		<-updates
 	case 27:
 		note := tu.File(mustOpen("note.mp4"))
 
