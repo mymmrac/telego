@@ -291,21 +291,24 @@ func main() {
 		bh, _ := th.NewBotHandler(bot, updates)
 		defer bh.Stop()
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			fmt.Println(update.Message.Text)
-		}, func(update telego.Update) bool {
+			return nil
+		}, func(ctx context.Context, update telego.Update) bool {
 			return update.Message != nil
 		})
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("====")
 			fmt.Println(update.Message.Text)
 			fmt.Println("====")
-		}, func(update telego.Update) bool {
+			return nil
+		}, func(ctx context.Context, update telego.Update) bool {
 			return update.Message != nil && update.Message.Text == "OK"
 		})
 
-		bh.Start()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 16:
 		updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
@@ -313,50 +316,57 @@ func main() {
 
 		count := 0
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("ZERO")
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is zero")))
 			count = 1
-		}, func(update telego.Update) bool {
+			return nil
+		}, func(ctx context.Context, update telego.Update) bool {
 			return update.Message != nil && count == 0
 		})
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("ONE")
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is one")))
 			count = 2
-		}, func(update telego.Update) bool {
+			return nil
+		}, func(ctx context.Context, update telego.Update) bool {
 			return update.Message != nil && count == 1
 		})
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("BIG")
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(update.Message.Chat.ID), fmt.Sprintf("Count is big: %d", count)))
 			count++
-		}, func(update telego.Update) bool {
+			return nil
+		}, func(ctx context.Context, update telego.Update) bool {
 			return update.Message != nil && count > 1
 		})
 
-		bh.Start()
 		defer bh.Stop()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 17:
 		updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			matches := th.CommandRegexp.FindStringSubmatch(msg.Text)
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("%+v", matches)))
+			return nil
 		}, th.AnyCommand())
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), fmt.Sprintf("Whaaat? %s", msg.Text)))
+			return nil
 		}, th.AnyMessage(), th.Not(th.AnyCommand()))
 
-		bh.Start()
 		defer bh.Stop()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 18:
 		updates, err := bot.UpdatesViaLongPolling(ctx, nil)
 		assert(err == nil, err)
@@ -364,60 +374,70 @@ func main() {
 		bh, err := th.NewBotHandler(bot, updates)
 		assert(err == nil, err)
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Running test"))
+			return nil
 		}, th.CommandEqualArgv("run", "test"))
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Running update"))
+			return nil
 		}, th.CommandEqualArgv("run", "update"))
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			m := tu.Message(tu.ID(msg.Chat.ID), "Run usage:\n```/run test```\n```/run update```")
 			m.ParseMode = telego.ModeMarkdownV2
 			_, _ = bot.SendMessage(ctx, m)
+			return nil
 		}, th.Or(
 			th.CommandEqualArgc("run", 0),
 			th.CommandEqualArgv("help", "run"),
 		))
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			m := tu.Message(tu.ID(msg.Chat.ID), "Unknown subcommand\nRun usage:\n```/run test```\n```/run update```")
 			m.ParseMode = telego.ModeMarkdownV2
 			_, _ = bot.SendMessage(ctx, m)
+			return nil
 		}, th.CommandEqual("run"))
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Help: /run"))
+			return nil
 		}, th.CommandEqual("help"))
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			msg := update.Message
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(msg.Chat.ID), "Unknown command, use: /run"))
+			return nil
 		}, th.AnyCommand())
 
-		bh.Start()
 		defer bh.Stop()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 19:
 		updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
-		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Hmm?"))
+			return nil
 		}, th.TextEqual("Hmm"))
 
-		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 			_, _ = bot.SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Hello"))
+			return nil
 		})
 
-		bh.Start()
 		defer bh.Stop()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 20:
 		img := tu.File(mustOpen("img1.jpg"))
 		img2 := tu.File(mustOpen("img2.jpg"))
@@ -486,7 +506,7 @@ func main() {
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
-		bh.HandleInlineQuery(func(bot *telego.Bot, query telego.InlineQuery) {
+		bh.HandleInlineQuery(func(ctx *th.Context, query telego.InlineQuery) error {
 			err = bot.AnswerInlineQuery(ctx, &telego.AnswerInlineQueryParams{
 				InlineQueryID: query.ID,
 				Results: []telego.InlineQueryResult{
@@ -502,9 +522,10 @@ func main() {
 				},
 			})
 			assert(err == nil, err)
+			return nil
 		})
 
-		bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
+		bh.HandleCallbackQuery(func(ctx *th.Context, query telego.CallbackQuery) error {
 			_, err = bot.EditMessageText(ctx, &telego.EditMessageTextParams{
 				Text:            "GG?",
 				InlineMessageID: query.InlineMessageID,
@@ -516,16 +537,18 @@ func main() {
 				Text:            "OK",
 			})
 			assert(err == nil, err)
+			return nil
 		})
 
 		defer bh.Stop()
-		bh.Start()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 22:
 		updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
-		auth := func(update telego.Update) bool {
+		auth := func(ctx context.Context, update telego.Update) bool {
 			var userID int64
 
 			if update.Message != nil && update.Message.From != nil {
@@ -547,37 +570,43 @@ func main() {
 			return false
 		}
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			// DO AUTHORIZED STUFF...
+			return nil
 		}, auth)
 
-		bh.Handle(func(bot *telego.Bot, update telego.Update) {
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
 			// DO NOT AUTHORIZED STUFF...
+			return nil
 		}, th.Not(auth))
 
 		defer bh.Stop()
-		bh.Start()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 23:
 		updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 		bh, _ := th.NewBotHandler(bot, updates)
 
 		ok := false
-		middleware := func(update telego.Update) bool {
+		middleware := func(ctx context.Context, update telego.Update) bool {
 			return ok
 		}
 
-		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 			ok = true
 			fmt.Println("SET OK")
+			return nil
 		}, th.CommandEqual("ok"))
 
-		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 			fmt.Println("OK")
+			return nil
 		}, middleware)
 
 		defer bh.Stop()
-		bh.Start()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 24:
 		mux := http.NewServeMux()
 
@@ -644,35 +673,38 @@ func main() {
 
 		bh.Use(th.PanicRecovery())
 		bh.Use(
-			func(bot *telego.Bot, update telego.Update, next th.Handler) {
+			func(ctx *th.Context, update telego.Update) error {
 				fmt.Println("M 2")
-				next(bot, update)
+				return ctx.Next(update)
 			},
-			func(bot *telego.Bot, update telego.Update, next th.Handler) {
+			func(ctx *th.Context, update telego.Update) error {
 				fmt.Println("M 3")
-				next(bot, update)
+				return ctx.Next(update)
 			},
 		)
 
-		bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 			fmt.Println("REGULAR USER")
+			return nil
 		})
 
-		adminUserMsg := bh.Group(th.AnyMessage(), func(update telego.Update) bool {
+		adminUserMsg := bh.Group(th.AnyMessage(), func(ctx context.Context, update telego.Update) bool {
 			ok := update.Message.From.ID == myID.ID
 			fmt.Println("OK", ok)
 			return ok
 		})
-		adminUserMsg.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+		adminUserMsg.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 			fmt.Println("ADMIN USER")
+			return nil
 		})
-		adminUserMsg.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+		adminUserMsg.Use(func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("M 4")
-			next(bot, update)
+			return ctx.Next(update)
 		})
 
 		defer bh.Stop()
-		bh.Start()
+		err = bh.Start()
+		assert(err == nil, err)
 	case 32:
 		err = bot.CreateNewStickerSet(ctx, &telego.CreateNewStickerSetParams{
 			UserID: myID.ID,

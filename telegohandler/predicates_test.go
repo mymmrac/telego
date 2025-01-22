@@ -1,6 +1,7 @@
 package telegohandler
 
 import (
+	"context"
 	"regexp"
 	"testing"
 
@@ -42,8 +43,8 @@ func TestPredicates(t *testing.T) {
 		{
 			name: "and_matches",
 			predicate: And(
-				func(update telego.Update) bool { return true },
-				func(update telego.Update) bool { return true },
+				func(_ context.Context, _ telego.Update) bool { return true },
+				func(_ context.Context, _ telego.Update) bool { return true },
 			),
 			update:  telego.Update{},
 			matches: true,
@@ -51,8 +52,8 @@ func TestPredicates(t *testing.T) {
 		{
 			name: "and_not_matches",
 			predicate: And(
-				func(update telego.Update) bool { return true },
-				func(update telego.Update) bool { return false },
+				func(_ context.Context, _ telego.Update) bool { return true },
+				func(_ context.Context, _ telego.Update) bool { return false },
 			),
 			update:  telego.Update{},
 			matches: false,
@@ -60,8 +61,8 @@ func TestPredicates(t *testing.T) {
 		{
 			name: "or_matches",
 			predicate: Or(
-				func(update telego.Update) bool { return true },
-				func(update telego.Update) bool { return false },
+				func(_ context.Context, _ telego.Update) bool { return true },
+				func(_ context.Context, _ telego.Update) bool { return false },
 			),
 			update:  telego.Update{},
 			matches: true,
@@ -69,39 +70,21 @@ func TestPredicates(t *testing.T) {
 		{
 			name: "or_not_matches",
 			predicate: Or(
-				func(update telego.Update) bool { return false },
-				func(update telego.Update) bool { return false },
-			),
-			update:  telego.Update{},
-			matches: false,
-		},
-		{
-			name: "union_matches",
-			predicate: Union(
-				func(update telego.Update) bool { return true },
-				func(update telego.Update) bool { return false },
-			),
-			update:  telego.Update{},
-			matches: true,
-		},
-		{
-			name: "union_not_matches",
-			predicate: Union(
-				func(update telego.Update) bool { return false },
-				func(update telego.Update) bool { return false },
+				func(_ context.Context, _ telego.Update) bool { return false },
+				func(_ context.Context, _ telego.Update) bool { return false },
 			),
 			update:  telego.Update{},
 			matches: false,
 		},
 		{
 			name:      "not_matches",
-			predicate: Not(func(update telego.Update) bool { return false }),
+			predicate: Not(func(_ context.Context, _ telego.Update) bool { return false }),
 			update:    telego.Update{},
 			matches:   true,
 		},
 		{
 			name:      "not_not_matches",
-			predicate: Not(func(update telego.Update) bool { return true }),
+			predicate: Not(func(_ context.Context, _ telego.Update) bool { return true }),
 			update:    telego.Update{},
 			matches:   false,
 		},
@@ -1307,9 +1290,10 @@ func TestPredicates(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.matches, tt.predicate(tt.update))
+			assert.Equal(t, tt.matches, tt.predicate(ctx, tt.update))
 		})
 	}
 }

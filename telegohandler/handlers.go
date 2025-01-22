@@ -1,15 +1,13 @@
 package telegohandler
 
 import (
-	"context"
-
 	"github.com/mymmrac/telego"
 )
 
 // TODO: Implement missing handlers
 
 // MessageHandler handles message that came from bot
-type MessageHandler func(ctx context.Context, bot *telego.Bot, message telego.Message)
+type MessageHandler func(ctx *Context, message telego.Message) error
 
 // HandleMessage same as Handle, but assumes that the update contains a message
 func (h *HandlerGroup) HandleMessage(handler MessageHandler, predicates ...Predicate) {
@@ -17,8 +15,8 @@ func (h *HandlerGroup) HandleMessage(handler MessageHandler, predicates ...Predi
 		panic("Telego: nil message handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.Message)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.Message)
 	}, append([]Predicate{AnyMessage()}, predicates...)...)
 }
 
@@ -33,8 +31,8 @@ func (h *HandlerGroup) HandleEditedMessage(handler MessageHandler, predicates ..
 		panic("Telego: nil edited message handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.EditedMessage)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.EditedMessage)
 	}, append([]Predicate{AnyEditedMessage()}, predicates...)...)
 }
 
@@ -49,8 +47,8 @@ func (h *HandlerGroup) HandleChannelPost(handler MessageHandler, predicates ...P
 		panic("Telego: nil channel post handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.ChannelPost)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.ChannelPost)
 	}, append([]Predicate{AnyChannelPost()}, predicates...)...)
 }
 
@@ -65,8 +63,8 @@ func (h *HandlerGroup) HandleEditedChannelPost(handler MessageHandler, predicate
 		panic("Telego: nil edited channel post handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.EditedChannelPost)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.EditedChannelPost)
 	}, append([]Predicate{AnyEditedChannelPost()}, predicates...)...)
 }
 
@@ -76,7 +74,7 @@ func (h *BotHandler) HandleEditedChannelPost(handler MessageHandler, predicates 
 }
 
 // InlineQueryHandler handles inline queries that came from bot
-type InlineQueryHandler func(ctx context.Context, bot *telego.Bot, query telego.InlineQuery)
+type InlineQueryHandler func(ctx *Context, query telego.InlineQuery) error
 
 // HandleInlineQuery same as Handle, but assumes that the update contains an inline query
 func (h *HandlerGroup) HandleInlineQuery(handler InlineQueryHandler, predicates ...Predicate) {
@@ -84,8 +82,8 @@ func (h *HandlerGroup) HandleInlineQuery(handler InlineQueryHandler, predicates 
 		panic("Telego: nil inline query handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.InlineQuery)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.InlineQuery)
 	}, append([]Predicate{AnyInlineQuery()}, predicates...)...)
 }
 
@@ -95,7 +93,7 @@ func (h *BotHandler) HandleInlineQuery(handler InlineQueryHandler, predicates ..
 }
 
 // ChosenInlineResultHandler handles chosen inline result that came from bot
-type ChosenInlineResultHandler func(ctx context.Context, bot *telego.Bot, result telego.ChosenInlineResult)
+type ChosenInlineResultHandler func(ctx *Context, result telego.ChosenInlineResult) error
 
 // HandleChosenInlineResult same as Handle, but assumes that the update contains a chosen inline result
 func (h *HandlerGroup) HandleChosenInlineResult(handler ChosenInlineResultHandler, predicates ...Predicate) {
@@ -103,8 +101,8 @@ func (h *HandlerGroup) HandleChosenInlineResult(handler ChosenInlineResultHandle
 		panic("Telego: nil chosen inline query handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.ChosenInlineResult)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.ChosenInlineResult)
 	}, append([]Predicate{AnyChosenInlineResult()}, predicates...)...)
 }
 
@@ -114,7 +112,7 @@ func (h *BotHandler) HandleChosenInlineResult(handler ChosenInlineResultHandler,
 }
 
 // CallbackQueryHandler handles callback queries that came from bot
-type CallbackQueryHandler func(ctx context.Context, bot *telego.Bot, query telego.CallbackQuery)
+type CallbackQueryHandler func(ctx *Context, query telego.CallbackQuery) error
 
 // HandleCallbackQuery same as Handle, but assumes that the update contains a callback query
 func (h *HandlerGroup) HandleCallbackQuery(handler CallbackQueryHandler, predicates ...Predicate) {
@@ -122,8 +120,8 @@ func (h *HandlerGroup) HandleCallbackQuery(handler CallbackQueryHandler, predica
 		panic("Telego: nil callback query handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.CallbackQuery)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.CallbackQuery)
 	}, append([]Predicate{AnyCallbackQuery()}, predicates...)...)
 }
 
@@ -133,7 +131,7 @@ func (h *BotHandler) HandleCallbackQuery(handler CallbackQueryHandler, predicate
 }
 
 // ShippingQueryHandler handles shipping query that came from bot
-type ShippingQueryHandler func(ctx context.Context, bot *telego.Bot, query telego.ShippingQuery)
+type ShippingQueryHandler func(ctx *Context, query telego.ShippingQuery) error
 
 // HandleShippingQuery same as Handle, but assumes that the update contains a shipping query
 func (h *HandlerGroup) HandleShippingQuery(handler ShippingQueryHandler, predicates ...Predicate) {
@@ -141,8 +139,8 @@ func (h *HandlerGroup) HandleShippingQuery(handler ShippingQueryHandler, predica
 		panic("Telego: nil shipping query handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.ShippingQuery)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.ShippingQuery)
 	}, append([]Predicate{AnyShippingQuery()}, predicates...)...)
 }
 
@@ -152,7 +150,7 @@ func (h *BotHandler) HandleShippingQuery(handler ShippingQueryHandler, predicate
 }
 
 // PreCheckoutQueryHandler handles pre checkout query that came from bot
-type PreCheckoutQueryHandler func(ctx context.Context, bot *telego.Bot, query telego.PreCheckoutQuery)
+type PreCheckoutQueryHandler func(ctx *Context, query telego.PreCheckoutQuery) error
 
 // HandlePreCheckoutQuery same as Handle, but assumes that the update contains a pre checkout query
 func (h *HandlerGroup) HandlePreCheckoutQuery(handler PreCheckoutQueryHandler, predicates ...Predicate) {
@@ -160,8 +158,8 @@ func (h *HandlerGroup) HandlePreCheckoutQuery(handler PreCheckoutQueryHandler, p
 		panic("Telego: nil pre checkout query handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.PreCheckoutQuery)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.PreCheckoutQuery)
 	}, append([]Predicate{AnyPreCheckoutQuery()}, predicates...)...)
 }
 
@@ -171,7 +169,7 @@ func (h *BotHandler) HandlePreCheckoutQuery(handler PreCheckoutQueryHandler, pre
 }
 
 // PollHandler handles poll that came from bot
-type PollHandler func(ctx context.Context, bot *telego.Bot, poll telego.Poll)
+type PollHandler func(ctx *Context, poll telego.Poll) error
 
 // HandlePoll same as Handle, but assumes that the update contains a poll
 func (h *HandlerGroup) HandlePoll(handler PollHandler, predicates ...Predicate) {
@@ -179,8 +177,8 @@ func (h *HandlerGroup) HandlePoll(handler PollHandler, predicates ...Predicate) 
 		panic("Telego: nil poll handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.Poll)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.Poll)
 	}, append([]Predicate{AnyPoll()}, predicates...)...)
 }
 
@@ -190,7 +188,7 @@ func (h *BotHandler) HandlePoll(handler PollHandler, predicates ...Predicate) {
 }
 
 // PollAnswerHandler handles poll answer that came from bot
-type PollAnswerHandler func(ctx context.Context, bot *telego.Bot, answer telego.PollAnswer)
+type PollAnswerHandler func(ctx *Context, answer telego.PollAnswer) error
 
 // HandlePollAnswer same as Handle, but assumes that the update contains a poll answer
 func (h *HandlerGroup) HandlePollAnswer(handler PollAnswerHandler, predicates ...Predicate) {
@@ -198,8 +196,8 @@ func (h *HandlerGroup) HandlePollAnswer(handler PollAnswerHandler, predicates ..
 		panic("Telego: nil poll answer handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.PollAnswer)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.PollAnswer)
 	}, append([]Predicate{AnyPollAnswer()}, predicates...)...)
 }
 
@@ -209,7 +207,7 @@ func (h *BotHandler) HandlePollAnswer(handler PollAnswerHandler, predicates ...P
 }
 
 // ChatMemberUpdatedHandler handles chat member that came from bot
-type ChatMemberUpdatedHandler func(ctx context.Context, bot *telego.Bot, chatMember telego.ChatMemberUpdated)
+type ChatMemberUpdatedHandler func(ctx *Context, chatMember telego.ChatMemberUpdated) error
 
 // HandleMyChatMemberUpdated same as Handle, but assumes that the update contains my chat member
 func (h *HandlerGroup) HandleMyChatMemberUpdated(handler ChatMemberUpdatedHandler, predicates ...Predicate) {
@@ -217,8 +215,8 @@ func (h *HandlerGroup) HandleMyChatMemberUpdated(handler ChatMemberUpdatedHandle
 		panic("Telego: nil my chat member update handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.MyChatMember)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.MyChatMember)
 	}, append([]Predicate{AnyMyChatMember()}, predicates...)...)
 }
 
@@ -233,8 +231,8 @@ func (h *HandlerGroup) HandleChatMemberUpdated(handler ChatMemberUpdatedHandler,
 		panic("Telego: nil chat member update handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.ChatMember)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.ChatMember)
 	}, append([]Predicate{AnyChatMember()}, predicates...)...)
 }
 
@@ -244,7 +242,7 @@ func (h *BotHandler) HandleChatMemberUpdated(handler ChatMemberUpdatedHandler, p
 }
 
 // ChatJoinRequestHandler handles chat join request that came from bot
-type ChatJoinRequestHandler func(ctx context.Context, bot *telego.Bot, request telego.ChatJoinRequest)
+type ChatJoinRequestHandler func(ctx *Context, request telego.ChatJoinRequest) error
 
 // HandleChatJoinRequest same as Handle, but assumes that the update contains chat join request
 func (h *HandlerGroup) HandleChatJoinRequest(handler ChatJoinRequestHandler, predicates ...Predicate) {
@@ -252,8 +250,8 @@ func (h *HandlerGroup) HandleChatJoinRequest(handler ChatJoinRequestHandler, pre
 		panic("Telego: nil chat join request handlers not allowed")
 	}
 
-	h.Handle(func(bot *telego.Bot, update telego.Update) {
-		handler(update.Context(), bot, *update.ChatJoinRequest)
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.ChatJoinRequest)
 	}, append([]Predicate{AnyChatJoinRequest()}, predicates...)...)
 }
 

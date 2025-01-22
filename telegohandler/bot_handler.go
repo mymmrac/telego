@@ -2,6 +2,7 @@ package telegohandler
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 
@@ -9,19 +10,11 @@ import (
 )
 
 // Handler handles update that came from bot
-type Handler func(bot *telego.Bot, update telego.Update)
+type Handler func(ctx *Context, update telego.Update) error
 
 // Predicate allows filtering updates for handlers
 // Note: Predicate can't change the update, because it uses a copy, not original value
-type Predicate func(update telego.Update) bool
-
-// Middleware applies any function on bot and update before calling other middlewares, predicates and handler
-// Note: Calling next multiple times does nothing after first call, calling next in goroutine is allowed,
-// but user should expect that context will be closed sooner than handler ends
-//
-// Warning: Not calling next at all is allowed, but if context doesn't close, update will be stuck forever, however
-// if context closes since not all middlewares were executed, the handler group will be skipped
-type Middleware func(bot *telego.Bot, update telego.Update, next Handler)
+type Predicate func(ctx context.Context, update telego.Update) bool
 
 // BotHandler represents a bot handler that can handle updated matching by predicates
 type BotHandler struct {
@@ -29,22 +22,22 @@ type BotHandler struct {
 	updates   <-chan telego.Update
 	baseGroup *HandlerGroup
 
-	running        bool
-	runningLock    sync.RWMutex
-	stop           chan struct{}
-	handledUpdates *sync.WaitGroup
+	running  bool
+	lock     sync.RWMutex
+	stop     chan struct{}
+	handlers sync.WaitGroup
 }
 
 // BotHandlerOption represents an option that can be applied to bot handler
 type BotHandlerOption func(bh *BotHandler) error
 
 // NewBotHandler creates new bot handler
+// Note: Currently no options available, they may be added in future
 func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...BotHandlerOption) (*BotHandler, error) {
 	bh := &BotHandler{
-		bot:            bot,
-		updates:        updates,
-		baseGroup:      &HandlerGroup{},
-		handledUpdates: &sync.WaitGroup{},
+		bot:       bot,
+		updates:   updates,
+		baseGroup: &HandlerGroup{},
 	}
 
 	for _, option := range options {
@@ -57,37 +50,40 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 }
 
 // Start starts handling of updates, blocks execution
-// Note: Calling [BotHandler.Start] method multiple times after the first one does nothing.
-func (h *BotHandler) Start() {
-	h.runningLock.RLock()
+// Note: Calling if already running will return an error
+func (h *BotHandler) Start() error {
+	h.lock.RLock()
 	if h.running {
-		h.runningLock.RUnlock()
-		return
+		h.lock.RUnlock()
+		return errors.New("telego: bot handler already running")
 	}
-	h.runningLock.RUnlock()
+	h.lock.RUnlock()
 
-	h.runningLock.Lock()
+	h.lock.Lock()
 	h.stop = make(chan struct{})
 	h.running = true
 	// Prevents calling Wait before single Add call
-	h.handledUpdates.Add(1)
-	defer h.handledUpdates.Done()
-	h.runningLock.Unlock()
+	h.handlers.Add(1)
+	defer h.handlers.Done()
+	h.lock.Unlock()
 
 	for {
 		select {
 		case <-h.stop:
-			return
+			return nil
 		case update, ok := <-h.updates:
 			if !ok {
-				go h.Stop()
-				return
+				return errors.New("telego: updates channel closed")
 			}
 
 			// Process update
-			h.handledUpdates.Add(1)
+			h.handlers.Add(1)
 			go func() {
-				ctx, cancel := context.WithCancel(update.Context())
+				defer h.handlers.Done()
+
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+
 				go func() {
 					select {
 					case <-ctx.Done():
@@ -97,10 +93,17 @@ func (h *BotHandler) Start() {
 					}
 				}()
 
-				h.baseGroup.processUpdate(h.bot, update.WithContext(ctx))
-				cancel()
+				bCtx := &Context{
+					bot:             h.bot,
+					ctx:             ctx,
+					updateID:        update.UpdateID,
+					group:           h.baseGroup,
+					middlewareIndex: -1,
+				}
 
-				h.handledUpdates.Done()
+				if err := bCtx.Next(update); err != nil {
+					h.bot.Logger().Errorf("Error processing update %d, err: %s", update.UpdateID, err)
+				}
 			}()
 		}
 	}
@@ -108,17 +111,17 @@ func (h *BotHandler) Start() {
 
 // IsRunning tells if Start is running
 func (h *BotHandler) IsRunning() bool {
-	h.runningLock.RLock()
-	defer h.runningLock.RUnlock()
-
+	h.lock.RLock()
+	defer h.lock.RUnlock()
 	return h.running
 }
 
-// StopWithContext stops handling of updates, blocks until all updates have been processes or when context is canceled.
-// Note: Calling [BotHandler.StopWithContext] method multiple times or before [BotHandler.Start] does nothing.
+// StopWithContext stops handling of updates, blocks until all updates have been processes or when context is canceled
+// Note: Calling [BotHandler.StopWithContext] method multiple times or before [BotHandler.Start] does nothing
 func (h *BotHandler) StopWithContext(ctx context.Context) {
-	h.runningLock.Lock()
-	defer h.runningLock.Unlock()
+	h.lock.Lock()
+	defer h.lock.Unlock()
+
 	if !h.running {
 		return
 	}
@@ -135,7 +138,7 @@ func (h *BotHandler) StopWithContext(ctx context.Context) {
 
 	wait := make(chan struct{})
 	go func() {
-		h.handledUpdates.Wait()
+		h.handlers.Wait()
 		close(wait)
 	}()
 
@@ -143,7 +146,7 @@ func (h *BotHandler) StopWithContext(ctx context.Context) {
 	case <-ctx.Done():
 		// Wait for context to be done
 	case <-wait:
-		// Wait for handler to complete
+		// Wait for handlers to complete
 	}
 
 	h.running = false
@@ -155,20 +158,20 @@ func (h *BotHandler) Stop() {
 	h.StopWithContext(context.Background())
 }
 
-// Handle registers new handler in the base group, update will be processed only by first-matched handler,
-// order of registration determines the order of matching handlers.
-// Important to notice, update's context will be automatically canceled once the handler will finish processing or
+// Handle registers new handler in the base group, update will be processed only by first-matched route,
+// order of registration determines the order of matching routes.
+// Important to notice, handler's context will be automatically canceled once the handler will finish processing or
 // the bot handler stopped.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
-// in mind that middlewares and predicates are checked sequentially.
+// in mind that middlewares and predicates are run sequentially.
 //
 // Warning: Panics if nil handler or predicates passed
 func (h *BotHandler) Handle(handler Handler, predicates ...Predicate) {
 	h.baseGroup.Handle(handler, predicates...)
 }
 
-// Group creates a new group of handlers and middlewares from the base group
-// Note: Updates first checked by group and only after that by handler
+// Group creates a new group of handlers and middlewares from the base group, update will be processed only by
+// first-matched route, order of registration determines the order of matching routes
 //
 // Warning: Panics if nil predicates passed
 func (h *BotHandler) Group(predicates ...Predicate) *HandlerGroup {
@@ -176,12 +179,10 @@ func (h *BotHandler) Group(predicates ...Predicate) *HandlerGroup {
 }
 
 // Use applies middleware to the base group
-// Note: The chain will be stopped if middleware doesn't call the next func,
-// if there is no context timeout then update will be stuck,
-// if there is time out then the group will be skipped since not all middlewares were called
+// Note: The chain will be stopped if middleware doesn't call the [Context.Next]
 //
 // Warning: Panics if nil middlewares passed
-func (h *BotHandler) Use(middlewares ...Middleware) {
+func (h *BotHandler) Use(middlewares ...Handler) {
 	h.baseGroup.Use(middlewares...)
 }
 
