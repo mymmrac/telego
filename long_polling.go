@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 	"time"
 )
 
@@ -71,9 +72,7 @@ func WithLongPollingBuffer(chanBuffer uint) LongPollingOption {
 // but if a non-nil parameter is passed, you should remember to explicitly specify timeout
 //
 // Note: After you done with getting updates, you should close context this will close the update chan
-//
-// Note: Value of params is reused to call [Bot.GetUpdates] method, caller should not reuse or modify it after calling
-// this method to avoid unexpected behavior
+// Note: Value of params is reused to call [Bot.GetUpdates] method many times, because of this we copy params value
 func (b *Bot) UpdatesViaLongPolling(
 	ctx context.Context, params *GetUpdatesParams, options ...LongPollingOption,
 ) (<-chan Update, error) {
@@ -97,6 +96,13 @@ func (b *Bot) UpdatesViaLongPolling(
 	if params == nil {
 		params = &GetUpdatesParams{
 			Timeout: defaultLongPollingUpdateTimeoutInSeconds,
+		}
+	} else {
+		params = &GetUpdatesParams{
+			Offset:         params.Offset,
+			Limit:          params.Limit,
+			Timeout:        params.Timeout,
+			AllowedUpdates: slices.Clone(params.AllowedUpdates),
 		}
 	}
 
