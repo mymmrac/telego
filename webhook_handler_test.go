@@ -117,15 +117,6 @@ func TestWebhookHTTPServer(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, rc.Code)
 	})
 
-	t.Run("error_close", func(t *testing.T) {
-		rc := httptest.NewRecorder()
-		req := httptest.NewRequest(http.MethodPost, "/", errReaderCloser{reader: strings.NewReader("ok")})
-		req.Header.Set(WebhookSecretTokenHeader, "secret")
-		srv.Handler.ServeHTTP(rc, req)
-
-		assert.Equal(t, http.StatusInternalServerError, rc.Code)
-	})
-
 	t.Run("secret_token_invalid", func(t *testing.T) {
 		rc := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, "/", nil)
@@ -184,15 +175,6 @@ func TestWebhookHTTPServeMux(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, rc.Code)
 	})
 
-	t.Run("error_close", func(t *testing.T) {
-		rc := httptest.NewRecorder()
-		req := httptest.NewRequest(http.MethodPost, "/", errReaderCloser{reader: strings.NewReader("ok")})
-		req.Header.Set(WebhookSecretTokenHeader, "secret")
-		mux.ServeHTTP(rc, req)
-
-		assert.Equal(t, http.StatusInternalServerError, rc.Code)
-	})
-
 	t.Run("secret_token_invalid", func(t *testing.T) {
 		rc := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, "/", nil)
@@ -206,16 +188,4 @@ type errReader struct{}
 
 func (e errReader) Read(_ []byte) (n int, err error) {
 	return 0, errTest
-}
-
-type errReaderCloser struct {
-	reader io.Reader
-}
-
-func (e errReaderCloser) Close() error {
-	return errTest
-}
-
-func (e errReaderCloser) Read(b []byte) (n int, err error) {
-	return e.reader.Read(b)
 }

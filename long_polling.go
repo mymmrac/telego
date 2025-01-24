@@ -76,18 +76,13 @@ func WithLongPollingBuffer(chanBuffer uint) LongPollingOption {
 func (b *Bot) UpdatesViaLongPolling(
 	ctx context.Context, params *GetUpdatesParams, options ...LongPollingOption,
 ) (<-chan Update, error) {
-	b.lock.Lock()
-	defer b.lock.Unlock()
-
-	if b.longPollingRunning {
-		return nil, errors.New("telego: long polling already running")
-	}
-	if b.webhookRunning {
-		return nil, errors.New("telego: webhook already running")
+	if err := b.run(runningLongPolling); err != nil {
+		return nil, err
 	}
 
 	lp, err := b.createLongPolling(options)
 	if err != nil {
+		b.running.Store(runningNone)
 		return nil, err
 	}
 
@@ -106,7 +101,6 @@ func (b *Bot) UpdatesViaLongPolling(
 		}
 	}
 
-	b.longPollingRunning = true
 	go b.doLongPolling(ctx, lp, params, updatesChan)
 
 	return updatesChan, nil
@@ -114,10 +108,7 @@ func (b *Bot) UpdatesViaLongPolling(
 
 func (b *Bot) doLongPolling(ctx context.Context, lp *longPolling, params *GetUpdatesParams, updatesChan chan<- Update) {
 	defer func() {
-		b.lock.Lock()
-		b.longPollingRunning = false
-		b.lock.Unlock()
-
+		b.running.Store(runningNone)
 		close(updatesChan)
 	}()
 

@@ -2,7 +2,6 @@ package telego
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/mymmrac/telego/internal/json"
@@ -48,18 +47,13 @@ func WithWebhookSet(ctx context.Context, params *SetWebhookParams) WebhookOption
 func (b *Bot) UpdatesViaWebhook(
 	ctx context.Context, registerHandler func(handler WebhookHandler) error, options ...WebhookOption,
 ) (<-chan Update, error) {
-	b.lock.Lock()
-	defer b.lock.Unlock()
-
-	if b.webhookRunning {
-		return nil, errors.New("telego: webhook already running")
-	}
-	if b.longPollingRunning {
-		return nil, errors.New("telego: long polling already running")
+	if err := b.run(runningWebhook); err != nil {
+		return nil, err
 	}
 
 	wh, err := b.createWebhook(options)
 	if err != nil {
+		b.running.Store(runningNone)
 		return nil, err
 	}
 
@@ -83,17 +77,13 @@ func (b *Bot) UpdatesViaWebhook(
 		}
 	})
 	if err != nil {
+		b.running.Store(runningNone)
 		return nil, fmt.Errorf("telego: webhook register handler: %w", err)
 	}
 
-	b.webhookRunning = true
 	go func() {
 		<-ctx.Done()
-
-		b.lock.Lock()
-		b.webhookRunning = false
-		b.lock.Unlock()
-
+		b.running.Store(runningNone)
 		close(updatesChan)
 	}()
 

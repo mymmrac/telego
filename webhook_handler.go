@@ -52,7 +52,7 @@ func WebhookHTTPServer(server *http.Server, path string, secretToken ...string) 
 	}
 	return func(handler WebhookHandler) error {
 		server.Handler = http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			defer func() { _ = request.Body.Close() }()
+			defer func() { _ = request.Body.Close() }() //nolint:errcheck
 
 			if request.URL.Path != path {
 				writer.WriteHeader(http.StatusNotFound)
@@ -93,7 +93,7 @@ func WebhookHTTPServeMux(mux *http.ServeMux, pattern string, secretToken ...stri
 	}
 	return func(handler WebhookHandler) error {
 		mux.HandleFunc(pattern, func(writer http.ResponseWriter, request *http.Request) {
-			defer func() { _ = request.Body.Close() }()
+			defer func() { _ = request.Body.Close() }() //nolint:errcheck
 
 			if len(secretToken) > 0 && secretToken[0] != request.Header.Get(WebhookSecretTokenHeader) {
 				writer.WriteHeader(http.StatusUnauthorized)

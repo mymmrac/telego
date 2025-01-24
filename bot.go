@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
-	"sync"
+	"sync/atomic"
 
 	"github.com/valyala/fasthttp"
 
@@ -51,9 +51,27 @@ type Bot struct {
 	reportWarningAsErrors bool
 	healthCheckContext    context.Context
 
-	lock               sync.Mutex
-	longPollingRunning bool
-	webhookRunning     bool
+	running atomic.Int32
+}
+
+const (
+	runningNone        = 0
+	runningLongPolling = 1
+	runningWebhook     = 2
+)
+
+func (b *Bot) run(actionToRun int32) error {
+	if b.running.CompareAndSwap(runningNone, actionToRun) {
+		return nil
+	}
+	switch b.running.Load() {
+	case runningLongPolling:
+		return errors.New("telego: long polling already running")
+	case runningWebhook:
+		return errors.New("telego: webhook already running")
+	default:
+		return errors.New("telego: unknown running state")
+	}
 }
 
 // BotOption represents an option that can be applied to Bot
