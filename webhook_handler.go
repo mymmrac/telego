@@ -52,6 +52,8 @@ func WebhookHTTPServer(server *http.Server, path string, secretToken ...string) 
 	}
 	return func(handler WebhookHandler) error {
 		server.Handler = http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+			defer func() { _ = request.Body.Close() }()
+
 			if request.URL.Path != path {
 				writer.WriteHeader(http.StatusNotFound)
 				return
@@ -69,11 +71,6 @@ func WebhookHTTPServer(server *http.Server, path string, secretToken ...string) 
 
 			data, err := io.ReadAll(request.Body)
 			if err != nil {
-				writer.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-
-			if err = request.Body.Close(); err != nil {
 				writer.WriteHeader(http.StatusInternalServerError)
 				return
 			}
@@ -96,6 +93,8 @@ func WebhookHTTPServeMux(mux *http.ServeMux, pattern string, secretToken ...stri
 	}
 	return func(handler WebhookHandler) error {
 		mux.HandleFunc(pattern, func(writer http.ResponseWriter, request *http.Request) {
+			defer func() { _ = request.Body.Close() }()
+
 			if len(secretToken) > 0 && secretToken[0] != request.Header.Get(WebhookSecretTokenHeader) {
 				writer.WriteHeader(http.StatusUnauthorized)
 				return
@@ -103,11 +102,6 @@ func WebhookHTTPServeMux(mux *http.ServeMux, pattern string, secretToken ...stri
 
 			data, err := io.ReadAll(request.Body)
 			if err != nil {
-				writer.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-
-			if err = request.Body.Close(); err != nil {
 				writer.WriteHeader(http.StatusInternalServerError)
 				return
 			}
