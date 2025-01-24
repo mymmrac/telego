@@ -2,11 +2,12 @@ package telegohandler
 
 import (
 	"context"
+	"slices"
 
 	"github.com/mymmrac/telego"
 )
 
-// route represents handler or group with respectful predicates
+// route represents handler, middleware or group with respectful predicates
 type route struct {
 	predicates []Predicate
 
@@ -16,19 +17,24 @@ type route struct {
 
 // match matches the current update by predicates
 func (r route) match(ctx context.Context, update telego.Update) bool {
+	if len(r.predicates) == 0 {
+		return true
+	}
+
 	update = update.Clone()
 	for _, p := range r.predicates {
 		if !p(ctx, update) {
 			return false
 		}
 	}
+
 	return true
 }
 
 // HandlerGroup represents a group of middlewares and routes (handlers and subgroups)
 type HandlerGroup struct {
-	middlewares []Handler
-	routes      []route
+	parent *HandlerGroup
+	routes []route
 }
 
 // Handle registers new handler in the group, update will be processed only by first-matched route,
@@ -67,7 +73,9 @@ func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
 		}
 	}
 
-	group := &HandlerGroup{}
+	group := &HandlerGroup{
+		parent: h,
+	}
 
 	h.routes = append(h.routes, route{
 		predicates: predicates,
@@ -77,7 +85,8 @@ func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
 	return group
 }
 
-// Use applies middleware to the group
+// Use applies middleware to the group, update will be processed only by first-matched route,
+// order of registration determines the order of matching routes.
 // Note: The chain will be stopped if middleware doesn't call the [Context.Next]
 //
 // Warning: Panics if nil middlewares passed
@@ -88,5 +97,10 @@ func (h *HandlerGroup) Use(middlewares ...Handler) {
 		}
 	}
 
-	h.middlewares = append(h.middlewares, middlewares...)
+	h.routes = slices.Grow(h.routes, len(middlewares))
+	for _, middleware := range middlewares {
+		h.routes = append(h.routes, route{
+			handler: middleware,
+		})
+	}
 }

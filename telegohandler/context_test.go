@@ -80,6 +80,20 @@ func TestContext_WithTimeout(t *testing.T) {
 	assert.True(t, ok)
 }
 
+func TestContext_WithoutCancel(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Hour)
+	defer cancel()
+
+	bCtx := &Context{
+		ctx: ctx,
+	}
+
+	bCtx = bCtx.WithoutCancel()
+	assert.NotNil(t, cancel)
+	_, ok := bCtx.Deadline()
+	assert.False(t, ok)
+}
+
 func TestContext_Bot(t *testing.T) {
 	ctx := &Context{
 		bot: &telego.Bot{},
@@ -98,13 +112,13 @@ func TestContext_Next(t *testing.T) {
 	run := false
 	ctx := &Context{
 		group: &HandlerGroup{
-			middlewares: []Handler{
-				func(ctx *Context, update telego.Update) error {
-					update.UpdateID = 1
-					return ctx.Next(update)
-				},
-			},
 			routes: []route{
+				{
+					handler: func(ctx *Context, update telego.Update) error {
+						update.UpdateID = 1
+						return ctx.Next(update)
+					},
+				},
 				{
 					predicates: []Predicate{
 						func(_ context.Context, _ telego.Update) bool {
@@ -125,7 +139,7 @@ func TestContext_Next(t *testing.T) {
 				},
 			},
 		},
-		middlewareIndex: -1,
+		stack: []int{-1},
 	}
 
 	err := ctx.Next(telego.Update{})

@@ -97,7 +97,7 @@ func TestHandlerGroup_Use(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		gr.Use(middleware)
 
-		require.Len(t, gr.middlewares, 1)
-		assert.NotNil(t, gr.middlewares[0])
+		require.Len(t, gr.routes, 1)
+		assert.NotNil(t, gr.routes[0].handler)
 	})
 }

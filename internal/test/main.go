@@ -21,7 +21,7 @@ var (
 	userUsername    = tu.Username("@mymmrac")
 )
 
-const testCase = 34
+const testCase = 35
 
 func main() {
 	ctx := context.Background()
@@ -744,6 +744,44 @@ func main() {
 			ShortDescription: "",
 		})
 		assert(err == nil, err)
+	case 35:
+		updates := make(chan telego.Update, 1)
+
+		bh, _ := th.NewBotHandler(nil, updates)
+
+		test := bh.Group()
+		test.Use(func(ctx *th.Context, update telego.Update) error {
+			fmt.Println("middleware")
+			// _ = ctx.Next(update)
+			return ctx.Next(update)
+		})
+		test.Handle(func(ctx *th.Context, update telego.Update) error {
+			panic("not here")
+		}, th.None())
+
+		test2 := test.Group()
+		test2.Use(func(ctx *th.Context, update telego.Update) error {
+			fmt.Println("middleware 2")
+			return ctx.Next(update)
+		})
+
+		test.Handle(func(ctx *th.Context, update telego.Update) error {
+			fmt.Println("handler 3")
+			return ctx.Next(update)
+		})
+
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
+			fmt.Println("handler")
+			return nil
+		})
+
+		bh.Handle(func(ctx *th.Context, update telego.Update) error {
+			fmt.Println("handler 2")
+			return nil
+		})
+
+		updates <- telego.Update{}
+		_ = bh.Start()
 	}
 }
 

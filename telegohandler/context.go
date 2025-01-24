@@ -13,8 +13,8 @@ type Context struct {
 	ctx      context.Context
 	updateID int
 
-	group           *HandlerGroup
-	middlewareIndex int
+	group *HandlerGroup
+	stack []int
 }
 
 // Deadline implements [context.Context.Deadline]
@@ -62,6 +62,12 @@ func (c *Context) WithTimeout(timeout time.Duration) (*Context, context.CancelFu
 	return c, cancel
 }
 
+// WithoutCancel sets new [context.Context] without cancel returning same [Context]
+func (c *Context) WithoutCancel() *Context {
+	c.ctx = context.WithoutCancel(c.ctx)
+	return c
+}
+
 // Bot returns [telego.Bot]
 func (c *Context) Bot() *telego.Bot {
 	return c.bot
@@ -74,21 +80,32 @@ func (c *Context) UpdateID() int {
 
 // Next executes the next handler in the stack that matches current update
 func (c *Context) Next(update telego.Update) error {
-	c.middlewareIndex++
-	if len(c.group.middlewares) > c.middlewareIndex {
-		return c.group.middlewares[c.middlewareIndex](c, update)
-	}
-
-	for _, r := range c.group.routes {
+	// Go though all middlewares, subgroups and handlers
+	for i := c.stack[len(c.stack)-1] + 1; i < len(c.group.routes); i++ {
+		r := c.group.routes[i]
 		if r.match(c.ctx, update) {
+			// Update last checked route
+			c.stack[len(c.stack)-1] = i
+
+			// Go into handler or middleware
 			if r.handler != nil {
 				return r.handler(c, update)
 			}
+
+			// Go into subgroup
 			c.group = r.group
-			c.middlewareIndex = -1
+			c.stack = append(c.stack, -1)
 			return c.Next(update)
 		}
 	}
 
+	// Go back to parent if nothing matches in current group
+	if c.group.parent != nil {
+		c.group = c.group.parent
+		c.stack = c.stack[:len(c.stack)-1]
+		return c.Next(update)
+	}
+
+	// Nothing matches in any group
 	return nil
 }

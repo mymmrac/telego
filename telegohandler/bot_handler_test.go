@@ -374,8 +374,8 @@ func TestBotHandler_Use(t *testing.T) {
 
 	bh.Use(middleware)
 
-	require.Len(t, bh.baseGroup.middlewares, 1)
-	assert.NotNil(t, bh.baseGroup.middlewares[0])
+	require.Len(t, bh.baseGroup.routes, 1)
+	assert.NotNil(t, bh.baseGroup.routes[0].handler)
 }
 
 func TestBotHandler_IsRunning(t *testing.T) {

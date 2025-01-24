@@ -94,11 +94,11 @@ func (h *BotHandler) Start() error {
 				}()
 
 				bCtx := &Context{
-					bot:             h.bot,
-					ctx:             ctx,
-					updateID:        update.UpdateID,
-					group:           h.baseGroup,
-					middlewareIndex: -1,
+					bot:      h.bot,
+					ctx:      ctx,
+					updateID: update.UpdateID,
+					group:    h.baseGroup,
+					stack:    []int{-1}, // TODO: Pre allocate
 				}
 
 				if err := bCtx.Next(update); err != nil {
@@ -178,7 +178,8 @@ func (h *BotHandler) Group(predicates ...Predicate) *HandlerGroup {
 	return h.baseGroup.Group(predicates...)
 }
 
-// Use applies middleware to the base group
+// Use applies middleware to the base group, update will be processed only by first-matched route,
+// order of registration determines the order of matching routes.
 // Note: The chain will be stopped if middleware doesn't call the [Context.Next]
 //
 // Warning: Panics if nil middlewares passed

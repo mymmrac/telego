@@ -42,12 +42,9 @@ func TestPanicRecovery(t *testing.T) {
 
 func TestTimeout(t *testing.T) {
 	ctx := &Context{
-		ctx: context.Background(),
-		group: &HandlerGroup{
-			middlewares: nil,
-			routes:      nil,
-		},
-		middlewareIndex: -1,
+		ctx:   context.Background(),
+		group: &HandlerGroup{},
+		stack: []int{-1},
 	}
 
 	err := Timeout(time.Minute)(ctx, telego.Update{})
