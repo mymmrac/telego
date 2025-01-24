@@ -410,6 +410,48 @@ func EditedPostTextMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
+// AnyBusinessConnection is true if business connection isn't nil
+func AnyBusinessConnection() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.BusinessConnection != nil
+	}
+}
+
+// AnyBusinessMessage is true if the business message isn't nil
+func AnyBusinessMessage() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return anyMassage(update.BusinessMessage)
+	}
+}
+
+// AnyEditedBusinessMessage is true if edited business message isn't nil
+func AnyEditedBusinessMessage() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return anyMassage(update.EditedBusinessMessage)
+	}
+}
+
+// AnyDeletedBusinessMessages is true if deleted business messages isn't nil
+func AnyDeletedBusinessMessages() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.DeletedBusinessMessages != nil
+	}
+}
+
+// AnyMessageReaction is true if message reaction isn't nil
+func AnyMessageReaction() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.MessageReaction != nil
+	}
+}
+
+// AnyMessageReactionCount is true if message reaction count isn't nil
+func AnyMessageReactionCount() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.MessageReactionCount != nil
+	}
+}
+
 // AnyInlineQuery is true if inline query isn't nil
 func AnyInlineQuery() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
@@ -538,6 +580,13 @@ func AnyPreCheckoutQuery() Predicate {
 	}
 }
 
+// AnyPurchasedPaidMedia is true if the purchased paid media isn't nil
+func AnyPurchasedPaidMedia() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.PurchasedPaidMedia != nil
+	}
+}
+
 // AnyPoll is true if the poll isn't nil
 func AnyPoll() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
@@ -570,6 +619,20 @@ func AnyChatMember() Predicate {
 func AnyChatJoinRequest() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
 		return update.ChatJoinRequest != nil
+	}
+}
+
+// AnyChatBoost is true if chat boost isn't nil
+func AnyChatBoost() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.ChatBoost != nil
+	}
+}
+
+// AnyRemovedChatBoost is true if removed chat boost isn't nil
+func AnyRemovedChatBoost() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.RemovedChatBoost != nil
 	}
 }
 

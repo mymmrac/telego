@@ -118,6 +118,120 @@ func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleBusinessConnection(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleBusinessConnection(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := BusinessConnectionHandler(func(_ *Context, _ telego.BusinessConnection) error { wg.Done(); return nil })
+
+	bh.HandleBusinessConnection(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{BusinessConnection: &telego.BusinessConnection{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleBusinessMessage(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleBusinessMessage(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
+
+	bh.HandleBusinessMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{BusinessMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleEditedBusinessMessage(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleEditedBusinessMessage(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
+
+	bh.HandleEditedBusinessMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{EditedBusinessMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleDeletedBusinessMessages(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleDeletedBusinessMessages(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := DeletedBusinessMessagesHandler(func(_ *Context, _ telego.BusinessMessagesDeleted) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandleDeletedBusinessMessages(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{DeletedBusinessMessages: &telego.BusinessMessagesDeleted{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleMessageReaction(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleMessageReaction(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageReactionHandler(func(_ *Context, _ telego.MessageReactionUpdated) error { wg.Done(); return nil })
+
+	bh.HandleMessageReaction(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{MessageReaction: &telego.MessageReactionUpdated{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleMessageReactionCount(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleMessageReactionCount(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageReactionCountHandler(func(_ *Context, _ telego.MessageReactionCountUpdated) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandleMessageReactionCount(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{MessageReactionCount: &telego.MessageReactionCountUpdated{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleInlineQuery(t *testing.T) {
 	bh := newTestBotHandler(t)
 
@@ -209,6 +323,27 @@ func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
 
 	updates := make(chan telego.Update, 1)
 	updates <- telego.Update{PreCheckoutQuery: &telego.PreCheckoutQuery{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandlePurchasedPaidMedia(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandlePurchasedPaidMedia(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := PurchasedPaidMediaHandler(func(_ *Context, _ telego.PaidMediaPurchased) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandlePurchasedPaidMedia(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{PurchasedPaidMedia: &telego.PaidMediaPurchased{}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)
@@ -311,6 +446,52 @@ func TestBotHandler_HandleChatJoinRequest(t *testing.T) {
 
 	updates := make(chan telego.Update, 1)
 	updates <- telego.Update{ChatJoinRequest: &telego.ChatJoinRequest{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleChatBoost(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleChatBoost(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := ChatBoostHandler(func(_ *Context, _ telego.ChatBoostUpdated) error { wg.Done(); return nil })
+
+	bh.HandleChatBoost(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{ChatBoost: &telego.ChatBoostUpdated{
+		Boost: telego.ChatBoost{
+			Source: &telego.ChatBoostSourcePremium{
+				Source: telego.BoostSourcePremium,
+			},
+		},
+	}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleRemovedChatBoost(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleRemovedChatBoost(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := RemovedChatBoostHandler(func(_ *Context, _ telego.ChatBoostRemoved) error { wg.Done(); return nil })
+
+	bh.HandleRemovedChatBoost(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{RemovedChatBoost: &telego.ChatBoostRemoved{
+		Source: &telego.ChatBoostSourcePremium{
+			Source: telego.BoostSourcePremium,
+		},
+	}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)

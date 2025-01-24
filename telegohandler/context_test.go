@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/mymmrac/telego"
 )
@@ -41,7 +42,7 @@ func TestContext_Err(t *testing.T) {
 
 func TestContext_Value(t *testing.T) {
 	ctx := &Context{
-		ctx: context.WithValue(context.Background(), "key", "value"),
+		ctx: context.WithValue(context.Background(), "key", "value"), //nolint:staticcheck
 	}
 	assert.Equal(t, "value", ctx.Value("key"))
 }
@@ -57,7 +58,7 @@ func TestContext_WithContext(t *testing.T) {
 
 	t.Run("nil", func(t *testing.T) {
 		assert.Panics(t, func() {
-			bCtx.WithContext(nil)
+			bCtx.WithContext(nil) //nolint:staticcheck
 		})
 	})
 }
@@ -143,6 +144,6 @@ func TestContext_Next(t *testing.T) {
 	}
 
 	err := ctx.Next(telego.Update{})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.True(t, run)
 }
