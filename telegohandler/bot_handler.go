@@ -52,24 +52,28 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 // Start starts handling of updates, blocks execution
 // Note: Calling if already running will return an error
 func (h *BotHandler) Start() error {
-	h.lock.RLock()
+	h.lock.Lock()
+
 	if h.running {
-		h.lock.RUnlock()
+		h.lock.Unlock()
 		return errors.New("telego: bot handler already running")
 	}
-	h.lock.RUnlock()
 
-	h.lock.Lock()
-	h.stop = make(chan struct{})
 	h.running = true
+	h.stop = make(chan struct{})
+
 	// Prevents calling Wait before single Add call
 	h.handlers.Add(1)
 	defer h.handlers.Done()
+
 	h.lock.Unlock()
+
+	depth := h.baseGroup.depth(1)
 
 	for {
 		select {
 		case <-h.stop:
+			// TODO: Wait for last update to be consumed from channel OR stop context closed?
 			return nil
 		case update, ok := <-h.updates:
 			if !ok {
@@ -98,7 +102,7 @@ func (h *BotHandler) Start() error {
 					ctx:      ctx,
 					updateID: update.UpdateID,
 					group:    h.baseGroup,
-					stack:    []int{-1}, // TODO: Pre allocate
+					stack:    append(make([]int, 0, depth), -1),
 				}
 
 				if err := bCtx.Next(update); err != nil {

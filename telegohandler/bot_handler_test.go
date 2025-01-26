@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -198,13 +199,21 @@ func TestBotHandler_Stop(t *testing.T) {
 		bh, err := NewBotHandler(bot, updates)
 		require.NoError(t, err)
 
+		called1 := atomic.Int32{}
 		bh.Handle(
-			func(_ *Context, _ telego.Update) error { return nil },
+			func(_ *Context, _ telego.Update) error {
+				called1.Add(1)
+				return nil
+			},
 			func(_ context.Context, update telego.Update) bool { return update.UpdateID == 0 },
 		)
 
+		called2 := atomic.Int32{}
 		bh.Handle(
-			func(_ *Context, _ telego.Update) error { return errTest },
+			func(_ *Context, _ telego.Update) error {
+				called2.Add(1)
+				return errTest
+			},
 		)
 
 		timeoutSignal := time.After(timeout)
@@ -234,6 +243,10 @@ func TestBotHandler_Stop(t *testing.T) {
 				t.Fatal("Timeout")
 			case <-done:
 			}
+
+			// TODO: Flaky test
+			assert.Equal(t, int32(1), called1.Load())
+			assert.Equal(t, int32(1), called2.Load())
 		})
 	})
 

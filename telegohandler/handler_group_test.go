@@ -101,3 +101,39 @@ func TestHandlerGroup_Use(t *testing.T) {
 		assert.NotNil(t, gr.routes[0].handler)
 	})
 }
+
+func TestHandlerGroup_depth(t *testing.T) {
+	t.Run("1", func(t *testing.T) {
+		gr := &HandlerGroup{}
+		assert.Equal(t, 1, gr.depth(1))
+	})
+
+	t.Run("2", func(t *testing.T) {
+		gr := &HandlerGroup{
+			routes: []route{
+				{},
+				{group: &HandlerGroup{}},
+			},
+		}
+		assert.Equal(t, 2, gr.depth(1))
+	})
+
+	t.Run("3", func(t *testing.T) {
+		gr := &HandlerGroup{
+			routes: []route{
+				{},
+				{group: &HandlerGroup{}},
+				{},
+				{group: &HandlerGroup{
+					routes: []route{
+						{},
+						{group: &HandlerGroup{}},
+					},
+				}},
+				{group: &HandlerGroup{}},
+				{},
+			},
+		}
+		assert.Equal(t, 3, gr.depth(1))
+	})
+}

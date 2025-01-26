@@ -37,6 +37,17 @@ type HandlerGroup struct {
 	routes []route
 }
 
+// depth returns the depth of the group's routes
+func (h *HandlerGroup) depth(depth int) int {
+	localDepth := depth
+	for _, r := range h.routes {
+		if r.group != nil {
+			depth = max(depth, r.group.depth(localDepth+1))
+		}
+	}
+	return depth
+}
+
 // Handle registers new handler in the group, update will be processed only by first-matched route,
 // order of registration determines the order of matching routes.
 // Important to notice, handler's context will be automatically canceled once the handler will finish processing or
