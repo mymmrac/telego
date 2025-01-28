@@ -49,7 +49,8 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 	return bh, nil
 }
 
-// Start starts handling of updates, blocks execution
+// Start starts handling of updates, blocks execution, caller is responsible for handling all unhandled updates in the
+// update channel after bot handler stop (start will return an error in this case)
 // Note: Calling if already running will return an error
 func (h *BotHandler) Start() error {
 	h.lock.Lock()
@@ -73,11 +74,13 @@ func (h *BotHandler) Start() error {
 	for {
 		select {
 		case <-h.stop:
-			// TODO: Wait for last update to be consumed from channel OR stop context closed?
+			if unhandled := len(h.updates); unhandled > 0 {
+				return fmt.Errorf("telego: bot handler stopped, %d update(s) left unhandled", unhandled)
+			}
 			return nil
 		case update, ok := <-h.updates:
 			if !ok {
-				return errors.New("telego: updates channel closed")
+				return nil
 			}
 
 			// Process update
@@ -120,22 +123,24 @@ func (h *BotHandler) IsRunning() bool {
 	return h.running
 }
 
-// StopWithContext stops handling of updates, blocks until all updates have been processes or when context is canceled
+// StopWithContext stops handling of updates, blocks until all updates have been processes (only if update was received
+// from the update channel) or when context is canceled, if not all updates were received from the update channel
+// [BotHandler.Start] will return an error, if context is canceled context error will be returned
 // Note: Calling [BotHandler.StopWithContext] method multiple times or before [BotHandler.Start] does nothing
-func (h *BotHandler) StopWithContext(ctx context.Context) {
+func (h *BotHandler) StopWithContext(ctx context.Context) error {
 	h.lock.Lock()
 	defer h.lock.Unlock()
 
 	if !h.running {
-		return
+		return nil
 	}
 
 	close(h.stop)
+	h.running = false
 
 	select {
 	case <-ctx.Done():
-		h.running = false
-		return
+		return ctx.Err()
 	default:
 		// Continue
 	}
@@ -149,17 +154,17 @@ func (h *BotHandler) StopWithContext(ctx context.Context) {
 	select {
 	case <-ctx.Done():
 		// Wait for context to be done
+		return ctx.Err()
 	case <-wait:
 		// Wait for handlers to complete
+		return nil
 	}
-
-	h.running = false
 }
 
 // Stop stops handling of updates, will block until all updates have been processes.
 // It's recommended to use [BotHandler.StopWithContext] if you want to force stop after some timeout.
-func (h *BotHandler) Stop() {
-	h.StopWithContext(context.Background())
+func (h *BotHandler) Stop() error {
+	return h.StopWithContext(context.Background())
 }
 
 // Handle registers new handler in the base group, update will be processed only by first-matched route,

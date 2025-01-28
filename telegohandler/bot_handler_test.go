@@ -107,16 +107,18 @@ func TestBotHandler_Start(t *testing.T) {
 		wg.Add(2)
 
 		go func() {
-			err = bh.Start()
-			assert.NoError(t, err)
+			errStart := bh.Start()
+			assert.NoError(t, errStart)
 		}()
 
-		// Check if multiple Start calls do nothing
 		time.Sleep(smallTimeout)
 		err = bh.Start()
 		assert.Error(t, err)
 
-		defer bh.Stop()
+		defer func() {
+			err = bh.Stop()
+			assert.NoError(t, err)
+		}()
 
 		updates <- telego.Update{}
 		updates <- telego.Update{UpdateID: 1}
@@ -142,7 +144,8 @@ func TestBotHandler_Stop(t *testing.T) {
 		bh := newTestBotHandler(t)
 		bh.stop = make(chan struct{})
 		assert.NotPanics(t, func() {
-			bh.Stop()
+			err := bh.Stop()
+			assert.NoError(t, err)
 		})
 	})
 
@@ -166,18 +169,20 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go func() {
-				err = bh.Start()
-				assert.NoError(t, err)
+				errStart := bh.Start()
+				assert.NoError(t, errStart)
 			}()
 			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 
 			updates <- telego.Update{}
+			time.Sleep(smallTimeout)
 
 			ctx, cancel := context.WithTimeout(context.Background(), smallTimeout)
 			go func() {
-				bh.StopWithContext(ctx)
+				errStop := bh.StopWithContext(ctx)
+				assert.ErrorIs(t, errStop, context.DeadlineExceeded)
 				done <- struct{}{}
 				cancel()
 			}()
@@ -221,8 +226,8 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go func() {
-				err = bh.Start()
-				assert.NoError(t, err)
+				errStart := bh.Start()
+				assert.NoError(t, errStart)
 			}()
 			for !bh.IsRunning() {
 				// Wait for handler to start
@@ -230,10 +235,12 @@ func TestBotHandler_Stop(t *testing.T) {
 
 			updates <- telego.Update{}
 			updates <- telego.Update{UpdateID: 1}
+			time.Sleep(smallTimeout)
 
 			ctx, cancel := context.WithTimeout(context.Background(), hugeTimeout)
 			go func() {
-				bh.StopWithContext(ctx)
+				errStop := bh.StopWithContext(ctx)
+				assert.NoError(t, errStop)
 				done <- struct{}{}
 				cancel()
 			}()
@@ -244,7 +251,6 @@ func TestBotHandler_Stop(t *testing.T) {
 			case <-done:
 			}
 
-			// TODO: Flaky test
 			assert.Equal(t, int32(1), called1.Load())
 			assert.Equal(t, int32(1), called2.Load())
 		})
@@ -270,8 +276,8 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go func() {
-				err = bh.Start()
-				assert.NoError(t, err)
+				errStart := bh.Start()
+				assert.NoError(t, errStart)
 			}()
 			for !bh.IsRunning() {
 				// Wait for handler to start
@@ -282,7 +288,8 @@ func TestBotHandler_Stop(t *testing.T) {
 			ctx, cancel := context.WithCancel(context.Background())
 			cancel()
 			go func() {
-				bh.StopWithContext(ctx)
+				errStop := bh.StopWithContext(ctx)
+				assert.ErrorIs(t, errStop, context.Canceled)
 				done <- struct{}{}
 			}()
 
@@ -310,14 +317,15 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go func() {
-				err = bh.Start()
-				assert.NoError(t, err)
+				errStart := bh.Start()
+				assert.NoError(t, errStart)
 			}()
 			for !bh.IsRunning() {
 				// Wait for handler to start
 			}
 
-			bh.Stop()
+			err = bh.Stop()
+			assert.NoError(t, err)
 
 			updates <- telego.Update{}
 		})
@@ -339,8 +347,8 @@ func TestBotHandler_Stop(t *testing.T) {
 
 		assert.NotPanics(t, func() {
 			go func() {
-				err = bh.Start()
-				assert.Error(t, err)
+				errStart := bh.Start()
+				assert.NoError(t, errStart)
 			}()
 			for !bh.IsRunning() {
 				// Wait for handler to start
@@ -406,7 +414,8 @@ func TestBotHandler_IsRunning(t *testing.T) {
 		time.Sleep(smallTimeout)
 		assert.True(t, bh.IsRunning())
 
-		bh.Stop()
+		err := bh.Stop()
+		require.NoError(t, err)
 		assert.False(t, bh.IsRunning())
 	})
 }

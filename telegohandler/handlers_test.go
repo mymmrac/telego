@@ -20,8 +20,8 @@ func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
 	done := make(chan struct{})
 
 	go func() {
-		err := bh.Start()
-		assert.NoError(t, err)
+		errStart := bh.Start()
+		assert.NoError(t, errStart)
 	}()
 
 	go func() {
@@ -34,7 +34,8 @@ func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
 		t.Fatal("Timeout")
 	case <-done:
 	}
-	bh.Stop()
+	err := bh.Stop()
+	assert.NoError(t, err)
 }
 
 func testHandlerSetup(t *testing.T, bh *BotHandler) {
