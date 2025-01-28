@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"sync"
 	"sync/atomic"
 
 	"github.com/valyala/fasthttp"
@@ -52,6 +53,10 @@ type Bot struct {
 	healthCheckContext    context.Context
 
 	running atomic.Int32
+
+	myOnce     sync.Once
+	myID       int64
+	myUsername string
 }
 
 const (
@@ -104,9 +109,14 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 	}
 
 	if b.healthCheckContext != nil {
-		if _, err := b.GetMe(b.healthCheckContext); err != nil {
+		me, err := b.GetMe(b.healthCheckContext)
+		if err != nil {
 			return nil, fmt.Errorf("telego: health check: %w", err)
 		}
+
+		b.myOnce.Do(func() {})
+		b.myID = me.ID
+		b.myUsername = me.Username
 	}
 
 	return b, nil
@@ -120,6 +130,29 @@ func (b *Bot) Token() string {
 // Logger returns bot logger
 func (b *Bot) Logger() Logger {
 	return b.log
+}
+
+// updateMe updates bot ID and username
+func (b *Bot) updateMe() {
+	me, err := b.GetMe(context.Background())
+	if err != nil {
+		b.log.Errorf("Error on get me: %s", err)
+	} else {
+		b.myID = me.ID
+		b.myUsername = me.Username
+	}
+}
+
+// ID returns bot ID by calling [Bot.GetMe] method once, if error occurs ID will be 0
+func (b *Bot) ID() int64 {
+	b.myOnce.Do(b.updateMe)
+	return b.myID
+}
+
+// Username returns bot username by calling [Bot.GetMe] method once, if error occurs username will be empty
+func (b *Bot) Username() string {
+	b.myOnce.Do(b.updateMe)
+	return b.myUsername
 }
 
 // FileDownloadURL returns URL used to download file by its file path retrieved from GetFile method
