@@ -18,7 +18,9 @@ const (
 	testTextSuffix  = `text`
 	testCommand1    = `/test abc 123`
 	testCommand2    = `/hmm bcd`
+	testCommand3    = "/test@test_bot abc 123"
 	testCommandName = `test`
+	testBotUsername = "test_bot"
 )
 
 func TestPredicates(t *testing.T) {
@@ -205,6 +207,30 @@ func TestPredicates(t *testing.T) {
 		{
 			name:      "any_command_not_matches",
 			predicate: AnyCommand(),
+			update:    telego.Update{Message: &telego.Message{Text: testText}},
+			matches:   false,
+		},
+		{
+			name:      "any_command_to_me_matches",
+			predicate: AnyCommandToMe(testBotUsername),
+			update:    telego.Update{Message: &telego.Message{Text: testCommand3}},
+			matches:   true,
+		},
+		{
+			name:      "any_command_to_me_not_matches_no_username",
+			predicate: AnyCommandToMe(testBotUsername),
+			update:    telego.Update{Message: &telego.Message{Text: testCommand1}},
+			matches:   false,
+		},
+		{
+			name:      "any_command_to_me_not_matches_no_message",
+			predicate: AnyCommandToMe(testBotUsername),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "any_command_to_me_not_matches_no_command",
+			predicate: AnyCommandToMe(testBotUsername),
 			update:    telego.Update{Message: &telego.Message{Text: testText}},
 			matches:   false,
 		},

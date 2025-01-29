@@ -154,7 +154,7 @@ func TextMatches(pattern *regexp.Regexp) Predicate {
 }
 
 // CommandRegexp matches to command and has match groups on command, bot username and arguments
-var CommandRegexp = regexp.MustCompile(`(?s)^/(\w+)(@\w+)?(?:\s+(.+?)\s*)?$`)
+var CommandRegexp = regexp.MustCompile(`(?s)^/(\w+)(?:@(\w+))?(?:\s+(.+?)\s*)?$`)
 
 // Command match group indexes in the [CommandRegexp]
 const (
@@ -170,6 +170,27 @@ const CommandMatchGroupsLen = 4
 func AnyCommand() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
 		return update.Message != nil && CommandRegexp.MatchString(update.Message.Text)
+	}
+}
+
+// AnyCommandToMe is true if the message isn't nil, and it matches to command regexp, and the message either in
+// private chat, or it contains bot's username or reply to bot's message
+// Note: It's better to use Group Privacy Mode (https://core.telegram.org/bots/features#privacy-mode) instead
+func AnyCommandToMe(botUsername string) Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
+		if len(matches) != CommandMatchGroupsLen {
+			return false
+		}
+
+		return update.Message.Chat.Type == telego.ChatTypePrivate ||
+			strings.EqualFold(matches[CommandMatchBotUsernameGroup], botUsername) ||
+			(update.Message.ReplyToMessage != nil && update.Message.ReplyToMessage.From != nil &&
+				strings.EqualFold(update.Message.ReplyToMessage.From.Username, botUsername))
 	}
 }
 

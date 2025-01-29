@@ -100,7 +100,8 @@ func TestNewBot(t *testing.T) {
 
 		t.Run("success", func(t *testing.T) {
 			expectedResp := &ta.Response{
-				Ok: true,
+				Ok:     true,
+				Result: json.RawMessage(`{}`),
 			}
 
 			constructor.EXPECT().
