@@ -83,7 +83,7 @@ tasks:
     cmds:
       - go test -bench=. -benchtime=10s -benchmem
 
-  vulnurability:
+  vulnerability:
     desc: "Check for vulnerabilities"
     deps: [ install:govulncheck ]
     cmds:
@@ -144,6 +144,7 @@ tasks:
     deps:
       - install:lint
       - install:mock
+      - install:govulncheck
 
   install:lint:
     desc: "Install golangci-lint"
