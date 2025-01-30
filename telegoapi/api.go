@@ -72,12 +72,12 @@ type Caller interface {
 }
 
 // NamedReader represents a way to send files (or other data).
-// Implemented by os.File.
+// Implemented by [os.File].
 // Note: Name method may be called multiple times and should return unique names for all files sent in one request.
 //
 // Warning: Since, for sending data (files) reader data will be copied, using the same reader multiple times as is
 // will not work.
-// For os.File you can use file.Seek(0, io.SeekStart) to prepare for a new request.
+// For [os.File] you can use os.File.Seek(0, io.SeekStart) to prepare for a new request.
 type NamedReader interface {
 	io.Reader
 	Name() string

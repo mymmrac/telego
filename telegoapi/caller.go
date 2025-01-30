@@ -16,7 +16,7 @@ import (
 	"github.com/mymmrac/telego/internal/json"
 )
 
-// FastHTTPCaller fasthttp implementation of Caller
+// FastHTTPCaller fasthttp implementation of [Caller]
 type FastHTTPCaller struct {
 	Client *fasthttp.Client
 }
@@ -70,7 +70,7 @@ func (a FastHTTPCaller) Call(ctx context.Context, url string, data *RequestData)
 	return apiResp, nil
 }
 
-// HTTPCaller http implementation of Caller
+// HTTPCaller http implementation of [Caller]
 type HTTPCaller struct {
 	Client *http.Client
 }
@@ -112,7 +112,7 @@ func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*R
 	return apiResp, nil
 }
 
-// RetryCaller decorator over Caller that provides reties with exponential backoff
+// RetryCaller decorator over [Caller] that provides retries with exponential backoff
 // Delay = (ExponentBase ^ AttemptNumber) * StartDelay or MaxDelay
 type RetryCaller struct {
 	Caller       Caller

@@ -12,7 +12,7 @@ import (
 	"github.com/mymmrac/telego/internal/json"
 )
 
-// DefaultConstructor default implementation of RequestConstructor
+// DefaultConstructor default implementation of [RequestConstructor]
 type DefaultConstructor struct{}
 
 // JSONRequest is default implementation
