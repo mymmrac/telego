@@ -11,7 +11,7 @@ import (
 const WebhookSecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token" //nolint:gosec
 
 // WebhookFastHTTP registers new POST handler for the desired path with optional secret token, replacing
-// original fasthttp handler for the server
+// the original fasthttp handler for the server
 func WebhookFastHTTP(server *fasthttp.Server, path string, secretToken ...string) func(handler WebhookHandler) error {
 	if path == "" {
 		path = "/"
@@ -45,7 +45,7 @@ func WebhookFastHTTP(server *fasthttp.Server, path string, secretToken ...string
 }
 
 // WebhookHTTPServer registers new POST handler for the desired path with optional secret token, replacing
-// original http handler for the server
+// the original http handler for the server
 func WebhookHTTPServer(server *http.Server, path string, secretToken ...string) func(handler WebhookHandler) error {
 	if path == "" {
 		path = "/"

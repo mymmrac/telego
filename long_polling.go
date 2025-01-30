@@ -30,8 +30,8 @@ type LongPollingOption func(lp *longPolling) error
 // WithLongPollingUpdateInterval sets an update interval for long polling. Ensure that between two calls of
 // [Bot.GetUpdates] method will be at least specified time, but it could be longer.
 // Default is 0s.
-// Note: Telegram has built in a timeout mechanism, to properly use it, set GetUpdatesParams.Timeout to desired timeout
-// and update interval to 0 (default, recommended way).
+// Note: Telegram has built in a timeout mechanism, to properly use it, set [GetUpdatesParams.Timeout] to desired
+// timeout and update interval to 0 (default, recommended way).
 func WithLongPollingUpdateInterval(updateInterval time.Duration) LongPollingOption {
 	return func(lp *longPolling) error {
 		if updateInterval < 0 {
@@ -106,6 +106,7 @@ func (b *Bot) UpdatesViaLongPolling(
 	return updatesChan, nil
 }
 
+// doLongPolling receive updates in chan using the [Bot.GetUpdates] method
 func (b *Bot) doLongPolling(ctx context.Context, lp *longPolling, params *GetUpdatesParams, updatesChan chan<- Update) {
 	defer func() {
 		b.running.Store(runningNone)
@@ -152,6 +153,7 @@ func (b *Bot) doLongPolling(ctx context.Context, lp *longPolling, params *GetUpd
 	}
 }
 
+// createLongPolling create new long polling configuration
 func (b *Bot) createLongPolling(options []LongPollingOption) (*longPolling, error) {
 	lp := &longPolling{
 		updateChanBuffer: defaultLongPollingUpdateChanBuffer,

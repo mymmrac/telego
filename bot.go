@@ -28,10 +28,10 @@ const (
 	botPathPrefix = "/bot"
 )
 
-// ErrEmptyToken Bot token is empty
+// ErrEmptyToken bot token is empty
 var ErrEmptyToken = errors.New("telego: empty token")
 
-// ErrInvalidToken Bot token is invalid according to token regexp
+// ErrInvalidToken bot token is invalid according to token regexp
 var ErrInvalidToken = errors.New("telego: invalid token format")
 
 // validateToken validates if token matches format
@@ -59,12 +59,14 @@ type Bot struct {
 	myUsername string
 }
 
+// Bot actions
 const (
 	runningNone        = 0
 	runningLongPolling = 1
 	runningWebhook     = 2
 )
 
+// run checks if bot is already running some action
 func (b *Bot) run(actionToRun int32) error {
 	if b.running.CompareAndSwap(runningNone, actionToRun) {
 		return nil
@@ -79,7 +81,7 @@ func (b *Bot) run(actionToRun int32) error {
 	}
 }
 
-// BotOption represents an option that can be applied to Bot
+// BotOption represents an option that can be applied to [Bot]
 type BotOption func(bot *Bot) error
 
 // NewBot creates new bots with given options.
@@ -155,7 +157,7 @@ func (b *Bot) Username() string {
 	return b.myUsername
 }
 
-// FileDownloadURL returns URL used to download file by its file path retrieved from GetFile method
+// FileDownloadURL returns URL that can be used to download a file by its file path retrieved from [Bot.GetFile] method
 func (b *Bot) FileDownloadURL(filepath string) string {
 	if b.useTestServerPath {
 		return b.apiURL + "/file/bot" + b.token + "/test/" + filepath

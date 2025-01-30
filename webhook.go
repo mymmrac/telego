@@ -90,6 +90,7 @@ func (b *Bot) UpdatesViaWebhook(
 	return updatesChan, nil
 }
 
+// createWebhook creates webhook configuration
 func (b *Bot) createWebhook(options []WebhookOption) (*webhook, error) {
 	wh := &webhook{
 		updateChanBuffer: defaultWebhookUpdateChanBuffer,
