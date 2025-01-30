@@ -1,3 +1,3 @@
 package telegohandler
 
-// No options yet
+// No bot handler options yet

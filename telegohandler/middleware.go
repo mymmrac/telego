@@ -12,9 +12,9 @@ func PanicRecovery() Handler {
 	return PanicRecoveryHandler(nil)
 }
 
-// PanicRecoveryHandler returns a middleware that will recover handler from panic and call panic handler, error
-// returned from panic handler will be returned as handler error, if panic handler is nil, panic will be ignored
-// (not recommended, try to always handle panics)
+// PanicRecoveryHandler returns a middleware that will recover handler from panic and call panic handler.
+// Error returned from panic handler will be returned as handler error, if panic handler is nil, panic will be ignored
+// (not recommended, try to always handle panics).
 func PanicRecoveryHandler(panicHandler func(recovered any) error) Handler {
 	return func(ctx *Context, update telego.Update) (err error) {
 		defer func() {

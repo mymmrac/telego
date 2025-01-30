@@ -78,7 +78,7 @@ func (c *Context) UpdateID() int {
 	return c.updateID
 }
 
-// Next executes the next handler in the stack that matches current update
+// Next executes the next handler in the stack that matches the current update
 func (c *Context) Next(update telego.Update) error {
 	// Go though all middlewares, subgroups and handlers
 	for i := c.stack[len(c.stack)-1] + 1; i < len(c.group.routes); i++ {
@@ -99,7 +99,7 @@ func (c *Context) Next(update telego.Update) error {
 		}
 	}
 
-	// Go back to parent if nothing matches in current group
+	// Go back to parent if nothing matches in the current group
 	if c.group.parent != nil {
 		c.group = c.group.parent
 		c.stack = c.stack[:len(c.stack)-1]

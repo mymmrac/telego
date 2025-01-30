@@ -50,7 +50,7 @@ func (h *HandlerGroup) depth(depth int) int {
 
 // Handle registers new handler in the group, update will be processed only by first-matched route,
 // order of registration determines the order of matching routes.
-// Important to notice, handler's context will be automatically canceled once the handler will finish processing or
+// Important to notice handler's context will be automatically canceled once the handler will finish processing or
 // the bot handler stopped.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
 // in mind that middlewares and predicates are run sequentially.

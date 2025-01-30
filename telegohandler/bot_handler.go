@@ -169,7 +169,7 @@ func (h *BotHandler) Stop() error {
 
 // Handle registers new handler in the base group, update will be processed only by first-matched route,
 // order of registration determines the order of matching routes.
-// Important to notice, handler's context will be automatically canceled once the handler will finish processing or
+// Important to notice handler's context will be automatically canceled once the handler will finish processing or
 // the bot handler stopped.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
 // in mind that middlewares and predicates are run sequentially.
@@ -196,7 +196,7 @@ func (h *BotHandler) Use(middlewares ...Handler) {
 	h.baseGroup.Use(middlewares...)
 }
 
-// BaseGroup returns a base group that is used by default in [BotHandler] methods
+// BaseGroup returns a base group used by default in [BotHandler] methods
 func (h *BotHandler) BaseGroup() *HandlerGroup {
 	return h.baseGroup
 }
