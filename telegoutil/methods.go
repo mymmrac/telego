@@ -6,7 +6,7 @@ import (
 	"github.com/mymmrac/telego"
 )
 
-// Message creates telego.SendMessageParams with required parameters
+// Message creates [telego.SendMessageParams] with required parameters
 func Message(id telego.ChatID, text string) *telego.SendMessageParams {
 	return &telego.SendMessageParams{
 		ChatID: id,
@@ -14,7 +14,7 @@ func Message(id telego.ChatID, text string) *telego.SendMessageParams {
 	}
 }
 
-// Messagef creates telego.SendMessageParams with required parameters and provided format
+// Messagef creates [telego.SendMessageParams] with required parameters and provided format
 func Messagef(id telego.ChatID, format string, args ...any) *telego.SendMessageParams {
 	return &telego.SendMessageParams{
 		ChatID: id,
@@ -22,7 +22,7 @@ func Messagef(id telego.ChatID, format string, args ...any) *telego.SendMessageP
 	}
 }
 
-// MessageWithEntities creates telego.SendMessageParams with required parameters and parsed entities
+// MessageWithEntities creates [telego.SendMessageParams] with required parameters and parsed entities
 func MessageWithEntities(id telego.ChatID, entityCollections ...MessageEntityCollection) *telego.SendMessageParams {
 	text, entities := MessageEntities(entityCollections...)
 	return &telego.SendMessageParams{
@@ -32,7 +32,7 @@ func MessageWithEntities(id telego.ChatID, entityCollections ...MessageEntityCol
 	}
 }
 
-// Photo creates telego.SendPhotoParams with required parameters
+// Photo creates [telego.SendPhotoParams] with required parameters
 func Photo(id telego.ChatID, photo telego.InputFile) *telego.SendPhotoParams {
 	return &telego.SendPhotoParams{
 		ChatID: id,
@@ -40,7 +40,7 @@ func Photo(id telego.ChatID, photo telego.InputFile) *telego.SendPhotoParams {
 	}
 }
 
-// Audio creates telego.SendAudioParams with required parameters
+// Audio creates [telego.SendAudioParams] with required parameters
 func Audio(id telego.ChatID, audio telego.InputFile) *telego.SendAudioParams {
 	return &telego.SendAudioParams{
 		ChatID: id,
@@ -48,7 +48,7 @@ func Audio(id telego.ChatID, audio telego.InputFile) *telego.SendAudioParams {
 	}
 }
 
-// Document creates telego.SendDocumentParams with required parameters
+// Document creates [telego.SendDocumentParams] with required parameters
 func Document(id telego.ChatID, document telego.InputFile) *telego.SendDocumentParams {
 	return &telego.SendDocumentParams{
 		ChatID:   id,
@@ -56,7 +56,7 @@ func Document(id telego.ChatID, document telego.InputFile) *telego.SendDocumentP
 	}
 }
 
-// Video creates telego.SendVideoParams with required parameters
+// Video creates [telego.SendVideoParams] with required parameters
 func Video(id telego.ChatID, video telego.InputFile) *telego.SendVideoParams {
 	return &telego.SendVideoParams{
 		ChatID: id,
@@ -64,7 +64,7 @@ func Video(id telego.ChatID, video telego.InputFile) *telego.SendVideoParams {
 	}
 }
 
-// Animation creates telego.SendAnimationParams with required parameters
+// Animation creates [telego.SendAnimationParams] with required parameters
 func Animation(id telego.ChatID, animation telego.InputFile) *telego.SendAnimationParams {
 	return &telego.SendAnimationParams{
 		ChatID:    id,
@@ -72,7 +72,7 @@ func Animation(id telego.ChatID, animation telego.InputFile) *telego.SendAnimati
 	}
 }
 
-// Voice creates telego.SendVoiceParams with required parameters
+// Voice creates [telego.SendVoiceParams] with required parameters
 func Voice(id telego.ChatID, voice telego.InputFile) *telego.SendVoiceParams {
 	return &telego.SendVoiceParams{
 		ChatID: id,
@@ -80,7 +80,7 @@ func Voice(id telego.ChatID, voice telego.InputFile) *telego.SendVoiceParams {
 	}
 }
 
-// VideoNote creates telego.SendVideoNoteParams with required parameters
+// VideoNote creates [telego.SendVideoNoteParams] with required parameters
 func VideoNote(id telego.ChatID, videoNote telego.InputFile) *telego.SendVideoNoteParams {
 	return &telego.SendVideoNoteParams{
 		ChatID:    id,
@@ -88,7 +88,7 @@ func VideoNote(id telego.ChatID, videoNote telego.InputFile) *telego.SendVideoNo
 	}
 }
 
-// MediaGroup creates telego.SendMediaGroupParams with required parameters
+// MediaGroup creates [telego.SendMediaGroupParams] with required parameters
 func MediaGroup(id telego.ChatID, mediaGroups ...telego.InputMedia) *telego.SendMediaGroupParams {
 	return &telego.SendMediaGroupParams{
 		ChatID: id,
@@ -96,7 +96,7 @@ func MediaGroup(id telego.ChatID, mediaGroups ...telego.InputMedia) *telego.Send
 	}
 }
 
-// Location creates telego.SendLocationParams with required parameters
+// Location creates [telego.SendLocationParams] with required parameters
 func Location(id telego.ChatID, latitude, longitude float64) *telego.SendLocationParams {
 	return &telego.SendLocationParams{
 		ChatID:    id,
@@ -105,7 +105,7 @@ func Location(id telego.ChatID, latitude, longitude float64) *telego.SendLocatio
 	}
 }
 
-// Venue creates telego.SendVenueParams with required parameters
+// Venue creates [telego.SendVenueParams] with required parameters
 func Venue(id telego.ChatID, latitude, longitude float64, title, address string) *telego.SendVenueParams {
 	return &telego.SendVenueParams{
 		ChatID:    id,
@@ -116,7 +116,7 @@ func Venue(id telego.ChatID, latitude, longitude float64, title, address string)
 	}
 }
 
-// Contact creates telego.SendContactParams with required parameters
+// Contact creates [telego.SendContactParams] with required parameters
 func Contact(id telego.ChatID, phoneNumber, firstName string) *telego.SendContactParams {
 	return &telego.SendContactParams{
 		ChatID:      id,
@@ -125,7 +125,7 @@ func Contact(id telego.ChatID, phoneNumber, firstName string) *telego.SendContac
 	}
 }
 
-// Poll creates telego.SendPollParams with required parameters
+// Poll creates [telego.SendPollParams] with required parameters
 func Poll(id telego.ChatID, question string, options ...telego.InputPollOption) *telego.SendPollParams {
 	return &telego.SendPollParams{
 		ChatID:   id,
@@ -134,15 +134,15 @@ func Poll(id telego.ChatID, question string, options ...telego.InputPollOption) 
 	}
 }
 
-// PollOption creates telego.InputPollOption with required parameters
+// PollOption creates [telego.InputPollOption] with required parameters
 func PollOption(text string) telego.InputPollOption {
 	return telego.InputPollOption{
 		Text: text,
 	}
 }
 
-// Dice creates telego.SendDiceParams with required parameters
-// Note: Emoji isn't required, but most likely you would what to specify it, you can use telego.EmojiDice or etc.
+// Dice creates [telego.SendDiceParams] with required parameters
+// Note: Emoji isn't required, but most likely you would what to specify it, you can use [telego.EmojiDice]or etc.
 func Dice(id telego.ChatID, emoji string) *telego.SendDiceParams {
 	return &telego.SendDiceParams{
 		ChatID: id,
@@ -150,7 +150,7 @@ func Dice(id telego.ChatID, emoji string) *telego.SendDiceParams {
 	}
 }
 
-// ChatAction creates telego.SendChatActionParams with required parameters
+// ChatAction creates [telego.SendChatActionParams] with required parameters
 func ChatAction(id telego.ChatID, action string) *telego.SendChatActionParams {
 	return &telego.SendChatActionParams{
 		ChatID: id,
@@ -158,7 +158,7 @@ func ChatAction(id telego.ChatID, action string) *telego.SendChatActionParams {
 	}
 }
 
-// Sticker creates telego.SendStickerParams with required parameters
+// Sticker creates [telego.SendStickerParams] with required parameters
 func Sticker(id telego.ChatID, sticker telego.InputFile) *telego.SendStickerParams {
 	return &telego.SendStickerParams{
 		ChatID:  id,
@@ -166,7 +166,7 @@ func Sticker(id telego.ChatID, sticker telego.InputFile) *telego.SendStickerPara
 	}
 }
 
-// Invoice creates telego.SendInvoiceParams with required parameters
+// Invoice creates [telego.SendInvoiceParams] with required parameters
 func Invoice(id telego.ChatID, title, description, payload, providerToken, currency string,
 	prices ...telego.LabeledPrice,
 ) *telego.SendInvoiceParams {
@@ -181,7 +181,7 @@ func Invoice(id telego.ChatID, title, description, payload, providerToken, curre
 	}
 }
 
-// Game creates telego.SendGameParams with required parameters
+// Game creates [telego.SendGameParams] with required parameters
 func Game(id int64, gameShortName string) *telego.SendGameParams {
 	return &telego.SendGameParams{
 		ChatID:        id,
@@ -189,7 +189,7 @@ func Game(id int64, gameShortName string) *telego.SendGameParams {
 	}
 }
 
-// CopyMessage creates telego.CopyMessageParams with required parameters
+// CopyMessage creates [telego.CopyMessageParams] with required parameters
 func CopyMessage(id, fromID telego.ChatID, messageID int) *telego.CopyMessageParams {
 	return &telego.CopyMessageParams{
 		ChatID:     id,
@@ -198,14 +198,14 @@ func CopyMessage(id, fromID telego.ChatID, messageID int) *telego.CopyMessagePar
 	}
 }
 
-// CallbackQuery creates telego.AnswerCallbackQueryParams with required parameters
+// CallbackQuery creates [telego.AnswerCallbackQueryParams] with required parameters
 func CallbackQuery(queryID string) *telego.AnswerCallbackQueryParams {
 	return &telego.AnswerCallbackQueryParams{
 		CallbackQueryID: queryID,
 	}
 }
 
-// InlineQuery creates telego.AnswerInlineQueryParams with required parameters
+// InlineQuery creates [telego.AnswerInlineQueryParams] with required parameters
 func InlineQuery(queryID string, results ...telego.InlineQueryResult) *telego.AnswerInlineQueryParams {
 	return &telego.AnswerInlineQueryParams{
 		InlineQueryID: queryID,
@@ -213,7 +213,7 @@ func InlineQuery(queryID string, results ...telego.InlineQueryResult) *telego.An
 	}
 }
 
-// ShippingQuery creates telego.AnswerShippingQueryParams with required parameters
+// ShippingQuery creates [telego.AnswerShippingQueryParams] with required parameters
 func ShippingQuery(queryID string, ok bool, options ...telego.ShippingOption) *telego.AnswerShippingQueryParams {
 	return &telego.AnswerShippingQueryParams{
 		ShippingQueryID: queryID,
@@ -222,7 +222,7 @@ func ShippingQuery(queryID string, ok bool, options ...telego.ShippingOption) *t
 	}
 }
 
-// PreCheckoutQuery creates telego.AnswerPreCheckoutQueryParams with required parameters
+// PreCheckoutQuery creates [telego.AnswerPreCheckoutQueryParams] with required parameters
 func PreCheckoutQuery(queryID string, ok bool) *telego.AnswerPreCheckoutQueryParams {
 	return &telego.AnswerPreCheckoutQueryParams{
 		PreCheckoutQueryID: queryID,
@@ -230,7 +230,7 @@ func PreCheckoutQuery(queryID string, ok bool) *telego.AnswerPreCheckoutQueryPar
 	}
 }
 
-// WebAppQuery creates telego.AnswerWebAppQueryParams with required parameters
+// WebAppQuery creates [telego.AnswerWebAppQueryParams] with required parameters
 func WebAppQuery(queryID string, result telego.InlineQueryResult) *telego.AnswerWebAppQueryParams {
 	return &telego.AnswerWebAppQueryParams{
 		WebAppQueryID: queryID,
@@ -238,14 +238,14 @@ func WebAppQuery(queryID string, result telego.InlineQueryResult) *telego.Answer
 	}
 }
 
-// Webhook creates telego.SetWebhookParams with required parameters
+// Webhook creates [telego.SetWebhookParams] with required parameters
 func Webhook(url string) *telego.SetWebhookParams {
 	return &telego.SetWebhookParams{
 		URL: url,
 	}
 }
 
-// Delete creates telego.DeleteMessageParams with required parameters
+// Delete creates [telego.DeleteMessageParams] with required parameters
 func Delete(id telego.ChatID, messageID int) *telego.DeleteMessageParams {
 	return &telego.DeleteMessageParams{
 		ChatID:    id,

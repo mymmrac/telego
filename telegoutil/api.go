@@ -13,7 +13,7 @@ import (
 	ta "github.com/mymmrac/telego/telegoapi"
 )
 
-// namedReaderImpl represents simplest implementation of telegoapi.NamedReader
+// namedReaderImpl represents the simplest implementation of [ta.NamedReader]
 type namedReaderImpl struct {
 	reader io.Reader
 	name   string
@@ -27,7 +27,7 @@ func (r namedReaderImpl) Name() string {
 	return r.name
 }
 
-// NameReader "names" io.Reader and returns valid telegoapi.NamedReader
+// NameReader "names" [io.Reader] and returns valid [ta.NamedReader]
 func NameReader(reader io.Reader, name string) ta.NamedReader {
 	return namedReaderImpl{
 		reader: reader,
@@ -68,7 +68,7 @@ const (
 )
 
 // ValidateWebAppData validates the integrity of value provided by `window.Telegram.WebApp.initData` from web app and
-// returns url.Values containing all fields that were provided
+// returns [url.Values] containing all fields that were provided
 // More info: https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
 func ValidateWebAppData(token string, data string) (url.Values, error) {
 	appData, err := url.ParseQuery(data)
@@ -108,7 +108,7 @@ const (
 )
 
 // ValidateLoginWidgetData validates the integrity of value provided by Telegram Login Widget and
-// returns url.Values containing all fields that were provided
+// returns [url.Values] containing all fields that were provided
 // More info: https://core.telegram.org/widgets/login#checking-authorization
 func ValidateLoginWidgetData(token string, data string) (url.Values, error) {
 	appData, err := url.ParseQuery(data)
