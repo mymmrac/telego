@@ -111,35 +111,29 @@ func TestContext_UpdateID(t *testing.T) {
 
 func TestContext_Next(t *testing.T) {
 	run := false
+
+	gr := &HandlerGroup{}
+
+	gr.Use(func(ctx *Context, update telego.Update) error {
+		update.UpdateID = 1
+		return ctx.Next(update)
+	})
+
+	gr1 := gr.Group()
+	gr1.Handle(func(ctx *Context, update telego.Update) error {
+		t.Fatalf("Should not be called")
+		return nil
+	}, None())
+
+	gr2 := gr.Group()
+	gr2.Handle(func(_ *Context, update telego.Update) error {
+		assert.Equal(t, 1, update.UpdateID)
+		run = true
+		return nil
+	})
+
 	ctx := &Context{
-		group: &HandlerGroup{
-			routes: []route{
-				{
-					handler: func(ctx *Context, update telego.Update) error {
-						update.UpdateID = 1
-						return ctx.Next(update)
-					},
-				},
-				{
-					predicates: []Predicate{
-						func(_ context.Context, _ telego.Update) bool {
-							return true
-						},
-					},
-					group: &HandlerGroup{
-						routes: []route{
-							{
-								handler: func(_ *Context, update telego.Update) error {
-									assert.Equal(t, 1, update.UpdateID)
-									run = true
-									return nil
-								},
-							},
-						},
-					},
-				},
-			},
-		},
+		group: gr,
 		stack: []int{-1},
 	}
 

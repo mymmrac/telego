@@ -138,7 +138,7 @@ func TestBotHandler_Start(t *testing.T) {
 	})
 }
 
-//nolint:gocognit
+//nolint:gocognit,gocyclo
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		bh := newTestBotHandler(t)
@@ -254,6 +254,40 @@ func TestBotHandler_Stop(t *testing.T) {
 			assert.Equal(t, int32(1), called1.Load())
 			assert.Equal(t, int32(1), called2.Load())
 		})
+	})
+
+	t.Run("with_unhandled_updates_error", func(t *testing.T) {
+		bot, err := telego.NewBot(token)
+		require.NoError(t, err)
+
+		updates := make(chan telego.Update, 1000)
+		for range cap(updates) - 1 {
+			updates <- telego.Update{}
+		}
+
+		bh, err := NewBotHandler(bot, updates)
+		require.NoError(t, err)
+
+		done := make(chan struct{})
+		assert.NotPanics(t, func() {
+			go func() {
+				errStart := bh.Start()
+				assert.Error(t, errStart)
+				done <- struct{}{}
+			}()
+			for !bh.IsRunning() {
+				// Wait for handler to start
+			}
+
+			err = bh.StopWithContext(context.Background())
+			assert.NoError(t, err)
+		})
+
+		select {
+		case <-done:
+		case <-time.After(timeout):
+			t.Fatal("Timeout")
+		}
 	})
 
 	t.Run("with_canceled", func(t *testing.T) {
