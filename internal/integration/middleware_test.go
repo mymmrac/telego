@@ -13,7 +13,9 @@ import (
 )
 
 func TestMiddleware(t *testing.T) {
-	updates, err := bot.UpdatesViaLongPolling(nil)
+	ctx := context.Background()
+
+	updates, err := bot.UpdatesViaLongPolling(ctx, nil)
 	require.NoError(t, err)
 
 	bh, err := th.NewBotHandler(bot, updates)
@@ -22,21 +24,23 @@ func TestMiddleware(t *testing.T) {
 	messages := bh.Group(th.AnyMessageWithFrom())
 
 	const userIDKey = "user-id"
-	messages.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+	messages.Use(func(ctx *th.Context, update telego.Update) error {
 		t.Log("User ID middleware")
-		ctx := context.WithValue(update.Context(), userIDKey, update.Message.From.ID)
-		next(bot, update.WithContext(ctx))
+		ctx.WithValue(userIDKey, update.Message.From.ID)
+		return ctx.Next(update)
 	})
 
 	messages.Handle(
-		func(bot *telego.Bot, update telego.Update) {
-			userID := update.Context().Value(userIDKey).(int64)
+		func(ctx *th.Context, update telego.Update) error {
+			userID := ctx.Value(userIDKey).(int64)
 			t.Log("User ID:", userID)
+			return nil
 		},
-		func(update telego.Update) bool {
-			return update.Context().Value(userIDKey) != nil
+		func(ctx context.Context, update telego.Update) bool {
+			return ctx.Value(userIDKey) != nil
 		},
 	)
 
-	bh.Start()
+	err = bh.Start()
+	require.NoError(t, err)
 }
