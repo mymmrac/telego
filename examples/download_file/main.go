@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -25,11 +27,11 @@ func main() {
 	)
 
 	// Send a test document
-	msg, _ := bot.SendDocument(document)
+	msg, _ := bot.SendDocument(ctx, document)
 
 	// Get file info
 	// Note: File ID used to get info is only valid for temporary time
-	file, _ := bot.GetFile(&telego.GetFileParams{
+	file, _ := bot.GetFile(ctx, &telego.GetFileParams{
 		FileID: msg.Document.FileID,
 	})
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -23,10 +25,10 @@ func main() {
 	chatID := tu.ID(123)
 
 	// Create a message with only required parameters
-	_, _ = bot.SendMessage(tu.Message(chatID, "Hello"))
+	_, _ = bot.SendMessage(ctx, tu.Message(chatID, "Hello"))
 
 	// Create telego.ChatID username and send a message
-	_, _ = bot.SendMessage(tu.Message(tu.Username("@user"), "World"))
+	_, _ = bot.SendMessage(ctx, tu.Message(tu.Username("@user"), "World"))
 
 	// Create a message and change optional parameters
 	msg := tu.Message(chatID, "Hello World").
@@ -35,26 +37,26 @@ func main() {
 		}).
 		WithDisableNotification().
 		WithProtectContent()
-	_, _ = bot.SendMessage(msg)
+	_, _ = bot.SendMessage(ctx, msg)
 
 	var file *os.File // Used, just for example (not valid in real use)
 
 	// Create document using *os.File as telego.InputFile
-	_, _ = bot.SendDocument(tu.Document(chatID, tu.File(file)))
+	_, _ = bot.SendDocument(ctx, tu.Document(chatID, tu.File(file)))
 
 	var reader io.Reader // Used, just for example (not valid in real use)
 
 	// Create a document using io.Reader by "naming" it and send as a document
-	_, _ = bot.SendDocument(tu.Document(chatID, tu.File(tu.NameReader(reader, "my_file"))))
+	_, _ = bot.SendDocument(ctx, tu.Document(chatID, tu.File(tu.NameReader(reader, "my_file"))))
 
 	// Create document using URL to file as telego.InputFile
-	_, _ = bot.SendDocument(tu.Document(chatID, tu.FileFromURL("https://example.com/test.txt")))
+	_, _ = bot.SendDocument(ctx, tu.Document(chatID, tu.FileFromURL("https://example.com/test.txt")))
 
 	// Create contact from phone and first name
-	_, _ = bot.SendContact(tu.Contact(chatID, "+123454321", "John"))
+	_, _ = bot.SendContact(ctx, tu.Contact(chatID, "+123454321", "John"))
 
 	// Small example of parsing commands
-	updates, _ := bot.GetUpdates(nil)
+	updates, _ := bot.GetUpdates(ctx, nil)
 	for _, u := range updates {
 		if u.Message != nil {
 			text := u.Message.Text

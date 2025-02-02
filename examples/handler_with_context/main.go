@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -20,44 +21,37 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Stop handling updates
-	defer bh.Stop()
-
-	// Stop getting updates
-	defer bot.StopLongPolling()
+	defer func() { _ = bh.Stop() }()
 
 	// Define a context key
 	type userID bool
 	var userIDKey userID
 
 	// Apply middleware that will retrieve user ID from update
-	bh.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
-		// Get initial context
-		ctx := update.Context()
-
+	bh.Use(func(ctx *th.Context, update telego.Update) error {
 		if update.Message != nil && update.Message.From != nil {
 			// Set user ID in context
-			ctx = context.WithValue(ctx, userIDKey, update.Message.From.ID)
+			ctx = ctx.WithValue(userIDKey, update.Message.From.ID)
 		}
 
 		// Update context
 		update = update.WithContext(ctx)
-		next(bot, update)
+		return ctx.Next(update)
 	})
 
 	// Handle messages
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
-		ctx := update.Context()
-
+	bh.Handle(func(ctx *th.Context, update telego.Update) error {
 		// Retrieve user ID from context
 		fmt.Println("User ID:", ctx.Value(userIDKey))
+		return nil
 	}, th.AnyMessage())
 
 	// Start handling updates
-	bh.Start()
+	_ = bh.Start()
 }

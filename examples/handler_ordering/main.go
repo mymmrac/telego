@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -18,20 +20,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Stop handling updates
-	defer bh.Stop()
-
-	// Stop getting updates
-	defer bot.StopLongPolling()
+	defer func() { _ = bh.Stop() }()
 
 	// Should not be here, because the order of handlers does meter.
 	//
-	// bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	// bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 	// 	 fmt.Println("Message:", message.Text)
+	//	 return nil
 	// })
 	//
 	// When you are defining handlers only the first matched handler will process update, that means that in this
@@ -42,15 +42,17 @@ func main() {
 	// and only then more generic handlers (like any message).
 
 	// Will match any message with command `/start`
-	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 		fmt.Println("Start")
+		return nil
 	}, th.CommandEqual("start"))
 
 	// Will match to any message
-	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 		fmt.Println("Message:", message.Text)
+		return nil
 	})
 
 	// Start handling
-	bh.Start()
+	_ = bh.Start()
 }

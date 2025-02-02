@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -20,7 +21,7 @@ func main() {
 	}
 
 	// Send a message with provided message entities
-	_, _ = bot.SendMessage(tu.MessageWithEntities(tu.ID(1234567),
+	_, _ = bot.SendMessage(context.Background(), tu.MessageWithEntities(tu.ID(1234567),
 		tu.Entity("Hi").Bold(), tu.Entity(" "), tu.Entity("There").Italic().Spoiler(), tu.Entity("\n"),
 		tu.Entity("The Link").TextLink("https://example.com").Italic(), tu.Entity("\n"),
 		tu.Entity("User: "), tu.Entity("???").TextMentionWithID(1234567),

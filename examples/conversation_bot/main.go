@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/mail"
 	"os"
@@ -32,6 +33,7 @@ type User struct {
 }
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Create Bot with debug on
@@ -43,7 +45,7 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler
 	bh, _ := th.NewBotHandler(bot, updates)
@@ -55,7 +57,7 @@ func main() {
 	lock := sync.RWMutex{}
 
 	// Handle any message
-	bh.HandleMessage(func(bot *telego.Bot, msg telego.Message) {
+	bh.HandleMessage(func(ctx *th.Context, msg telego.Message) error {
 		userID := msg.From.ID
 
 		lock.RLock()
@@ -117,13 +119,13 @@ func main() {
 		users[userID] = user
 		lock.Unlock()
 
-		_, _ = bot.SendMessage(tu.Message(msg.Chat.ChatID(), text))
+		_, _ = bot.SendMessage(ctx, tu.Message(msg.Chat.ChatID(), text))
+		return nil
 	})
 
 	// Stop handling updates on exit
-	defer bh.Stop()
-	defer bot.StopLongPolling()
+	defer func() { _ = bh.Stop() }()
 
 	// Start handling updates
-	bh.Start()
+	_ = bh.Start()
 }

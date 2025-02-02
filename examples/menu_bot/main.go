@@ -12,6 +12,7 @@ import (
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
+	"github.com/valyala/fasthttp"
 )
 
 func main() {
@@ -23,63 +24,85 @@ func main() {
 		log.Fatalf("Create bot: %s", err)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
+	// Initialize signal handling
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	// Note: Creating a secret token like this is not secure,
-	// but at least better than having a plain bot token as is in requests
+	// Generate secret
 	secretBytes := sha256.Sum256([]byte(botToken))
 	secret := hex.EncodeToString(secretBytes[:])
 
-	srv, url := Webhook(ctx, bot, secret)
+	// Create webhook server and listener
+	srv := &fasthttp.Server{}
+	listener, url := WebhookListener(ctx)
 
-	updates, err := bot.UpdatesViaWebhook(
-		"/bot",
-		telego.WithWebhookServer(srv),
-		telego.WithWebhookSet(tu.Webhook(url+"/bot").WithSecretToken(secret)),
+	// Get updates via webhook
+	updates, err := bot.UpdatesViaWebhook(ctx,
+		telego.WebhookFastHTTP(srv, "/bot", secret),
+		telego.WithWebhookSet(ctx, tu.Webhook(url+"/bot").WithSecretToken(secret)),
 	)
 	if err != nil {
 		log.Fatalf("Updates via webhoo: %s", err)
 	}
 
+	// Create bot handler
 	bh, err := th.NewBotHandler(bot, updates)
 	if err != nil {
-		log.Fatalf("Bot handler: %s", err)
+		log.Fatalf("Create bot handler: %s", err)
 	}
 
-	RegisterHandlers(bh)
+	// Register bot handlers
+	registerHandlers(bh)
 
+	// Initialize done chan
 	done := make(chan struct{}, 1)
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, os.Interrupt)
 
 	go func() {
-		<-sigs
+		// Wait for stop signal
+		<-ctx.Done()
 		log.Println("Stopping...")
 
 		stopCtx, stopCancel := context.WithTimeout(context.Background(), time.Second*10)
 		defer stopCancel()
 
-		err = bot.StopWebhookWithContext(stopCtx)
-		if err != nil {
-			log.Println("Failed to stop webhook properly:", err)
+		if err = srv.ShutdownWithContext(stopCtx); err != nil {
+			log.Printf("Failed to shutdown webhook server: %s", err)
 		}
 
-		bh.StopWithContext(stopCtx)
+		for len(updates) > 0 {
+			select {
+			case <-stopCtx.Done():
+				break
+			case <-time.After(time.Microsecond * 100):
+				log.Printf("Update handler timeout")
+			}
+		}
 
+		if err = bh.StopWithContext(stopCtx); err != nil {
+			log.Printf("Failed to stop bot handler: %s", err)
+		}
+
+		// Notify that stop is done
 		done <- struct{}{}
 	}()
 
-	go bh.Start()
+	// Start handling in goroutine
+	go func() {
+		if startErr := bh.Start(); startErr != nil {
+			log.Fatalf("Failed to start bot handler: %s", startErr)
+		}
+	}()
 	log.Println("Handling updates...")
 
+	// Start server for receiving requests from the Telegram
 	go func() {
-		err = bot.StartWebhook(":443")
+		err = srv.Serve(listener)
 		if err != nil {
-			log.Fatalf("Failed to start webhook: %s", err)
+			log.Fatalf("Failed to start webhook server: %s", err)
 		}
 	}()
 
+	// Wait for the stop process to be completed
 	<-done
 	log.Println("Done")
 }

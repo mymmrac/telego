@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
@@ -41,7 +42,7 @@ func main() {
 	// Call method getMe (https://core.telegram.org/bots/api#getme).
 	// In case if this call will fail, retry caller will retry calling Telegram until request is
 	// successful (no network errors) or max attempts reached.
-	botUser, err := bot.GetMe()
+	botUser, err := bot.GetMe(context.Background())
 	if err != nil {
 		fmt.Println("Error:", err)
 	}

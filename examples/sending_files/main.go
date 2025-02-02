@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -34,7 +36,7 @@ func main() {
 	).WithCaption("My cool file from disk")
 
 	// Sending document
-	msg, err := bot.SendDocument(document)
+	msg, err := bot.SendDocument(ctx, document)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -53,7 +55,7 @@ func main() {
 	).WithCaption("My cool photo")
 
 	// Sending photo
-	_, _ = bot.SendPhoto(photo)
+	_, _ = bot.SendPhoto(ctx, photo)
 
 	// =========================================== //
 
@@ -70,7 +72,7 @@ func main() {
 	)
 
 	// Sending a media group
-	_, _ = bot.SendMediaGroup(mediaGroup)
+	_, _ = bot.SendMediaGroup(ctx, mediaGroup)
 }
 
 // Helper function to open file or panic

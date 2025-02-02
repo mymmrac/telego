@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -19,7 +21,7 @@ func main() {
 	}
 
 	// Edit message text
-	_, _ = bot.EditMessageText(&telego.EditMessageTextParams{
+	_, _ = bot.EditMessageText(ctx, &telego.EditMessageTextParams{
 		ChatID:    tu.ID(1234567),
 		MessageID: 1234, // Message ID can be retried when it's sent or with update
 		Text:      "<h1>New text</h1>",
@@ -27,7 +29,7 @@ func main() {
 	})
 
 	// Edit message caption & reply markup (inline keyboard)
-	_, _ = bot.EditMessageCaption(&telego.EditMessageCaptionParams{
+	_, _ = bot.EditMessageCaption(ctx, &telego.EditMessageCaptionParams{
 		ChatID:    tu.ID(1234567),
 		MessageID: 1234, // Message ID can be retried when it's sent or with update
 		Caption:   "New caption",
@@ -39,7 +41,7 @@ func main() {
 	})
 
 	// Edit message photo
-	_, _ = bot.EditMessageMedia(&telego.EditMessageMediaParams{
+	_, _ = bot.EditMessageMedia(ctx, &telego.EditMessageMediaParams{
 		ChatID:    tu.ID(1234567),
 		MessageID: 1234, // Message ID can be retried when it's sent or with update
 		Media:     tu.MediaPhoto(tu.File(mustOpen("photo.png"))),

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"sync/atomic"
@@ -10,6 +11,9 @@ import (
 )
 
 func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	botToken := os.Getenv("TOKEN")
 
 	// Create Bot
@@ -20,10 +24,7 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-
-	// Stop reviving updates from update channel
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	fmt.Println("Listening for updates...")
 
@@ -38,7 +39,7 @@ func main() {
 
 		// Stop bot when processed 3 updates
 		if currentCount >= 3 {
-			bot.StopLongPolling()
+			cancel()
 		}
 
 		return update
