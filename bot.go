@@ -50,7 +50,6 @@ type Bot struct {
 
 	useTestServerPath     bool
 	reportWarningAsErrors bool
-	healthCheckContext    context.Context
 
 	running atomic.Int32
 
@@ -84,7 +83,7 @@ func (b *Bot) run(actionToRun int32) error {
 // BotOption represents an option that can be applied to [Bot]
 type BotOption func(bot *Bot) error
 
-// NewBot creates new bots with given options.
+// NewBot creates new bots with given options (order is important).
 // If no options are specified, default values are used.
 // Note: Default logger (that logs only errors if not configured) will hide your bot token, but it still may log
 // sensitive information, it's only safe to use default logger in testing environment.
@@ -108,17 +107,6 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 		if err := option(b); err != nil {
 			return nil, fmt.Errorf("telego: bot options: %w", err)
 		}
-	}
-
-	if b.healthCheckContext != nil {
-		me, err := b.GetMe(b.healthCheckContext)
-		if err != nil {
-			return nil, fmt.Errorf("telego: health check: %w", err)
-		}
-
-		b.myOnce.Do(func() {})
-		b.myID = me.ID
-		b.myUsername = me.Username
 	}
 
 	return b, nil

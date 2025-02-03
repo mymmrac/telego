@@ -115,9 +115,9 @@ func TestNewBot(t *testing.T) {
 				Times(1)
 
 			bot, err := NewBot(token,
-				WithHealthCheck(testCtx),
 				WithAPICaller(caller),
 				WithRequestConstructor(constructor),
+				WithHealthCheck(testCtx),
 			)
 
 			require.NoError(t, err)
@@ -141,9 +141,9 @@ func TestNewBot(t *testing.T) {
 				Times(1)
 
 			bot, err := NewBot(token,
-				WithHealthCheck(testCtx),
 				WithAPICaller(caller),
 				WithRequestConstructor(constructor),
+				WithHealthCheck(testCtx),
 			)
 
 			require.Error(t, err)

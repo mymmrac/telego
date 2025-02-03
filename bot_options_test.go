@@ -1,6 +1,7 @@
 package telego
 
 import (
+	"bytes"
 	"context"
 	"net/http"
 	"strings"
@@ -9,8 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/valyala/fasthttp"
+	"go.uber.org/mock/gomock"
 
+	"github.com/mymmrac/telego/internal/json"
 	ta "github.com/mymmrac/telego/telegoapi"
+	mockapi "github.com/mymmrac/telego/telegoapi/mock"
 )
 
 type testCallerType struct{}
@@ -178,12 +182,38 @@ func TestWithTestServerPath(t *testing.T) {
 }
 
 func TestWithHealthCheck(t *testing.T) {
-	bot := &Bot{}
+	ctrl := gomock.NewController(t)
 
-	err := WithHealthCheck(testCtx)(bot)
+	caller := mockapi.NewMockCaller(ctrl)
+	constructor := mockapi.NewMockRequestConstructor(ctrl)
+
+	expectedResp := &ta.Response{
+		Ok:     true,
+		Result: json.RawMessage(`{}`),
+	}
+
+	expectedData := &ta.RequestData{
+		ContentType: ta.ContentTypeJSON,
+		Buffer:      bytes.NewBuffer([]byte{}),
+	}
+
+	constructor.EXPECT().
+		JSONRequest(nil).
+		Return(expectedData, nil).
+		Times(1)
+
+	caller.EXPECT().
+		Call(testCtx, defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
+		Return(expectedResp, nil).
+		Times(1)
+
+	bot, err := NewBot(token,
+		WithAPICaller(caller),
+		WithRequestConstructor(constructor),
+		WithHealthCheck(testCtx),
+	)
 	require.NoError(t, err)
-
-	assert.Equal(t, testCtx, bot.healthCheckContext)
+	require.NotNil(t, bot)
 }
 
 func TestWithWarnings(t *testing.T) {

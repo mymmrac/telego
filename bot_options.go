@@ -123,7 +123,14 @@ func WithTestServerPath() BotOption {
 // WithHealthCheck enables health check using [Bot.GetMe] method on start
 func WithHealthCheck(ctx context.Context) BotOption {
 	return func(bot *Bot) error {
-		bot.healthCheckContext = ctx //nolint:fatcontext
+		me, err := bot.GetMe(ctx)
+		if err != nil {
+			return err
+		}
+
+		bot.myOnce.Do(func() {})
+		bot.myID = me.ID
+		bot.myUsername = me.Username
 		return nil
 	}
 }
