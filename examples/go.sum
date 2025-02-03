@@ -38,6 +38,8 @@ github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWE
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/mymmrac/telego v0.32.1-0.20250130224125-2e8b30b55e34 h1:asUmG+UpRCIaT0RmE3p1j5drf2zdJ2hUsS6zIShtoXQ=
 github.com/mymmrac/telego v0.32.1-0.20250130224125-2e8b30b55e34/go.mod h1:vxWyqSoZbh8OKS6jE3u4yoS71N3jWUqxDv9wr1DSr3Q=
+github.com/mymmrac/telego v0.32.1-0.20250203211309-2f8d8f9e7e05 h1:Y/mssuzk/lzo5iu9gKmh9asO+4TOIDySsfdR2LimJwM=
+github.com/mymmrac/telego v0.32.1-0.20250203211309-2f8d8f9e7e05/go.mod h1:vxWyqSoZbh8OKS6jE3u4yoS71N3jWUqxDv9wr1DSr3Q=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

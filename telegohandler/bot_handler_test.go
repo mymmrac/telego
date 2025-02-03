@@ -271,8 +271,12 @@ func TestBotHandler_Stop(t *testing.T) {
 		done := make(chan struct{})
 		assert.NotPanics(t, func() {
 			go func() {
-				errStart := bh.Start()
-				assert.Error(t, errStart)
+				startErr := bh.Start()
+				if len(updates) == 0 {
+					assert.NoError(t, startErr)
+				} else {
+					assert.Error(t, startErr)
+				}
 				done <- struct{}{}
 			}()
 			for !bh.IsRunning() {
