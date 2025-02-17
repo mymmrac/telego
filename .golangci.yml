@@ -30,7 +30,7 @@ linters:
     - wsl # Whitespace Linter - Forces you to use empty lines!
 
     # Disabled because deprecated
-    - exportloopref # An analyzer that finds exporting pointers for loop variables
+    - tenv # Tenv is analyzer that detects using os.Setenv instead of t.Setenv since Go1.17
 
     # To see a list of enabled/disabled by current configuration linters:
     # golangci-lint linters
