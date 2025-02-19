@@ -61,30 +61,38 @@ func (c *Context) WithContext(ctx context.Context) *Context {
 	}
 }
 
-// WithValue sets new value in underling [context.Context] returning same [Context]
+// WithValue creates new [Context] with set value
 func (c *Context) WithValue(key any, value any) *Context {
-	c.ctx = context.WithValue(c.ctx, key, value)
-	return c
+	return &Context{
+		ctx:     context.WithValue(c.ctx, key, value),
+		ctxBase: c.ctxBase,
+	}
 }
 
-// WithTimeout sets new timeout in underling [context.Context] returning same [Context]
+// WithTimeout creates new [Context] with timeout
 func (c *Context) WithTimeout(timeout time.Duration) (*Context, context.CancelFunc) {
-	var cancel context.CancelFunc
-	c.ctx, cancel = context.WithTimeout(c.ctx, timeout)
-	return c, cancel
+	ctx, cancel := context.WithTimeout(c.ctx, timeout)
+	return &Context{
+		ctx:     ctx,
+		ctxBase: c.ctxBase,
+	}, cancel
 }
 
-// WithCancel sets new [context.Context] with cancel returning same [Context]
+// WithCancel creates new [Context] with cancel
 func (c *Context) WithCancel() (*Context, context.CancelFunc) {
-	var cancel context.CancelFunc
-	c.ctx, cancel = context.WithCancel(c.ctx)
-	return c, cancel
+	ctx, cancel := context.WithCancel(c.ctx)
+	return &Context{
+		ctx:     ctx,
+		ctxBase: c.ctxBase,
+	}, cancel
 }
 
-// WithoutCancel sets new [context.Context] without cancel returning same [Context]
+// WithoutCancel creates new [Context] without cancel
 func (c *Context) WithoutCancel() *Context {
-	c.ctx = context.WithoutCancel(c.ctx)
-	return c
+	return &Context{
+		ctx:     context.WithoutCancel(c.ctx),
+		ctxBase: c.ctxBase,
+	}
 }
 
 // Bot returns [telego.Bot]

@@ -84,8 +84,8 @@ func TestContext_WithValue(t *testing.T) {
 	ctx := &Context{
 		ctx: context.Background(),
 	}
-	ctx.WithValue("key", "value")
-	assert.Equal(t, "value", ctx.Value("key"))
+	newCtx := ctx.WithValue("key", "value")
+	assert.Equal(t, "value", newCtx.Value("key"))
 }
 
 func TestContext_WithTimeout(t *testing.T) {

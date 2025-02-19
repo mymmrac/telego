@@ -41,17 +41,27 @@ func TestPanicRecovery(t *testing.T) {
 }
 
 func TestTimeout(t *testing.T) {
+	run := false
 	ctx := &Context{
 		ctx: context.Background(),
 		ctxBase: &ctxBase{
-			group: &HandlerGroup{},
+			group: &HandlerGroup{
+				routes: []route{
+					{
+						handler: func(ctx *Context, update telego.Update) error {
+							_, hasDeadline := ctx.Deadline()
+							assert.True(t, hasDeadline)
+							run = true
+							return nil
+						},
+					},
+				},
+			},
 			stack: []int{-1},
 		},
 	}
 
 	err := Timeout(time.Minute)(ctx, telego.Update{})
 	require.NoError(t, err)
-
-	_, hasDeadline := ctx.Deadline()
-	assert.True(t, hasDeadline)
+	assert.True(t, run)
 }
