@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	github.com/mymmrac/telego v0.32.1-0.20250203211309-2f8d8f9e7e05
-	github.com/valyala/fasthttp v1.58.0
+	github.com/valyala/fasthttp v1.59.0
 	golang.ngrok.com/ngrok v1.13.0
 )
 
@@ -28,10 +28,10 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.ngrok.com/muxado/v2 v2.0.1 // indirect
 	golang.org/x/arch v0.6.0 // indirect
-	golang.org/x/net v0.31.0 // indirect
+	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/term v0.26.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/term v0.29.0 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
