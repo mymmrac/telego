@@ -42,7 +42,7 @@ func (c *Context) Context() context.Context {
 	return c.ctx
 }
 
-// WithContext sets new underling [context.Context] returning same [Context]
+// WithContext creates new [Context] with its underling [context.Context] changed to the one provided by user
 //
 // Warning: Panics if nil context passed
 func (c *Context) WithContext(ctx context.Context) *Context {
@@ -50,8 +50,10 @@ func (c *Context) WithContext(ctx context.Context) *Context {
 		panic("Telego: nil context not allowed")
 	}
 
-	c.ctx = ctx
-	return c
+	newCtx := &Context{}
+	*newCtx = *c
+	newCtx.ctx = ctx
+	return newCtx
 }
 
 // WithValue sets new value in underling [context.Context] returning same [Context]
@@ -64,6 +66,13 @@ func (c *Context) WithValue(key any, value any) *Context {
 func (c *Context) WithTimeout(timeout time.Duration) (*Context, context.CancelFunc) {
 	var cancel context.CancelFunc
 	c.ctx, cancel = context.WithTimeout(c.ctx, timeout)
+	return c, cancel
+}
+
+// WithCancel sets new [context.Context] with cancel returning same [Context]
+func (c *Context) WithCancel() (*Context, context.CancelFunc) {
+	var cancel context.CancelFunc
+	c.ctx, cancel = context.WithCancel(c.ctx)
 	return c, cancel
 }
 

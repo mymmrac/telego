@@ -61,14 +61,22 @@ func TestContext_WithContext(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("success", func(t *testing.T) {
-		bCtx.WithContext(ctx)
-		assert.Equal(t, ctx, bCtx.ctx)
+		newCtx := bCtx.WithContext(ctx)
+		assert.Equal(t, ctx, newCtx.ctx)
 	})
 
 	t.Run("nil", func(t *testing.T) {
 		assert.Panics(t, func() {
 			bCtx.WithContext(nil) //nolint:staticcheck
 		})
+	})
+
+	t.Run("recursion", func(t *testing.T) {
+		bCtx.ctx = ctx
+		bCtx = bCtx.WithValue("key", "value")
+		assert.Equal(t, "value", bCtx.Value("key"))
+		newCtx := bCtx.WithContext(context.WithoutCancel(bCtx))
+		assert.Equal(t, "value", newCtx.Value("key"))
 	})
 }
 
@@ -88,6 +96,16 @@ func TestContext_WithTimeout(t *testing.T) {
 	assert.NotNil(t, cancel)
 	_, ok := ctx.Deadline()
 	assert.True(t, ok)
+}
+
+func TestContext_WithCancel(t *testing.T) {
+	ctx := &Context{
+		ctx: context.Background(),
+	}
+	ctx, cancel := ctx.WithCancel()
+	assert.NotNil(t, cancel)
+	cancel()
+	assert.ErrorIs(t, ctx.Err(), context.Canceled)
 }
 
 func TestContext_WithoutCancel(t *testing.T) {
