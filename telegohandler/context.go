@@ -9,8 +9,13 @@ import (
 
 // Context is a wrapper around [context.Context] with bot handler specific methods
 type Context struct {
+	ctx context.Context
+	*ctxBase
+}
+
+// ctxBase is a base struct for [Context] that is used to copy context without a need to copy all fields
+type ctxBase struct {
 	bot      *telego.Bot
-	ctx      context.Context
 	updateID int
 
 	group *HandlerGroup
@@ -50,10 +55,10 @@ func (c *Context) WithContext(ctx context.Context) *Context {
 		panic("Telego: nil context not allowed")
 	}
 
-	newCtx := &Context{}
-	*newCtx = *c
-	newCtx.ctx = ctx
-	return newCtx
+	return &Context{
+		ctx:     ctx,
+		ctxBase: c.ctxBase,
+	}
 }
 
 // WithValue sets new value in underling [context.Context] returning same [Context]

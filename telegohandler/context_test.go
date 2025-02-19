@@ -75,7 +75,7 @@ func TestContext_WithContext(t *testing.T) {
 		bCtx.ctx = ctx
 		bCtx = bCtx.WithValue("key", "value")
 		assert.Equal(t, "value", bCtx.Value("key"))
-		newCtx := bCtx.WithContext(context.WithoutCancel(bCtx))
+		newCtx := bCtx.WithContext(context.WithoutCancel(bCtx)) //nolint:contextcheck
 		assert.Equal(t, "value", newCtx.Value("key"))
 	})
 }
@@ -124,14 +124,18 @@ func TestContext_WithoutCancel(t *testing.T) {
 
 func TestContext_Bot(t *testing.T) {
 	ctx := &Context{
-		bot: &telego.Bot{},
+		ctxBase: &ctxBase{
+			bot: &telego.Bot{},
+		},
 	}
 	assert.NotNil(t, ctx.Bot())
 }
 
 func TestContext_UpdateID(t *testing.T) {
 	ctx := &Context{
-		updateID: 1,
+		ctxBase: &ctxBase{
+			updateID: 1,
+		},
 	}
 	assert.Equal(t, 1, ctx.UpdateID())
 }
@@ -143,6 +147,7 @@ func TestContext_Next(t *testing.T) {
 
 	gr.Use(func(ctx *Context, update telego.Update) error {
 		update.UpdateID = 1
+		ctx = ctx.WithContext(context.WithValue(ctx, "key", "value")) //nolint:staticcheck
 		return ctx.Next(update)
 	})
 
@@ -153,15 +158,18 @@ func TestContext_Next(t *testing.T) {
 	}, None())
 
 	gr2 := gr.Group()
-	gr2.Handle(func(_ *Context, update telego.Update) error {
+	gr2.Handle(func(ctx *Context, update telego.Update) error {
 		assert.Equal(t, 1, update.UpdateID)
+		assert.Equal(t, "value", ctx.Value("key"))
 		run = true
 		return nil
 	})
 
 	ctx := &Context{
-		group: gr,
-		stack: []int{-1},
+		ctxBase: &ctxBase{
+			group: gr,
+			stack: []int{-1},
+		},
 	}
 
 	err := ctx.Next(telego.Update{})
