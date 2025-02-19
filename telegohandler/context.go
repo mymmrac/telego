@@ -37,6 +37,11 @@ func (c *Context) Value(key any) any {
 	return c.ctx.Value(key)
 }
 
+// Context returns underling [context.Context]
+func (c *Context) Context() context.Context {
+	return c.ctx
+}
+
 // WithContext sets new underling [context.Context] returning same [Context]
 //
 // Warning: Panics if nil context passed

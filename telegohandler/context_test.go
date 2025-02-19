@@ -47,6 +47,15 @@ func TestContext_Value(t *testing.T) {
 	assert.Equal(t, "value", ctx.Value("key"))
 }
 
+func TestContext_Context(t *testing.T) {
+	ctx := context.Background()
+	bCtx := &Context{
+		ctx: ctx,
+	}
+
+	assert.Equal(t, ctx, bCtx.Context())
+}
+
 func TestContext_WithContext(t *testing.T) {
 	bCtx := &Context{}
 	ctx := context.Background()
