@@ -292,7 +292,11 @@ import (
 			returnsNotFoundCount++
 		}
 
-		data.WriteString(fmt.Sprintf("\nfunc (b *Bot) %s(%s) %s {\n", m.nameTitle, parametersArg, returnType))
+		if parametersArg != "" {
+			parametersArg = ", " + parametersArg
+		}
+
+		data.WriteString(fmt.Sprintf("\nfunc (b *Bot) %s(ctx context.Context%s) %s {\n", m.nameTitle, parametersArg, returnType))
 
 		returnVar := returnTypeToVar(m.returnType)
 		switch m.nameTitle {
@@ -315,21 +319,21 @@ import (
 			}
 
 			if len(m.parameters) > 0 {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params, &%s%s)\n", m.name, returnVar, successValue))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(ctx, \"%s\", params, &%s%s)\n", m.name, returnVar, successValue))
 			} else {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil, &%s%s)\n", m.name, returnVar, successValue))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(ctx, \"%s\", nil, &%s%s)\n", m.name, returnVar, successValue))
 			}
 
-			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"telego: %s(): %%w\", err)\n\t}\n\n", m.name))
+			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"telego: %s: %%w\", err)\n\t}\n", m.name))
 			data.WriteString(fmt.Sprintf("\treturn %s, nil\n}\n\n", returnVar))
 		} else {
 			if len(m.parameters) > 0 {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", params)\n", m.name))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(ctx, \"%s\", params)\n", m.name))
 			} else {
-				data.WriteString(fmt.Sprintf("\terr := b.performRequest(\"%s\", nil)\n", m.name))
+				data.WriteString(fmt.Sprintf("\terr := b.performRequest(ctx, \"%s\", nil)\n", m.name))
 			}
 
-			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn fmt.Errorf(\"telego: %s(): %%w\", err)\n\t}\n\n", m.name))
+			data.WriteString(fmt.Sprintf("\tif err != nil {\n\t\treturn fmt.Errorf(\"telego: %s: %%w\", err)\n\t}\n", m.name))
 			data.WriteString("\treturn nil\n}\n\n")
 		}
 	}

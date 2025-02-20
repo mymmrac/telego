@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -28,7 +29,7 @@ func main() {
 		telego.WithHTTPClient(&http.Client{}),
 
 		// Enables basic health check that will call getMe method before returning bot instance (default: false)
-		telego.WithHealthCheck(),
+		telego.WithHealthCheck(context.Background()),
 
 		// Make all warnings an errors for all requests (default: false)
 		// Note: Things like `deleteWebhook` may return a result as true, but also error description with warning
@@ -61,6 +62,6 @@ func main() {
 	}
 
 	// Call method getMe
-	botUser, _ := bot.GetMe()
+	botUser, _ := bot.GetMe(context.Background())
 	fmt.Printf("Bot user: %+v\n", botUser)
 }

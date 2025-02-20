@@ -22,13 +22,13 @@
   <img src="docs/logo/telego-long.png" alt="Telego logo" width="512px" style="border-radius: 12px;">
 </p>
 
-Telego is Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
+Telego is a Telegram Bot API library for Golang with full [API][TelegramBotAPI] implementation (one-to-one)
 
 The goal of this library was to create API with the same types and methods as actual Telegram Bot API.
 Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly
 all documentation from Telegram.
 
-:warning: Telego is still in v0.x.x version, so do expect breaking changes! :warning:
+:warning: This is a Telego release candidate, so do expect breaking changes! :warning:
 
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
@@ -62,7 +62,7 @@ How to get the library:
 go get github.com/mymmrac/telego
 ```
 
-Make sure you get the latest version to have all new features & fixes.
+Make sure you get the latest version to have all new features and fixes.
 
 More examples can be seen here:
 
@@ -138,6 +138,7 @@ specify [token](https://core.telegram.org/bots/api#authorizing-your-bot).
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -159,7 +160,7 @@ func main() {
 	}
 
 	// Call method getMe (https://core.telegram.org/bots/api#getme)
-	botUser, err := bot.GetMe()
+	botUser, err := bot.GetMe(context.Background())
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
@@ -173,10 +174,10 @@ func main() {
 
 [▲ Go Up ▲](#telego--go-telegram-bot-api)
 
-In order to receive updates, you can use one of two methods:
+To receive updates, you can use one of two methods:
 
 - using long polling (`bot.UpdatesViaLongPolling`)
-- using webhook (`bot.UpdatesViaWebhook`)
+- using webhook (`bot.UpdatesViaWebhook`, recommended way)
 
 Let's start from long polling (easier for local testing):
 
@@ -184,6 +185,7 @@ Let's start from long polling (easier for local testing):
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -203,10 +205,7 @@ func main() {
 
 	// Get updates channel
 	// (more on configuration in examples/updates_long_polling/main.go)
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-
-	// Stop reviving updates from update channel
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(context.Background(), nil)
 
 	// Loop through all updates when they came
 	for update := range updates {
@@ -221,13 +220,16 @@ Webhook example (recommended way):
 package main
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/mymmrac/telego"
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information,
@@ -239,26 +241,24 @@ func main() {
 	}
 
 	// Set up a webhook on Telegram side
-	_ = bot.SetWebhook(&telego.SetWebhookParams{
+	_ = bot.SetWebhook(ctx, &telego.SetWebhookParams{
 		URL: "https://example.com/bot" + bot.Token(),
 	})
 
 	// Receive information about webhook
-	info, _ := bot.GetWebhookInfo()
+	info, _ := bot.GetWebhookInfo(ctx)
 	fmt.Printf("Webhook Info: %+v\n", info)
+
+	// Create http serve mux
+	mux := http.NewServeMux()
 
 	// Get an update channel from webhook.
 	// (more on configuration in examples/updates_webhook/main.go)
-	updates, _ := bot.UpdatesViaWebhook("/bot" + bot.Token())
+	updates, _ := bot.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "/bot", bot.Token()))
 
 	// Start server for receiving requests from the Telegram
 	go func() {
-		_ = bot.StartWebhook("localhost:443")
-	}()
-
-	// Stop reviving updates from update channel and shutdown webhook server
-	defer func() {
-		_ = bot.StopWebhook()
+		_ = http.ListenAndServe(":443", mux)
 	}()
 
 	// Loop through all updates when they came
@@ -270,7 +270,7 @@ func main() {
 
 For running multiple bots from a single server, see [this](examples/multi_bot_webhook/main.go) example.
 
-> Tip: For testing webhooks, you can use [Ngrok](https://ngrok.com) to make a tunnel to your localhost,
+> Tip: For testing webhooks locally, you can use [Ngrok](https://ngrok.com) to make a tunnel to your localhost,
 > and get a random domain available from the Internet.
 > It's as simple as `ngrok http 8080`.
 > Or follow [Telego + Ngrok example](examples/ngrok/main.go) using [ngrok/ngrok-go](https://github.com/ngrok/ngrok-go)
@@ -294,6 +294,7 @@ name: `<methodName>` + `Params`. If method doesn't have required parameters `nil
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -302,6 +303,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information,
@@ -313,11 +315,10 @@ func main() {
 	}
 
 	// Call method getMe
-	botUser, _ := bot.GetMe()
+	botUser, _ := bot.GetMe(ctx)
 	fmt.Printf("Bot User: %+v\n", botUser)
 
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	for update := range updates {
 		if update.Message != nil {
@@ -327,7 +328,7 @@ func main() {
 			// Call method sendMessage.
 			// Send a message to sender with the same text (echo bot).
 			// (https://core.telegram.org/bots/api#sendmessage)
-			sentMessage, _ := bot.SendMessage(
+			sentMessage, _ := bot.SendMessage(ctx,
 				tu.Message(
 					tu.ID(chatID),
 					update.Message.Text,
@@ -420,12 +421,12 @@ func main() {
 		"Hello World",
 	).WithReplyMarkup(keyboard).WithProtectContent() // Multiple `with` method 
 
-	bot.SendMessage(msg)
+	bot.SendMessage(ctx, msg)
 }
 ```
 
 Those methods allow you to modify values without directly accessing them, also as you saw `with` methods can be staked
-one to another in order to update multiple values.
+one to another to update multiple values.
 
 ### :sun_behind_large_cloud: Bot handlers
 
@@ -453,6 +454,7 @@ or define your own.
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -462,6 +464,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information,
@@ -473,47 +476,46 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Stop handling updates
-	defer bh.Stop()
-
-	// Stop getting updates
-	defer bot.StopLongPolling()
+	defer func() { _ = bh.Stop() }()
 
 	// Register new handler with match on command `/start`
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+	bh.Handle(func(ctx *th.Context, update telego.Update) error {
 		// Send message
-		_, _ = bot.SendMessage(tu.Message(
+		_, _ = ctx.Bot().SendMessage(ctx, tu.Message(
 			tu.ID(update.Message.Chat.ID),
 			fmt.Sprintf("Hello %s!", update.Message.From.FirstName),
 		))
+		return nil
 	}, th.CommandEqual("start"))
 
 	// Register new handler with match on any command
 	// Handlers will match only once and in order of registration, 
 	// so this handler will be called on any command except `/start` command
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+	bh.Handle(func(ctx *th.Context, update telego.Update) error {
 		// Send message
-		_, _ = bot.SendMessage(tu.Message(
+		_, _ = ctx.Bot().SendMessage(ctx, tu.Message(
 			tu.ID(update.Message.Chat.ID),
 			"Unknown command, use /start",
 		))
+		return nil
 	}, th.AnyCommand())
 
 	// Start handling updates
-	bh.Start()
+	_ = bh.Start()
 }
 ```
 
-Also, just handling updates is useful, but handling specific updates like messages or callback queries in most of the
-cases are more straightforward and provides cleaner code.
+Just handling updates is useful, but handling specific updates like messages or callback queries in most of the
+cases is more straightforward and provides cleaner code.
 
 So Telego provides specific handles for all fields of `telego.Update`. See the list of all available handler types in
-[`telegohandler/update_handlers`](telegohandler/update_handlers.go), or define your own.
+[`telegohandler/handlers`](telegohandler/handlers.go), or define your own.
 
 ```go
 package main
@@ -531,9 +533,9 @@ func main() {
 	// (full example in examples/handler_specific/main.go)
 
 	// Register new handler with match on command `/start`
-	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 		// Send a message with inline keyboard
-		_, _ = bot.SendMessage(tu.Message(
+		_, _ = ctx.Bot().SendMessage(ctx, tu.Message(
 			tu.ID(message.Chat.ID),
 			fmt.Sprintf("Hello %s!", message.From.FirstName),
 		).WithReplyMarkup(tu.InlineKeyboard(
@@ -541,23 +543,26 @@ func main() {
 				tu.InlineKeyboardButton("Go!").WithCallbackData("go"),
 			)),
 		))
+		return nil
 	}, th.CommandEqual("start"))
 
 	// Register new handler with match on the call back query 
 	// with data equal to `go` and non-nil message
-	bh.HandleCallbackQuery(func(bot *telego.Bot, query telego.CallbackQuery) {
+	bh.HandleCallbackQuery(func(ctx *th.Context, query telego.CallbackQuery) error {
 		// Send message
-		_, _ = bot.SendMessage(tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
+		_, _ = ctx.Bot().SendMessage(ctx, tu.Message(tu.ID(query.Message.Chat.ID), "GO GO GO"))
 
 		// Answer callback query
-		_ = bot.AnswerCallbackQuery(tu.CallbackQuery(query.ID).WithText("Done"))
+		_ = ctx.Bot().AnswerCallbackQuery(ctx, tu.CallbackQuery(query.ID).WithText("Done"))
+
+		return nil
 	}, th.AnyCallbackQueryWithMessage(), th.CallbackDataEqual("go"))
 
 	// ... start bot handler
 }
 ```
 
-One more important part of handlers are groups and middlewares.
+One more important part of handlers is groups and middlewares.
 Telego allows creating groups with and without predicates and attaching middleware to groups.
 
 ```go
@@ -574,9 +579,9 @@ func main() {
 	// Init ...
 
 	// Add global middleware, it will be applied in order of addition
-	bh.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+	bh.Use(func(ctx *th.Context, update telego.Update) error {
 		fmt.Println("Global middleware") // Will be called first
-		next(bot, update)
+		return ctx.Next(update)
 	})
 
 	// Create any groups with or without predicates
@@ -585,20 +590,22 @@ func main() {
 	task := bh.Group(th.TextContains("task"))
 
 	// Add middleware to groups
-	task.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+	task.Use(func(ctx *th.Context, update telego.Update) error {
 		fmt.Println("Group-based middleware") // Will be called second
 
 		if len(update.Message.Text) < 10 {
-			next(bot, update)
+			return ctx.Next(update)
 		}
+
+		return nil
 	})
 
 	// Handle updates on a group
-	task.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	task.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 		fmt.Println("Task...") // Will be called third
+		return nil
 	})
 }
-
 ```
 
 ### :gear: Build configuration
@@ -614,6 +621,9 @@ Telego supports multiple build configurations via Go's build tags
 
 > Note: Use `sonic` only on supported platforms as it has its own limitations, more
 > [here](https://github.com/bytedance/sonic?tab=readme-ov-file#requirement).
+
+If you wish to set JSON encoding/decoding methods to something custom, there are global methods `SetJSONMarshal` and
+`SetJSONUnmarshal` that can be used.
 
 ## :art: Contribution
 

@@ -1442,7 +1442,7 @@ func (p *SendPollParams) WithOptions(options ...InputPollOption) *SendPollParams
 
 // WithIsAnonymous adds is anonymous parameter
 func (p *SendPollParams) WithIsAnonymous(isAnonymous bool) *SendPollParams {
-	p.IsAnonymous = ToPtr(isAnonymous)
+	p.IsAnonymous = &isAnonymous
 	return p
 }
 
@@ -1460,7 +1460,7 @@ func (p *SendPollParams) WithAllowsMultipleAnswers() *SendPollParams {
 
 // WithCorrectOptionID adds correct option ID parameter
 func (p *SendPollParams) WithCorrectOptionID(correctOptionID int) *SendPollParams {
-	p.CorrectOptionID = ToPtr(correctOptionID)
+	p.CorrectOptionID = &correctOptionID
 	return p
 }
 
@@ -1713,91 +1713,91 @@ func (p *PromoteChatMemberParams) WithChatID(chatID ChatID) *PromoteChatMemberPa
 
 // WithIsAnonymous adds is anonymous parameter
 func (p *PromoteChatMemberParams) WithIsAnonymous(isAnonymous bool) *PromoteChatMemberParams {
-	p.IsAnonymous = ToPtr(isAnonymous)
+	p.IsAnonymous = &isAnonymous
 	return p
 }
 
 // WithCanManageChat adds can manage chat parameter
 func (p *PromoteChatMemberParams) WithCanManageChat(canManageChat bool) *PromoteChatMemberParams {
-	p.CanManageChat = ToPtr(canManageChat)
+	p.CanManageChat = &canManageChat
 	return p
 }
 
 // WithCanDeleteMessages adds can delete messages parameter
 func (p *PromoteChatMemberParams) WithCanDeleteMessages(canDeleteMessages bool) *PromoteChatMemberParams {
-	p.CanDeleteMessages = ToPtr(canDeleteMessages)
+	p.CanDeleteMessages = &canDeleteMessages
 	return p
 }
 
 // WithCanManageVideoChats adds can manage video chats parameter
 func (p *PromoteChatMemberParams) WithCanManageVideoChats(canManageVideoChats bool) *PromoteChatMemberParams {
-	p.CanManageVideoChats = ToPtr(canManageVideoChats)
+	p.CanManageVideoChats = &canManageVideoChats
 	return p
 }
 
 // WithCanRestrictMembers adds can restrict members parameter
 func (p *PromoteChatMemberParams) WithCanRestrictMembers(canRestrictMembers bool) *PromoteChatMemberParams {
-	p.CanRestrictMembers = ToPtr(canRestrictMembers)
+	p.CanRestrictMembers = &canRestrictMembers
 	return p
 }
 
 // WithCanPromoteMembers adds can promote members parameter
 func (p *PromoteChatMemberParams) WithCanPromoteMembers(canPromoteMembers bool) *PromoteChatMemberParams {
-	p.CanPromoteMembers = ToPtr(canPromoteMembers)
+	p.CanPromoteMembers = &canPromoteMembers
 	return p
 }
 
 // WithCanChangeInfo adds can change info parameter
 func (p *PromoteChatMemberParams) WithCanChangeInfo(canChangeInfo bool) *PromoteChatMemberParams {
-	p.CanChangeInfo = ToPtr(canChangeInfo)
+	p.CanChangeInfo = &canChangeInfo
 	return p
 }
 
 // WithCanInviteUsers adds can invite users parameter
 func (p *PromoteChatMemberParams) WithCanInviteUsers(canInviteUsers bool) *PromoteChatMemberParams {
-	p.CanInviteUsers = ToPtr(canInviteUsers)
+	p.CanInviteUsers = &canInviteUsers
 	return p
 }
 
 // WithCanPostStories adds can post stories parameter
 func (p *PromoteChatMemberParams) WithCanPostStories(canPostStories bool) *PromoteChatMemberParams {
-	p.CanPostStories = ToPtr(canPostStories)
+	p.CanPostStories = &canPostStories
 	return p
 }
 
 // WithCanEditStories adds can edit stories parameter
 func (p *PromoteChatMemberParams) WithCanEditStories(canEditStories bool) *PromoteChatMemberParams {
-	p.CanEditStories = ToPtr(canEditStories)
+	p.CanEditStories = &canEditStories
 	return p
 }
 
 // WithCanDeleteStories adds can delete stories parameter
 func (p *PromoteChatMemberParams) WithCanDeleteStories(canDeleteStories bool) *PromoteChatMemberParams {
-	p.CanDeleteStories = ToPtr(canDeleteStories)
+	p.CanDeleteStories = &canDeleteStories
 	return p
 }
 
 // WithCanPostMessages adds can post messages parameter
 func (p *PromoteChatMemberParams) WithCanPostMessages(canPostMessages bool) *PromoteChatMemberParams {
-	p.CanPostMessages = ToPtr(canPostMessages)
+	p.CanPostMessages = &canPostMessages
 	return p
 }
 
 // WithCanEditMessages adds can edit messages parameter
 func (p *PromoteChatMemberParams) WithCanEditMessages(canEditMessages bool) *PromoteChatMemberParams {
-	p.CanEditMessages = ToPtr(canEditMessages)
+	p.CanEditMessages = &canEditMessages
 	return p
 }
 
 // WithCanPinMessages adds can pin messages parameter
 func (p *PromoteChatMemberParams) WithCanPinMessages(canPinMessages bool) *PromoteChatMemberParams {
-	p.CanPinMessages = ToPtr(canPinMessages)
+	p.CanPinMessages = &canPinMessages
 	return p
 }
 
 // WithCanManageTopics adds can manage topics parameter
 func (p *PromoteChatMemberParams) WithCanManageTopics(canManageTopics bool) *PromoteChatMemberParams {
-	p.CanManageTopics = ToPtr(canManageTopics)
+	p.CanManageTopics = &canManageTopics
 	return p
 }
 
@@ -2147,7 +2147,7 @@ func (p *EditForumTopicParams) WithName(name string) *EditForumTopicParams {
 
 // WithIconCustomEmojiID adds icon custom emoji ID parameter
 func (p *EditForumTopicParams) WithIconCustomEmojiID(iconCustomEmojiID string) *EditForumTopicParams {
-	p.IconCustomEmojiID = ToPtr(iconCustomEmojiID)
+	p.IconCustomEmojiID = &iconCustomEmojiID
 	return p
 }
 

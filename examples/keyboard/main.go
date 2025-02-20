@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -42,5 +43,5 @@ func main() {
 	).WithReplyMarkup(keyboard)
 
 	// Sending message
-	_, _ = bot.SendMessage(message)
+	_, _ = bot.SendMessage(context.Background(), message)
 }

@@ -15,18 +15,24 @@ type Logger interface {
 	Errorf(format string, args ...any)
 }
 
+// logMode represents logging mode
 type logMode string
 
+// Logging modes
 const (
 	debugMode logMode = "DEBUG"
 	errorMode logMode = "ERROR"
+)
 
+// ANSI escape codes
+const (
 	ansiReset  = "\u001B[0m"
 	ansiRed    = "\u001B[31m"
 	ansiYellow = "\u001B[33m"
 	ansiBlue   = "\u001B[34m"
 )
 
+// logger used to debug or error information
 type logger struct {
 	Out         io.Writer
 	DebugMode   bool
@@ -36,6 +42,7 @@ type logger struct {
 	mutex sync.Mutex
 }
 
+// newDefaultLogger creates new default logger
 func newDefaultLogger(token string) *logger {
 	return &logger{
 		Out:         os.Stderr,
@@ -45,6 +52,7 @@ func newDefaultLogger(token string) *logger {
 	}
 }
 
+// prefix returns log prefix
 func (l *logger) prefix(mode logMode) string {
 	timeNow := ansiBlue + time.Now().Format(time.UnixDate) + ansiReset
 	switch mode {
@@ -56,6 +64,7 @@ func (l *logger) prefix(mode logMode) string {
 	return "LOGGING "
 }
 
+// log logs text
 func (l *logger) log(mode logMode, text string) {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
@@ -71,12 +80,14 @@ func (l *logger) log(mode logMode, text string) {
 	}
 }
 
+// Debugf logs debug information
 func (l *logger) Debugf(format string, args ...any) {
 	if l.DebugMode {
 		l.log(debugMode, fmt.Sprintf(format+"\n", args...))
 	}
 }
 
+// Errorf logs error information
 func (l *logger) Errorf(format string, args ...any) {
 	if l.PrintErrors {
 		l.log(errorMode, fmt.Sprintf(format+"\n", args...))
@@ -86,6 +97,7 @@ func (l *logger) Errorf(format string, args ...any) {
 // DefaultLoggerTokenReplacement used to replace bot token in logs when using default logger
 const DefaultLoggerTokenReplacement = "BOT_TOKEN"
 
+// defaultReplacer returns replacer for default logger
 func defaultReplacer(token string) *strings.Replacer {
 	return strings.NewReplacer(token, DefaultLoggerTokenReplacement)
 }

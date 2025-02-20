@@ -3,6 +3,7 @@
 package main
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,8 +14,10 @@ import (
 )
 
 func TestSendMessage(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("simple", func(t *testing.T) {
-		msg, err := bot.SendMessage(&telego.SendMessageParams{
+		msg, err := bot.SendMessage(ctx, &telego.SendMessageParams{
 			ChatID: tu.ID(chatID),
 			Text:   "SendMessage " + timeNow,
 		})
@@ -27,7 +30,7 @@ func TestSendMessage(t *testing.T) {
 		keyboard := tu.InlineKeyboard(
 			tu.InlineKeyboardRow(tu.InlineKeyboardButton("Test").WithCallbackData("OK")),
 		)
-		msg, err := bot.SendMessage(
+		msg, err := bot.SendMessage(ctx,
 			tu.MessageWithEntities(tu.ID(chatID),
 				tu.Entity("SendMessage").Bold(), tu.Entity(" "), tu.Entity(timeNow).Code(),
 			).WithReplyMarkup(keyboard),
@@ -38,7 +41,7 @@ func TestSendMessage(t *testing.T) {
 	})
 
 	t.Run("new_line", func(t *testing.T) {
-		msg, err := bot.SendMessage(&telego.SendMessageParams{
+		msg, err := bot.SendMessage(ctx, &telego.SendMessageParams{
 			ChatID: tu.ID(chatID),
 			Text:   "Send\nMessage",
 		})
@@ -53,7 +56,7 @@ func TestSendMessage(t *testing.T) {
 			tu.Entity("\n"),
 			tu.Entity("  Pre\nPre").Pre(""),
 		)
-		msg, err := bot.SendMessage(tu.Message(tu.ID(chatID), text).WithEntities(entities...))
+		msg, err := bot.SendMessage(ctx, tu.Message(tu.ID(chatID), text).WithEntities(entities...))
 		require.NoError(t, err)
 
 		assert.Equal(t, msg.Text, text)
@@ -71,7 +74,7 @@ func TestSendMessage(t *testing.T) {
 			tu.Entity("世界").Bold(),
 		)
 
-		msg, err := bot.SendMessage(tu.Message(tu.ID(chatID), "_😅_* test *_🌗_* Україна* _\U0001FAE5 _*世界*").
+		msg, err := bot.SendMessage(ctx, tu.Message(tu.ID(chatID), "_😅_* test *_🌗_* Україна* _\U0001FAE5 _*世界*").
 			WithParseMode(telego.ModeMarkdownV2))
 		require.NoError(t, err)
 
@@ -84,7 +87,7 @@ func TestSendMessage(t *testing.T) {
 	})
 
 	t.Run("entities_check", func(t *testing.T) {
-		msg, err := bot.SendMessage(tu.MessageWithEntities(tu.ID(chatID),
+		msg, err := bot.SendMessage(ctx, tu.MessageWithEntities(tu.ID(chatID),
 			tu.Entity("Lo").Strikethrough(), tu.Entity("rem").Underline(), tu.Entity(" ipsum "),
 			tu.Entity("dolor").Strikethrough().Underline(), tu.Entity(" sit amet, consectetur adipiscing elit."),
 			tu.Entity("\n"),
@@ -107,8 +110,10 @@ func TestSendMessage(t *testing.T) {
 }
 
 func TestSendPhoto(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("regular", func(t *testing.T) {
-		msg, err := bot.SendPhoto(&telego.SendPhotoParams{
+		msg, err := bot.SendPhoto(ctx, &telego.SendPhotoParams{
 			ChatID:  tu.ID(chatID),
 			Photo:   tu.File(open(img1Jpg)),
 			Caption: "SendPhoto " + timeNow,
@@ -119,7 +124,7 @@ func TestSendPhoto(t *testing.T) {
 	})
 
 	t.Run("new_line", func(t *testing.T) {
-		msg, err := bot.SendPhoto(&telego.SendPhotoParams{
+		msg, err := bot.SendPhoto(ctx, &telego.SendPhotoParams{
 			ChatID:  tu.ID(chatID),
 			Photo:   tu.File(open(img1Jpg)),
 			Caption: "Send\nPhoto \" >",
@@ -130,7 +135,7 @@ func TestSendPhoto(t *testing.T) {
 	})
 
 	t.Run("keyboard_and_markdown", func(t *testing.T) {
-		msg, err := bot.SendPhoto(&telego.SendPhotoParams{
+		msg, err := bot.SendPhoto(ctx, &telego.SendPhotoParams{
 			ChatID:    tu.ID(chatID),
 			Photo:     tu.File(open(img1Jpg)),
 			ParseMode: telego.ModeMarkdownV2,
@@ -146,8 +151,10 @@ func TestSendPhoto(t *testing.T) {
 }
 
 func TestSendAudio(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("audio_file", func(t *testing.T) {
-		msg, err := bot.SendAudio(&telego.SendAudioParams{
+		msg, err := bot.SendAudio(ctx, &telego.SendAudioParams{
 			ChatID:    tu.ID(chatID),
 			Audio:     tu.File(open(kittenMp3)),
 			Caption:   "SendAudio " + timeNow,
@@ -159,7 +166,7 @@ func TestSendAudio(t *testing.T) {
 	})
 
 	t.Run("url", func(t *testing.T) {
-		msg, err := bot.SendAudio(&telego.SendAudioParams{
+		msg, err := bot.SendAudio(ctx, &telego.SendAudioParams{
 			ChatID:    tu.ID(chatID),
 			Audio:     tu.FileFromURL(exampleMp3),
 			Caption:   "SendAudio " + timeNow,
@@ -172,8 +179,10 @@ func TestSendAudio(t *testing.T) {
 }
 
 func TestSendPoll(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("anonymous", func(t *testing.T) {
-		msg, err := bot.SendPoll(&telego.SendPollParams{
+		msg, err := bot.SendPoll(ctx, &telego.SendPollParams{
 			ChatID:      tu.ID(chatID),
 			Question:    "Test",
 			Options:     []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
@@ -185,7 +194,7 @@ func TestSendPoll(t *testing.T) {
 	})
 
 	t.Run("not_anonymous", func(t *testing.T) {
-		msg, err := bot.SendPoll(&telego.SendPollParams{
+		msg, err := bot.SendPoll(ctx, &telego.SendPollParams{
 			ChatID:      tu.ID(chatID),
 			Question:    "Test",
 			Options:     []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
@@ -197,7 +206,7 @@ func TestSendPoll(t *testing.T) {
 	})
 
 	t.Run("correct_option_id", func(t *testing.T) {
-		msg, err := bot.SendPoll(&telego.SendPollParams{
+		msg, err := bot.SendPoll(ctx, &telego.SendPollParams{
 			ChatID:          tu.ID(chatID),
 			Question:        "Test",
 			Options:         []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},

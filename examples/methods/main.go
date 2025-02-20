@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Create Bot
@@ -20,11 +22,10 @@ func main() {
 	}
 
 	// Call method getMe
-	botUser, _ := bot.GetMe()
+	botUser, _ := bot.GetMe(ctx)
 	fmt.Printf("Bot User: %+v\n", botUser)
 
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	for update := range updates {
 		if update.Message != nil {
@@ -33,7 +34,7 @@ func main() {
 
 			// Call method sendMessage (https://core.telegram.org/bots/api#sendmessage).
 			// Send a message to sender with the same text (echo bot).
-			sentMessage, _ := bot.SendMessage(
+			sentMessage, _ := bot.SendMessage(ctx,
 				tu.Message(
 					tu.ID(chatID),
 					update.Message.Text,

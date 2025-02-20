@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -19,27 +21,24 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Stop handling updates
-	defer bh.Stop()
-
-	// Stop getting updates
-	defer bot.StopLongPolling()
+	defer func() { _ = bh.Stop() }()
 
 	// Add global middleware, it will be applied in order of addition
 	bh.Use(th.PanicRecovery()) // Will be called first
 	bh.Use(
-		func(bot *telego.Bot, update telego.Update, next th.Handler) {
+		func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("Global middleware") // Will be called second
-			next(bot, update)
+			return ctx.Next(update)
 		},
-		func(bot *telego.Bot, update telego.Update, next th.Handler) {
+		func(ctx *th.Context, update telego.Update) error {
 			fmt.Println("Global middleware 2") // Will be called third
-			next(bot, update)
+			return ctx.Next(update)
 		},
 	)
 
@@ -48,19 +47,22 @@ func main() {
 	task := bh.Group(th.TextContains("task"))
 
 	// Add middleware to groups
-	task.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+	task.Use(func(ctx *th.Context, update telego.Update) error {
 		fmt.Println("Group-based middleware") // Will be called fourth
 
 		if len(update.Message.Text) < 10 {
-			next(bot, update)
+			return ctx.Next(update)
 		}
+
+		return nil
 	})
 
 	// Handle updates on a group
-	task.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	task.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 		fmt.Println("Task...") // Will be called fifth
+		return err
 	})
 
 	// Start handling updates
-	bh.Start()
+	_ = bh.Start()
 }

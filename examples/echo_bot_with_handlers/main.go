@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Create Bot with debug on
@@ -21,7 +23,7 @@ func main() {
 	}
 
 	// Get bot user
-	botUser, err := bot.GetMe()
+	botUser, err := bot.GetMe(ctx)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -30,26 +32,25 @@ func main() {
 	fmt.Printf("Bot user: %+v\n", botUser)
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler
 	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Handle any message
-	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
+	bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
 		// Get chat ID from the message
 		chatID := tu.ID(message.Chat.ID)
 
 		// Copy sent messages back to the user
-		_, _ = bot.CopyMessage(
-			tu.CopyMessage(chatID, chatID, message.MessageID),
-		)
+		_, _ = bot.CopyMessage(ctx, tu.CopyMessage(chatID, chatID, message.MessageID))
+
+		return nil
 	})
 
 	// Stop handling updates on exit
-	defer bh.Stop()
-	defer bot.StopLongPolling()
+	defer func() { _ = bh.Stop() }()
 
 	// Start handling updates
-	bh.Start()
+	_ = bh.Start()
 }

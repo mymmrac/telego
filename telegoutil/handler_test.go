@@ -39,14 +39,14 @@ func TestParseCommand(t *testing.T) {
 			name:     "with_username",
 			text:     "/test@user ok",
 			cmd:      "test",
-			username: "@user",
+			username: "user",
 			args:     []string{"ok"},
 		},
 		{
 			name:     "multiline",
 			text:     "/test@user  ok\n   test ",
 			cmd:      "test",
-			username: "@user",
+			username: "user",
 			args:     []string{"ok", "test"},
 		},
 	}
@@ -94,14 +94,14 @@ func TestParseCommandPayload(t *testing.T) {
 			name:     "with_username",
 			text:     "/test@user ok",
 			cmd:      "test",
-			username: "@user",
+			username: "user",
 			payload:  "ok",
 		},
 		{
 			name:     "multiline",
 			text:     "/test@user   ok\n   test ",
 			cmd:      "test",
-			username: "@user",
+			username: "user",
 			payload:  "ok\n   test",
 		},
 	}

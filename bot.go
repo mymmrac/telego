@@ -1,11 +1,14 @@
 package telego
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"github.com/valyala/fasthttp"
 
@@ -25,10 +28,10 @@ const (
 	botPathPrefix = "/bot"
 )
 
-// ErrEmptyToken Bot token is empty
+// ErrEmptyToken bot token is empty
 var ErrEmptyToken = errors.New("telego: empty token")
 
-// ErrInvalidToken Bot token is invalid according to token regexp
+// ErrInvalidToken bot token is invalid according to token regexp
 var ErrInvalidToken = errors.New("telego: invalid token format")
 
 // validateToken validates if token matches format
@@ -46,17 +49,41 @@ type Bot struct {
 	constructor ta.RequestConstructor
 
 	useTestServerPath     bool
-	healthCheckRequested  bool
 	reportWarningAsErrors bool
 
-	longPollingContext *longPollingContext
-	webhookContext     *webhookContext
+	running atomic.Int32
+
+	myOnce     sync.Once
+	myID       int64
+	myUsername string
 }
 
-// BotOption represents an option that can be applied to Bot
+// Bot actions
+const (
+	runningNone        = 0
+	runningLongPolling = 1
+	runningWebhook     = 2
+)
+
+// run checks if bot is already running some action
+func (b *Bot) run(actionToRun int32) error {
+	if b.running.CompareAndSwap(runningNone, actionToRun) {
+		return nil
+	}
+	switch b.running.Load() {
+	case runningLongPolling:
+		return errors.New("telego: long polling already running")
+	case runningWebhook:
+		return errors.New("telego: webhook already running")
+	default:
+		return errors.New("telego: unknown running state")
+	}
+}
+
+// BotOption represents an option that can be applied to [Bot]
 type BotOption func(bot *Bot) error
 
-// NewBot creates new bots with given options.
+// NewBot creates new bots with given options (order is important).
 // If no options are specified, default values are used.
 // Note: Default logger (that logs only errors if not configured) will hide your bot token, but it still may log
 // sensitive information, it's only safe to use default logger in testing environment.
@@ -78,13 +105,7 @@ func NewBot(token string, options ...BotOption) (*Bot, error) {
 
 	for _, option := range options {
 		if err := option(b); err != nil {
-			return nil, fmt.Errorf("telego: options: %w", err)
-		}
-	}
-
-	if b.healthCheckRequested {
-		if _, err := b.GetMe(); err != nil {
-			return nil, fmt.Errorf("telego: health check: %w", err)
+			return nil, fmt.Errorf("telego: bot options: %w", err)
 		}
 	}
 
@@ -101,7 +122,30 @@ func (b *Bot) Logger() Logger {
 	return b.log
 }
 
-// FileDownloadURL returns URL used to download file by its file path retrieved from GetFile method
+// updateMe updates bot ID and username
+func (b *Bot) updateMe() {
+	me, err := b.GetMe(context.Background())
+	if err != nil {
+		b.log.Errorf("Error on get me: %s", err)
+	} else {
+		b.myID = me.ID
+		b.myUsername = me.Username
+	}
+}
+
+// ID returns bot ID by calling [Bot.GetMe] method once, if error occurs ID will be 0
+func (b *Bot) ID() int64 {
+	b.myOnce.Do(b.updateMe)
+	return b.myID
+}
+
+// Username returns bot username by calling [Bot.GetMe] method once, if error occurs username will be empty
+func (b *Bot) Username() string {
+	b.myOnce.Do(b.updateMe)
+	return b.myUsername
+}
+
+// FileDownloadURL returns URL that can be used to download a file by its file path retrieved from [Bot.GetFile] method
 func (b *Bot) FileDownloadURL(filepath string) string {
 	if b.useTestServerPath {
 		return b.apiURL + "/file/bot" + b.token + "/test/" + filepath
@@ -110,8 +154,8 @@ func (b *Bot) FileDownloadURL(filepath string) string {
 }
 
 // performRequest executes and parses response of method
-func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error {
-	resp, err := b.constructAndCallRequest(methodName, parameters)
+func (b *Bot) performRequest(ctx context.Context, methodName string, parameters any, vs ...any) error {
+	resp, err := b.constructAndCallRequest(ctx, methodName, parameters)
 	if err != nil {
 		b.log.Errorf("Execution error %s: %s", methodName, err)
 		return fmt.Errorf("internal execution: %w", err)
@@ -144,7 +188,7 @@ func (b *Bot) performRequest(methodName string, parameters any, vs ...any) error
 }
 
 // constructAndCallRequest creates and executes request with parsing of parameters
-func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Response, error) {
+func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, parameters any) (*ta.Response, error) {
 	filesParams, hasFiles := filesParameters(parameters)
 	var data *ta.RequestData
 
@@ -182,7 +226,7 @@ func (b *Bot) constructAndCallRequest(methodName string, parameters any) (*ta.Re
 	debugData := strings.TrimSuffix(debug.String(), "\n")
 	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
 
-	resp, err := b.api.Call(url, data)
+	resp, err := b.api.Call(ctx, url, data)
 	if err != nil {
 		return nil, fmt.Errorf("request call: %w", err)
 	}
@@ -269,19 +313,21 @@ func parseField(field reflect.Value) (string, error) {
 	return value, nil
 }
 
-func isNil(i any) bool {
-	if i == nil {
+// isNil checks if the value, or it's underlying interface is nil
+func isNil(v any) bool {
+	if v == nil {
 		return true
 	}
 
-	switch reflect.TypeOf(i).Kind() {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-		return reflect.ValueOf(i).IsNil()
+	switch reflect.TypeOf(v).Kind() {
+	case reflect.Interface, reflect.Ptr, reflect.Slice, reflect.Map, reflect.Chan, reflect.Func:
+		return reflect.ValueOf(v).IsNil()
 	default:
 		return false
 	}
 }
 
+// logRequestWithFiles logs request with files
 func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, files map[string]ta.NamedReader) {
 	debugFiles := make([]string, 0, len(files))
 	for k, v := range files {
@@ -297,23 +343,10 @@ func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, f
 	}
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)
-
 	_, _ = debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
 }
 
 // ToPtr converts value into a pointer to value
 func ToPtr[T any](value T) *T {
 	return &value
-}
-
-// safeSend safely send to chan and return true if chan was closed
-func safeSend[T any](ch chan<- T, value T) (closed bool) {
-	defer func() {
-		if recover() != nil {
-			closed = true
-		}
-	}()
-
-	ch <- value
-	return false
 }

@@ -22,39 +22,46 @@ func main() {
 	}
 
 	// Initialize signal handling
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, os.Interrupt)
-
-	// Initialize done chan
-	done := make(chan struct{}, 1)
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
 
 	// Get updates
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler with stop timeout
 	bh, _ := th.NewBotHandler(bot, updates)
 
 	// Handle updates
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+	bh.Handle(func(ctx *th.Context, update telego.Update) error {
 		fmt.Println("Processing update:", update.UpdateID)
 		time.Sleep(time.Second * 15) // Simulate long process time
 		fmt.Println("Done update:", update.UpdateID)
+		return nil
 	})
+
+	// Initialize done chan
+	done := make(chan struct{}, 1)
 
 	// Handle stop signal (Ctrl+C)
 	go func() {
 		// Wait for stop signal
-		<-sigs
-
+		<-ctx.Done()
 		fmt.Println("Stopping...")
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
-		defer cancel()
+		stopCtx, stopCancel := context.WithTimeout(context.Background(), time.Second*20)
+		defer stopCancel()
 
-		bot.StopLongPolling()
+		for len(updates) > 0 {
+			select {
+			case <-stopCtx.Done():
+				break
+			case <-time.After(time.Microsecond * 100):
+				// Continue
+			}
+		}
 		fmt.Println("Long polling done")
 
-		bh.StopWithContext(ctx)
+		_ = bh.StopWithContext(stopCtx)
 		fmt.Println("Bot handler done")
 
 		// Notify that stop is done
@@ -62,7 +69,7 @@ func main() {
 	}()
 
 	// Start handling in goroutine
-	go bh.Start()
+	go func() { _ = bh.Start() }()
 	fmt.Println("Handling updates...")
 
 	// Wait for the stop process to be completed

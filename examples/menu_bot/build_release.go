@@ -4,17 +4,14 @@ package main
 
 import (
 	"context"
-
-	"github.com/fasthttp/router"
-	"github.com/mymmrac/telego"
-	"github.com/valyala/fasthttp"
+	"log"
+	"net"
 )
 
-func Webhook(_ context.Context, bot *telego.Bot, secret string) (telego.WebhookServer, string) {
-	return telego.FastHTTPWebhookServer{
-		Logger:      bot.Logger(),
-		Server:      &fasthttp.Server{},
-		Router:      router.New(),
-		SecretToken: secret,
-	}, "https://example.org"
+func WebhookListener(_ context.Context) (net.Listener, string) {
+	ln, err := net.Listen("tcp", ":443")
+	if err != nil {
+		log.Fatalf("Listen: %s", err)
+	}
+	return ln, "https://example.org"
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/mymmrac/telego"
@@ -8,9 +9,16 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-func RegisterHandlers(bh *th.BotHandler) {
-	bh.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		_, err := bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Menu").
+func registerHandlers(bh *th.BotHandler) {
+	bh.Use(func(ctx *th.Context, update telego.Update) error {
+		if err := ctx.Next(update); err != nil {
+			log.Printf("Handler error: %s", err)
+		}
+		return nil
+	})
+
+	bh.HandleMessage(func(ctx *th.Context, message telego.Message) error {
+		_, err := ctx.Bot().SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Menu").
 			WithReplyMarkup(tu.Keyboard(
 				tu.KeyboardRow(
 					tu.KeyboardButton("Sub menu 1"),
@@ -21,37 +29,41 @@ func RegisterHandlers(bh *th.BotHandler) {
 				),
 			).WithResizeKeyboard()))
 		if err != nil {
-			log.Printf("Error on start: %s", err)
+			return fmt.Errorf("start: %w", err)
 		}
+		return nil
 	}, th.Or(th.CommandEqual("start"), th.TextEqual("Back")))
 
 	subMenu := bh.Group(th.TextPrefix("Sub menu"))
-	subMenu.Use(func(bot *telego.Bot, update telego.Update, next th.Handler) {
+	subMenu.Use(func(ctx *th.Context, update telego.Update) error {
 		log.Println("Sub menu group")
-		next(bot, update)
+		return ctx.Next(update)
 	})
 
-	subMenu.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		_, err := bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Sub menu 1 content").
+	subMenu.HandleMessage(func(ctx *th.Context, message telego.Message) error {
+		_, err := ctx.Bot().SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Sub menu 1 content").
 			WithReplyMarkup(tu.Keyboard(tu.KeyboardRow(tu.KeyboardButton("Back"))).WithResizeKeyboard()))
 		if err != nil {
-			log.Printf("Error on sub menu 1: %s", err)
+			return fmt.Errorf("sub menu 1: %w", err)
 		}
+		return nil
 	}, th.TextSuffix("1"))
 
-	subMenu.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		_, err := bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Sub menu 2 content").
+	subMenu.HandleMessage(func(ctx *th.Context, message telego.Message) error {
+		_, err := ctx.Bot().SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Sub menu 2 content").
 			WithReplyMarkup(tu.Keyboard(tu.KeyboardRow(tu.KeyboardButton("Back"))).WithResizeKeyboard()))
 		if err != nil {
-			log.Printf("Error on sub menu 2: %s", err)
+			return fmt.Errorf("sub menu 2: %w", err)
 		}
+		return nil
 	}, th.TextSuffix("2"))
 
-	subMenu.HandleMessage(func(bot *telego.Bot, message telego.Message) {
-		_, err := bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "Sub menu 3 content").
+	subMenu.HandleMessage(func(ctx *th.Context, message telego.Message) error {
+		_, err := ctx.Bot().SendMessage(ctx, tu.Message(tu.ID(message.Chat.ID), "Sub menu 3 content").
 			WithReplyMarkup(tu.Keyboard(tu.KeyboardRow(tu.KeyboardButton("Back"))).WithResizeKeyboard()))
 		if err != nil {
-			log.Printf("Error on sub menu 3: %s", err)
+			return fmt.Errorf("sub menu 3: %w", err)
 		}
+		return nil
 	}, th.TextSuffix("3"))
 }

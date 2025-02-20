@@ -2,6 +2,7 @@ package telegoapi
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"net"
 	"net/http"
@@ -56,26 +57,28 @@ func TestFastHTTPCaller_Call(t *testing.T) {
 		Buffer:      bytes.NewBufferString("test"),
 	}
 
+	ctx := context.Background()
+
 	t.Run("success", func(t *testing.T) {
-		resp, err := caller.Call("http://localhost", data)
+		resp, err := caller.Call(ctx, "http://localhost", data)
 		require.NoError(t, err)
 		assert.True(t, resp.Ok)
 	})
 
 	t.Run("error_fasthttp_do_request", func(t *testing.T) {
-		resp, err := caller.Call("abc", data)
+		resp, err := caller.Call(ctx, "abc", data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_500", func(t *testing.T) {
-		resp, err := caller.Call("http://localhost/500", data)
+		resp, err := caller.Call(ctx, "http://localhost/500", data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_json", func(t *testing.T) {
-		resp, err := caller.Call("http://localhost/json_err", data)
+		resp, err := caller.Call(ctx, "http://localhost/json_err", data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -120,32 +123,34 @@ func TestHTTPCaller_Call(t *testing.T) {
 		Buffer:      bytes.NewBufferString("test"),
 	}
 
+	ctx := context.Background()
+
 	t.Run("success", func(t *testing.T) {
-		resp, err := caller.Call(srv.URL, data)
+		resp, err := caller.Call(ctx, srv.URL, data)
 		require.NoError(t, err)
 		assert.True(t, resp.Ok)
 	})
 
 	t.Run("error_http_create_request", func(t *testing.T) {
-		resp, err := caller.Call("\x00", data)
+		resp, err := caller.Call(ctx, "\x00", data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_http_do_request", func(t *testing.T) {
-		resp, err := caller.Call("abc", data)
+		resp, err := caller.Call(ctx, "abc", data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_500", func(t *testing.T) {
-		resp, err := caller.Call(srv.URL+err500Path, data)
+		resp, err := caller.Call(ctx, srv.URL+err500Path, data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
 
 	t.Run("error_json", func(t *testing.T) {
-		resp, err := caller.Call(srv.URL+errJSONPath, data)
+		resp, err := caller.Call(ctx, srv.URL+errJSONPath, data)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -180,7 +185,7 @@ type testRetryCaller struct {
 	okAfter  int
 }
 
-func (t *testRetryCaller) Call(_ string, _ *RequestData) (*Response, error) {
+func (t *testRetryCaller) Call(_ context.Context, _ string, _ *RequestData) (*Response, error) {
 	t.attempts++
 	if t.okAfter != 0 && t.attempts > t.okAfter {
 		return t.resp, nil
@@ -189,6 +194,7 @@ func (t *testRetryCaller) Call(_ string, _ *RequestData) (*Response, error) {
 }
 
 func TestRetryCaller_Call(t *testing.T) {
+	ctx := context.Background()
 	expectedResp := &Response{Ok: true}
 
 	t.Run("success", func(t *testing.T) {
@@ -199,7 +205,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			},
 			MaxAttempts: 1,
 		}
-		resp, err := retryCaller.Call("", nil)
+		resp, err := retryCaller.Call(ctx, "", nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -213,7 +219,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			},
 			MaxAttempts: 3,
 		}
-		resp, err := retryCaller.Call("", nil)
+		resp, err := retryCaller.Call(ctx, "", nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -226,7 +232,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			},
 			MaxAttempts: 2,
 		}
-		resp, err := retryCaller.Call("", nil)
+		resp, err := retryCaller.Call(ctx, "", nil)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -242,7 +248,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			StartDelay:   10,
 			MaxDelay:     1,
 		}
-		resp, err := retryCaller.Call("", nil)
+		resp, err := retryCaller.Call(ctx, "", nil)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})

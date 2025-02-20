@@ -7,7 +7,6 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"
@@ -26,8 +25,8 @@ func main() {
 	}
 
 	// Initialize signal handling
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, os.Interrupt)
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
 
 	// Initialize done chan
 	done := make(chan struct{}, 1)
@@ -48,49 +47,44 @@ func main() {
 	srv := &fasthttp.Server{}
 
 	// Get an update channel from webhook using Ngrok
-	updates, _ := bot.UpdatesViaWebhook("/bot"+bot.Token(),
-		// Set func server with fast http server inside that will be used to handle webhooks
-		telego.WithWebhookServer(telego.FuncWebhookServer{
-			Server: telego.FastHTTPWebhookServer{
-				Logger: bot.Logger(),
-				Server: srv,
-				Router: router.New(),
-			},
-			// Override default start func to use Ngrok tunnel
-			// Note: When server is stopped, the Ngrok tunnel always returns an error, so it should be handled by user
-			StartFunc: func(_ string) error {
-				return srv.Serve(tun)
-			},
-		}),
-
+	updates, _ := bot.UpdatesViaWebhook(ctx,
+		// Use FastHTTP webhook server
+		telego.WebhookFastHTTP(srv, "/bot", bot.Token()),
 		// Calls SetWebhook before starting webhook and provide dynamic Ngrok tunnel URL
-		telego.WithWebhookSet(&telego.SetWebhookParams{
-			URL: tun.URL() + "/bot" + bot.Token(),
+		telego.WithWebhookSet(ctx, &telego.SetWebhookParams{
+			URL:         tun.URL() + "/bot",
+			SecretToken: bot.Token(),
 		}),
 	)
 
 	// Handle stop signal (Ctrl+C)
 	go func() {
 		// Wait for stop signal
-		<-sigs
-
+		<-ctx.Done()
 		fmt.Println("Stopping...")
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-		defer cancel()
+		stopCtx, stopCancel := context.WithTimeout(context.Background(), time.Second*20)
+		defer stopCancel()
 
-		// Stop reviving updates from update channel and shutdown webhook server
-		_ = bot.StopWebhookWithContext(ctx)
+		_ = srv.ShutdownWithContext(stopCtx)
+		fmt.Println("Server done")
+
+		for len(updates) > 0 {
+			select {
+			case <-stopCtx.Done():
+				break
+			case <-time.After(time.Microsecond * 100):
+				// Continue
+			}
+		}
 		fmt.Println("Webhook done")
 
 		// Notify that stop is done
 		done <- struct{}{}
 	}()
 
-	// Start server for receiving requests from the Telegram
-	go func() {
-		_ = bot.StartWebhook("")
-	}()
+	// Start server for receiving requests from the Telegram using the Ngrok tunnel
+	go func() { _ = srv.Serve(tun) }()
 
 	// Loop through all updates when they came
 	go func() {

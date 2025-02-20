@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -18,8 +20,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	for update := range updates {
 		// Receive inline query
@@ -28,7 +29,7 @@ func main() {
 			name := iq.From.FirstName
 
 			// Answer inline query request
-			_ = bot.AnswerInlineQuery(tu.InlineQuery(
+			_ = bot.AnswerInlineQuery(ctx, tu.InlineQuery(
 				iq.ID,
 
 				tu.ResultArticle(

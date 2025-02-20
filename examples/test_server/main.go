@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -31,7 +32,7 @@ func main() {
 
 	// Call method getMe (https://core.telegram.org/bots/api#getme).
 	// Note: Bot will call the test server: https://api.telegram.org/bot<token>/test/getMe
-	botUser, err := bot.GetMe()
+	botUser, err := bot.GetMe(context.Background())
 	if err != nil {
 		fmt.Println("Error:", err)
 	}

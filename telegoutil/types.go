@@ -9,35 +9,35 @@ import (
 	ta "github.com/mymmrac/telego/telegoapi"
 )
 
-// ID creates telego.ChatID from user's identifier
+// ID creates [telego.ChatID] from user's identifier
 func ID(id int64) telego.ChatID {
 	return telego.ChatID{
 		ID: id,
 	}
 }
 
-// Username creates telego.ChatID from username
+// Username creates [telego.ChatID] from username
 func Username(username string) telego.ChatID {
 	return telego.ChatID{
 		Username: username,
 	}
 }
 
-// File creates telego.InputFile from telegoapi.NamedReader
+// File creates [telego.InputFile] from telegoapi.NamedReader
 func File(file ta.NamedReader) telego.InputFile {
 	return telego.InputFile{
 		File: file,
 	}
 }
 
-// FileFromURL creates telego.InputFile from URL
+// FileFromURL creates [telego.InputFile] from URL
 func FileFromURL(url string) telego.InputFile {
 	return telego.InputFile{
 		URL: url,
 	}
 }
 
-// FileFromID creates telego.InputFile from file ID
+// FileFromID creates [telego.InputFile] from file ID
 func FileFromID(id string) telego.InputFile {
 	return telego.InputFile{
 		FileID: id,
@@ -59,19 +59,19 @@ func DownloadFile(url string) ([]byte, error) {
 	return file, nil
 }
 
-// Keyboard creates telego.ReplyKeyboardMarkup from slice of keyboard buttons
+// Keyboard creates [telego.ReplyKeyboardMarkup] from slice of keyboard buttons
 func Keyboard(rows ...[]telego.KeyboardButton) *telego.ReplyKeyboardMarkup {
 	return &telego.ReplyKeyboardMarkup{
 		Keyboard: rows,
 	}
 }
 
-// KeyboardRow creates a slice of telego.KeyboardButton
+// KeyboardRow creates a slice of [telego.KeyboardButton]
 func KeyboardRow(buttons ...telego.KeyboardButton) []telego.KeyboardButton {
 	return buttons
 }
 
-// KeyboardGrid creates a telego.ReplyKeyboardMarkup from grid of buttons
+// KeyboardGrid creates a [telego.ReplyKeyboardMarkup] from grid of buttons
 func KeyboardGrid(buttons [][]telego.KeyboardButton) *telego.ReplyKeyboardMarkup {
 	return &telego.ReplyKeyboardMarkup{
 		Keyboard: buttons,
@@ -138,54 +138,54 @@ func KeyboardRows(rows int, buttons ...telego.KeyboardButton) [][]telego.Keyboar
 	return grid
 }
 
-// KeyboardButton creates telego.KeyboardButton with required fields
+// KeyboardButton creates [telego.KeyboardButton] with required fields
 func KeyboardButton(text string) telego.KeyboardButton {
 	return telego.KeyboardButton{
 		Text: text,
 	}
 }
 
-// ReplyKeyboardRemove creates telego.ReplyKeyboardRemove with required fields
+// ReplyKeyboardRemove creates [telego.ReplyKeyboardRemove] with required fields
 func ReplyKeyboardRemove() *telego.ReplyKeyboardRemove {
 	return &telego.ReplyKeyboardRemove{
 		RemoveKeyboard: true,
 	}
 }
 
-// WebAppInfo creates telego.WebAppInfo with required fields
+// WebAppInfo creates [telego.WebAppInfo] with required fields
 func WebAppInfo(url string) *telego.WebAppInfo {
 	return &telego.WebAppInfo{
 		URL: url,
 	}
 }
 
-// ForceReply creates telego.ForceReply with required fields
+// ForceReply creates [telego.ForceReply] with required fields
 func ForceReply() *telego.ForceReply {
 	return &telego.ForceReply{
 		ForceReply: true,
 	}
 }
 
-// PollTypeAny creates telego.KeyboardButtonPollType with any type
+// PollTypeAny creates [telego.KeyboardButtonPollType] with any type
 func PollTypeAny() *telego.KeyboardButtonPollType {
 	return &telego.KeyboardButtonPollType{}
 }
 
-// PollTypeRegular creates telego.KeyboardButtonPollType with type regular
+// PollTypeRegular creates [telego.KeyboardButtonPollType] with type regular
 func PollTypeRegular() *telego.KeyboardButtonPollType {
 	return &telego.KeyboardButtonPollType{
 		Type: telego.PollTypeRegular,
 	}
 }
 
-// PollTypeQuiz creates telego.KeyboardButtonPollType with type quiz
+// PollTypeQuiz creates [telego.KeyboardButtonPollType] with type quiz
 func PollTypeQuiz() *telego.KeyboardButtonPollType {
 	return &telego.KeyboardButtonPollType{
 		Type: telego.PollTypeQuiz,
 	}
 }
 
-// InlineKeyboard creates telego.InlineKeyboardMarkup from slice of keyboard buttons rows
+// InlineKeyboard creates [telego.InlineKeyboardMarkup] from slice of keyboard buttons rows
 func InlineKeyboard(rows ...[]telego.InlineKeyboardButton) *telego.InlineKeyboardMarkup {
 	return &telego.InlineKeyboardMarkup{
 		InlineKeyboard: rows,
@@ -197,7 +197,7 @@ func InlineKeyboardRow(buttons ...telego.InlineKeyboardButton) []telego.InlineKe
 	return buttons
 }
 
-// InlineKeyboardGrid creates a telego.InlineKeyboardMarkup from grid of buttons
+// InlineKeyboardGrid creates a [telego.InlineKeyboardMarkup] from grid of buttons
 func InlineKeyboardGrid(buttons [][]telego.InlineKeyboardButton) *telego.InlineKeyboardMarkup {
 	return &telego.InlineKeyboardMarkup{
 		InlineKeyboard: buttons,
@@ -264,14 +264,14 @@ func InlineKeyboardRows(rows int, buttons ...telego.InlineKeyboardButton) [][]te
 	return grid
 }
 
-// InlineKeyboardButton creates telego.InlineKeyboardButton with required fields
+// InlineKeyboardButton creates [telego.InlineKeyboardButton] with required fields
 func InlineKeyboardButton(text string) telego.InlineKeyboardButton {
 	return telego.InlineKeyboardButton{
 		Text: text,
 	}
 }
 
-// ResultCachedAudio creates telego.InlineQueryResultCachedAudio with required fields
+// ResultCachedAudio creates [telego.InlineQueryResultCachedAudio] with required fields
 func ResultCachedAudio(id, audioFileID string) *telego.InlineQueryResultCachedAudio {
 	return &telego.InlineQueryResultCachedAudio{
 		Type:        telego.ResultTypeAudio,
@@ -280,7 +280,7 @@ func ResultCachedAudio(id, audioFileID string) *telego.InlineQueryResultCachedAu
 	}
 }
 
-// ResultCachedDocument creates telego.InlineQueryResultCachedDocument with required fields
+// ResultCachedDocument creates [telego.InlineQueryResultCachedDocument] with required fields
 func ResultCachedDocument(id, title, documentFileID string) *telego.InlineQueryResultCachedDocument {
 	return &telego.InlineQueryResultCachedDocument{
 		Type:           telego.ResultTypeDocument,
@@ -290,7 +290,7 @@ func ResultCachedDocument(id, title, documentFileID string) *telego.InlineQueryR
 	}
 }
 
-// ResultCachedGif creates telego.InlineQueryResultCachedGif with required fields
+// ResultCachedGif creates [telego.InlineQueryResultCachedGif] with required fields
 func ResultCachedGif(id, gifFileID string) *telego.InlineQueryResultCachedGif {
 	return &telego.InlineQueryResultCachedGif{
 		Type:      telego.ResultTypeGif,
@@ -299,7 +299,7 @@ func ResultCachedGif(id, gifFileID string) *telego.InlineQueryResultCachedGif {
 	}
 }
 
-// ResultCachedMpeg4Gif creates telego.InlineQueryResultCachedMpeg4Gif with required fields
+// ResultCachedMpeg4Gif creates [telego.InlineQueryResultCachedMpeg4Gif] with required fields
 func ResultCachedMpeg4Gif(id, mpeg4FileID string) *telego.InlineQueryResultCachedMpeg4Gif {
 	return &telego.InlineQueryResultCachedMpeg4Gif{
 		Type:        telego.ResultTypeMpeg4Gif,
@@ -308,7 +308,7 @@ func ResultCachedMpeg4Gif(id, mpeg4FileID string) *telego.InlineQueryResultCache
 	}
 }
 
-// ResultCachedPhoto creates telego.InlineQueryResultCachedPhoto with required fields
+// ResultCachedPhoto creates [telego.InlineQueryResultCachedPhoto] with required fields
 func ResultCachedPhoto(id, photoFileID string) *telego.InlineQueryResultCachedPhoto {
 	return &telego.InlineQueryResultCachedPhoto{
 		Type:        telego.ResultTypePhoto,
@@ -317,7 +317,7 @@ func ResultCachedPhoto(id, photoFileID string) *telego.InlineQueryResultCachedPh
 	}
 }
 
-// ResultCachedSticker creates telego.InlineQueryResultCachedSticker with required fields
+// ResultCachedSticker creates [telego.InlineQueryResultCachedSticker] with required fields
 func ResultCachedSticker(id, stickerFileID string) *telego.InlineQueryResultCachedSticker {
 	return &telego.InlineQueryResultCachedSticker{
 		Type:          telego.ResultTypeSticker,
@@ -326,7 +326,7 @@ func ResultCachedSticker(id, stickerFileID string) *telego.InlineQueryResultCach
 	}
 }
 
-// ResultCachedVideo creates telego.InlineQueryResultCachedVideo with required fields
+// ResultCachedVideo creates [telego.InlineQueryResultCachedVideo] with required fields
 func ResultCachedVideo(id, videoFileID, title string) *telego.InlineQueryResultCachedVideo {
 	return &telego.InlineQueryResultCachedVideo{
 		Type:        telego.ResultTypeVideo,
@@ -336,7 +336,7 @@ func ResultCachedVideo(id, videoFileID, title string) *telego.InlineQueryResultC
 	}
 }
 
-// ResultCachedVoice creates telego.InlineQueryResultCachedVoice with required fields
+// ResultCachedVoice creates [telego.InlineQueryResultCachedVoice] with required fields
 func ResultCachedVoice(id, voiceFileID, title string) *telego.InlineQueryResultCachedVoice {
 	return &telego.InlineQueryResultCachedVoice{
 		Type:        telego.ResultTypeVoice,
@@ -346,7 +346,7 @@ func ResultCachedVoice(id, voiceFileID, title string) *telego.InlineQueryResultC
 	}
 }
 
-// ResultArticle creates telego.InlineQueryResultArticle with required fields
+// ResultArticle creates [telego.InlineQueryResultArticle] with required fields
 func ResultArticle(id, title string, inputMessageContent telego.InputMessageContent,
 ) *telego.InlineQueryResultArticle {
 	return &telego.InlineQueryResultArticle{
@@ -357,7 +357,7 @@ func ResultArticle(id, title string, inputMessageContent telego.InputMessageCont
 	}
 }
 
-// ResultAudio creates telego.InlineQueryResultAudio with required fields
+// ResultAudio creates [telego.InlineQueryResultAudio] with required fields
 func ResultAudio(id, audioURL, title string) *telego.InlineQueryResultAudio {
 	return &telego.InlineQueryResultAudio{
 		Type:     telego.ResultTypeAudio,
@@ -367,7 +367,7 @@ func ResultAudio(id, audioURL, title string) *telego.InlineQueryResultAudio {
 	}
 }
 
-// ResultContact creates telego.InlineQueryResultContact with required fields
+// ResultContact creates [telego.InlineQueryResultContact] with required fields
 func ResultContact(id, phoneNumber, firstName string) *telego.InlineQueryResultContact {
 	return &telego.InlineQueryResultContact{
 		Type:        telego.ResultTypeContact,
@@ -377,7 +377,7 @@ func ResultContact(id, phoneNumber, firstName string) *telego.InlineQueryResultC
 	}
 }
 
-// ResultGame creates telego.InlineQueryResultGame with required fields
+// ResultGame creates [telego.InlineQueryResultGame] with required fields
 func ResultGame(id, gameShortName string) *telego.InlineQueryResultGame {
 	return &telego.InlineQueryResultGame{
 		Type:          telego.ResultTypeGame,
@@ -386,7 +386,7 @@ func ResultGame(id, gameShortName string) *telego.InlineQueryResultGame {
 	}
 }
 
-// ResultDocument creates telego.InlineQueryResultDocument with required fields
+// ResultDocument creates [telego.InlineQueryResultDocument] with required fields
 func ResultDocument(id, title, documentURL, mimeType string) *telego.InlineQueryResultDocument {
 	return &telego.InlineQueryResultDocument{
 		Type:        telego.ResultTypeDocument,
@@ -397,7 +397,7 @@ func ResultDocument(id, title, documentURL, mimeType string) *telego.InlineQuery
 	}
 }
 
-// ResultGif creates telego.InlineQueryResultGif with required fields
+// ResultGif creates [telego.InlineQueryResultGif] with required fields
 func ResultGif(id, gifURL, thumbnailURL string) *telego.InlineQueryResultGif {
 	return &telego.InlineQueryResultGif{
 		Type:         telego.ResultTypeGif,
@@ -407,7 +407,7 @@ func ResultGif(id, gifURL, thumbnailURL string) *telego.InlineQueryResultGif {
 	}
 }
 
-// ResultLocation creates telego.InlineQueryResultLocation with required fields
+// ResultLocation creates [telego.InlineQueryResultLocation] with required fields
 func ResultLocation(id string, latitude, longitude float64, title string) *telego.InlineQueryResultLocation {
 	return &telego.InlineQueryResultLocation{
 		Type:      telego.ResultTypeLocation,
@@ -418,7 +418,7 @@ func ResultLocation(id string, latitude, longitude float64, title string) *teleg
 	}
 }
 
-// ResultMpeg4Gif creates telego.InlineQueryResultMpeg4Gif with required fields
+// ResultMpeg4Gif creates [telego.InlineQueryResultMpeg4Gif] with required fields
 func ResultMpeg4Gif(id, mpeg4URL, thumbnailURL string) *telego.InlineQueryResultMpeg4Gif {
 	return &telego.InlineQueryResultMpeg4Gif{
 		Type:         telego.ResultTypeMpeg4Gif,
@@ -428,7 +428,7 @@ func ResultMpeg4Gif(id, mpeg4URL, thumbnailURL string) *telego.InlineQueryResult
 	}
 }
 
-// ResultPhoto creates telego.InlineQueryResultPhoto with required fields
+// ResultPhoto creates [telego.InlineQueryResultPhoto] with required fields
 func ResultPhoto(id, photoURL, thumbnailURL string) *telego.InlineQueryResultPhoto {
 	return &telego.InlineQueryResultPhoto{
 		Type:         telego.ResultTypePhoto,
@@ -438,7 +438,7 @@ func ResultPhoto(id, photoURL, thumbnailURL string) *telego.InlineQueryResultPho
 	}
 }
 
-// ResultVenue creates telego.InlineQueryResultVenue with required fields
+// ResultVenue creates [telego.InlineQueryResultVenue] with required fields
 func ResultVenue(id string, latitude, longitude float64, title, address string,
 ) *telego.InlineQueryResultVenue {
 	return &telego.InlineQueryResultVenue{
@@ -451,7 +451,7 @@ func ResultVenue(id string, latitude, longitude float64, title, address string,
 	}
 }
 
-// ResultVideo creates telego.InlineQueryResultVideo with required fields
+// ResultVideo creates [telego.InlineQueryResultVideo] with required fields
 func ResultVideo(id, videoURL, mimeType, thumbnailURL, title string) *telego.InlineQueryResultVideo {
 	return &telego.InlineQueryResultVideo{
 		Type:         telego.ResultTypeVideo,
@@ -463,7 +463,7 @@ func ResultVideo(id, videoURL, mimeType, thumbnailURL, title string) *telego.Inl
 	}
 }
 
-// ResultVoice creates telego.InlineQueryResultVoice with required fields
+// ResultVoice creates [telego.InlineQueryResultVoice] with required fields
 func ResultVoice(id, voiceURL, title string) *telego.InlineQueryResultVoice {
 	return &telego.InlineQueryResultVoice{
 		Type:     telego.ResultTypeVoice,
@@ -473,14 +473,14 @@ func ResultVoice(id, voiceURL, title string) *telego.InlineQueryResultVoice {
 	}
 }
 
-// TextMessage creates telego.InputTextMessageContent with required fields
+// TextMessage creates [telego.InputTextMessageContent] with required fields
 func TextMessage(messageText string) *telego.InputTextMessageContent {
 	return &telego.InputTextMessageContent{
 		MessageText: messageText,
 	}
 }
 
-// LocationMessage creates telego.InputLocationMessageContent with required fields
+// LocationMessage creates [telego.InputLocationMessageContent] with required fields
 func LocationMessage(latitude, longitude float64) *telego.InputLocationMessageContent {
 	return &telego.InputLocationMessageContent{
 		Latitude:  latitude,
@@ -488,7 +488,7 @@ func LocationMessage(latitude, longitude float64) *telego.InputLocationMessageCo
 	}
 }
 
-// VenueMessage creates telego.InputVenueMessageContent with required fields
+// VenueMessage creates [telego.InputVenueMessageContent] with required fields
 func VenueMessage(latitude, longitude float64, title, address string) *telego.InputVenueMessageContent {
 	return &telego.InputVenueMessageContent{
 		Latitude:  latitude,
@@ -498,7 +498,7 @@ func VenueMessage(latitude, longitude float64, title, address string) *telego.In
 	}
 }
 
-// ContactMessage creates telego.InputContactMessageContent with required fields
+// ContactMessage creates [telego.InputContactMessageContent] with required fields
 func ContactMessage(phoneNumber, firstName string) *telego.InputContactMessageContent {
 	return &telego.InputContactMessageContent{
 		PhoneNumber: phoneNumber,
@@ -506,7 +506,7 @@ func ContactMessage(phoneNumber, firstName string) *telego.InputContactMessageCo
 	}
 }
 
-// InvoiceMessage creates telego.InputInvoiceMessageContent with required fields
+// InvoiceMessage creates [telego.InputInvoiceMessageContent] with required fields
 func InvoiceMessage(title, description, payload, providerToken, currency string, prices ...telego.LabeledPrice,
 ) *telego.InputInvoiceMessageContent {
 	return &telego.InputInvoiceMessageContent{
@@ -519,7 +519,7 @@ func InvoiceMessage(title, description, payload, providerToken, currency string,
 	}
 }
 
-// MediaAnimation creates telego.InputMediaAnimation with required fields
+// MediaAnimation creates [telego.InputMediaAnimation] with required fields
 func MediaAnimation(media telego.InputFile) *telego.InputMediaAnimation {
 	return &telego.InputMediaAnimation{
 		Type:  telego.MediaTypeAnimation,
@@ -527,7 +527,7 @@ func MediaAnimation(media telego.InputFile) *telego.InputMediaAnimation {
 	}
 }
 
-// MediaDocument creates telego.InputMediaDocument with required fields
+// MediaDocument creates [telego.InputMediaDocument] with required fields
 func MediaDocument(media telego.InputFile) *telego.InputMediaDocument {
 	return &telego.InputMediaDocument{
 		Type:  telego.MediaTypeDocument,
@@ -535,7 +535,7 @@ func MediaDocument(media telego.InputFile) *telego.InputMediaDocument {
 	}
 }
 
-// MediaAudio creates telego.InputMediaAudio with required fields
+// MediaAudio creates [telego.InputMediaAudio] with required fields
 func MediaAudio(media telego.InputFile) *telego.InputMediaAudio {
 	return &telego.InputMediaAudio{
 		Type:  telego.MediaTypeAudio,
@@ -543,7 +543,7 @@ func MediaAudio(media telego.InputFile) *telego.InputMediaAudio {
 	}
 }
 
-// MediaPhoto creates telego.InputMediaPhoto with required fields
+// MediaPhoto creates [telego.InputMediaPhoto] with required fields
 func MediaPhoto(media telego.InputFile) *telego.InputMediaPhoto {
 	return &telego.InputMediaPhoto{
 		Type:  telego.MediaTypePhoto,
@@ -551,7 +551,7 @@ func MediaPhoto(media telego.InputFile) *telego.InputMediaPhoto {
 	}
 }
 
-// MediaVideo creates telego.InputMediaVideo with required fields
+// MediaVideo creates [telego.InputMediaVideo] with required fields
 func MediaVideo(media telego.InputFile) *telego.InputMediaVideo {
 	return &telego.InputMediaVideo{
 		Type:  telego.MediaTypeVideo,
@@ -559,35 +559,35 @@ func MediaVideo(media telego.InputFile) *telego.InputMediaVideo {
 	}
 }
 
-// ScopeDefault creates telego.BotCommandScopeDefault with required fields
+// ScopeDefault creates [telego.BotCommandScopeDefault] with required fields
 func ScopeDefault() *telego.BotCommandScopeDefault {
 	return &telego.BotCommandScopeDefault{
 		Type: telego.ScopeTypeDefault,
 	}
 }
 
-// ScopeAllPrivateChats creates telego.BotCommandScopeAllPrivateChats with required fields
+// ScopeAllPrivateChats creates [telego.BotCommandScopeAllPrivateChats] with required fields
 func ScopeAllPrivateChats() *telego.BotCommandScopeAllPrivateChats {
 	return &telego.BotCommandScopeAllPrivateChats{
 		Type: telego.ScopeTypeAllPrivateChats,
 	}
 }
 
-// ScopeAllGroupChats creates telego.BotCommandScopeAllGroupChats with required fields
+// ScopeAllGroupChats creates [telego.BotCommandScopeAllGroupChats] with required fields
 func ScopeAllGroupChats() *telego.BotCommandScopeAllGroupChats {
 	return &telego.BotCommandScopeAllGroupChats{
 		Type: telego.ScopeTypeAllGroupChats,
 	}
 }
 
-// ScopeAllChatAdministrators creates telego.BotCommandScopeAllChatAdministrators with required fields
+// ScopeAllChatAdministrators creates [telego.BotCommandScopeAllChatAdministrators] with required fields
 func ScopeAllChatAdministrators() *telego.BotCommandScopeAllChatAdministrators {
 	return &telego.BotCommandScopeAllChatAdministrators{
 		Type: telego.ScopeTypeAllChatAdministrators,
 	}
 }
 
-// ScopeChat creates telego.BotCommandScopeChat with required fields
+// ScopeChat creates [telego.BotCommandScopeChat] with required fields
 func ScopeChat(chatID telego.ChatID) *telego.BotCommandScopeChat {
 	return &telego.BotCommandScopeChat{
 		Type:   telego.ScopeTypeChat,
@@ -595,7 +595,7 @@ func ScopeChat(chatID telego.ChatID) *telego.BotCommandScopeChat {
 	}
 }
 
-// ScopeChatAdministrators creates telego.BotCommandScopeChatAdministrators with required fields
+// ScopeChatAdministrators creates [telego.BotCommandScopeChatAdministrators] with required fields
 func ScopeChatAdministrators(chatID telego.ChatID) *telego.BotCommandScopeChatAdministrators {
 	return &telego.BotCommandScopeChatAdministrators{
 		Type:   telego.ScopeTypeChatAdministrators,
@@ -603,7 +603,7 @@ func ScopeChatAdministrators(chatID telego.ChatID) *telego.BotCommandScopeChatAd
 	}
 }
 
-// ScopeChatMember creates telego.BotCommandScopeChatMember with required fields
+// ScopeChatMember creates [telego.BotCommandScopeChatMember] with required fields
 func ScopeChatMember(chatID telego.ChatID, userID int64) *telego.BotCommandScopeChatMember {
 	return &telego.BotCommandScopeChatMember{
 		Type:   telego.ScopeTypeChatMember,
@@ -612,7 +612,7 @@ func ScopeChatMember(chatID telego.ChatID, userID int64) *telego.BotCommandScope
 	}
 }
 
-// ErrorDataField creates telego.PassportElementErrorDataField with required fields
+// ErrorDataField creates [telego.PassportElementErrorDataField] with required fields
 func ErrorDataField(sourceType, message, fieldName, dataHash string) *telego.PassportElementErrorDataField {
 	return &telego.PassportElementErrorDataField{
 		Source:    telego.ErrorSourceDataField,
@@ -623,7 +623,7 @@ func ErrorDataField(sourceType, message, fieldName, dataHash string) *telego.Pas
 	}
 }
 
-// ErrorFrontSide creates telego.PassportElementErrorFrontSide with required fields
+// ErrorFrontSide creates [telego.PassportElementErrorFrontSide] with required fields
 func ErrorFrontSide(sourceType, message, fileHash string) *telego.PassportElementErrorFrontSide {
 	return &telego.PassportElementErrorFrontSide{
 		Source:   telego.ErrorSourceFrontSide,
@@ -633,7 +633,7 @@ func ErrorFrontSide(sourceType, message, fileHash string) *telego.PassportElemen
 	}
 }
 
-// ErrorReverseSide creates telego.PassportElementErrorReverseSide with required fields
+// ErrorReverseSide creates [telego.PassportElementErrorReverseSide] with required fields
 func ErrorReverseSide(sourceType, message, fileHash string) *telego.PassportElementErrorReverseSide {
 	return &telego.PassportElementErrorReverseSide{
 		Source:   telego.ErrorSourceReverseSide,
@@ -643,7 +643,7 @@ func ErrorReverseSide(sourceType, message, fileHash string) *telego.PassportElem
 	}
 }
 
-// ErrorSelfie creates telego.PassportElementErrorSelfie with required fields
+// ErrorSelfie creates [telego.PassportElementErrorSelfie] with required fields
 func ErrorSelfie(sourceType, message, fileHash string) *telego.PassportElementErrorSelfie {
 	return &telego.PassportElementErrorSelfie{
 		Source:   telego.ErrorSourceSelfie,
@@ -653,7 +653,7 @@ func ErrorSelfie(sourceType, message, fileHash string) *telego.PassportElementEr
 	}
 }
 
-// ErrorFile creates telego.PassportElementErrorFile with required fields
+// ErrorFile creates [telego.PassportElementErrorFile] with required fields
 func ErrorFile(sourceType, message, fileHash string) *telego.PassportElementErrorFile {
 	return &telego.PassportElementErrorFile{
 		Source:   telego.ErrorSourceFile,
@@ -663,7 +663,7 @@ func ErrorFile(sourceType, message, fileHash string) *telego.PassportElementErro
 	}
 }
 
-// ErrorFiles creates telego.PassportElementErrorFiles with required fields
+// ErrorFiles creates [telego.PassportElementErrorFiles] with required fields
 func ErrorFiles(sourceType, message string, fileHashes ...string) *telego.PassportElementErrorFiles {
 	return &telego.PassportElementErrorFiles{
 		Source:     telego.ErrorSourceFiles,
@@ -673,7 +673,7 @@ func ErrorFiles(sourceType, message string, fileHashes ...string) *telego.Passpo
 	}
 }
 
-// ErrorTranslationFile creates telego.PassportElementErrorTranslationFile with required fields
+// ErrorTranslationFile creates [telego.PassportElementErrorTranslationFile] with required fields
 func ErrorTranslationFile(sourceType, message, fileHash string) *telego.PassportElementErrorTranslationFile {
 	return &telego.PassportElementErrorTranslationFile{
 		Source:   telego.ErrorSourceTranslationFile,
@@ -683,7 +683,7 @@ func ErrorTranslationFile(sourceType, message, fileHash string) *telego.Passport
 	}
 }
 
-// ErrorTranslationFiles creates telego.PassportElementErrorTranslationFiles with required fields
+// ErrorTranslationFiles creates [telego.PassportElementErrorTranslationFiles] with required fields
 func ErrorTranslationFiles(sourceType, message string, fileHashes ...string,
 ) *telego.PassportElementErrorTranslationFiles {
 	return &telego.PassportElementErrorTranslationFiles{
@@ -694,7 +694,7 @@ func ErrorTranslationFiles(sourceType, message string, fileHashes ...string,
 	}
 }
 
-// ErrorUnspecified creates telego.PassportElementErrorUnspecified with required fields
+// ErrorUnspecified creates [telego.PassportElementErrorUnspecified] with required fields
 func ErrorUnspecified(sourceType, message, elementHash string) *telego.PassportElementErrorUnspecified {
 	return &telego.PassportElementErrorUnspecified{
 		Source:      telego.ErrorSourceUnspecified,
@@ -704,7 +704,7 @@ func ErrorUnspecified(sourceType, message, elementHash string) *telego.PassportE
 	}
 }
 
-// LabeledPrice creates telego.LabeledPrice with required parameters
+// LabeledPrice creates [telego.LabeledPrice] with required parameters
 func LabeledPrice(label string, amount int) telego.LabeledPrice {
 	return telego.LabeledPrice{
 		Label:  label,
@@ -712,7 +712,7 @@ func LabeledPrice(label string, amount int) telego.LabeledPrice {
 	}
 }
 
-// ShippingOption creates telego.ShippingOption with required parameters
+// ShippingOption creates [telego.ShippingOption] with required parameters
 func ShippingOption(id, title string, prices ...telego.LabeledPrice) telego.ShippingOption {
 	return telego.ShippingOption{
 		ID:     id,

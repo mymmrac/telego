@@ -1,6 +1,7 @@
 package telegohandler
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -11,34 +12,56 @@ import (
 )
 
 func TestPanicRecovery(t *testing.T) {
-	bot, err := telego.NewBot(token, telego.WithDiscardLogger())
-	require.NoError(t, err)
-
 	t.Run("no_panic", func(t *testing.T) {
 		assert.NotPanics(t, func() {
-			PanicRecovery()(bot, telego.Update{}, func(bot *telego.Bot, update telego.Update) {})
+			err := PanicRecovery()(nil, telego.Update{})
+			assert.NoError(t, err)
 		})
 	})
 
-	t.Run("panic_recovered", func(t *testing.T) {
-		const panicValue = "test panic"
+	t.Run("panic_recovered_no_error", func(t *testing.T) {
 		assert.NotPanics(t, func() {
-			PanicRecoveryHandler(func(recovered any) {
-				assert.Equal(t, panicValue, recovered)
-			})(bot, telego.Update{}, func(bot *telego.Bot, update telego.Update) {
-				panic(panicValue)
-			})
+			err := PanicRecoveryHandler(func(recovered any) error {
+				assert.NotNil(t, recovered)
+				return nil
+			})(nil, telego.Update{})
+			assert.NoError(t, err)
+		})
+	})
+
+	t.Run("panic_recovered_error", func(t *testing.T) {
+		assert.NotPanics(t, func() {
+			err := PanicRecoveryHandler(func(recovered any) error {
+				assert.NotNil(t, recovered)
+				return errTest
+			})(nil, telego.Update{})
+			assert.ErrorIs(t, err, errTest)
 		})
 	})
 }
 
 func TestTimeout(t *testing.T) {
-	bot, err := telego.NewBot(token, telego.WithDiscardLogger())
-	require.NoError(t, err)
+	run := false
+	ctx := &Context{
+		ctx: context.Background(),
+		ctxBase: &ctxBase{
+			group: &HandlerGroup{
+				routes: []route{
+					{
+						handler: func(ctx *Context, update telego.Update) error {
+							_, hasDeadline := ctx.Deadline()
+							assert.True(t, hasDeadline)
+							run = true
+							return nil
+						},
+					},
+				},
+			},
+			stack: []int{-1},
+		},
+	}
 
-	hasDeadline := false
-	Timeout(time.Minute)(bot, telego.Update{}, func(bot *telego.Bot, update telego.Update) {
-		_, hasDeadline = update.Context().Deadline()
-	})
-	assert.True(t, hasDeadline)
+	err := Timeout(time.Minute)(ctx, telego.Update{})
+	require.NoError(t, err)
+	assert.True(t, run)
 }

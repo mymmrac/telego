@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -20,37 +22,36 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Create bot handler and specify from where to get updates
 	bh, _ := th.NewBotHandler(bot, updates)
 
-	// Stop handling updates
-	defer bh.Stop()
-
-	// Stop getting updates
-	defer bot.StopLongPolling()
-
 	// Register new handler with match on command `/start`
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+	bh.Handle(func(ctx *th.Context, update telego.Update) error {
 		// Send message
-		_, _ = bot.SendMessage(tu.Messagef(
+		_, _ = bot.SendMessage(ctx, tu.Messagef(
 			tu.ID(update.Message.Chat.ID),
 			"Hello %s!", update.Message.From.FirstName,
 		))
+		return nil
 	}, th.CommandEqual("start"))
 
 	// Register new handler with match on any command
 	// Handlers will match only once and in order of registration, so this handler will be called on any command except
 	// `/start` command
-	bh.Handle(func(bot *telego.Bot, update telego.Update) {
+	bh.Handle(func(ctx *th.Context, update telego.Update) error {
 		// Send message
-		_, _ = bot.SendMessage(tu.Message(
+		_, _ = bot.SendMessage(ctx, tu.Message(
 			tu.ID(update.Message.Chat.ID),
 			"Unknown command, use /start",
 		))
+		return nil
 	}, th.AnyCommand())
 
+	// Stop handling updates
+	defer func() { _ = bh.Stop() }()
+
 	// Start handling updates
-	bh.Start()
+	_ = bh.Start()
 }

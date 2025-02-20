@@ -1,114 +1,59 @@
 package telegohandler
 
 import (
-	"sync"
+	"context"
+	"slices"
 
 	"github.com/mymmrac/telego"
 )
 
-// conditionalHandler represents handler with respectful predicates
-type conditionalHandler struct {
-	handler    Handler
+// route represents handler, middleware or group with respectful predicates
+type route struct {
 	predicates []Predicate
+
+	group   *HandlerGroup
+	handler Handler
 }
 
-// match matches the current update and handler
-func (h conditionalHandler) match(update telego.Update) bool {
+// match matches the current update by predicates
+func (r route) match(ctx context.Context, update telego.Update) bool {
+	if len(r.predicates) == 0 {
+		return true
+	}
+
 	update = update.Clone()
-	for _, p := range h.predicates {
-		if !p(update) {
+	for _, p := range r.predicates {
+		if !p(ctx, update) {
 			return false
 		}
 	}
+
 	return true
 }
 
-// HandlerGroup represents a group of handlers, middlewares and child groups
+// HandlerGroup represents a group of middlewares and routes (handlers and subgroups)
 type HandlerGroup struct {
-	lock        sync.RWMutex
-	predicates  []Predicate
-	middlewares []Middleware
-	groups      []*HandlerGroup
-	handlers    []conditionalHandler
+	parent *HandlerGroup
+	routes []route
 }
 
-// match matches the current update and group
-func (h *HandlerGroup) match(update telego.Update) bool {
-	update = update.Clone()
-	for _, p := range h.predicates {
-		if !p(update) {
-			return false
+// depth returns the depth of the group's routes
+func (h *HandlerGroup) depth(depth int) int {
+	localDepth := depth
+	for _, r := range h.routes {
+		if r.group != nil {
+			depth = max(depth, r.group.depth(localDepth+1))
 		}
 	}
-	return true
+	return depth
 }
 
-// processUpdate checks all group predicates, runs middlewares, checks handler predicates,
-// tries to process update in first matched handler
-func (h *HandlerGroup) processUpdate(bot *telego.Bot, update telego.Update) {
-	h.lock.RLock()
-	_ = h.processUpdateWithMiddlewares(bot, update, h.middlewares)
-	h.lock.RUnlock()
-}
-
-func (h *HandlerGroup) processUpdateWithMiddlewares(
-	bot *telego.Bot, update telego.Update, middlewares []Middleware,
-) bool {
-	ctx := update.Context()
-	select {
-	case <-ctx.Done():
-		return false
-	default:
-		// Continue
-	}
-
-	// Check group predicates once
-	if len(middlewares) == len(h.middlewares) && !h.match(update) {
-		return false
-	}
-
-	// Process all middlewares
-	if len(middlewares) != 0 {
-		once := sync.Once{}
-		done := make(chan bool, 1)
-		middlewares[0](bot, update, func(bot *telego.Bot, update telego.Update) {
-			once.Do(func() {
-				done <- h.processUpdateWithMiddlewares(bot, update, middlewares[1:])
-			})
-		})
-
-		select {
-		case <-ctx.Done():
-			return false
-		case matched := <-done:
-			return matched
-		}
-	}
-
-	// Process all groups
-	for _, group := range h.groups {
-		if group.processUpdateWithMiddlewares(bot, update, group.middlewares) {
-			return true
-		}
-	}
-
-	// Process all handlers
-	for _, handler := range h.handlers {
-		if handler.match(update) {
-			handler.handler(bot, update)
-			return true
-		}
-	}
-
-	return false
-}
-
-// Handle registers new handler in the group, update will be processed only by first-matched handler,
-// order of registration determines the order of matching handlers.
-// Important to notice, update's context will be automatically canceled once the handler will finish processing or
+// Handle registers new handler in the group, update will be processed only by first-matched route,
+// order of registration determines the order of matching routes.
+// Important to notice handler's context will be automatically canceled once the handler will finish processing or
 // the bot handler stopped.
 // Note: All handlers will process updates in parallel, there is no guaranty on order of processed updates, also keep
-// in mind that middlewares and predicates are checked sequentially.
+// in mind that middlewares and predicates are run sequentially.
 //
 // Warning: Panics if nil handler or predicates passed
 func (h *HandlerGroup) Handle(handler Handler, predicates ...Predicate) {
@@ -122,16 +67,14 @@ func (h *HandlerGroup) Handle(handler Handler, predicates ...Predicate) {
 		}
 	}
 
-	h.lock.Lock()
-	h.handlers = append(h.handlers, conditionalHandler{
-		handler:    handler,
+	h.routes = append(h.routes, route{
 		predicates: predicates,
+		handler:    handler,
 	})
-	h.lock.Unlock()
 }
 
-// Group creates a new group of handlers and middlewares from the parent group
-// Note: Updates first checked by group and only after that by handler
+// Group creates a new group of handlers and middlewares from the parent group, update will be processed only by
+// first-matched route, order of registration determines the order of matching routes
 //
 // Warning: Panics if nil predicates passed
 func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
@@ -142,30 +85,33 @@ func (h *HandlerGroup) Group(predicates ...Predicate) *HandlerGroup {
 	}
 
 	group := &HandlerGroup{
-		predicates: predicates,
+		parent: h,
 	}
 
-	h.lock.Lock()
-	h.groups = append(h.groups, group)
-	h.lock.Unlock()
+	h.routes = append(h.routes, route{
+		predicates: predicates,
+		group:      group,
+	})
 
 	return group
 }
 
-// Use applies middleware to the group
-// Note: The chain will be stopped if middleware doesn't call the next func,
-// if there is no context timeout then update will be stuck,
-// if there is time out then the group will be skipped since not all middlewares were called
+// Use applies middleware to the group, update will be processed only by first-matched route,
+// order of registration determines the order of matching routes.
+// Note: The chain will be stopped if middleware doesn't call the [Context.Next]
 //
 // Warning: Panics if nil middlewares passed
-func (h *HandlerGroup) Use(middlewares ...Middleware) {
+func (h *HandlerGroup) Use(middlewares ...Handler) {
 	for _, m := range middlewares {
 		if m == nil {
 			panic("Telego: nil middlewares not allowed")
 		}
 	}
 
-	h.lock.Lock()
-	h.middlewares = append(h.middlewares, middlewares...)
-	h.lock.Unlock()
+	h.routes = slices.Grow(h.routes, len(middlewares))
+	for _, middleware := range middlewares {
+		h.routes = append(h.routes, route{
+			handler: middleware,
+		})
+	}
 }

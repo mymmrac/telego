@@ -7,20 +7,20 @@ import (
 	"github.com/mymmrac/telego"
 )
 
-// MessageEntityCollection represents text and slice of telego.MessageEntity associated with it
+// MessageEntityCollection represents text and slice of [telego.MessageEntity] associated with it
 type MessageEntityCollection struct {
 	text     string
 	entities []telego.MessageEntity
 }
 
-// Entity creates new MessageEntityCollection with provided text and no entities
+// Entity creates new [MessageEntityCollection] with provided text and no entities
 func Entity(text string) MessageEntityCollection {
 	return MessageEntityCollection{
 		text: text,
 	}
 }
 
-// Entityf creates new MessageEntityCollection with the provided format and args and no entities
+// Entityf creates new [MessageEntityCollection] with the provided format and args and no entities
 func Entityf(format string, args ...any) MessageEntityCollection {
 	return MessageEntityCollection{
 		text: fmt.Sprintf(format, args...),
@@ -44,7 +44,7 @@ func (c MessageEntityCollection) SetOffset(offset int) {
 	}
 }
 
-// Mention assigns mention entity and returns new collection
+// Mention assigns mention entity and returns a new collection
 func (c MessageEntityCollection) Mention() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeMention,
@@ -125,7 +125,7 @@ func (c MessageEntityCollection) Italic() MessageEntityCollection {
 	return c
 }
 
-// Underline assigns underline entity and returns new collection
+// Underline assigns underline entity and returns a new collection
 func (c MessageEntityCollection) Underline() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeUnderline,
@@ -143,7 +143,7 @@ func (c MessageEntityCollection) Strikethrough() MessageEntityCollection {
 	return c
 }
 
-// Spoiler assigns spoiler entity and returns new collection
+// Spoiler assigns spoiler entity and returns a new collection
 func (c MessageEntityCollection) Spoiler() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeSpoiler,
@@ -152,7 +152,7 @@ func (c MessageEntityCollection) Spoiler() MessageEntityCollection {
 	return c
 }
 
-// Blockquote assigns blockquote entity and returns new collection
+// Blockquote assigns blockquote entity and returns a new collection
 func (c MessageEntityCollection) Blockquote() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeBlockquote,
@@ -161,7 +161,7 @@ func (c MessageEntityCollection) Blockquote() MessageEntityCollection {
 	return c
 }
 
-// ExpandableBlockquote assigns expandable blockquote entity and returns new collection
+// ExpandableBlockquote assigns expandable blockquote entity and returns a new collection
 func (c MessageEntityCollection) ExpandableBlockquote() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeExpandableBlockquote,
@@ -170,7 +170,7 @@ func (c MessageEntityCollection) ExpandableBlockquote() MessageEntityCollection 
 	return c
 }
 
-// Code assigns code entity and returns new collection
+// Code assigns code entity and returns a new collection
 func (c MessageEntityCollection) Code() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeCode,
@@ -199,7 +199,7 @@ func (c MessageEntityCollection) TextLink(url string) MessageEntityCollection {
 	return c
 }
 
-// TextMention assigns text mention entity with user and returns new collection
+// TextMention assigns text mention entity with user and returns a new collection
 func (c MessageEntityCollection) TextMention(user *telego.User) MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{
 		Type:   telego.EntityTypeTextMention,

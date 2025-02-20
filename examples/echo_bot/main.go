@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Create Bot with debug on
@@ -20,10 +22,7 @@ func main() {
 	}
 
 	// Get updates channel
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-
-	// Stop reviving updates from update channel
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Loop through all updates when they came
 	for update := range updates {
@@ -33,7 +32,7 @@ func main() {
 			chatID := tu.ID(update.Message.Chat.ID)
 
 			// Copy sent messages back to the user
-			_, _ = bot.CopyMessage(
+			_, _ = bot.CopyMessage(ctx,
 				tu.CopyMessage(
 					chatID,
 					chatID,

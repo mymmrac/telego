@@ -1,11 +1,11 @@
 package telegohandler
 
 import (
-	"context"
 	"sync"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/mymmrac/telego"
@@ -19,7 +19,10 @@ func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
 	timeoutSignal := time.After(timeout)
 	done := make(chan struct{})
 
-	go bh.Start()
+	go func() {
+		errStart := bh.Start()
+		assert.NoError(t, errStart)
+	}()
 
 	go func() {
 		wg.Wait()
@@ -31,16 +34,17 @@ func testHandler(t *testing.T, bh *BotHandler, wg *sync.WaitGroup) {
 		t.Fatal("Timeout")
 	case <-done:
 	}
-	bh.Stop()
+	err := bh.Stop()
+	assert.NoError(t, err)
 }
 
 func testHandlerSetup(t *testing.T, bh *BotHandler) {
 	t.Helper()
 
-	require.Len(t, bh.baseGroup.handlers, 1)
-	require.NotNil(t, bh.baseGroup.handlers[0].handler)
-	require.NotNil(t, bh.baseGroup.handlers[0].predicates)
-	require.Len(t, bh.baseGroup.handlers[0].predicates, 1)
+	require.Len(t, bh.baseGroup.routes, 1)
+	require.NotNil(t, bh.baseGroup.routes[0].handler)
+	require.NotNil(t, bh.baseGroup.routes[0].predicates)
+	require.Len(t, bh.baseGroup.routes[0].predicates, 1)
 }
 
 func TestBotHandler_HandleMessage(t *testing.T) {
@@ -49,27 +53,9 @@ func TestBotHandler_HandleMessage(t *testing.T) {
 	require.Panics(t, func() { bh.HandleMessage(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := MessageHandler(func(_ *telego.Bot, _ telego.Message) { wg.Done() })
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
 
 	bh.HandleMessage(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{Message: &telego.Message{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleMessageCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleMessageCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := MessageHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.Message) { wg.Done() })
-
-	bh.HandleMessageCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -85,27 +71,9 @@ func TestBotHandler_HandleEditedMessage(t *testing.T) {
 	require.Panics(t, func() { bh.HandleEditedMessage(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := MessageHandler(func(_ *telego.Bot, _ telego.Message) { wg.Done() })
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
 
 	bh.HandleEditedMessage(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{EditedMessage: &telego.Message{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleEditedMessageCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleEditedMessageCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := MessageHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.Message) { wg.Done() })
-
-	bh.HandleEditedMessageCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -121,27 +89,9 @@ func TestBotHandler_HandleChannelPost(t *testing.T) {
 	require.Panics(t, func() { bh.HandleChannelPost(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := MessageHandler(func(_ *telego.Bot, _ telego.Message) { wg.Done() })
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
 
 	bh.HandleChannelPost(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{ChannelPost: &telego.Message{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleChannelPostCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleChannelPostCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := MessageHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.Message) { wg.Done() })
-
-	bh.HandleChannelPostCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -157,7 +107,7 @@ func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 	require.Panics(t, func() { bh.HandleEditedChannelPost(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := MessageHandler(func(_ *telego.Bot, _ telego.Message) { wg.Done() })
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
 
 	bh.HandleEditedChannelPost(handler)
 	testHandlerSetup(t, bh)
@@ -169,19 +119,115 @@ func TestBotHandler_HandleEditedChannelPost(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
-func TestBotHandler_HandleEditedChannelPostCtx(t *testing.T) {
+func TestBotHandler_HandleBusinessConnection(t *testing.T) {
 	bh := newTestBotHandler(t)
 
-	require.Panics(t, func() { bh.HandleEditedChannelPostCtx(nil) })
+	require.Panics(t, func() { bh.HandleBusinessConnection(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := MessageHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.Message) { wg.Done() })
+	handler := BusinessConnectionHandler(func(_ *Context, _ telego.BusinessConnection) error { wg.Done(); return nil })
 
-	bh.HandleEditedChannelPostCtx(handler)
+	bh.HandleBusinessConnection(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{EditedChannelPost: &telego.Message{}}
+	updates <- telego.Update{BusinessConnection: &telego.BusinessConnection{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleBusinessMessage(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleBusinessMessage(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
+
+	bh.HandleBusinessMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{BusinessMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleEditedBusinessMessage(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleEditedBusinessMessage(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
+
+	bh.HandleEditedBusinessMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{EditedBusinessMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleDeletedBusinessMessages(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleDeletedBusinessMessages(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := DeletedBusinessMessagesHandler(func(_ *Context, _ telego.BusinessMessagesDeleted) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandleDeletedBusinessMessages(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{DeletedBusinessMessages: &telego.BusinessMessagesDeleted{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleMessageReaction(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleMessageReaction(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageReactionHandler(func(_ *Context, _ telego.MessageReactionUpdated) error { wg.Done(); return nil })
+
+	bh.HandleMessageReaction(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{MessageReaction: &telego.MessageReactionUpdated{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleMessageReactionCount(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleMessageReactionCount(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageReactionCountHandler(func(_ *Context, _ telego.MessageReactionCountUpdated) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandleMessageReactionCount(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{MessageReactionCount: &telego.MessageReactionCountUpdated{}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)
@@ -193,27 +239,9 @@ func TestBotHandler_HandleInlineQuery(t *testing.T) {
 	require.Panics(t, func() { bh.HandleInlineQuery(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := InlineQueryHandler(func(_ *telego.Bot, _ telego.InlineQuery) { wg.Done() })
+	handler := InlineQueryHandler(func(_ *Context, _ telego.InlineQuery) error { wg.Done(); return nil })
 
 	bh.HandleInlineQuery(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{InlineQuery: &telego.InlineQuery{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleInlineQueryCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleInlineQueryCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := InlineQueryHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.InlineQuery) { wg.Done() })
-
-	bh.HandleInlineQueryCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -229,29 +257,12 @@ func TestBotHandler_HandleChosenInlineResult(t *testing.T) {
 	require.Panics(t, func() { bh.HandleChosenInlineResult(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := ChosenInlineResultHandler(func(_ *telego.Bot, _ telego.ChosenInlineResult) { wg.Done() })
-
-	bh.HandleChosenInlineResult(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{ChosenInlineResult: &telego.ChosenInlineResult{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleChosenInlineResultCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleChosenInlineResultCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := ChosenInlineResultHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.ChosenInlineResult) {
+	handler := ChosenInlineResultHandler(func(_ *Context, _ telego.ChosenInlineResult) error {
 		wg.Done()
+		return nil
 	})
 
-	bh.HandleChosenInlineResultCtx(handler)
+	bh.HandleChosenInlineResult(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -267,27 +278,9 @@ func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 	require.Panics(t, func() { bh.HandleCallbackQuery(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := CallbackQueryHandler(func(_ *telego.Bot, _ telego.CallbackQuery) { wg.Done() })
+	handler := CallbackQueryHandler(func(_ *Context, _ telego.CallbackQuery) error { wg.Done(); return nil })
 
 	bh.HandleCallbackQuery(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{CallbackQuery: &telego.CallbackQuery{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleCallbackQueryCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleCallbackQueryCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := CallbackQueryHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.CallbackQuery) { wg.Done() })
-
-	bh.HandleCallbackQueryCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -303,27 +296,9 @@ func TestBotHandler_HandleShippingQuery(t *testing.T) {
 	require.Panics(t, func() { bh.HandleShippingQuery(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := ShippingQueryHandler(func(_ *telego.Bot, _ telego.ShippingQuery) { wg.Done() })
+	handler := ShippingQueryHandler(func(_ *Context, _ telego.ShippingQuery) error { wg.Done(); return nil })
 
 	bh.HandleShippingQuery(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{ShippingQuery: &telego.ShippingQuery{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleShippingQueryCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleShippingQueryCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := ShippingQueryHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.ShippingQuery) { wg.Done() })
-
-	bh.HandleShippingQueryCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -339,7 +314,10 @@ func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
 	require.Panics(t, func() { bh.HandlePreCheckoutQuery(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := PreCheckoutQueryHandler(func(_ *telego.Bot, _ telego.PreCheckoutQuery) { wg.Done() })
+	handler := PreCheckoutQueryHandler(func(_ *Context, _ telego.PreCheckoutQuery) error {
+		wg.Done()
+		return nil
+	})
 
 	bh.HandlePreCheckoutQuery(handler)
 	testHandlerSetup(t, bh)
@@ -351,21 +329,22 @@ func TestBotHandler_HandlePreCheckoutQuery(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
-func TestBotHandler_HandlePreCheckoutQueryCtx(t *testing.T) {
+func TestBotHandler_HandlePurchasedPaidMedia(t *testing.T) {
 	bh := newTestBotHandler(t)
 
-	require.Panics(t, func() { bh.HandlePreCheckoutQueryCtx(nil) })
+	require.Panics(t, func() { bh.HandlePurchasedPaidMedia(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := PreCheckoutQueryHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.PreCheckoutQuery) {
+	handler := PurchasedPaidMediaHandler(func(_ *Context, _ telego.PaidMediaPurchased) error {
 		wg.Done()
+		return nil
 	})
 
-	bh.HandlePreCheckoutQueryCtx(handler)
+	bh.HandlePurchasedPaidMedia(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{PreCheckoutQuery: &telego.PreCheckoutQuery{}}
+	updates <- telego.Update{PurchasedPaidMedia: &telego.PaidMediaPurchased{}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)
@@ -377,27 +356,9 @@ func TestBotHandler_HandlePoll(t *testing.T) {
 	require.Panics(t, func() { bh.HandlePoll(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := PollHandler(func(_ *telego.Bot, _ telego.Poll) { wg.Done() })
+	handler := PollHandler(func(_ *Context, _ telego.Poll) error { wg.Done(); return nil })
 
 	bh.HandlePoll(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{Poll: &telego.Poll{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandlePollCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandlePollCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := PollHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.Poll) { wg.Done() })
-
-	bh.HandlePollCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -413,27 +374,9 @@ func TestBotHandler_HandlePollAnswer(t *testing.T) {
 	require.Panics(t, func() { bh.HandlePollAnswer(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := PollAnswerHandler(func(_ *telego.Bot, _ telego.PollAnswer) { wg.Done() })
+	handler := PollAnswerHandler(func(_ *Context, _ telego.PollAnswer) error { wg.Done(); return nil })
 
 	bh.HandlePollAnswer(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{PollAnswer: &telego.PollAnswer{}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandlePollAnswerCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandlePollAnswerCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := PollAnswerHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.PollAnswer) { wg.Done() })
-
-	bh.HandlePollAnswerCtx(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -449,32 +392,12 @@ func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 	require.Panics(t, func() { bh.HandleMyChatMemberUpdated(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := ChatMemberUpdatedHandler(func(_ *telego.Bot, _ telego.ChatMemberUpdated) { wg.Done() })
-
-	bh.HandleMyChatMemberUpdated(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{MyChatMember: &telego.ChatMemberUpdated{
-		OldChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
-		NewChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
-	}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleMyChatMemberUpdatedCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleMyChatMemberUpdatedCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := ChatMemberUpdatedHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.ChatMemberUpdated) {
+	handler := ChatMemberUpdatedHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
 		wg.Done()
+		return nil
 	})
 
-	bh.HandleMyChatMemberUpdatedCtx(handler)
+	bh.HandleMyChatMemberUpdated(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -493,32 +416,12 @@ func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
 	require.Panics(t, func() { bh.HandleChatMemberUpdated(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := ChatMemberUpdatedHandler(func(_ *telego.Bot, _ telego.ChatMemberUpdated) { wg.Done() })
-
-	bh.HandleChatMemberUpdated(handler)
-	testHandlerSetup(t, bh)
-
-	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{ChatMember: &telego.ChatMemberUpdated{
-		OldChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
-		NewChatMember: &telego.ChatMemberMember{Status: telego.MemberStatusMember},
-	}}
-
-	bh.updates = updates
-	testHandler(t, bh, wg)
-}
-
-func TestBotHandler_HandleChatMemberUpdatedCtx(t *testing.T) {
-	bh := newTestBotHandler(t)
-
-	require.Panics(t, func() { bh.HandleChatMemberUpdatedCtx(nil) })
-
-	wg := &sync.WaitGroup{}
-	handler := ChatMemberUpdatedHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.ChatMemberUpdated) {
+	handler := ChatMemberUpdatedHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
 		wg.Done()
+		return nil
 	})
 
-	bh.HandleChatMemberUpdatedCtx(handler)
+	bh.HandleChatMemberUpdated(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -537,7 +440,7 @@ func TestBotHandler_HandleChatJoinRequest(t *testing.T) {
 	require.Panics(t, func() { bh.HandleChatJoinRequest(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := ChatJoinRequestHandler(func(_ *telego.Bot, _ telego.ChatJoinRequest) { wg.Done() })
+	handler := ChatJoinRequestHandler(func(_ *Context, _ telego.ChatJoinRequest) error { wg.Done(); return nil })
 
 	bh.HandleChatJoinRequest(handler)
 	testHandlerSetup(t, bh)
@@ -549,19 +452,47 @@ func TestBotHandler_HandleChatJoinRequest(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
-func TestBotHandler_HandleChatJoinRequestCtx(t *testing.T) {
+func TestBotHandler_HandleChatBoost(t *testing.T) {
 	bh := newTestBotHandler(t)
 
-	require.Panics(t, func() { bh.HandleChatJoinRequestCtx(nil) })
+	require.Panics(t, func() { bh.HandleChatBoost(nil) })
 
 	wg := &sync.WaitGroup{}
-	handler := ChatJoinRequestHandlerCtx(func(_ context.Context, _ *telego.Bot, _ telego.ChatJoinRequest) { wg.Done() })
+	handler := ChatBoostHandler(func(_ *Context, _ telego.ChatBoostUpdated) error { wg.Done(); return nil })
 
-	bh.HandleChatJoinRequestCtx(handler)
+	bh.HandleChatBoost(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
-	updates <- telego.Update{ChatJoinRequest: &telego.ChatJoinRequest{}}
+	updates <- telego.Update{ChatBoost: &telego.ChatBoostUpdated{
+		Boost: telego.ChatBoost{
+			Source: &telego.ChatBoostSourcePremium{
+				Source: telego.BoostSourcePremium,
+			},
+		},
+	}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleRemovedChatBoost(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleRemovedChatBoost(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := RemovedChatBoostHandler(func(_ *Context, _ telego.ChatBoostRemoved) error { wg.Done(); return nil })
+
+	bh.HandleRemovedChatBoost(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{RemovedChatBoost: &telego.ChatBoostRemoved{
+		Source: &telego.ChatBoostSourcePremium{
+			Source: telego.BoostSourcePremium,
+		},
+	}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)

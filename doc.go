@@ -1,5 +1,5 @@
 /*
-Package telego provides one-to-one Telegram Bot API method & types.
+Package telego provides one-to-one Telegram Bot API method and types.
 
 Telego features all methods and types described in official Telegram documentation (https://core.telegram.org/bots/api).
 It achieves this by generating methods and types from docs (generation is in internal/generator package).
@@ -12,12 +12,12 @@ immediately know how to implement that in Go using Telego.
 All types named and contain the same information as documented by Telegram, for methods it's exactly the same.
 However, some minor differences may be present (like use of interfaces or combined types).
 Also, all generated codes have the same description as in Telegram docs, so there is actually no need to go to docs (but
-still, be careful as it is not a full copy of docs due to text only limitation).
+still, be careful as it is not a full copy of docs due to text-only limitation).
 
 Telego was also created to simplify work with a Telegram API, so some additional methods for more convenient usage
 located in long_polling.go and webhook.go and telegoutil package.
 
-When you are working with things like chat ID which can be an integer or string Telego provides combined types:
+When you are working with things like chat ID which can be an integer or string, Telego provides combined types:
 
 	type ChatID struct {
 		ID       int64
@@ -34,18 +34,18 @@ or input files that can be URL, file ID or actual file data:
 
 you will specify only one of the fields and Telego will figure out what to do with that.
 
-For more flexibility, file data for InputFile are provided via simple interface:
+For more flexibility, file data for [InputFile] are provided via simple interface:
 
 	type NamedReader interface {
 		io.Reader
 		Name() string
 	}
 
-os.File already implements this interface, so you can use it directly.
+[os.File] already implements this interface, so you can use it directly.
 
 # Example
 
-Most of the examples can be seen in examples folder.
+Most of the examples can be seen in the examples folder.
 
 Simple echo bot:
 
@@ -60,6 +60,7 @@ Simple echo bot:
 	)
 
 	func main() {
+		ctx := context.Background()
 		botToken := os.Getenv("TOKEN")
 
 		// Create Bot with debug on
@@ -70,10 +71,7 @@ Simple echo bot:
 		}
 
 		// Get updates channel
-		updates, _ := bot.UpdatesViaLongPolling(nil)
-
-		// Stop reviving updates from updates channel
-		defer bot.StopLongPolling()
+		updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 		// Loop through all updates when they came
 		for update := range updates {
@@ -83,7 +81,7 @@ Simple echo bot:
 				chatID := tu.ID(update.Message.Chat.ID)
 
 				// Copy sent message back to user
-				_, _ = bot.CopyMessage(&telego.CopyMessageParams{
+				_, _ = bot.CopyMessage(ctx, &telego.CopyMessageParams{
 					ChatID:     chatID,
 					FromChatID: chatID,
 					MessageID:  update.Message.MessageID,

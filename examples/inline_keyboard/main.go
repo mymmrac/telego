@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	botToken := os.Getenv("TOKEN")
 
 	// Note: Please keep in mind that default logger may expose sensitive information, use in development only
@@ -38,10 +40,9 @@ func main() {
 	).WithReplyMarkup(inlineKeyboard)
 
 	// Sending message
-	_, _ = bot.SendMessage(message)
+	_, _ = bot.SendMessage(ctx, message)
 
-	updates, _ := bot.UpdatesViaLongPolling(nil)
-	defer bot.StopLongPolling()
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Receiving callback data
 	for update := range updates {

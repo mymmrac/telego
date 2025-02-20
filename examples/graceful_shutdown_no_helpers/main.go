@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -20,8 +21,8 @@ func main() {
 	}
 
 	// Initialize signal handling
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, os.Interrupt)
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
 
 	// Initialize done chan
 	done := make(chan struct{}, 1)
@@ -32,22 +33,22 @@ func main() {
 	// Handle stop signal (Ctrl+C)
 	go func() {
 		// Wait for stop signal
-		<-sigs
-
+		<-ctx.Done()
 		fmt.Println("Stopping...")
 
-		bot.StopLongPolling()
-		fmt.Println("Long polling done")
-
-		<-updatesProcessed
-		fmt.Println("Updates processed")
+		select {
+		case <-updatesProcessed:
+			fmt.Println("Updates processed")
+		case <-time.After(time.Second * 20):
+			// Timeout
+		}
 
 		// Notify that stop is done
 		done <- struct{}{}
 	}()
 
 	// Get updates
-	updates, _ := bot.UpdatesViaLongPolling(nil)
+	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
 
 	// Handle updates
 	go func() {

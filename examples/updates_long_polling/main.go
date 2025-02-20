@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
@@ -20,6 +21,9 @@ func main() {
 
 	// Get updates channel, all options are optional
 	updates, _ := bot.UpdatesViaLongPolling(
+		// When the context is closed, the update channel will be closed and long polling will be stopped
+		context.Background(),
+
 		// Set Telegram parameter to get updates, can be nil
 		// Note: If nil then timeout will be set to default 8s
 		&telego.GetUpdatesParams{
@@ -38,9 +42,6 @@ func main() {
 		// Set chan buffer (default 100)
 		telego.WithLongPollingBuffer(100),
 	)
-
-	// Stop reviving updates from update channel
-	defer bot.StopLongPolling()
 
 	// Loop through all updates when they came
 	for update := range updates {
