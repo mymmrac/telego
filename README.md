@@ -28,8 +28,6 @@ The goal of this library was to create API with the same types and methods as ac
 Every type and method have been represented in [`types.go`](types.go) and [`methods.go`](methods.go) files with mostly
 all documentation from Telegram.
 
-:warning: This is a Telego release candidate, so do expect breaking changes! :warning:
-
 For more detailed documentation, see docs at [telego.pixelbox.dev](https://telego.pixelbox.dev).
 
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http`
