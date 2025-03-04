@@ -3,7 +3,7 @@ module github.com/mymmrac/telego
 go 1.23.4
 
 require (
-	github.com/bytedance/sonic v1.12.9
+	github.com/bytedance/sonic v1.12.10
 	github.com/stretchr/testify v1.10.0
 	github.com/valyala/fasthttp v1.59.0
 	github.com/valyala/fastjson v1.6.4
