@@ -287,6 +287,9 @@ type ForwardMessageParams struct {
 	// the format @channel_username)
 	FromChatID ChatID `json:"from_chat_id"`
 
+	// VideoStartTimestamp - Optional. New start timestamp for the forwarded video in the message
+	VideoStartTimestamp int `json:"video_start_timestamp,omitempty"`
+
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
 	DisableNotification bool `json:"disable_notification,omitempty"`
@@ -365,6 +368,9 @@ type CopyMessageParams struct {
 
 	// MessageID - Message identifier in the chat specified in from_chat_id
 	MessageID int `json:"message_id"`
+
+	// VideoStartTimestamp - Optional. New start timestamp for the copied video in the message
+	VideoStartTimestamp int `json:"video_start_timestamp,omitempty"`
 
 	// Caption - Optional. New caption for media, 0-1024 characters after entities parsing. If not specified,
 	// the original caption is kept
@@ -776,6 +782,15 @@ type SendVideoParams struct {
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
+	// Cover - Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the
+	// Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass
+	// “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name>
+	// name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Cover *InputFile `json:"cover,omitempty"`
+
+	// StartTimestamp - Optional. Start timestamp for the video in the message
+	StartTimestamp int `json:"start_timestamp,omitempty"`
+
 	// Caption - Optional. Video caption (may also be used when resending videos by file_id), 0-1024 characters
 	// after entities parsing
 	Caption string `json:"caption,omitempty"`
@@ -829,6 +844,9 @@ func (p *SendVideoParams) fileParameters() map[string]ta.NamedReader {
 	fp["video"] = p.Video.File
 	if p.Thumbnail != nil {
 		fp["thumbnail"] = p.Thumbnail.File
+	}
+	if p.Cover != nil {
+		fp["cover"] = p.Cover.File
 	}
 
 	return fp
@@ -1698,9 +1716,9 @@ type SetMessageReactionParams struct {
 	IsBig bool `json:"is_big,omitempty"`
 }
 
-// SetMessageReaction - Use this method to change the chosen reactions on a message. Service messages can't
-// be reacted to. Automatically forwarded messages from a channel to its discussion group have the same
-// available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
+// SetMessageReaction - Use this method to change the chosen reactions on a message. Service messages of some
+// types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the
+// same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
 func (b *Bot) SetMessageReaction(ctx context.Context, params *SetMessageReactionParams) error {
 	err := b.performRequest(ctx, "setMessageReaction", params)
 	if err != nil {
@@ -4002,8 +4020,8 @@ func (b *Bot) DeleteStickerSet(ctx context.Context, params *DeleteStickerSetPara
 	return nil
 }
 
-// GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users. Requires no
-// parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
+// GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users and channel chats.
+// Requires no parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
 func (b *Bot) GetAvailableGifts(ctx context.Context) (*Gifts, error) {
 	var gifts *Gifts
 	err := b.performRequest(ctx, "getAvailableGifts", nil, &gifts)
@@ -4015,8 +4033,13 @@ func (b *Bot) GetAvailableGifts(ctx context.Context) (*Gifts, error) {
 
 // SendGiftParams - Represents parameters of sendGift method.
 type SendGiftParams struct {
-	// UserID - Unique identifier of the target user that will receive the gift
-	UserID int64 `json:"user_id"`
+	// UserID - Optional. Required if chat_id is not specified. Unique identifier of the target user who will
+	// receive the gift.
+	UserID int64 `json:"user_id,omitempty"`
+
+	// ChatID - Optional. Required if user_id is not specified. Unique identifier for the chat or username of
+	// the channel (in the format @channel_username) that will receive the gift.
+	ChatID ChatID `json:"chat_id,omitempty"`
 
 	// GiftID - Identifier of the gift
 	GiftID string `json:"gift_id"`
@@ -4025,7 +4048,7 @@ type SendGiftParams struct {
 	// the upgrade free for the receiver
 	PayForUpgrade bool `json:"pay_for_upgrade,omitempty"`
 
-	// Text - Optional. Text that will be shown along with the gift; 0-255 characters
+	// Text - Optional. Text that will be shown along with the gift; 0-128 characters
 	Text string `json:"text,omitempty"`
 
 	// TextParseMode - Optional. Mode for parsing entities in the text. See formatting options
@@ -4039,8 +4062,8 @@ type SendGiftParams struct {
 	TextEntities []MessageEntity `json:"text_entities,omitempty"`
 }
 
-// SendGift - Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
-// Returns True on success.
+// SendGift - Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars
+// by the receiver. Returns True on success.
 func (b *Bot) SendGift(ctx context.Context, params *SendGiftParams) error {
 	err := b.performRequest(ctx, "sendGift", params)
 	if err != nil {

@@ -89,23 +89,25 @@ func TestForwardMessageParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 4}).
 		WithMessageThreadID(1).
 		WithFromChatID(ChatID{ID: 2}).
+		WithVideoStartTimestamp(3).
 		WithDisableNotification().
 		WithProtectContent().
-		WithMessageID(3)
+		WithMessageID(4)
 
 	assert.Equal(t, &ForwardMessageParams{
 		ChatID:              ChatID{ID: 4},
 		MessageThreadID:     1,
 		FromChatID:          ChatID{ID: 2},
+		VideoStartTimestamp: 3,
 		DisableNotification: true,
 		ProtectContent:      true,
-		MessageID:           3,
+		MessageID:           4,
 	}, f)
 }
 
 func TestForwardMessagesParams_Setters(t *testing.T) {
 	f := (&ForwardMessagesParams{}).
-		WithChatID(ChatID{ID: 4}).
+		WithChatID(ChatID{ID: 5}).
 		WithMessageThreadID(1).
 		WithFromChatID(ChatID{ID: 2}).
 		WithMessageIDs([]int{3}...).
@@ -113,7 +115,7 @@ func TestForwardMessagesParams_Setters(t *testing.T) {
 		WithProtectContent()
 
 	assert.Equal(t, &ForwardMessagesParams{
-		ChatID:              ChatID{ID: 4},
+		ChatID:              ChatID{ID: 5},
 		MessageThreadID:     1,
 		FromChatID:          ChatID{ID: 2},
 		MessageIDs:          []int{3},
@@ -128,6 +130,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		WithMessageThreadID(1).
 		WithFromChatID(ChatID{ID: 2}).
 		WithMessageID(3).
+		WithVideoStartTimestamp(4).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -135,7 +138,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &CopyMessageParams{
@@ -143,6 +146,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		MessageThreadID:       1,
 		FromChatID:            ChatID{ID: 2},
 		MessageID:             3,
+		VideoStartTimestamp:   4,
 		Caption:               "Caption",
 		ParseMode:             "ParseMode",
 		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
@@ -150,14 +154,14 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		DisableNotification:   true,
 		ProtectContent:        true,
 		AllowPaidBroadcast:    true,
-		ReplyParameters:       &ReplyParameters{MessageID: 4},
+		ReplyParameters:       &ReplyParameters{MessageID: 5},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, c)
 }
 
 func TestCopyMessagesParams_Setters(t *testing.T) {
 	c := (&CopyMessagesParams{}).
-		WithChatID(ChatID{ID: 5}).
+		WithChatID(ChatID{ID: 6}).
 		WithMessageThreadID(1).
 		WithFromChatID(ChatID{ID: 2}).
 		WithMessageIDs([]int{3}...).
@@ -166,7 +170,7 @@ func TestCopyMessagesParams_Setters(t *testing.T) {
 		WithRemoveCaption()
 
 	assert.Equal(t, &CopyMessagesParams{
-		ChatID:              ChatID{ID: 5},
+		ChatID:              ChatID{ID: 6},
 		MessageThreadID:     1,
 		FromChatID:          ChatID{ID: 2},
 		MessageIDs:          []int{3},
@@ -301,6 +305,8 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithWidth(4).
 		WithHeight(5).
 		WithThumbnail(&testInputFile).
+		WithCover(&testInputFile).
+		WithStartTimestamp(6).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -311,7 +317,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithProtectContent().
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
-		WithReplyParameters(&ReplyParameters{MessageID: 6}).
+		WithReplyParameters(&ReplyParameters{MessageID: 7}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVideoParams{
@@ -323,6 +329,8 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		Width:                 4,
 		Height:                5,
 		Thumbnail:             &testInputFile,
+		Cover:                 &testInputFile,
+		StartTimestamp:        6,
 		Caption:               "Caption",
 		ParseMode:             "ParseMode",
 		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
@@ -333,7 +341,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		ProtectContent:        true,
 		AllowPaidBroadcast:    true,
 		MessageEffectID:       "MessageEffectID",
-		ReplyParameters:       &ReplyParameters{MessageID: 6},
+		ReplyParameters:       &ReplyParameters{MessageID: 7},
 		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -1755,6 +1763,7 @@ func TestDeleteStickerSetParams_Setters(t *testing.T) {
 
 func TestSendGiftParams_Setters(t *testing.T) {
 	s := (&SendGiftParams{}).
+		WithChatID(ChatID{ID: 1}).
 		WithGiftID("GiftID").
 		WithPayForUpgrade().
 		WithText("Text").
@@ -1762,6 +1771,7 @@ func TestSendGiftParams_Setters(t *testing.T) {
 		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...)
 
 	assert.Equal(t, &SendGiftParams{
+		ChatID:        ChatID{ID: 1},
 		GiftID:        "GiftID",
 		PayForUpgrade: true,
 		Text:          "Text",

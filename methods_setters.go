@@ -168,6 +168,12 @@ func (p *ForwardMessageParams) WithFromChatID(fromChatID ChatID) *ForwardMessage
 	return p
 }
 
+// WithVideoStartTimestamp adds video start timestamp parameter
+func (p *ForwardMessageParams) WithVideoStartTimestamp(videoStartTimestamp int) *ForwardMessageParams {
+	p.VideoStartTimestamp = videoStartTimestamp
+	return p
+}
+
 // WithDisableNotification adds disable notification parameter
 func (p *ForwardMessageParams) WithDisableNotification() *ForwardMessageParams {
 	p.DisableNotification = true
@@ -243,6 +249,12 @@ func (p *CopyMessageParams) WithFromChatID(fromChatID ChatID) *CopyMessageParams
 // WithMessageID adds message ID parameter
 func (p *CopyMessageParams) WithMessageID(messageID int) *CopyMessageParams {
 	p.MessageID = messageID
+	return p
+}
+
+// WithVideoStartTimestamp adds video start timestamp parameter
+func (p *CopyMessageParams) WithVideoStartTimestamp(videoStartTimestamp int) *CopyMessageParams {
+	p.VideoStartTimestamp = videoStartTimestamp
 	return p
 }
 
@@ -669,6 +681,18 @@ func (p *SendVideoParams) WithHeight(height int) *SendVideoParams {
 // WithThumbnail adds thumbnail parameter
 func (p *SendVideoParams) WithThumbnail(thumbnail *InputFile) *SendVideoParams {
 	p.Thumbnail = thumbnail
+	return p
+}
+
+// WithCover adds cover parameter
+func (p *SendVideoParams) WithCover(cover *InputFile) *SendVideoParams {
+	p.Cover = cover
+	return p
+}
+
+// WithStartTimestamp adds start timestamp parameter
+func (p *SendVideoParams) WithStartTimestamp(startTimestamp int) *SendVideoParams {
+	p.StartTimestamp = startTimestamp
 	return p
 }
 
@@ -2962,6 +2986,12 @@ func (p *SetCustomEmojiStickerSetThumbnailParams) WithCustomEmojiID(customEmojiI
 // WithName adds name parameter
 func (p *DeleteStickerSetParams) WithName(name string) *DeleteStickerSetParams {
 	p.Name = name
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *SendGiftParams) WithChatID(chatID ChatID) *SendGiftParams {
+	p.ChatID = chatID
 	return p
 }
 
