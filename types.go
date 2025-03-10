@@ -414,6 +414,9 @@ type ChatFullInfo struct {
 	// Permissions - Optional. Default chat member permissions, for groups and supergroups
 	Permissions *ChatPermissions `json:"permissions,omitempty"`
 
+	// CanSendGift - Optional. True, if gifts can be sent to the chat
+	CanSendGift bool `json:"can_send_gift,omitempty"`
+
 	// CanSendPaidMedia - Optional. True, if paid media messages can be sent or forwarded to the channel chat.
 	// The field is available only for channel chats.
 	CanSendPaidMedia bool `json:"can_send_paid_media,omitempty"`
@@ -1437,6 +1440,12 @@ type Video struct {
 
 	// Thumbnail - Optional. Video thumbnail
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
+
+	// Cover - Optional. Available sizes of the cover of the video in the message
+	Cover []PhotoSize `json:"cover,omitempty"`
+
+	// StartTimestamp - Optional. Timestamp in seconds from which the video will play in the message
+	StartTimestamp int `json:"start_timestamp,omitempty"`
 
 	// FileName - Optional. Original filename as defined by the sender
 	FileName string `json:"file_name,omitempty"`
@@ -4429,6 +4438,15 @@ type InputMediaVideo struct {
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
+	// Cover - Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the
+	// Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass
+	// “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name>
+	// name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Cover *InputFile `json:"cover,omitempty"`
+
+	// StartTimestamp - Optional. Start timestamp for the video in the message
+	StartTimestamp int `json:"start_timestamp,omitempty"`
+
 	// Caption - Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
 	Caption string `json:"caption,omitempty"`
 
@@ -4474,6 +4492,10 @@ func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
 	if i.Thumbnail != nil {
 		i.Thumbnail.needAttach = true
 		fp["thumbnail"] = i.Thumbnail.File
+	}
+	if i.Cover != nil {
+		i.Cover.needAttach = true
+		fp["cover"] = i.Cover.File
 	}
 
 	return fp
@@ -4723,6 +4745,7 @@ type InputPaidMedia interface {
 	MediaFile() InputFile
 	// Disallow external implementations
 	iInputPaidMedia()
+	fileCompatible
 }
 
 // InputPaidMediaPhoto - The paid media to send is a photo.
@@ -4738,16 +4761,23 @@ type InputPaidMediaPhoto struct {
 }
 
 // MediaType returns InputPaidMedia type
-func (m *InputPaidMediaPhoto) MediaType() string {
+func (i *InputPaidMediaPhoto) MediaType() string {
 	return PaidMediaTypePhoto
 }
 
 // MediaFile returns InputPaidMedia file
-func (m *InputPaidMediaPhoto) MediaFile() InputFile {
-	return m.Media
+func (i *InputPaidMediaPhoto) MediaFile() InputFile {
+	return i.Media
 }
 
-func (m *InputPaidMediaPhoto) iInputPaidMedia() {}
+func (i *InputPaidMediaPhoto) iInputPaidMedia() {}
+
+func (i *InputPaidMediaPhoto) fileParameters() map[string]telegoapi.NamedReader {
+	i.Media.needAttach = true
+	return map[string]telegoapi.NamedReader{
+		"media": i.Media.File,
+	}
+}
 
 // InputPaidMediaVideo - The paid media to send is a video.
 type InputPaidMediaVideo struct {
@@ -4768,6 +4798,15 @@ type InputPaidMediaVideo struct {
 	// <file_attach_name>. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
 	Thumbnail *InputFile `json:"thumbnail,omitempty"`
 
+	// Cover - Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the
+	// Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass
+	// “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name>
+	// name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files)
+	Cover *InputFile `json:"cover,omitempty"`
+
+	// StartTimestamp - Optional. Start timestamp for the video in the message
+	StartTimestamp int `json:"start_timestamp,omitempty"`
+
 	// Width - Optional. Video width
 	Width int `json:"width,omitempty"`
 
@@ -4782,16 +4821,33 @@ type InputPaidMediaVideo struct {
 }
 
 // MediaType returns InputPaidMedia type
-func (m *InputPaidMediaVideo) MediaType() string {
+func (i *InputPaidMediaVideo) MediaType() string {
 	return PaidMediaTypeVideo
 }
 
 // MediaFile returns InputPaidMedia file
-func (m *InputPaidMediaVideo) MediaFile() InputFile {
-	return m.Media
+func (i *InputPaidMediaVideo) MediaFile() InputFile {
+	return i.Media
 }
 
-func (m *InputPaidMediaVideo) iInputPaidMedia() {}
+func (i *InputPaidMediaVideo) iInputPaidMedia() {}
+
+func (i *InputPaidMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	i.Media.needAttach = true
+	fp["media"] = i.Media.File
+	if i.Thumbnail != nil {
+		i.Thumbnail.needAttach = true
+		fp["thumbnail"] = i.Thumbnail.File
+	}
+	if i.Cover != nil {
+		i.Cover.needAttach = true
+		fp["cover"] = i.Cover.File
+	}
+
+	return fp
+}
 
 // Sticker - This object represents a sticker.
 type Sticker struct {
@@ -6590,6 +6646,7 @@ type AffiliateInfo struct {
 // TransactionPartner - This object describes the source of a transaction, or its recipient for outgoing
 // transactions. Currently, it can be one of
 // TransactionPartnerUser (https://core.telegram.org/bots/api#transactionpartneruser)
+// TransactionPartnerChat (https://core.telegram.org/bots/api#transactionpartnerchat)
 // TransactionPartnerAffiliateProgram (https://core.telegram.org/bots/api#transactionpartneraffiliateprogram)
 // TransactionPartnerFragment (https://core.telegram.org/bots/api#transactionpartnerfragment)
 // TransactionPartnerTelegramAds (https://core.telegram.org/bots/api#transactionpartnertelegramads)
@@ -6604,6 +6661,7 @@ type TransactionPartner interface {
 // Transaction partner types
 const (
 	PartnerTypeUser             = "user"
+	PartnerTypeChat             = "chat"
 	PartnerTypeAffiliateProgram = "affiliate_program"
 	PartnerTypeFragment         = "fragment"
 	PartnerTypeTelegramAds      = "telegram_ads"
@@ -6683,6 +6741,25 @@ func (p *TransactionPartnerUser) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+// TransactionPartnerChat - Describes a transaction with a chat.
+type TransactionPartnerChat struct {
+	// Type - Type of the transaction partner, always “chat”
+	Type string `json:"type"`
+
+	// Chat - Information about the chat
+	Chat Chat `json:"chat"`
+
+	// Gift - Optional. The gift sent to the chat by the bot
+	Gift *Gift `json:"gift,omitempty"`
+}
+
+// PartnerType returns TransactionPartner type
+func (p *TransactionPartnerChat) PartnerType() string {
+	return PartnerTypeChat
+}
+
+func (p *TransactionPartnerChat) iTransactionPartner() {}
 
 // TransactionPartnerAffiliateProgram - Describes the affiliate program that issued the affiliate commission
 // received via this transaction.
@@ -6810,6 +6887,8 @@ func (t *StarTransaction) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 		switch partnerType {
 		case PartnerTypeUser:
 			ut.Source = &TransactionPartnerUser{}
+		case PartnerTypeChat:
+			ut.Source = &TransactionPartnerChat{}
 		case PartnerTypeAffiliateProgram:
 			ut.Source = &TransactionPartnerAffiliateProgram{}
 		case PartnerTypeFragment:
@@ -6830,6 +6909,8 @@ func (t *StarTransaction) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 		switch partnerType {
 		case PartnerTypeUser:
 			ut.Receiver = &TransactionPartnerUser{}
+		case PartnerTypeChat:
+			ut.Receiver = &TransactionPartnerChat{}
 		case PartnerTypeAffiliateProgram:
 			ut.Receiver = &TransactionPartnerAffiliateProgram{}
 		case PartnerTypeFragment:

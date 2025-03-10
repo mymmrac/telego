@@ -402,6 +402,18 @@ func (i *InputMediaVideo) WithThumbnail(thumbnail *InputFile) *InputMediaVideo {
 	return i
 }
 
+// WithCover adds cover parameter
+func (i *InputMediaVideo) WithCover(cover *InputFile) *InputMediaVideo {
+	i.Cover = cover
+	return i
+}
+
+// WithStartTimestamp adds start timestamp parameter
+func (i *InputMediaVideo) WithStartTimestamp(startTimestamp int) *InputMediaVideo {
+	i.StartTimestamp = startTimestamp
+	return i
+}
+
 // WithCaption adds caption parameter
 func (i *InputMediaVideo) WithCaption(caption string) *InputMediaVideo {
 	i.Caption = caption
@@ -597,6 +609,60 @@ func (i *InputMediaDocument) WithCaptionEntities(captionEntities ...MessageEntit
 // WithDisableContentTypeDetection adds disable content type detection parameter
 func (i *InputMediaDocument) WithDisableContentTypeDetection() *InputMediaDocument {
 	i.DisableContentTypeDetection = true
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputPaidMediaPhoto) WithMedia(media InputFile) *InputPaidMediaPhoto {
+	i.Media = media
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputPaidMediaVideo) WithMedia(media InputFile) *InputPaidMediaVideo {
+	i.Media = media
+	return i
+}
+
+// WithThumbnail adds thumbnail parameter
+func (i *InputPaidMediaVideo) WithThumbnail(thumbnail *InputFile) *InputPaidMediaVideo {
+	i.Thumbnail = thumbnail
+	return i
+}
+
+// WithCover adds cover parameter
+func (i *InputPaidMediaVideo) WithCover(cover *InputFile) *InputPaidMediaVideo {
+	i.Cover = cover
+	return i
+}
+
+// WithStartTimestamp adds start timestamp parameter
+func (i *InputPaidMediaVideo) WithStartTimestamp(startTimestamp int) *InputPaidMediaVideo {
+	i.StartTimestamp = startTimestamp
+	return i
+}
+
+// WithWidth adds width parameter
+func (i *InputPaidMediaVideo) WithWidth(width int) *InputPaidMediaVideo {
+	i.Width = width
+	return i
+}
+
+// WithHeight adds height parameter
+func (i *InputPaidMediaVideo) WithHeight(height int) *InputPaidMediaVideo {
+	i.Height = height
+	return i
+}
+
+// WithDuration adds duration parameter
+func (i *InputPaidMediaVideo) WithDuration(duration int) *InputPaidMediaVideo {
+	i.Duration = duration
+	return i
+}
+
+// WithSupportsStreaming adds supports streaming parameter
+func (i *InputPaidMediaVideo) WithSupportsStreaming() *InputPaidMediaVideo {
+	i.SupportsStreaming = true
 	return i
 }
 

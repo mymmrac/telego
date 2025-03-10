@@ -82,6 +82,9 @@ var typeStructsSetters = []string{
 	"InputMediaPhoto",
 	"InputMediaVideo",
 
+	"InputPaidMediaPhoto",
+	"InputPaidMediaVideo",
+
 	"InputTextMessageContent",
 	"InputLocationMessageContent",
 	"InputVenueMessageContent",

@@ -222,26 +222,30 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 	i := (&InputMediaVideo{}).
 		WithMedia(testInputFile).
 		WithThumbnail(&testInputFile).
+		WithCover(&testInputFile).
+		WithStartTimestamp(1).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
 		WithShowCaptionAboveMedia().
-		WithWidth(1).
-		WithHeight(2).
-		WithDuration(3).
+		WithWidth(2).
+		WithHeight(3).
+		WithDuration(4).
 		WithSupportsStreaming().
 		WithHasSpoiler()
 
 	assert.Equal(t, &InputMediaVideo{
 		Media:                 testInputFile,
 		Thumbnail:             &testInputFile,
+		Cover:                 &testInputFile,
+		StartTimestamp:        1,
 		Caption:               "Caption",
 		ParseMode:             "ParseMode",
 		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
 		ShowCaptionAboveMedia: true,
-		Width:                 1,
-		Height:                2,
-		Duration:              3,
+		Width:                 2,
+		Height:                3,
+		Duration:              4,
 		SupportsStreaming:     true,
 		HasSpoiler:            true,
 	}, i)
@@ -313,6 +317,38 @@ func TestInputMediaDocument_Setters(t *testing.T) {
 		ParseMode:                   "ParseMode",
 		CaptionEntities:             []MessageEntity{{Type: "CaptionEntities"}},
 		DisableContentTypeDetection: true,
+	}, i)
+}
+
+func TestInputPaidMediaPhoto_Setters(t *testing.T) {
+	i := (&InputPaidMediaPhoto{}).
+		WithMedia(testInputFile)
+
+	assert.Equal(t, &InputPaidMediaPhoto{
+		Media: testInputFile,
+	}, i)
+}
+
+func TestInputPaidMediaVideo_Setters(t *testing.T) {
+	i := (&InputPaidMediaVideo{}).
+		WithMedia(testInputFile).
+		WithThumbnail(&testInputFile).
+		WithCover(&testInputFile).
+		WithStartTimestamp(1).
+		WithWidth(2).
+		WithHeight(3).
+		WithDuration(4).
+		WithSupportsStreaming()
+
+	assert.Equal(t, &InputPaidMediaVideo{
+		Media:             testInputFile,
+		Thumbnail:         &testInputFile,
+		Cover:             &testInputFile,
+		StartTimestamp:    1,
+		Width:             2,
+		Height:            3,
+		Duration:          4,
+		SupportsStreaming: true,
 	}, i)
 }
 

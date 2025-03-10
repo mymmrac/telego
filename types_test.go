@@ -241,6 +241,9 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerUser{})
 	assert.Equal(t, PartnerTypeUser, (&TransactionPartnerUser{}).PartnerType())
 
+	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerChat{})
+	assert.Equal(t, PartnerTypeChat, (&TransactionPartnerChat{}).PartnerType())
+
 	assert.Implements(t, (*TransactionPartner)(nil), &TransactionPartnerAffiliateProgram{})
 	assert.Equal(t, PartnerTypeAffiliateProgram, (&TransactionPartnerAffiliateProgram{}).PartnerType())
 
@@ -776,7 +779,7 @@ func TestTypesConstants(t *testing.T) {
 			WithdrawalStatePending, WithdrawalStateSucceeded, WithdrawalStateFailed,
 		},
 		{
-			PartnerTypeUser, PartnerTypeAffiliateProgram, PartnerTypeFragment, PartnerTypeTelegramAds,
+			PartnerTypeUser, PartnerTypeChat, PartnerTypeAffiliateProgram, PartnerTypeFragment, PartnerTypeTelegramAds,
 			PartnerTypeTelegramApi, PartnerTypeOther,
 		},
 		{

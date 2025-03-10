@@ -291,8 +291,12 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		field.typ = "[]int64"
 	}
 
-	if field.name == "Media" && field.typ == "string" {
-		field.typ = "InputFile"
+	if (field.name == "Media" || field.name == "Thumbnail" || field.name == "Cover") && field.typ == "string" {
+		if field.optional {
+			field.typ = "*InputFile"
+		} else {
+			field.typ = "InputFile"
+		}
 	}
 
 	if field.name == "InputMessageContent" && field.typ == "*InputMessageContent" {
