@@ -2,6 +2,8 @@ package telego
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"testing"
 
@@ -159,6 +161,14 @@ func TestBot_Token(t *testing.T) {
 	assert.Equal(t, token, bot.Token())
 }
 
+func TestBot_SecretToken(t *testing.T) {
+	bot, err := NewBot(token)
+	require.NoError(t, err)
+
+	hash := sha256.Sum256([]byte(token))
+	assert.Equal(t, hex.EncodeToString(hash[:]), bot.SecretToken())
+}
+
 func TestBot_Logger(t *testing.T) {
 	bot, err := NewBot(token)
 	require.NoError(t, err)
@@ -205,6 +215,7 @@ func (t testEmptyMarshal) MarshalJSON() ([]byte, error) {
 func Test_parseParameters(t *testing.T) {
 	n := 1
 
+	//nolint:gci,gofmt,gofumpt,goimports
 	tests := []struct {
 		name             string
 		parameters       any
