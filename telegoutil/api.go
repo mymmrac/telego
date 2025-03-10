@@ -1,6 +1,7 @@
 package telegoutil
 
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -31,6 +32,14 @@ func (r namedReaderImpl) Name() string {
 func NameReader(reader io.Reader, name string) ta.NamedReader {
 	return namedReaderImpl{
 		reader: reader,
+		name:   name,
+	}
+}
+
+// NameBytes "names" slice of bytes and returns valid [ta.NamedReader]
+func NameBytes(data []byte, name string) ta.NamedReader {
+	return namedReaderImpl{
+		reader: bytes.NewReader(data),
 		name:   name,
 	}
 }

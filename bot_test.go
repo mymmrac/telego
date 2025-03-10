@@ -215,7 +215,6 @@ func (t testEmptyMarshal) MarshalJSON() ([]byte, error) {
 func Test_parseParameters(t *testing.T) {
 	n := 1
 
-	//nolint:gci,gofmt,gofumpt,goimports
 	tests := []struct {
 		name             string
 		parameters       any
@@ -224,6 +223,7 @@ func Test_parseParameters(t *testing.T) {
 	}{
 		{
 			name: "success",
+			//nolint:all
 			parameters: &struct {
 				Empty       string    `json:"empty,omitempty"`
 				EmptyNoOmit string    `json:"empty_no_omit"`

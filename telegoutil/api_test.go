@@ -25,6 +25,16 @@ func TestNameReader(t *testing.T) {
 	assert.Equal(t, text2, nameReader.Name())
 }
 
+func TestNameBytes(t *testing.T) {
+	nameBytes := NameBytes([]byte(text1), text2)
+
+	data, err := io.ReadAll(nameBytes)
+	require.NoError(t, err)
+
+	assert.Equal(t, text1, string(data))
+	assert.Equal(t, text2, nameBytes.Name())
+}
+
 func TestUpdateProcessor(t *testing.T) {
 	updates := make(chan telego.Update)
 

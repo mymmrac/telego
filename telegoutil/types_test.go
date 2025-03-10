@@ -30,6 +30,16 @@ func TestFile(t *testing.T) {
 	assert.Equal(t, nr, f.File)
 }
 
+func TestFileFromReader(t *testing.T) {
+	f := FileFromReader(nr, nr.Name())
+	assert.Equal(t, nr.Name(), f.File.Name())
+}
+
+func TestFileFromBytes(t *testing.T) {
+	f := FileFromBytes([]byte(text1), text2)
+	assert.Equal(t, text2, f.File.Name())
+}
+
 func TestFileByID(t *testing.T) {
 	f := FileFromID(text1)
 	assert.Equal(t, text1, f.FileID)

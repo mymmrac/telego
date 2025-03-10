@@ -2,6 +2,7 @@ package telegoutil
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/valyala/fasthttp"
 
@@ -23,10 +24,24 @@ func Username(username string) telego.ChatID {
 	}
 }
 
-// File creates [telego.InputFile] from telegoapi.NamedReader
+// File creates [telego.InputFile] from [ta.NamedReader]
 func File(file ta.NamedReader) telego.InputFile {
 	return telego.InputFile{
 		File: file,
+	}
+}
+
+// FileFromReader creates [telego.InputFile] from [io.Reader] and name
+func FileFromReader(reader io.Reader, name string) telego.InputFile {
+	return telego.InputFile{
+		File: NameReader(reader, name),
+	}
+}
+
+// FileFromBytes creates [telego.InputFile] from slice of bytes and name
+func FileFromBytes(data []byte, name string) telego.InputFile {
+	return telego.InputFile{
+		File: NameBytes(data, name),
 	}
 }
 
