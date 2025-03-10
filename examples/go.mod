@@ -3,15 +3,15 @@ module github.com/mymmrac/telego/examples
 go 1.23.4
 
 require (
-	github.com/mymmrac/telego v1.0.0
+	github.com/mymmrac/telego v1.0.1
 	github.com/valyala/fasthttp v1.59.0
 	golang.ngrok.com/ngrok v1.13.0
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
-	github.com/bytedance/sonic v1.12.10 // indirect
-	github.com/bytedance/sonic/loader v0.2.2 // indirect
+	github.com/bytedance/sonic v1.13.1 // indirect
+	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/grbit/go-json v0.11.0 // indirect

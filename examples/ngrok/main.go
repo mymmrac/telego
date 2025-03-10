@@ -49,11 +49,11 @@ func main() {
 	// Get an update channel from webhook using Ngrok
 	updates, _ := bot.UpdatesViaWebhook(ctx,
 		// Use FastHTTP webhook server
-		telego.WebhookFastHTTP(srv, "/bot", bot.Token()),
+		telego.WebhookFastHTTP(srv, "/bot", bot.SecretToken()),
 		// Calls SetWebhook before starting webhook and provide dynamic Ngrok tunnel URL
 		telego.WithWebhookSet(ctx, &telego.SetWebhookParams{
 			URL:         tun.URL() + "/bot",
-			SecretToken: bot.Token(),
+			SecretToken: bot.SecretToken(),
 		}),
 	)
 

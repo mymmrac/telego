@@ -24,7 +24,7 @@ func main() {
 	// Note: If you are keeping this call, you shouldn't use telego.WithWebhookSet option below
 	_ = bot.SetWebhook(ctx, &telego.SetWebhookParams{
 		URL:         "https://example.com/bot",
-		SecretToken: bot.Token(),
+		SecretToken: bot.SecretToken(),
 	})
 
 	// Receive information about webhook
@@ -39,13 +39,13 @@ func main() {
 	updates, _ := bot.UpdatesViaWebhook(ctx,
 		// Use fasthttp webhook server, any other custom server can be used,
 		// you need to provide a way to register handler
-		telego.WebhookFastHTTP(srv, "/bot", bot.Token()),
+		telego.WebhookFastHTTP(srv, "/bot", bot.SecretToken()),
 
 		// Telego provides a simple way to use http.Server as a webhook server
-		// telego.WebhookHTTPServer(srv, "/bot", bot.Token()),
+		// telego.WebhookHTTPServer(srv, "/bot", bot.SecretToken()),
 
 		// Telego provides a simple way to use http.ServeMux as a webhook server
-		// telego.WebhookHTTPServeMux(mux, "POST /bot", bot.Token()),
+		// telego.WebhookHTTPServeMux(mux, "POST /bot", bot.SecretToken()),
 
 		// Set chan buffer (default 128)
 		telego.WithWebhookBuffer(128),
@@ -54,7 +54,7 @@ func main() {
 		// Note: If you are using this option, you shouldn't call bot.SetWebhook above
 		telego.WithWebhookSet(ctx, &telego.SetWebhookParams{
 			URL:         "https://example.com/bot",
-			SecretToken: bot.Token(),
+			SecretToken: bot.SecretToken(),
 		}),
 	)
 

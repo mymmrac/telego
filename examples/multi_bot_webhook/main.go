@@ -22,11 +22,11 @@ func main() {
 	// Set up a webhook on Telegram side for each bot with different URLs
 	_ = bot1.SetWebhook(ctx, &telego.SetWebhookParams{
 		URL:         "https://example.com/bot1",
-		SecretToken: bot1.Token(),
+		SecretToken: bot1.SecretToken(),
 	})
 	_ = bot2.SetWebhook(ctx, &telego.SetWebhookParams{
 		URL:         "https://example.com/bot2",
-		SecretToken: bot2.Token(),
+		SecretToken: bot2.SecretToken(),
 	})
 
 	// Create a common webhook serve mux (or another custom server) for all bots
@@ -34,8 +34,8 @@ func main() {
 
 	// Get updates chan from webhook with respect to webhook URL
 	// Note: Each bot should use the same webhook serve mux (or another custom server)
-	updates1, _ := bot1.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "POST /bot1", bot1.Token()))
-	updates2, _ := bot2.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "POST /bot2", bot2.Token()))
+	updates1, _ := bot1.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "POST /bot1", bot1.SecretToken()))
+	updates2, _ := bot2.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "POST /bot2", bot2.SecretToken()))
 
 	// Start server for receiving requests from the Telegram
 	go func() { _ = http.ListenAndServe(":443", mux) }()

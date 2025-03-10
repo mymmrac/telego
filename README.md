@@ -240,7 +240,8 @@ func main() {
 
 	// Set up a webhook on Telegram side
 	_ = bot.SetWebhook(ctx, &telego.SetWebhookParams{
-		URL: "https://example.com/bot" + bot.Token(),
+		URL:         "https://example.com/bot",
+		SecretToken: bot.SecretToken(),
 	})
 
 	// Receive information about webhook
@@ -252,7 +253,7 @@ func main() {
 
 	// Get an update channel from webhook.
 	// (more on configuration in examples/updates_webhook/main.go)
-	updates, _ := bot.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "/bot", bot.Token()))
+	updates, _ := bot.UpdatesViaWebhook(ctx, telego.WebhookHTTPServeMux(mux, "/bot", bot.SecretToken()))
 
 	// Start server for receiving requests from the Telegram
 	go func() {
@@ -264,6 +265,7 @@ func main() {
 		fmt.Printf("Update: %+v\n", update)
 	}
 }
+
 ```
 
 For running multiple bots from a single server, see [this](examples/multi_bot_webhook/main.go) example.

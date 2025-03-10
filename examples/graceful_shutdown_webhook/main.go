@@ -33,7 +33,7 @@ func main() {
 	srv := &fasthttp.Server{}
 
 	// Get updates
-	updates, _ := bot.UpdatesViaWebhook(ctx, telego.WebhookFastHTTP(srv, "/bot", bot.Token()))
+	updates, _ := bot.UpdatesViaWebhook(ctx, telego.WebhookFastHTTP(srv, "/bot", bot.SecretToken()))
 
 	// Create bot handler
 	bh, _ := th.NewBotHandler(bot, updates)
