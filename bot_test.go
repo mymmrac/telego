@@ -223,7 +223,6 @@ func Test_parseParameters(t *testing.T) {
 	}{
 		{
 			name: "success",
-			//nolint:all
 			parameters: &struct {
 				Empty       string    `json:"empty,omitempty"`
 				EmptyNoOmit string    `json:"empty_no_omit"`

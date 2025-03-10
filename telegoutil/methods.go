@@ -22,6 +22,44 @@ func Messagef(id telego.ChatID, format string, args ...any) *telego.SendMessageP
 	}
 }
 
+// EditMessageText creates [telego.EditMessageTextParams] with required parameters
+func EditMessageText(chatID telego.ChatID, messageID int, text string) *telego.EditMessageTextParams {
+	return &telego.EditMessageTextParams{
+		ChatID:    chatID,
+		MessageID: messageID,
+		Text:      text,
+	}
+}
+
+// EditMessageCaption creates [telego.EditMessageCaptionParams] with required parameters
+func EditMessageCaption(chatID telego.ChatID, messageID int, caption string) *telego.EditMessageCaptionParams {
+	return &telego.EditMessageCaptionParams{
+		ChatID:    chatID,
+		MessageID: messageID,
+		Caption:   caption,
+	}
+}
+
+// EditMessageMedia creates [telego.EditMessageMediaParams] with required parameters
+func EditMessageMedia(chatID telego.ChatID, messageID int, media telego.InputMedia) *telego.EditMessageMediaParams {
+	return &telego.EditMessageMediaParams{
+		ChatID:    chatID,
+		MessageID: messageID,
+		Media:     media,
+	}
+}
+
+// EditMessageReplayMarkup creates [telego.EditMessageReplyMarkupParams] with required parameters
+func EditMessageReplayMarkup(
+	chatID telego.ChatID, messageID int, markup *telego.InlineKeyboardMarkup,
+) *telego.EditMessageReplyMarkupParams {
+	return &telego.EditMessageReplyMarkupParams{
+		ChatID:      chatID,
+		MessageID:   messageID,
+		ReplyMarkup: markup,
+	}
+}
+
 // MessageWithEntities creates [telego.SendMessageParams] with required parameters and parsed entities
 func MessageWithEntities(id telego.ChatID, entityCollections ...MessageEntityCollection) *telego.SendMessageParams {
 	text, entities := MessageEntities(entityCollections...)
