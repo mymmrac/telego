@@ -23,6 +23,22 @@ const (
 	testBotUsername = "test_bot"
 )
 
+var (
+	testVideo     = &telego.Video{FileID: "file_id"}
+	testVideoNote = &telego.VideoNote{FileID: "file_id"}
+	testPhoto     = []telego.PhotoSize{telego.PhotoSize{FileID: "file_id"}}
+	testAudio     = &telego.Audio{FileID: "file_id"}
+	testVoice     = &telego.Voice{FileID: "file_id"}
+	testDocument  = &telego.Document{FileID: "file_id"}
+	testSticker   = &telego.Sticker{FileID: "file_id"}
+	testPoll      = &telego.Poll{ID: "id"}
+	testDice      = &telego.Dice{Emoji: "emoji", Value: 1}
+	testLocation  = &telego.Location{Latitude: 0.0, Longitude: 0.0}
+	testStory     = &telego.Story{ID: 1}
+	testGame      = &telego.Game{Title: "Test game"}
+	testContact   = &telego.Contact{PhoneNumber: "+1234567890"}
+)
+
 func TestPredicates(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -125,6 +141,84 @@ func TestPredicates(t *testing.T) {
 			predicate: AnyMessageWithFrom(),
 			update:    telego.Update{Message: &telego.Message{}},
 			matches:   false,
+		},
+		{
+			name:      "any_message_with_photo_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Photo: testPhoto}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_audio_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Audio: testAudio}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_video_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Video: testVideo}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_video_note_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{VideoNote: testVideoNote}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_voice_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Voice: testVoice}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_document_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Document: testDocument}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_sticker_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Sticker: testSticker}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_poll_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Poll: testPoll}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_dice_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Dice: testDice}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_location_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Location: testLocation}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_story_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Story: testStory}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_game_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Game: testGame}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_contact_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Contact: testContact}},
+			matches:   true,
 		},
 		{
 			name:      "text_equal_matches",

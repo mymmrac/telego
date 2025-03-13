@@ -64,6 +64,69 @@ func AnyMessage() Predicate {
 	}
 }
 
+func anyMessageWithPhoto(message *telego.Message) bool {
+	return message.Photo != nil
+}
+
+func anyMessageWithAudio(message *telego.Message) bool {
+	return message.Audio != nil
+}
+
+func anyMessageWithVideo(message *telego.Message) bool {
+	return message.Video != nil
+}
+
+func anyMessageWithVideoNote(message *telego.Message) bool {
+	return message.VideoNote != nil
+}
+
+func anyMessageWithVoice(message *telego.Message) bool {
+	return message.Voice != nil
+}
+
+func anyMessageWithPaidMedia(message *telego.Message) bool {
+	return message.PaidMedia != nil
+}
+func anyMessageWithDocument(message *telego.Message) bool {
+	return message.Document != nil
+}
+
+func anyMessageWithContact(message *telego.Message) bool {
+	return message.Contact != nil
+}
+
+func anyMessageWithGame(message *telego.Message) bool {
+	return message.Game != nil
+}
+
+func anyMessageWithStory(message *telego.Message) bool {
+	return message.Story != nil
+}
+
+func anyMessageWithLocation(message *telego.Message) bool {
+	return message.Location != nil
+}
+
+func anyMessageWithPoll(message *telego.Message) bool {
+	return message.Poll != nil
+}
+
+func anyMessageWithDice(message *telego.Message) bool {
+	return message.Dice != nil
+}
+
+func anyMessageWithSticker(message *telego.Message) bool {
+	return message.Sticker != nil
+}
+
+// AnyMessageWithMedia is true when message contain any media content
+func AnyMessageWithMedia() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return (anyMessageWithPhoto(update.Message) || anyMessageWithAudio(update.Message) || anyMessageWithVideo(update.Message) || anyMessageWithVideoNote(update.Message) || anyMessageWithVoice(update.Message) || anyMessageWithPaidMedia(update.Message) || anyMessageWithDocument(update.Message) || anyMessageWithContact(update.Message) || anyMessageWithGame(update.Message) || anyMessageWithStory(update.Message) || anyMessageWithLocation(update.Message) || anyMessageWithPoll(update.Message) || anyMessageWithDice(update.Message) || anyMessageWithSticker(update.Message))
+	}
+
+}
+
 func anyMassageWithText(message *telego.Message) bool {
 	return message != nil && message.Text != ""
 }
