@@ -53,14 +53,14 @@ func Not(predicate Predicate) Predicate {
 	}
 }
 
-func anyMassage(message *telego.Message) bool {
+func anyMessage(message *telego.Message) bool {
 	return message != nil
 }
 
 // AnyMessage is true if the message isn't nil
 func AnyMessage() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMassage(update.Message)
+		return anyMessage(update.Message)
 	}
 }
 
