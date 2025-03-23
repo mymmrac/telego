@@ -127,6 +127,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_message_with_media_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{Photo: []telego.PhotoSize{{}}}},
+			matches:   true,
+		},
+		{
+			name:      "any_message_with_media_not_matches",
+			predicate: AnyMessageWithMedia(),
+			update:    telego.Update{Message: &telego.Message{}},
+			matches:   false,
+		},
+		{
 			name:      "text_equal_matches",
 			predicate: TextEqual(testText),
 			update:    telego.Update{Message: &telego.Message{Text: testText}},

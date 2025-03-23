@@ -1,4 +1,3 @@
-//revive:disable:confusing-naming
 package telegohandler
 
 import (
@@ -54,36 +53,64 @@ func Not(predicate Predicate) Predicate {
 	}
 }
 
-func anyMessage(message *telego.Message) bool {
+func baseAnyMessage(message *telego.Message) bool {
 	return message != nil
 }
 
 // AnyMessage is true if the message isn't nil
 func AnyMessage() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessage(update.Message)
+		return baseAnyMessage(update.Message)
 	}
 }
 
-func anyMessageWithText(message *telego.Message) bool {
+func baseAnyMessageWithText(message *telego.Message) bool {
 	return message != nil && message.Text != ""
 }
 
 // AnyMessageWithText is true if the message isn't nil and its text is not empty
 func AnyMessageWithText() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithText(update.Message)
+		return baseAnyMessageWithText(update.Message)
 	}
 }
 
-func anyMessageWithFrom(message *telego.Message) bool {
+func baseAnyMessageWithFrom(message *telego.Message) bool {
 	return message != nil && message.From != nil
 }
 
 // AnyMessageWithFrom is true if the message isn't nil and its from (sender) is not nil
 func AnyMessageWithFrom() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithFrom(update.Message)
+		return baseAnyMessageWithFrom(update.Message)
+	}
+}
+
+func baseAnyMessageWithMedia(message *telego.Message) bool { //nolint:gocyclo
+	return message != nil &&
+		(len(message.Photo) > 0 ||
+			message.Video != nil ||
+			message.Document != nil ||
+			message.Voice != nil ||
+			message.Audio != nil ||
+			message.VideoNote != nil ||
+			message.Sticker != nil ||
+			message.Animation != nil ||
+			message.PaidMedia != nil ||
+			message.Story != nil ||
+			message.Dice != nil ||
+			message.Game != nil ||
+			message.Poll != nil ||
+			message.Venue != nil ||
+			message.Location != nil ||
+			message.Contact != nil ||
+			message.PassportData != nil)
+}
+
+// AnyMessageWithMedia iis true if the message isn't nil, and it contains any media (photo, document, sticker, etc.)
+func AnyMessageWithMedia() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return baseAnyMessageWithMedia(update.Message)
 	}
 }
 
@@ -257,21 +284,21 @@ func SuccessPayment() Predicate {
 // AnyEditedMessage is true if the edited message isn't nil
 func AnyEditedMessage() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessage(update.EditedMessage)
+		return baseAnyMessage(update.EditedMessage)
 	}
 }
 
 // AnyEditedMessageWithText is true if the edited message isn't nil and its text is not empty
 func AnyEditedMessageWithText() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithText(update.EditedMessage)
+		return baseAnyMessageWithText(update.EditedMessage)
 	}
 }
 
 // AnyEditedMessageWithFrom is true if the edited message isn't nil and its from (sender) is not nil
 func AnyEditedMessageWithFrom() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithFrom(update.EditedMessage)
+		return baseAnyMessageWithFrom(update.EditedMessage)
 	}
 }
 
@@ -321,14 +348,14 @@ func EditedTextMatches(pattern *regexp.Regexp) Predicate {
 // AnyChannelPost is true if channel post isn't nil
 func AnyChannelPost() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessage(update.ChannelPost)
+		return baseAnyMessage(update.ChannelPost)
 	}
 }
 
 // AnyChannelPostWithText is true if channel post isn't nil and its text is not empty
 func AnyChannelPostWithText() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithText(update.ChannelPost)
+		return baseAnyMessageWithText(update.ChannelPost)
 	}
 }
 
@@ -378,14 +405,14 @@ func PostTextMatches(pattern *regexp.Regexp) Predicate {
 // AnyEditedChannelPost is true if the edited channel post isn't nil
 func AnyEditedChannelPost() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessage(update.EditedChannelPost)
+		return baseAnyMessage(update.EditedChannelPost)
 	}
 }
 
 // AnyEditedChannelPostWithText is true if edited channel post isn't nil and its text is not empty
 func AnyEditedChannelPostWithText() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithText(update.EditedChannelPost)
+		return baseAnyMessageWithText(update.EditedChannelPost)
 	}
 }
 
@@ -442,14 +469,14 @@ func AnyBusinessConnection() Predicate {
 // AnyBusinessMessage is true if the business message isn't nil
 func AnyBusinessMessage() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessage(update.BusinessMessage)
+		return baseAnyMessage(update.BusinessMessage)
 	}
 }
 
 // AnyEditedBusinessMessage is true if edited business message isn't nil
 func AnyEditedBusinessMessage() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessage(update.EditedBusinessMessage)
+		return baseAnyMessage(update.EditedBusinessMessage)
 	}
 }
 
@@ -658,14 +685,14 @@ func AnyRemovedChatBoost() Predicate {
 	}
 }
 
-func anyMessageWithCaption(message *telego.Message) bool {
+func baseAnyMessageWithCaption(message *telego.Message) bool {
 	return message != nil && message.Caption != ""
 }
 
 // AnyMessageWithCaption is true if the message isn't nil and its caption is not empty
 func AnyMessageWithCaption() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithCaption(update.Message)
+		return baseAnyMessageWithCaption(update.Message)
 	}
 }
 
@@ -799,7 +826,7 @@ func CaptionCommandEqualArgv(command string, argv ...string) Predicate {
 // AnyEditedMessageWithCaption is true if the edited message isn't nil and its caption is not empty
 func AnyEditedMessageWithCaption() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithCaption(update.EditedMessage)
+		return baseAnyMessageWithCaption(update.EditedMessage)
 	}
 }
 
@@ -849,7 +876,7 @@ func EditedCaptionMatches(pattern *regexp.Regexp) Predicate {
 // AnyChannelPostWithCaption is true if channel post isn't nil and its caption is not empty
 func AnyChannelPostWithCaption() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithCaption(update.ChannelPost)
+		return baseAnyMessageWithCaption(update.ChannelPost)
 	}
 }
 
@@ -899,7 +926,7 @@ func PostCaptionMatches(pattern *regexp.Regexp) Predicate {
 // AnyEditedChannelPostWithCaption is true if edited channel post isn't nil and its caption is not empty
 func AnyEditedChannelPostWithCaption() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
-		return anyMessageWithCaption(update.EditedChannelPost)
+		return baseAnyMessageWithCaption(update.EditedChannelPost)
 	}
 }
 
