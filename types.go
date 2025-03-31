@@ -546,11 +546,11 @@ type Message struct {
 
 	// BusinessConnectionID - Optional. Unique identifier of the business connection from which the message was
 	// received. If non-empty, the message belongs to a chat of the corresponding business account that is
-	// independent from any potential bot chat which might share the same identifier.
+	// independent of any potential bot chat which might share the same identifier.
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
 	// Chat - Chat the message belongs to
-	Chat Chat `json:"chat"`
+	Chat *Chat `json:"chat"`
 
 	// ForwardOrigin - Optional. Information about the original message for forwarded messages
 	ForwardOrigin MessageOrigin `json:"forward_origin,omitempty"`
@@ -867,7 +867,7 @@ func (m *Message) IsAccessible() bool {
 }
 
 // GetChat returns message chat
-func (m *Message) GetChat() Chat {
+func (m *Message) GetChat() *Chat {
 	return m.Chat
 }
 
@@ -883,6 +883,46 @@ func (m *Message) GetDate() int64 {
 
 func (m *Message) iMaybeInaccessibleMessage() {}
 
+// GetPhoto  returns true if message accessible for bot
+func (m *Message) GetPhoto() []PhotoSize {
+	return m.Photo
+}
+
+// GetVideo returns the Video field of the accessible message.
+func (m *Message) GetVideo() *Video {
+	return m.Video
+}
+
+// GetDocument returns the Document field of the accessible message.
+func (m *Message) GetDocument() *Document {
+	return m.Document
+}
+
+// GetAudio returns the Audio field of the accessible message.
+func (m *Message) GetAudio() *Audio {
+	return m.Audio
+}
+
+// GetVoice returns the Voice field of the accessible message.
+func (m *Message) GetVoice() *Voice {
+	return m.Voice
+}
+
+// GetVideoNote returns the VideoNote field of the accessible message.
+func (m *Message) GetVideoNote() *VideoNote {
+	return m.VideoNote
+}
+
+// GetPaidMedia returns the PaidMedia field of the accessible message.
+func (m *Message) GetPaidMedia() *PaidMediaInfo {
+	return m.PaidMedia
+}
+
+// GetCaption returns the Caption field of the accessible message.
+func (m *Message) GetCaption() string {
+	return m.Caption
+}
+
 // MessageID - This object represents a unique message identifier.
 type MessageID struct {
 	// MessageID - Unique message identifier. In specific instances (e.g., message containing a video sent to a
@@ -895,13 +935,37 @@ type MessageID struct {
 // bot.
 type InaccessibleMessage struct {
 	// Chat - Chat the message belonged to
-	Chat Chat `json:"chat"`
+	Chat *Chat `json:"chat"`
 
 	// MessageID - Unique message identifier inside the chat
 	MessageID int `json:"message_id"`
 
 	// Date - Always 0. The field can be used to differentiate regular and inaccessible messages.
 	Date int64 `json:"date"`
+
+	// Document - Optional. Message is a general file, information about the file
+	Document *Document `json:"document,omitempty"`
+
+	// Video - Optional. Message is a video, information about the video
+	Video *Video `json:"video,omitempty"`
+
+	// Photo - Optional. Message is a photo, available sizes of the photo
+	Photo []PhotoSize `json:"photo,omitempty"`
+
+	// Audio - Optional. Message is an audio file, information about the audio file.
+	Audio *Audio `json:"audio,omitempty"`
+
+	// Voice - Optional. Message is a voice message, information about the voice message.
+	Voice *Voice `json:"voice,omitempty"`
+
+	// VideoNote - Optional. Message is a video note, information about the video note.
+	VideoNote *VideoNote `json:"video_note,omitempty"`
+
+	// PaidMedia - Optional. Message contains paid media; information about the paid media.
+	PaidMedia *PaidMediaInfo `json:"paid_media,omitempty"`
+
+	// Caption - Caption for the animation, audio, document, paid media, photo, video or voice
+	Caption string `json:"caption,omitempty"`
 }
 
 // IsAccessible returns true if message accessible for bot
@@ -910,7 +974,7 @@ func (m *InaccessibleMessage) IsAccessible() bool {
 }
 
 // GetChat returns message chat
-func (m *InaccessibleMessage) GetChat() Chat {
+func (m *InaccessibleMessage) GetChat() *Chat {
 	return m.Chat
 }
 
@@ -924,6 +988,46 @@ func (m *InaccessibleMessage) GetDate() int64 {
 	return m.Date
 }
 
+// GetPhoto  returns true if message accessible for bot
+func (m *InaccessibleMessage) GetPhoto() []PhotoSize {
+	return m.Photo
+}
+
+// GetVideo returns the Video field of the inaccessible message.
+func (m *InaccessibleMessage) GetVideo() *Video {
+	return m.Video
+}
+
+// GetDocument returns the Document field of the inaccessible message.
+func (m *InaccessibleMessage) GetDocument() *Document {
+	return m.Document
+}
+
+// GetAudio returns the Audio field of the inaccessible message.
+func (m *InaccessibleMessage) GetAudio() *Audio {
+	return m.Audio
+}
+
+// GetVoice returns the Voice field of the inaccessible message.
+func (m *InaccessibleMessage) GetVoice() *Voice {
+	return m.Voice
+}
+
+// GetVideoNote returns the VideoNote field of the inaccessible message.
+func (m *InaccessibleMessage) GetVideoNote() *VideoNote {
+	return m.VideoNote
+}
+
+// GetPaidMedia returns the PaidMedia field of the inaccessible message.
+func (m *InaccessibleMessage) GetPaidMedia() *PaidMediaInfo {
+	return m.PaidMedia
+}
+
+// GetCaption returns the Caption field of the inaccessible message.
+func (m *InaccessibleMessage) GetCaption() string {
+	return m.Caption
+}
+
 func (m *InaccessibleMessage) iMaybeInaccessibleMessage() {}
 
 // MaybeInaccessibleMessage - This object describes a message that can be inaccessible to the bot. It can be
@@ -932,9 +1036,17 @@ func (m *InaccessibleMessage) iMaybeInaccessibleMessage() {}
 // InaccessibleMessage (https://core.telegram.org/bots/api#inaccessiblemessage)
 type MaybeInaccessibleMessage interface {
 	IsAccessible() bool
-	GetChat() Chat
+	GetChat() *Chat
 	GetMessageID() int
 	GetDate() int64
+	GetPhoto() []PhotoSize
+	GetVideo() *Video
+	GetDocument() *Document
+	GetPaidMedia() *PaidMediaInfo
+	GetVideoNote() *VideoNote
+	GetVoice() *Voice
+	GetAudio() *Audio
+	GetCaption() string
 	// Disallow external implementations
 	iMaybeInaccessibleMessage()
 }
@@ -3806,7 +3918,7 @@ type ChatID struct { //nolint:recvcheck
 }
 
 // String returns string representation of ChatID
-func (c ChatID) String() string {
+func (c *ChatID) String() string {
 	if c.ID != 0 {
 		return strconv.FormatInt(c.ID, 10)
 	}
@@ -3819,7 +3931,7 @@ func (c ChatID) String() string {
 }
 
 // MarshalJSON returns JSON representation of ChatID
-func (c ChatID) MarshalJSON() ([]byte, error) {
+func (c *ChatID) MarshalJSON() ([]byte, error) {
 	if c.ID != 0 {
 		return json.Marshal(c.ID)
 	}
