@@ -550,7 +550,7 @@ type Message struct {
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
 	// Chat - Chat the message belongs to
-	Chat Chat `json:"chat"`
+	Chat *Chat `json:"chat"`
 
 	// ForwardOrigin - Optional. Information about the original message for forwarded messages
 	ForwardOrigin MessageOrigin `json:"forward_origin,omitempty"`
@@ -867,7 +867,7 @@ func (m *Message) IsAccessible() bool {
 }
 
 // GetChat returns message chat
-func (m *Message) GetChat() Chat {
+func (m *Message) GetChat() *Chat {
 	return m.Chat
 }
 
@@ -930,7 +930,7 @@ type MessageID struct {
 // bot.
 type InaccessibleMessage struct {
 	// Chat - Chat the message belonged to
-	Chat Chat `json:"chat"`
+	Chat *Chat `json:"chat"`
 
 	// MessageID - Unique message identifier inside the chat
 	MessageID int `json:"message_id"`
@@ -966,7 +966,7 @@ func (m *InaccessibleMessage) IsAccessible() bool {
 }
 
 // GetChat returns message chat
-func (m *InaccessibleMessage) GetChat() Chat {
+func (m *InaccessibleMessage) GetChat() *Chat {
 	return m.Chat
 }
 
@@ -1023,7 +1023,7 @@ func (m *InaccessibleMessage) iMaybeInaccessibleMessage() {}
 // InaccessibleMessage (https://core.telegram.org/bots/api#inaccessiblemessage)
 type MaybeInaccessibleMessage interface {
 	IsAccessible() bool
-	GetChat() Chat
+	GetChat() *Chat
 	GetMessageID() int
 	GetDate() int64
 	GetPhoto() []PhotoSize
