@@ -888,34 +888,39 @@ func (m *Message) GetPhoto() []PhotoSize {
 	return m.Photo
 }
 
-// GetVideo returns the Video field of the inaccessible message.
+// GetVideo returns the Video field of the accessible message.
 func (m *Message) GetVideo() *Video {
 	return m.Video
 }
 
-// GetDocument returns the Document field of the inaccessible message.
+// GetDocument returns the Document field of the accessible message.
 func (m *Message) GetDocument() *Document {
 	return m.Document
 }
 
-// GetAudio returns the Audio field of the inaccessible message.
+// GetAudio returns the Audio field of the accessible message.
 func (m *Message) GetAudio() *Audio {
 	return m.Audio
 }
 
-// GetVoice returns the Voice field of the inaccessible message.
+// GetVoice returns the Voice field of the accessible message.
 func (m *Message) GetVoice() *Voice {
 	return m.Voice
 }
 
-// GetVideoNote returns the VideoNote field of the inaccessible message.
+// GetVideoNote returns the VideoNote field of the accessible message.
 func (m *Message) GetVideoNote() *VideoNote {
 	return m.VideoNote
 }
 
-// GetPaidMedia returns the PaidMedia field of the inaccessible message.
+// GetPaidMedia returns the PaidMedia field of the accessible message.
 func (m *Message) GetPaidMedia() *PaidMediaInfo {
 	return m.PaidMedia
+}
+
+// GetCaption returns the Caption field of the accessible message.
+func (m *Message) GetCaption() string {
+	return m.Caption
 }
 
 // MessageID - This object represents a unique message identifier.
@@ -958,6 +963,9 @@ type InaccessibleMessage struct {
 
 	// PaidMedia - Optional. Message contains paid media; information about the paid media.
 	PaidMedia *PaidMediaInfo `json:"paid_media,omitempty"`
+
+	// Caption - Caption for the animation, audio, document, paid media, photo, video or voice
+	Caption string `json:"caption,omitempty"`
 }
 
 // IsAccessible returns true if message accessible for bot
@@ -1015,6 +1023,11 @@ func (m *InaccessibleMessage) GetPaidMedia() *PaidMediaInfo {
 	return m.PaidMedia
 }
 
+// GetCaption returns the Caption field of the inaccessible message.
+func (m *InaccessibleMessage) GetCaption() string {
+	return m.Caption
+}
+
 func (m *InaccessibleMessage) iMaybeInaccessibleMessage() {}
 
 // MaybeInaccessibleMessage - This object describes a message that can be inaccessible to the bot. It can be
@@ -1033,6 +1046,7 @@ type MaybeInaccessibleMessage interface {
 	GetVideoNote() *VideoNote
 	GetVoice() *Voice
 	GetAudio() *Audio
+	GetCaption() string
 	// Disallow external implementations
 	iMaybeInaccessibleMessage()
 }
