@@ -1,6 +1,6 @@
 //go:build integration && interactive
 
-package main
+package integration
 
 import (
 	"context"

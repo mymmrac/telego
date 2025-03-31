@@ -286,7 +286,7 @@ type Chat struct {
 }
 
 // ChatID returns [ChatID] of this chat
-func (c Chat) ChatID() ChatID {
+func (c *Chat) ChatID() ChatID {
 	return ChatID{
 		ID: c.ID,
 	}
