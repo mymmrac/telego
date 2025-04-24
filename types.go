@@ -866,6 +866,16 @@ func (m *Message) IsAccessible() bool {
 	return true
 }
 
+// Message returns [Message] if message accessible for bot, otherwise returns nil
+func (m *Message) Message() *Message {
+	return m
+}
+
+// InaccessibleMessage returns [InaccessibleMessage] if message not accessible for bot, otherwise returns nil
+func (m *Message) InaccessibleMessage() *InaccessibleMessage {
+	return nil
+}
+
 // GetChat returns message chat
 func (m *Message) GetChat() Chat {
 	return m.Chat
@@ -909,6 +919,16 @@ func (m *InaccessibleMessage) IsAccessible() bool {
 	return false
 }
 
+// Message returns [Message] if message accessible for bot, otherwise returns nil
+func (m *InaccessibleMessage) Message() *Message {
+	return nil
+}
+
+// InaccessibleMessage returns [InaccessibleMessage] if message not accessible for bot, otherwise returns nil
+func (m *InaccessibleMessage) InaccessibleMessage() *InaccessibleMessage {
+	return m
+}
+
 // GetChat returns message chat
 func (m *InaccessibleMessage) GetChat() Chat {
 	return m.Chat
@@ -931,10 +951,20 @@ func (m *InaccessibleMessage) iMaybeInaccessibleMessage() {}
 // Message (https://core.telegram.org/bots/api#message)
 // InaccessibleMessage (https://core.telegram.org/bots/api#inaccessiblemessage)
 type MaybeInaccessibleMessage interface {
+	// IsAccessible returns true if message accessible for bot
 	IsAccessible() bool
+	// Message returns [Message] if message accessible for bot, otherwise returns nil
+	Message() *Message
+	// InaccessibleMessage returns [InaccessibleMessage] if message not accessible for bot, otherwise returns nil
+	InaccessibleMessage() *InaccessibleMessage
+
+	// GetChat returns message chat
 	GetChat() Chat
+	// GetMessageID returns message ID
 	GetMessageID() int
+	// GetDate returns message date
 	GetDate() int64
+
 	// Disallow external implementations
 	iMaybeInaccessibleMessage()
 }
@@ -1178,7 +1208,9 @@ type ReplyParameters struct {
 // MessageOriginChat (https://core.telegram.org/bots/api#messageoriginchat)
 // MessageOriginChannel (https://core.telegram.org/bots/api#messageoriginchannel)
 type MessageOrigin interface {
+	// OriginType returns original message type
 	OriginType() string
+	// OriginalDate returns original message date
 	OriginalDate() int64
 	// Disallow external implementations
 	iMessageOrigin()
@@ -1557,6 +1589,7 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 // PaidMediaPhoto (https://core.telegram.org/bots/api#paidmediaphoto)
 // PaidMediaVideo (https://core.telegram.org/bots/api#paidmediavideo)
 type PaidMedia interface {
+	// MediaType returns PaidMedia type
 	MediaType() string
 	// Disallow external implementations
 	iPaidMedia()
@@ -1854,6 +1887,7 @@ type ChatBoostAdded struct {
 // BackgroundFillGradient (https://core.telegram.org/bots/api#backgroundfillgradient)
 // BackgroundFillFreeformGradient (https://core.telegram.org/bots/api#backgroundfillfreeformgradient)
 type BackgroundFill interface {
+	// BackgroundFilled returns BackgroundFill type
 	BackgroundFilled() string
 	// Disallow external implementations
 	iBackgroundFill()
@@ -1875,7 +1909,7 @@ type BackgroundFillSolid struct {
 	Color int `json:"color"`
 }
 
-// BackgroundFilled - Returns BackgroundFill type
+// BackgroundFilled returns BackgroundFill type
 func (b *BackgroundFillSolid) BackgroundFilled() string {
 	return BackgroundFilledSolid
 }
@@ -1897,7 +1931,7 @@ type BackgroundFillGradient struct {
 	RotationAngle int `json:"rotation_angle"`
 }
 
-// BackgroundFilled - Returns BackgroundFill type
+// BackgroundFilled returns BackgroundFill type
 func (b *BackgroundFillGradient) BackgroundFilled() string {
 	return BackgroundFilledGradient
 }
@@ -1915,7 +1949,7 @@ type BackgroundFillFreeformGradient struct {
 	Colors []int `json:"colors"`
 }
 
-// BackgroundFilled - Returns BackgroundFill type
+// BackgroundFilled returns BackgroundFill type
 func (b *BackgroundFillFreeformGradient) BackgroundFilled() string {
 	return BackgroundFilledFreeformGradient
 }
@@ -1928,6 +1962,7 @@ func (b *BackgroundFillFreeformGradient) iBackgroundFill() {}
 // BackgroundTypePattern (https://core.telegram.org/bots/api#backgroundtypepattern)
 // BackgroundTypeChatTheme (https://core.telegram.org/bots/api#backgroundtypechattheme)
 type BackgroundType interface {
+	// BackgroundType returns BackgroundType type
 	BackgroundType() string
 	// Disallow external implementations
 	iBackgroundType()
@@ -1953,7 +1988,7 @@ type BackgroundTypeFill struct {
 	DarkThemeDimming int `json:"dark_theme_dimming"`
 }
 
-// BackgroundType - Returns BackgroundType type
+// BackgroundType returns BackgroundType type
 func (b *BackgroundTypeFill) BackgroundType() string {
 	return BackgroundTypeNameFill
 }
@@ -2016,7 +2051,7 @@ type BackgroundTypeWallpaper struct {
 	IsMoving bool `json:"is_moving,omitempty"`
 }
 
-// BackgroundType - Returns BackgroundType type
+// BackgroundType returns BackgroundType type
 func (b *BackgroundTypeWallpaper) BackgroundType() string {
 	return BackgroundTypeNameWallpaper
 }
@@ -2046,7 +2081,7 @@ type BackgroundTypePattern struct {
 	IsMoving bool `json:"is_moving,omitempty"`
 }
 
-// BackgroundType - Returns BackgroundType type
+// BackgroundType returns BackgroundType type
 func (b *BackgroundTypePattern) BackgroundType() string {
 	return BackgroundTypeNamePattern
 }
@@ -2062,7 +2097,7 @@ type BackgroundTypeChatTheme struct {
 	ThemeName string `json:"theme_name"`
 }
 
-// BackgroundType - Returns BackgroundType type
+// BackgroundType returns BackgroundType type
 func (b *BackgroundTypeChatTheme) BackgroundType() string {
 	return BackgroundTypeNameChatTheme
 }
@@ -2419,7 +2454,7 @@ type WebAppInfo struct {
 
 // ReplyMarkup - Represents reply markup (inline keyboard, custom reply keyboard, etc.)
 type ReplyMarkup interface {
-	// ReplyType - Returns type of reply
+	// ReplyType returns type of reply
 	ReplyType() string
 	// Disallow external implementations
 	iReplyMarkup()
@@ -2469,7 +2504,7 @@ type ReplyKeyboardMarkup struct {
 	Selective bool `json:"selective,omitempty"`
 }
 
-// ReplyType - Returns ReplyKeyboardMarkup type
+// ReplyType returns ReplyKeyboardMarkup type
 func (r *ReplyKeyboardMarkup) ReplyType() string {
 	return MarkupTypeReplyKeyboard
 }
@@ -2618,7 +2653,7 @@ type ReplyKeyboardRemove struct {
 	Selective bool `json:"selective,omitempty"`
 }
 
-// ReplyType - Returns ReplyKeyboardRemove type
+// ReplyType returns ReplyKeyboardRemove type
 func (r *ReplyKeyboardRemove) ReplyType() string {
 	return MarkupTypeReplyKeyboardRemove
 }
@@ -2634,7 +2669,7 @@ type InlineKeyboardMarkup struct {
 	InlineKeyboard [][]InlineKeyboardButton `json:"inline_keyboard"`
 }
 
-// ReplyType - Returns InlineKeyboardMarkup type
+// ReplyType returns InlineKeyboardMarkup type
 func (i *InlineKeyboardMarkup) ReplyType() string {
 	return MarkupTypeInlineKeyboard
 }
@@ -2842,7 +2877,7 @@ type ForceReply struct {
 	Selective bool `json:"selective,omitempty"`
 }
 
-// ReplyType - Returns ForceReply type
+// ReplyType returns ForceReply type
 func (f *ForceReply) ReplyType() string {
 	return MarkupTypeForceReply
 }
@@ -3116,8 +3151,11 @@ func (c *chatMemberData) UnmarshalJSON(data []byte) error {
 // ChatMemberLeft (https://core.telegram.org/bots/api#chatmemberleft)
 // ChatMemberBanned (https://core.telegram.org/bots/api#chatmemberbanned)
 type ChatMember interface {
+	// MemberStatus returns ChatMember status
 	MemberStatus() string
+	// MemberUser returns ChatMember User
 	MemberUser() User
+	// MemberIsMember returns true if ChatMember is member
 	MemberIsMember() bool
 	// Disallow external implementations
 	iChatMember()
@@ -3159,7 +3197,7 @@ func (c *ChatMemberOwner) MemberUser() User {
 	return c.User
 }
 
-// MemberIsMember returns ChatMember is_member
+// MemberIsMember returns true if ChatMember is member
 func (c *ChatMemberOwner) MemberIsMember() bool {
 	return true
 }
@@ -3246,7 +3284,7 @@ func (c *ChatMemberAdministrator) MemberUser() User {
 	return c.User
 }
 
-// MemberIsMember returns ChatMember is_member
+// MemberIsMember returns true if ChatMember is member
 func (c *ChatMemberAdministrator) MemberIsMember() bool {
 	return true
 }
@@ -3276,7 +3314,7 @@ func (c *ChatMemberMember) MemberUser() User {
 	return c.User
 }
 
-// MemberIsMember returns ChatMember is_member
+// MemberIsMember returns true if ChatMember is member
 func (c *ChatMemberMember) MemberIsMember() bool {
 	return true
 }
@@ -3354,7 +3392,7 @@ func (c *ChatMemberRestricted) MemberUser() User {
 	return c.User
 }
 
-// MemberIsMember returns ChatMember is_member
+// MemberIsMember returns true if ChatMember is member
 func (c *ChatMemberRestricted) MemberIsMember() bool {
 	return c.IsMember
 }
@@ -3381,7 +3419,7 @@ func (c *ChatMemberLeft) MemberUser() User {
 	return c.User
 }
 
-// MemberIsMember returns ChatMember is_member
+// MemberIsMember returns true if ChatMember is member
 func (c *ChatMemberLeft) MemberIsMember() bool {
 	return false
 }
@@ -3412,7 +3450,7 @@ func (c *ChatMemberBanned) MemberUser() User {
 	return c.User
 }
 
-// MemberIsMember returns ChatMember is_member
+// MemberIsMember returns true if ChatMember is member
 func (c *ChatMemberBanned) MemberIsMember() bool {
 	return false
 }
@@ -3560,6 +3598,7 @@ type ChatLocation struct {
 // ReactionTypeCustomEmoji (https://core.telegram.org/bots/api#reactiontypecustomemoji)
 // ReactionTypePaid (https://core.telegram.org/bots/api#reactiontypepaid)
 type ReactionType interface {
+	// ReactionType returns reaction type
 	ReactionType() string
 	// Disallow external implementations
 	iReactionType()
@@ -3850,6 +3889,7 @@ func (c *ChatID) UnmarshalJSON(data []byte) error {
 // BotCommandScopeChatAdministrators (https://core.telegram.org/bots/api#botcommandscopechatadministrators)
 // BotCommandScopeChatMember (https://core.telegram.org/bots/api#botcommandscopechatmember)
 type BotCommandScope interface {
+	// ScopeType returns BotCommandScope type
 	ScopeType() string
 	// Disallow external implementations
 	iBotCommandScope()
@@ -4008,6 +4048,7 @@ type BotShortDescription struct {
 // for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default,
 // the menu button opens the list of bot commands.
 type MenuButton interface {
+	// ButtonType returns MenuButton type
 	ButtonType() string
 	// Disallow external implementations
 	iMenuButton()
@@ -4114,6 +4155,7 @@ func (m *MenuButtonDefault) iMenuButton() {}
 // ChatBoostSourceGiftCode (https://core.telegram.org/bots/api#chatboostsourcegiftcode)
 // ChatBoostSourceGiveaway (https://core.telegram.org/bots/api#chatboostsourcegiveaway)
 type ChatBoostSource interface {
+	// BoostSource returns boost source
 	BoostSource() string
 	// Disallow external implementations
 	iChatBoostSource()
@@ -4361,6 +4403,7 @@ type fileCompatible interface {
 // InputMediaPhoto (https://core.telegram.org/bots/api#inputmediaphoto)
 // InputMediaVideo (https://core.telegram.org/bots/api#inputmediavideo)
 type InputMedia interface {
+	// MediaType return InputMedia type
 	MediaType() string
 	// Disallow external implementations
 	iInputMedia()
@@ -4741,7 +4784,9 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 // InputPaidMediaPhoto (https://core.telegram.org/bots/api#inputpaidmediaphoto)
 // InputPaidMediaVideo (https://core.telegram.org/bots/api#inputpaidmediavideo)
 type InputPaidMedia interface {
+	// MediaType returns InputPaidMedia type
 	MediaType() string
+	// MediaFile returns InputPaidMedia file
 	MediaFile() InputFile
 	// Disallow external implementations
 	iInputPaidMedia()
@@ -5088,6 +5133,7 @@ type InlineQueryResultsButton struct {
 // Note: All URLs passed in inline query results will be available to end users and therefore must be assumed to
 // be public.
 type InlineQueryResult interface {
+	// ResultType returns InlineQueryResult type
 	ResultType() string
 	// Disallow external implementations
 	iInlineQueryResult()
@@ -6092,6 +6138,7 @@ func (i *InlineQueryResultCachedAudio) iInlineQueryResult() {}
 // InputContactMessageContent (https://core.telegram.org/bots/api#inputcontactmessagecontent)
 // InputInvoiceMessageContent (https://core.telegram.org/bots/api#inputinvoicemessagecontent)
 type InputMessageContent interface {
+	// ContentType returns InputMessageContent type
 	ContentType() string
 	// Disallow external implementations
 	iInputMessageContent()
@@ -6564,6 +6611,7 @@ type PaidMediaPurchased struct {
 // RevenueWithdrawalStateSucceeded (https://core.telegram.org/bots/api#revenuewithdrawalstatesucceeded)
 // RevenueWithdrawalStateFailed (https://core.telegram.org/bots/api#revenuewithdrawalstatefailed)
 type RevenueWithdrawalState interface {
+	// WithdrawalState returns RevenueWithdrawalState type
 	WithdrawalState() string
 	// Disallow external implementations
 	iRevenueWithdrawalState()
@@ -6653,6 +6701,7 @@ type AffiliateInfo struct {
 // TransactionPartnerTelegramApi (https://core.telegram.org/bots/api#transactionpartnertelegramapi)
 // TransactionPartnerOther (https://core.telegram.org/bots/api#transactionpartnerother)
 type TransactionPartner interface {
+	// PartnerType returns TransactionPartner type
 	PartnerType() string
 	// Disallow external implementations
 	iTransactionPartner()
@@ -7070,6 +7119,7 @@ type EncryptedCredentials struct {
 // (https://core.telegram.org/bots/api#passportelementerrortranslationfiles)
 // PassportElementErrorUnspecified (https://core.telegram.org/bots/api#passportelementerrorunspecified)
 type PassportElementError interface {
+	// ErrorSource returns PassportElementError source
 	ErrorSource() string
 	// Disallow external implementations
 	iPassportElementError()
