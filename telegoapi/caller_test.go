@@ -252,4 +252,72 @@ func TestRetryCaller_Call(t *testing.T) {
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
+
+	t.Run("error_retry_rate_limit_skip", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err: &Error{
+					ErrorCode:  429,
+					Parameters: &ResponseParameters{RetryAfter: 1},
+				},
+			},
+			MaxAttempts: 2,
+			RateLimit:   RetryRateLimitSkip,
+		}
+		resp, err := retryCaller.Call(ctx, "", nil)
+		require.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error_retry_rate_limit_wait", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err: &Error{
+					ErrorCode:  429,
+					Parameters: &ResponseParameters{RetryAfter: 1},
+				},
+			},
+			MaxAttempts: 2,
+			RateLimit:   RetryRateLimitWait,
+		}
+		resp, err := retryCaller.Call(ctx, "", nil)
+		require.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error_retry_rate_limit_abort", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err: &Error{
+					ErrorCode:  429,
+					Parameters: &ResponseParameters{RetryAfter: 1},
+				},
+			},
+			MaxAttempts: 2,
+			RateLimit:   RetryRateLimitAbort,
+		}
+		resp, err := retryCaller.Call(ctx, "", nil)
+		require.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error_retry_rate_limit_wait_or_abort", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err: &Error{
+					ErrorCode:  429,
+					Parameters: &ResponseParameters{RetryAfter: 1},
+				},
+			},
+			MaxAttempts: 2,
+			RateLimit:   RetryRateLimitWaitOrAbort,
+		}
+		resp, err := retryCaller.Call(ctx, "", nil)
+		require.Error(t, err)
+		assert.Nil(t, resp)
+	})
 }

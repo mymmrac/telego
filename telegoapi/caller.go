@@ -113,14 +113,36 @@ func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*R
 }
 
 // RetryCaller decorator over [Caller] that provides retries with exponential backoff
-// Delay = (ExponentBase ^ AttemptNumber) * StartDelay or MaxDelay
+// Depending on [RetryRateLimit] will wait for rate limit timeout to reset or abort, defaults to do nothing
+// Delay = min((ExponentBase ^ AttemptNumber) * StartDelay, MaxDelay)
 type RetryCaller struct {
-	Caller       Caller
-	MaxAttempts  int
+	// Underling caller
+	Caller Caller
+	// Max number of attempts to make call
+	MaxAttempts int
+	// Exponent base for delay
 	ExponentBase float64
-	StartDelay   time.Duration
-	MaxDelay     time.Duration
+	// Starting delay duration
+	StartDelay time.Duration
+	// Maximum delay duration
+	MaxDelay time.Duration
+	// Rate limit behavior
+	RateLimit RetryRateLimit
 }
+
+// RetryRateLimit mode for handling rate limits
+type RetryRateLimit uint
+
+const (
+	// RetryRateLimitSkip do not handle rate limits
+	RetryRateLimitSkip RetryRateLimit = iota
+	// RetryRateLimitAbort abort retry if hit rate limit
+	RetryRateLimitAbort
+	// RetryRateLimitWait wait for rate limit timeout to reset
+	RetryRateLimitWait
+	// RetryRateLimitWaitOrAbort wait for rate limit timeout to reset if it's less than max delay else abort
+	RetryRateLimitWaitOrAbort
+)
 
 // ErrMaxRetryAttempts returned when max retry attempts reached
 var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
@@ -137,11 +159,35 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 			break
 		}
 
-		delay := time.Duration(math.Pow(r.ExponentBase, float64(i))) * r.StartDelay
-		if delay > r.MaxDelay {
-			delay = r.MaxDelay
+		var delay time.Duration
+
+		var apiErr *Error
+		if errors.As(err, &apiErr) && apiErr.ErrorCode == 429 && apiErr.Parameters != nil { // Rate limit
+			switch r.RateLimit {
+			case RetryRateLimitSkip:
+				// Do nothing
+			case RetryRateLimitAbort:
+				return nil, err
+			case RetryRateLimitWait:
+				delay = time.Duration(apiErr.Parameters.RetryAfter) * time.Second
+			case RetryRateLimitWaitOrAbort:
+				delay = time.Duration(apiErr.Parameters.RetryAfter) * time.Second
+				if delay > r.MaxDelay {
+					return nil, err
+				}
+			}
 		}
-		time.Sleep(delay)
+
+		if delay == 0 {
+			delay = min(time.Duration(math.Pow(r.ExponentBase, float64(i)))*r.StartDelay, r.MaxDelay)
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, errors.Join(err, ctx.Err())
+		case <-time.After(delay):
+			// Continue
+		}
 	}
 	return nil, errors.Join(err, ErrMaxRetryAttempts)
 }
