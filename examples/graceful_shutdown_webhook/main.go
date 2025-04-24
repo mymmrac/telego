@@ -7,9 +7,10 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/valyala/fasthttp"
+
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
-	"github.com/valyala/fasthttp"
 )
 
 func main() {

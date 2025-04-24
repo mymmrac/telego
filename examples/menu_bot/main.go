@@ -9,10 +9,11 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/valyala/fasthttp"
+
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
-	"github.com/valyala/fasthttp"
 )
 
 func main() {

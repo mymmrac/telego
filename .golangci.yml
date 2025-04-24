@@ -1,204 +1,144 @@
-# Output configuration options
-output:
-  # Sort results by: filepath, line and column
-  sort-results: true
+version: "2"
 
-# Enabled/disabled linters
 linters:
-  enable-all: true
+  default: all
   disable:
-    # Disabled because not relevant for this project
-    - cyclop # Checks function and package cyclomatic complexity
-    - containedctx # containedctx is a linter that detects struct contained context.Context field
-    - depguard # Go linter that checks if package imports are in a list of acceptable packages
-    - dupword # checks for duplicate words in the source code
-    - dupl # Tool for code clone detection
-    - exhaustruct # Checks if all structure fields are initialized
-    - gochecknoglobals # check that no global variables exist
-    - godot # Check if comments end in a period
-    - err113 # Golang linter to check the errors handling expressions
-    - ireturn # Accept Interfaces, Return Concrete Types
-    - intrange # Intrange is a linter to find places where for loops could make use of an integer range
-    - nlreturn # nlreturn checks for a new line before return and branch statements to increase code clarity
-    - noctx # noctx finds sending http request without context.Context
-    - nonamedreturns # Reports all named returns
-    - paralleltest # paralleltest detects missing usage of t.Parallel() method in your Go test
-    - tagliatelle # Checks the struct tags
-    - testpackage # linter that makes you use a separate _test package
-    - varnamelen # checks that the length of a variable's name matches its scope
-    - wrapcheck # Checks that errors returned from external packages are wrapped
-    - wsl # Whitespace Linter - Forces you to use empty lines!
-
-    # Disabled because deprecated
-    - tenv # Tenv is analyzer that detects using os.Setenv instead of t.Setenv since Go1.17
-
-    # To see a list of enabled/disabled by current configuration linters:
-    # golangci-lint linters
-
-# Settings of specific linters
-linters-settings:
-  govet: # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not
-    # Enable all analyzers.
-    # Default: false
-    enable-all: true
-    # Disable analyzers by name.
-    # Run `go tool vet help` to see all analyzers.
-    # Default: []
-    disable:
-      - fieldalignment # check for struct field alignments
-  gocyclo: # Computes and checks the cyclomatic complexity of functions
-    # minimal code complexity to report, 30 by default (but we recommend 10-20)
-    min-complexity: 15
-  misspell: # Finds commonly misspelled English words in comments
-    # Correct spellings using locale preferences for US or UK.
-    # Default is to use a neutral variety of English.
-    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
-    locale: US
-  errcheck: # Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be
-    # critical bugs in some cases.
-    # report about not checking of errors in type assertions: `a := b.(MyStruct)`;
-    # default is false: such cases aren't reported by default.
-    check-type-assertions: true
-    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
-    # default is false: such cases aren't reported by default.
-    check-blank: true
-  gocognit: # Computes and checks the cognitive complexity of functions
-    # Minimal code complexity to report, 30 by default (but we recommend 10-20)
-    min-complexity: 20
-  mnd: # An analyzer to detect magic numbers.
-    # The list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
-    checks:
-      - argument
-      - assign
-      - case
-      - condition
-      - operation
-      - return
-  lll: # Reports long lines
-    # Max line length, lines longer will be reported. Default is 120.
-    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
-    line-length: 120
-    # Tab width in spaces. Default to 1.
-    # tabulation - 4 spaces. the end.
-    tab-width: 4
-  nakedret: # Finds naked returns in functions greater than a specified function length
-    # Make an issue if func has more lines of code than this setting, and it has naked returns; default is 30
-    # decided to use 3 to exclude long functions with named returns which can be a potential source of many errors / bugs
-    max-func-lines: 3
-  funlen: # Tool for detection of long functions
-    lines: 120
-    statements: 40
-  gci: # Gci control golang package import order and make it always deterministic.
-    sections:
-      - standard
-      - default
-      - prefix(github.com/mymmrac/telego)
-  exhaustive: # check exhaustiveness of enum switch statements
-    # Presence of "default" case in switch statements satisfies exhaustiveness,
-    # even if all enum members are not listed
-    default-signifies-exhaustive: true
-  revive:
-    # Enable all available rules.
-    # Default: false
-    enable-all-rules: true
+    - containedctx
+    - cyclop
+    - depguard
+    - dupl
+    - dupword
+    - err113
+    - exhaustruct
+    - funcorder
+    - gochecknoglobals
+    - godot
+    - intrange
+    - ireturn
+    - nlreturn
+    - noctx
+    - nonamedreturns
+    - paralleltest
+    - tagliatelle
+    - testpackage
+    - varnamelen
+    - wrapcheck
+    - wsl
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    exhaustive:
+      default-signifies-exhaustive: true
+    funlen:
+      lines: 120
+      statements: 40
+    gocognit:
+      min-complexity: 20
+    gocyclo:
+      min-complexity: 15
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    lll:
+      line-length: 120
+      tab-width: 4
+    misspell:
+      locale: US
+    mnd:
+      checks:
+        - argument
+        - assign
+        - case
+        - condition
+        - operation
+        - return
+    nakedret:
+      max-func-lines: 3
+    revive:
+      enable-all-rules: true
+      rules:
+        - name: add-constant
+          disabled: true
+        - name: argument-limit
+          arguments:
+            - 7
+          severity: warning
+        - name: banned-characters
+          disabled: true
+        - name: cognitive-complexity
+          disabled: true
+        - name: comment-spacings
+          arguments:
+            - nolint
+          severity: warning
+        - name: cyclomatic
+          disabled: true
+        - name: file-header
+          disabled: true
+        - name: function-result-limit
+          arguments:
+            - 3
+          severity: warning
+        - name: function-length
+          disabled: true
+        - name: line-length-limit
+          disabled: true
+        - name: max-public-structs
+          disabled: true
+        - name: modifies-value-receiver
+          disabled: true
+        - name: package-comments
+          disabled: true
+        - name: unused-receiver
+          disabled: true
+  exclusions:
+    generated: lax
     rules:
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
-      - name: add-constant
-        disabled: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#argument-limit
-      - name: argument-limit
-        severity: warning
-        disabled: false
-        arguments: [ 7 ]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#banned-characters
-      - name: banned-characters
-        disabled: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cognitive-complexity
-      - name: cognitive-complexity
-        disabled: true # Duplicate: gocognit
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#comment-spacings
-      - name: comment-spacings
-        severity: warning
-        disabled: false
-        arguments:
-          - nolint
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cyclomatic
-      - name: cyclomatic
-        disabled: true # Duplicate: gocyclo
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
-      - name: file-header
-        disabled: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-result-limit
-      - name: function-result-limit
-        severity: warning
-        disabled: false
-        arguments: [ 3 ]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-length
-      - name: function-length
-        disabled: true # Duplicate: funlen
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#line-length-limit
-      - name: line-length-limit
-        disabled: true # Duplicate: lll
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#max-public-structs
-      - name: max-public-structs
-        disabled: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#modifies-value-receiver
-      - name: modifies-value-receiver
-        disabled: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#package-comments
-      - name: package-comments
-        disabled: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unused-receiver
-      - name: unused-receiver
-        disabled: true
+      - linters:
+          - lll
+        source: '^//go:generate '
+      - linters:
+          - funlen
+          - maintidx
+          - revive
+        path: _test\.go$
+      - linters:
+          - funlen
+        path: types.go
+      - linters:
+          - lll
+        path: methods.go
+    paths:
+      - mock
+      - internal
 
 issues:
-  # Excluding configuration per-path, per-linter, per-text and per-source
-  exclude-rules:
-    # Exclude lll issues for long lines with go:generate
-    - linters:
-        - lll
-      source: "^//go:generate "
-
-    # Exclude liters for test files
-    - path: "_test\\.go$"
-      linters:
-        - funlen
-        - maintidx
-        - revive
-
-    # Exclude linters for types file
-    - path: "types.go"
-      linters:
-        - funlen
-
-    # Exclude linters for methods file
-    - path: "methods.go"
-      linters:
-        - lll
-
-  # Which dirs to exclude: issues from them won't be reported.
-  # Can use regexp here: `generated.*`, regexp is applied on full path,
-  # including the path prefix if one is set.
-  # Default dirs are skipped independently of this option's value (see exclude-dirs-use-default).
-  # "/" will be replaced by current OS file path separator to properly work on Windows.
-  # Default: []
-  exclude-dirs:
-    - mock
-    - internal
-
-  # Independently of option `exclude` we use default exclude patterns,
-  # it can be disabled by this option. To list all
-  # excluded by default patterns execute `golangci-lint run --help`.
-  # Default value for this option is true.
-  exclude-use-default: false
-
-  # Maximum issues count per one linter.
-  # Set to 0 to disable.
-  # Default: 50
   max-issues-per-linter: 0
-
-  # Maximum count of issues with the same text.
-  # Set to 0 to disable.
-  # Default: 3
   max-same-issues: 0
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - localmodule
+      custom-order: true
+    gofmt:
+      rewrite-rules:
+        - pattern: "interface{}"
+          replacement: "any"
+        - pattern: "a[b:len(a)]"
+          replacement: "a[b:]"
+  exclusions:
+    generated: lax
+    paths:
+      - mock
+      - internal

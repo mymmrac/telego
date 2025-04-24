@@ -91,7 +91,7 @@ func TestWithLongPollingUpdateInterval(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		err := WithLongPollingUpdateInterval(interval)(ctx)
 		require.NoError(t, err)
-		assert.EqualValues(t, interval, ctx.updateInterval)
+		assert.Equal(t, interval, ctx.updateInterval)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -106,7 +106,7 @@ func TestWithLongPollingRetryTimeout(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		err := WithLongPollingRetryTimeout(timeout)(ctx)
 		require.NoError(t, err)
-		assert.EqualValues(t, timeout, ctx.retryTimeout)
+		assert.Equal(t, timeout, ctx.retryTimeout)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -121,5 +121,5 @@ func TestWithLongPollingBuffer(t *testing.T) {
 
 	err := WithLongPollingBuffer(buffer)(ctx)
 	require.NoError(t, err)
-	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
+	assert.Equal(t, buffer, ctx.updateChanBuffer)
 }

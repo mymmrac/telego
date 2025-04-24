@@ -33,7 +33,7 @@ func Test_logger_Debugf(t *testing.T) {
 
 	t.Run("disabled", func(t *testing.T) {
 		l.Debugf(format, data1, data2)
-		assert.Equal(t, "", b.String())
+		assert.Empty(t, b.String())
 	})
 
 	t.Run("enabled", func(t *testing.T) {
@@ -49,7 +49,7 @@ func Test_logger_Errorf(t *testing.T) {
 
 	t.Run("disabled", func(t *testing.T) {
 		l.Errorf(format, data1, data2)
-		assert.Equal(t, "", b.String())
+		assert.Empty(t, b.String())
 	})
 
 	t.Run("enabled", func(t *testing.T) {

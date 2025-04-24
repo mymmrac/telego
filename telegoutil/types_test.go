@@ -354,7 +354,7 @@ func TestMediaVideo(t *testing.T) {
 
 func TestPollTypeAny(t *testing.T) {
 	p := PollTypeAny()
-	assert.Equal(t, "", p.Type)
+	assert.Empty(t, p.Type)
 }
 
 func TestPollTypeQuiz(t *testing.T) {

@@ -106,7 +106,7 @@ func TestWithWebhookBuffer(t *testing.T) {
 
 	err := WithWebhookBuffer(buffer)(nil, ctx)
 	require.NoError(t, err)
-	assert.EqualValues(t, buffer, ctx.updateChanBuffer)
+	assert.Equal(t, buffer, ctx.updateChanBuffer)
 }
 
 func TestWithWebhookSet(t *testing.T) {

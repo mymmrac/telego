@@ -352,7 +352,7 @@ func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, f
 	}
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)
-	_, _ = debug.WriteString(fmt.Sprintf("parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", ")))
+	_, _ = fmt.Fprintf(debug, "parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", "))
 }
 
 // ToPtr converts value into a pointer to value

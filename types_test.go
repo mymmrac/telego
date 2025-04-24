@@ -365,7 +365,7 @@ func Test_chatMemberData_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c.Data)
+			assert.Equal(t, tt.data, c.Data)
 		})
 	}
 }
@@ -393,7 +393,7 @@ func TestChatMember_MemberUser(t *testing.T) {
 	}
 
 	for i, cm := range members {
-		assert.EqualValues(t, User{ID: int64(i) + 1}, cm.MemberUser())
+		assert.Equal(t, User{ID: int64(i) + 1}, cm.MemberUser())
 	}
 }
 
@@ -413,7 +413,7 @@ func TestChatMemberUpdated_UnmarshalJSON(t *testing.T) {
 		cmu := &ChatMemberUpdated{}
 		err = cmu.UnmarshalJSON(jsonData)
 		require.NoError(t, err)
-		assert.EqualValues(t, expectedCMU, cmu)
+		assert.Equal(t, expectedCMU, cmu)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -477,7 +477,7 @@ func Test_menuButtonData_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, m.Data)
+			assert.Equal(t, tt.data, m.Data)
 		})
 	}
 }
@@ -1089,7 +1089,7 @@ func Test_ChatFullInfo_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }
@@ -1140,7 +1140,7 @@ func Test_ExternalReplyInfo_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, e)
+			assert.Equal(t, tt.data, e)
 		})
 	}
 }
@@ -1182,7 +1182,7 @@ func Test_CallbackQuery_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }
@@ -1233,7 +1233,7 @@ func Test_ReactionCount_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }
@@ -1294,7 +1294,7 @@ func Test_MessageReactionUpdated_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, m)
+			assert.Equal(t, tt.data, m)
 		})
 	}
 }
@@ -1345,7 +1345,7 @@ func Test_ChatBoost_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }
@@ -1396,7 +1396,7 @@ func Test_ChatBoostRemoved_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }
@@ -1447,7 +1447,7 @@ func Test_BackgroundTypeFill_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }
@@ -1497,7 +1497,7 @@ func Test_ChatBackground_UnmarshalJSON(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.EqualValues(t, tt.data, c)
+			assert.Equal(t, tt.data, c)
 		})
 	}
 }

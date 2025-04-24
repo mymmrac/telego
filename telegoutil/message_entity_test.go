@@ -127,10 +127,10 @@ func TestEntityLength(t *testing.T) {
 		Entity(" Україна").Bold(),
 		Entity(" "),
 		Entity("\U0001FAE5 ").Italic(),
-		Entity("世界").Bold(),
+		Entity("世界").Bold(), //nolint:gosmopolitan
 	)
 
-	assert.Equal(t, "😅 test 🌗 Україна \U0001FAE5 世界", text)
+	assert.Equal(t, "😅 test 🌗 Україна \U0001FAE5 世界", text) //nolint:gosmopolitan
 	require.Len(t, entities, 6)
 
 	assert.Equal(t, telego.MessageEntity{

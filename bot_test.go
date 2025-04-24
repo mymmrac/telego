@@ -632,7 +632,7 @@ func TestBot_performRequest(t *testing.T) {
 		var stringResult string
 		err := m.Bot.performRequest(testCtx, methodName, params, &stringResult)
 		require.Error(t, err)
-		assert.Equal(t, "", stringResult)
+		assert.Empty(t, stringResult)
 	})
 
 	t.Run("error_warning", func(t *testing.T) {
@@ -694,6 +694,6 @@ func TestToPtr(t *testing.T) {
 	assert.True(t, *ToPtr(true))
 	assert.False(t, *ToPtr(false))
 
-	assert.Equal(t, "", *ToPtr(""))
+	assert.Empty(t, *ToPtr(""))
 	assert.Equal(t, "a", *ToPtr("a"))
 }

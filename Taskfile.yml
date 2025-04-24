@@ -13,10 +13,17 @@ tasks:
     cmds:
       - go mod tidy
       - task: generate
+      - task: fmt
       - task: lint
       - task: test
       - task: build:lib
       - task: build:examples
+
+  fmt:
+    desc: "Run formatters"
+    deps: [ install:lint ]
+    cmds:
+      - golangci-lint fmt
 
   lint:
     desc: "Run golangci-lint"
@@ -149,7 +156,7 @@ tasks:
   install:lint:
     desc: "Install golangci-lint"
     cmds:
-      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+      - go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
     status:
       - command -v golangci-lint
 
