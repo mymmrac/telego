@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/bytedance/sonic v1.13.2
 	github.com/stretchr/testify v1.10.0
-	github.com/valyala/fasthttp v1.61.0
+	github.com/valyala/fasthttp v1.62.0
 	github.com/valyala/fastjson v1.6.4
 	go.uber.org/mock v0.5.2
 )
