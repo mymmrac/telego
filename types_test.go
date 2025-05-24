@@ -85,6 +85,21 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*ChatMember)(nil), &ChatMemberBanned{})
 	assert.Equal(t, MemberStatusBanned, (&ChatMemberBanned{}).MemberStatus())
 
+	assert.Implements(t, (*StoryAreaType)(nil), &StoryAreaTypeLocation{})
+	assert.Equal(t, StoryAreaLocation, (&StoryAreaTypeLocation{}).StoryAreaType())
+
+	assert.Implements(t, (*StoryAreaType)(nil), &StoryAreaTypeSuggestedReaction{})
+	assert.Equal(t, StoryAreaSuggestedReaction, (&StoryAreaTypeSuggestedReaction{}).StoryAreaType())
+
+	assert.Implements(t, (*StoryAreaType)(nil), &StoryAreaTypeLink{})
+	assert.Equal(t, StoryAreaLink, (&StoryAreaTypeLink{}).StoryAreaType())
+
+	assert.Implements(t, (*StoryAreaType)(nil), &StoryAreaTypeWeather{})
+	assert.Equal(t, StoryAreaWeather, (&StoryAreaTypeWeather{}).StoryAreaType())
+
+	assert.Implements(t, (*StoryAreaType)(nil), &StoryAreaTypeUniqueGift{})
+	assert.Equal(t, StoryAreaUniqueGift, (&StoryAreaTypeUniqueGift{}).StoryAreaType())
+
 	assert.Implements(t, (*ReactionType)(nil), &ReactionTypeEmoji{})
 	assert.Equal(t, ReactionEmoji, (&ReactionTypeEmoji{}).ReactionType())
 
@@ -93,6 +108,12 @@ func TestTypesInterfaces(t *testing.T) {
 
 	assert.Implements(t, (*ReactionType)(nil), &ReactionTypePaid{})
 	assert.Equal(t, ReactionPaid, (&ReactionTypePaid{}).ReactionType())
+
+	assert.Implements(t, (*OwnedGift)(nil), &OwnedGiftRegular{})
+	assert.Equal(t, GiftTypeRegular, (&OwnedGiftRegular{}).GiftType())
+
+	assert.Implements(t, (*OwnedGift)(nil), &OwnedGiftUnique{})
+	assert.Equal(t, GiftTypeUnique, (&OwnedGiftUnique{}).GiftType())
 
 	assert.Implements(t, (*BotCommandScope)(nil), &BotCommandScopeDefault{})
 	assert.Equal(t, ScopeTypeDefault, (&BotCommandScopeDefault{}).ScopeType())
@@ -153,6 +174,18 @@ func TestTypesInterfaces(t *testing.T) {
 
 	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaVideo{})
 	assert.Equal(t, PaidMediaTypeVideo, (&InputPaidMediaVideo{}).MediaType())
+
+	assert.Implements(t, (*InputProfilePhoto)(nil), &InputProfilePhotoStatic{})
+	assert.Equal(t, PhotoTypeStatic, (&InputProfilePhotoStatic{}).ProfilePhotoType())
+
+	assert.Implements(t, (*InputProfilePhoto)(nil), &InputProfilePhotoAnimated{})
+	assert.Equal(t, PhotoTypeAnimated, (&InputProfilePhotoAnimated{}).ProfilePhotoType())
+
+	assert.Implements(t, (*InputStoryContent)(nil), &InputStoryContentPhoto{})
+	assert.Equal(t, StoryTypePhoto, (&InputStoryContentPhoto{}).StoryType())
+
+	assert.Implements(t, (*InputStoryContent)(nil), &InputStoryContentVideo{})
+	assert.Equal(t, StoryTypeVideo, (&InputStoryContentVideo{}).StoryType())
 
 	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultArticle{})
 	assert.Equal(t, ResultTypeArticle, (&InlineQueryResultArticle{}).ResultType())
@@ -736,7 +769,13 @@ func TestTypesConstants(t *testing.T) {
 			MemberStatusLeft, MemberStatusBanned,
 		},
 		{
+			StoryAreaLocation, StoryAreaSuggestedReaction, StoryAreaLink, StoryAreaWeather, StoryAreaUniqueGift,
+		},
+		{
 			ReactionEmoji, ReactionCustomEmoji, ReactionPaid,
+		},
+		{
+			GiftTypeRegular, GiftTypeUnique,
 		},
 		{
 			ScopeTypeDefault, ScopeTypeAllPrivateChats, ScopeTypeAllGroupChats, ScopeTypeAllChatAdministrators,
@@ -753,6 +792,9 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo,
+		},
+		{
+			PhotoTypeStatic, PhotoTypeAnimated,
 		},
 		{
 			StickerTypeRegular, StickerTypeMask, StickerTypeCustomEmoji,
@@ -781,6 +823,10 @@ func TestTypesConstants(t *testing.T) {
 		{
 			PartnerTypeUser, PartnerTypeChat, PartnerTypeAffiliateProgram, PartnerTypeFragment, PartnerTypeTelegramAds,
 			PartnerTypeTelegramApi, PartnerTypeOther,
+		},
+		{
+			TransactionTypeInvoicePayment, TransactionTypePaidMediaPayment, TransactionTypeGiftPurchase,
+			TransactionTypePremiumPurchase, TransactionTypeBusinessAccountTransfer,
 		},
 		{
 			ElementTypePersonalDetails, ElementTypePassport, ElementTypeDriverLicense, ElementTypeIdentityCard,

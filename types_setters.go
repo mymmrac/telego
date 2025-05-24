@@ -138,6 +138,12 @@ func (k KeyboardButton) WithWebApp(webApp *WebAppInfo) KeyboardButton {
 	return k
 }
 
+// WithRequestID adds request ID parameter
+func (k *KeyboardButtonRequestUsers) WithRequestID(requestID int32) *KeyboardButtonRequestUsers {
+	k.RequestID = requestID
+	return k
+}
+
 // WithUserIsBot adds user is bot parameter
 func (k *KeyboardButtonRequestUsers) WithUserIsBot(userIsBot bool) *KeyboardButtonRequestUsers {
 	k.UserIsBot = &userIsBot
@@ -171,6 +177,12 @@ func (k *KeyboardButtonRequestUsers) WithRequestUsername(requestUsername bool) *
 // WithRequestPhoto adds request photo parameter
 func (k *KeyboardButtonRequestUsers) WithRequestPhoto(requestPhoto bool) *KeyboardButtonRequestUsers {
 	k.RequestPhoto = &requestPhoto
+	return k
+}
+
+// WithRequestID adds request ID parameter
+func (k *KeyboardButtonRequestChat) WithRequestID(requestID int32) *KeyboardButtonRequestChat {
+	k.RequestID = requestID
 	return k
 }
 
@@ -663,6 +675,54 @@ func (i *InputPaidMediaVideo) WithDuration(duration int) *InputPaidMediaVideo {
 // WithSupportsStreaming adds supports streaming parameter
 func (i *InputPaidMediaVideo) WithSupportsStreaming() *InputPaidMediaVideo {
 	i.SupportsStreaming = true
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputProfilePhotoStatic) WithPhoto(photo InputFile) *InputProfilePhotoStatic {
+	i.Photo = photo
+	return i
+}
+
+// WithAnimation adds animation parameter
+func (i *InputProfilePhotoAnimated) WithAnimation(animation InputFile) *InputProfilePhotoAnimated {
+	i.Animation = animation
+	return i
+}
+
+// WithMainFrameTimestamp adds main frame timestamp parameter
+func (i *InputProfilePhotoAnimated) WithMainFrameTimestamp(mainFrameTimestamp float64) *InputProfilePhotoAnimated {
+	i.MainFrameTimestamp = mainFrameTimestamp
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputStoryContentPhoto) WithPhoto(photo InputFile) *InputStoryContentPhoto {
+	i.Photo = photo
+	return i
+}
+
+// WithVideo adds video parameter
+func (i *InputStoryContentVideo) WithVideo(video InputFile) *InputStoryContentVideo {
+	i.Video = video
+	return i
+}
+
+// WithDuration adds duration parameter
+func (i *InputStoryContentVideo) WithDuration(duration float64) *InputStoryContentVideo {
+	i.Duration = duration
+	return i
+}
+
+// WithCoverFrameTimestamp adds cover frame timestamp parameter
+func (i *InputStoryContentVideo) WithCoverFrameTimestamp(coverFrameTimestamp float64) *InputStoryContentVideo {
+	i.CoverFrameTimestamp = coverFrameTimestamp
+	return i
+}
+
+// WithIsAnimation adds is animation parameter
+func (i *InputStoryContentVideo) WithIsAnimation() *InputStoryContentVideo {
+	i.IsAnimation = true
 	return i
 }
 
@@ -1291,9 +1351,27 @@ func (i *InlineQueryResultLocation) WithID(iD string) *InlineQueryResultLocation
 	return i
 }
 
+// WithLatitude adds latitude parameter
+func (i *InlineQueryResultLocation) WithLatitude(latitude float64) *InlineQueryResultLocation {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InlineQueryResultLocation) WithLongitude(longitude float64) *InlineQueryResultLocation {
+	i.Longitude = longitude
+	return i
+}
+
 // WithTitle adds title parameter
 func (i *InlineQueryResultLocation) WithTitle(title string) *InlineQueryResultLocation {
 	i.Title = title
+	return i
+}
+
+// WithHorizontalAccuracy adds horizontal accuracy parameter
+func (i *InlineQueryResultLocation) WithHorizontalAccuracy(horizontalAccuracy float64) *InlineQueryResultLocation {
+	i.HorizontalAccuracy = horizontalAccuracy
 	return i
 }
 
@@ -1349,6 +1427,18 @@ func (i *InlineQueryResultLocation) WithThumbnailHeight(thumbnailHeight int) *In
 // WithID adds ID parameter
 func (i *InlineQueryResultVenue) WithID(iD string) *InlineQueryResultVenue {
 	i.ID = iD
+	return i
+}
+
+// WithLatitude adds latitude parameter
+func (i *InlineQueryResultVenue) WithLatitude(latitude float64) *InlineQueryResultVenue {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InlineQueryResultVenue) WithLongitude(longitude float64) *InlineQueryResultVenue {
+	i.Longitude = longitude
 	return i
 }
 
@@ -1941,6 +2031,24 @@ func (i *InputTextMessageContent) WithLinkPreviewOptions(
 	return i
 }
 
+// WithLatitude adds latitude parameter
+func (i *InputLocationMessageContent) WithLatitude(latitude float64) *InputLocationMessageContent {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InputLocationMessageContent) WithLongitude(longitude float64) *InputLocationMessageContent {
+	i.Longitude = longitude
+	return i
+}
+
+// WithHorizontalAccuracy adds horizontal accuracy parameter
+func (i *InputLocationMessageContent) WithHorizontalAccuracy(horizontalAccuracy float64) *InputLocationMessageContent {
+	i.HorizontalAccuracy = horizontalAccuracy
+	return i
+}
+
 // WithLivePeriod adds live period parameter
 func (i *InputLocationMessageContent) WithLivePeriod(livePeriod int) *InputLocationMessageContent {
 	i.LivePeriod = livePeriod
@@ -1956,6 +2064,18 @@ func (i *InputLocationMessageContent) WithHeading(heading int) *InputLocationMes
 // WithProximityAlertRadius adds proximity alert radius parameter
 func (i *InputLocationMessageContent) WithProximityAlertRadius(proximityAlertRadius int) *InputLocationMessageContent {
 	i.ProximityAlertRadius = proximityAlertRadius
+	return i
+}
+
+// WithLatitude adds latitude parameter
+func (i *InputVenueMessageContent) WithLatitude(latitude float64) *InputVenueMessageContent {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InputVenueMessageContent) WithLongitude(longitude float64) *InputVenueMessageContent {
+	i.Longitude = longitude
 	return i
 }
 

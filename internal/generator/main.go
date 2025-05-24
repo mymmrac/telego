@@ -92,6 +92,12 @@ var typeStructsSetters = []string{
 	"InputInvoiceMessageContent",
 
 	"InputSticker",
+
+	"InputProfilePhotoStatic",
+	"InputProfilePhotoAnimated",
+
+	"InputStoryContentPhoto",
+	"InputStoryContentVideo",
 }
 
 var typeStructsNoPointerSetters = []string{
