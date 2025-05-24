@@ -1143,7 +1143,7 @@ type SendPaidMediaParams struct {
 	// the chat's balance. Otherwise, they will be credited to the bot's balance.
 	ChatID ChatID `json:"chat_id"`
 
-	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-2500
+	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-10000
 	StarCount int `json:"star_count"`
 
 	// Media - A JSON-serialized array describing the media to be sent; up to 10 items
@@ -2162,7 +2162,7 @@ type CreateChatSubscriptionInviteLinkParams struct {
 	SubscriptionPeriod int64 `json:"subscription_period"`
 
 	// SubscriptionPrice - The amount of Telegram Stars a user must pay initially and after each subsequent
-	// subscription period to be a member of the chat; 1-2500
+	// subscription period to be a member of the chat; 1-10000
 	SubscriptionPrice int `json:"subscription_price"`
 }
 
@@ -3550,6 +3550,609 @@ func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) 
 	return nil
 }
 
+// GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users and channel chats.
+// Requires no parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
+func (b *Bot) GetAvailableGifts(ctx context.Context) (*Gifts, error) {
+	var gifts *Gifts
+	err := b.performRequest(ctx, "getAvailableGifts", nil, &gifts)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getAvailableGifts: %w", err)
+	}
+	return gifts, nil
+}
+
+// SendGiftParams - Represents parameters of sendGift method.
+type SendGiftParams struct {
+	// UserID - Optional. Required if chat_id is not specified. Unique identifier of the target user who will
+	// receive the gift.
+	UserID int64 `json:"user_id,omitempty"`
+
+	// ChatID - Optional. Required if user_id is not specified. Unique identifier for the chat or username of
+	// the channel (in the format @channel_username) that will receive the gift.
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// GiftID - Identifier of the gift
+	GiftID string `json:"gift_id"`
+
+	// PayForUpgrade - Optional. Pass True to pay for the gift upgrade from the bot's balance, thereby making
+	// the upgrade free for the receiver
+	PayForUpgrade bool `json:"pay_for_upgrade,omitempty"`
+
+	// Text - Optional. Text that will be shown along with the gift; 0-128 characters
+	Text string `json:"text,omitempty"`
+
+	// TextParseMode - Optional. Mode for parsing entities in the text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details. Entities other than “bold”,
+	// “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+	TextParseMode string `json:"text_parse_mode,omitempty"`
+
+	// TextEntities - Optional. A JSON-serialized list of special entities that appear in the gift text. It can
+	// be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”,
+	// “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+	TextEntities []MessageEntity `json:"text_entities,omitempty"`
+}
+
+// SendGift - Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars
+// by the receiver. Returns True on success.
+func (b *Bot) SendGift(ctx context.Context, params *SendGiftParams) error {
+	err := b.performRequest(ctx, "sendGift", params)
+	if err != nil {
+		return fmt.Errorf("telego: sendGift: %w", err)
+	}
+	return nil
+}
+
+// GiftPremiumSubscriptionParams - Represents parameters of giftPremiumSubscription method.
+type GiftPremiumSubscriptionParams struct {
+	// UserID - Unique identifier of the target user who will receive a Telegram Premium subscription
+	UserID int64 `json:"user_id"`
+
+	// MonthCount - Number of months the Telegram Premium subscription will be active for the user; must be one
+	// of 3, 6, or 12
+	MonthCount int `json:"month_count"`
+
+	// StarCount - Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3
+	// months, 1500 for 6 months, and 2500 for 12 months
+	StarCount int `json:"star_count"`
+
+	// Text - Optional. Text that will be shown along with the service message about the subscription; 0-128
+	// characters
+	Text string `json:"text,omitempty"`
+
+	// TextParseMode - Optional. Mode for parsing entities in the text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details. Entities other than “bold”,
+	// “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+	TextParseMode string `json:"text_parse_mode,omitempty"`
+
+	// TextEntities - Optional. A JSON-serialized list of special entities that appear in the gift text. It can
+	// be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”,
+	// “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+	TextEntities []MessageEntity `json:"text_entities,omitempty"`
+}
+
+// GiftPremiumSubscription - Gifts a Telegram Premium subscription to the given user. Returns True on
+// success.
+func (b *Bot) GiftPremiumSubscription(ctx context.Context, params *GiftPremiumSubscriptionParams) error {
+	err := b.performRequest(ctx, "giftPremiumSubscription", params)
+	if err != nil {
+		return fmt.Errorf("telego: giftPremiumSubscription: %w", err)
+	}
+	return nil
+}
+
+// VerifyUserParams - Represents parameters of verifyUser method.
+type VerifyUserParams struct {
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+
+	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
+	// the organization isn't allowed to provide a custom verification description.
+	CustomDescription string `json:"custom_description,omitempty"`
+}
+
+// VerifyUser - Verifies a user on behalf of the organization
+// (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
+// success.
+func (b *Bot) VerifyUser(ctx context.Context, params *VerifyUserParams) error {
+	err := b.performRequest(ctx, "verifyUser", params)
+	if err != nil {
+		return fmt.Errorf("telego: verifyUser: %w", err)
+	}
+	return nil
+}
+
+// VerifyChatParams - Represents parameters of verifyChat method.
+type VerifyChatParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
+	// the organization isn't allowed to provide a custom verification description.
+	CustomDescription string `json:"custom_description,omitempty"`
+}
+
+// VerifyChat - Verifies a chat on behalf of the organization
+// (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
+// success.
+func (b *Bot) VerifyChat(ctx context.Context, params *VerifyChatParams) error {
+	err := b.performRequest(ctx, "verifyChat", params)
+	if err != nil {
+		return fmt.Errorf("telego: verifyChat: %w", err)
+	}
+	return nil
+}
+
+// RemoveUserVerificationParams - Represents parameters of removeUserVerification method.
+type RemoveUserVerificationParams struct {
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+}
+
+// RemoveUserVerification - Removes verification from a user who is currently verified on behalf of the
+// organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
+// success.
+func (b *Bot) RemoveUserVerification(ctx context.Context, params *RemoveUserVerificationParams) error {
+	err := b.performRequest(ctx, "removeUserVerification", params)
+	if err != nil {
+		return fmt.Errorf("telego: removeUserVerification: %w", err)
+	}
+	return nil
+}
+
+// RemoveChatVerificationParams - Represents parameters of removeChatVerification method.
+type RemoveChatVerificationParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+}
+
+// RemoveChatVerification - Removes verification from a chat that is currently verified on behalf of the
+// organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
+// success.
+func (b *Bot) RemoveChatVerification(ctx context.Context, params *RemoveChatVerificationParams) error {
+	err := b.performRequest(ctx, "removeChatVerification", params)
+	if err != nil {
+		return fmt.Errorf("telego: removeChatVerification: %w", err)
+	}
+	return nil
+}
+
+// ReadBusinessMessageParams - Represents parameters of readBusinessMessage method.
+type ReadBusinessMessageParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection on behalf of which to read the
+	// message
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// ChatID - Unique identifier of the chat in which the message was received. The chat must have been active
+	// in the last 24 hours.
+	ChatID int64 `json:"chat_id"`
+
+	// MessageID - Unique identifier of the message to mark as read
+	MessageID int `json:"message_id"`
+}
+
+// ReadBusinessMessage - Marks incoming message as read on behalf of a business account. Requires the
+// can_read_messages business bot right. Returns True on success.
+func (b *Bot) ReadBusinessMessage(ctx context.Context, params *ReadBusinessMessageParams) error {
+	err := b.performRequest(ctx, "readBusinessMessage", params)
+	if err != nil {
+		return fmt.Errorf("telego: readBusinessMessage: %w", err)
+	}
+	return nil
+}
+
+// DeleteBusinessMessagesParams - Represents parameters of deleteBusinessMessages method.
+type DeleteBusinessMessagesParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection on behalf of which to delete the
+	// messages
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from
+	// the same chat. See deleteMessage (https://core.telegram.org/bots/api#deletemessage) for limitations on which
+	// messages can be deleted
+	MessageIDs []int `json:"message_ids"`
+}
+
+// DeleteBusinessMessages - Delete messages on behalf of a business account. Requires the
+// can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the
+// can_delete_all_messages business bot right to delete any message. Returns True on success.
+func (b *Bot) DeleteBusinessMessages(ctx context.Context, params *DeleteBusinessMessagesParams) error {
+	err := b.performRequest(ctx, "deleteBusinessMessages", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteBusinessMessages: %w", err)
+	}
+	return nil
+}
+
+// SetBusinessAccountNameParams - Represents parameters of setBusinessAccountName method.
+type SetBusinessAccountNameParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// FirstName - The new value of the first name for the business account; 1-64 characters
+	FirstName string `json:"first_name"`
+
+	// LastName - Optional. The new value of the last name for the business account; 0-64 characters
+	LastName string `json:"last_name,omitempty"`
+}
+
+// SetBusinessAccountName - Changes the first and last name of a managed business account. Requires the
+// can_change_name business bot right. Returns True on success.
+func (b *Bot) SetBusinessAccountName(ctx context.Context, params *SetBusinessAccountNameParams) error {
+	err := b.performRequest(ctx, "setBusinessAccountName", params)
+	if err != nil {
+		return fmt.Errorf("telego: setBusinessAccountName: %w", err)
+	}
+	return nil
+}
+
+// SetBusinessAccountUsernameParams - Represents parameters of setBusinessAccountUsername method.
+type SetBusinessAccountUsernameParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// Username - Optional. The new value of the username for the business account; 0-32 characters
+	Username string `json:"username,omitempty"`
+}
+
+// SetBusinessAccountUsername - Changes the username of a managed business account. Requires the
+// can_change_username business bot right. Returns True on success.
+func (b *Bot) SetBusinessAccountUsername(ctx context.Context, params *SetBusinessAccountUsernameParams) error {
+	err := b.performRequest(ctx, "setBusinessAccountUsername", params)
+	if err != nil {
+		return fmt.Errorf("telego: setBusinessAccountUsername: %w", err)
+	}
+	return nil
+}
+
+// SetBusinessAccountBioParams - Represents parameters of setBusinessAccountBio method.
+type SetBusinessAccountBioParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// Bio - Optional. The new value of the bio for the business account; 0-140 characters
+	Bio string `json:"bio,omitempty"`
+}
+
+// SetBusinessAccountBio - Changes the bio of a managed business account. Requires the can_change_bio
+// business bot right. Returns True on success.
+func (b *Bot) SetBusinessAccountBio(ctx context.Context, params *SetBusinessAccountBioParams) error {
+	err := b.performRequest(ctx, "setBusinessAccountBio", params)
+	if err != nil {
+		return fmt.Errorf("telego: setBusinessAccountBio: %w", err)
+	}
+	return nil
+}
+
+// SetBusinessAccountProfilePhotoParams - Represents parameters of setBusinessAccountProfilePhoto method.
+type SetBusinessAccountProfilePhotoParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// Photo - The new profile photo to set
+	Photo InputProfilePhoto `json:"photo"`
+
+	// IsPublic - Optional. Pass True to set the public photo, which will be visible even if the main photo is
+	// hidden by the business account's privacy settings. An account can have only one public photo.
+	IsPublic bool `json:"is_public,omitempty"`
+}
+
+// SetBusinessAccountProfilePhoto - Changes the profile photo of a managed business account. Requires the
+// can_edit_profile_photo business bot right. Returns True on success.
+func (b *Bot) SetBusinessAccountProfilePhoto(ctx context.Context, params *SetBusinessAccountProfilePhotoParams) error {
+	err := b.performRequest(ctx, "setBusinessAccountProfilePhoto", params)
+	if err != nil {
+		return fmt.Errorf("telego: setBusinessAccountProfilePhoto: %w", err)
+	}
+	return nil
+}
+
+// RemoveBusinessAccountProfilePhotoParams - Represents parameters of removeBusinessAccountProfilePhoto
+// method.
+type RemoveBusinessAccountProfilePhotoParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// IsPublic - Optional. Pass True to remove the public photo, which is visible even if the main photo is
+	// hidden by the business account's privacy settings. After the main photo is removed, the previous profile
+	// photo (if present) becomes the main photo.
+	IsPublic bool `json:"is_public,omitempty"`
+}
+
+// RemoveBusinessAccountProfilePhoto - Removes the current profile photo of a managed business account.
+// Requires the can_edit_profile_photo business bot right. Returns True on success.
+func (b *Bot) RemoveBusinessAccountProfilePhoto(ctx context.Context, params *RemoveBusinessAccountProfilePhotoParams) error {
+	err := b.performRequest(ctx, "removeBusinessAccountProfilePhoto", params)
+	if err != nil {
+		return fmt.Errorf("telego: removeBusinessAccountProfilePhoto: %w", err)
+	}
+	return nil
+}
+
+// SetBusinessAccountGiftSettingsParams - Represents parameters of setBusinessAccountGiftSettings method.
+type SetBusinessAccountGiftSettingsParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// ShowGiftButton - Pass True, if a button for sending a gift to the user or by the business account must
+	// always be shown in the input field
+	ShowGiftButton bool `json:"show_gift_button"`
+
+	// AcceptedGiftTypes - Types of gifts accepted by the business account
+	AcceptedGiftTypes AcceptedGiftTypes `json:"accepted_gift_types"`
+}
+
+// SetBusinessAccountGiftSettings - Changes the privacy settings pertaining to incoming gifts in a managed
+// business account. Requires the can_change_gift_settings business bot right. Returns True on success.
+func (b *Bot) SetBusinessAccountGiftSettings(ctx context.Context, params *SetBusinessAccountGiftSettingsParams) error {
+	err := b.performRequest(ctx, "setBusinessAccountGiftSettings", params)
+	if err != nil {
+		return fmt.Errorf("telego: setBusinessAccountGiftSettings: %w", err)
+	}
+	return nil
+}
+
+// GetBusinessAccountStarBalanceParams - Represents parameters of getBusinessAccountStarBalance method.
+type GetBusinessAccountStarBalanceParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+}
+
+// GetBusinessAccountStarBalance - Returns the amount of Telegram Stars owned by a managed business account.
+// Requires the can_view_gifts_and_stars business bot right. Returns StarAmount
+// (https://core.telegram.org/bots/api#staramount) on success.
+func (b *Bot) GetBusinessAccountStarBalance(ctx context.Context, params *GetBusinessAccountStarBalanceParams) (*StarAmount, error) {
+	var starAmount *StarAmount
+	err := b.performRequest(ctx, "getBusinessAccountStarBalance", params, &starAmount)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getBusinessAccountStarBalance: %w", err)
+	}
+	return starAmount, nil
+}
+
+// TransferBusinessAccountStarsParams - Represents parameters of transferBusinessAccountStars method.
+type TransferBusinessAccountStarsParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// StarCount - Number of Telegram Stars to transfer; 1-10000
+	StarCount int `json:"star_count"`
+}
+
+// TransferBusinessAccountStars - Transfers Telegram Stars from the business account balance to the bot's
+// balance. Requires the can_transfer_stars business bot right. Returns True on success.
+func (b *Bot) TransferBusinessAccountStars(ctx context.Context, params *TransferBusinessAccountStarsParams) error {
+	err := b.performRequest(ctx, "transferBusinessAccountStars", params)
+	if err != nil {
+		return fmt.Errorf("telego: transferBusinessAccountStars: %w", err)
+	}
+	return nil
+}
+
+// GetBusinessAccountGiftsParams - Represents parameters of getBusinessAccountGifts method.
+type GetBusinessAccountGiftsParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// ExcludeUnsaved - Optional. Pass True to exclude gifts that aren't saved to the account's profile page
+	ExcludeUnsaved bool `json:"exclude_unsaved,omitempty"`
+
+	// ExcludeSaved - Optional. Pass True to exclude gifts that are saved to the account's profile page
+	ExcludeSaved bool `json:"exclude_saved,omitempty"`
+
+	// ExcludeUnlimited - Optional. Pass True to exclude gifts that can be purchased an unlimited number of
+	// times
+	ExcludeUnlimited bool `json:"exclude_unlimited,omitempty"`
+
+	// ExcludeLimited - Optional. Pass True to exclude gifts that can be purchased a limited number of times
+	ExcludeLimited bool `json:"exclude_limited,omitempty"`
+
+	// ExcludeUnique - Optional. Pass True to exclude unique gifts
+	ExcludeUnique bool `json:"exclude_unique,omitempty"`
+
+	// SortByPrice - Optional. Pass True to sort results by gift price instead of send date. Sorting is applied
+	// before pagination.
+	SortByPrice bool `json:"sort_by_price,omitempty"`
+
+	// Offset - Optional. Offset of the first entry to return as received from the previous request; use empty
+	// string to get the first chunk of results
+	Offset string `json:"offset,omitempty"`
+
+	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100
+	Limit int `json:"limit,omitempty"`
+}
+
+// GetBusinessAccountGifts - Returns the gifts received and owned by a managed business account. Requires the
+// can_view_gifts_and_stars business bot right. Returns OwnedGifts
+// (https://core.telegram.org/bots/api#ownedgifts) on success.
+func (b *Bot) GetBusinessAccountGifts(ctx context.Context, params *GetBusinessAccountGiftsParams) (*OwnedGifts, error) {
+	var ownedGifts *OwnedGifts
+	err := b.performRequest(ctx, "getBusinessAccountGifts", params, &ownedGifts)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getBusinessAccountGifts: %w", err)
+	}
+	return ownedGifts, nil
+}
+
+// ConvertGiftToStarsParams - Represents parameters of convertGiftToStars method.
+type ConvertGiftToStarsParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// OwnedGiftID - Unique identifier of the regular gift that should be converted to Telegram Stars
+	OwnedGiftID string `json:"owned_gift_id"`
+}
+
+// ConvertGiftToStars - Converts a given regular gift to Telegram Stars. Requires the
+// can_convert_gifts_to_stars business bot right. Returns True on success.
+func (b *Bot) ConvertGiftToStars(ctx context.Context, params *ConvertGiftToStarsParams) error {
+	err := b.performRequest(ctx, "convertGiftToStars", params)
+	if err != nil {
+		return fmt.Errorf("telego: convertGiftToStars: %w", err)
+	}
+	return nil
+}
+
+// UpgradeGiftParams - Represents parameters of upgradeGift method.
+type UpgradeGiftParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// OwnedGiftID - Unique identifier of the regular gift that should be upgraded to a unique one
+	OwnedGiftID string `json:"owned_gift_id"`
+
+	// KeepOriginalDetails - Optional. Pass True to keep the original gift text, sender and receiver in the
+	// upgraded gift
+	KeepOriginalDetails bool `json:"keep_original_details,omitempty"`
+
+	// StarCount - Optional. The amount of Telegram Stars that will be paid for the upgrade from the business
+	// account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars
+	// business bot right is required and gift.upgrade_star_count must be passed.
+	StarCount int `json:"star_count,omitempty"`
+}
+
+// UpgradeGift - Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts
+// business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid.
+// Returns True on success.
+func (b *Bot) UpgradeGift(ctx context.Context, params *UpgradeGiftParams) error {
+	err := b.performRequest(ctx, "upgradeGift", params)
+	if err != nil {
+		return fmt.Errorf("telego: upgradeGift: %w", err)
+	}
+	return nil
+}
+
+// TransferGiftParams - Represents parameters of transferGift method.
+type TransferGiftParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// OwnedGiftID - Unique identifier of the regular gift that should be transferred
+	OwnedGiftID string `json:"owned_gift_id"`
+
+	// NewOwnerChatID - Unique identifier of the chat which will own the gift. The chat must be active in the
+	// last 24 hours.
+	NewOwnerChatID int `json:"new_owner_chat_id"`
+
+	// StarCount - Optional. The amount of Telegram Stars that will be paid for the transfer from the business
+	// account balance. If positive, then the can_transfer_stars business bot right is required.
+	StarCount int `json:"star_count,omitempty"`
+}
+
+// TransferGift - Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts
+// business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on
+// success.
+func (b *Bot) TransferGift(ctx context.Context, params *TransferGiftParams) error {
+	err := b.performRequest(ctx, "transferGift", params)
+	if err != nil {
+		return fmt.Errorf("telego: transferGift: %w", err)
+	}
+	return nil
+}
+
+// PostStoryParams - Represents parameters of postStory method.
+type PostStoryParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// Content - Content of the story
+	Content InputStoryContent `json:"content"`
+
+	// ActivePeriod - Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600,
+	// 12 * 3600, 86400, or 2 * 86400
+	ActivePeriod int `json:"active_period"`
+
+	// Caption - Optional. Caption of the story, 0-2048 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the story caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// Areas - Optional. A JSON-serialized list of clickable areas to be shown on the story
+	Areas []StoryArea `json:"areas,omitempty"`
+
+	// PostToChatPage - Optional. Pass True to keep the story accessible after it expires
+	PostToChatPage bool `json:"post_to_chat_page,omitempty"`
+
+	// ProtectContent - Optional. Pass True if the content of the story must be protected from forwarding and
+	// screenshotting
+	ProtectContent bool `json:"protect_content,omitempty"`
+}
+
+// PostStory - Posts a story on behalf of a managed business account. Requires the can_manage_stories
+// business bot right. Returns Story (https://core.telegram.org/bots/api#story) on success.
+func (b *Bot) PostStory(ctx context.Context, params *PostStoryParams) (*Story, error) {
+	var story *Story
+	err := b.performRequest(ctx, "postStory", params, &story)
+	if err != nil {
+		return nil, fmt.Errorf("telego: postStory: %w", err)
+	}
+	return story, nil
+}
+
+// EditStoryParams - Represents parameters of editStory method.
+type EditStoryParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// StoryID - Unique identifier of the story to edit
+	StoryID int `json:"story_id"`
+
+	// Content - Content of the story
+	Content InputStoryContent `json:"content"`
+
+	// Caption - Optional. Caption of the story, 0-2048 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the story caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// Areas - Optional. A JSON-serialized list of clickable areas to be shown on the story
+	Areas []StoryArea `json:"areas,omitempty"`
+}
+
+// EditStory - Edits a story previously posted by the bot on behalf of a managed business account. Requires
+// the can_manage_stories business bot right. Returns Story (https://core.telegram.org/bots/api#story) on
+// success.
+func (b *Bot) EditStory(ctx context.Context, params *EditStoryParams) (*Story, error) {
+	var story *Story
+	err := b.performRequest(ctx, "editStory", params, &story)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editStory: %w", err)
+	}
+	return story, nil
+}
+
+// DeleteStoryParams - Represents parameters of deleteStory method.
+type DeleteStoryParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// StoryID - Unique identifier of the story to delete
+	StoryID int `json:"story_id"`
+}
+
+// DeleteStory - Deletes a story previously posted by the bot on behalf of a managed business account.
+// Requires the can_manage_stories business bot right. Returns True on success.
+func (b *Bot) DeleteStory(ctx context.Context, params *DeleteStoryParams) error {
+	err := b.performRequest(ctx, "deleteStory", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteStory: %w", err)
+	}
+	return nil
+}
+
 // SendStickerParams - Represents parameters of sendSticker method.
 type SendStickerParams struct {
 	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
@@ -4020,136 +4623,6 @@ func (b *Bot) DeleteStickerSet(ctx context.Context, params *DeleteStickerSetPara
 	return nil
 }
 
-// GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users and channel chats.
-// Requires no parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
-func (b *Bot) GetAvailableGifts(ctx context.Context) (*Gifts, error) {
-	var gifts *Gifts
-	err := b.performRequest(ctx, "getAvailableGifts", nil, &gifts)
-	if err != nil {
-		return nil, fmt.Errorf("telego: getAvailableGifts: %w", err)
-	}
-	return gifts, nil
-}
-
-// SendGiftParams - Represents parameters of sendGift method.
-type SendGiftParams struct {
-	// UserID - Optional. Required if chat_id is not specified. Unique identifier of the target user who will
-	// receive the gift.
-	UserID int64 `json:"user_id,omitempty"`
-
-	// ChatID - Optional. Required if user_id is not specified. Unique identifier for the chat or username of
-	// the channel (in the format @channel_username) that will receive the gift.
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// GiftID - Identifier of the gift
-	GiftID string `json:"gift_id"`
-
-	// PayForUpgrade - Optional. Pass True to pay for the gift upgrade from the bot's balance, thereby making
-	// the upgrade free for the receiver
-	PayForUpgrade bool `json:"pay_for_upgrade,omitempty"`
-
-	// Text - Optional. Text that will be shown along with the gift; 0-128 characters
-	Text string `json:"text,omitempty"`
-
-	// TextParseMode - Optional. Mode for parsing entities in the text. See formatting options
-	// (https://core.telegram.org/bots/api#formatting-options) for more details. Entities other than “bold”,
-	// “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
-	TextParseMode string `json:"text_parse_mode,omitempty"`
-
-	// TextEntities - Optional. A JSON-serialized list of special entities that appear in the gift text. It can
-	// be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”,
-	// “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
-	TextEntities []MessageEntity `json:"text_entities,omitempty"`
-}
-
-// SendGift - Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars
-// by the receiver. Returns True on success.
-func (b *Bot) SendGift(ctx context.Context, params *SendGiftParams) error {
-	err := b.performRequest(ctx, "sendGift", params)
-	if err != nil {
-		return fmt.Errorf("telego: sendGift: %w", err)
-	}
-	return nil
-}
-
-// VerifyUserParams - Represents parameters of verifyUser method.
-type VerifyUserParams struct {
-	// UserID - Unique identifier of the target user
-	UserID int64 `json:"user_id"`
-
-	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
-	// the organization isn't allowed to provide a custom verification description.
-	CustomDescription string `json:"custom_description,omitempty"`
-}
-
-// VerifyUser - Verifies a user on behalf of the organization
-// (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
-// success.
-func (b *Bot) VerifyUser(ctx context.Context, params *VerifyUserParams) error {
-	err := b.performRequest(ctx, "verifyUser", params)
-	if err != nil {
-		return fmt.Errorf("telego: verifyUser: %w", err)
-	}
-	return nil
-}
-
-// VerifyChatParams - Represents parameters of verifyChat method.
-type VerifyChatParams struct {
-	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
-	ChatID ChatID `json:"chat_id"`
-
-	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
-	// the organization isn't allowed to provide a custom verification description.
-	CustomDescription string `json:"custom_description,omitempty"`
-}
-
-// VerifyChat - Verifies a chat on behalf of the organization
-// (https://telegram.org/verify#third-party-verification) which is represented by the bot. Returns True on
-// success.
-func (b *Bot) VerifyChat(ctx context.Context, params *VerifyChatParams) error {
-	err := b.performRequest(ctx, "verifyChat", params)
-	if err != nil {
-		return fmt.Errorf("telego: verifyChat: %w", err)
-	}
-	return nil
-}
-
-// RemoveUserVerificationParams - Represents parameters of removeUserVerification method.
-type RemoveUserVerificationParams struct {
-	// UserID - Unique identifier of the target user
-	UserID int64 `json:"user_id"`
-}
-
-// RemoveUserVerification - Removes verification from a user who is currently verified on behalf of the
-// organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
-// success.
-func (b *Bot) RemoveUserVerification(ctx context.Context, params *RemoveUserVerificationParams) error {
-	err := b.performRequest(ctx, "removeUserVerification", params)
-	if err != nil {
-		return fmt.Errorf("telego: removeUserVerification: %w", err)
-	}
-	return nil
-}
-
-// RemoveChatVerificationParams - Represents parameters of removeChatVerification method.
-type RemoveChatVerificationParams struct {
-	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
-	ChatID ChatID `json:"chat_id"`
-}
-
-// RemoveChatVerification - Removes verification from a chat that is currently verified on behalf of the
-// organization (https://telegram.org/verify#third-party-verification) represented by the bot. Returns True on
-// success.
-func (b *Bot) RemoveChatVerification(ctx context.Context, params *RemoveChatVerificationParams) error {
-	err := b.performRequest(ctx, "removeChatVerification", params)
-	if err != nil {
-		return fmt.Errorf("telego: removeChatVerification: %w", err)
-	}
-	return nil
-}
-
 // AnswerInlineQueryParams - Represents parameters of answerInlineQuery method.
 type AnswerInlineQueryParams struct {
 	// InlineQueryID - Unique identifier for the answered query
@@ -4407,7 +4880,7 @@ type CreateInvoiceLinkParams struct {
 	// payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must
 	// always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the
 	// same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed
-	// 2500 Telegram Stars.
+	// 10000 Telegram Stars.
 	SubscriptionPeriod int64 `json:"subscription_period,omitempty"`
 
 	// MaxTipAmount - Optional. The maximum accepted amount for tips in the smallest units of the currency

@@ -70,23 +70,16 @@ const methodParameterPattern = `
 </tr>
 `
 
-const (
-	returnTypePattern1 = `[Rr]eturns [a-z ]*?((?:[Aa]rray of |)[A-Z]\w+)`
-	returnTypePattern2 = `((?:[Aa]rray of |)[A-Z]\w+)[a-z ]*?returned`
-)
-
 const returnTypeNotFound = "NOT_FOUND"
-
-const curInternalFuncPattern = `^func \(.+?\) [a-z]\w+\(`
 
 var (
 	methodRegexp          = regexp.MustCompile(preparePattern(methodPattern))
 	methodParameterRegexp = regexp.MustCompile(preparePattern(methodParameterPattern))
 
-	returnTypeRegexp1 = regexp.MustCompile(returnTypePattern1)
-	returnTypeRegexp2 = regexp.MustCompile(returnTypePattern2)
+	returnTypeRegexp1 = regexp.MustCompile(`[Rr]eturns [a-z ]*?((?:[Aa]rray of |)[A-Z]\w+)`)
+	returnTypeRegexp2 = regexp.MustCompile(`((?:[Aa]rray of |)[A-Z]\w+)[a-z ]*?returned`)
 
-	curInternalFuncRegexp = regexp.MustCompile(curInternalFuncPattern)
+	curInternalFuncRegexp = regexp.MustCompile(`^func \(.+?\) [a-z]\w+\(`)
 )
 
 func generateMethods(docs string) tgMethods {
@@ -401,6 +394,8 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 func parseReturnType(methodDescription string) string {
 	methodDescription = removeHTML(methodDescription)
 	var returnType string
+
+	methodDescription = strings.TrimPrefix(methodDescription, "Returns ")
 
 	returns1 := returnTypeRegexp1.FindStringSubmatch(methodDescription)
 	if len(returns1) != 0 {

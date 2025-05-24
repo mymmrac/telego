@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,8 +9,6 @@ import (
 
 	ta "github.com/mymmrac/telego/telegoapi"
 )
-
-var testCtx = context.Background()
 
 func TestBot_GetUpdates(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -31,7 +28,7 @@ func TestBot_GetUpdates(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		updates, err := m.Bot.GetUpdates(testCtx, nil)
+		updates, err := m.Bot.GetUpdates(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedUpdates, updates)
 	})
@@ -41,7 +38,7 @@ func TestBot_GetUpdates(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		updates, err := m.Bot.GetUpdates(testCtx, nil)
+		updates, err := m.Bot.GetUpdates(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, updates)
 	})
@@ -60,7 +57,7 @@ func TestBot_SetWebhook(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetWebhook(testCtx, nil)
+		err := m.Bot.SetWebhook(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -69,7 +66,7 @@ func TestBot_SetWebhook(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetWebhook(testCtx, nil)
+		err := m.Bot.SetWebhook(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -87,7 +84,7 @@ func TestBot_DeleteWebhook(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteWebhook(testCtx, nil)
+		err := m.Bot.DeleteWebhook(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -96,7 +93,7 @@ func TestBot_DeleteWebhook(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteWebhook(testCtx, nil)
+		err := m.Bot.DeleteWebhook(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -118,7 +115,7 @@ func TestBot_GetWebhookInfo(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		webhookInfo, err := m.Bot.GetWebhookInfo(testCtx)
+		webhookInfo, err := m.Bot.GetWebhookInfo(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, expectedWebhookInfo, webhookInfo)
 	})
@@ -128,7 +125,7 @@ func TestBot_GetWebhookInfo(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		webhookInfo, err := m.Bot.GetWebhookInfo(testCtx)
+		webhookInfo, err := m.Bot.GetWebhookInfo(t.Context())
 		require.Error(t, err)
 		assert.Nil(t, webhookInfo)
 	})
@@ -151,7 +148,7 @@ func TestBot_GetMe(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		user, err := m.Bot.GetMe(testCtx)
+		user, err := m.Bot.GetMe(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, expectedUser, user)
 	})
@@ -161,7 +158,7 @@ func TestBot_GetMe(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		user, err := m.Bot.GetMe(testCtx)
+		user, err := m.Bot.GetMe(t.Context())
 		require.Error(t, err)
 		assert.Nil(t, user)
 	})
@@ -180,7 +177,7 @@ func TestBot_LogOut(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.LogOut(testCtx)
+		err := m.Bot.LogOut(t.Context())
 		require.NoError(t, err)
 	})
 
@@ -189,7 +186,7 @@ func TestBot_LogOut(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.LogOut(testCtx)
+		err := m.Bot.LogOut(t.Context())
 		require.Error(t, err)
 	})
 }
@@ -207,7 +204,7 @@ func TestBot_Close(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.Close(testCtx)
+		err := m.Bot.Close(t.Context())
 		require.NoError(t, err)
 	})
 
@@ -216,7 +213,7 @@ func TestBot_Close(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.Close(testCtx)
+		err := m.Bot.Close(t.Context())
 		require.Error(t, err)
 	})
 }
@@ -235,7 +232,7 @@ func TestBot_SendMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendMessage(testCtx, nil)
+		message, err := m.Bot.SendMessage(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -245,7 +242,7 @@ func TestBot_SendMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendMessage(testCtx, nil)
+		message, err := m.Bot.SendMessage(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -265,7 +262,7 @@ func TestBot_ForwardMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.ForwardMessage(testCtx, nil)
+		message, err := m.Bot.ForwardMessage(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -275,7 +272,7 @@ func TestBot_ForwardMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.ForwardMessage(testCtx, nil)
+		message, err := m.Bot.ForwardMessage(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -299,7 +296,7 @@ func TestBot_ForwardMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		messageIDs, err := m.Bot.ForwardMessages(testCtx, nil)
+		messageIDs, err := m.Bot.ForwardMessages(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessageIDs, messageIDs)
 	})
@@ -309,7 +306,7 @@ func TestBot_ForwardMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		messageIDs, err := m.Bot.ForwardMessages(testCtx, nil)
+		messageIDs, err := m.Bot.ForwardMessages(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, messageIDs)
 	})
@@ -332,7 +329,7 @@ func TestBot_CopyMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		messageID, err := m.Bot.CopyMessage(testCtx, nil)
+		messageID, err := m.Bot.CopyMessage(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessageID, messageID)
 	})
@@ -342,7 +339,7 @@ func TestBot_CopyMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		messageID, err := m.Bot.CopyMessage(testCtx, nil)
+		messageID, err := m.Bot.CopyMessage(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, messageID)
 	})
@@ -366,7 +363,7 @@ func TestBot_CopyMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		messageIDs, err := m.Bot.CopyMessages(testCtx, nil)
+		messageIDs, err := m.Bot.CopyMessages(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessageIDs, messageIDs)
 	})
@@ -376,7 +373,7 @@ func TestBot_CopyMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		messageIDs, err := m.Bot.CopyMessages(testCtx, nil)
+		messageIDs, err := m.Bot.CopyMessages(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, messageIDs)
 	})
@@ -396,7 +393,7 @@ func TestBot_SendPhoto(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendPhoto(testCtx, nil)
+		message, err := m.Bot.SendPhoto(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -406,7 +403,7 @@ func TestBot_SendPhoto(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendPhoto(testCtx, nil)
+		message, err := m.Bot.SendPhoto(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -426,7 +423,7 @@ func TestBot_SendAudio(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendAudio(testCtx, nil)
+		message, err := m.Bot.SendAudio(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -436,7 +433,7 @@ func TestBot_SendAudio(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendAudio(testCtx, nil)
+		message, err := m.Bot.SendAudio(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -456,7 +453,7 @@ func TestBot_SendDocument(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendDocument(testCtx, nil)
+		message, err := m.Bot.SendDocument(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -466,7 +463,7 @@ func TestBot_SendDocument(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendDocument(testCtx, nil)
+		message, err := m.Bot.SendDocument(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -486,7 +483,7 @@ func TestBot_SendVideo(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendVideo(testCtx, nil)
+		message, err := m.Bot.SendVideo(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -496,7 +493,7 @@ func TestBot_SendVideo(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendVideo(testCtx, nil)
+		message, err := m.Bot.SendVideo(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -516,7 +513,7 @@ func TestBot_SendAnimation(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendAnimation(testCtx, nil)
+		message, err := m.Bot.SendAnimation(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -526,7 +523,7 @@ func TestBot_SendAnimation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendAnimation(testCtx, nil)
+		message, err := m.Bot.SendAnimation(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -546,7 +543,7 @@ func TestBot_SendVoice(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendVoice(testCtx, nil)
+		message, err := m.Bot.SendVoice(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -556,7 +553,7 @@ func TestBot_SendVoice(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendVoice(testCtx, nil)
+		message, err := m.Bot.SendVoice(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -576,7 +573,7 @@ func TestBot_SendVideoNote(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendVideoNote(testCtx, nil)
+		message, err := m.Bot.SendVideoNote(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -586,7 +583,7 @@ func TestBot_SendVideoNote(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendVideoNote(testCtx, nil)
+		message, err := m.Bot.SendVideoNote(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -606,7 +603,7 @@ func TestBot_SendPaidMedia(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendPaidMedia(testCtx, nil)
+		message, err := m.Bot.SendPaidMedia(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -616,7 +613,7 @@ func TestBot_SendPaidMedia(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendPaidMedia(testCtx, nil)
+		message, err := m.Bot.SendPaidMedia(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -640,7 +637,7 @@ func TestBot_SendMediaGroup(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		messages, err := m.Bot.SendMediaGroup(testCtx, nil)
+		messages, err := m.Bot.SendMediaGroup(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessages, messages)
 	})
@@ -650,7 +647,7 @@ func TestBot_SendMediaGroup(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		messages, err := m.Bot.SendMediaGroup(testCtx, nil)
+		messages, err := m.Bot.SendMediaGroup(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, messages)
 	})
@@ -670,7 +667,7 @@ func TestBot_SendLocation(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendLocation(testCtx, nil)
+		message, err := m.Bot.SendLocation(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -680,7 +677,7 @@ func TestBot_SendLocation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendLocation(testCtx, nil)
+		message, err := m.Bot.SendLocation(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -700,7 +697,7 @@ func TestBot_SendVenue(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendVenue(testCtx, nil)
+		message, err := m.Bot.SendVenue(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -710,7 +707,7 @@ func TestBot_SendVenue(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendVenue(testCtx, nil)
+		message, err := m.Bot.SendVenue(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -730,7 +727,7 @@ func TestBot_SendContact(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendContact(testCtx, nil)
+		message, err := m.Bot.SendContact(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -740,7 +737,7 @@ func TestBot_SendContact(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendContact(testCtx, nil)
+		message, err := m.Bot.SendContact(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -760,7 +757,7 @@ func TestBot_SendPoll(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendPoll(testCtx, nil)
+		message, err := m.Bot.SendPoll(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -770,7 +767,7 @@ func TestBot_SendPoll(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendPoll(testCtx, nil)
+		message, err := m.Bot.SendPoll(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -790,7 +787,7 @@ func TestBot_SendDice(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendDice(testCtx, nil)
+		message, err := m.Bot.SendDice(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -800,7 +797,7 @@ func TestBot_SendDice(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendDice(testCtx, nil)
+		message, err := m.Bot.SendDice(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -819,7 +816,7 @@ func TestBot_SendChatAction(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SendChatAction(testCtx, nil)
+		err := m.Bot.SendChatAction(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -828,7 +825,7 @@ func TestBot_SendChatAction(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SendChatAction(testCtx, nil)
+		err := m.Bot.SendChatAction(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -846,7 +843,7 @@ func TestBot_SetMessageReaction(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetMessageReaction(testCtx, nil)
+		err := m.Bot.SetMessageReaction(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -855,7 +852,7 @@ func TestBot_SetMessageReaction(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetMessageReaction(testCtx, nil)
+		err := m.Bot.SetMessageReaction(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -877,7 +874,7 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(testCtx, nil)
+		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedUserProfilePhotos, userProfilePhotos)
 	})
@@ -887,7 +884,7 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(testCtx, nil)
+		userProfilePhotos, err := m.Bot.GetUserProfilePhotos(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, userProfilePhotos)
 	})
@@ -906,7 +903,7 @@ func TestBot_SetUserEmojiStatus(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetUserEmojiStatus(testCtx, nil)
+		err := m.Bot.SetUserEmojiStatus(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -915,7 +912,7 @@ func TestBot_SetUserEmojiStatus(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetUserEmojiStatus(testCtx, nil)
+		err := m.Bot.SetUserEmojiStatus(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -937,7 +934,7 @@ func TestBot_GetFile(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		file, err := m.Bot.GetFile(testCtx, nil)
+		file, err := m.Bot.GetFile(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedFile, file)
 	})
@@ -947,7 +944,7 @@ func TestBot_GetFile(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		file, err := m.Bot.GetFile(testCtx, nil)
+		file, err := m.Bot.GetFile(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, file)
 	})
@@ -966,7 +963,7 @@ func TestBot_BanChatMember(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.BanChatMember(testCtx, nil)
+		err := m.Bot.BanChatMember(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -975,7 +972,7 @@ func TestBot_BanChatMember(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.BanChatMember(testCtx, nil)
+		err := m.Bot.BanChatMember(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -993,7 +990,7 @@ func TestBot_UnbanChatMember(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnbanChatMember(testCtx, nil)
+		err := m.Bot.UnbanChatMember(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1002,7 +999,7 @@ func TestBot_UnbanChatMember(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnbanChatMember(testCtx, nil)
+		err := m.Bot.UnbanChatMember(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1020,7 +1017,7 @@ func TestBot_RestrictChatMember(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.RestrictChatMember(testCtx, nil)
+		err := m.Bot.RestrictChatMember(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1029,7 +1026,7 @@ func TestBot_RestrictChatMember(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.RestrictChatMember(testCtx, nil)
+		err := m.Bot.RestrictChatMember(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1047,7 +1044,7 @@ func TestBot_PromoteChatMember(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.PromoteChatMember(testCtx, nil)
+		err := m.Bot.PromoteChatMember(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1056,7 +1053,7 @@ func TestBot_PromoteChatMember(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.PromoteChatMember(testCtx, nil)
+		err := m.Bot.PromoteChatMember(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1074,7 +1071,7 @@ func TestBot_SetChatAdministratorCustomTitle(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatAdministratorCustomTitle(testCtx, nil)
+		err := m.Bot.SetChatAdministratorCustomTitle(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1083,7 +1080,7 @@ func TestBot_SetChatAdministratorCustomTitle(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatAdministratorCustomTitle(testCtx, nil)
+		err := m.Bot.SetChatAdministratorCustomTitle(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1101,7 +1098,7 @@ func TestBot_BanChatSenderChat(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.BanChatSenderChat(testCtx, nil)
+		err := m.Bot.BanChatSenderChat(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1110,7 +1107,7 @@ func TestBot_BanChatSenderChat(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.BanChatSenderChat(testCtx, nil)
+		err := m.Bot.BanChatSenderChat(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1128,7 +1125,7 @@ func TestBot_UnbanChatSenderChat(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnbanChatSenderChat(testCtx, nil)
+		err := m.Bot.UnbanChatSenderChat(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1137,7 +1134,7 @@ func TestBot_UnbanChatSenderChat(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnbanChatSenderChat(testCtx, nil)
+		err := m.Bot.UnbanChatSenderChat(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1155,7 +1152,7 @@ func TestBot_SetChatPermissions(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatPermissions(testCtx, nil)
+		err := m.Bot.SetChatPermissions(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1164,7 +1161,7 @@ func TestBot_SetChatPermissions(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatPermissions(testCtx, nil)
+		err := m.Bot.SetChatPermissions(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1184,7 +1181,7 @@ func TestBot_ExportChatInviteLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		inviteLink, err := m.Bot.ExportChatInviteLink(testCtx, nil)
+		inviteLink, err := m.Bot.ExportChatInviteLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, &expectedInviteLink, inviteLink)
 	})
@@ -1194,7 +1191,7 @@ func TestBot_ExportChatInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		inviteLink, err := m.Bot.ExportChatInviteLink(testCtx, nil)
+		inviteLink, err := m.Bot.ExportChatInviteLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, inviteLink)
 	})
@@ -1217,7 +1214,7 @@ func TestBot_CreateChatInviteLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatInviteLink, err := m.Bot.CreateChatInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.CreateChatInviteLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
@@ -1227,7 +1224,7 @@ func TestBot_CreateChatInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatInviteLink, err := m.Bot.CreateChatInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.CreateChatInviteLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
@@ -1250,7 +1247,7 @@ func TestBot_EditChatInviteLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatInviteLink, err := m.Bot.EditChatInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.EditChatInviteLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
@@ -1260,7 +1257,7 @@ func TestBot_EditChatInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatInviteLink, err := m.Bot.EditChatInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.EditChatInviteLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
@@ -1283,7 +1280,7 @@ func TestBot_CreateChatSubscriptionInviteLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatInviteLink, err := m.Bot.CreateChatSubscriptionInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.CreateChatSubscriptionInviteLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
@@ -1293,7 +1290,7 @@ func TestBot_CreateChatSubscriptionInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatInviteLink, err := m.Bot.CreateChatSubscriptionInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.CreateChatSubscriptionInviteLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
@@ -1316,7 +1313,7 @@ func TestBot_EditChatSubscriptionInviteLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatInviteLink, err := m.Bot.EditChatSubscriptionInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.EditChatSubscriptionInviteLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
@@ -1326,7 +1323,7 @@ func TestBot_EditChatSubscriptionInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatInviteLink, err := m.Bot.EditChatSubscriptionInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.EditChatSubscriptionInviteLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
@@ -1349,7 +1346,7 @@ func TestBot_RevokeChatInviteLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatInviteLink, err := m.Bot.RevokeChatInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.RevokeChatInviteLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatInviteLink, chatInviteLink)
 	})
@@ -1359,7 +1356,7 @@ func TestBot_RevokeChatInviteLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatInviteLink, err := m.Bot.RevokeChatInviteLink(testCtx, nil)
+		chatInviteLink, err := m.Bot.RevokeChatInviteLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatInviteLink)
 	})
@@ -1378,7 +1375,7 @@ func TestBot_ApproveChatJoinRequest(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.ApproveChatJoinRequest(testCtx, nil)
+		err := m.Bot.ApproveChatJoinRequest(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1387,7 +1384,7 @@ func TestBot_ApproveChatJoinRequest(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.ApproveChatJoinRequest(testCtx, nil)
+		err := m.Bot.ApproveChatJoinRequest(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1405,7 +1402,7 @@ func TestBot_DeclineChatJoinRequest(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeclineChatJoinRequest(testCtx, nil)
+		err := m.Bot.DeclineChatJoinRequest(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1414,7 +1411,7 @@ func TestBot_DeclineChatJoinRequest(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeclineChatJoinRequest(testCtx, nil)
+		err := m.Bot.DeclineChatJoinRequest(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1432,7 +1429,7 @@ func TestBot_SetChatPhoto(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatPhoto(testCtx, nil)
+		err := m.Bot.SetChatPhoto(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1441,7 +1438,7 @@ func TestBot_SetChatPhoto(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatPhoto(testCtx, nil)
+		err := m.Bot.SetChatPhoto(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1459,7 +1456,7 @@ func TestBot_DeleteChatPhoto(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteChatPhoto(testCtx, nil)
+		err := m.Bot.DeleteChatPhoto(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1468,7 +1465,7 @@ func TestBot_DeleteChatPhoto(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteChatPhoto(testCtx, nil)
+		err := m.Bot.DeleteChatPhoto(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1486,7 +1483,7 @@ func TestBot_SetChatTitle(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatTitle(testCtx, nil)
+		err := m.Bot.SetChatTitle(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1495,7 +1492,7 @@ func TestBot_SetChatTitle(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatTitle(testCtx, nil)
+		err := m.Bot.SetChatTitle(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1513,7 +1510,7 @@ func TestBot_SetChatDescription(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatDescription(testCtx, nil)
+		err := m.Bot.SetChatDescription(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1522,7 +1519,7 @@ func TestBot_SetChatDescription(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatDescription(testCtx, nil)
+		err := m.Bot.SetChatDescription(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1540,7 +1537,7 @@ func TestBot_PinChatMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.PinChatMessage(testCtx, nil)
+		err := m.Bot.PinChatMessage(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1549,7 +1546,7 @@ func TestBot_PinChatMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.PinChatMessage(testCtx, nil)
+		err := m.Bot.PinChatMessage(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1567,7 +1564,7 @@ func TestBot_UnpinChatMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnpinChatMessage(testCtx, nil)
+		err := m.Bot.UnpinChatMessage(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1576,7 +1573,7 @@ func TestBot_UnpinChatMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnpinChatMessage(testCtx, nil)
+		err := m.Bot.UnpinChatMessage(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1594,7 +1591,7 @@ func TestBot_UnpinAllChatMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnpinAllChatMessages(testCtx, nil)
+		err := m.Bot.UnpinAllChatMessages(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1603,7 +1600,7 @@ func TestBot_UnpinAllChatMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnpinAllChatMessages(testCtx, nil)
+		err := m.Bot.UnpinAllChatMessages(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1621,7 +1618,7 @@ func TestBot_LeaveChat(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.LeaveChat(testCtx, nil)
+		err := m.Bot.LeaveChat(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1630,7 +1627,7 @@ func TestBot_LeaveChat(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.LeaveChat(testCtx, nil)
+		err := m.Bot.LeaveChat(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1652,7 +1649,7 @@ func TestBot_GetChat(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatFullInfo, err := m.Bot.GetChat(testCtx, nil)
+		chatFullInfo, err := m.Bot.GetChat(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatFullInfo, chatFullInfo)
 	})
@@ -1662,7 +1659,7 @@ func TestBot_GetChat(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatFullInfo, err := m.Bot.GetChat(testCtx, nil)
+		chatFullInfo, err := m.Bot.GetChat(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatFullInfo)
 	})
@@ -1686,7 +1683,7 @@ func TestBot_GetChatAdministrators(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatMembers, err := m.Bot.GetChatAdministrators(testCtx, nil)
+		chatMembers, err := m.Bot.GetChatAdministrators(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatMembers, chatMembers)
 	})
@@ -1696,7 +1693,7 @@ func TestBot_GetChatAdministrators(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatMembers, err := m.Bot.GetChatAdministrators(testCtx, nil)
+		chatMembers, err := m.Bot.GetChatAdministrators(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatMembers)
 	})
@@ -1717,7 +1714,7 @@ func TestBot_GetChatMemberCount(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatMemberCount, err := m.Bot.GetChatMemberCount(testCtx, nil)
+		chatMemberCount, err := m.Bot.GetChatMemberCount(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, &expectedChatMemberCount, chatMemberCount)
 	})
@@ -1727,7 +1724,7 @@ func TestBot_GetChatMemberCount(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		nt, err := m.Bot.GetChatMemberCount(testCtx, nil)
+		nt, err := m.Bot.GetChatMemberCount(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, nt)
 	})
@@ -1750,7 +1747,7 @@ func TestBot_GetChatMember(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatMember, err := m.Bot.GetChatMember(testCtx, nil)
+		chatMember, err := m.Bot.GetChatMember(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatMember, chatMember)
 	})
@@ -1760,7 +1757,7 @@ func TestBot_GetChatMember(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatMember, err := m.Bot.GetChatMember(testCtx, nil)
+		chatMember, err := m.Bot.GetChatMember(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatMember)
 	})
@@ -1779,7 +1776,7 @@ func TestBot_SetChatStickerSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatStickerSet(testCtx, nil)
+		err := m.Bot.SetChatStickerSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1788,7 +1785,7 @@ func TestBot_SetChatStickerSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatStickerSet(testCtx, nil)
+		err := m.Bot.SetChatStickerSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1806,7 +1803,7 @@ func TestBot_DeleteChatStickerSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteChatStickerSet(testCtx, nil)
+		err := m.Bot.DeleteChatStickerSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1815,7 +1812,7 @@ func TestBot_DeleteChatStickerSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteChatStickerSet(testCtx, nil)
+		err := m.Bot.DeleteChatStickerSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1837,7 +1834,7 @@ func TestBot_GetForumTopicIconStickers(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		stickers, err := m.Bot.GetForumTopicIconStickers(testCtx)
+		stickers, err := m.Bot.GetForumTopicIconStickers(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, expectedStickers, stickers)
 	})
@@ -1847,7 +1844,7 @@ func TestBot_GetForumTopicIconStickers(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		stickers, err := m.Bot.GetForumTopicIconStickers(testCtx)
+		stickers, err := m.Bot.GetForumTopicIconStickers(t.Context())
 		require.Error(t, err)
 		assert.Nil(t, stickers)
 	})
@@ -1870,7 +1867,7 @@ func TestBot_CreateForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		forumTopic, err := m.Bot.CreateForumTopic(testCtx, nil)
+		forumTopic, err := m.Bot.CreateForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedForumTopic, forumTopic)
 	})
@@ -1880,7 +1877,7 @@ func TestBot_CreateForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		forumTopic, err := m.Bot.CreateForumTopic(testCtx, nil)
+		forumTopic, err := m.Bot.CreateForumTopic(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, forumTopic)
 	})
@@ -1899,7 +1896,7 @@ func TestBot_EditForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.EditForumTopic(testCtx, nil)
+		err := m.Bot.EditForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1908,7 +1905,7 @@ func TestBot_EditForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.EditForumTopic(testCtx, nil)
+		err := m.Bot.EditForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1926,7 +1923,7 @@ func TestBot_CloseForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.CloseForumTopic(testCtx, nil)
+		err := m.Bot.CloseForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1935,7 +1932,7 @@ func TestBot_CloseForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.CloseForumTopic(testCtx, nil)
+		err := m.Bot.CloseForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1953,7 +1950,7 @@ func TestBot_ReopenForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.ReopenForumTopic(testCtx, nil)
+		err := m.Bot.ReopenForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1962,7 +1959,7 @@ func TestBot_ReopenForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.ReopenForumTopic(testCtx, nil)
+		err := m.Bot.ReopenForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -1980,7 +1977,7 @@ func TestBot_DeleteForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteForumTopic(testCtx, nil)
+		err := m.Bot.DeleteForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -1989,7 +1986,7 @@ func TestBot_DeleteForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteForumTopic(testCtx, nil)
+		err := m.Bot.DeleteForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2007,7 +2004,7 @@ func TestBot_UnpinAllForumTopicMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnpinAllForumTopicMessages(testCtx, nil)
+		err := m.Bot.UnpinAllForumTopicMessages(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2016,7 +2013,7 @@ func TestBot_UnpinAllForumTopicMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnpinAllForumTopicMessages(testCtx, nil)
+		err := m.Bot.UnpinAllForumTopicMessages(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2034,7 +2031,7 @@ func TestBot_EditGeneralForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.EditGeneralForumTopic(testCtx, nil)
+		err := m.Bot.EditGeneralForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2043,7 +2040,7 @@ func TestBot_EditGeneralForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.EditGeneralForumTopic(testCtx, nil)
+		err := m.Bot.EditGeneralForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2061,7 +2058,7 @@ func TestBot_CloseGeneralForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.CloseGeneralForumTopic(testCtx, nil)
+		err := m.Bot.CloseGeneralForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2070,7 +2067,7 @@ func TestBot_CloseGeneralForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.CloseGeneralForumTopic(testCtx, nil)
+		err := m.Bot.CloseGeneralForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2088,7 +2085,7 @@ func TestBot_ReopenGeneralForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.ReopenGeneralForumTopic(testCtx, nil)
+		err := m.Bot.ReopenGeneralForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2097,7 +2094,7 @@ func TestBot_ReopenGeneralForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.ReopenGeneralForumTopic(testCtx, nil)
+		err := m.Bot.ReopenGeneralForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2115,7 +2112,7 @@ func TestBot_HideGeneralForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.HideGeneralForumTopic(testCtx, nil)
+		err := m.Bot.HideGeneralForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2124,7 +2121,7 @@ func TestBot_HideGeneralForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.HideGeneralForumTopic(testCtx, nil)
+		err := m.Bot.HideGeneralForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2142,7 +2139,7 @@ func TestBot_UnhideGeneralForumTopic(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnhideGeneralForumTopic(testCtx, nil)
+		err := m.Bot.UnhideGeneralForumTopic(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2151,7 +2148,7 @@ func TestBot_UnhideGeneralForumTopic(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnhideGeneralForumTopic(testCtx, nil)
+		err := m.Bot.UnhideGeneralForumTopic(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2169,7 +2166,7 @@ func TestBot_UnpinAllGeneralForumTopicMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.UnpinAllGeneralForumTopicMessages(testCtx, nil)
+		err := m.Bot.UnpinAllGeneralForumTopicMessages(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2178,7 +2175,7 @@ func TestBot_UnpinAllGeneralForumTopicMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.UnpinAllGeneralForumTopicMessages(testCtx, nil)
+		err := m.Bot.UnpinAllGeneralForumTopicMessages(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2196,7 +2193,7 @@ func TestBot_AnswerCallbackQuery(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.AnswerCallbackQuery(testCtx, nil)
+		err := m.Bot.AnswerCallbackQuery(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2205,7 +2202,7 @@ func TestBot_AnswerCallbackQuery(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.AnswerCallbackQuery(testCtx, nil)
+		err := m.Bot.AnswerCallbackQuery(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2225,7 +2222,7 @@ func TestBot_GetUserChatBoosts(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		userChatBoosts, err := m.Bot.GetUserChatBoosts(testCtx, nil)
+		userChatBoosts, err := m.Bot.GetUserChatBoosts(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedUserChatBoosts, userChatBoosts)
 	})
@@ -2235,7 +2232,7 @@ func TestBot_GetUserChatBoosts(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		userChatBoosts, err := m.Bot.GetUserChatBoosts(testCtx, nil)
+		userChatBoosts, err := m.Bot.GetUserChatBoosts(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, userChatBoosts)
 	})
@@ -2256,7 +2253,7 @@ func TestBot_GetBusinessConnection(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		businessConnection, err := m.Bot.GetBusinessConnection(testCtx, nil)
+		businessConnection, err := m.Bot.GetBusinessConnection(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedBusinessConnection, businessConnection)
 	})
@@ -2266,7 +2263,7 @@ func TestBot_GetBusinessConnection(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		businessConnection, err := m.Bot.GetBusinessConnection(testCtx, nil)
+		businessConnection, err := m.Bot.GetBusinessConnection(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, businessConnection)
 	})
@@ -2285,7 +2282,7 @@ func TestBot_SetMyCommands(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetMyCommands(testCtx, nil)
+		err := m.Bot.SetMyCommands(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2294,7 +2291,7 @@ func TestBot_SetMyCommands(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetMyCommands(testCtx, nil)
+		err := m.Bot.SetMyCommands(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2312,7 +2309,7 @@ func TestBot_DeleteMyCommands(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteMyCommands(testCtx, nil)
+		err := m.Bot.DeleteMyCommands(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2321,7 +2318,7 @@ func TestBot_DeleteMyCommands(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteMyCommands(testCtx, nil)
+		err := m.Bot.DeleteMyCommands(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2344,7 +2341,7 @@ func TestBot_GetMyCommands(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		botCommands, err := m.Bot.GetMyCommands(testCtx, nil)
+		botCommands, err := m.Bot.GetMyCommands(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedBotCommands, botCommands)
 	})
@@ -2354,7 +2351,7 @@ func TestBot_GetMyCommands(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		botCommands, err := m.Bot.GetMyCommands(testCtx, nil)
+		botCommands, err := m.Bot.GetMyCommands(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, botCommands)
 	})
@@ -2373,7 +2370,7 @@ func TestBot_SetMyName(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetMyName(testCtx, nil)
+		err := m.Bot.SetMyName(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2382,7 +2379,7 @@ func TestBot_SetMyName(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetMyName(testCtx, nil)
+		err := m.Bot.SetMyName(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2404,7 +2401,7 @@ func TestBot_GetMyName(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		botName, err := m.Bot.GetMyName(testCtx, nil)
+		botName, err := m.Bot.GetMyName(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedBotName, botName)
 	})
@@ -2414,7 +2411,7 @@ func TestBot_GetMyName(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		botName, err := m.Bot.GetMyName(testCtx, nil)
+		botName, err := m.Bot.GetMyName(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, botName)
 	})
@@ -2433,7 +2430,7 @@ func TestBot_SetMyDescription(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetMyDescription(testCtx, nil)
+		err := m.Bot.SetMyDescription(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2442,7 +2439,7 @@ func TestBot_SetMyDescription(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetMyDescription(testCtx, nil)
+		err := m.Bot.SetMyDescription(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2464,7 +2461,7 @@ func TestBot_GetMyDescription(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		botDescription, err := m.Bot.GetMyDescription(testCtx, nil)
+		botDescription, err := m.Bot.GetMyDescription(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedBotDescription, botDescription)
 	})
@@ -2474,7 +2471,7 @@ func TestBot_GetMyDescription(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		botDescription, err := m.Bot.GetMyDescription(testCtx, nil)
+		botDescription, err := m.Bot.GetMyDescription(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, botDescription)
 	})
@@ -2493,7 +2490,7 @@ func TestBot_SetMyShortDescription(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetMyShortDescription(testCtx, nil)
+		err := m.Bot.SetMyShortDescription(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2502,7 +2499,7 @@ func TestBot_SetMyShortDescription(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetMyShortDescription(testCtx, nil)
+		err := m.Bot.SetMyShortDescription(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2524,7 +2521,7 @@ func TestBot_GetMyShortDescription(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		botShortDescription, err := m.Bot.GetMyShortDescription(testCtx, nil)
+		botShortDescription, err := m.Bot.GetMyShortDescription(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedBotShortDescription, botShortDescription)
 	})
@@ -2534,7 +2531,7 @@ func TestBot_GetMyShortDescription(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		botShortDescription, err := m.Bot.GetMyShortDescription(testCtx, nil)
+		botShortDescription, err := m.Bot.GetMyShortDescription(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, botShortDescription)
 	})
@@ -2553,7 +2550,7 @@ func TestBot_SetChatMenuButton(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetChatMenuButton(testCtx, nil)
+		err := m.Bot.SetChatMenuButton(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2562,7 +2559,7 @@ func TestBot_SetChatMenuButton(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetChatMenuButton(testCtx, nil)
+		err := m.Bot.SetChatMenuButton(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2584,7 +2581,7 @@ func TestBot_GetChatMenuButton(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		menuButton, err := m.Bot.GetChatMenuButton(testCtx, nil)
+		menuButton, err := m.Bot.GetChatMenuButton(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMenuButton, menuButton)
 	})
@@ -2594,7 +2591,7 @@ func TestBot_GetChatMenuButton(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		menuButton, err := m.Bot.GetChatMenuButton(testCtx, nil)
+		menuButton, err := m.Bot.GetChatMenuButton(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, menuButton)
 	})
@@ -2613,7 +2610,7 @@ func TestBot_SetMyDefaultAdministratorRights(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetMyDefaultAdministratorRights(testCtx, nil)
+		err := m.Bot.SetMyDefaultAdministratorRights(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2622,7 +2619,7 @@ func TestBot_SetMyDefaultAdministratorRights(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetMyDefaultAdministratorRights(testCtx, nil)
+		err := m.Bot.SetMyDefaultAdministratorRights(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2644,7 +2641,7 @@ func TestBot_GetMyDefaultAdministratorRights(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(testCtx, nil)
+		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedChatAdministratorRights, chatAdministratorRights)
 	})
@@ -2654,7 +2651,7 @@ func TestBot_GetMyDefaultAdministratorRights(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(testCtx, nil)
+		chatAdministratorRights, err := m.Bot.GetMyDefaultAdministratorRights(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, chatAdministratorRights)
 	})
@@ -2674,7 +2671,7 @@ func TestBot_EditMessageText(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.EditMessageText(testCtx, nil)
+		message, err := m.Bot.EditMessageText(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2684,7 +2681,7 @@ func TestBot_EditMessageText(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.EditMessageText(testCtx, nil)
+		message, err := m.Bot.EditMessageText(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2704,7 +2701,7 @@ func TestBot_EditMessageCaption(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.EditMessageCaption(testCtx, nil)
+		message, err := m.Bot.EditMessageCaption(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2714,7 +2711,7 @@ func TestBot_EditMessageCaption(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.EditMessageCaption(testCtx, nil)
+		message, err := m.Bot.EditMessageCaption(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2734,7 +2731,7 @@ func TestBot_EditMessageMedia(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.EditMessageMedia(testCtx, nil)
+		message, err := m.Bot.EditMessageMedia(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2744,7 +2741,7 @@ func TestBot_EditMessageMedia(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.EditMessageMedia(testCtx, nil)
+		message, err := m.Bot.EditMessageMedia(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2764,7 +2761,7 @@ func TestBot_EditMessageLiveLocation(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.EditMessageLiveLocation(testCtx, nil)
+		message, err := m.Bot.EditMessageLiveLocation(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2774,7 +2771,7 @@ func TestBot_EditMessageLiveLocation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.EditMessageLiveLocation(testCtx, nil)
+		message, err := m.Bot.EditMessageLiveLocation(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2794,7 +2791,7 @@ func TestBot_StopMessageLiveLocation(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.StopMessageLiveLocation(testCtx, nil)
+		message, err := m.Bot.StopMessageLiveLocation(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2804,7 +2801,7 @@ func TestBot_StopMessageLiveLocation(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.StopMessageLiveLocation(testCtx, nil)
+		message, err := m.Bot.StopMessageLiveLocation(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2824,7 +2821,7 @@ func TestBot_EditMessageReplyMarkup(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.EditMessageReplyMarkup(testCtx, nil)
+		message, err := m.Bot.EditMessageReplyMarkup(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2834,7 +2831,7 @@ func TestBot_EditMessageReplyMarkup(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.EditMessageReplyMarkup(testCtx, nil)
+		message, err := m.Bot.EditMessageReplyMarkup(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2857,7 +2854,7 @@ func TestBot_StopPoll(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		poll, err := m.Bot.StopPoll(testCtx, nil)
+		poll, err := m.Bot.StopPoll(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedPoll, poll)
 	})
@@ -2867,7 +2864,7 @@ func TestBot_StopPoll(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		poll, err := m.Bot.StopPoll(testCtx, nil)
+		poll, err := m.Bot.StopPoll(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, poll)
 	})
@@ -2886,7 +2883,7 @@ func TestBot_DeleteMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteMessage(testCtx, nil)
+		err := m.Bot.DeleteMessage(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2895,7 +2892,7 @@ func TestBot_DeleteMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteMessage(testCtx, nil)
+		err := m.Bot.DeleteMessage(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2913,7 +2910,7 @@ func TestBot_DeleteMessages(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteMessages(testCtx, nil)
+		err := m.Bot.DeleteMessages(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -2922,7 +2919,7 @@ func TestBot_DeleteMessages(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteMessages(testCtx, nil)
+		err := m.Bot.DeleteMessages(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2941,7 +2938,7 @@ func TestBot_SendSticker(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendSticker(testCtx, nil)
+		message, err := m.Bot.SendSticker(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -2951,7 +2948,7 @@ func TestBot_SendSticker(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendSticker(testCtx, nil)
+		message, err := m.Bot.SendSticker(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -2974,7 +2971,7 @@ func TestBot_GetStickerSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		stickerSet, err := m.Bot.GetStickerSet(testCtx, nil)
+		stickerSet, err := m.Bot.GetStickerSet(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedStickerSet, stickerSet)
 	})
@@ -2984,7 +2981,7 @@ func TestBot_GetStickerSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		stickerSet, err := m.Bot.GetStickerSet(testCtx, nil)
+		stickerSet, err := m.Bot.GetStickerSet(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, stickerSet)
 	})
@@ -3007,7 +3004,7 @@ func TestBot_GetCustomEmojiStickers(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		stickers, err := m.Bot.GetCustomEmojiStickers(testCtx, nil)
+		stickers, err := m.Bot.GetCustomEmojiStickers(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedStickers, stickers)
 	})
@@ -3017,7 +3014,7 @@ func TestBot_GetCustomEmojiStickers(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		stickers, err := m.Bot.GetCustomEmojiStickers(testCtx, nil)
+		stickers, err := m.Bot.GetCustomEmojiStickers(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, stickers)
 	})
@@ -3040,7 +3037,7 @@ func TestBot_UploadStickerFile(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		file, err := m.Bot.UploadStickerFile(testCtx, nil)
+		file, err := m.Bot.UploadStickerFile(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedFile, file)
 	})
@@ -3050,7 +3047,7 @@ func TestBot_UploadStickerFile(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		file, err := m.Bot.UploadStickerFile(testCtx, nil)
+		file, err := m.Bot.UploadStickerFile(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, file)
 	})
@@ -3069,7 +3066,7 @@ func TestBot_CreateNewStickerSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.CreateNewStickerSet(testCtx, nil)
+		err := m.Bot.CreateNewStickerSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3078,7 +3075,7 @@ func TestBot_CreateNewStickerSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.CreateNewStickerSet(testCtx, nil)
+		err := m.Bot.CreateNewStickerSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3096,7 +3093,7 @@ func TestBot_AddStickerToSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.AddStickerToSet(testCtx, nil)
+		err := m.Bot.AddStickerToSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3105,7 +3102,7 @@ func TestBot_AddStickerToSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.AddStickerToSet(testCtx, nil)
+		err := m.Bot.AddStickerToSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3123,7 +3120,7 @@ func TestBot_SetStickerPositionInSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerPositionInSet(testCtx, nil)
+		err := m.Bot.SetStickerPositionInSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3132,7 +3129,7 @@ func TestBot_SetStickerPositionInSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerPositionInSet(testCtx, nil)
+		err := m.Bot.SetStickerPositionInSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3150,7 +3147,7 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteStickerFromSet(testCtx, nil)
+		err := m.Bot.DeleteStickerFromSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3159,7 +3156,7 @@ func TestBot_DeleteStickerFromSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteStickerFromSet(testCtx, nil)
+		err := m.Bot.DeleteStickerFromSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3177,7 +3174,7 @@ func TestBot_ReplaceStickerInSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.ReplaceStickerInSet(testCtx, nil)
+		err := m.Bot.ReplaceStickerInSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3186,7 +3183,7 @@ func TestBot_ReplaceStickerInSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.ReplaceStickerInSet(testCtx, nil)
+		err := m.Bot.ReplaceStickerInSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3204,7 +3201,7 @@ func TestBot_SetStickerEmojiList(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerEmojiList(testCtx, nil)
+		err := m.Bot.SetStickerEmojiList(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3213,7 +3210,7 @@ func TestBot_SetStickerEmojiList(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerEmojiList(testCtx, nil)
+		err := m.Bot.SetStickerEmojiList(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3231,7 +3228,7 @@ func TestBot_SetStickerKeywords(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerKeywords(testCtx, nil)
+		err := m.Bot.SetStickerKeywords(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3240,7 +3237,7 @@ func TestBot_SetStickerKeywords(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerKeywords(testCtx, nil)
+		err := m.Bot.SetStickerKeywords(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3258,7 +3255,7 @@ func TestBot_SetStickerMaskPosition(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerMaskPosition(testCtx, nil)
+		err := m.Bot.SetStickerMaskPosition(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3267,7 +3264,7 @@ func TestBot_SetStickerMaskPosition(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerMaskPosition(testCtx, nil)
+		err := m.Bot.SetStickerMaskPosition(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3285,7 +3282,7 @@ func TestBot_SetStickerSetTitle(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerSetTitle(testCtx, nil)
+		err := m.Bot.SetStickerSetTitle(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3294,7 +3291,7 @@ func TestBot_SetStickerSetTitle(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerSetTitle(testCtx, nil)
+		err := m.Bot.SetStickerSetTitle(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3312,7 +3309,7 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetStickerSetThumbnail(testCtx, nil)
+		err := m.Bot.SetStickerSetThumbnail(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3321,7 +3318,7 @@ func TestBot_SetStickerSetThumbnail(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetStickerSetThumbnail(testCtx, nil)
+		err := m.Bot.SetStickerSetThumbnail(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3339,7 +3336,7 @@ func TestBot_SetCustomEmojiStickerSetThumbnail(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetCustomEmojiStickerSetThumbnail(testCtx, nil)
+		err := m.Bot.SetCustomEmojiStickerSetThumbnail(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3348,7 +3345,7 @@ func TestBot_SetCustomEmojiStickerSetThumbnail(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetCustomEmojiStickerSetThumbnail(testCtx, nil)
+		err := m.Bot.SetCustomEmojiStickerSetThumbnail(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3366,7 +3363,7 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.DeleteStickerSet(testCtx, nil)
+		err := m.Bot.DeleteStickerSet(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3375,7 +3372,7 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.DeleteStickerSet(testCtx, nil)
+		err := m.Bot.DeleteStickerSet(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3397,7 +3394,7 @@ func TestBot_GetAvailableGifts(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		gifts, err := m.Bot.GetAvailableGifts(testCtx)
+		gifts, err := m.Bot.GetAvailableGifts(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, expectedGifts, gifts)
 	})
@@ -3407,7 +3404,7 @@ func TestBot_GetAvailableGifts(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		gifts, err := m.Bot.GetAvailableGifts(testCtx)
+		gifts, err := m.Bot.GetAvailableGifts(t.Context())
 		require.Error(t, err)
 		assert.Nil(t, gifts)
 	})
@@ -3426,7 +3423,7 @@ func TestBot_SendGift(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SendGift(testCtx, nil)
+		err := m.Bot.SendGift(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3435,7 +3432,7 @@ func TestBot_SendGift(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SendGift(testCtx, nil)
+		err := m.Bot.SendGift(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3453,7 +3450,7 @@ func TestBot_VerifyUser(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.VerifyUser(testCtx, nil)
+		err := m.Bot.VerifyUser(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3462,7 +3459,7 @@ func TestBot_VerifyUser(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.VerifyUser(testCtx, nil)
+		err := m.Bot.VerifyUser(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3480,7 +3477,7 @@ func TestBot_VerifyChat(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.VerifyChat(testCtx, nil)
+		err := m.Bot.VerifyChat(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3489,7 +3486,7 @@ func TestBot_VerifyChat(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.VerifyChat(testCtx, nil)
+		err := m.Bot.VerifyChat(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3507,7 +3504,7 @@ func TestBot_RemoveUserVerification(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.RemoveUserVerification(testCtx, nil)
+		err := m.Bot.RemoveUserVerification(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3516,7 +3513,7 @@ func TestBot_RemoveUserVerification(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.RemoveUserVerification(testCtx, nil)
+		err := m.Bot.RemoveUserVerification(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3534,7 +3531,7 @@ func TestBot_RemoveChatVerification(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.RemoveChatVerification(testCtx, nil)
+		err := m.Bot.RemoveChatVerification(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3543,7 +3540,7 @@ func TestBot_RemoveChatVerification(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.RemoveChatVerification(testCtx, nil)
+		err := m.Bot.RemoveChatVerification(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3561,7 +3558,7 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.AnswerInlineQuery(testCtx, nil)
+		err := m.Bot.AnswerInlineQuery(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3570,7 +3567,7 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.AnswerInlineQuery(testCtx, nil)
+		err := m.Bot.AnswerInlineQuery(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3592,7 +3589,7 @@ func TestBot_AnswerWebAppQuery(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(testCtx, nil)
+		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedSentWebAppMessage, sentWebAppMessage)
 	})
@@ -3602,7 +3599,7 @@ func TestBot_AnswerWebAppQuery(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(testCtx, nil)
+		sentWebAppMessage, err := m.Bot.AnswerWebAppQuery(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, sentWebAppMessage)
 	})
@@ -3625,7 +3622,7 @@ func TestBot_SavePreparedInlineMessage(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		preparedInlineMessage, err := m.Bot.SavePreparedInlineMessage(testCtx, nil)
+		preparedInlineMessage, err := m.Bot.SavePreparedInlineMessage(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedPreparedInlineMessage, preparedInlineMessage)
 	})
@@ -3635,7 +3632,7 @@ func TestBot_SavePreparedInlineMessage(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		preparedInlineMessage, err := m.Bot.SavePreparedInlineMessage(testCtx, nil)
+		preparedInlineMessage, err := m.Bot.SavePreparedInlineMessage(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, preparedInlineMessage)
 	})
@@ -3655,7 +3652,7 @@ func TestBot_SendInvoice(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendInvoice(testCtx, nil)
+		message, err := m.Bot.SendInvoice(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -3665,7 +3662,7 @@ func TestBot_SendInvoice(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendInvoice(testCtx, nil)
+		message, err := m.Bot.SendInvoice(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -3686,7 +3683,7 @@ func TestBot_CreateInvoiceLink(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		invoiceLink, err := m.Bot.CreateInvoiceLink(testCtx, nil)
+		invoiceLink, err := m.Bot.CreateInvoiceLink(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, &expectedInvoiceLink, invoiceLink)
 	})
@@ -3696,7 +3693,7 @@ func TestBot_CreateInvoiceLink(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		invoiceLink, err := m.Bot.CreateInvoiceLink(testCtx, nil)
+		invoiceLink, err := m.Bot.CreateInvoiceLink(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, invoiceLink)
 	})
@@ -3715,7 +3712,7 @@ func TestBot_AnswerShippingQuery(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.AnswerShippingQuery(testCtx, nil)
+		err := m.Bot.AnswerShippingQuery(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3724,7 +3721,7 @@ func TestBot_AnswerShippingQuery(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.AnswerShippingQuery(testCtx, nil)
+		err := m.Bot.AnswerShippingQuery(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3742,7 +3739,7 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.AnswerPreCheckoutQuery(testCtx, nil)
+		err := m.Bot.AnswerPreCheckoutQuery(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3751,7 +3748,7 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.AnswerPreCheckoutQuery(testCtx, nil)
+		err := m.Bot.AnswerPreCheckoutQuery(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3775,7 +3772,7 @@ func TestBot_GetStarTransactions(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		starTransactions, err := m.Bot.GetStarTransactions(testCtx, nil)
+		starTransactions, err := m.Bot.GetStarTransactions(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedStarTransactions, starTransactions)
 	})
@@ -3785,7 +3782,7 @@ func TestBot_GetStarTransactions(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		starTransactions, err := m.Bot.GetStarTransactions(testCtx, nil)
+		starTransactions, err := m.Bot.GetStarTransactions(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, starTransactions)
 	})
@@ -3804,7 +3801,7 @@ func TestBot_RefundStarPayment(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.RefundStarPayment(testCtx, nil)
+		err := m.Bot.RefundStarPayment(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3813,7 +3810,7 @@ func TestBot_RefundStarPayment(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.RefundStarPayment(testCtx, nil)
+		err := m.Bot.RefundStarPayment(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3831,7 +3828,7 @@ func TestBot_EditUserStarSubscription(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.EditUserStarSubscription(testCtx, nil)
+		err := m.Bot.EditUserStarSubscription(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3840,7 +3837,7 @@ func TestBot_EditUserStarSubscription(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.EditUserStarSubscription(testCtx, nil)
+		err := m.Bot.EditUserStarSubscription(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3858,7 +3855,7 @@ func TestBot_SetPassportDataErrors(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(emptyResp, nil)
 
-		err := m.Bot.SetPassportDataErrors(testCtx, nil)
+		err := m.Bot.SetPassportDataErrors(t.Context(), nil)
 		require.NoError(t, err)
 	})
 
@@ -3867,7 +3864,7 @@ func TestBot_SetPassportDataErrors(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		err := m.Bot.SetPassportDataErrors(testCtx, nil)
+		err := m.Bot.SetPassportDataErrors(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3886,7 +3883,7 @@ func TestBot_SendGame(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SendGame(testCtx, nil)
+		message, err := m.Bot.SendGame(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -3896,7 +3893,7 @@ func TestBot_SendGame(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SendGame(testCtx, nil)
+		message, err := m.Bot.SendGame(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -3916,7 +3913,7 @@ func TestBot_SetGameScore(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		message, err := m.Bot.SetGameScore(testCtx, nil)
+		message, err := m.Bot.SetGameScore(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedMessage, message)
 	})
@@ -3926,7 +3923,7 @@ func TestBot_SetGameScore(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		message, err := m.Bot.SetGameScore(testCtx, nil)
+		message, err := m.Bot.SetGameScore(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
 	})
@@ -3950,7 +3947,7 @@ func TestBot_GetGameHighScores(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil)
 
-		gameHighScores, err := m.Bot.GetGameHighScores(testCtx, nil)
+		gameHighScores, err := m.Bot.GetGameHighScores(t.Context(), nil)
 		require.NoError(t, err)
 		assert.Equal(t, expectedGameHighScores, gameHighScores)
 	})
@@ -3960,7 +3957,7 @@ func TestBot_GetGameHighScores(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(nil, errTest)
 
-		gameHighScores, err := m.Bot.GetGameHighScores(testCtx, nil)
+		gameHighScores, err := m.Bot.GetGameHighScores(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, gameHighScores)
 	})
