@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"context"
 	"os"
 	"testing"
 
@@ -1088,7 +1087,7 @@ func TestUpdate_Context(t *testing.T) {
 
 	assert.NotNil(t, u.Context())
 
-	ctx := context.Background()
+	ctx := t.Context()
 	cu := u.WithContext(ctx)
 	assert.Equal(t, ctx, cu.Context())
 	assert.Equal(t, u.UpdateID, cu.UpdateID)

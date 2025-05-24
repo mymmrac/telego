@@ -13,14 +13,14 @@ import (
 
 func TestContext_Deadline(t *testing.T) {
 	ctx := &Context{
-		ctx: context.Background(),
+		ctx: t.Context(),
 	}
 	_, ok := ctx.Deadline()
 	assert.False(t, ok)
 }
 
 func TestContext_Done(t *testing.T) {
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(t.Context())
 	bCtx := &Context{
 		ctx: ctx,
 	}
@@ -35,20 +35,20 @@ func TestContext_Done(t *testing.T) {
 
 func TestContext_Err(t *testing.T) {
 	ctx := &Context{
-		ctx: context.Background(),
+		ctx: t.Context(),
 	}
 	assert.NoError(t, ctx.Err())
 }
 
 func TestContext_Value(t *testing.T) {
 	ctx := &Context{
-		ctx: context.WithValue(context.Background(), "key", "value"), //nolint:staticcheck
+		ctx: context.WithValue(t.Context(), "key", "value"), //nolint:staticcheck
 	}
 	assert.Equal(t, "value", ctx.Value("key"))
 }
 
 func TestContext_Context(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	bCtx := &Context{
 		ctx: ctx,
 	}
@@ -58,7 +58,7 @@ func TestContext_Context(t *testing.T) {
 
 func TestContext_WithContext(t *testing.T) {
 	bCtx := &Context{}
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("success", func(t *testing.T) {
 		newCtx := bCtx.WithContext(ctx)
@@ -82,7 +82,7 @@ func TestContext_WithContext(t *testing.T) {
 
 func TestContext_WithValue(t *testing.T) {
 	ctx := &Context{
-		ctx: context.Background(),
+		ctx: t.Context(),
 	}
 	newCtx := ctx.WithValue("key", "value")
 	assert.Equal(t, "value", newCtx.Value("key"))
@@ -90,7 +90,7 @@ func TestContext_WithValue(t *testing.T) {
 
 func TestContext_WithTimeout(t *testing.T) {
 	ctx := &Context{
-		ctx: context.Background(),
+		ctx: t.Context(),
 	}
 	ctx, cancel := ctx.WithTimeout(time.Minute)
 	assert.NotNil(t, cancel)
@@ -100,7 +100,7 @@ func TestContext_WithTimeout(t *testing.T) {
 
 func TestContext_WithCancel(t *testing.T) {
 	ctx := &Context{
-		ctx: context.Background(),
+		ctx: t.Context(),
 	}
 	ctx, cancel := ctx.WithCancel()
 	assert.NotNil(t, cancel)
@@ -109,7 +109,7 @@ func TestContext_WithCancel(t *testing.T) {
 }
 
 func TestContext_WithoutCancel(t *testing.T) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Hour)
+	ctx, cancel := context.WithTimeout(t.Context(), time.Hour)
 	defer cancel()
 
 	bCtx := &Context{

@@ -57,7 +57,7 @@ func TestFastHTTPCaller_Call(t *testing.T) {
 		Buffer:      bytes.NewBufferString("test"),
 	}
 
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("success", func(t *testing.T) {
 		resp, err := caller.Call(ctx, "http://localhost", data)
@@ -123,7 +123,7 @@ func TestHTTPCaller_Call(t *testing.T) {
 		Buffer:      bytes.NewBufferString("test"),
 	}
 
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("success", func(t *testing.T) {
 		resp, err := caller.Call(ctx, srv.URL, data)
@@ -194,7 +194,7 @@ func (t *testRetryCaller) Call(_ context.Context, _ string, _ *RequestData) (*Re
 }
 
 func TestRetryCaller_Call(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	expectedResp := &Response{Ok: true}
 
 	t.Run("success", func(t *testing.T) {

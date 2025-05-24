@@ -179,7 +179,7 @@ func TestBotHandler_Stop(t *testing.T) {
 			updates <- telego.Update{}
 			time.Sleep(smallTimeout)
 
-			ctx, cancel := context.WithTimeout(context.Background(), smallTimeout)
+			ctx, cancel := context.WithTimeout(t.Context(), smallTimeout)
 			go func() {
 				errStop := bh.StopWithContext(ctx)
 				assert.ErrorIs(t, errStop, context.DeadlineExceeded)
@@ -237,7 +237,7 @@ func TestBotHandler_Stop(t *testing.T) {
 			updates <- telego.Update{UpdateID: 1}
 			time.Sleep(smallTimeout)
 
-			ctx, cancel := context.WithTimeout(context.Background(), hugeTimeout)
+			ctx, cancel := context.WithTimeout(t.Context(), hugeTimeout)
 			go func() {
 				errStop := bh.StopWithContext(ctx)
 				assert.NoError(t, errStop)
@@ -283,7 +283,7 @@ func TestBotHandler_Stop(t *testing.T) {
 				// Wait for handler to start
 			}
 
-			err = bh.StopWithContext(context.Background())
+			err = bh.StopWithContext(t.Context())
 			assert.NoError(t, err)
 		})
 
@@ -323,7 +323,7 @@ func TestBotHandler_Stop(t *testing.T) {
 
 			updates <- telego.Update{}
 
-			ctx, cancel := context.WithCancel(context.Background())
+			ctx, cancel := context.WithCancel(t.Context())
 			cancel()
 			go func() {
 				errStop := bh.StopWithContext(ctx)

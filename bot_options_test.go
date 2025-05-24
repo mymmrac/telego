@@ -203,14 +203,14 @@ func TestWithHealthCheck(t *testing.T) {
 		Times(1)
 
 	caller.EXPECT().
-		Call(testCtx, defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
+		Call(t.Context(), defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
 		Return(expectedResp, nil).
 		Times(1)
 
 	bot, err := NewBot(token,
 		WithAPICaller(caller),
 		WithRequestConstructor(constructor),
-		WithHealthCheck(testCtx),
+		WithHealthCheck(t.Context()),
 	)
 	require.NoError(t, err)
 	require.NotNil(t, bot)

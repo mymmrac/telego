@@ -45,6 +45,9 @@ import (
 			pointer = ""
 		}
 		valueName := firstToLower(string(currentStruct[0]))
+		if valueName == "t" {
+			valueName += "1"
+		}
 		data.WriteString(fmt.Sprintf("\t%s := (%s%s{}).\n", valueName, pointer, currentStruct))
 
 		for j, s := range currentSetters {
@@ -181,6 +184,14 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputSticker{{}}"
 	case "InputSticker":
 		return "InputSticker{Sticker: testInputFile}"
+	case "InputProfilePhoto":
+		return "&InputProfilePhotoAnimated{Animation: testInputFile}"
+	case "InputStoryContent":
+		return "&InputStoryContentPhoto{Photo: testInputFile}"
+	case "[]StoryArea":
+		return "[]StoryArea{{Position: StoryAreaPosition{XPercentage: 1.0}}}"
+	case "AcceptedGiftTypes":
+		return "AcceptedGiftTypes{UnlimitedGifts: true}"
 	case "*SwitchInlineQueryChosenChat":
 		return "&SwitchInlineQueryChosenChat{AllowUserChats: true}"
 	case "*InlineQueryResultsButton":

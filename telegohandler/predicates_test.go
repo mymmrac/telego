@@ -1436,7 +1436,7 @@ func TestPredicates(t *testing.T) {
 		},
 	}
 
-	ctx := context.Background()
+	ctx := t.Context()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equal(t, tt.matches, tt.predicate(ctx, tt.update))

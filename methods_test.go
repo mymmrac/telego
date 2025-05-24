@@ -2924,6 +2924,680 @@ func TestBot_DeleteMessages(t *testing.T) {
 	})
 }
 
+func TestBot_GiftPremiumSubscription(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.GiftPremiumSubscription(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.GiftPremiumSubscription(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_VerifyUser(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.VerifyUser(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.VerifyUser(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_VerifyChat(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.VerifyChat(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.VerifyChat(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_RemoveUserVerification(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.RemoveUserVerification(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.RemoveUserVerification(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_RemoveChatVerification(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.RemoveChatVerification(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.RemoveChatVerification(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_ReadBusinessMessage(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.ReadBusinessMessage(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.ReadBusinessMessage(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_DeleteBusinessMessages(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteBusinessMessages(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteBusinessMessages(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_GetAvailableGifts(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedGifts := &Gifts{
+			Gifts: []Gift{
+				{},
+			},
+		}
+		resp := telegoResponse(t, expectedGifts)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		gifts, err := m.Bot.GetAvailableGifts(t.Context())
+		require.NoError(t, err)
+		assert.Equal(t, expectedGifts, gifts)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		gifts, err := m.Bot.GetAvailableGifts(t.Context())
+		require.Error(t, err)
+		assert.Nil(t, gifts)
+	})
+}
+
+func TestBot_SendGift(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SendGift(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SendGift(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SetBusinessAccountName(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetBusinessAccountName(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetBusinessAccountName(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SetBusinessAccountUsername(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetBusinessAccountUsername(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetBusinessAccountUsername(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SetBusinessAccountBio(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetBusinessAccountBio(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetBusinessAccountBio(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SetBusinessAccountProfilePhoto(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetBusinessAccountProfilePhoto(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetBusinessAccountProfilePhoto(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_RemoveBusinessAccountProfilePhoto(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.RemoveBusinessAccountProfilePhoto(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.RemoveBusinessAccountProfilePhoto(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SetBusinessAccountGiftSettings(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetBusinessAccountGiftSettings(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetBusinessAccountGiftSettings(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_GetBusinessAccountStarBalance(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStarAmount := &StarAmount{}
+		resp := telegoResponse(t, expectedStarAmount)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		starAmount, err := m.Bot.GetBusinessAccountStarBalance(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedStarAmount, starAmount)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		starAmount, err := m.Bot.GetBusinessAccountStarBalance(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, starAmount)
+	})
+}
+
+func TestBot_TransferBusinessAccountStars(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.TransferBusinessAccountStars(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.TransferBusinessAccountStars(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_GetBusinessAccountGifts(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedOwnedGifts := &OwnedGifts{
+			TotalCount: 1,
+		}
+		resp := telegoResponse(t, expectedOwnedGifts)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		ownedGifts, err := m.Bot.GetBusinessAccountGifts(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedOwnedGifts, ownedGifts)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		ownedGifts, err := m.Bot.GetBusinessAccountGifts(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, ownedGifts)
+	})
+}
+
+func TestBot_ConvertGiftToStars(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.ConvertGiftToStars(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.ConvertGiftToStars(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_UpgradeGift(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.UpgradeGift(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.UpgradeGift(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_TransferGift(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.TransferGift(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.TransferGift(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_PostStory(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStory := &Story{}
+		resp := telegoResponse(t, expectedStory)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		story, err := m.Bot.PostStory(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedStory, story)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		story, err := m.Bot.PostStory(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, story)
+	})
+}
+
+func TestBot_EditStory(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStory := &Story{}
+		resp := telegoResponse(t, expectedStory)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		story, err := m.Bot.EditStory(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedStory, story)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		story, err := m.Bot.EditStory(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, story)
+	})
+}
+
+func TestBot_DeleteStory(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteStory(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteStory(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_SendSticker(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2963,9 +3637,7 @@ func TestBot_GetStickerSet(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		expectedStickerSet := &StickerSet{
-			Name: "test",
-		}
+		expectedStickerSet := &StickerSet{}
 		resp := telegoResponse(t, expectedStickerSet)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
@@ -2997,7 +3669,7 @@ func TestBot_GetCustomEmojiStickers(t *testing.T) {
 			Return(data, nil)
 
 		expectedStickers := []Sticker{
-			{FileID: "FileID"},
+			{Type: StickerTypeRegular},
 		}
 		resp := telegoResponse(t, expectedStickers)
 		m.MockAPICaller.EXPECT().
@@ -3029,9 +3701,7 @@ func TestBot_UploadStickerFile(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		expectedFile := &File{
-			FileID: "test",
-		}
+		expectedFile := &File{}
 		resp := telegoResponse(t, expectedFile)
 		m.MockAPICaller.EXPECT().
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
@@ -3373,174 +4043,6 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteStickerSet(t.Context(), nil)
-		require.Error(t, err)
-	})
-}
-
-func TestBot_GetAvailableGifts(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		expectedGifts := &Gifts{
-			Gifts: []Gift{{}},
-		}
-		resp := telegoResponse(t, expectedGifts)
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(resp, nil)
-
-		gifts, err := m.Bot.GetAvailableGifts(t.Context())
-		require.NoError(t, err)
-		assert.Equal(t, expectedGifts, gifts)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		gifts, err := m.Bot.GetAvailableGifts(t.Context())
-		require.Error(t, err)
-		assert.Nil(t, gifts)
-	})
-}
-
-func TestBot_SendGift(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(emptyResp, nil)
-
-		err := m.Bot.SendGift(t.Context(), nil)
-		require.NoError(t, err)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		err := m.Bot.SendGift(t.Context(), nil)
-		require.Error(t, err)
-	})
-}
-
-func TestBot_VerifyUser(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(emptyResp, nil)
-
-		err := m.Bot.VerifyUser(t.Context(), nil)
-		require.NoError(t, err)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		err := m.Bot.VerifyUser(t.Context(), nil)
-		require.Error(t, err)
-	})
-}
-
-func TestBot_VerifyChat(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(emptyResp, nil)
-
-		err := m.Bot.VerifyChat(t.Context(), nil)
-		require.NoError(t, err)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		err := m.Bot.VerifyChat(t.Context(), nil)
-		require.Error(t, err)
-	})
-}
-
-func TestBot_RemoveUserVerification(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(emptyResp, nil)
-
-		err := m.Bot.RemoveUserVerification(t.Context(), nil)
-		require.NoError(t, err)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		err := m.Bot.RemoveUserVerification(t.Context(), nil)
-		require.Error(t, err)
-	})
-}
-
-func TestBot_RemoveChatVerification(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := newMockedBot(ctrl)
-
-	t.Run("success", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(data, nil)
-
-		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any(), gomock.Any()).
-			Return(emptyResp, nil)
-
-		err := m.Bot.RemoveChatVerification(t.Context(), nil)
-		require.NoError(t, err)
-	})
-
-	t.Run("error", func(t *testing.T) {
-		m.MockRequestConstructor.EXPECT().
-			JSONRequest(gomock.Any()).
-			Return(nil, errTest)
-
-		err := m.Bot.RemoveChatVerification(t.Context(), nil)
 		require.Error(t, err)
 	})
 }

@@ -1,7 +1,6 @@
 package telegohandler
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -43,7 +42,7 @@ func TestPanicRecovery(t *testing.T) {
 func TestTimeout(t *testing.T) {
 	run := false
 	ctx := &Context{
-		ctx: context.Background(),
+		ctx: t.Context(),
 		ctxBase: &ctxBase{
 			group: &HandlerGroup{
 				routes: []route{

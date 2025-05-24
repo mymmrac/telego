@@ -112,14 +112,14 @@ func TestNewBot(t *testing.T) {
 				Times(1)
 
 			caller.EXPECT().
-				Call(testCtx, defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
+				Call(t.Context(), defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
 				Return(expectedResp, nil).
 				Times(1)
 
 			bot, err := NewBot(token,
 				WithAPICaller(caller),
 				WithRequestConstructor(constructor),
-				WithHealthCheck(testCtx),
+				WithHealthCheck(t.Context()),
 			)
 
 			require.NoError(t, err)
@@ -138,14 +138,14 @@ func TestNewBot(t *testing.T) {
 				Times(1)
 
 			caller.EXPECT().
-				Call(testCtx, defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
+				Call(t.Context(), defaultBotAPIServer+botPathPrefix+token+"/getMe", expectedData).
 				Return(expectedResp, nil).
 				Times(1)
 
 			bot, err := NewBot(token,
 				WithAPICaller(caller),
 				WithRequestConstructor(constructor),
-				WithHealthCheck(testCtx),
+				WithHealthCheck(t.Context()),
 			)
 
 			require.Error(t, err)
@@ -439,11 +439,11 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		m.MockAPICaller.EXPECT().
-			Call(testCtx, url, expectedData).
+			Call(t.Context(), url, expectedData).
 			Return(expectedResp, nil).
 			Times(1)
 
-		resp, err := m.Bot.constructAndCallRequest(testCtx, methodName, params)
+		resp, err := m.Bot.constructAndCallRequest(t.Context(), methodName, params)
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -454,7 +454,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Return(nil, errTest).
 			Times(1)
 
-		resp, err := m.Bot.constructAndCallRequest(testCtx, methodName, params)
+		resp, err := m.Bot.constructAndCallRequest(t.Context(), methodName, params)
 		require.ErrorIs(t, err, errTest)
 		assert.Nil(t, resp)
 	})
@@ -479,11 +479,11 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		m.MockAPICaller.EXPECT().
-			Call(testCtx, url, expectedDataFile).
+			Call(t.Context(), url, expectedDataFile).
 			Return(expectedResp, nil).
 			Times(1)
 
-		resp, err := m.Bot.constructAndCallRequest(testCtx, methodName, paramsFile)
+		resp, err := m.Bot.constructAndCallRequest(t.Context(), methodName, paramsFile)
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -499,7 +499,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Return(nil, errTest).
 			Times(1)
 
-		resp, err := m.Bot.constructAndCallRequest(testCtx, methodName, paramsFile)
+		resp, err := m.Bot.constructAndCallRequest(t.Context(), methodName, paramsFile)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -507,7 +507,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 	t.Run("error_multipart_params", func(t *testing.T) {
 		notStruct := notStructParamsWithFile("test")
 
-		resp, err := m.Bot.constructAndCallRequest(testCtx, methodName, &notStruct)
+		resp, err := m.Bot.constructAndCallRequest(t.Context(), methodName, &notStruct)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -519,11 +519,11 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 			Times(1)
 
 		m.MockAPICaller.EXPECT().
-			Call(testCtx, url, expectedData).
+			Call(t.Context(), url, expectedData).
 			Return(nil, errTest).
 			Times(1)
 
-		resp, err := m.Bot.constructAndCallRequest(testCtx, methodName, params)
+		resp, err := m.Bot.constructAndCallRequest(t.Context(), methodName, params)
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -555,7 +555,7 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  nil,
 			}, nil)
 
-		err := m.Bot.performRequest(testCtx, methodName, params, &result)
+		err := m.Bot.performRequest(t.Context(), methodName, params, &result)
 		require.NoError(t, err)
 		assert.Equal(t, 1, result)
 	})
@@ -577,7 +577,7 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  nil,
 			}, nil)
 
-		err := m.Bot.performRequest(testCtx, methodName, params, &result1, &result2)
+		err := m.Bot.performRequest(t.Context(), methodName, params, &result1, &result2)
 		require.NoError(t, err)
 		assert.Equal(t, 0, result1)
 		assert.True(t, result2)
@@ -599,7 +599,7 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  &ta.Error{},
 			}, nil)
 
-		err := m.Bot.performRequest(testCtx, methodName, params, &result)
+		err := m.Bot.performRequest(t.Context(), methodName, params, &result)
 		require.Error(t, err)
 	})
 
@@ -611,7 +611,7 @@ func TestBot_performRequest(t *testing.T) {
 			Return(nil, errTest).
 			Times(1)
 
-		err := m.Bot.performRequest(testCtx, methodName, params, &result)
+		err := m.Bot.performRequest(t.Context(), methodName, params, &result)
 		require.Error(t, err)
 	})
 
@@ -630,7 +630,7 @@ func TestBot_performRequest(t *testing.T) {
 			}, nil)
 
 		var stringResult string
-		err := m.Bot.performRequest(testCtx, methodName, params, &stringResult)
+		err := m.Bot.performRequest(t.Context(), methodName, params, &stringResult)
 		require.Error(t, err)
 		assert.Empty(t, stringResult)
 	})
@@ -651,7 +651,7 @@ func TestBot_performRequest(t *testing.T) {
 				Error:  &ta.Error{ErrorCode: 1},
 			}, nil)
 
-		err := m.Bot.performRequest(testCtx, methodName, params, &result)
+		err := m.Bot.performRequest(t.Context(), methodName, params, &result)
 		assert.Equal(t, &ta.Error{ErrorCode: 1}, err)
 		assert.Equal(t, 1, result)
 	})

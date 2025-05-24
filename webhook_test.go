@@ -20,7 +20,7 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		b, err := NewBot(token, WithDiscardLogger())
 		require.NoError(t, err)
 
-		_, err = b.UpdatesViaWebhook(testCtx, func(handler WebhookHandler) error {
+		_, err = b.UpdatesViaWebhook(t.Context(), func(handler WebhookHandler) error {
 			return nil
 		})
 		require.NoError(t, err)
@@ -29,12 +29,12 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 	t.Run("error_webhook_exist", func(t *testing.T) {
 		b := &Bot{}
 
-		_, err := b.UpdatesViaWebhook(testCtx, func(handler WebhookHandler) error {
+		_, err := b.UpdatesViaWebhook(t.Context(), func(handler WebhookHandler) error {
 			return nil
 		})
 		require.NoError(t, err)
 
-		_, err = b.UpdatesViaWebhook(testCtx, func(handler WebhookHandler) error {
+		_, err = b.UpdatesViaWebhook(t.Context(), func(handler WebhookHandler) error {
 			return nil
 		})
 		require.Error(t, err)
@@ -55,10 +55,10 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(resp, nil).AnyTimes()
 
-		_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
+		_, err := m.Bot.UpdatesViaLongPolling(t.Context(), nil)
 		require.NoError(t, err)
 
-		_, err = m.Bot.UpdatesViaWebhook(testCtx, func(handler WebhookHandler) error {
+		_, err = m.Bot.UpdatesViaWebhook(t.Context(), func(handler WebhookHandler) error {
 			return nil
 		})
 		require.Error(t, err)
@@ -77,10 +77,10 @@ func TestBot_UpdatesViaWebhook(t *testing.T) {
 		expectedUpdateBytes, err := json.Marshal(expectedUpdate)
 		require.NoError(t, err)
 
-		updates, err := b.UpdatesViaWebhook(testCtx, func(handler WebhookHandler) error {
+		updates, err := b.UpdatesViaWebhook(t.Context(), func(handler WebhookHandler) error {
 			go func() {
 				<-pushUpdate
-				err = handler(testCtx, expectedUpdateBytes)
+				err = handler(t.Context(), expectedUpdateBytes)
 				assert.NoError(t, err)
 			}()
 			return nil
@@ -120,6 +120,6 @@ func TestWithWebhookSet(t *testing.T) {
 
 	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any(), gomock.Any()).Return(&ta.Response{Ok: true}, nil)
 
-	err := WithWebhookSet(testCtx, &SetWebhookParams{})(m.Bot, ctx)
+	err := WithWebhookSet(t.Context(), &SetWebhookParams{})(m.Bot, ctx)
 	require.NoError(t, err)
 }

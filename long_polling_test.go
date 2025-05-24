@@ -31,7 +31,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(resp, nil).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			updates, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
+			updates, err := m.Bot.UpdatesViaLongPolling(t.Context(), nil)
 			require.NoError(t, err)
 
 			time.Sleep(time.Millisecond * 10)
@@ -52,7 +52,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(nil, errTest).MinTimes(1)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
+			_, err := m.Bot.UpdatesViaLongPolling(t.Context(), nil)
 			require.NoError(t, err)
 			time.Sleep(time.Millisecond * 10)
 		})
@@ -66,10 +66,10 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 			Return(nil, errTest).AnyTimes()
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil)
+			_, err := m.Bot.UpdatesViaLongPolling(t.Context(), nil)
 			require.NoError(t, err)
 
-			_, err = m.Bot.UpdatesViaLongPolling(testCtx, nil)
+			_, err = m.Bot.UpdatesViaLongPolling(t.Context(), nil)
 			require.Error(t, err)
 		})
 	})
@@ -78,7 +78,7 @@ func TestBot_UpdatesViaLongPolling(t *testing.T) {
 		m := newMockedBot(ctrl)
 
 		assert.NotPanics(t, func() {
-			_, err := m.Bot.UpdatesViaLongPolling(testCtx, nil, WithLongPollingUpdateInterval(-time.Second))
+			_, err := m.Bot.UpdatesViaLongPolling(t.Context(), nil, WithLongPollingUpdateInterval(-time.Second))
 			require.Error(t, err)
 		})
 	})

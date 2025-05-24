@@ -57,16 +57,16 @@ import (
 
 		data.WriteString(`
 		m.MockAPICaller.EXPECT().
-			Call(gomock.Any(), gomock.Any()).
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
 			Return(` + respVar + `, nil)`)
 		data.WriteString("\n\n")
 
 		if m.hasReturnValue() {
-			data.WriteString(fmt.Sprintf(`		%s, err := m.Bot.%s(%s)
+			data.WriteString(fmt.Sprintf(`		%s, err := m.Bot.%s(t.Context(), %s)
 		require.NoError(t, err)
 		assert.Equal(t, %s, %s)`, actualVar, m.nameTitle, parameters, expectedVar, actualVar))
 		} else {
-			data.WriteString(fmt.Sprintf(`		err := m.Bot.%s(%s)
+			data.WriteString(fmt.Sprintf(`		err := m.Bot.%s(t.Context(), %s)
 		require.NoError(t, err)`, m.nameTitle, parameters))
 		}
 
@@ -79,11 +79,11 @@ import (
 		data.WriteString("\n\n")
 
 		if m.hasReturnValue() {
-			data.WriteString(fmt.Sprintf(`		%s, err := m.Bot.%s(%s)
+			data.WriteString(fmt.Sprintf(`		%s, err := m.Bot.%s(t.Context(), %s)
 		require.Error(t, err)
 		assert.Nil(t, %s)`, actualVar, m.nameTitle, parameters, actualVar))
 		} else {
-			data.WriteString(fmt.Sprintf(`		err := m.Bot.%s(%s)
+			data.WriteString(fmt.Sprintf(`		err := m.Bot.%s(t.Context(), %s)
 		require.Error(t, err)`, m.nameTitle, parameters))
 		}
 
