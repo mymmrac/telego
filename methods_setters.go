@@ -3286,7 +3286,7 @@ func (p *TransferGiftParams) WithOwnedGiftID(ownedGiftID string) *TransferGiftPa
 }
 
 // WithNewOwnerChatID adds new owner chat ID parameter
-func (p *TransferGiftParams) WithNewOwnerChatID(newOwnerChatID int) *TransferGiftParams {
+func (p *TransferGiftParams) WithNewOwnerChatID(newOwnerChatID int64) *TransferGiftParams {
 	p.NewOwnerChatID = newOwnerChatID
 	return p
 }

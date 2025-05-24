@@ -4033,7 +4033,7 @@ type TransferGiftParams struct {
 
 	// NewOwnerChatID - Unique identifier of the chat which will own the gift. The chat must be active in the
 	// last 24 hours.
-	NewOwnerChatID int `json:"new_owner_chat_id"`
+	NewOwnerChatID int64 `json:"new_owner_chat_id"`
 
 	// StarCount - Optional. The amount of Telegram Stars that will be paid for the transfer from the business
 	// account balance. If positive, then the can_transfer_stars business bot right is required.
