@@ -4288,6 +4288,43 @@ type OwnedGifts struct {
 	NextOffset string `json:"next_offset,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to OwnedGifts
+func (g *OwnedGifts) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uOwnedGifts OwnedGifts
+	var ug uOwnedGifts
+
+	if value.Exists("gifts") {
+		gifts := value.GetArray("gifts")
+		ug.Gifts = make([]OwnedGift, len(gifts))
+		for i, gift := range gifts {
+			giftType := string(gift.GetStringBytes("type"))
+			switch giftType {
+			case GiftTypeRegular:
+				ug.Gifts[i] = &OwnedGiftRegular{}
+			case GiftTypeUnique:
+				ug.Gifts[i] = &OwnedGiftUnique{}
+			default:
+				return fmt.Errorf("unknown owned gift type: %s", giftType)
+			}
+		}
+	}
+
+	if err = json.Unmarshal(data, &ug); err != nil {
+		return err
+	}
+	*g = OwnedGifts(ug)
+
+	return nil
+}
+
 // AcceptedGiftTypes - This object describes the types of gifts that can be gifted to a user or a chat.
 type AcceptedGiftTypes struct {
 	// UnlimitedGifts - True, if unlimited regular gifts are accepted
