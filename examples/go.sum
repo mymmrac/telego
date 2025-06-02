@@ -46,8 +46,8 @@ github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovk
 github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/mymmrac/telego v1.1.0 h1:ycb/hcSU7/IwY+5j0Fc8axAZglFZemU/yV+abL6qUbQ=
-github.com/mymmrac/telego v1.1.0/go.mod h1:/XiDyjLADWl/WgjXV6WXDsGTVqTNKmQYt0qZktDEeDs=
+github.com/mymmrac/telego v1.1.1 h1:HJvcd9F9w5gpOwvioyLl447lyvPb9zPAlj7kaucpSks=
+github.com/mymmrac/telego v1.1.1/go.mod h1:/XiDyjLADWl/WgjXV6WXDsGTVqTNKmQYt0qZktDEeDs=
 github.com/philhofer/fwd v1.1.3-0.20240916144458-20a13a1f6b7c h1:dAMKvw0MlJT1GshSTtih8C2gDs04w8dReiOGXrGLNoY=
 github.com/philhofer/fwd v1.1.3-0.20240916144458-20a13a1f6b7c/go.mod h1:RqIHx9QI14HlwKwm98g9Re5prTQ6LdeRQn+gXJFxsJM=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
