@@ -17,6 +17,7 @@ linters:
     - ireturn
     - nlreturn
     - noctx
+    - noinlineerr
     - nonamedreturns
     - paralleltest
     - tagliatelle
@@ -24,6 +25,7 @@ linters:
     - varnamelen
     - wrapcheck
     - wsl
+    - wsl_v5
   settings:
     errcheck:
       check-type-assertions: true

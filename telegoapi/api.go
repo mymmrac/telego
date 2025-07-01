@@ -19,9 +19,10 @@ const (
 
 // Response represents response returned by Telegram API
 type Response struct {
+	*Error
+
 	Ok     bool            `json:"ok"`
 	Result json.RawMessage `json:"result,omitempty"`
-	*Error
 }
 
 func (r Response) String() string {

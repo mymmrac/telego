@@ -9,8 +9,9 @@ import (
 
 // Context is a wrapper around [context.Context] with bot handler specific methods
 type Context struct {
-	ctx context.Context
 	*ctxBase
+
+	ctx context.Context
 }
 
 // ctxBase is a base struct for [Context] that is used to copy context without a need to copy all fields
