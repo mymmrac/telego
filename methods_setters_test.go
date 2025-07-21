@@ -683,6 +683,29 @@ func TestSendPollParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSendChecklistParams_Setters(t *testing.T) {
+	s := (&SendChecklistParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(1).
+		WithChecklist(InputChecklist{Tasks: []InputChecklistTask{{}}}).
+		WithDisableNotification().
+		WithProtectContent().
+		WithMessageEffectID("MessageEffectID").
+		WithReplyParameters(&ReplyParameters{MessageID: 2}).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &SendChecklistParams{
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               1,
+		Checklist:            InputChecklist{Tasks: []InputChecklistTask{{}}},
+		DisableNotification:  true,
+		ProtectContent:       true,
+		MessageEffectID:      "MessageEffectID",
+		ReplyParameters:      &ReplyParameters{MessageID: 2},
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, s)
+}
+
 func TestSendDiceParams_Setters(t *testing.T) {
 	s := (&SendDiceParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
@@ -1576,6 +1599,23 @@ func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
 		InlineMessageID:      "InlineMessageID",
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, s)
+}
+
+func TestEditMessageChecklistParams_Setters(t *testing.T) {
+	e := (&EditMessageChecklistParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(1).
+		WithMessageID(2).
+		WithChecklist(InputChecklist{Tasks: []InputChecklistTask{{}}}).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &EditMessageChecklistParams{
+		BusinessConnectionID: "BusinessConnectionID",
+		ChatID:               1,
+		MessageID:            2,
+		Checklist:            InputChecklist{Tasks: []InputChecklistTask{{}}},
+		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
 }
 
 func TestEditMessageReplyMarkupParams_Setters(t *testing.T) {

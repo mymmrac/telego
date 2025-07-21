@@ -1591,6 +1591,54 @@ func (p *SendPollParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendPollParam
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
+func (p *SendChecklistParams) WithBusinessConnectionID(businessConnectionID string) *SendChecklistParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *SendChecklistParams) WithChatID(chatID int64) *SendChecklistParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithChecklist adds checklist parameter
+func (p *SendChecklistParams) WithChecklist(checklist InputChecklist) *SendChecklistParams {
+	p.Checklist = checklist
+	return p
+}
+
+// WithDisableNotification adds disable notification parameter
+func (p *SendChecklistParams) WithDisableNotification() *SendChecklistParams {
+	p.DisableNotification = true
+	return p
+}
+
+// WithProtectContent adds protect content parameter
+func (p *SendChecklistParams) WithProtectContent() *SendChecklistParams {
+	p.ProtectContent = true
+	return p
+}
+
+// WithMessageEffectID adds message effect ID parameter
+func (p *SendChecklistParams) WithMessageEffectID(messageEffectID string) *SendChecklistParams {
+	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithReplyParameters adds reply parameters parameter
+func (p *SendChecklistParams) WithReplyParameters(replyParameters *ReplyParameters) *SendChecklistParams {
+	p.ReplyParameters = replyParameters
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *SendChecklistParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *SendChecklistParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
 func (p *SendDiceParams) WithBusinessConnectionID(businessConnectionID string) *SendDiceParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -2835,6 +2883,36 @@ func (p *StopMessageLiveLocationParams) WithInlineMessageID(inlineMessageID stri
 // WithReplyMarkup adds reply markup parameter
 func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
 ) *StopMessageLiveLocationParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageChecklistParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageChecklistParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageChecklistParams) WithChatID(chatID int64) *EditMessageChecklistParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageChecklistParams) WithMessageID(messageID int) *EditMessageChecklistParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithChecklist adds checklist parameter
+func (p *EditMessageChecklistParams) WithChecklist(checklist InputChecklist) *EditMessageChecklistParams {
+	p.Checklist = checklist
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageChecklistParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageChecklistParams {
 	p.ReplyMarkup = replyMarkup
 	return p
 }

@@ -773,6 +773,36 @@ func TestBot_SendPoll(t *testing.T) {
 	})
 }
 
+func TestBot_SendChecklist(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.SendChecklist(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.SendChecklist(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
 func TestBot_SendDice(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2807,6 +2837,36 @@ func TestBot_StopMessageLiveLocation(t *testing.T) {
 	})
 }
 
+func TestBot_EditMessageChecklist(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.EditMessageChecklist(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.EditMessageChecklist(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
 func TestBot_EditMessageReplyMarkup(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -4252,6 +4312,37 @@ func TestBot_AnswerPreCheckoutQuery(t *testing.T) {
 
 		err := m.Bot.AnswerPreCheckoutQuery(t.Context(), nil)
 		require.Error(t, err)
+	})
+}
+
+func TestBot_GetMyStarBalance(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStarAmount := &StarAmount{}
+		resp := telegoResponse(t, expectedStarAmount)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		starAmount, err := m.Bot.GetMyStarBalance(t.Context())
+		require.NoError(t, err)
+		assert.Equal(t, expectedStarAmount, starAmount)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		starAmount, err := m.Bot.GetMyStarBalance(t.Context())
+		require.Error(t, err)
+		assert.Nil(t, starAmount)
 	})
 }
 

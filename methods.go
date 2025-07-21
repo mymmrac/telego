@@ -1254,7 +1254,7 @@ func (p *SendMediaGroupParams) fileParameters() map[string]ta.NamedReader {
 
 // SendMediaGroup - Use this method to send a group of photos, videos, documents or audios as an album.
 // Documents and audio files can be only grouped in an album with messages of the same type. On success, an
-// array of Messages (https://core.telegram.org/bots/api#message) that were sent is returned.
+// array of Message (https://core.telegram.org/bots/api#message) objects that were sent is returned.
 func (b *Bot) SendMediaGroup(ctx context.Context, params *SendMediaGroupParams) ([]Message, error) {
 	var messages []Message
 	err := b.performRequest(ctx, "sendMediaGroup", params, &messages)
@@ -1504,7 +1504,7 @@ type SendPollParams struct {
 	// It can be specified instead of question_parse_mode
 	QuestionEntities []MessageEntity `json:"question_entities,omitempty"`
 
-	// Options - A JSON-serialized list of 2-10 answer options
+	// Options - A JSON-serialized list of 2-12 answer options
 	Options []InputPollOption `json:"options"`
 
 	// IsAnonymous - Optional. True, if the poll needs to be anonymous, defaults to True
@@ -1578,6 +1578,46 @@ func (b *Bot) SendPoll(ctx context.Context, params *SendPollParams) (*Message, e
 	err := b.performRequest(ctx, "sendPoll", params, &message)
 	if err != nil {
 		return nil, fmt.Errorf("telego: sendPoll: %w", err)
+	}
+	return message, nil
+}
+
+// SendChecklistParams - Represents parameters of sendChecklist method.
+type SendChecklistParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection on behalf of which the message will
+	// be sent
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// ChatID - Unique identifier for the target chat
+	ChatID int64 `json:"chat_id"`
+
+	// Checklist - A JSON-serialized object for the checklist to send
+	Checklist InputChecklist `json:"checklist"`
+
+	// DisableNotification - Optional. Sends the message silently. Users will receive a notification with no
+	// sound.
+	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// ReplyParameters - Optional. A JSON-serialized object for description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// SendChecklist - Use this method to send a checklist on behalf of a connected business account. On success,
+// the sent Message (https://core.telegram.org/bots/api#message) is returned.
+func (b *Bot) SendChecklist(ctx context.Context, params *SendChecklistParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest(ctx, "sendChecklist", params, &message)
+	if err != nil {
+		return nil, fmt.Errorf("telego: sendChecklist: %w", err)
 	}
 	return message, nil
 }
@@ -1904,8 +1944,8 @@ type PromoteChatMemberParams struct {
 	IsAnonymous *bool `json:"is_anonymous,omitempty"`
 
 	// CanManageChat - Optional. Pass True if the administrator can access the chat event log, get boost list,
-	// see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other
-	// administrator privilege.
+	// see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the
+	// chat without paying Telegram Stars. Implied by any other administrator privilege.
 	CanManageChat *bool `json:"can_manage_chat,omitempty"`
 
 	// CanDeleteMessages - Optional. Pass True if the administrator can delete messages of other users
@@ -1939,8 +1979,8 @@ type PromoteChatMemberParams struct {
 	// CanDeleteStories - Optional. Pass True if the administrator can delete stories posted by other users
 	CanDeleteStories *bool `json:"can_delete_stories,omitempty"`
 
-	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel, or access
-	// channel statistics; for channels only
+	// CanPostMessages - Optional. Pass True if the administrator can post messages in the channel, approve
+	// suggested posts, or access channel statistics; for channels only
 	CanPostMessages *bool `json:"can_post_messages,omitempty"`
 
 	// CanEditMessages - Optional. Pass True if the administrator can edit messages of other users and can pin
@@ -3430,6 +3470,36 @@ func (b *Bot) StopMessageLiveLocation(ctx context.Context, params *StopMessageLi
 	err := b.performRequest(ctx, "stopMessageLiveLocation", params, &message, &success)
 	if err != nil {
 		return nil, fmt.Errorf("telego: stopMessageLiveLocation: %w", err)
+	}
+	return message, nil
+}
+
+// EditMessageChecklistParams - Represents parameters of editMessageChecklist method.
+type EditMessageChecklistParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection on behalf of which the message will
+	// be sent
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// ChatID - Unique identifier for the target chat
+	ChatID int64 `json:"chat_id"`
+
+	// MessageID - Unique identifier for the target message
+	MessageID int `json:"message_id"`
+
+	// Checklist - A JSON-serialized object for the new checklist
+	Checklist InputChecklist `json:"checklist"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for the new inline keyboard for the message
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageChecklist - Use this method to edit a checklist on behalf of a connected business account. On
+// success, the edited Message (https://core.telegram.org/bots/api#message) is returned.
+func (b *Bot) EditMessageChecklist(ctx context.Context, params *EditMessageChecklistParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest(ctx, "editMessageChecklist", params, &message)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageChecklist: %w", err)
 	}
 	return message, nil
 }
@@ -5009,6 +5079,17 @@ func (b *Bot) AnswerPreCheckoutQuery(ctx context.Context, params *AnswerPreCheck
 		return fmt.Errorf("telego: answerPreCheckoutQuery: %w", err)
 	}
 	return nil
+}
+
+// GetMyStarBalance - A method to get the current Telegram Stars balance of the bot. Requires no parameters.
+// On success, returns a StarAmount (https://core.telegram.org/bots/api#staramount) object.
+func (b *Bot) GetMyStarBalance(ctx context.Context) (*StarAmount, error) {
+	var starAmount *StarAmount
+	err := b.performRequest(ctx, "getMyStarBalance", nil, &starAmount)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getMyStarBalance: %w", err)
+	}
+	return starAmount, nil
 }
 
 // GetStarTransactionsParams - Represents parameters of getStarTransactions method.
