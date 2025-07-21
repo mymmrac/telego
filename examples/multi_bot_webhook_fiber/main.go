@@ -60,7 +60,7 @@ func WebhookFiber(router fiber.Router, path string, secretToken string) func(han
 				return fCtx.SendStatus(fiber.StatusUnauthorized)
 			}
 
-			if err := handler(fCtx.Context(), fCtx.Body()); err != nil {
+			if err := handler(fCtx, fCtx.Body()); err != nil {
 				return fCtx.SendStatus(fiber.StatusInternalServerError)
 			}
 
