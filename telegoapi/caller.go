@@ -175,6 +175,8 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 				if delay > r.MaxDelay {
 					return nil, err
 				}
+			default:
+				return nil, fmt.Errorf("unknown rate limit behavior: %d", r.RateLimit)
 			}
 		}
 

@@ -60,8 +60,9 @@ func (l *logger) prefix(mode logMode) string {
 		return fmt.Sprintf("[%s] %sDEBUG%s ", timeNow, ansiYellow, ansiReset)
 	case errorMode:
 		return fmt.Sprintf("[%s] %sERROR%s ", timeNow, ansiRed, ansiReset)
+	default:
+		return "LOGGING "
 	}
-	return "LOGGING "
 }
 
 // log logs text
