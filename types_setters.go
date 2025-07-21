@@ -60,6 +60,66 @@ func (i *InputPollOption) WithTextEntities(textEntities ...MessageEntity) *Input
 	return i
 }
 
+// WithID adds ID parameter
+func (i *InputChecklistTask) WithID(iD int) *InputChecklistTask {
+	i.ID = iD
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputChecklistTask) WithText(text string) *InputChecklistTask {
+	i.Text = text
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputChecklistTask) WithParseMode(parseMode string) *InputChecklistTask {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithTextEntities adds text entities parameter
+func (i *InputChecklistTask) WithTextEntities(textEntities ...MessageEntity) *InputChecklistTask {
+	i.TextEntities = textEntities
+	return i
+}
+
+// WithTitle adds title parameter
+func (i *InputChecklist) WithTitle(title string) *InputChecklist {
+	i.Title = title
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputChecklist) WithParseMode(parseMode string) *InputChecklist {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithTitleEntities adds title entities parameter
+func (i *InputChecklist) WithTitleEntities(titleEntities ...MessageEntity) *InputChecklist {
+	i.TitleEntities = titleEntities
+	return i
+}
+
+// WithTasks adds tasks parameter
+func (i *InputChecklist) WithTasks(tasks ...InputChecklistTask) *InputChecklist {
+	i.Tasks = tasks
+	return i
+}
+
+// WithOthersCanAddTasks adds others can add tasks parameter
+func (i *InputChecklist) WithOthersCanAddTasks() *InputChecklist {
+	i.OthersCanAddTasks = true
+	return i
+}
+
+// WithOthersCanMarkTasksAsDone adds others can mark tasks as done parameter
+func (i *InputChecklist) WithOthersCanMarkTasksAsDone() *InputChecklist {
+	i.OthersCanMarkTasksAsDone = true
+	return i
+}
+
 // WithKeyboard adds keyboard parameter
 func (r *ReplyKeyboardMarkup) WithKeyboard(keyboard ...[]KeyboardButton) *ReplyKeyboardMarkup {
 	r.Keyboard = keyboard

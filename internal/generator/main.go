@@ -98,6 +98,9 @@ var typeStructsSetters = []string{
 
 	"InputStoryContentPhoto",
 	"InputStoryContentVideo",
+
+	"InputChecklist",
+	"InputChecklistTask",
 }
 
 var typeStructsNoPointerSetters = []string{

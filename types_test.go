@@ -774,6 +774,9 @@ func TestTypesConstants(t *testing.T) {
 			ReactionEmoji, ReactionCustomEmoji, ReactionPaid,
 		},
 		{
+			GiftOriginUpgrade, GiftOriginTransfer, GiftOriginResale,
+		},
+		{
 			GiftTypeRegular, GiftTypeUnique,
 		},
 		{

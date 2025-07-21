@@ -40,6 +40,40 @@ func TestInputPollOption_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestInputChecklistTask_Setters(t *testing.T) {
+	i := (&InputChecklistTask{}).
+		WithID(1).
+		WithText("Text").
+		WithParseMode("ParseMode").
+		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...)
+
+	assert.Equal(t, &InputChecklistTask{
+		ID:           1,
+		Text:         "Text",
+		ParseMode:    "ParseMode",
+		TextEntities: []MessageEntity{{Type: "TextEntities"}},
+	}, i)
+}
+
+func TestInputChecklist_Setters(t *testing.T) {
+	i := (&InputChecklist{}).
+		WithTitle("Title").
+		WithParseMode("ParseMode").
+		WithTitleEntities([]MessageEntity{{Type: "TitleEntities"}}...).
+		WithTasks([]InputChecklistTask{{}}...).
+		WithOthersCanAddTasks().
+		WithOthersCanMarkTasksAsDone()
+
+	assert.Equal(t, &InputChecklist{
+		Title:                    "Title",
+		ParseMode:                "ParseMode",
+		TitleEntities:            []MessageEntity{{Type: "TitleEntities"}},
+		Tasks:                    []InputChecklistTask{{}},
+		OthersCanAddTasks:        true,
+		OthersCanMarkTasksAsDone: true,
+	}, i)
+}
+
 func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 	r := (&ReplyKeyboardMarkup{}).
 		WithKeyboard([][]KeyboardButton{{}}...).

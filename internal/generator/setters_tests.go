@@ -184,6 +184,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputSticker{{}}"
 	case "InputSticker":
 		return "InputSticker{Sticker: testInputFile}"
+	case "[]InputChecklistTask":
+		return "[]InputChecklistTask{{}}"
 	case "InputProfilePhoto":
 		return "&InputProfilePhotoAnimated{Animation: testInputFile}"
 	case "InputStoryContent":
