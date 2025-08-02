@@ -51,10 +51,11 @@ func main() {
 		stopCtx, stopCancel := context.WithTimeout(context.Background(), time.Second*20)
 		defer stopCancel()
 
+	loop:
 		for len(updates) > 0 {
 			select {
 			case <-stopCtx.Done():
-				break
+				break loop
 			case <-time.After(time.Microsecond * 100):
 				// Continue
 			}
