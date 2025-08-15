@@ -49,8 +49,8 @@ func EditMessageMedia(chatID telego.ChatID, messageID int, media telego.InputMed
 	}
 }
 
-// EditMessageReplayMarkup creates [telego.EditMessageReplyMarkupParams] with required parameters
-func EditMessageReplayMarkup(
+// EditMessageReplyMarkup creates [telego.EditMessageReplyMarkupParams] with required parameters
+func EditMessageReplyMarkup(
 	chatID telego.ChatID, messageID int, markup *telego.InlineKeyboardMarkup,
 ) *telego.EditMessageReplyMarkupParams {
 	return &telego.EditMessageReplyMarkupParams{
