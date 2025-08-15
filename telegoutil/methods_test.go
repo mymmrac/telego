@@ -150,7 +150,7 @@ func TestEditMessageMedia(t *testing.T) {
 
 func TestEditMessageReplyMarkup(t *testing.T) {
 	markup := &telego.InlineKeyboardMarkup{}
-	m := EditMessageReplayMarkup(id1, number1, markup)
+	m := EditMessageReplyMarkup(id1, number1, markup)
 	assert.Equal(t, id1, m.ChatID)
 	assert.Equal(t, number1, m.MessageID)
 	assert.Equal(t, markup, m.ReplyMarkup)
