@@ -5,9 +5,9 @@ go 1.24.3
 require (
 	github.com/bytedance/sonic v1.14.0
 	github.com/stretchr/testify v1.10.0
-	github.com/valyala/fasthttp v1.64.0
+	github.com/valyala/fasthttp v1.65.0
 	github.com/valyala/fastjson v1.6.4
-	go.uber.org/mock v0.5.2
+	go.uber.org/mock v0.6.0
 )
 
 // Temporary fix for issue https://github.com/goccy/go-json/issues/405
