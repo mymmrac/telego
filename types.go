@@ -283,6 +283,9 @@ type Chat struct {
 	// IsForum - Optional. True, if the supergroup chat is a forum (has topics
 	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
 	IsForum bool `json:"is_forum,omitempty"`
+
+	// IsDirectMessages - Optional. True, if the chat is the direct messages chat of a channel
+	IsDirectMessages bool `json:"is_direct_messages,omitempty"`
 }
 
 // ChatID returns [ChatID] of this chat
@@ -328,6 +331,9 @@ type ChatFullInfo struct {
 	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
 	IsForum bool `json:"is_forum,omitempty"`
 
+	// IsDirectMessages - Optional. True, if the chat is the direct messages chat of a channel
+	IsDirectMessages bool `json:"is_direct_messages,omitempty"`
+
 	// AccentColorID - Identifier of the accent color for the chat name and backgrounds of the chat photo, reply
 	// header, and link preview. See accent colors (https://core.telegram.org/bots/api#accent-colors) for more
 	// details.
@@ -359,6 +365,9 @@ type ChatFullInfo struct {
 
 	// PersonalChat - Optional. For private chats, the personal channel of the user
 	PersonalChat *Chat `json:"personal_chat,omitempty"`
+
+	// ParentChat - Optional. Information about the corresponding channel chat; for direct messages chats only
+	ParentChat *Chat `json:"parent_chat,omitempty"`
 
 	// AvailableReactions - Optional. List of available reactions allowed in the chat. If omitted, then all
 	// emoji reactions (https://core.telegram.org/bots/api#reactiontypeemoji) are allowed.
@@ -523,6 +532,10 @@ type Message struct {
 	// supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopic - Optional. Information about the direct messages chat topic that contains the
+	// message
+	DirectMessagesTopic *DirectMessagesTopic `json:"direct_messages_topic,omitempty"`
+
 	// From - Optional. Sender of the message; may be empty for messages sent to channels. For backward
 	// compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in
 	// non-channel chats
@@ -564,8 +577,8 @@ type Message struct {
 	IsAutomaticForward bool `json:"is_automatic_forward,omitempty"`
 
 	// ReplyToMessage - Optional. For replies in the same chat and message thread, the original message. Note
-	// that the Message object in this field will not contain further reply_to_message fields even if it itself is a
-	// reply.
+	// that the Message (https://core.telegram.org/bots/api#message) object in this field will not contain further
+	// reply_to_message fields even if it itself is a reply.
 	ReplyToMessage *Message `json:"reply_to_message,omitempty"`
 
 	// ExternalReply - Optional. Information about the message that is being replied to, which may come from
@@ -577,6 +590,9 @@ type Message struct {
 
 	// ReplyToStory - Optional. For replies to a story, the original story
 	ReplyToStory *Story `json:"reply_to_story,omitempty"`
+
+	// ReplyToChecklistTaskID - Optional. Identifier of the specific checklist task that is being replied to
+	ReplyToChecklistTaskID int `json:"reply_to_checklist_task_id,omitempty"`
 
 	// ViaBot - Optional. Bot through which the message was sent
 	ViaBot *User `json:"via_bot,omitempty"`
@@ -590,6 +606,10 @@ type Message struct {
 	// IsFromOffline - Optional. True, if the message was sent by an implicit action, for example, as an away or
 	// a greeting business message, or as a scheduled message
 	IsFromOffline bool `json:"is_from_offline,omitempty"`
+
+	// IsPaidPost - Optional. True, if the message is a paid post. Note that such posts must not be deleted for
+	// 24 hours to receive the payment and can't be edited.
+	IsPaidPost bool `json:"is_paid_post,omitempty"`
 
 	// MediaGroupID - Optional. The unique identifier of a media message group this message belongs to
 	MediaGroupID string `json:"media_group_id,omitempty"`
@@ -612,6 +632,11 @@ type Message struct {
 	// LinkPreviewOptions - Optional. Options used for link preview generation for the message, if it is a text
 	// message and link preview options were changed
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
+
+	// SuggestedPostInfo - Optional. Information about suggested post parameters if the message is a suggested
+	// post in a channel direct messages chat. If the message is an approved or declined suggested post, then it
+	// can't be edited.
+	SuggestedPostInfo *SuggestedPostInfo `json:"suggested_post_info,omitempty"`
 
 	// EffectID - Optional. Unique identifier of the message effect added to the message
 	EffectID string `json:"effect_id,omitempty"`
@@ -730,8 +755,9 @@ type Message struct {
 	// integer or double-precision float type are safe for storing this identifier.
 	MigrateFromChatID int64 `json:"migrate_from_chat_id,omitempty"`
 
-	// PinnedMessage - Optional. Specified message was pinned. Note that the Message object in this field will
-	// not contain further reply_to_message fields even if it itself is a reply.
+	// PinnedMessage - Optional. Specified message was pinned. Note that the Message
+	// (https://core.telegram.org/bots/api#message) object in this field will not contain further reply_to_message
+	// fields even if it itself is a reply.
 	PinnedMessage MaybeInaccessibleMessage `json:"pinned_message,omitempty"`
 
 	// Invoice - Optional. Message is an invoice for a payment (https://core.telegram.org/bots/api#payments),
@@ -822,6 +848,21 @@ type Message struct {
 
 	// PaidMessagePriceChanged - Optional. Service message: the price for paid messages has changed in the chat
 	PaidMessagePriceChanged *PaidMessagePriceChanged `json:"paid_message_price_changed,omitempty"`
+
+	// SuggestedPostApproved - Optional. Service message: a suggested post was approved
+	SuggestedPostApproved *SuggestedPostApproved `json:"suggested_post_approved,omitempty"`
+
+	// SuggestedPostApprovalFailed - Optional. Service message: approval of a suggested post has failed
+	SuggestedPostApprovalFailed *SuggestedPostApprovalFailed `json:"suggested_post_approval_failed,omitempty"`
+
+	// SuggestedPostDeclined - Optional. Service message: a suggested post was declined
+	SuggestedPostDeclined *SuggestedPostDeclined `json:"suggested_post_declined,omitempty"`
+
+	// SuggestedPostPaid - Optional. Service message: payment for a suggested post was received
+	SuggestedPostPaid *SuggestedPostPaid `json:"suggested_post_paid,omitempty"`
+
+	// SuggestedPostRefunded - Optional. Service message: payment for a suggested post was refunded
+	SuggestedPostRefunded *SuggestedPostRefunded `json:"suggested_post_refunded,omitempty"`
 
 	// VideoChatScheduled - Optional. Service message: video chat scheduled
 	VideoChatScheduled *VideoChatScheduled `json:"video_chat_scheduled,omitempty"`
@@ -1206,7 +1247,7 @@ type ReplyParameters struct {
 
 	// ChatID - Optional. If the message to be replied to is from a different chat, unique identifier for the
 	// chat or username of the channel (in the format @channel_username). Not supported for messages sent on behalf
-	// of a business account.
+	// of a business account and messages from channel direct messages chats.
 	ChatID ChatID `json:"chat_id,omitempty"`
 
 	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
@@ -1230,6 +1271,9 @@ type ReplyParameters struct {
 
 	// QuotePosition - Optional. Position of the quote in the original message in UTF-16 code units
 	QuotePosition int `json:"quote_position,omitempty"`
+
+	// ChecklistTaskID - Optional. Identifier of the specific checklist task to be replied to
+	ChecklistTaskID int `json:"checklist_task_id,omitempty"`
 }
 
 // MessageOrigin - This object describes the origin of a message. It can be one of
@@ -1910,8 +1954,8 @@ type InputChecklist struct {
 // ChecklistTasksDone - Describes a service message about checklist tasks marked as done or not done.
 type ChecklistTasksDone struct {
 	// ChecklistMessage - Optional. Message containing the checklist whose tasks were marked as done or not
-	// done. Note that the Message object in this field will not contain the reply_to_message field even if it
-	// itself is a reply.
+	// done. Note that the Message (https://core.telegram.org/bots/api#message) object in this field will not
+	// contain the reply_to_message field even if it itself is a reply.
 	ChecklistMessage *Message `json:"checklist_message,omitempty"`
 
 	// MarkedAsDoneTaskIDs - Optional. Identifiers of the tasks that were marked as done
@@ -1924,7 +1968,8 @@ type ChecklistTasksDone struct {
 // ChecklistTasksAdded - Describes a service message about tasks added to a checklist.
 type ChecklistTasksAdded struct {
 	// ChecklistMessage - Optional. Message containing the checklist to which the tasks were added. Note that
-	// the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+	// the Message (https://core.telegram.org/bots/api#message) object in this field will not contain the
+	// reply_to_message field even if it itself is a reply.
 	ChecklistMessage *Message `json:"checklist_message,omitempty"`
 
 	// Tasks - List of tasks added to the checklist
@@ -2445,6 +2490,76 @@ type DirectMessagePriceChanged struct {
 	DirectMessageStarCount int `json:"direct_message_star_count,omitempty"`
 }
 
+// SuggestedPostApproved - Describes a service message about the approval of a suggested post.
+type SuggestedPostApproved struct {
+	// SuggestedPostMessage - Optional. Message containing the suggested post. Note that the Message
+	// (https://core.telegram.org/bots/api#message) object in this field will not contain the reply_to_message field
+	// even if it itself is a reply.
+	SuggestedPostMessage *Message `json:"suggested_post_message,omitempty"`
+
+	// Price - Optional. Amount paid for the post
+	Price *SuggestedPostPrice `json:"price,omitempty"`
+
+	// SendDate - Date when the post will be published
+	SendDate int64 `json:"send_date"`
+}
+
+// SuggestedPostApprovalFailed - Describes a service message about the failed approval of a suggested post.
+// Currently, only caused by insufficient user funds at the time of approval.
+type SuggestedPostApprovalFailed struct {
+	// SuggestedPostMessage - Optional. Message containing the suggested post whose approval has failed. Note
+	// that the Message (https://core.telegram.org/bots/api#message) object in this field will not contain the
+	// reply_to_message field even if it itself is a reply.
+	SuggestedPostMessage *Message `json:"suggested_post_message,omitempty"`
+
+	// Price - Expected price of the post
+	Price SuggestedPostPrice `json:"price"`
+}
+
+// SuggestedPostDeclined - Describes a service message about the rejection of a suggested post.
+type SuggestedPostDeclined struct {
+	// SuggestedPostMessage - Optional. Message containing the suggested post. Note that the Message
+	// (https://core.telegram.org/bots/api#message) object in this field will not contain the reply_to_message field
+	// even if it itself is a reply.
+	SuggestedPostMessage *Message `json:"suggested_post_message,omitempty"`
+
+	// Comment - Optional. Comment with which the post was declined
+	Comment string `json:"comment,omitempty"`
+}
+
+// SuggestedPostPaid - Describes a service message about a successful payment for a suggested post.
+type SuggestedPostPaid struct {
+	// SuggestedPostMessage - Optional. Message containing the suggested post. Note that the Message
+	// (https://core.telegram.org/bots/api#message) object in this field will not contain the reply_to_message field
+	// even if it itself is a reply.
+	SuggestedPostMessage *Message `json:"suggested_post_message,omitempty"`
+
+	// Currency - Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or
+	// “TON” for toncoins
+	Currency string `json:"currency"`
+
+	// Amount - Optional. The amount of the currency that was received by the channel in nanotoncoins; for
+	// payments in toncoins only
+	Amount int `json:"amount,omitempty"`
+
+	// StarAmount - Optional. The amount of Telegram Stars that was received by the channel; for payments in
+	// Telegram Stars only
+	StarAmount *StarAmount `json:"star_amount,omitempty"`
+}
+
+// SuggestedPostRefunded - Describes a service message about a payment refund for a suggested post.
+type SuggestedPostRefunded struct {
+	// SuggestedPostMessage - Optional. Message containing the suggested post. Note that the Message
+	// (https://core.telegram.org/bots/api#message) object in this field will not contain the reply_to_message field
+	// even if it itself is a reply.
+	SuggestedPostMessage *Message `json:"suggested_post_message,omitempty"`
+
+	// Reason - Reason for the refund. Currently, one of “post_deleted” if the post was deleted within 24
+	// hours of being posted or removed from scheduled messages without being posted, or “payment_refunded” if
+	// the payer refunded their payment.
+	Reason string `json:"reason"`
+}
+
 // GiveawayCreated - This object represents a service message about the creation of a scheduled giveaway.
 type GiveawayCreated struct {
 	// PrizeStarCount - Optional. The number of Telegram Stars to be split between giveaway winners; for
@@ -2568,6 +2683,52 @@ type LinkPreviewOptions struct {
 	// ShowAboveText - Optional. True, if the link preview must be shown above the message text; otherwise, the
 	// link preview will be shown below the message text
 	ShowAboveText bool `json:"show_above_text,omitempty"`
+}
+
+// SuggestedPostPrice - Describes the price of a suggested post.
+type SuggestedPostPrice struct {
+	// Currency - Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram
+	// Stars or “TON” for toncoins
+	Currency string `json:"currency"`
+
+	// Amount - The amount of the currency that will be paid for the post in the smallest units of the currency,
+	// i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and
+	// price in nanotoncoins must be between 10000000 and 10000000000000.
+	Amount int `json:"amount"`
+}
+
+// SuggestedPostInfo - Contains information about a suggested post.
+type SuggestedPostInfo struct {
+	// State - State of the suggested post. Currently, it can be one of “pending”, “approved”,
+	// “declined”.
+	State string `json:"state"`
+
+	// Price - Optional. Proposed price of the post. If the field is omitted, then the post is unpaid.
+	Price *SuggestedPostPrice `json:"price,omitempty"`
+
+	// SendDate - Optional. Proposed send date of the post. If the field is omitted, then the post can be
+	// published at any time within 30 days at the sole discretion of the user or administrator who approves it.
+	SendDate int64 `json:"send_date,omitempty"`
+}
+
+// SuggestedPostParameters - Contains parameters of a post that is being suggested by the bot.
+type SuggestedPostParameters struct {
+	// Price - Optional. Proposed price for the post. If the field is omitted, then the post is unpaid.
+	Price *SuggestedPostPrice `json:"price,omitempty"`
+
+	// SendDate - Optional. Proposed send date of the post. If specified, then the date must be between 300
+	// second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published
+	// at any time within 30 days at the sole discretion of the user who approves it.
+	SendDate int64 `json:"send_date,omitempty"`
+}
+
+// DirectMessagesTopic - Describes a topic of a direct messages chat.
+type DirectMessagesTopic struct {
+	// TopicID - Unique identifier of the topic
+	TopicID int `json:"topic_id"`
+
+	// User - Optional. Information about the user that created the topic. Currently, it is always present
+	User *User `json:"user,omitempty"`
 }
 
 // UserProfilePhotos - This object represent a user's profile pictures.
@@ -2860,21 +3021,22 @@ type InlineKeyboardButton struct {
 
 	// SwitchInlineQuery - Optional. If set, pressing the button will prompt the user to select one of their
 	// chats, open that chat and insert the bot's username and the specified inline query in the input field. May be
-	// empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a
-	// Telegram Business account.
+	// empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel
+	// direct messages chats and on behalf of a Telegram Business account.
 	SwitchInlineQuery *string `json:"switch_inline_query,omitempty"`
 
 	// SwitchInlineQueryCurrentChat - Optional. If set, pressing the button will insert the bot's username and
 	// the specified inline query in the current chat's input field. May be empty, in which case only the bot's
 	// username will be inserted.
 	// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting
-	// something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram
-	// Business account.
+	// something from multiple options. Not supported in channels and for messages sent in channel direct messages
+	// chats and on behalf of a Telegram Business account.
 	SwitchInlineQueryCurrentChat *string `json:"switch_inline_query_current_chat,omitempty"`
 
 	// SwitchInlineQueryChosenChat - Optional. If set, pressing the button will prompt the user to select one of
 	// their chats of the specified type, open that chat and insert the bot's username and the specified inline
-	// query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
+	// query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a
+	// Telegram Business account.
 	SwitchInlineQueryChosenChat *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`
 
 	// CopyText - Optional. Description of the button that copies the specified text to the clipboard.
@@ -3155,6 +3317,10 @@ type ChatAdministratorRights struct {
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
 	// topics; for supergroups only
 	CanManageTopics bool `json:"can_manage_topics,omitempty"`
+
+	// CanManageDirectMessages - Optional. True, if the administrator can manage direct messages of the channel
+	// and decline suggested posts; for channels only
+	CanManageDirectMessages bool `json:"can_manage_direct_messages,omitempty"`
 }
 
 // ChatMemberUpdated - This object represents changes in the status of a chat member.
@@ -3425,6 +3591,10 @@ type ChatMemberAdministrator struct {
 	// CanManageTopics - Optional. True, if the user is allowed to create, rename, close, and reopen forum
 	// topics; for supergroups only
 	CanManageTopics bool `json:"can_manage_topics,omitempty"`
+
+	// CanManageDirectMessages - Optional. True, if the administrator can manage direct messages of the channel
+	// and decline suggested posts; for channels only
+	CanManageDirectMessages bool `json:"can_manage_direct_messages,omitempty"`
 
 	// CustomTitle - Optional. Custom title for this user
 	CustomTitle string `json:"custom_title,omitempty"`
@@ -4172,6 +4342,9 @@ type Gift struct {
 	// RemainingCount - Optional. The number of remaining gifts of this type that can be sent; for limited gifts
 	// only
 	RemainingCount int `json:"remaining_count,omitempty"`
+
+	// PublisherChat - Optional. Information about the chat that published the gift
+	PublisherChat *Chat `json:"publisher_chat,omitempty"`
 }
 
 // Gifts - This object represent a list of gifts.
@@ -4250,6 +4423,9 @@ type UniqueGift struct {
 
 	// Backdrop - Backdrop of the gift
 	Backdrop UniqueGiftBackdrop `json:"backdrop"`
+
+	// PublisherChat - Optional. Information about the chat that published the gift
+	PublisherChat *Chat `json:"publisher_chat,omitempty"`
 }
 
 // GiftInfo - Describes a service message about a regular gift that was sent or received.
@@ -4651,7 +4827,7 @@ type BotCommandScopeChat struct {
 	Type string `json:"type"`
 
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroup_username)
+	// @supergroup_username). Channel direct messages chats and channel chats aren't supported.
 	ChatID ChatID `json:"chat_id"`
 }
 
@@ -4670,7 +4846,7 @@ type BotCommandScopeChatAdministrators struct {
 	Type string `json:"type"`
 
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroup_username)
+	// @supergroup_username). Channel direct messages chats and channel chats aren't supported.
 	ChatID ChatID `json:"chat_id"`
 }
 
@@ -4688,7 +4864,7 @@ type BotCommandScopeChatMember struct {
 	Type string `json:"type"`
 
 	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @supergroup_username)
+	// @supergroup_username). Channel direct messages chats and channel chats aren't supported.
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Unique identifier of the target user

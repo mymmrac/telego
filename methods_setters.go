@@ -90,6 +90,12 @@ func (p *SendMessageParams) WithMessageThreadID(messageThreadID int) *SendMessag
 	return p
 }
 
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendMessageParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
 // WithText adds text parameter
 func (p *SendMessageParams) WithText(text string) *SendMessageParams {
 	p.Text = text
@@ -138,6 +144,13 @@ func (p *SendMessageParams) WithMessageEffectID(messageEffectID string) *SendMes
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendMessageParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendMessageParams) WithReplyParameters(replyParameters *ReplyParameters) *SendMessageParams {
 	p.ReplyParameters = replyParameters
@@ -159,6 +172,12 @@ func (p *ForwardMessageParams) WithChatID(chatID ChatID) *ForwardMessageParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *ForwardMessageParams) WithMessageThreadID(messageThreadID int) *ForwardMessageParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *ForwardMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int) *ForwardMessageParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -186,6 +205,13 @@ func (p *ForwardMessageParams) WithProtectContent() *ForwardMessageParams {
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *ForwardMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *ForwardMessageParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithMessageID adds message ID parameter
 func (p *ForwardMessageParams) WithMessageID(messageID int) *ForwardMessageParams {
 	p.MessageID = messageID
@@ -201,6 +227,12 @@ func (p *ForwardMessagesParams) WithChatID(chatID ChatID) *ForwardMessagesParams
 // WithMessageThreadID adds message thread ID parameter
 func (p *ForwardMessagesParams) WithMessageThreadID(messageThreadID int) *ForwardMessagesParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *ForwardMessagesParams) WithDirectMessagesTopicID(directMessagesTopicID int) *ForwardMessagesParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -237,6 +269,12 @@ func (p *CopyMessageParams) WithChatID(chatID ChatID) *CopyMessageParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *CopyMessageParams) WithMessageThreadID(messageThreadID int) *CopyMessageParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *CopyMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int) *CopyMessageParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -300,6 +338,13 @@ func (p *CopyMessageParams) WithAllowPaidBroadcast() *CopyMessageParams {
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *CopyMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *CopyMessageParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *CopyMessageParams) WithReplyParameters(replyParameters *ReplyParameters) *CopyMessageParams {
 	p.ReplyParameters = replyParameters
@@ -321,6 +366,12 @@ func (p *CopyMessagesParams) WithChatID(chatID ChatID) *CopyMessagesParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *CopyMessagesParams) WithMessageThreadID(messageThreadID int) *CopyMessagesParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *CopyMessagesParams) WithDirectMessagesTopicID(directMessagesTopicID int) *CopyMessagesParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -369,6 +420,12 @@ func (p *SendPhotoParams) WithChatID(chatID ChatID) *SendPhotoParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendPhotoParams) WithMessageThreadID(messageThreadID int) *SendPhotoParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendPhotoParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendPhotoParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -432,6 +489,13 @@ func (p *SendPhotoParams) WithMessageEffectID(messageEffectID string) *SendPhoto
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendPhotoParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendPhotoParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendPhotoParams) WithReplyParameters(replyParameters *ReplyParameters) *SendPhotoParams {
 	p.ReplyParameters = replyParameters
@@ -459,6 +523,12 @@ func (p *SendAudioParams) WithChatID(chatID ChatID) *SendAudioParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendAudioParams) WithMessageThreadID(messageThreadID int) *SendAudioParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendAudioParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendAudioParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -534,6 +604,13 @@ func (p *SendAudioParams) WithMessageEffectID(messageEffectID string) *SendAudio
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendAudioParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendAudioParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendAudioParams) WithReplyParameters(replyParameters *ReplyParameters) *SendAudioParams {
 	p.ReplyParameters = replyParameters
@@ -561,6 +638,12 @@ func (p *SendDocumentParams) WithChatID(chatID ChatID) *SendDocumentParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendDocumentParams) WithMessageThreadID(messageThreadID int) *SendDocumentParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendDocumentParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendDocumentParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -624,6 +707,13 @@ func (p *SendDocumentParams) WithMessageEffectID(messageEffectID string) *SendDo
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendDocumentParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendDocumentParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendDocumentParams) WithReplyParameters(replyParameters *ReplyParameters) *SendDocumentParams {
 	p.ReplyParameters = replyParameters
@@ -651,6 +741,12 @@ func (p *SendVideoParams) WithChatID(chatID ChatID) *SendVideoParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendVideoParams) WithMessageThreadID(messageThreadID int) *SendVideoParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendVideoParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVideoParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -756,6 +852,13 @@ func (p *SendVideoParams) WithMessageEffectID(messageEffectID string) *SendVideo
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendVideoParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendVideoParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendVideoParams) WithReplyParameters(replyParameters *ReplyParameters) *SendVideoParams {
 	p.ReplyParameters = replyParameters
@@ -783,6 +886,12 @@ func (p *SendAnimationParams) WithChatID(chatID ChatID) *SendAnimationParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendAnimationParams) WithMessageThreadID(messageThreadID int) *SendAnimationParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendAnimationParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendAnimationParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -870,6 +979,13 @@ func (p *SendAnimationParams) WithMessageEffectID(messageEffectID string) *SendA
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendAnimationParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendAnimationParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendAnimationParams) WithReplyParameters(replyParameters *ReplyParameters) *SendAnimationParams {
 	p.ReplyParameters = replyParameters
@@ -897,6 +1013,12 @@ func (p *SendVoiceParams) WithChatID(chatID ChatID) *SendVoiceParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendVoiceParams) WithMessageThreadID(messageThreadID int) *SendVoiceParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendVoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVoiceParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -954,6 +1076,13 @@ func (p *SendVoiceParams) WithMessageEffectID(messageEffectID string) *SendVoice
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendVoiceParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendVoiceParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendVoiceParams) WithReplyParameters(replyParameters *ReplyParameters) *SendVoiceParams {
 	p.ReplyParameters = replyParameters
@@ -981,6 +1110,12 @@ func (p *SendVideoNoteParams) WithChatID(chatID ChatID) *SendVideoNoteParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendVideoNoteParams) WithMessageThreadID(messageThreadID int) *SendVideoNoteParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendVideoNoteParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVideoNoteParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -1032,6 +1167,13 @@ func (p *SendVideoNoteParams) WithMessageEffectID(messageEffectID string) *SendV
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendVideoNoteParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendVideoNoteParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendVideoNoteParams) WithReplyParameters(replyParameters *ReplyParameters) *SendVideoNoteParams {
 	p.ReplyParameters = replyParameters
@@ -1053,6 +1195,18 @@ func (p *SendPaidMediaParams) WithBusinessConnectionID(businessConnectionID stri
 // WithChatID adds chat ID parameter
 func (p *SendPaidMediaParams) WithChatID(chatID ChatID) *SendPaidMediaParams {
 	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendPaidMediaParams) WithMessageThreadID(messageThreadID int) *SendPaidMediaParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendPaidMediaParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendPaidMediaParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -1116,6 +1270,13 @@ func (p *SendPaidMediaParams) WithAllowPaidBroadcast() *SendPaidMediaParams {
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendPaidMediaParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendPaidMediaParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendPaidMediaParams) WithReplyParameters(replyParameters *ReplyParameters) *SendPaidMediaParams {
 	p.ReplyParameters = replyParameters
@@ -1143,6 +1304,12 @@ func (p *SendMediaGroupParams) WithChatID(chatID ChatID) *SendMediaGroupParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendMediaGroupParams) WithMessageThreadID(messageThreadID int) *SendMediaGroupParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendMediaGroupParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendMediaGroupParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -1197,6 +1364,12 @@ func (p *SendLocationParams) WithChatID(chatID ChatID) *SendLocationParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendLocationParams) WithMessageThreadID(messageThreadID int) *SendLocationParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendLocationParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendLocationParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -1260,6 +1433,13 @@ func (p *SendLocationParams) WithMessageEffectID(messageEffectID string) *SendLo
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendLocationParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendLocationParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendLocationParams) WithReplyParameters(replyParameters *ReplyParameters) *SendLocationParams {
 	p.ReplyParameters = replyParameters
@@ -1287,6 +1467,12 @@ func (p *SendVenueParams) WithChatID(chatID ChatID) *SendVenueParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendVenueParams) WithMessageThreadID(messageThreadID int) *SendVenueParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendVenueParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVenueParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -1362,6 +1548,13 @@ func (p *SendVenueParams) WithMessageEffectID(messageEffectID string) *SendVenue
 	return p
 }
 
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendVenueParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendVenueParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
 // WithReplyParameters adds reply parameters parameter
 func (p *SendVenueParams) WithReplyParameters(replyParameters *ReplyParameters) *SendVenueParams {
 	p.ReplyParameters = replyParameters
@@ -1389,6 +1582,12 @@ func (p *SendContactParams) WithChatID(chatID ChatID) *SendContactParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendContactParams) WithMessageThreadID(messageThreadID int) *SendContactParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendContactParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendContactParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -1437,6 +1636,13 @@ func (p *SendContactParams) WithAllowPaidBroadcast() *SendContactParams {
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendContactParams) WithMessageEffectID(messageEffectID string) *SendContactParams {
 	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendContactParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendContactParams {
+	p.SuggestedPostParameters = suggestedPostParameters
 	return p
 }
 
@@ -1656,6 +1862,12 @@ func (p *SendDiceParams) WithMessageThreadID(messageThreadID int) *SendDiceParam
 	return p
 }
 
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendDiceParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendDiceParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
 // WithEmoji adds emoji parameter
 func (p *SendDiceParams) WithEmoji(emoji string) *SendDiceParams {
 	p.Emoji = emoji
@@ -1683,6 +1895,12 @@ func (p *SendDiceParams) WithAllowPaidBroadcast() *SendDiceParams {
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendDiceParams) WithMessageEffectID(messageEffectID string) *SendDiceParams {
 	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendDiceParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters) *SendDiceParams {
+	p.SuggestedPostParameters = suggestedPostParameters
 	return p
 }
 
@@ -1961,6 +2179,12 @@ func (p *PromoteChatMemberParams) WithCanPinMessages(canPinMessages bool) *Promo
 // WithCanManageTopics adds can manage topics parameter
 func (p *PromoteChatMemberParams) WithCanManageTopics(canManageTopics bool) *PromoteChatMemberParams {
 	p.CanManageTopics = &canManageTopics
+	return p
+}
+
+// WithCanManageDirectMessages adds can manage direct messages parameter
+func (p *PromoteChatMemberParams) WithCanManageDirectMessages(canManageDirectMessages bool) *PromoteChatMemberParams {
+	p.CanManageDirectMessages = &canManageDirectMessages
 	return p
 }
 
@@ -2641,362 +2865,6 @@ func (p *GetMyDefaultAdministratorRightsParams) WithForChannels() *GetMyDefaultA
 	return p
 }
 
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageTextParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageTextParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageTextParams) WithChatID(chatID ChatID) *EditMessageTextParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageTextParams) WithMessageID(messageID int) *EditMessageTextParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *EditMessageTextParams) WithInlineMessageID(inlineMessageID string) *EditMessageTextParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithText adds text parameter
-func (p *EditMessageTextParams) WithText(text string) *EditMessageTextParams {
-	p.Text = text
-	return p
-}
-
-// WithParseMode adds parse mode parameter
-func (p *EditMessageTextParams) WithParseMode(parseMode string) *EditMessageTextParams {
-	p.ParseMode = parseMode
-	return p
-}
-
-// WithEntities adds entities parameter
-func (p *EditMessageTextParams) WithEntities(entities ...MessageEntity) *EditMessageTextParams {
-	p.Entities = entities
-	return p
-}
-
-// WithLinkPreviewOptions adds link preview options parameter
-func (p *EditMessageTextParams) WithLinkPreviewOptions(linkPreviewOptions *LinkPreviewOptions) *EditMessageTextParams {
-	p.LinkPreviewOptions = linkPreviewOptions
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageTextParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageTextParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageCaptionParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageCaptionParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageCaptionParams) WithChatID(chatID ChatID) *EditMessageCaptionParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageCaptionParams) WithMessageID(messageID int) *EditMessageCaptionParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *EditMessageCaptionParams) WithInlineMessageID(inlineMessageID string) *EditMessageCaptionParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithCaption adds caption parameter
-func (p *EditMessageCaptionParams) WithCaption(caption string) *EditMessageCaptionParams {
-	p.Caption = caption
-	return p
-}
-
-// WithParseMode adds parse mode parameter
-func (p *EditMessageCaptionParams) WithParseMode(parseMode string) *EditMessageCaptionParams {
-	p.ParseMode = parseMode
-	return p
-}
-
-// WithCaptionEntities adds caption entities parameter
-func (p *EditMessageCaptionParams) WithCaptionEntities(captionEntities ...MessageEntity) *EditMessageCaptionParams {
-	p.CaptionEntities = captionEntities
-	return p
-}
-
-// WithShowCaptionAboveMedia adds show caption above media parameter
-func (p *EditMessageCaptionParams) WithShowCaptionAboveMedia() *EditMessageCaptionParams {
-	p.ShowCaptionAboveMedia = true
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageCaptionParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageCaptionParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageMediaParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageMediaParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageMediaParams) WithChatID(chatID ChatID) *EditMessageMediaParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageMediaParams) WithMessageID(messageID int) *EditMessageMediaParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *EditMessageMediaParams) WithInlineMessageID(inlineMessageID string) *EditMessageMediaParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithMedia adds media parameter
-func (p *EditMessageMediaParams) WithMedia(media InputMedia) *EditMessageMediaParams {
-	p.Media = media
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageMediaParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
-) *EditMessageLiveLocationParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageLiveLocationParams) WithChatID(chatID ChatID) *EditMessageLiveLocationParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageLiveLocationParams) WithMessageID(messageID int) *EditMessageLiveLocationParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *EditMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *EditMessageLiveLocationParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithLatitude adds latitude parameter
-func (p *EditMessageLiveLocationParams) WithLatitude(latitude float64) *EditMessageLiveLocationParams {
-	p.Latitude = latitude
-	return p
-}
-
-// WithLongitude adds longitude parameter
-func (p *EditMessageLiveLocationParams) WithLongitude(longitude float64) *EditMessageLiveLocationParams {
-	p.Longitude = longitude
-	return p
-}
-
-// WithLivePeriod adds live period parameter
-func (p *EditMessageLiveLocationParams) WithLivePeriod(livePeriod int) *EditMessageLiveLocationParams {
-	p.LivePeriod = livePeriod
-	return p
-}
-
-// WithHorizontalAccuracy adds horizontal accuracy parameter
-func (p *EditMessageLiveLocationParams) WithHorizontalAccuracy(horizontalAccuracy float64,
-) *EditMessageLiveLocationParams {
-	p.HorizontalAccuracy = horizontalAccuracy
-	return p
-}
-
-// WithHeading adds heading parameter
-func (p *EditMessageLiveLocationParams) WithHeading(heading int) *EditMessageLiveLocationParams {
-	p.Heading = heading
-	return p
-}
-
-// WithProximityAlertRadius adds proximity alert radius parameter
-func (p *EditMessageLiveLocationParams) WithProximityAlertRadius(proximityAlertRadius int,
-) *EditMessageLiveLocationParams {
-	p.ProximityAlertRadius = proximityAlertRadius
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *EditMessageLiveLocationParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *StopMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
-) *StopMessageLiveLocationParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *StopMessageLiveLocationParams) WithChatID(chatID ChatID) *StopMessageLiveLocationParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *StopMessageLiveLocationParams) WithMessageID(messageID int) *StopMessageLiveLocationParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *StopMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *StopMessageLiveLocationParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *StopMessageLiveLocationParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageChecklistParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageChecklistParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageChecklistParams) WithChatID(chatID int64) *EditMessageChecklistParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageChecklistParams) WithMessageID(messageID int) *EditMessageChecklistParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithChecklist adds checklist parameter
-func (p *EditMessageChecklistParams) WithChecklist(checklist InputChecklist) *EditMessageChecklistParams {
-	p.Checklist = checklist
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageChecklistParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageChecklistParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageReplyMarkupParams) WithBusinessConnectionID(businessConnectionID string,
-) *EditMessageReplyMarkupParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *EditMessageReplyMarkupParams) WithChatID(chatID ChatID) *EditMessageReplyMarkupParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *EditMessageReplyMarkupParams) WithMessageID(messageID int) *EditMessageReplyMarkupParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithInlineMessageID adds inline message ID parameter
-func (p *EditMessageReplyMarkupParams) WithInlineMessageID(inlineMessageID string) *EditMessageReplyMarkupParams {
-	p.InlineMessageID = inlineMessageID
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *EditMessageReplyMarkupParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
-) *EditMessageReplyMarkupParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithBusinessConnectionID adds business connection ID parameter
-func (p *StopPollParams) WithBusinessConnectionID(businessConnectionID string) *StopPollParams {
-	p.BusinessConnectionID = businessConnectionID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *StopPollParams) WithChatID(chatID ChatID) *StopPollParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *StopPollParams) WithMessageID(messageID int) *StopPollParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithReplyMarkup adds reply markup parameter
-func (p *StopPollParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *StopPollParams {
-	p.ReplyMarkup = replyMarkup
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *DeleteMessageParams) WithChatID(chatID ChatID) *DeleteMessageParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageID adds message ID parameter
-func (p *DeleteMessageParams) WithMessageID(messageID int) *DeleteMessageParams {
-	p.MessageID = messageID
-	return p
-}
-
-// WithChatID adds chat ID parameter
-func (p *DeleteMessagesParams) WithChatID(chatID ChatID) *DeleteMessagesParams {
-	p.ChatID = chatID
-	return p
-}
-
-// WithMessageIDs adds message ids parameter
-func (p *DeleteMessagesParams) WithMessageIDs(messageIDs ...int) *DeleteMessagesParams {
-	p.MessageIDs = messageIDs
-	return p
-}
-
 // WithUserID adds user ID parameter
 func (p *SendGiftParams) WithUserID(userID int64) *SendGiftParams {
 	p.UserID = userID
@@ -3484,6 +3352,398 @@ func (p *DeleteStoryParams) WithStoryID(storyID int) *DeleteStoryParams {
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageTextParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageTextParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageTextParams) WithChatID(chatID ChatID) *EditMessageTextParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageTextParams) WithMessageID(messageID int) *EditMessageTextParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageTextParams) WithInlineMessageID(inlineMessageID string) *EditMessageTextParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithText adds text parameter
+func (p *EditMessageTextParams) WithText(text string) *EditMessageTextParams {
+	p.Text = text
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *EditMessageTextParams) WithParseMode(parseMode string) *EditMessageTextParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithEntities adds entities parameter
+func (p *EditMessageTextParams) WithEntities(entities ...MessageEntity) *EditMessageTextParams {
+	p.Entities = entities
+	return p
+}
+
+// WithLinkPreviewOptions adds link preview options parameter
+func (p *EditMessageTextParams) WithLinkPreviewOptions(linkPreviewOptions *LinkPreviewOptions) *EditMessageTextParams {
+	p.LinkPreviewOptions = linkPreviewOptions
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageTextParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageTextParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageCaptionParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageCaptionParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageCaptionParams) WithChatID(chatID ChatID) *EditMessageCaptionParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageCaptionParams) WithMessageID(messageID int) *EditMessageCaptionParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageCaptionParams) WithInlineMessageID(inlineMessageID string) *EditMessageCaptionParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithCaption adds caption parameter
+func (p *EditMessageCaptionParams) WithCaption(caption string) *EditMessageCaptionParams {
+	p.Caption = caption
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *EditMessageCaptionParams) WithParseMode(parseMode string) *EditMessageCaptionParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (p *EditMessageCaptionParams) WithCaptionEntities(captionEntities ...MessageEntity) *EditMessageCaptionParams {
+	p.CaptionEntities = captionEntities
+	return p
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (p *EditMessageCaptionParams) WithShowCaptionAboveMedia() *EditMessageCaptionParams {
+	p.ShowCaptionAboveMedia = true
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageCaptionParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageCaptionParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageMediaParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageMediaParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageMediaParams) WithChatID(chatID ChatID) *EditMessageMediaParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageMediaParams) WithMessageID(messageID int) *EditMessageMediaParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageMediaParams) WithInlineMessageID(inlineMessageID string) *EditMessageMediaParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithMedia adds media parameter
+func (p *EditMessageMediaParams) WithMedia(media InputMedia) *EditMessageMediaParams {
+	p.Media = media
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageMediaParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
+) *EditMessageLiveLocationParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageLiveLocationParams) WithChatID(chatID ChatID) *EditMessageLiveLocationParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageLiveLocationParams) WithMessageID(messageID int) *EditMessageLiveLocationParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *EditMessageLiveLocationParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithLatitude adds latitude parameter
+func (p *EditMessageLiveLocationParams) WithLatitude(latitude float64) *EditMessageLiveLocationParams {
+	p.Latitude = latitude
+	return p
+}
+
+// WithLongitude adds longitude parameter
+func (p *EditMessageLiveLocationParams) WithLongitude(longitude float64) *EditMessageLiveLocationParams {
+	p.Longitude = longitude
+	return p
+}
+
+// WithLivePeriod adds live period parameter
+func (p *EditMessageLiveLocationParams) WithLivePeriod(livePeriod int) *EditMessageLiveLocationParams {
+	p.LivePeriod = livePeriod
+	return p
+}
+
+// WithHorizontalAccuracy adds horizontal accuracy parameter
+func (p *EditMessageLiveLocationParams) WithHorizontalAccuracy(horizontalAccuracy float64,
+) *EditMessageLiveLocationParams {
+	p.HorizontalAccuracy = horizontalAccuracy
+	return p
+}
+
+// WithHeading adds heading parameter
+func (p *EditMessageLiveLocationParams) WithHeading(heading int) *EditMessageLiveLocationParams {
+	p.Heading = heading
+	return p
+}
+
+// WithProximityAlertRadius adds proximity alert radius parameter
+func (p *EditMessageLiveLocationParams) WithProximityAlertRadius(proximityAlertRadius int,
+) *EditMessageLiveLocationParams {
+	p.ProximityAlertRadius = proximityAlertRadius
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditMessageLiveLocationParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *StopMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
+) *StopMessageLiveLocationParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *StopMessageLiveLocationParams) WithChatID(chatID ChatID) *StopMessageLiveLocationParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *StopMessageLiveLocationParams) WithMessageID(messageID int) *StopMessageLiveLocationParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *StopMessageLiveLocationParams) WithInlineMessageID(inlineMessageID string) *StopMessageLiveLocationParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *StopMessageLiveLocationParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageChecklistParams) WithBusinessConnectionID(businessConnectionID string) *EditMessageChecklistParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageChecklistParams) WithChatID(chatID int64) *EditMessageChecklistParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageChecklistParams) WithMessageID(messageID int) *EditMessageChecklistParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithChecklist adds checklist parameter
+func (p *EditMessageChecklistParams) WithChecklist(checklist InputChecklist) *EditMessageChecklistParams {
+	p.Checklist = checklist
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageChecklistParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageChecklistParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *EditMessageReplyMarkupParams) WithBusinessConnectionID(businessConnectionID string,
+) *EditMessageReplyMarkupParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageReplyMarkupParams) WithChatID(chatID ChatID) *EditMessageReplyMarkupParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageReplyMarkupParams) WithMessageID(messageID int) *EditMessageReplyMarkupParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageReplyMarkupParams) WithInlineMessageID(inlineMessageID string) *EditMessageReplyMarkupParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditMessageReplyMarkupParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditMessageReplyMarkupParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *StopPollParams) WithBusinessConnectionID(businessConnectionID string) *StopPollParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *StopPollParams) WithChatID(chatID ChatID) *StopPollParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *StopPollParams) WithMessageID(messageID int) *StopPollParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *StopPollParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *StopPollParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *ApproveSuggestedPostParams) WithChatID(chatID int64) *ApproveSuggestedPostParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *ApproveSuggestedPostParams) WithMessageID(messageID int) *ApproveSuggestedPostParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithSendDate adds send date parameter
+func (p *ApproveSuggestedPostParams) WithSendDate(sendDate int64) *ApproveSuggestedPostParams {
+	p.SendDate = sendDate
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *DeclineSuggestedPostParams) WithChatID(chatID int64) *DeclineSuggestedPostParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *DeclineSuggestedPostParams) WithMessageID(messageID int) *DeclineSuggestedPostParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithComment adds comment parameter
+func (p *DeclineSuggestedPostParams) WithComment(comment string) *DeclineSuggestedPostParams {
+	p.Comment = comment
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *DeleteMessageParams) WithChatID(chatID ChatID) *DeleteMessageParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *DeleteMessageParams) WithMessageID(messageID int) *DeleteMessageParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *DeleteMessagesParams) WithChatID(chatID ChatID) *DeleteMessagesParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageIDs adds message ids parameter
+func (p *DeleteMessagesParams) WithMessageIDs(messageIDs ...int) *DeleteMessagesParams {
+	p.MessageIDs = messageIDs
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
 func (p *SendStickerParams) WithBusinessConnectionID(businessConnectionID string) *SendStickerParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3498,6 +3758,12 @@ func (p *SendStickerParams) WithChatID(chatID ChatID) *SendStickerParams {
 // WithMessageThreadID adds message thread ID parameter
 func (p *SendStickerParams) WithMessageThreadID(messageThreadID int) *SendStickerParams {
 	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendStickerParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendStickerParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
 
@@ -3534,6 +3800,13 @@ func (p *SendStickerParams) WithAllowPaidBroadcast() *SendStickerParams {
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendStickerParams) WithMessageEffectID(messageEffectID string) *SendStickerParams {
 	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendStickerParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendStickerParams {
+	p.SuggestedPostParameters = suggestedPostParameters
 	return p
 }
 
@@ -3862,6 +4135,12 @@ func (p *SendInvoiceParams) WithMessageThreadID(messageThreadID int) *SendInvoic
 	return p
 }
 
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendInvoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendInvoiceParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
 // WithTitle adds title parameter
 func (p *SendInvoiceParams) WithTitle(title string) *SendInvoiceParams {
 	p.Title = title
@@ -4009,6 +4288,13 @@ func (p *SendInvoiceParams) WithAllowPaidBroadcast() *SendInvoiceParams {
 // WithMessageEffectID adds message effect ID parameter
 func (p *SendInvoiceParams) WithMessageEffectID(messageEffectID string) *SendInvoiceParams {
 	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendInvoiceParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendInvoiceParams {
+	p.SuggestedPostParameters = suggestedPostParameters
 	return p
 }
 

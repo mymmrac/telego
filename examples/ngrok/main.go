@@ -69,10 +69,11 @@ func main() {
 		_ = srv.ShutdownWithContext(stopCtx)
 		fmt.Println("Server done")
 
+	loop:
 		for len(updates) > 0 {
 			select {
 			case <-stopCtx.Done():
-				break
+				break loop
 			case <-time.After(time.Microsecond * 100):
 				// Continue
 			}

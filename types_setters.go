@@ -42,6 +42,12 @@ func (r *ReplyParameters) WithQuotePosition(quotePosition int) *ReplyParameters 
 	return r
 }
 
+// WithChecklistTaskID adds checklist task ID parameter
+func (r *ReplyParameters) WithChecklistTaskID(checklistTaskID int) *ReplyParameters {
+	r.ChecklistTaskID = checklistTaskID
+	return r
+}
+
 // WithText adds text parameter
 func (i *InputPollOption) WithText(text string) *InputPollOption {
 	i.Text = text
