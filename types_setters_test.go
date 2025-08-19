@@ -14,7 +14,8 @@ func TestReplyParameters_Setters(t *testing.T) {
 		WithQuote("Quote").
 		WithQuoteParseMode("QuoteParseMode").
 		WithQuoteEntities([]MessageEntity{{Type: "QuoteEntities"}}...).
-		WithQuotePosition(3)
+		WithQuotePosition(3).
+		WithChecklistTaskID(4)
 
 	assert.Equal(t, &ReplyParameters{
 		MessageID:                1,
@@ -24,6 +25,7 @@ func TestReplyParameters_Setters(t *testing.T) {
 		QuoteParseMode:           "QuoteParseMode",
 		QuoteEntities:            []MessageEntity{{Type: "QuoteEntities"}},
 		QuotePosition:            3,
+		ChecklistTaskID:          4,
 	}, r)
 }
 
