@@ -215,6 +215,10 @@ type SendMessageParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Text - Text of the message to be sent, 1-4096 characters after entities parsing
 	Text string `json:"text"`
 
@@ -244,6 +248,11 @@ type SendMessageParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -283,6 +292,10 @@ type ForwardMessageParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// forwarded; required if the message is forwarded to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// FromChatID - Unique identifier for the chat where the original message was sent (or channel username in
 	// the format @channel_username)
 	FromChatID ChatID `json:"from_chat_id"`
@@ -296,6 +309,10 @@ type ForwardMessageParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the forwarded message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// MessageID - Message identifier in the chat specified in from_chat_id
 	MessageID int `json:"message_id"`
@@ -322,6 +339,10 @@ type ForwardMessagesParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
+	// forwarded; required if the messages are forwarded to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original messages were sent (or channel username in
 	// the format @channel_username)
@@ -362,6 +383,10 @@ type CopyMessageParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// FromChatID - Unique identifier for the chat where the original message was sent (or channel username in
 	// the format @channel_username)
 	FromChatID ChatID `json:"from_chat_id"`
@@ -400,6 +425,11 @@ type CopyMessageParams struct {
 	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
 	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -435,6 +465,10 @@ type CopyMessagesParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
+	// sent; required if the messages are sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original messages were sent (or channel username in
 	// the format @channel_username)
@@ -485,6 +519,10 @@ type SendPhotoParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new
 	// photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must
@@ -526,6 +564,11 @@ type SendPhotoParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -566,6 +609,10 @@ type SendAudioParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// Audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or
@@ -617,6 +664,11 @@ type SendAudioParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -666,6 +718,10 @@ type SendDocumentParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
 	// using multipart/form-data. More information on Sending Files »
@@ -711,6 +767,11 @@ type SendDocumentParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -758,6 +819,10 @@ type SendVideoParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
@@ -828,6 +893,11 @@ type SendVideoParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -878,6 +948,10 @@ type SendAnimationParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
@@ -936,6 +1010,11 @@ type SendAnimationParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -983,6 +1062,10 @@ type SendVoiceParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
 	// using multipart/form-data. More information on Sending Files »
@@ -1018,6 +1101,11 @@ type SendVoiceParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -1064,6 +1152,10 @@ type SendVideoNoteParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
 	// (https://core.telegram.org/bots/api#sending-files). Sending video notes by a URL is currently unsupported
@@ -1098,6 +1190,11 @@ type SendVideoNoteParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -1143,6 +1240,14 @@ type SendPaidMediaParams struct {
 	// the chat's balance. Otherwise, they will be credited to the bot's balance.
 	ChatID ChatID `json:"chat_id"`
 
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
+	// forum supergroups only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-10000
 	StarCount int `json:"star_count"`
 
@@ -1179,6 +1284,11 @@ type SendPaidMediaParams struct {
 	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
 	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1213,6 +1323,10 @@ type SendMediaGroupParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
+	// sent; required if the messages are sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// Media - A JSON-serialized array describing messages to be sent, must include 2-10 items
 	Media []InputMedia `json:"media"`
@@ -1278,6 +1392,10 @@ type SendLocationParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Latitude - Latitude of the location
 	Latitude float64 `json:"latitude"`
 
@@ -1316,6 +1434,11 @@ type SendLocationParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1350,6 +1473,10 @@ type SendVenueParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// Latitude - Latitude of the venue
 	Latitude float64 `json:"latitude"`
@@ -1393,6 +1520,11 @@ type SendVenueParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1428,6 +1560,10 @@ type SendContactParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// PhoneNumber - Contact's phone number
 	PhoneNumber string `json:"phone_number"`
 
@@ -1457,6 +1593,11 @@ type SendContactParams struct {
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
 
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
@@ -1485,7 +1626,7 @@ type SendPollParams struct {
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
+	// @channel_username). Polls can't be sent to channel direct messages chats.
 	ChatID ChatID `json:"chat_id"`
 
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
@@ -1636,6 +1777,10 @@ type SendDiceParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Emoji - Optional. Emoji on which the dice throw animation is based. Currently, must be one of “🎲”,
 	// “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”,
 	// “🎯” and “🎳”, values 1-5 for “🏀” and “⚽”, and values 1-64 for “🎰”. Defaults
@@ -1657,6 +1802,11 @@ type SendDiceParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -1685,8 +1835,8 @@ type SendChatActionParams struct {
 	// action will be sent
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
-	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username). Channel chats and channel direct messages chats aren't supported.
 	ChatID ChatID `json:"chat_id"`
 
 	// MessageThreadID - Optional. Unique identifier for the target message thread; for supergroups only
@@ -1993,6 +2143,10 @@ type PromoteChatMemberParams struct {
 	// CanManageTopics - Optional. Pass True if the user is allowed to create, rename, close, and reopen forum
 	// topics; for supergroups only
 	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
+
+	// CanManageDirectMessages - Optional. Pass True if the administrator can manage direct messages within the
+	// channel and decline suggested posts; for channels only
+	CanManageDirectMessages *bool `json:"can_manage_direct_messages,omitempty"`
 }
 
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
@@ -2414,10 +2568,10 @@ type PinChatMessageParams struct {
 	DisableNotification bool `json:"disable_notification,omitempty"`
 }
 
-// PinChatMessage - Use this method to add a message to the list of pinned messages in a chat. If the chat is
-// not a private chat, the bot must be an administrator in the chat for this to work and must have the
-// 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
-// channel. Returns True on success.
+// PinChatMessage - Use this method to add a message to the list of pinned messages in a chat. In private
+// chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be
+// an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups
+// and channels respectively. Returns True on success.
 func (b *Bot) PinChatMessage(ctx context.Context, params *PinChatMessageParams) error {
 	err := b.performRequest(ctx, "pinChatMessage", params)
 	if err != nil {
@@ -2441,10 +2595,10 @@ type UnpinChatMessageParams struct {
 	MessageID int `json:"message_id,omitempty"`
 }
 
-// UnpinChatMessage - Use this method to remove a message from the list of pinned messages in a chat. If the
-// chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the
-// 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
-// channel. Returns True on success.
+// UnpinChatMessage - Use this method to remove a message from the list of pinned messages in a chat. In
+// private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an
+// administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups
+// and channels respectively. Returns True on success.
 func (b *Bot) UnpinChatMessage(ctx context.Context, params *UnpinChatMessageParams) error {
 	err := b.performRequest(ctx, "unpinChatMessage", params)
 	if err != nil {
@@ -2460,10 +2614,10 @@ type UnpinAllChatMessagesParams struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-// UnpinAllChatMessages - Use this method to clear the list of pinned messages in a chat. If the chat is not
-// a private chat, the bot must be an administrator in the chat for this to work and must have the
-// 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a
-// channel. Returns True on success.
+// UnpinAllChatMessages - Use this method to clear the list of pinned messages in a chat. In private chats
+// and channel direct messages chats, no additional rights are required to unpin all pinned messages.
+// Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages'
+// right to unpin all pinned messages in groups and channels respectively. Returns True on success.
 func (b *Bot) UnpinAllChatMessages(ctx context.Context, params *UnpinAllChatMessagesParams) error {
 	err := b.performRequest(ctx, "unpinAllChatMessages", params)
 	if err != nil {
@@ -2475,7 +2629,8 @@ func (b *Bot) UnpinAllChatMessages(ctx context.Context, params *UnpinAllChatMess
 // LeaveChatParams - Represents parameters of leaveChat method.
 type LeaveChatParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup or channel (in the
-	// format @channel_username)
+	// format @channel_username). Channel direct messages chats aren't supported; leave the corresponding channel
+	// instead.
 	ChatID ChatID `json:"chat_id"`
 }
 
@@ -3220,406 +3375,6 @@ func (b *Bot) GetMyDefaultAdministratorRights(ctx context.Context, params *GetMy
 	return chatAdministratorRights, nil
 }
 
-// EditMessageTextParams - Represents parameters of editMessageText method.
-type EditMessageTextParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// Text - New text of the message, 1-4096 characters after entities parsing
-	Text string `json:"text"`
-
-	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
-	// (https://core.telegram.org/bots/api#formatting-options) for more details.
-	ParseMode string `json:"parse_mode,omitempty"`
-
-	// Entities - Optional. A JSON-serialized list of special entities that appear in message text, which can be
-	// specified instead of parse_mode
-	Entities []MessageEntity `json:"entities,omitempty"`
-
-	// LinkPreviewOptions - Optional. Link preview generation options for the message
-	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// EditMessageText - Use this method to edit text and game (https://core.telegram.org/bots/api#games)
-// messages. On success, if the edited message is not an inline message, the edited Message
-// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
-// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
-// hours from the time they were sent.
-func (b *Bot) EditMessageText(ctx context.Context, params *EditMessageTextParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest(ctx, "editMessageText", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageText: %w", err)
-	}
-	return message, nil
-}
-
-// EditMessageCaptionParams - Represents parameters of editMessageCaption method.
-type EditMessageCaptionParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// Caption - Optional. New caption of the message, 0-1024 characters after entities parsing
-	Caption string `json:"caption,omitempty"`
-
-	// ParseMode - Optional. Mode for parsing entities in the message caption. See formatting options
-	// (https://core.telegram.org/bots/api#formatting-options) for more details.
-	ParseMode string `json:"parse_mode,omitempty"`
-
-	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
-	// can be specified instead of parse_mode
-	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
-
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media.
-	// Supported only for animation, photo and video messages.
-	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// EditMessageCaption - Use this method to edit captions of messages. On success, if the edited message is
-// not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise
-// True is returned. Note that business messages that were not sent by the bot and do not contain an inline
-// keyboard can only be edited within 48 hours from the time they were sent.
-func (b *Bot) EditMessageCaption(ctx context.Context, params *EditMessageCaptionParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest(ctx, "editMessageCaption", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageCaption: %w", err)
-	}
-	return message, nil
-}
-
-// EditMessageMediaParams - Represents parameters of editMessageMedia method.
-type EditMessageMediaParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// Media - A JSON-serialized object for a new media content of the message
-	Media InputMedia `json:"media"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
-	fp := make(map[string]ta.NamedReader)
-
-	for _, v := range p.Media.fileParameters() {
-		if isNil(v) {
-			continue
-		}
-		fp[v.Name()] = v
-	}
-
-	return fp
-}
-
-// EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages, or to add
-// media to text messages. If a message is part of a message album, then it can be edited only to an audio for
-// audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline
-// message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a
-// URL. On success, if the edited message is not an inline message, the edited Message
-// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
-// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
-// hours from the time they were sent.
-func (b *Bot) EditMessageMedia(ctx context.Context, params *EditMessageMediaParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest(ctx, "editMessageMedia", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageMedia: %w", err)
-	}
-	return message, nil
-}
-
-// EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
-type EditMessageLiveLocationParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// Latitude - Latitude of new location
-	Latitude float64 `json:"latitude"`
-
-	// Longitude - Longitude of new location
-	Longitude float64 `json:"longitude"`
-
-	// LivePeriod - Optional. New period in seconds during which the location can be updated, starting from the
-	// message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new
-	// value must not exceed the current live_period by more than a day, and the live location expiration date must
-	// remain within the next 90 days. If not specified, then live_period remains unchanged
-	LivePeriod int `json:"live_period,omitempty"`
-
-	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
-	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
-
-	// Heading - Optional. Direction in which the user is moving, in degrees. Must be between 1 and 360 if
-	// specified.
-	Heading int `json:"heading,omitempty"`
-
-	// ProximityAlertRadius - Optional. The maximum distance for proximity alerts about approaching another chat
-	// member, in meters. Must be between 1 and 100000 if specified.
-	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
-// its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
-// (https://core.telegram.org/bots/api#stopmessagelivelocation). On success, if the edited message is not an
-// inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True
-// is returned.
-func (b *Bot) EditMessageLiveLocation(ctx context.Context, params *EditMessageLiveLocationParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest(ctx, "editMessageLiveLocation", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageLiveLocation: %w", err)
-	}
-	return message, nil
-}
-
-// StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
-type StopMessageLiveLocationParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message with live
-	// location to stop
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
-// expires. On success, if the message is not an inline message, the edited Message
-// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
-func (b *Bot) StopMessageLiveLocation(ctx context.Context, params *StopMessageLiveLocationParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest(ctx, "stopMessageLiveLocation", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: stopMessageLiveLocation: %w", err)
-	}
-	return message, nil
-}
-
-// EditMessageChecklistParams - Represents parameters of editMessageChecklist method.
-type EditMessageChecklistParams struct {
-	// BusinessConnectionID - Unique identifier of the business connection on behalf of which the message will
-	// be sent
-	BusinessConnectionID string `json:"business_connection_id"`
-
-	// ChatID - Unique identifier for the target chat
-	ChatID int64 `json:"chat_id"`
-
-	// MessageID - Unique identifier for the target message
-	MessageID int `json:"message_id"`
-
-	// Checklist - A JSON-serialized object for the new checklist
-	Checklist InputChecklist `json:"checklist"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for the new inline keyboard for the message
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// EditMessageChecklist - Use this method to edit a checklist on behalf of a connected business account. On
-// success, the edited Message (https://core.telegram.org/bots/api#message) is returned.
-func (b *Bot) EditMessageChecklist(ctx context.Context, params *EditMessageChecklistParams) (*Message, error) {
-	var message *Message
-	err := b.performRequest(ctx, "editMessageChecklist", params, &message)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageChecklist: %w", err)
-	}
-	return message, nil
-}
-
-// EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
-type EditMessageReplyMarkupParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
-	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
-
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
-	MessageID int `json:"message_id,omitempty"`
-
-	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// EditMessageReplyMarkup - Use this method to edit only the reply markup of messages. On success, if the
-// edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
-// returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not
-// contain an inline keyboard can only be edited within 48 hours from the time they were sent.
-func (b *Bot) EditMessageReplyMarkup(ctx context.Context, params *EditMessageReplyMarkupParams) (*Message, error) {
-	var message *Message
-	var success *bool
-	err := b.performRequest(ctx, "editMessageReplyMarkup", params, &message, &success)
-	if err != nil {
-		return nil, fmt.Errorf("telego: editMessageReplyMarkup: %w", err)
-	}
-	return message, nil
-}
-
-// StopPollParams - Represents parameters of stopPoll method.
-type StopPollParams struct {
-	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message to be edited was sent
-	BusinessConnectionID string `json:"business_connection_id,omitempty"`
-
-	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
-	ChatID ChatID `json:"chat_id"`
-
-	// MessageID - Identifier of the original message with the poll
-	MessageID int `json:"message_id"`
-
-	// ReplyMarkup - Optional. A JSON-serialized object for a new message inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
-}
-
-// StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll
-// (https://core.telegram.org/bots/api#poll) is returned.
-func (b *Bot) StopPoll(ctx context.Context, params *StopPollParams) (*Poll, error) {
-	var poll *Poll
-	err := b.performRequest(ctx, "stopPoll", params, &poll)
-	if err != nil {
-		return nil, fmt.Errorf("telego: stopPoll: %w", err)
-	}
-	return poll, nil
-}
-
-// DeleteMessageParams - Represents parameters of deleteMessage method.
-type DeleteMessageParams struct {
-	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
-	ChatID ChatID `json:"chat_id"`
-
-	// MessageID - Identifier of the message to delete
-	MessageID int `json:"message_id"`
-}
-
-// DeleteMessage - Use this method to delete a message, including service messages, with the following
-// limitations:
-// - A message can only be deleted if it was sent less than 48 hours ago.
-// - Service messages about a supergroup, channel, or forum topic creation can't be deleted.
-// - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
-// - Bots can delete outgoing messages in private chats, groups, and supergroups.
-// - Bots can delete incoming messages in private chats.
-// - Bots granted can_post_messages permissions can delete outgoing messages in channels.
-// - If the bot is an administrator of a group, it can delete any message there.
-// - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message
-// there.
-// Returns True on success.
-func (b *Bot) DeleteMessage(ctx context.Context, params *DeleteMessageParams) error {
-	err := b.performRequest(ctx, "deleteMessage", params)
-	if err != nil {
-		return fmt.Errorf("telego: deleteMessage: %w", err)
-	}
-	return nil
-}
-
-// DeleteMessagesParams - Represents parameters of deleteMessages method.
-type DeleteMessagesParams struct {
-	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
-	ChatID ChatID `json:"chat_id"`
-
-	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage
-	// (https://core.telegram.org/bots/api#deletemessage) for limitations on which messages can be deleted
-	MessageIDs []int `json:"message_ids"`
-}
-
-// DeleteMessages - Use this method to delete multiple messages simultaneously. If some of the specified
-// messages can't be found, they are skipped. Returns True on success.
-func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) error {
-	err := b.performRequest(ctx, "deleteMessages", params)
-	if err != nil {
-		return fmt.Errorf("telego: deleteMessages: %w", err)
-	}
-	return nil
-}
-
 // GetAvailableGifts - Returns the list of gifts that can be sent by the bot to users and channel chats.
 // Requires no parameters. Returns a Gifts (https://core.telegram.org/bots/api#gifts) object.
 func (b *Bot) GetAvailableGifts(ctx context.Context) (*Gifts, error) {
@@ -3734,7 +3489,7 @@ func (b *Bot) VerifyUser(ctx context.Context, params *VerifyUserParams) error {
 // VerifyChatParams - Represents parameters of verifyChat method.
 type VerifyChatParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
-	// @channel_username)
+	// @channel_username). Channel direct messages chats can't be verified.
 	ChatID ChatID `json:"chat_id"`
 
 	// CustomDescription - Optional. Custom description for the verification; 0-70 characters. Must be empty if
@@ -4223,6 +3978,455 @@ func (b *Bot) DeleteStory(ctx context.Context, params *DeleteStoryParams) error 
 	return nil
 }
 
+// EditMessageTextParams - Represents parameters of editMessageText method.
+type EditMessageTextParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// Text - New text of the message, 1-4096 characters after entities parsing
+	Text string `json:"text"`
+
+	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// Entities - Optional. A JSON-serialized list of special entities that appear in message text, which can be
+	// specified instead of parse_mode
+	Entities []MessageEntity `json:"entities,omitempty"`
+
+	// LinkPreviewOptions - Optional. Link preview generation options for the message
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageText - Use this method to edit text and game (https://core.telegram.org/bots/api#games)
+// messages. On success, if the edited message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
+// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
+// hours from the time they were sent.
+func (b *Bot) EditMessageText(ctx context.Context, params *EditMessageTextParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest(ctx, "editMessageText", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageText: %w", err)
+	}
+	return message, nil
+}
+
+// EditMessageCaptionParams - Represents parameters of editMessageCaption method.
+type EditMessageCaptionParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// Caption - Optional. New caption of the message, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the message caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media.
+	// Supported only for animation, photo and video messages.
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageCaption - Use this method to edit captions of messages. On success, if the edited message is
+// not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise
+// True is returned. Note that business messages that were not sent by the bot and do not contain an inline
+// keyboard can only be edited within 48 hours from the time they were sent.
+func (b *Bot) EditMessageCaption(ctx context.Context, params *EditMessageCaptionParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest(ctx, "editMessageCaption", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageCaption: %w", err)
+	}
+	return message, nil
+}
+
+// EditMessageMediaParams - Represents parameters of editMessageMedia method.
+type EditMessageMediaParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// Media - A JSON-serialized object for a new media content of the message
+	Media InputMedia `json:"media"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
+
+	for _, v := range p.Media.fileParameters() {
+		if isNil(v) {
+			continue
+		}
+		fp[v.Name()] = v
+	}
+
+	return fp
+}
+
+// EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages, or to add
+// media to text messages. If a message is part of a message album, then it can be edited only to an audio for
+// audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline
+// message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a
+// URL. On success, if the edited message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
+// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
+// hours from the time they were sent.
+func (b *Bot) EditMessageMedia(ctx context.Context, params *EditMessageMediaParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest(ctx, "editMessageMedia", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageMedia: %w", err)
+	}
+	return message, nil
+}
+
+// EditMessageLiveLocationParams - Represents parameters of editMessageLiveLocation method.
+type EditMessageLiveLocationParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// Latitude - Latitude of new location
+	Latitude float64 `json:"latitude"`
+
+	// Longitude - Longitude of new location
+	Longitude float64 `json:"longitude"`
+
+	// LivePeriod - Optional. New period in seconds during which the location can be updated, starting from the
+	// message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new
+	// value must not exceed the current live_period by more than a day, and the live location expiration date must
+	// remain within the next 90 days. If not specified, then live_period remains unchanged
+	LivePeriod int `json:"live_period,omitempty"`
+
+	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
+	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
+
+	// Heading - Optional. Direction in which the user is moving, in degrees. Must be between 1 and 360 if
+	// specified.
+	Heading int `json:"heading,omitempty"`
+
+	// ProximityAlertRadius - Optional. The maximum distance for proximity alerts about approaching another chat
+	// member, in meters. Must be between 1 and 100000 if specified.
+	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageLiveLocation - Use this method to edit live location messages. A location can be edited until
+// its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
+// (https://core.telegram.org/bots/api#stopmessagelivelocation). On success, if the edited message is not an
+// inline message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True
+// is returned.
+func (b *Bot) EditMessageLiveLocation(ctx context.Context, params *EditMessageLiveLocationParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest(ctx, "editMessageLiveLocation", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageLiveLocation: %w", err)
+	}
+	return message, nil
+}
+
+// StopMessageLiveLocationParams - Represents parameters of stopMessageLiveLocation method.
+type StopMessageLiveLocationParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message with live
+	// location to stop
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// StopMessageLiveLocation - Use this method to stop updating a live location message before live_period
+// expires. On success, if the message is not an inline message, the edited Message
+// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
+func (b *Bot) StopMessageLiveLocation(ctx context.Context, params *StopMessageLiveLocationParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest(ctx, "stopMessageLiveLocation", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: stopMessageLiveLocation: %w", err)
+	}
+	return message, nil
+}
+
+// EditMessageChecklistParams - Represents parameters of editMessageChecklist method.
+type EditMessageChecklistParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection on behalf of which the message will
+	// be sent
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// ChatID - Unique identifier for the target chat
+	ChatID int64 `json:"chat_id"`
+
+	// MessageID - Unique identifier for the target message
+	MessageID int `json:"message_id"`
+
+	// Checklist - A JSON-serialized object for the new checklist
+	Checklist InputChecklist `json:"checklist"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for the new inline keyboard for the message
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageChecklist - Use this method to edit a checklist on behalf of a connected business account. On
+// success, the edited Message (https://core.telegram.org/bots/api#message) is returned.
+func (b *Bot) EditMessageChecklist(ctx context.Context, params *EditMessageChecklistParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest(ctx, "editMessageChecklist", params, &message)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageChecklist: %w", err)
+	}
+	return message, nil
+}
+
+// EditMessageReplyMarkupParams - Represents parameters of editMessageReplyMarkup method.
+type EditMessageReplyMarkupParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// or username of the target channel (in the format @channel_username)
+	ChatID ChatID `json:"chat_id,omitempty"`
+
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
+	// inline message
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditMessageReplyMarkup - Use this method to edit only the reply markup of messages. On success, if the
+// edited message is not an inline message, the edited Message (https://core.telegram.org/bots/api#message) is
+// returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not
+// contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+func (b *Bot) EditMessageReplyMarkup(ctx context.Context, params *EditMessageReplyMarkupParams) (*Message, error) {
+	var message *Message
+	var success *bool
+	err := b.performRequest(ctx, "editMessageReplyMarkup", params, &message, &success)
+	if err != nil {
+		return nil, fmt.Errorf("telego: editMessageReplyMarkup: %w", err)
+	}
+	return message, nil
+}
+
+// StopPollParams - Represents parameters of stopPoll method.
+type StopPollParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message to be edited was sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageID - Identifier of the original message with the poll
+	MessageID int `json:"message_id"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for a new message inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards).
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// StopPoll - Use this method to stop a poll which was sent by the bot. On success, the stopped Poll
+// (https://core.telegram.org/bots/api#poll) is returned.
+func (b *Bot) StopPoll(ctx context.Context, params *StopPollParams) (*Poll, error) {
+	var poll *Poll
+	err := b.performRequest(ctx, "stopPoll", params, &poll)
+	if err != nil {
+		return nil, fmt.Errorf("telego: stopPoll: %w", err)
+	}
+	return poll, nil
+}
+
+// ApproveSuggestedPostParams - Represents parameters of approveSuggestedPost method.
+type ApproveSuggestedPostParams struct {
+	// ChatID - Unique identifier for the target direct messages chat
+	ChatID int64 `json:"chat_id"`
+
+	// MessageID - Identifier of a suggested post message to approve
+	MessageID int `json:"message_id"`
+
+	// SendDate - Optional. Point in time (Unix timestamp) when the post is expected to be published; omit if
+	// the date has already been specified when the suggested post was created. If specified, then the date must be
+	// not more than 2678400 seconds (30 days) in the future
+	SendDate int64 `json:"send_date,omitempty"`
+}
+
+// ApproveSuggestedPost - Use this method to approve a suggested post in a direct messages chat. The bot must
+// have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success.
+func (b *Bot) ApproveSuggestedPost(ctx context.Context, params *ApproveSuggestedPostParams) error {
+	err := b.performRequest(ctx, "approveSuggestedPost", params)
+	if err != nil {
+		return fmt.Errorf("telego: approveSuggestedPost: %w", err)
+	}
+	return nil
+}
+
+// DeclineSuggestedPostParams - Represents parameters of declineSuggestedPost method.
+type DeclineSuggestedPostParams struct {
+	// ChatID - Unique identifier for the target direct messages chat
+	ChatID int64 `json:"chat_id"`
+
+	// MessageID - Identifier of a suggested post message to decline
+	MessageID int `json:"message_id"`
+
+	// Comment - Optional. Comment for the creator of the suggested post; 0-128 characters
+	Comment string `json:"comment,omitempty"`
+}
+
+// DeclineSuggestedPost - Use this method to decline a suggested post in a direct messages chat. The bot must
+// have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on
+// success.
+func (b *Bot) DeclineSuggestedPost(ctx context.Context, params *DeclineSuggestedPostParams) error {
+	err := b.performRequest(ctx, "declineSuggestedPost", params)
+	if err != nil {
+		return fmt.Errorf("telego: declineSuggestedPost: %w", err)
+	}
+	return nil
+}
+
+// DeleteMessageParams - Represents parameters of deleteMessage method.
+type DeleteMessageParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageID - Identifier of the message to delete
+	MessageID int `json:"message_id"`
+}
+
+// DeleteMessage - Use this method to delete a message, including service messages, with the following
+// limitations:
+// - A message can only be deleted if it was sent less than 48 hours ago.
+// - Service messages about a supergroup, channel, or forum topic creation can't be deleted.
+// - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
+// - Bots can delete outgoing messages in private chats, groups, and supergroups.
+// - Bots can delete incoming messages in private chats.
+// - Bots granted can_post_messages permissions can delete outgoing messages in channels.
+// - If the bot is an administrator of a group, it can delete any message there.
+// - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any
+// message there.
+// - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in
+// the corresponding direct messages chat.
+// Returns True on success.
+func (b *Bot) DeleteMessage(ctx context.Context, params *DeleteMessageParams) error {
+	err := b.performRequest(ctx, "deleteMessage", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteMessage: %w", err)
+	}
+	return nil
+}
+
+// DeleteMessagesParams - Represents parameters of deleteMessages method.
+type DeleteMessagesParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage
+	// (https://core.telegram.org/bots/api#deletemessage) for limitations on which messages can be deleted
+	MessageIDs []int `json:"message_ids"`
+}
+
+// DeleteMessages - Use this method to delete multiple messages simultaneously. If some of the specified
+// messages can't be found, they are skipped. Returns True on success.
+func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) error {
+	err := b.performRequest(ctx, "deleteMessages", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteMessages: %w", err)
+	}
+	return nil
+}
+
 // SendStickerParams - Represents parameters of sendSticker method.
 type SendStickerParams struct {
 	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
@@ -4236,6 +4440,10 @@ type SendStickerParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload
@@ -4262,6 +4470,11 @@ type SendStickerParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -4792,6 +5005,10 @@ type SendInvoiceParams struct {
 	// forum supergroups only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+
 	// Title - Product name, 1-32 characters
 	Title string `json:"title"`
 
@@ -4895,6 +5112,11 @@ type SendInvoiceParams struct {
 	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
 	// private chats only
 	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
 
 	// ReplyParameters - Optional. Description of the message to reply to
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -5186,8 +5408,8 @@ type SendGameParams struct {
 	// message will be sent
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
-	// ChatID - Unique identifier for the target chat
-	// Note: Should be int64 not ChatID according to documentation (https://core.telegram.org/bots/api#sendgame)
+	// ChatID - Unique identifier for the target chat. Games can't be sent to channel direct messages chats and
+	// channel chats.
 	ChatID int64 `json:"chat_id"`
 
 	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for

@@ -213,6 +213,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputPaidMedia{&InputPaidMediaPhoto{}}"
 	case "*CopyTextButton":
 		return "&CopyTextButton{}"
+	case "*SuggestedPostParameters":
+		return "&SuggestedPostParameters{}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
