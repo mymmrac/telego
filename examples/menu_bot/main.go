@@ -70,10 +70,11 @@ func main() {
 			log.Printf("Failed to shutdown webhook server: %s", err)
 		}
 
+	loop:
 		for len(updates) > 0 {
 			select {
 			case <-stopCtx.Done():
-				break
+				break loop
 			case <-time.After(time.Microsecond * 100):
 				log.Printf("Update handler timeout")
 			}
