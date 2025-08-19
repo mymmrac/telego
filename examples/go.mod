@@ -4,15 +4,15 @@ go 1.24.6
 
 require (
 	github.com/gofiber/fiber/v3 v3.0.0-beta.5
-	github.com/mymmrac/telego v1.2.0
+	github.com/mymmrac/telego v1.3.0
 	github.com/valyala/fasthttp v1.65.0
 	golang.ngrok.com/ngrok v1.13.0
 )
 
 require (
 	github.com/andybalholm/brotli v1.2.0 // indirect
-	github.com/bytedance/sonic v1.13.3 // indirect
-	github.com/bytedance/sonic/loader v0.2.4 // indirect
+	github.com/bytedance/sonic v1.14.0 // indirect
+	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gofiber/schema v1.6.0 // indirect
