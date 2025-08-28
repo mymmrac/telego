@@ -479,7 +479,7 @@ type ChatFullInfo struct {
 }
 
 // unknownReactionTypeErr is an error for unknown reaction type
-const unknownReactionTypeErr = "unknown reaction type: %s"
+const unknownReactionTypeErr = "unknown reaction type: %q"
 
 // UnmarshalJSON converts JSON to Chat
 func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
@@ -917,7 +917,7 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		case OriginTypeChannel:
 			um.ForwardOrigin = &MessageOriginChannel{}
 		default:
-			return fmt.Errorf("unknown forward message origin: %s", forwardOriginType)
+			return fmt.Errorf("unknown forward message origin: %q", forwardOriginType)
 		}
 	}
 
@@ -1228,7 +1228,7 @@ func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
 	case OriginTypeChannel:
 		ue.Origin = &MessageOriginChannel{}
 	default:
-		return fmt.Errorf("unknown origin: %s", originType)
+		return fmt.Errorf("unknown origin: %q", originType)
 	}
 
 	if err = json.Unmarshal(data, &ue); err != nil {
@@ -1645,7 +1645,7 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 			case PaidMediaTypeVideo:
 				um.PaidMedia[i] = &PaidMediaVideo{}
 			default:
-				return fmt.Errorf("unknown paid media type: %s", mediaType)
+				return fmt.Errorf("unknown paid media type: %q", mediaType)
 			}
 		}
 	}
@@ -2202,7 +2202,7 @@ func (b *BackgroundTypeFill) UnmarshalJSON(data []byte) error {
 	case BackgroundFilledFreeformGradient:
 		ub.Fill = &BackgroundFillFreeformGradient{}
 	default:
-		return fmt.Errorf("unknown chat background fill type: %s", fillType)
+		return fmt.Errorf("unknown chat background fill type: %q", fillType)
 	}
 
 	if err = json.Unmarshal(data, &ub); err != nil {
@@ -2322,7 +2322,7 @@ func (c *ChatBackground) UnmarshalJSON(data []byte) error {
 	case BackgroundTypeNameChatTheme:
 		uc.Type = &BackgroundTypeChatTheme{}
 	default:
-		return fmt.Errorf("unknown chat background type: %s", backgroundType)
+		return fmt.Errorf("unknown chat background type: %q", backgroundType)
 	}
 
 	if err = json.Unmarshal(data, &uc); err != nil {
@@ -3388,7 +3388,7 @@ func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 	case MemberStatusBanned:
 		uc.OldChatMember = &ChatMemberBanned{}
 	default:
-		return fmt.Errorf("unknown chat member status: %s", oldMemberStatus)
+		return fmt.Errorf("unknown chat member status: %q", oldMemberStatus)
 	}
 
 	newMemberStatus := string(value.GetStringBytes("new_chat_member", "status"))
@@ -3406,7 +3406,7 @@ func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 	case MemberStatusBanned:
 		uc.NewChatMember = &ChatMemberBanned{}
 	default:
-		return fmt.Errorf("unknown chat member status: %s", newMemberStatus)
+		return fmt.Errorf("unknown chat member status: %q", newMemberStatus)
 	}
 
 	if err = json.Unmarshal(data, &uc); err != nil {
@@ -4642,7 +4642,7 @@ func (g *OwnedGifts) UnmarshalJSON(data []byte) error {
 			case GiftTypeUnique:
 				ug.Gifts[i] = &OwnedGiftUnique{}
 			default:
-				return fmt.Errorf("unknown owned gift type: %s", giftType)
+				return fmt.Errorf("unknown owned gift type: %q", giftType)
 			}
 		}
 	}
@@ -5130,7 +5130,7 @@ func (b *ChatBoost) UnmarshalJSON(data []byte) error {
 	case BoostSourceGiveaway:
 		ub.Source = &ChatBoostSourceGiveaway{}
 	default:
-		return fmt.Errorf("unknown chat boost source: %s", source)
+		return fmt.Errorf("unknown chat boost source: %q", source)
 	}
 
 	if err = json.Unmarshal(data, &ub); err != nil {
@@ -5191,7 +5191,7 @@ func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
 	case BoostSourceGiveaway:
 		ub.Source = &ChatBoostSourceGiveaway{}
 	default:
-		return fmt.Errorf("unknown chat boost source: %s", source)
+		return fmt.Errorf("unknown chat boost source: %q", source)
 	}
 
 	if err = json.Unmarshal(data, &ub); err != nil {
@@ -7801,7 +7801,7 @@ func (p *TransactionPartnerUser) UnmarshalJSON(data []byte) error {
 			case PaidMediaTypeVideo:
 				up.PaidMedia[i] = &PaidMediaVideo{}
 			default:
-				return fmt.Errorf("unknown paid media type: %s", mediaType)
+				return fmt.Errorf("unknown paid media type: %q", mediaType)
 			}
 		}
 	}
@@ -7972,7 +7972,7 @@ func (t *StarTransaction) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 		case PartnerTypeOther:
 			ut.Source = &TransactionPartnerOther{}
 		default:
-			return fmt.Errorf("unknown source partner type: %s", partnerType)
+			return fmt.Errorf("unknown source partner type: %q", partnerType)
 		}
 	}
 
@@ -7994,7 +7994,7 @@ func (t *StarTransaction) UnmarshalJSON(data []byte) error { //nolint:gocyclo
 		case PartnerTypeOther:
 			ut.Receiver = &TransactionPartnerOther{}
 		default:
-			return fmt.Errorf("unknown receiver partner type: %s", partnerType)
+			return fmt.Errorf("unknown receiver partner type: %q", partnerType)
 		}
 	}
 
