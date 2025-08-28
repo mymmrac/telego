@@ -33,6 +33,9 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaVideo{})
 	assert.Equal(t, PaidMediaTypeVideo, (&PaidMediaVideo{}).MediaType())
 
+	assert.Implements(t, (*PaidMedia)(nil), &paidMediaOther{})
+	assert.Equal(t, paidMediaTypeOther, (&paidMediaOther{}).MediaType())
+
 	assert.Implements(t, (*BackgroundFill)(nil), &BackgroundFillSolid{})
 	assert.Equal(t, BackgroundFilledSolid, (&BackgroundFillSolid{}).BackgroundFilled())
 
@@ -793,7 +796,7 @@ func TestTypesConstants(t *testing.T) {
 			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,
 		},
 		{
-			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo,
+			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo, paidMediaTypeOther,
 		},
 		{
 			PhotoTypeStatic, PhotoTypeAnimated,

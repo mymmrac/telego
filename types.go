@@ -1644,6 +1644,8 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 				um.PaidMedia[i] = &PaidMediaPhoto{}
 			case PaidMediaTypeVideo:
 				um.PaidMedia[i] = &PaidMediaVideo{}
+			case paidMediaTypeOther:
+				um.PaidMedia[i] = &paidMediaOther{}
 			default:
 				return fmt.Errorf("unknown paid media type: %q", mediaType)
 			}
@@ -1662,6 +1664,9 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 // PaidMediaPreview (https://core.telegram.org/bots/api#paidmediapreview)
 // PaidMediaPhoto (https://core.telegram.org/bots/api#paidmediaphoto)
 // PaidMediaVideo (https://core.telegram.org/bots/api#paidmediavideo)
+//
+// WARNING: Telegram introduced undocumented type "other", it will be correctly parsed by Telego, but will not be
+// exposed to users directly as it's not documented anywhere, but still used by Telegram
 type PaidMedia interface {
 	// MediaType returns PaidMedia type
 	MediaType() string
@@ -1674,6 +1679,7 @@ const (
 	PaidMediaTypePreview = "preview"
 	PaidMediaTypePhoto   = "photo"
 	PaidMediaTypeVideo   = "video"
+	paidMediaTypeOther   = "other"
 )
 
 // PaidMediaPreview - The paid media isn't available before the payment.
@@ -1729,6 +1735,22 @@ func (m *PaidMediaVideo) MediaType() string {
 }
 
 func (m *PaidMediaVideo) iPaidMedia() {}
+
+// paidMediaOther - The paid media is a other.
+//
+// WARNING: This is undocumented type that was created because we saw it being used by Telegram, users of Telego are
+// not expected to use this type as it is not documented anywhere
+type paidMediaOther struct {
+	// Type - Type of the paid media, always “other”
+	Type string `json:"type"`
+}
+
+// MediaType returns PaidMedia type
+func (m *paidMediaOther) MediaType() string {
+	return paidMediaTypeOther
+}
+
+func (m *paidMediaOther) iPaidMedia() {}
 
 // Contact - This object represents a phone contact.
 type Contact struct {
@@ -7800,6 +7822,8 @@ func (p *TransactionPartnerUser) UnmarshalJSON(data []byte) error {
 				up.PaidMedia[i] = &PaidMediaPhoto{}
 			case PaidMediaTypeVideo:
 				up.PaidMedia[i] = &PaidMediaVideo{}
+			case paidMediaTypeOther:
+				up.PaidMedia[i] = &paidMediaOther{}
 			default:
 				return fmt.Errorf("unknown paid media type: %q", mediaType)
 			}
