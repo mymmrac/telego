@@ -79,7 +79,7 @@ const (
 // ValidateWebAppData validates the integrity of value provided by `window.Telegram.WebApp.initData` from web app and
 // returns [url.Values] containing all fields that were provided
 // More info: https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
-func ValidateWebAppData(token string, data string) (url.Values, error) {
+func ValidateWebAppData(botToken string, data string) (url.Values, error) {
 	appData, err := url.ParseQuery(data)
 	if err != nil {
 		return nil, errors.New("telego: parse query: bad data")
@@ -96,7 +96,7 @@ func ValidateWebAppData(token string, data string) (url.Values, error) {
 	//nolint:errcheck
 	appDataToCheck, _ := url.QueryUnescape(strings.ReplaceAll(appData.Encode(), "&", "\n"))
 
-	secretKey := hmacHash([]byte(token), []byte(WebAppSecret))
+	secretKey := hmacHash([]byte(botToken), []byte(WebAppSecret))
 	if hex.EncodeToString(hmacHash([]byte(appDataToCheck), secretKey)) != hash {
 		return nil, errors.New("telego: invalid hash")
 	}
@@ -119,7 +119,7 @@ const (
 // ValidateLoginWidgetData validates the integrity of value provided by Telegram Login Widget and
 // returns [url.Values] containing all fields that were provided
 // More info: https://core.telegram.org/widgets/login#checking-authorization
-func ValidateLoginWidgetData(token string, data string) (url.Values, error) {
+func ValidateLoginWidgetData(botToken string, data string) (url.Values, error) {
 	appData, err := url.ParseQuery(data)
 	if err != nil {
 		return nil, errors.New("telego: parse query: bad data")
@@ -136,7 +136,7 @@ func ValidateLoginWidgetData(token string, data string) (url.Values, error) {
 	//nolint:errcheck
 	appDataToCheck, _ := url.QueryUnescape(strings.ReplaceAll(appData.Encode(), "&", "\n"))
 
-	secretKey := sha256.Sum256([]byte(token))
+	secretKey := sha256.Sum256([]byte(botToken))
 	if hex.EncodeToString(hmacHash([]byte(appDataToCheck), secretKey[:])) != hash {
 		return nil, errors.New("telego: invalid hash")
 	}

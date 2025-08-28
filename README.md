@@ -101,6 +101,7 @@ More examples can be seen here:
 - [Retry caller](examples/retry_caller/main.go)
 - [Menu bot](examples/menu_bot/main.go)
 - [Test server](examples/test_server/main.go)
+- [Web Apps (Mini Apps)](examples/web_apps/main.go)
 
 </details>
 
