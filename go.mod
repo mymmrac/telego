@@ -5,7 +5,7 @@ go 1.24.6
 require (
 	github.com/bytedance/sonic v1.14.1
 	github.com/stretchr/testify v1.11.1
-	github.com/valyala/fasthttp v1.65.0
+	github.com/valyala/fasthttp v1.66.0
 	github.com/valyala/fastjson v1.6.4
 	go.uber.org/mock v0.6.0
 )
@@ -26,6 +26,6 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
