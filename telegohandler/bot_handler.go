@@ -16,11 +16,15 @@ type Handler func(ctx *Context, update telego.Update) error
 // Note: Predicate can't change the update, because it uses a copy, not original value
 type Predicate func(ctx context.Context, update telego.Update) bool
 
+// ErrorHandler handles error that came from bot handing update
+type ErrorHandler func(ctx *Context, update telego.Update, err error)
+
 // BotHandler represents a bot handler that can handle updated matching by predicates
 type BotHandler struct {
-	bot       *telego.Bot
-	updates   <-chan telego.Update
-	baseGroup *HandlerGroup
+	bot          *telego.Bot
+	updates      <-chan telego.Update
+	baseGroup    *HandlerGroup
+	errorHandler ErrorHandler
 
 	running  bool
 	lock     sync.RWMutex
@@ -52,7 +56,7 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 // Start starts handling of updates, blocks execution, caller is responsible for handling all unhandled updates in the
 // update channel after bot handler stop (start will return an error in this case)
 // Note: Calling if already running will return an error
-func (h *BotHandler) Start() error {
+func (h *BotHandler) Start() error { //nolint:gocognit
 	h.lock.Lock()
 
 	if h.running {
@@ -111,7 +115,11 @@ func (h *BotHandler) Start() error {
 				}
 
 				if err := bCtx.Next(update); err != nil {
-					h.bot.Logger().Errorf("Error processing update %d, err: %s", update.UpdateID, err)
+					if h.errorHandler != nil {
+						h.errorHandler(bCtx, update, err)
+					} else {
+						h.bot.Logger().Errorf("Error processing update %d, err: %s", update.UpdateID, err)
+					}
 				}
 			}()
 		}

@@ -138,6 +138,57 @@ func TestBotHandler_Start(t *testing.T) {
 	})
 }
 
+func TestBotHandler_HandleError(t *testing.T) {
+	bot, err := telego.NewBot(token)
+	require.NoError(t, err)
+
+	updates := make(chan telego.Update)
+
+	wg := sync.WaitGroup{}
+
+	var receivedError error
+	bh, err := NewBotHandler(bot, updates, WithErrorHandler(func(_ *Context, _ telego.Update, err error) {
+		defer wg.Done()
+		receivedError = err
+	}))
+	require.NoError(t, err)
+
+	bh.Handle(func(_ *Context, _ telego.Update) error {
+		return errTest
+	})
+
+	timeoutSignal := time.After(timeout * 10)
+	done := make(chan struct{})
+
+	assert.NotPanics(t, func() {
+		wg.Add(1)
+
+		go func() {
+			errStart := bh.Start()
+			assert.NoError(t, errStart)
+		}()
+
+		defer func() {
+			err = bh.Stop()
+			assert.NoError(t, err)
+		}()
+
+		updates <- telego.Update{}
+
+		go func() {
+			wg.Wait()
+			done <- struct{}{}
+		}()
+
+		select {
+		case <-timeoutSignal:
+			t.Fatal("Timeout")
+		case <-done:
+			assert.Equal(t, errTest, receivedError)
+		}
+	})
+}
+
 //nolint:gocognit,gocyclo
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
