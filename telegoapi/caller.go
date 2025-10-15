@@ -66,7 +66,9 @@ func (a FastHTTPCaller) Call(ctx context.Context, url string, data *RequestData)
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
-
+	if apiResp.Error != nil {
+		return nil, apiResp.Error
+	}
 	return apiResp, nil
 }
 
@@ -108,7 +110,9 @@ func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*R
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
-
+	if apiResp.Error != nil {
+		return nil, apiResp.Error
+	}
 	return apiResp, nil
 }
 
