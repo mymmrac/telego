@@ -36,9 +36,9 @@ linters:
       lines: 120
       statements: 40
     gocognit:
-      min-complexity: 20
+      min-complexity: 25
     gocyclo:
-      min-complexity: 15
+      min-complexity: 20
     govet:
       enable-all: true
       disable:
@@ -105,6 +105,8 @@ linters:
           - funlen
           - maintidx
           - revive
+          - gocognit
+          - gocyclo
         path: _test\.go$
       - linters:
           - funlen

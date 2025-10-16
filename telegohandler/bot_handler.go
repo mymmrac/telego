@@ -56,7 +56,7 @@ func NewBotHandler(bot *telego.Bot, updates <-chan telego.Update, options ...Bot
 // Start starts handling of updates, blocks execution, caller is responsible for handling all unhandled updates in the
 // update channel after bot handler stop (start will return an error in this case)
 // Note: Calling if already running will return an error
-func (h *BotHandler) Start() error { //nolint:gocognit
+func (h *BotHandler) Start() error {
 	h.lock.Lock()
 
 	if h.running {

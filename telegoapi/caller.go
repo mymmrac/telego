@@ -151,8 +151,11 @@ var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
 func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (resp *Response, err error) {
 	for i := 0; i < r.MaxAttempts; i++ {
 		resp, err = r.Caller.Call(ctx, url, data)
-		if err == nil {
+		if err == nil && resp.Error == nil {
 			return resp, nil
+		}
+		if err == nil {
+			err = resp.Error
 		}
 
 		if i == r.MaxAttempts-1 {

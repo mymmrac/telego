@@ -86,7 +86,7 @@ func AnyMessageWithFrom() Predicate {
 	}
 }
 
-func baseAnyMessageWithMedia(message *telego.Message) bool { //nolint:gocyclo
+func baseAnyMessageWithMedia(message *telego.Message) bool {
 	return message != nil &&
 		(len(message.Photo) > 0 ||
 			message.Video != nil ||

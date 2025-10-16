@@ -189,7 +189,6 @@ func TestBotHandler_HandleError(t *testing.T) {
 	})
 }
 
-//nolint:gocognit,gocyclo
 func TestBotHandler_Stop(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		bh := newTestBotHandler(t)
