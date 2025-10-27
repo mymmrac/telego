@@ -60,7 +60,7 @@ jobs:
         run: task test
 
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: code-coverage-report
           path: bin
@@ -123,7 +123,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download code coverage results
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: code-coverage-report
           path: bin
