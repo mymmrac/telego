@@ -246,12 +246,16 @@ import (
 			fieldDescription := fitTextToLine(fmt.Sprintf("%s - %s", f.name, f.description), "\t// ")
 			data.WriteString(fieldDescription)
 
-			omitempty := ""
+			jsonSuffix := ""
 			if f.optional {
-				omitempty = omitemptySuffix
+				if f.typ == "ChatID" {
+					jsonSuffix = omitzeroSuffix
+				} else {
+					jsonSuffix = omitemptySuffix
+				}
 			}
 
-			data.WriteString(fmt.Sprintf("\n\t%s %s `json:\"%s%s\"`\n\n", f.name, f.typ, f.nameSnakeCase, omitempty))
+			data.WriteString(fmt.Sprintf("\n\t%s %s `json:\"%s%s\"`\n\n", f.name, f.typ, f.nameSnakeCase, jsonSuffix))
 		}
 
 		data.WriteString("}\n\n")

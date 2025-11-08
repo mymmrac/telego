@@ -16,6 +16,7 @@ const (
 
 	maxLineLen      = 110
 	omitemptySuffix = ",omitempty"
+	omitzeroSuffix  = ",omitzero"
 	optionalPrefix  = "Optional. "
 
 	typesFilename   = "../../types.go"

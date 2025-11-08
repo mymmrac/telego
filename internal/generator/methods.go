@@ -245,9 +245,13 @@ import (
 				parameterDescription := fitTextToLine(fmt.Sprintf("%s - %s%s", p.name, optional, p.description), "\t// ")
 				data.WriteString(parameterDescription)
 
-				omitempty := ""
+				jsonSuffix := ""
 				if p.optional {
-					omitempty = omitemptySuffix
+					if p.typ == "ChatID" {
+						jsonSuffix = omitzeroSuffix
+					} else {
+						jsonSuffix = omitemptySuffix
+					}
 				}
 
 				if strings.Contains(p.typ, " or ") || strings.Contains(p.typ, ",") {
@@ -255,7 +259,7 @@ import (
 					p.typ = "INTERFACE"
 				}
 
-				data.WriteString(fmt.Sprintf("\n\t%s %s `json:\"%s%s\"`\n\n", p.name, p.typ, p.nameSnakeCase, omitempty))
+				data.WriteString(fmt.Sprintf("\n\t%s %s `json:\"%s%s\"`\n\n", p.name, p.typ, p.nameSnakeCase, jsonSuffix))
 			}
 
 			data.WriteString("}\n\n")
