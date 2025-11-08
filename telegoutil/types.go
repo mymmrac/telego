@@ -108,7 +108,7 @@ func KeyboardCols(cols int, buttons ...telego.KeyboardButton) [][]telego.Keyboar
 	}
 
 	grid := make([][]telego.KeyboardButton, 0, rows)
-	for i := 0; i < len(buttons); i++ {
+	for i := range buttons {
 		if col >= cols {
 			col = 0
 			row++
@@ -138,7 +138,7 @@ func KeyboardRows(rows int, buttons ...telego.KeyboardButton) [][]telego.Keyboar
 	}
 
 	grid := make([][]telego.KeyboardButton, 0, rows)
-	for i := 0; i < len(buttons); i++ {
+	for i := range buttons {
 		if col >= cols {
 			col = 0
 			row++
@@ -234,7 +234,7 @@ func InlineKeyboardCols(cols int, buttons ...telego.InlineKeyboardButton) [][]te
 	}
 
 	grid := make([][]telego.InlineKeyboardButton, 0, rows)
-	for i := 0; i < len(buttons); i++ {
+	for i := range buttons {
 		if col >= cols {
 			col = 0
 			row++
@@ -264,7 +264,7 @@ func InlineKeyboardRows(rows int, buttons ...telego.InlineKeyboardButton) [][]te
 	}
 
 	grid := make([][]telego.InlineKeyboardButton, 0, rows)
-	for i := 0; i < len(buttons); i++ {
+	for i := range buttons {
 		if col >= cols {
 			col = 0
 			row++

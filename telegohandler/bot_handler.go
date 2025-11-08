@@ -88,10 +88,7 @@ func (h *BotHandler) Start() error {
 			}
 
 			// Process update
-			h.handlers.Add(1)
-			go func() {
-				defer h.handlers.Done()
-
+			h.handlers.Go(func() {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
@@ -121,7 +118,7 @@ func (h *BotHandler) Start() error {
 						h.bot.Logger().Errorf("Error processing update %d, err: %s", update.UpdateID, err)
 					}
 				}
-			}()
+			})
 		}
 	}
 }

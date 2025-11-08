@@ -3394,7 +3394,7 @@ type SendGiftParams struct {
 
 	// ChatID - Optional. Required if user_id is not specified. Unique identifier for the chat or username of
 	// the channel (in the format @channel_username) that will receive the gift.
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// GiftID - Identifier of the gift
 	GiftID string `json:"gift_id"`
@@ -3986,7 +3986,7 @@ type EditMessageTextParams struct {
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
@@ -4037,7 +4037,7 @@ type EditMessageCaptionParams struct {
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
@@ -4088,7 +4088,7 @@ type EditMessageMediaParams struct {
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
@@ -4144,7 +4144,7 @@ type EditMessageLiveLocationParams struct {
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
@@ -4204,7 +4204,7 @@ type StopMessageLiveLocationParams struct {
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message with live
 	// location to stop
@@ -4270,7 +4270,7 @@ type EditMessageReplyMarkupParams struct {
 
 	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
 	// or username of the target channel (in the format @channel_username)
-	ChatID ChatID `json:"chat_id,omitempty"`
+	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
 	MessageID int `json:"message_id,omitempty"`
