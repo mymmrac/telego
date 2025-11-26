@@ -274,6 +274,38 @@ func CommandEqualArgv(command string, argv ...string) Predicate {
 	}
 }
 
+// CommandPrefix is true if the message isn't nil, and command has specified prefix
+func CommandPrefix(prefix string) Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
+		if len(matches) != CommandMatchGroupsLen {
+			return false
+		}
+
+		return strings.HasPrefix(strings.ToLower(matches[CommandMatchCmdGroup]), strings.ToLower(prefix))
+	}
+}
+
+// CommandSuffix is true if the message isn't nil, and command has specified suffix
+func CommandSuffix(suffix string) Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		if update.Message == nil {
+			return false
+		}
+
+		matches := CommandRegexp.FindStringSubmatch(update.Message.Text)
+		if len(matches) != CommandMatchGroupsLen {
+			return false
+		}
+
+		return strings.HasSuffix(strings.ToLower(matches[CommandMatchCmdGroup]), strings.ToLower(suffix))
+	}
+}
+
 // SuccessPayment is true if the message isn't nil, and contains success payment
 func SuccessPayment() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
