@@ -719,7 +719,7 @@ func ErrorUnspecified(sourceType, message, elementHash string) *telego.PassportE
 	}
 }
 
-// LabeledPrice creates [telego.LabeledPrice] with required parameters
+// LabeledPrice creates [telego.LabeledPrice] with required fields
 func LabeledPrice(label string, amount int) telego.LabeledPrice {
 	return telego.LabeledPrice{
 		Label:  label,
@@ -727,11 +727,34 @@ func LabeledPrice(label string, amount int) telego.LabeledPrice {
 	}
 }
 
-// ShippingOption creates [telego.ShippingOption] with required parameters
+// ShippingOption creates [telego.ShippingOption] with required fields
 func ShippingOption(id, title string, prices ...telego.LabeledPrice) telego.ShippingOption {
 	return telego.ShippingOption{
 		ID:     id,
 		Title:  title,
 		Prices: prices,
+	}
+}
+
+// ReactionEmoji creates [telego.ReactionTypeEmoji] with required fields
+func ReactionEmoji(emoji string) *telego.ReactionTypeEmoji {
+	return &telego.ReactionTypeEmoji{
+		Type:  telego.ReactionEmoji,
+		Emoji: emoji,
+	}
+}
+
+// ReactionCustomEmoji creates [telego.ReactionTypeCustomEmoji] with required fields
+func ReactionCustomEmoji(customEmojiID string) *telego.ReactionTypeCustomEmoji {
+	return &telego.ReactionTypeCustomEmoji{
+		Type:          telego.ReactionCustomEmoji,
+		CustomEmojiID: customEmojiID,
+	}
+}
+
+// ReactionPaid creates [telego.ReactionTypePaid] with required fields
+func ReactionPaid() *telego.ReactionTypePaid {
+	return &telego.ReactionTypePaid{
+		Type: telego.ReactionPaid,
 	}
 }

@@ -613,3 +613,20 @@ func TestShippingOption(t *testing.T) {
 	assert.Equal(t, text2, s.Title)
 	assert.Equal(t, prices, s.Prices)
 }
+
+func TestReactionEmoji(t *testing.T) {
+	r := ReactionEmoji(text1)
+	assert.Equal(t, telego.ReactionEmoji, r.Type)
+	assert.Equal(t, text1, r.Emoji)
+}
+
+func TestReactionCustomEmoji(t *testing.T) {
+	r := ReactionCustomEmoji(text1)
+	assert.Equal(t, telego.ReactionCustomEmoji, r.Type)
+	assert.Equal(t, text1, r.CustomEmojiID)
+}
+
+func TestReactionPaid(t *testing.T) {
+	r := ReactionPaid()
+	assert.Equal(t, telego.ReactionPaid, r.Type)
+}
