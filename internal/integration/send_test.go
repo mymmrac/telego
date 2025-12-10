@@ -148,6 +148,21 @@ func TestSendPhoto(t *testing.T) {
 		require.NoError(t, err)
 		assert.NotNil(t, msg)
 	})
+
+	t.Run("edit_media", func(t *testing.T) {
+		msg, err := bot.SendMessage(ctx, &telego.SendMessageParams{
+			ChatID: tu.ID(chatID),
+			Text:   "SendPhoto " + timeNow,
+		})
+		require.NoError(t, err)
+
+		msg, err = bot.EditMessageMedia(ctx, tu.EditMessageMedia(
+			tu.ID(chatID), msg.MessageID, tu.MediaPhoto(tu.File(open(img1Jpg))),
+		))
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
 }
 
 func TestSendAudio(t *testing.T) {

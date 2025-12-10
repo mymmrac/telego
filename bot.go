@@ -25,8 +25,6 @@ const (
 
 	attachFile = `attach://`
 
-	omitEmptySuffix = ",omitempty"
-
 	botPathPrefix = "/bot"
 )
 
@@ -275,9 +273,9 @@ func parseParameters(v any) (map[string]string, error) {
 	for i := 0; i < paramsStructType.NumField(); i++ {
 		fieldType := paramsStructType.Field(i)
 		key := fieldType.Tag.Get("json")
-		key = strings.TrimSuffix(key, omitEmptySuffix)
+		key, _, _ = strings.Cut(key, ",") // Trim omitempty and omitzero
 		if key == "" {
-			return nil, fmt.Errorf("%s does not have `json` tag", paramsStructType.String())
+			return nil, fmt.Errorf("%s does not have `json` tag, or it's empty", paramsStructType.String())
 		}
 
 		fieldValue := paramsStruct.Field(i)
