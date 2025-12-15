@@ -60,7 +60,7 @@ jobs:
         run: task test
 
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: code-coverage-report
           path: bin
