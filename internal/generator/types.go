@@ -59,18 +59,13 @@ const typeFieldPattern = `
 </tr>
 `
 
-const curTypePattern = `^type (\w+) (?:struct|interface) {`
-const curConstPattern = `^const \(`
-const curFuncPattern = `^func \(`
-const curInterfacePattern = `^type \w+ interface {`
-
 var (
 	typeRegexp        = regexp.MustCompile(preparePattern(typePattern))
 	typeFieldRegexp   = regexp.MustCompile(preparePattern(typeFieldPattern))
-	curTypeRegexp     = regexp.MustCompile(curTypePattern)
-	curConstRegexp    = regexp.MustCompile(curConstPattern)
-	curFuncRegexp     = regexp.MustCompile(curFuncPattern)
-	curInterfaceRegex = regexp.MustCompile(curInterfacePattern)
+	curTypeRegexp     = regexp.MustCompile(`^type (\w+) (struct|interface) {`)
+	curConstRegexp    = regexp.MustCompile(`^const \(`)
+	curFuncRegexp     = regexp.MustCompile(`^func \(`)
+	curInterfaceRegex = regexp.MustCompile(`^type \w+ interface {`)
 )
 
 func generateTypes(docs string) tgTypes {
@@ -116,8 +111,13 @@ func generateTypeFields(fieldDocs, typeName string) tgTypeFields {
 	return fields
 }
 
-func parseCurrentTypes(types string) map[string][]string {
-	additional := map[string][]string{}
+type typeAddition struct {
+	Additions        []string // Constants and functions
+	InterfaceMethods string
+}
+
+func parseCurrentTypes(types string) map[string]typeAddition {
+	additional := make(map[string]typeAddition)
 
 	constCount := 0
 	funcOrInterfaceCount := 0
@@ -125,10 +125,14 @@ func parseCurrentTypes(types string) map[string][]string {
 
 	lines := strings.Split(types, "\n")
 	for i, line := range lines {
+		var parsingInterface bool
 		typeMatches := curTypeRegexp.FindStringSubmatch(line)
 		if len(typeMatches) > 0 {
 			currentType = typeMatches[1]
-			continue
+			parsingInterface = typeMatches[2] == "interface"
+			if !parsingInterface {
+				continue
+			}
 		}
 
 		if currentType != "" && curConstRegexp.MatchString(line) {
@@ -148,17 +152,15 @@ func parseCurrentTypes(types string) map[string][]string {
 				continue
 			}
 
-			_, ok := additional[currentType]
-			if !ok {
-				additional[currentType] = []string{}
-			}
-			additional[currentType] = append(additional[currentType], strings.Join(lines[i-1:end+1], "\n"))
-			constCount++
+			addition := additional[currentType]
+			addition.Additions = append(addition.Additions, strings.Join(lines[i-1:end+1], "\n"))
+			additional[currentType] = addition
 
+			constCount++
 			continue
 		}
 
-		if currentType != "" && (curFuncRegexp.MatchString(line) || curInterfaceRegex.MatchString(line)) {
+		if currentType != "" && (curFuncRegexp.MatchString(line) || parsingInterface) {
 			start := i - 1
 			for ; ; start-- {
 				if start < 0 {
@@ -188,11 +190,16 @@ func parseCurrentTypes(types string) map[string][]string {
 				continue
 			}
 
-			_, ok := additional[currentType]
-			if !ok {
-				additional[currentType] = []string{}
+			if parsingInterface {
+				addition := additional[currentType]
+				addition.InterfaceMethods = strings.Join(lines[i+1:end], "\n")
+				additional[currentType] = addition
+			} else {
+				addition := additional[currentType]
+				addition.Additions = append(addition.Additions, strings.Join(lines[start:end+1], "\n"))
+				additional[currentType] = addition
 			}
-			additional[currentType] = append(additional[currentType], strings.Join(lines[start:end+1], "\n"))
+
 			funcOrInterfaceCount++
 		}
 	}
@@ -228,11 +235,19 @@ import (
 		typeDescription := fitTextToLine(fmt.Sprintf("%s - %s", t.name, t.description), "// ")
 		data.WriteString(typeDescription)
 
+		addition := additional[t.name]
 		if len(t.fields) == 0 && !strings.Contains(t.description, "holds no information") {
-			data.WriteString(fmt.Sprintf(
-				"\ntype %s interface {\n\t// TODO: Add methods\n\t// Disallow external implementations\n\ti%s()\n",
-				t.name, t.name,
-			))
+			if addition.InterfaceMethods != "" {
+				data.WriteString(fmt.Sprintf(
+					"\ntype %s interface {\n%s\n",
+					t.name, addition.InterfaceMethods,
+				))
+			} else {
+				data.WriteString(fmt.Sprintf(
+					"\ntype %s interface {\n\t// TODO: Add methods\n\t// Disallow external implementations\n\ti%s()\n",
+					t.name, t.name,
+				))
+			}
 		} else {
 			data.WriteString(fmt.Sprintf("\ntype %s struct {", t.name))
 		}
@@ -260,8 +275,7 @@ import (
 
 		data.WriteString("}\n\n")
 
-		additions := additional[t.name]
-		for _, a := range additions {
+		for _, a := range addition.Additions {
 			data.WriteString(a)
 			data.WriteString("\n")
 		}
