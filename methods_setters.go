@@ -205,6 +205,12 @@ func (p *ForwardMessageParams) WithProtectContent() *ForwardMessageParams {
 	return p
 }
 
+// WithMessageEffectID adds message effect ID parameter
+func (p *ForwardMessageParams) WithMessageEffectID(messageEffectID string) *ForwardMessageParams {
+	p.MessageEffectID = messageEffectID
+	return p
+}
+
 // WithSuggestedPostParameters adds suggested post parameters parameter
 func (p *ForwardMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
 ) *ForwardMessageParams {
@@ -335,6 +341,12 @@ func (p *CopyMessageParams) WithProtectContent() *CopyMessageParams {
 // WithAllowPaidBroadcast adds allow paid broadcast parameter
 func (p *CopyMessageParams) WithAllowPaidBroadcast() *CopyMessageParams {
 	p.AllowPaidBroadcast = true
+	return p
+}
+
+// WithMessageEffectID adds message effect ID parameter
+func (p *CopyMessageParams) WithMessageEffectID(messageEffectID string) *CopyMessageParams {
+	p.MessageEffectID = messageEffectID
 	return p
 }
 
@@ -1916,6 +1928,42 @@ func (p *SendDiceParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendDiceParam
 	return p
 }
 
+// WithChatID adds chat ID parameter
+func (p *SendMessageDraftParams) WithChatID(chatID int64) *SendMessageDraftParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendMessageDraftParams) WithMessageThreadID(messageThreadID int) *SendMessageDraftParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDraftID adds draft ID parameter
+func (p *SendMessageDraftParams) WithDraftID(draftID int) *SendMessageDraftParams {
+	p.DraftID = draftID
+	return p
+}
+
+// WithText adds text parameter
+func (p *SendMessageDraftParams) WithText(text string) *SendMessageDraftParams {
+	p.Text = text
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *SendMessageDraftParams) WithParseMode(parseMode string) *SendMessageDraftParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithEntities adds entities parameter
+func (p *SendMessageDraftParams) WithEntities(entities ...MessageEntity) *SendMessageDraftParams {
+	p.Entities = entities
+	return p
+}
+
 // WithBusinessConnectionID adds business connection ID parameter
 func (p *SendChatActionParams) WithBusinessConnectionID(businessConnectionID string) *SendChatActionParams {
 	p.BusinessConnectionID = businessConnectionID
@@ -3153,15 +3201,27 @@ func (p *GetBusinessAccountGiftsParams) WithExcludeUnlimited() *GetBusinessAccou
 	return p
 }
 
-// WithExcludeLimited adds exclude limited parameter
-func (p *GetBusinessAccountGiftsParams) WithExcludeLimited() *GetBusinessAccountGiftsParams {
-	p.ExcludeLimited = true
+// WithExcludeLimitedUpgradable adds exclude limited upgradable parameter
+func (p *GetBusinessAccountGiftsParams) WithExcludeLimitedUpgradable() *GetBusinessAccountGiftsParams {
+	p.ExcludeLimitedUpgradable = true
+	return p
+}
+
+// WithExcludeLimitedNonUpgradable adds exclude limited non upgradable parameter
+func (p *GetBusinessAccountGiftsParams) WithExcludeLimitedNonUpgradable() *GetBusinessAccountGiftsParams {
+	p.ExcludeLimitedNonUpgradable = true
 	return p
 }
 
 // WithExcludeUnique adds exclude unique parameter
 func (p *GetBusinessAccountGiftsParams) WithExcludeUnique() *GetBusinessAccountGiftsParams {
 	p.ExcludeUnique = true
+	return p
+}
+
+// WithExcludeFromBlockchain adds exclude from blockchain parameter
+func (p *GetBusinessAccountGiftsParams) WithExcludeFromBlockchain() *GetBusinessAccountGiftsParams {
+	p.ExcludeFromBlockchain = true
 	return p
 }
 
@@ -3179,6 +3239,126 @@ func (p *GetBusinessAccountGiftsParams) WithOffset(offset string) *GetBusinessAc
 
 // WithLimit adds limit parameter
 func (p *GetBusinessAccountGiftsParams) WithLimit(limit int) *GetBusinessAccountGiftsParams {
+	p.Limit = limit
+	return p
+}
+
+// WithUserID adds user ID parameter
+func (p *GetUserGiftsParams) WithUserID(userID int64) *GetUserGiftsParams {
+	p.UserID = userID
+	return p
+}
+
+// WithExcludeUnlimited adds exclude unlimited parameter
+func (p *GetUserGiftsParams) WithExcludeUnlimited() *GetUserGiftsParams {
+	p.ExcludeUnlimited = true
+	return p
+}
+
+// WithExcludeLimitedUpgradable adds exclude limited upgradable parameter
+func (p *GetUserGiftsParams) WithExcludeLimitedUpgradable() *GetUserGiftsParams {
+	p.ExcludeLimitedUpgradable = true
+	return p
+}
+
+// WithExcludeLimitedNonUpgradable adds exclude limited non upgradable parameter
+func (p *GetUserGiftsParams) WithExcludeLimitedNonUpgradable() *GetUserGiftsParams {
+	p.ExcludeLimitedNonUpgradable = true
+	return p
+}
+
+// WithExcludeFromBlockchain adds exclude from blockchain parameter
+func (p *GetUserGiftsParams) WithExcludeFromBlockchain() *GetUserGiftsParams {
+	p.ExcludeFromBlockchain = true
+	return p
+}
+
+// WithExcludeUnique adds exclude unique parameter
+func (p *GetUserGiftsParams) WithExcludeUnique() *GetUserGiftsParams {
+	p.ExcludeUnique = true
+	return p
+}
+
+// WithSortByPrice adds sort by price parameter
+func (p *GetUserGiftsParams) WithSortByPrice() *GetUserGiftsParams {
+	p.SortByPrice = true
+	return p
+}
+
+// WithOffset adds offset parameter
+func (p *GetUserGiftsParams) WithOffset(offset string) *GetUserGiftsParams {
+	p.Offset = offset
+	return p
+}
+
+// WithLimit adds limit parameter
+func (p *GetUserGiftsParams) WithLimit(limit int) *GetUserGiftsParams {
+	p.Limit = limit
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *GetChatGiftsParams) WithChatID(chatID ChatID) *GetChatGiftsParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithExcludeUnsaved adds exclude unsaved parameter
+func (p *GetChatGiftsParams) WithExcludeUnsaved() *GetChatGiftsParams {
+	p.ExcludeUnsaved = true
+	return p
+}
+
+// WithExcludeSaved adds exclude saved parameter
+func (p *GetChatGiftsParams) WithExcludeSaved() *GetChatGiftsParams {
+	p.ExcludeSaved = true
+	return p
+}
+
+// WithExcludeUnlimited adds exclude unlimited parameter
+func (p *GetChatGiftsParams) WithExcludeUnlimited() *GetChatGiftsParams {
+	p.ExcludeUnlimited = true
+	return p
+}
+
+// WithExcludeLimitedUpgradable adds exclude limited upgradable parameter
+func (p *GetChatGiftsParams) WithExcludeLimitedUpgradable() *GetChatGiftsParams {
+	p.ExcludeLimitedUpgradable = true
+	return p
+}
+
+// WithExcludeLimitedNonUpgradable adds exclude limited non upgradable parameter
+func (p *GetChatGiftsParams) WithExcludeLimitedNonUpgradable() *GetChatGiftsParams {
+	p.ExcludeLimitedNonUpgradable = true
+	return p
+}
+
+// WithExcludeFromBlockchain adds exclude from blockchain parameter
+func (p *GetChatGiftsParams) WithExcludeFromBlockchain() *GetChatGiftsParams {
+	p.ExcludeFromBlockchain = true
+	return p
+}
+
+// WithExcludeUnique adds exclude unique parameter
+func (p *GetChatGiftsParams) WithExcludeUnique() *GetChatGiftsParams {
+	p.ExcludeUnique = true
+	return p
+}
+
+// WithSortByPrice adds sort by price parameter
+func (p *GetChatGiftsParams) WithSortByPrice() *GetChatGiftsParams {
+	p.SortByPrice = true
+	return p
+}
+
+// WithOffset adds offset parameter
+func (p *GetChatGiftsParams) WithOffset(offset string) *GetChatGiftsParams {
+	p.Offset = offset
+	return p
+}
+
+// WithLimit adds limit parameter
+func (p *GetChatGiftsParams) WithLimit(limit int) *GetChatGiftsParams {
 	p.Limit = limit
 	return p
 }
@@ -3293,6 +3473,42 @@ func (p *PostStoryParams) WithPostToChatPage() *PostStoryParams {
 
 // WithProtectContent adds protect content parameter
 func (p *PostStoryParams) WithProtectContent() *PostStoryParams {
+	p.ProtectContent = true
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *RepostStoryParams) WithBusinessConnectionID(businessConnectionID string) *RepostStoryParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithFromChatID adds from chat ID parameter
+func (p *RepostStoryParams) WithFromChatID(fromChatID int) *RepostStoryParams {
+	p.FromChatID = fromChatID
+	return p
+}
+
+// WithFromStoryID adds from story ID parameter
+func (p *RepostStoryParams) WithFromStoryID(fromStoryID int) *RepostStoryParams {
+	p.FromStoryID = fromStoryID
+	return p
+}
+
+// WithActivePeriod adds active period parameter
+func (p *RepostStoryParams) WithActivePeriod(activePeriod int) *RepostStoryParams {
+	p.ActivePeriod = activePeriod
+	return p
+}
+
+// WithPostToChatPage adds post to chat page parameter
+func (p *RepostStoryParams) WithPostToChatPage() *RepostStoryParams {
+	p.PostToChatPage = true
+	return p
+}
+
+// WithProtectContent adds protect content parameter
+func (p *RepostStoryParams) WithProtectContent() *RepostStoryParams {
 	p.ProtectContent = true
 	return p
 }

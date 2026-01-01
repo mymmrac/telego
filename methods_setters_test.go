@@ -97,6 +97,7 @@ func TestForwardMessageParams_Setters(t *testing.T) {
 		WithVideoStartTimestamp(4).
 		WithDisableNotification().
 		WithProtectContent().
+		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
 		WithMessageID(5)
 
@@ -108,6 +109,7 @@ func TestForwardMessageParams_Setters(t *testing.T) {
 		VideoStartTimestamp:     4,
 		DisableNotification:     true,
 		ProtectContent:          true,
+		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
 		MessageID:               5,
 	}, f)
@@ -149,6 +151,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
+		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
 		WithReplyParameters(&ReplyParameters{MessageID: 6}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
@@ -167,6 +170,7 @@ func TestCopyMessageParams_Setters(t *testing.T) {
 		DisableNotification:     true,
 		ProtectContent:          true,
 		AllowPaidBroadcast:      true,
+		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
 		ReplyParameters:         &ReplyParameters{MessageID: 6},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
@@ -798,6 +802,25 @@ func TestSendDiceParams_Setters(t *testing.T) {
 		SuggestedPostParameters: &SuggestedPostParameters{},
 		ReplyParameters:         &ReplyParameters{MessageID: 4},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
+func TestSendMessageDraftParams_Setters(t *testing.T) {
+	s := (&SendMessageDraftParams{}).
+		WithChatID(5).
+		WithMessageThreadID(1).
+		WithDraftID(2).
+		WithText("Text").
+		WithParseMode("ParseMode").
+		WithEntities([]MessageEntity{{Type: "Entities"}}...)
+
+	assert.Equal(t, &SendMessageDraftParams{
+		ChatID:          5,
+		MessageThreadID: 1,
+		DraftID:         2,
+		Text:            "Text",
+		ParseMode:       "ParseMode",
+		Entities:        []MessageEntity{{Type: "Entities"}},
 	}, s)
 }
 
@@ -1758,22 +1781,80 @@ func TestGetBusinessAccountGiftsParams_Setters(t *testing.T) {
 		WithExcludeUnsaved().
 		WithExcludeSaved().
 		WithExcludeUnlimited().
-		WithExcludeLimited().
+		WithExcludeLimitedUpgradable().
+		WithExcludeLimitedNonUpgradable().
 		WithExcludeUnique().
+		WithExcludeFromBlockchain().
 		WithSortByPrice().
 		WithOffset("Offset").
 		WithLimit(1)
 
 	assert.Equal(t, &GetBusinessAccountGiftsParams{
-		BusinessConnectionID: "BusinessConnectionID",
-		ExcludeUnsaved:       true,
-		ExcludeSaved:         true,
-		ExcludeUnlimited:     true,
-		ExcludeLimited:       true,
-		ExcludeUnique:        true,
-		SortByPrice:          true,
-		Offset:               "Offset",
-		Limit:                1,
+		BusinessConnectionID:        "BusinessConnectionID",
+		ExcludeUnsaved:              true,
+		ExcludeSaved:                true,
+		ExcludeUnlimited:            true,
+		ExcludeLimitedUpgradable:    true,
+		ExcludeLimitedNonUpgradable: true,
+		ExcludeUnique:               true,
+		ExcludeFromBlockchain:       true,
+		SortByPrice:                 true,
+		Offset:                      "Offset",
+		Limit:                       1,
+	}, g)
+}
+
+func TestGetUserGiftsParams_Setters(t *testing.T) {
+	g := (&GetUserGiftsParams{}).
+		WithUserID(2).
+		WithExcludeUnlimited().
+		WithExcludeLimitedUpgradable().
+		WithExcludeLimitedNonUpgradable().
+		WithExcludeFromBlockchain().
+		WithExcludeUnique().
+		WithSortByPrice().
+		WithOffset("Offset").
+		WithLimit(1)
+
+	assert.Equal(t, &GetUserGiftsParams{
+		UserID:                      2,
+		ExcludeUnlimited:            true,
+		ExcludeLimitedUpgradable:    true,
+		ExcludeLimitedNonUpgradable: true,
+		ExcludeFromBlockchain:       true,
+		ExcludeUnique:               true,
+		SortByPrice:                 true,
+		Offset:                      "Offset",
+		Limit:                       1,
+	}, g)
+}
+
+func TestGetChatGiftsParams_Setters(t *testing.T) {
+	g := (&GetChatGiftsParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithExcludeUnsaved().
+		WithExcludeSaved().
+		WithExcludeUnlimited().
+		WithExcludeLimitedUpgradable().
+		WithExcludeLimitedNonUpgradable().
+		WithExcludeFromBlockchain().
+		WithExcludeUnique().
+		WithSortByPrice().
+		WithOffset("Offset").
+		WithLimit(1)
+
+	assert.Equal(t, &GetChatGiftsParams{
+		ChatID:                      ChatID{ID: 2},
+		ExcludeUnsaved:              true,
+		ExcludeSaved:                true,
+		ExcludeUnlimited:            true,
+		ExcludeLimitedUpgradable:    true,
+		ExcludeLimitedNonUpgradable: true,
+		ExcludeFromBlockchain:       true,
+		ExcludeUnique:               true,
+		SortByPrice:                 true,
+		Offset:                      "Offset",
+		Limit:                       1,
 	}, g)
 }
 
@@ -1841,6 +1922,25 @@ func TestPostStoryParams_Setters(t *testing.T) {
 		PostToChatPage:       true,
 		ProtectContent:       true,
 	}, p)
+}
+
+func TestRepostStoryParams_Setters(t *testing.T) {
+	r := (&RepostStoryParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithFromChatID(1).
+		WithFromStoryID(2).
+		WithActivePeriod(3).
+		WithPostToChatPage().
+		WithProtectContent()
+
+	assert.Equal(t, &RepostStoryParams{
+		BusinessConnectionID: "BusinessConnectionID",
+		FromChatID:           1,
+		FromStoryID:          2,
+		ActivePeriod:         3,
+		PostToChatPage:       true,
+		ProtectContent:       true,
+	}, r)
 }
 
 func TestEditStoryParams_Setters(t *testing.T) {

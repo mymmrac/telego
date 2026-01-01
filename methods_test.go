@@ -833,6 +833,33 @@ func TestBot_SendDice(t *testing.T) {
 	})
 }
 
+func TestBot_SendMessageDraft(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SendMessageDraft(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SendMessageDraft(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_SendChatAction(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -3191,6 +3218,72 @@ func TestBot_GetBusinessAccountGifts(t *testing.T) {
 	})
 }
 
+func TestBot_GetUserGifts(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedOwnedGifts := &OwnedGifts{
+			TotalCount: 1,
+		}
+		resp := telegoResponse(t, expectedOwnedGifts)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		ownedGifts, err := m.Bot.GetUserGifts(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedOwnedGifts, ownedGifts)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		ownedGifts, err := m.Bot.GetUserGifts(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, ownedGifts)
+	})
+}
+
+func TestBot_GetChatGifts(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedOwnedGifts := &OwnedGifts{
+			TotalCount: 1,
+		}
+		resp := telegoResponse(t, expectedOwnedGifts)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		ownedGifts, err := m.Bot.GetChatGifts(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedOwnedGifts, ownedGifts)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		ownedGifts, err := m.Bot.GetChatGifts(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, ownedGifts)
+	})
+}
+
 func TestBot_ConvertGiftToStars(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -3298,6 +3391,39 @@ func TestBot_PostStory(t *testing.T) {
 			Return(nil, errTest)
 
 		story, err := m.Bot.PostStory(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, story)
+	})
+}
+
+func TestBot_RepostStory(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedStory := &Story{
+			ID: 1,
+		}
+		resp := telegoResponse(t, expectedStory)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		story, err := m.Bot.RepostStory(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedStory, story)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		story, err := m.Bot.RepostStory(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, story)
 	})

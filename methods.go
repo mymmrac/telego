@@ -211,8 +211,8 @@ type SendMessageParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -288,8 +288,8 @@ type ForwardMessageParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -309,6 +309,10 @@ type ForwardMessageParams struct {
 
 	// ProtectContent - Optional. Protects the contents of the forwarded message from forwarding and saving
 	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; only
+	// available when forwarding to private chats
+	MessageEffectID string `json:"message_effect_id,omitempty"`
 
 	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
 	// post to send; for direct messages chats only
@@ -336,8 +340,8 @@ type ForwardMessagesParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
@@ -379,8 +383,8 @@ type CopyMessageParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -425,6 +429,10 @@ type CopyMessageParams struct {
 	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
 	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
 
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; only
+	// available when copying to private chats
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
 	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
 	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
 	// then that suggested post is automatically declined.
@@ -462,8 +470,8 @@ type CopyMessagesParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
@@ -515,8 +523,8 @@ type SendPhotoParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -606,8 +614,8 @@ type SendAudioParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -714,8 +722,8 @@ type SendDocumentParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -816,8 +824,8 @@ type SendVideoParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -945,8 +953,8 @@ type SendAnimationParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1058,8 +1066,8 @@ type SendVoiceParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1148,8 +1156,8 @@ type SendVideoNoteParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1240,15 +1248,15 @@ type SendPaidMediaParams struct {
 	// the chat's balance. Otherwise, they will be credited to the bot's balance.
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
 
-	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-10000
+	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-25000
 	StarCount int `json:"star_count"`
 
 	// Media - A JSON-serialized array describing the media to be sent; up to 10 items
@@ -1320,8 +1328,8 @@ type SendMediaGroupParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
@@ -1388,8 +1396,8 @@ type SendLocationParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1470,8 +1478,8 @@ type SendVenueParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1556,8 +1564,8 @@ type SendContactParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1629,8 +1637,8 @@ type SendPollParams struct {
 	// @channel_username). Polls can't be sent to channel direct messages chats.
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Question - Poll question, 1-300 characters
@@ -1773,8 +1781,8 @@ type SendDiceParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -1829,6 +1837,40 @@ func (b *Bot) SendDice(ctx context.Context, params *SendDiceParams) (*Message, e
 	return message, nil
 }
 
+// SendMessageDraftParams - Represents parameters of sendMessageDraft method.
+type SendMessageDraftParams struct {
+	// ChatID - Unique identifier for the target private chat
+	ChatID int64 `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DraftID - Unique identifier of the message draft; must be non-zero. Changes of drafts with the same
+	// identifier are animated
+	DraftID int `json:"draft_id"`
+
+	// Text - Text of the message to be sent, 1-4096 characters after entities parsing
+	Text string `json:"text"`
+
+	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// Entities - Optional. A JSON-serialized list of special entities that appear in message text, which can be
+	// specified instead of parse_mode
+	Entities []MessageEntity `json:"entities,omitempty"`
+}
+
+// SendMessageDraft - Use this method to stream a partial message to a user while the message is being
+// generated; supported only for bots with forum topic mode enabled. Returns True on success.
+func (b *Bot) SendMessageDraft(ctx context.Context, params *SendMessageDraftParams) error {
+	err := b.performRequest(ctx, "sendMessageDraft", params)
+	if err != nil {
+		return fmt.Errorf("telego: sendMessageDraft: %w", err)
+	}
+	return nil
+}
+
 // SendChatActionParams - Represents parameters of sendChatAction method.
 type SendChatActionParams struct {
 	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
@@ -1839,7 +1881,8 @@ type SendChatActionParams struct {
 	// @supergroup_username). Channel chats and channel direct messages chats aren't supported.
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread; for supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread or topic of a forum; for
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// Action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing
@@ -2105,7 +2148,8 @@ type PromoteChatMemberParams struct {
 	CanManageVideoChats *bool `json:"can_manage_video_chats,omitempty"`
 
 	// CanRestrictMembers - Optional. Pass True if the administrator can restrict, ban or unban chat members, or
-	// access supergroup statistics
+	// access supergroup statistics. For backward compatibility, defaults to True for promotions of channel
+	// administrators
 	CanRestrictMembers *bool `json:"can_restrict_members,omitempty"`
 
 	// CanPromoteMembers - Optional. Pass True if the administrator can add new administrators with a subset of
@@ -2827,9 +2871,10 @@ type EditForumTopicParams struct {
 	IconCustomEmojiID *string `json:"icon_custom_emoji_id,omitempty"`
 }
 
-// EditForumTopic - Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must
-// be an administrator in the chat for this to work and must have the can_manage_topics administrator rights,
-// unless it is the creator of the topic. Returns True on success.
+// EditForumTopic - Use this method to edit name and icon of a topic in a forum supergroup chat or a private
+// chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to
+// work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns
+// True on success.
 func (b *Bot) EditForumTopic(ctx context.Context, params *EditForumTopicParams) error {
 	err := b.performRequest(ctx, "editForumTopic", params)
 	if err != nil {
@@ -2891,8 +2936,9 @@ type DeleteForumTopicParams struct {
 }
 
 // DeleteForumTopic - Use this method to delete a forum topic along with all its messages in a forum
-// supergroup chat. The bot must be an administrator in the chat for this to work and must have the
-// can_delete_messages administrator rights. Returns True on success.
+// supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an
+// administrator in the chat for this to work and must have the can_delete_messages administrator rights.
+// Returns True on success.
 func (b *Bot) DeleteForumTopic(ctx context.Context, params *DeleteForumTopicParams) error {
 	err := b.performRequest(ctx, "deleteForumTopic", params)
 	if err != nil {
@@ -2911,9 +2957,10 @@ type UnpinAllForumTopicMessagesParams struct {
 	MessageThreadID int `json:"message_thread_id"`
 }
 
-// UnpinAllForumTopicMessages - Use this method to clear the list of pinned messages in a forum topic. The
-// bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator
-// right in the supergroup. Returns True on success.
+// UnpinAllForumTopicMessages - Use this method to clear the list of pinned messages in a forum topic in a
+// forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an
+// administrator in the chat for this to work and must have the can_pin_messages administrator right in the
+// supergroup. Returns True on success.
 func (b *Bot) UnpinAllForumTopicMessages(ctx context.Context, params *UnpinAllForumTopicMessagesParams) error {
 	err := b.performRequest(ctx, "unpinAllForumTopicMessages", params)
 	if err != nil {
@@ -3396,7 +3443,7 @@ type SendGiftParams struct {
 	// the channel (in the format @channel_username) that will receive the gift.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
-	// GiftID - Identifier of the gift
+	// GiftID - Identifier of the gift; limited gifts can't be sent to channel chats
 	GiftID string `json:"gift_id"`
 
 	// PayForUpgrade - Optional. Pass True to pay for the gift upgrade from the bot's balance, thereby making
@@ -3770,11 +3817,20 @@ type GetBusinessAccountGiftsParams struct {
 	// times
 	ExcludeUnlimited bool `json:"exclude_unlimited,omitempty"`
 
-	// ExcludeLimited - Optional. Pass True to exclude gifts that can be purchased a limited number of times
-	ExcludeLimited bool `json:"exclude_limited,omitempty"`
+	// ExcludeLimitedUpgradable - Optional. Pass True to exclude gifts that can be purchased a limited number of
+	// times and can be upgraded to unique
+	ExcludeLimitedUpgradable bool `json:"exclude_limited_upgradable,omitempty"`
+
+	// ExcludeLimitedNonUpgradable - Optional. Pass True to exclude gifts that can be purchased a limited number
+	// of times and can't be upgraded to unique
+	ExcludeLimitedNonUpgradable bool `json:"exclude_limited_non_upgradable,omitempty"`
 
 	// ExcludeUnique - Optional. Pass True to exclude unique gifts
 	ExcludeUnique bool `json:"exclude_unique,omitempty"`
+
+	// ExcludeFromBlockchain - Optional. Pass True to exclude gifts that were assigned from the TON blockchain
+	// and can't be resold or transferred in Telegram
+	ExcludeFromBlockchain bool `json:"exclude_from_blockchain,omitempty"`
 
 	// SortByPrice - Optional. Pass True to sort results by gift price instead of send date. Sorting is applied
 	// before pagination.
@@ -3796,6 +3852,109 @@ func (b *Bot) GetBusinessAccountGifts(ctx context.Context, params *GetBusinessAc
 	err := b.performRequest(ctx, "getBusinessAccountGifts", params, &ownedGifts)
 	if err != nil {
 		return nil, fmt.Errorf("telego: getBusinessAccountGifts: %w", err)
+	}
+	return ownedGifts, nil
+}
+
+// GetUserGiftsParams - Represents parameters of getUserGifts method.
+type GetUserGiftsParams struct {
+	// UserID - Unique identifier of the user
+	UserID int64 `json:"user_id"`
+
+	// ExcludeUnlimited - Optional. Pass True to exclude gifts that can be purchased an unlimited number of
+	// times
+	ExcludeUnlimited bool `json:"exclude_unlimited,omitempty"`
+
+	// ExcludeLimitedUpgradable - Optional. Pass True to exclude gifts that can be purchased a limited number of
+	// times and can be upgraded to unique
+	ExcludeLimitedUpgradable bool `json:"exclude_limited_upgradable,omitempty"`
+
+	// ExcludeLimitedNonUpgradable - Optional. Pass True to exclude gifts that can be purchased a limited number
+	// of times and can't be upgraded to unique
+	ExcludeLimitedNonUpgradable bool `json:"exclude_limited_non_upgradable,omitempty"`
+
+	// ExcludeFromBlockchain - Optional. Pass True to exclude gifts that were assigned from the TON blockchain
+	// and can't be resold or transferred in Telegram
+	ExcludeFromBlockchain bool `json:"exclude_from_blockchain,omitempty"`
+
+	// ExcludeUnique - Optional. Pass True to exclude unique gifts
+	ExcludeUnique bool `json:"exclude_unique,omitempty"`
+
+	// SortByPrice - Optional. Pass True to sort results by gift price instead of send date. Sorting is applied
+	// before pagination.
+	SortByPrice bool `json:"sort_by_price,omitempty"`
+
+	// Offset - Optional. Offset of the first entry to return as received from the previous request; use an
+	// empty string to get the first chunk of results
+	Offset string `json:"offset,omitempty"`
+
+	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100
+	Limit int `json:"limit,omitempty"`
+}
+
+// GetUserGifts - Returns the gifts owned and hosted by a user. Returns OwnedGifts
+// (https://core.telegram.org/bots/api#ownedgifts) on success.
+func (b *Bot) GetUserGifts(ctx context.Context, params *GetUserGiftsParams) (*OwnedGifts, error) {
+	var ownedGifts *OwnedGifts
+	err := b.performRequest(ctx, "getUserGifts", params, &ownedGifts)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getUserGifts: %w", err)
+	}
+	return ownedGifts, nil
+}
+
+// GetChatGiftsParams - Represents parameters of getChatGifts method.
+type GetChatGiftsParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// ExcludeUnsaved - Optional. Pass True to exclude gifts that aren't saved to the chat's profile page.
+	// Always True, unless the bot has the can_post_messages administrator right in the channel.
+	ExcludeUnsaved bool `json:"exclude_unsaved,omitempty"`
+
+	// ExcludeSaved - Optional. Pass True to exclude gifts that are saved to the chat's profile page. Always
+	// False, unless the bot has the can_post_messages administrator right in the channel.
+	ExcludeSaved bool `json:"exclude_saved,omitempty"`
+
+	// ExcludeUnlimited - Optional. Pass True to exclude gifts that can be purchased an unlimited number of
+	// times
+	ExcludeUnlimited bool `json:"exclude_unlimited,omitempty"`
+
+	// ExcludeLimitedUpgradable - Optional. Pass True to exclude gifts that can be purchased a limited number of
+	// times and can be upgraded to unique
+	ExcludeLimitedUpgradable bool `json:"exclude_limited_upgradable,omitempty"`
+
+	// ExcludeLimitedNonUpgradable - Optional. Pass True to exclude gifts that can be purchased a limited number
+	// of times and can't be upgraded to unique
+	ExcludeLimitedNonUpgradable bool `json:"exclude_limited_non_upgradable,omitempty"`
+
+	// ExcludeFromBlockchain - Optional. Pass True to exclude gifts that were assigned from the TON blockchain
+	// and can't be resold or transferred in Telegram
+	ExcludeFromBlockchain bool `json:"exclude_from_blockchain,omitempty"`
+
+	// ExcludeUnique - Optional. Pass True to exclude unique gifts
+	ExcludeUnique bool `json:"exclude_unique,omitempty"`
+
+	// SortByPrice - Optional. Pass True to sort results by gift price instead of send date. Sorting is applied
+	// before pagination.
+	SortByPrice bool `json:"sort_by_price,omitempty"`
+
+	// Offset - Optional. Offset of the first entry to return as received from the previous request; use an
+	// empty string to get the first chunk of results
+	Offset string `json:"offset,omitempty"`
+
+	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100
+	Limit int `json:"limit,omitempty"`
+}
+
+// GetChatGifts - Returns the gifts owned by a chat. Returns OwnedGifts
+// (https://core.telegram.org/bots/api#ownedgifts) on success.
+func (b *Bot) GetChatGifts(ctx context.Context, params *GetChatGiftsParams) (*OwnedGifts, error) {
+	var ownedGifts *OwnedGifts
+	err := b.performRequest(ctx, "getChatGifts", params, &ownedGifts)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getChatGifts: %w", err)
 	}
 	return ownedGifts, nil
 }
@@ -3917,6 +4076,42 @@ func (b *Bot) PostStory(ctx context.Context, params *PostStoryParams) (*Story, e
 	err := b.performRequest(ctx, "postStory", params, &story)
 	if err != nil {
 		return nil, fmt.Errorf("telego: postStory: %w", err)
+	}
+	return story, nil
+}
+
+// RepostStoryParams - Represents parameters of repostStory method.
+type RepostStoryParams struct {
+	// BusinessConnectionID - Unique identifier of the business connection
+	BusinessConnectionID string `json:"business_connection_id"`
+
+	// FromChatID - Unique identifier of the chat which posted the story that should be reposted
+	FromChatID int `json:"from_chat_id"`
+
+	// FromStoryID - Unique identifier of the story that should be reposted
+	FromStoryID int `json:"from_story_id"`
+
+	// ActivePeriod - Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600,
+	// 12 * 3600, 86400, or 2 * 86400
+	ActivePeriod int `json:"active_period"`
+
+	// PostToChatPage - Optional. Pass True to keep the story accessible after it expires
+	PostToChatPage bool `json:"post_to_chat_page,omitempty"`
+
+	// ProtectContent - Optional. Pass True if the content of the story must be protected from forwarding and
+	// screenshotting
+	ProtectContent bool `json:"protect_content,omitempty"`
+}
+
+// RepostStory - Reposts a story on behalf of a business account from another business account. Both business
+// accounts must be managed by the same bot, and the story on the source account must have been posted (or
+// reposted) by the bot. Requires the can_manage_stories business bot right for both business accounts. Returns
+// Story (https://core.telegram.org/bots/api#story) on success.
+func (b *Bot) RepostStory(ctx context.Context, params *RepostStoryParams) (*Story, error) {
+	var story *Story
+	err := b.performRequest(ctx, "repostStory", params, &story)
+	if err != nil {
+		return nil, fmt.Errorf("telego: repostStory: %w", err)
 	}
 	return story, nil
 }
@@ -4437,8 +4632,8 @@ type SendStickerParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -5001,8 +5196,8 @@ type SendInvoiceParams struct {
 	// @channel_username)
 	ChatID ChatID `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
@@ -5412,8 +5607,8 @@ type SendGameParams struct {
 	// channel chats.
 	ChatID int64 `json:"chat_id"`
 
-	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of the forum; for
-	// forum supergroups only
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
 	// GameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games
