@@ -35,34 +35,34 @@ func (a FastHTTPCaller) Call(ctx context.Context, url string, data *RequestData)
 		// Continue
 	}
 
-	req := fasthttp.AcquireRequest()
-	defer fasthttp.ReleaseRequest(req)
+	request := fasthttp.AcquireRequest()
+	defer fasthttp.ReleaseRequest(request)
 
-	req.SetRequestURI(url)
-	req.Header.SetContentType(data.ContentType)
-	req.Header.SetMethod(fasthttp.MethodPost)
-	req.SetBodyRaw(data.Buffer.Bytes())
+	request.SetRequestURI(url)
+	request.Header.SetContentType(data.ContentType)
+	request.Header.SetMethod(fasthttp.MethodPost)
+	request.SetBodyRaw(data.Buffer.Bytes())
 
-	resp := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseResponse(resp)
+	response := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseResponse(response)
 
 	var err error
 	deadline, ok := ctx.Deadline()
 	if ok {
-		err = a.Client.DoDeadline(req, resp, deadline)
+		err = a.Client.DoDeadline(request, response, deadline)
 	} else {
-		err = a.Client.Do(req, resp)
+		err = a.Client.Do(request, response)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("fasthttp do request: %w", err)
 	}
 
-	if statusCode := resp.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
+	if statusCode := response.StatusCode(); statusCode >= fasthttp.StatusInternalServerError {
 		return nil, fmt.Errorf("internal server error: %d", statusCode)
 	}
 
 	apiResp := &Response{}
-	err = json.Unmarshal(resp.Body(), apiResp)
+	err = json.Unmarshal(response.Body(), apiResp)
 	if err != nil {
 		return nil, fmt.Errorf("decode json: %w", err)
 	}
@@ -82,23 +82,23 @@ var DefaultHTTPCaller = &HTTPCaller{
 
 // Call is a http implementation
 func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*Response, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, data.Buffer)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, data.Buffer)
 	if err != nil {
 		return nil, fmt.Errorf("http create request: %w", err)
 	}
-	req.Header.Set(ContentTypeHeader, data.ContentType)
+	request.Header.Set(ContentTypeHeader, data.ContentType)
 
-	resp, err := h.Client.Do(req)
+	response, err := h.Client.Do(request)
 	if err != nil {
 		return nil, fmt.Errorf("http do request: %w", err)
 	}
-	defer func() { _ = resp.Body.Close() }() //nolint:errcheck
+	defer func() { _ = response.Body.Close() }() //nolint:errcheck
 
-	if resp.StatusCode >= http.StatusInternalServerError {
-		return nil, fmt.Errorf("internal server error: %d", resp.StatusCode)
+	if response.StatusCode >= http.StatusInternalServerError {
+		return nil, fmt.Errorf("internal server error: %d", response.StatusCode)
 	}
 
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("read body: %w", err)
 	}
@@ -148,14 +148,14 @@ const (
 var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
 
 // Call makes calls using provided caller with retries
-func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (resp *Response, err error) {
+func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (response *Response, err error) {
 	for i := 0; i < r.MaxAttempts; i++ {
-		resp, err = r.Caller.Call(ctx, url, data)
-		if err == nil && (resp.Error == nil || resp.Error.ErrorCode == 0) {
-			return resp, nil
+		response, err = r.Caller.Call(ctx, url, data)
+		if err == nil && (response.Error == nil || response.ErrorCode == 0) {
+			return response, nil
 		}
 		if err == nil {
-			err = resp.Error
+			err = response.Error
 		}
 
 		if i == r.MaxAttempts-1 {

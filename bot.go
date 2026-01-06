@@ -162,21 +162,21 @@ func (b *Bot) FileDownloadURL(filepath string) string {
 
 // performRequest executes and parses response of method
 func (b *Bot) performRequest(ctx context.Context, methodName string, parameters any, vs ...any) error {
-	resp, err := b.constructAndCallRequest(ctx, methodName, parameters)
+	response, err := b.constructAndCallRequest(ctx, methodName, parameters)
 	if err != nil {
 		b.log.Errorf("Execution error %s: %s", methodName, err)
 		return fmt.Errorf("internal execution: %w", err)
 	}
-	b.log.Debugf("API response %s: %s", methodName, resp.String())
+	b.log.Debugf("API response %s: %s", methodName, response.String())
 
-	if !resp.Ok {
-		return fmt.Errorf("api: %w", resp.Error)
+	if !response.Ok {
+		return fmt.Errorf("api: %w", response.Error)
 	}
 
-	if resp.Result != nil {
+	if response.Result != nil {
 		var unmarshalErr error
 		for i := range vs {
-			unmarshalErr = json.Unmarshal(resp.Result, &vs[i])
+			unmarshalErr = json.Unmarshal(response.Result, &vs[i])
 			if unmarshalErr == nil {
 				break
 			}
@@ -187,8 +187,8 @@ func (b *Bot) performRequest(ctx context.Context, methodName string, parameters 
 		}
 	}
 
-	if b.reportWarningAsErrors && resp.Error != nil {
-		return resp.Error
+	if b.reportWarningAsErrors && response.Error != nil {
+		return response.Error
 	}
 
 	return nil
@@ -233,12 +233,12 @@ func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, pa
 	debugData := strings.TrimSuffix(debug.String(), "\n")
 	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
 
-	resp, err := b.api.Call(ctx, url, data)
+	response, err := b.api.Call(ctx, url, data)
 	if err != nil {
 		return nil, fmt.Errorf("request call: %w", err)
 	}
 
-	return resp, nil
+	return response, nil
 }
 
 // filesParameters gets all files from parameters
