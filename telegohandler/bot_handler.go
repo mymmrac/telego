@@ -104,10 +104,11 @@ func (h *BotHandler) Start() error {
 				bCtx := &Context{
 					ctx: ctx,
 					ctxBase: &ctxBase{
-						bot:      h.bot,
-						updateID: update.UpdateID,
-						group:    h.baseGroup,
-						stack:    append(make([]int, 0, depth), -1),
+						bot:        h.bot,
+						updateID:   update.UpdateID,
+						group:      h.baseGroup,
+						finalGroup: nil, // Not set
+						stack:      append(make([]int, 0, depth), -1),
 					},
 				}
 

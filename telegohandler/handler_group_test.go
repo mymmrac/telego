@@ -2,6 +2,7 @@ package telegohandler
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -136,4 +137,51 @@ func TestHandlerGroup_depth(t *testing.T) {
 		}
 		assert.Equal(t, 3, gr.depth(1))
 	})
+}
+
+func TestHandlerGroup_HandleUpdate(t *testing.T) {
+	pg := &HandlerGroup{}
+	pg.Handle(func(ctx *Context, update telego.Update) error {
+		return errors.ErrUnsupported
+	})
+
+	gr := pg.Group()
+
+	m := 0
+	gr.Handle(func(ctx *Context, update telego.Update) error {
+		m++
+		return nil
+	}, AnyMessage())
+
+	gr.Handle(func(ctx *Context, update telego.Update) error {
+		return errTest
+	}, AnyChannelPost())
+
+	ng := gr.Group(AnyCallbackQuery())
+
+	c := 0
+	ng.Handle(func(ctx *Context, update telego.Update) error {
+		c++
+		return nil
+	})
+
+	err := gr.HandleUpdate(t.Context(), nil, telego.Update{})
+	require.NoError(t, err)
+	assert.Equal(t, 0, m)
+	assert.Equal(t, 0, c)
+
+	err = gr.HandleUpdate(t.Context(), nil, telego.Update{Message: &telego.Message{}})
+	require.NoError(t, err)
+	assert.Equal(t, 1, m)
+	assert.Equal(t, 0, c)
+
+	err = gr.HandleUpdate(t.Context(), nil, telego.Update{ChannelPost: &telego.Message{}})
+	require.ErrorIs(t, err, errTest)
+	assert.Equal(t, 1, m)
+	assert.Equal(t, 0, c)
+
+	err = gr.HandleUpdate(t.Context(), nil, telego.Update{CallbackQuery: &telego.CallbackQuery{}})
+	require.NoError(t, err)
+	assert.Equal(t, 1, m)
+	assert.Equal(t, 1, c)
 }

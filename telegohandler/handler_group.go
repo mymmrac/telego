@@ -48,6 +48,30 @@ func (h *HandlerGroup) depth(depth int) int {
 	return depth
 }
 
+// HandleUpdate handles a single update in a handler group, update is allowed to be handled by any subgroup of this
+// group, but it will not be handled by the parent group of this group.
+// Note: Context passed to handlers will be automatically closed once this function exits. This behavior is consistent
+// with bot handler (it will a well close context once handler exists).
+//
+// Warning: This method is considered to be experimental and both signature and behavior may change in the future
+func (h *HandlerGroup) HandleUpdate(ctx context.Context, bot *telego.Bot, update telego.Update) error {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	bCtx := &Context{
+		ctx: ctx,
+		ctxBase: &ctxBase{
+			bot:        bot,
+			updateID:   update.UpdateID,
+			group:      h,
+			finalGroup: h,
+			stack:      append(make([]int, 0, h.depth(1)), -1),
+		},
+	}
+
+	return bCtx.Next(update)
+}
+
 // Handle registers new handler in the group, update will be processed only by first-matched route,
 // order of registration determines the order of matching routes.
 // Important to notice handler's context will be automatically canceled once the handler will finish processing or

@@ -19,8 +19,9 @@ type ctxBase struct {
 	bot      *telego.Bot
 	updateID int
 
-	group *HandlerGroup
-	stack []int
+	group      *HandlerGroup
+	finalGroup *HandlerGroup
+	stack      []int
 }
 
 // Deadline implements [context.Context.Deadline]
@@ -128,7 +129,7 @@ func (c *Context) Next(update telego.Update) error {
 	}
 
 	// Go back to parent if nothing matches in the current group
-	if c.group.parent != nil {
+	if c.group.parent != nil && c.group != c.finalGroup {
 		c.group = c.group.parent
 		c.stack = c.stack[:len(c.stack)-1]
 		return c.Next(update)
