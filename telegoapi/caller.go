@@ -147,6 +147,11 @@ type RetryCaller struct {
 	MaxDelay time.Duration
 	// Rate limit behavior
 	RateLimit RetryRateLimit
+	// Buffer request data, if set to true requests that usually stream body using io.Reader will be buffered
+	// to support retrying such requests
+	//
+	// Warning: Enabling this may lead to excessive memory consumption and OOMKill
+	BufferRequestData bool
 }
 
 // RetryRateLimit mode for handling rate limits
@@ -167,7 +172,17 @@ const (
 var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
 
 // Call makes calls using provided caller with retries
+//
+//nolint:gocognit,gocyclo
 func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (response *Response, err error) {
+	if data.BodyStream != nil && r.BufferRequestData {
+		data.BodyRaw, err = io.ReadAll(data.BodyStream)
+		if err != nil {
+			return nil, fmt.Errorf("read body: %w", err)
+		}
+		data.BodyStream = nil
+	}
+
 	for i := 0; i < r.MaxAttempts; i++ {
 		response, err = r.Caller.Call(ctx, url, data)
 		if err == nil && (response.Error == nil || response.ErrorCode == 0) {
@@ -213,5 +228,6 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 			// Continue
 		}
 	}
+
 	return nil, errors.Join(err, ErrMaxRetryAttempts)
 }

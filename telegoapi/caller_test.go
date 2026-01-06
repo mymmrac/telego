@@ -204,7 +204,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			},
 			MaxAttempts: 1,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -218,7 +218,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			},
 			MaxAttempts: 3,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
@@ -231,7 +231,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			},
 			MaxAttempts: 2,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -247,7 +247,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			StartDelay:   10,
 			MaxDelay:     1,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -264,7 +264,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 2,
 			RateLimit:   RetryRateLimitSkip,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -281,7 +281,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 2,
 			RateLimit:   RetryRateLimitWait,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -298,7 +298,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 2,
 			RateLimit:   RetryRateLimitAbort,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
@@ -315,7 +315,7 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 2,
 			RateLimit:   RetryRateLimitWaitOrAbort,
 		}
-		resp, err := retryCaller.Call(ctx, "", nil)
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
