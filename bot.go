@@ -48,6 +48,7 @@ type Bot struct {
 	api         ta.Caller
 	constructor ta.RequestConstructor
 
+	debugMode             bool
 	useTestServerPath     bool
 	reportWarningAsErrors bool
 
@@ -196,12 +197,11 @@ func (b *Bot) performRequest(ctx context.Context, methodName string, parameters 
 
 // constructAndCallRequest creates and executes request with parsing of parameters
 func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, parameters any) (*ta.Response, error) {
-	filesParams, hasFiles := filesParameters(parameters)
 	var data *ta.RequestData
-
 	debug := &strings.Builder{}
 
-	if hasFiles {
+	filesParams, hasFiles := filesParameters(parameters)
+	if hasFiles { //nolint:nestif
 		parsedParameters, err := parseParameters(parameters)
 		if err != nil {
 			return nil, fmt.Errorf("parsing parameters: %w", err)
@@ -212,7 +212,9 @@ func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, pa
 			return nil, fmt.Errorf("multipart request: %w", err)
 		}
 
-		logRequestWithFiles(debug, parsedParameters, filesParams)
+		if b.debugMode {
+			logRequestWithFiles(debug, parsedParameters, filesParams)
+		}
 	} else {
 		var err error
 		data, err = b.constructor.JSONRequest(parameters)
@@ -220,7 +222,9 @@ func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, pa
 			return nil, fmt.Errorf("json request: %w", err)
 		}
 
-		_, _ = debug.WriteString(data.Buffer.String())
+		if b.debugMode {
+			logRequest(debug, parameters)
+		}
 	}
 
 	var url string
@@ -230,8 +234,12 @@ func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, pa
 		url = b.apiURL + botPathPrefix + b.token + "/" + methodName
 	}
 
-	debugData := strings.TrimSuffix(debug.String(), "\n")
-	b.log.Debugf("API call to: %q, with data: %s", url, debugData)
+	if b.debugMode {
+		debugData := strings.TrimSuffix(debug.String(), "\n")
+		b.log.Debugf("API call to: %q, with data: %s", url, debugData)
+	} else {
+		b.log.Debugf("API call to: %q", url)
+	}
 
 	response, err := b.api.Call(ctx, url, data)
 	if err != nil {
@@ -351,6 +359,13 @@ func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, f
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)
 	_, _ = fmt.Fprintf(debug, "parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", "))
+}
+
+// logRequestWithFiles logs request
+func logRequest(debug *strings.Builder, parameters any) {
+	//nolint:errcheck
+	debugJSON, _ := json.Marshal(parameters)
+	_, _ = fmt.Fprintf(debug, "parameters: %s", debugJSON)
 }
 
 // ToPtr converts value into a pointer to value

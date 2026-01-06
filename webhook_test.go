@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"bytes"
 	"testing"
 	"time"
 
@@ -115,7 +114,7 @@ func TestWithWebhookSet(t *testing.T) {
 	ctx := &webhook{}
 
 	m.MockRequestConstructor.EXPECT().JSONRequest(gomock.Any()).Return(&ta.RequestData{
-		Buffer: bytes.NewBuffer(nil),
+		BodyRaw: []byte{},
 	}, nil)
 
 	m.MockAPICaller.EXPECT().Call(gomock.Any(), gomock.Any(), gomock.Any()).Return(&ta.Response{Ok: true}, nil)

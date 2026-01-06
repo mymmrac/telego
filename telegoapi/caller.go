@@ -3,6 +3,7 @@
 package telegoapi
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -41,7 +42,15 @@ func (a FastHTTPCaller) Call(ctx context.Context, url string, data *RequestData)
 	request.SetRequestURI(url)
 	request.Header.SetContentType(data.ContentType)
 	request.Header.SetMethod(fasthttp.MethodPost)
-	request.SetBodyRaw(data.Buffer.Bytes())
+
+	switch {
+	case data.BodyRaw != nil:
+		request.SetBodyRaw(data.BodyRaw)
+	case data.BodyStream != nil:
+		request.SetBodyStream(data.BodyStream, -1)
+	default:
+		return nil, errors.New("body is not provided")
+	}
 
 	response := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(response)
@@ -80,9 +89,19 @@ var DefaultHTTPCaller = &HTTPCaller{
 	Client: http.DefaultClient,
 }
 
-// Call is a http implementation
+// Call is an http implementation
 func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*Response, error) {
-	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, data.Buffer)
+	var requestBody io.Reader
+	switch {
+	case data.BodyRaw != nil:
+		requestBody = bytes.NewReader(data.BodyRaw)
+	case data.BodyStream != nil:
+		requestBody = data.BodyStream
+	default:
+		return nil, errors.New("body is not provided")
+	}
+
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, requestBody)
 	if err != nil {
 		return nil, fmt.Errorf("http create request: %w", err)
 	}
@@ -118,7 +137,7 @@ func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*R
 type RetryCaller struct {
 	// Underling caller
 	Caller Caller
-	// Max number of attempts to make call
+	// Max number of attempts to make a call
 	MaxAttempts int
 	// Exponent base for delay
 	ExponentBase float64

@@ -1,7 +1,6 @@
 package telegoapi
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -61,14 +60,19 @@ type ResponseParameters struct {
 	RetryAfter int `json:"retry_after,omitempty"`
 }
 
-// RequestData represents data needed to execute request
+// RequestData represents data needed to execute the request; at least one BodyRaw or BodyStream must be provided
 type RequestData struct {
+	// ContentType request content type
 	ContentType string
-	Buffer      *bytes.Buffer
+	// BodyRaw raw body, slice must not be modified until the request is completed
+	BodyRaw []byte
+	// BodyStream body stream that will be read, ignored if BodyRaw is provided
+	BodyStream io.Reader
 }
 
-// Caller represents way to call API with request
+// Caller represents way to call API with a request
 type Caller interface {
+	// Call accepts the URL and request data (as raw bytes or stream) and calls API
 	Call(ctx context.Context, url string, data *RequestData) (*Response, error)
 }
 
@@ -80,12 +84,16 @@ type Caller interface {
 // will not work.
 // For [os.File] you can use os.File.Seek(0, io.SeekStart) to prepare for a new request.
 type NamedReader interface {
+	// Reader of file data
 	io.Reader
+	// Name returns file name
 	Name() string
 }
 
-// RequestConstructor represents a way to construct API request
+// RequestConstructor represents a way to construct an API request
 type RequestConstructor interface {
+	// JSONRequest marshals parameters as JSON, usually returns body as raw bytes
 	JSONRequest(parameters any) (*RequestData, error)
+	// MultipartRequest marshals parameters and files as multipart form data, usually returns body as stream
 	MultipartRequest(parameters map[string]string, filesParameters map[string]NamedReader) (*RequestData, error)
 }

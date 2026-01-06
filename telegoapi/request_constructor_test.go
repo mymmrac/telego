@@ -1,7 +1,6 @@
 package telegoapi
 
 import (
-	"bytes"
 	"io"
 	"strings"
 	"testing"
@@ -29,7 +28,7 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 			},
 			data: &RequestData{
 				ContentType: ContentTypeJSON,
-				Buffer:      bytes.NewBufferString(`{"n":1,"s":"test"}`),
+				BodyRaw:     []byte(`{"n":1,"s":"test"}`),
 			},
 			isError: false,
 		},
@@ -44,7 +43,7 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.Equalf(t, tt.data, data, "Expected: %q, actual: %q", tt.data.Buffer.String(), data.Buffer.String())
+			assert.Equalf(t, tt.data, data, "Expected: %q, actual: %q", string(tt.data.BodyRaw), string(data.BodyRaw))
 		})
 	}
 }
@@ -88,8 +87,11 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 			require.NoError(t, err)
 			assert.Contains(t, data.ContentType, tt.contentType)
 
+			body, err := io.ReadAll(data.BodyStream)
+			require.NoError(t, err)
+
 			for _, expectedData := range tt.data {
-				assert.Contains(t, data.Buffer.String(), expectedData)
+				assert.Contains(t, string(body), expectedData)
 			}
 		})
 	}

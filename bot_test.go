@@ -97,7 +97,7 @@ func TestNewBot(t *testing.T) {
 
 		expectedData := &ta.RequestData{
 			ContentType: ta.ContentTypeJSON,
-			Buffer:      bytes.NewBuffer([]byte{}),
+			BodyRaw:     []byte{},
 		}
 
 		t.Run("success", func(t *testing.T) {
@@ -429,7 +429,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 
 	expectedData := &ta.RequestData{
 		ContentType: ta.ContentTypeJSON,
-		Buffer:      bytes.NewBuffer(paramsBytes),
+		BodyRaw:     paramsBytes,
 	}
 
 	t.Run("success_json", func(t *testing.T) {
@@ -470,7 +470,7 @@ func TestBot_constructAndCallRequest(t *testing.T) {
 
 		expectedDataFile := &ta.RequestData{
 			ContentType: ta.ContentTypeJSON,
-			Buffer:      bytes.NewBuffer(paramsBytesFile),
+			BodyRaw:     paramsBytesFile,
 		}
 
 		m.MockRequestConstructor.EXPECT().

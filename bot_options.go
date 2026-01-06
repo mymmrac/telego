@@ -12,7 +12,7 @@ import (
 	ta "github.com/mymmrac/telego/telegoapi"
 )
 
-// WithAPICaller sets custom API caller to use
+// WithAPICaller sets a custom API caller to use
 func WithAPICaller(caller ta.Caller) BotOption {
 	return func(bot *Bot) error {
 		bot.api = caller
@@ -46,7 +46,7 @@ func WithRequestConstructor(constructor ta.RequestConstructor) BotOption {
 
 // WithDefaultLogger configures default logger. Redefines existing logger.
 // Note: Default logger will hide your bot token, but it still may log sensitive information, it's only safe to use
-// default logger in testing environment.
+// default logger in a testing environment.
 func WithDefaultLogger(debugMode, printErrors bool) BotOption {
 	return func(bot *Bot) error {
 		log := &logger{
@@ -56,13 +56,14 @@ func WithDefaultLogger(debugMode, printErrors bool) BotOption {
 			Replacer:    defaultReplacer(bot.Token()),
 		}
 		bot.log = log
+		bot.debugMode = debugMode
 		return nil
 	}
 }
 
 // WithExtendedDefaultLogger configures default logger, replacer can be nil. Redefines existing loggers.
 // Note: Keep in mind that debug logs will include your bot token. It's only safe to have them enabled in
-// testing environment, or hide sensitive information (like bot token) yourself.
+// a testing environment or hide sensitive information (like bot token) yourself.
 func WithExtendedDefaultLogger(debugMode, printErrors bool, replacer *strings.Replacer) BotOption {
 	return func(bot *Bot) error {
 		log := &logger{
@@ -72,12 +73,13 @@ func WithExtendedDefaultLogger(debugMode, printErrors bool, replacer *strings.Re
 			Replacer:    replacer,
 		}
 		bot.log = log
+		bot.debugMode = debugMode
 		return nil
 	}
 }
 
 // WithDefaultDebugLogger configures default debug logger. Alias to default logger with debug and error logs.
-// Redefines existing logger.
+// Redefines existing logger. Enables debug mode.
 func WithDefaultDebugLogger() BotOption {
 	return WithDefaultLogger(true, true)
 }
@@ -89,10 +91,18 @@ func WithDiscardLogger() BotOption {
 
 // WithLogger sets logger to use. Redefines existing loggers.
 // Note: Keep in mind that debug logs will include your bot token. It's only safe to have them enabled in
-// testing environment, or hide sensitive information (like bot token) yourself.
+// a testing environment or hide sensitive information (like bot token) yourself.
 func WithLogger(log Logger) BotOption {
 	return func(bot *Bot) error {
 		bot.log = log
+		return nil
+	}
+}
+
+// WithDebugMode enables debug mode, when bot makes API requests log messages will include request parameters
+func WithDebugMode() BotOption {
+	return func(bot *Bot) error {
+		bot.debugMode = true
 		return nil
 	}
 }
@@ -109,7 +119,7 @@ func WithAPIServer(apiURL string) BotOption {
 	}
 }
 
-// WithTestServerPath use the test server API path instead of regular API path
+// WithTestServerPath use the test server API path instead of the regular API path
 //
 // Regular API: https://<api-server>/bot<token>/<method-name>
 // Test API:    https://<api-server>/bot<token>/test/<method-name>
@@ -120,7 +130,7 @@ func WithTestServerPath() BotOption {
 	}
 }
 
-// WithHealthCheck enables health check using [Bot.GetMe] method on start
+// WithHealthCheck enables health check using the [Bot.GetMe] method on the start
 func WithHealthCheck(ctx context.Context) BotOption {
 	return func(bot *Bot) error {
 		me, err := bot.GetMe(ctx)

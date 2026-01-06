@@ -1,7 +1,6 @@
 package telego
 
 import (
-	"bytes"
 	"context"
 	"net/http"
 	"strings"
@@ -172,6 +171,15 @@ func TestWithDefaultDebugLogger(t *testing.T) {
 	assert.NotNil(t, log.Replacer)
 }
 
+func TestWithDebugMode(t *testing.T) {
+	bot := &Bot{}
+
+	err := WithDebugMode()(bot)
+	require.NoError(t, err)
+
+	assert.True(t, bot.debugMode)
+}
+
 func TestWithTestServerPath(t *testing.T) {
 	bot := &Bot{}
 
@@ -194,7 +202,7 @@ func TestWithHealthCheck(t *testing.T) {
 
 	expectedData := &ta.RequestData{
 		ContentType: ta.ContentTypeJSON,
-		Buffer:      bytes.NewBuffer([]byte{}),
+		BodyRaw:     []byte{},
 	}
 
 	constructor.EXPECT().

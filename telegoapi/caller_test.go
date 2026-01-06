@@ -1,7 +1,6 @@
 package telegoapi
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"net"
@@ -54,7 +53,7 @@ func TestFastHTTPCaller_Call(t *testing.T) {
 
 	data := &RequestData{
 		ContentType: ContentTypeJSON,
-		Buffer:      bytes.NewBufferString("test"),
+		BodyRaw:     []byte("test"),
 	}
 
 	ctx := t.Context()
@@ -120,7 +119,7 @@ func TestHTTPCaller_Call(t *testing.T) {
 
 	data := &RequestData{
 		ContentType: ContentTypeJSON,
-		Buffer:      bytes.NewBufferString("test"),
+		BodyRaw:     []byte("test"),
 	}
 
 	ctx := t.Context()
