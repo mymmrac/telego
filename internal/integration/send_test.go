@@ -3,7 +3,6 @@
 package main
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,7 +13,7 @@ import (
 )
 
 func TestSendMessage(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("simple", func(t *testing.T) {
 		msg, err := bot.SendMessage(ctx, &telego.SendMessageParams{
@@ -110,7 +109,7 @@ func TestSendMessage(t *testing.T) {
 }
 
 func TestSendPhoto(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("regular", func(t *testing.T) {
 		msg, err := bot.SendPhoto(ctx, &telego.SendPhotoParams{
@@ -166,7 +165,7 @@ func TestSendPhoto(t *testing.T) {
 }
 
 func TestSendAudio(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("audio_file", func(t *testing.T) {
 		msg, err := bot.SendAudio(ctx, &telego.SendAudioParams{
@@ -194,7 +193,7 @@ func TestSendAudio(t *testing.T) {
 }
 
 func TestSendPoll(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	t.Run("anonymous", func(t *testing.T) {
 		msg, err := bot.SendPoll(ctx, &telego.SendPollParams{

@@ -13,7 +13,7 @@ import (
 )
 
 func TestMiddleware(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	updates, err := bot.UpdatesViaLongPolling(ctx, nil)
 	require.NoError(t, err)

@@ -3,7 +3,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"slices"
 	"sync"
@@ -17,7 +16,7 @@ import (
 )
 
 func TestForwardMessages(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	updates, err := bot.UpdatesViaLongPolling(ctx, &telego.GetUpdatesParams{
 		AllowedUpdates: []string{

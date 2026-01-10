@@ -3,7 +3,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"testing"
 
@@ -15,7 +14,7 @@ import (
 )
 
 func TestInlineQuery(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 
 	updates, err := bot.UpdatesViaLongPolling(ctx, &telego.GetUpdatesParams{
 		AllowedUpdates: []string{
