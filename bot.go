@@ -9,6 +9,7 @@ import (
 	"io"
 	"reflect"
 	"regexp"
+	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -361,6 +362,7 @@ func logRequestWithFiles(debug *strings.Builder, parameters map[string]string, f
 			debugFiles = append(debugFiles, fmt.Sprintf("%q: %q", k, v.Name()))
 		}
 	}
+	slices.Sort(debugFiles)
 	//nolint:errcheck
 	debugJSON, _ := json.Marshal(parameters)
 	_, _ = fmt.Fprintf(debug, "parameters: %s, files: {%s}", debugJSON, strings.Join(debugFiles, ", "))
