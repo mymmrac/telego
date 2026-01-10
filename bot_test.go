@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -696,4 +697,53 @@ func TestToPtr(t *testing.T) {
 
 	assert.Empty(t, *ToPtr(""))
 	assert.Equal(t, "a", *ToPtr("a"))
+}
+
+func TestBot_ID_and_Username(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	m.MockRequestConstructor.EXPECT().
+		JSONRequest(nil).
+		Return(&ta.RequestData{}, nil)
+	m.MockAPICaller.EXPECT().
+		Call(gomock.Any(), gomock.Any(), gomock.Any()).
+		Return(telegoResponse(t, &User{
+			ID:       123,
+			Username: "test",
+		}), nil)
+
+	id := m.Bot.ID()
+	assert.Equal(t, int64(123), id)
+
+	username := m.Bot.Username()
+	assert.Equal(t, "test", username)
+
+	id = m.Bot.ID()
+	assert.Equal(t, int64(123), id)
+}
+
+func Test_logRequestWithFiles(t *testing.T) {
+	debug := &strings.Builder{}
+	parameters := map[string]string{
+		"foo": "bar",
+	}
+	files := map[string]ta.NamedReader{
+		"file1":                 testNamedReade{},
+		testNamedReade{}.Name(): testNamedReade{},
+		"fileNil":               nil,
+	}
+
+	logRequestWithFiles(debug, parameters, files)
+	assert.Equal(t, `parameters: {"foo":"bar"}, files: {"file1": "test", "test"}`, debug.String())
+}
+
+func Test_logRequest(t *testing.T) {
+	debug := &strings.Builder{}
+	parameters := map[string]string{
+		"foo": "bar",
+	}
+
+	logRequest(debug, parameters)
+	assert.Equal(t, `parameters: {"foo":"bar"}`, debug.String())
 }
