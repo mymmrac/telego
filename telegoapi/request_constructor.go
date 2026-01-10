@@ -60,8 +60,7 @@ func (d DefaultConstructor) MultipartRequest(
 				return
 			}
 
-			_, err = io.Copy(wr, file)
-			if err != nil {
+			if _, err = io.Copy(wr, file); err != nil {
 				_ = pw.CloseWithError(fmt.Errorf("write file: %w", err))
 				return
 			}

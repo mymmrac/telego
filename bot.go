@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"io"
 	"reflect"
 	"regexp"
 	"strings"
@@ -225,6 +226,10 @@ func (b *Bot) constructAndCallRequest(ctx context.Context, methodName string, pa
 		if b.debugMode {
 			logRequest(debug, parameters)
 		}
+	}
+
+	if closer, ok := data.BodyStream.(io.Closer); ok {
+		defer func() { _ = closer.Close() }() //nolint:errcheck
 	}
 
 	var url string
