@@ -234,7 +234,7 @@ func (c MessageEntityCollection) CustomEmoji(emojiID string) MessageEntityCollec
 // fine, but trimming their length actually limits what can be sent
 func MessageEntities(entityCollections ...MessageEntityCollection) (string, []telego.MessageEntity) {
 	text := strings.Builder{}
-	var entities []telego.MessageEntity
+	entities := make([]telego.MessageEntity, 0, len(entityCollections))
 
 	for _, collection := range entityCollections {
 		collection.SetOffset(UTF16TextLen(text.String()))
