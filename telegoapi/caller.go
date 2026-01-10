@@ -172,8 +172,6 @@ const (
 var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
 
 // Call makes calls using provided caller with retries
-//
-//nolint:gocognit,gocyclo
 func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (response *Response, err error) {
 	if data.BodyStream != nil && r.BufferRequestData {
 		data.BodyRaw, err = io.ReadAll(data.BodyStream)
@@ -196,27 +194,10 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 			break
 		}
 
-		var delay time.Duration
-
-		var apiErr *Error
-		if errors.As(err, &apiErr) && apiErr.ErrorCode == 429 && apiErr.Parameters != nil { // Rate limit
-			switch r.RateLimit {
-			case RetryRateLimitSkip:
-				// Do nothing
-			case RetryRateLimitAbort:
-				return nil, err
-			case RetryRateLimitWait:
-				delay = time.Duration(apiErr.Parameters.RetryAfter) * time.Second
-			case RetryRateLimitWaitOrAbort:
-				delay = time.Duration(apiErr.Parameters.RetryAfter) * time.Second
-				if delay > r.MaxDelay {
-					return nil, err
-				}
-			default:
-				return nil, fmt.Errorf("unknown rate limit behavior: %d", r.RateLimit)
-			}
+		delay, ok := r.handleError(err)
+		if !ok {
+			return nil, err
 		}
-
 		if delay == 0 {
 			delay = min(time.Duration(math.Pow(r.ExponentBase, float64(i)))*r.StartDelay, r.MaxDelay)
 		}
@@ -230,4 +211,27 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 	}
 
 	return nil, errors.Join(err, ErrMaxRetryAttempts)
+}
+
+func (r *RetryCaller) handleError(err error) (time.Duration, bool) {
+	var apiErr *Error
+	if errors.As(err, &apiErr) && apiErr.ErrorCode == 429 && apiErr.Parameters != nil { // Rate limit
+		switch r.RateLimit {
+		case RetryRateLimitSkip:
+			return 0, true
+		case RetryRateLimitAbort:
+			return 0, false
+		case RetryRateLimitWait:
+			return time.Duration(apiErr.Parameters.RetryAfter) * time.Second, true
+		case RetryRateLimitWaitOrAbort:
+			delay := time.Duration(apiErr.Parameters.RetryAfter) * time.Second
+			if delay > r.MaxDelay {
+				return 0, false
+			}
+			return delay, true
+		default:
+			// Skip unknown rate limit behavior
+		}
+	}
+	return 0, true
 }

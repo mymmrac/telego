@@ -1,6 +1,7 @@
 package telegoapi
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"net"
@@ -205,6 +206,22 @@ func TestRetryCaller_Call(t *testing.T) {
 			MaxAttempts: 1,
 		}
 		resp, err := retryCaller.Call(ctx, "", &RequestData{})
+		require.NoError(t, err)
+		assert.Equal(t, expectedResp, resp)
+	})
+
+	t.Run("success_buffer_data", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: expectedResp,
+				err:  nil,
+			},
+			MaxAttempts:       1,
+			BufferRequestData: true,
+		}
+		resp, err := retryCaller.Call(ctx, "", &RequestData{
+			BodyStream: bytes.NewReader([]byte("abc")),
+		})
 		require.NoError(t, err)
 		assert.Equal(t, expectedResp, resp)
 	})
