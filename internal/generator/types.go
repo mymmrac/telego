@@ -60,12 +60,11 @@ const typeFieldPattern = `
 `
 
 var (
-	typeRegexp        = regexp.MustCompile(preparePattern(typePattern))
-	typeFieldRegexp   = regexp.MustCompile(preparePattern(typeFieldPattern))
-	curTypeRegexp     = regexp.MustCompile(`^type (\w+) (struct|interface) {`)
-	curConstRegexp    = regexp.MustCompile(`^const \(`)
-	curFuncRegexp     = regexp.MustCompile(`^func \(`)
-	curInterfaceRegex = regexp.MustCompile(`^type \w+ interface {`)
+	typeRegexp      = regexp.MustCompile(preparePattern(typePattern))
+	typeFieldRegexp = regexp.MustCompile(preparePattern(typeFieldPattern))
+	curTypeRegexp   = regexp.MustCompile(`^type (\w+) (struct|interface) {`)
+	curConstRegexp  = regexp.MustCompile(`^const \(`)
+	curFuncRegexp   = regexp.MustCompile(`^func \(`)
 )
 
 func generateTypes(docs string) tgTypes {

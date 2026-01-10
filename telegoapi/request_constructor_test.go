@@ -147,7 +147,7 @@ func (t testErrFile) Name() string {
 	return t.fileName
 }
 
-func (t testErrFile) Read(p []byte) (n int, err error) {
+func (t testErrFile) Read(_ []byte) (n int, err error) {
 	return 0, t.err
 }
 
