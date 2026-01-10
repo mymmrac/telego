@@ -1,4 +1,4 @@
-package web_apps
+package main
 
 import (
 	"context"

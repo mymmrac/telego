@@ -1,7 +1,7 @@
 package telegoapi
 
 import (
-	"bytes"
+	"errors"
 	"io"
 	"strings"
 	"testing"
@@ -29,7 +29,7 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 			},
 			data: &RequestData{
 				ContentType: ContentTypeJSON,
-				Buffer:      bytes.NewBufferString(`{"n":1,"s":"test"}`),
+				BodyRaw:     []byte(`{"n":1,"s":"test"}`),
 			},
 			isError: false,
 		},
@@ -44,7 +44,7 @@ func TestDefaultConstructor_JSONRequest(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			assert.Equalf(t, tt.data, data, "Expected: %q, actual: %q", tt.data.Buffer.String(), data.Buffer.String())
+			assert.Equalf(t, tt.data, data, "Expected: %q, actual: %q", string(tt.data.BodyRaw), string(data.BodyRaw))
 		})
 	}
 }
@@ -57,6 +57,7 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 		contentType     string
 		data            []string
 		isError         bool
+		isReadError     bool
 	}{
 		{
 			name: "success",
@@ -64,7 +65,7 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 				"testParam": "1",
 			},
 			filesParameters: map[string]NamedReader{
-				"testFile": newTestFile("Hello World", "testF"),
+				"testFile": newTestFile("testF", "Hello World"),
 				"nilFile":  nil,
 			},
 			contentType: "multipart/form-data; boundary=",
@@ -74,6 +75,14 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 				"Content-Disposition: form-data; name=\"testParam\"\r\n\r\n1\r\n",
 			},
 			isError: false,
+		},
+		{
+			name:       "error_read",
+			parameters: map[string]string{},
+			filesParameters: map[string]NamedReader{
+				"testFile": newTestErrFile("testF", errors.New("read error")),
+			},
+			isReadError: true,
 		},
 	}
 	for _, tt := range tests {
@@ -88,31 +97,58 @@ func TestDefaultConstructor_MultipartRequest(t *testing.T) {
 			require.NoError(t, err)
 			assert.Contains(t, data.ContentType, tt.contentType)
 
+			body, err := io.ReadAll(data.BodyStream)
+			if tt.isReadError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+
 			for _, expectedData := range tt.data {
-				assert.Contains(t, data.Buffer.String(), expectedData)
+				assert.Contains(t, string(body), expectedData)
 			}
 		})
 	}
 }
 
 type testFile struct {
-	data     io.Reader
 	fileName string
+	data     io.Reader
 }
 
-func newTestFile(data, name string) testFile {
+func newTestFile(name, data string) testFile {
 	return testFile{
-		data:     strings.NewReader(data),
 		fileName: name,
+		data:     strings.NewReader(data),
 	}
+}
+
+func (t testFile) Name() string {
+	return t.fileName
 }
 
 func (t testFile) Read(p []byte) (n int, err error) {
 	return t.data.Read(p)
 }
 
-func (t testFile) Name() string {
+type testErrFile struct {
+	fileName string
+	err      error
+}
+
+func newTestErrFile(name string, err error) testErrFile {
+	return testErrFile{
+		fileName: name,
+		err:      err,
+	}
+}
+
+func (t testErrFile) Name() string {
 	return t.fileName
+}
+
+func (t testErrFile) Read(_ []byte) (n int, err error) {
+	return 0, t.err
 }
 
 func Test_isNil(t *testing.T) {

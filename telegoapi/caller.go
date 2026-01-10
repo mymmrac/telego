@@ -3,6 +3,7 @@
 package telegoapi
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -41,7 +42,15 @@ func (a FastHTTPCaller) Call(ctx context.Context, url string, data *RequestData)
 	request.SetRequestURI(url)
 	request.Header.SetContentType(data.ContentType)
 	request.Header.SetMethod(fasthttp.MethodPost)
-	request.SetBodyRaw(data.Buffer.Bytes())
+
+	switch {
+	case data.BodyRaw != nil:
+		request.SetBodyRaw(data.BodyRaw)
+	case data.BodyStream != nil:
+		request.SetBodyStream(data.BodyStream, -1)
+	default:
+		return nil, errors.New("body is not provided")
+	}
 
 	response := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(response)
@@ -80,9 +89,19 @@ var DefaultHTTPCaller = &HTTPCaller{
 	Client: http.DefaultClient,
 }
 
-// Call is a http implementation
+// Call is an http implementation
 func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*Response, error) {
-	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, data.Buffer)
+	var requestBody io.Reader
+	switch {
+	case data.BodyRaw != nil:
+		requestBody = bytes.NewReader(data.BodyRaw)
+	case data.BodyStream != nil:
+		requestBody = data.BodyStream
+	default:
+		return nil, errors.New("body is not provided")
+	}
+
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, requestBody)
 	if err != nil {
 		return nil, fmt.Errorf("http create request: %w", err)
 	}
@@ -118,7 +137,7 @@ func (h HTTPCaller) Call(ctx context.Context, url string, data *RequestData) (*R
 type RetryCaller struct {
 	// Underling caller
 	Caller Caller
-	// Max number of attempts to make call
+	// Max number of attempts to make a call
 	MaxAttempts int
 	// Exponent base for delay
 	ExponentBase float64
@@ -128,6 +147,11 @@ type RetryCaller struct {
 	MaxDelay time.Duration
 	// Rate limit behavior
 	RateLimit RetryRateLimit
+	// Buffer request data, if set to true requests that usually stream body using io.Reader will be buffered
+	// to support retrying such requests
+	//
+	// Warning: Enabling this may lead to excessive memory consumption and OOMKill
+	BufferRequestData bool
 }
 
 // RetryRateLimit mode for handling rate limits
@@ -149,6 +173,14 @@ var ErrMaxRetryAttempts = errors.New("max retry attempts reached")
 
 // Call makes calls using provided caller with retries
 func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (response *Response, err error) {
+	if data.BodyStream != nil && r.BufferRequestData {
+		data.BodyRaw, err = io.ReadAll(data.BodyStream)
+		if err != nil {
+			return nil, fmt.Errorf("read body: %w", err)
+		}
+		data.BodyStream = nil
+	}
+
 	for i := 0; i < r.MaxAttempts; i++ {
 		response, err = r.Caller.Call(ctx, url, data)
 		if err == nil && (response.Error == nil || response.ErrorCode == 0) {
@@ -162,27 +194,10 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 			break
 		}
 
-		var delay time.Duration
-
-		var apiErr *Error
-		if errors.As(err, &apiErr) && apiErr.ErrorCode == 429 && apiErr.Parameters != nil { // Rate limit
-			switch r.RateLimit {
-			case RetryRateLimitSkip:
-				// Do nothing
-			case RetryRateLimitAbort:
-				return nil, err
-			case RetryRateLimitWait:
-				delay = time.Duration(apiErr.Parameters.RetryAfter) * time.Second
-			case RetryRateLimitWaitOrAbort:
-				delay = time.Duration(apiErr.Parameters.RetryAfter) * time.Second
-				if delay > r.MaxDelay {
-					return nil, err
-				}
-			default:
-				return nil, fmt.Errorf("unknown rate limit behavior: %d", r.RateLimit)
-			}
+		delay, ok := r.handleError(err)
+		if !ok {
+			return nil, err
 		}
-
 		if delay == 0 {
 			delay = min(time.Duration(math.Pow(r.ExponentBase, float64(i)))*r.StartDelay, r.MaxDelay)
 		}
@@ -194,5 +209,29 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 			// Continue
 		}
 	}
+
 	return nil, errors.Join(err, ErrMaxRetryAttempts)
+}
+
+func (r *RetryCaller) handleError(err error) (time.Duration, bool) {
+	var apiErr *Error
+	if errors.As(err, &apiErr) && apiErr.ErrorCode == 429 && apiErr.Parameters != nil { // Rate limit
+		switch r.RateLimit {
+		case RetryRateLimitSkip:
+			return 0, true
+		case RetryRateLimitAbort:
+			return 0, false
+		case RetryRateLimitWait:
+			return time.Duration(apiErr.Parameters.RetryAfter) * time.Second, true
+		case RetryRateLimitWaitOrAbort:
+			delay := time.Duration(apiErr.Parameters.RetryAfter) * time.Second
+			if delay > r.MaxDelay {
+				return 0, false
+			}
+			return delay, true
+		default:
+			// Skip unknown rate limit behavior
+		}
+	}
+	return 0, true
 }
