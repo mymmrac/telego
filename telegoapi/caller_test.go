@@ -336,4 +336,34 @@ func TestRetryCaller_Call(t *testing.T) {
 		require.Error(t, err)
 		assert.Nil(t, resp)
 	})
+
+	t.Run("error_non_retrieble", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err: &Error{
+					ErrorCode: 400,
+				},
+			},
+			MaxAttempts: 2,
+		}
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
+		require.Error(t, err)
+		assert.Nil(t, resp)
+	})
+
+	t.Run("error_unhandled", func(t *testing.T) {
+		retryCaller := &RetryCaller{
+			Caller: &testRetryCaller{
+				resp: nil,
+				err: &Error{
+					ErrorCode: 500,
+				},
+			},
+			MaxAttempts: 2,
+		}
+		resp, err := retryCaller.Call(ctx, "", &RequestData{})
+		require.Error(t, err)
+		assert.Nil(t, resp)
+	})
 }

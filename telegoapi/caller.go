@@ -215,23 +215,37 @@ func (r *RetryCaller) Call(ctx context.Context, url string, data *RequestData) (
 
 func (r *RetryCaller) handleError(err error) (time.Duration, bool) {
 	var apiErr *Error
-	if errors.As(err, &apiErr) && apiErr.ErrorCode == 429 && apiErr.Parameters != nil { // Rate limit
-		switch r.RateLimit {
+	if !errors.As(err, &apiErr) {
+		return 0, true // Unknown error
+	}
+
+	switch apiErr.ErrorCode {
+	case http.StatusTooManyRequests:
+		switch r.RateLimit { //nolint:revive
 		case RetryRateLimitSkip:
-			return 0, true
+			return 0, true // Skip handling
 		case RetryRateLimitAbort:
-			return 0, false
+			return 0, false // Abort retry
 		case RetryRateLimitWait:
-			return time.Duration(apiErr.Parameters.RetryAfter) * time.Second, true
+			if apiErr.Parameters == nil {
+				return 0, true // Unknown retry after time
+			}
+			return time.Duration(apiErr.Parameters.RetryAfter) * time.Second, true // Retry after delay
 		case RetryRateLimitWaitOrAbort:
+			if apiErr.Parameters == nil {
+				return 0, true // Unknown retry after time
+			}
 			delay := time.Duration(apiErr.Parameters.RetryAfter) * time.Second
 			if delay > r.MaxDelay {
-				return 0, false
+				return 0, false // Abort, delay too long
 			}
-			return delay, true
+			return delay, true // Retry after delay
 		default:
-			// Skip unknown rate limit behavior
+			return 0, true // Skip unknown rate limit behavior
 		}
+	case http.StatusBadRequest, http.StatusRequestEntityTooLarge, http.StatusForbidden, http.StatusUnauthorized:
+		return 0, false // Non retryable errors
+	default:
+		return 0, true // Unknown status
 	}
-	return 0, true
 }
