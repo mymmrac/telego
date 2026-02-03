@@ -892,17 +892,19 @@ func TestUpdate_Clone(t *testing.T) {
 }
 
 func BenchmarkUpdate_Clone(b *testing.B) {
-	const n1 = 1
-	const s1 = "text"
+	const n1 = 1234567890
+	const s1 = "Here is some long text used for testing cloning performance."
 	const b1 = true
 
 	c1 := Chat{
-		ID:        n1,
-		Type:      s1,
-		Title:     s1,
-		Username:  s1,
-		FirstName: s1,
-		LastName:  s1,
+		ID:               n1,
+		Type:             s1,
+		Title:            s1,
+		Username:         s1,
+		FirstName:        s1,
+		LastName:         s1,
+		IsForum:          b1,
+		IsDirectMessages: b1,
 	}
 
 	u1 := User{
@@ -917,38 +919,56 @@ func BenchmarkUpdate_Clone(b *testing.B) {
 		CanJoinGroups:           b1,
 		CanReadAllGroupMessages: b1,
 		SupportsInlineQueries:   b1,
+		CanConnectToBusiness:    b1,
+		HasMainWebApp:           b1,
+		HasTopicsEnabled:        b1,
 	}
 
 	u := Update{
 		UpdateID: n1,
 		Message: &Message{
-			MessageID:  n1,
-			From:       &u1,
-			SenderChat: &c1,
-			Date:       n1,
-			Chat:       c1,
+			MessageID:       n1,
+			MessageThreadID: n1,
+			DirectMessagesTopic: &DirectMessagesTopic{
+				TopicID: n1,
+				User:    &u1,
+			},
+			From:                 &u1,
+			SenderChat:           &c1,
+			SenderBoostCount:     n1,
+			Date:                 n1,
+			BusinessConnectionID: s1,
+			Chat:                 c1,
 			ForwardOrigin: &MessageOriginChat{
 				Type:            OriginTypeChat,
 				Date:            n1,
 				SenderChat:      c1,
 				AuthorSignature: s1,
 			},
-			IsAutomaticForward:    b1,
-			ViaBot:                &u1,
-			EditDate:              n1,
-			HasProtectedContent:   b1,
-			MediaGroupID:          s1,
-			AuthorSignature:       s1,
-			Text:                  s1,
-			Caption:               s1,
-			NewChatTitle:          s1,
-			DeleteChatPhoto:       b1,
-			GroupChatCreated:      b1,
-			SupergroupChatCreated: b1,
-			ChannelChatCreated:    b1,
-			MigrateToChatID:       n1,
-			MigrateFromChatID:     n1,
-			ConnectedWebsite:      s1,
+			IsTopicMessage:         b1,
+			IsAutomaticForward:     b1,
+			ReplyToChecklistTaskID: n1,
+			ViaBot:                 &u1,
+			EditDate:               n1,
+			HasProtectedContent:    b1,
+			IsFromOffline:          b1,
+			IsPaidPost:             b1,
+			MediaGroupID:           s1,
+			AuthorSignature:        s1,
+			PaidStarCount:          n1,
+			Text:                   s1,
+			EffectID:               s1,
+			Caption:                s1,
+			ShowCaptionAboveMedia:  b1,
+			HasMediaSpoiler:        b1,
+			NewChatTitle:           s1,
+			DeleteChatPhoto:        b1,
+			GroupChatCreated:       b1,
+			SupergroupChatCreated:  b1,
+			ChannelChatCreated:     b1,
+			MigrateToChatID:        n1,
+			MigrateFromChatID:      n1,
+			ConnectedWebsite:       s1,
 		},
 	}
 

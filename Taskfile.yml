@@ -88,7 +88,7 @@ tasks:
   test:bench:
     desc: "Run benchmarks"
     cmds:
-      - go test -bench=. -benchtime=10s -benchmem
+      - go test -bench=. -benchtime=30s -benchmem
 
   vulnerability:
     desc: "Check for vulnerabilities"
