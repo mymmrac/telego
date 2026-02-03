@@ -125,7 +125,6 @@ func (u Update) Clone() Update {
 	if err != nil {
 		panic(err)
 	}
-
 	return update
 }
 
@@ -133,13 +132,12 @@ func (u Update) Clone() Update {
 //
 // Note: Update's context is carried to the copy as is, to change it use [Update.WithContext] method.
 func (u Update) CloneSafe() (Update, error) {
-	var update Update
-
 	data, err := json.Marshal(u)
 	if err != nil {
 		return Update{}, fmt.Errorf("telego: clone update: marshal: %w", err)
 	}
 
+	var update Update
 	err = json.Unmarshal(data, &update)
 	if err != nil {
 		return Update{}, fmt.Errorf("telego: clone update: unmarshal: %w", err)
@@ -155,7 +153,6 @@ func (u Update) Context() context.Context {
 	if u.ctx != nil {
 		return u.ctx
 	}
-
 	return context.Background()
 }
 
@@ -166,7 +163,6 @@ func (u Update) WithContext(ctx context.Context) Update {
 	if ctx == nil {
 		panic("Telego: nil context not allowed")
 	}
-
 	u.ctx = ctx
 	return u
 }
