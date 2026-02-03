@@ -217,7 +217,7 @@ type SendMessageParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Text - Text of the message to be sent, 1-4096 characters after entities parsing
 	Text string `json:"text"`
@@ -294,7 +294,7 @@ type ForwardMessageParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// forwarded; required if the message is forwarded to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original message was sent (or channel username in
 	// the format @channel_username)
@@ -346,7 +346,7 @@ type ForwardMessagesParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
 	// forwarded; required if the messages are forwarded to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original messages were sent (or channel username in
 	// the format @channel_username)
@@ -389,7 +389,7 @@ type CopyMessageParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original message was sent (or channel username in
 	// the format @channel_username)
@@ -476,7 +476,7 @@ type CopyMessagesParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
 	// sent; required if the messages are sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// FromChatID - Unique identifier for the chat where the original messages were sent (or channel username in
 	// the format @channel_username)
@@ -529,7 +529,7 @@ type SendPhotoParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new
@@ -620,7 +620,7 @@ type SendAudioParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or
@@ -728,7 +728,7 @@ type SendDocumentParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
@@ -830,7 +830,7 @@ type SendVideoParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
@@ -959,7 +959,7 @@ type SendAnimationParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
@@ -1072,7 +1072,7 @@ type SendVoiceParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
@@ -1162,7 +1162,7 @@ type SendVideoNoteParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
@@ -1254,7 +1254,7 @@ type SendPaidMediaParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-25000
 	StarCount int `json:"star_count"`
@@ -1334,7 +1334,7 @@ type SendMediaGroupParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the messages will be
 	// sent; required if the messages are sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Media - A JSON-serialized array describing messages to be sent, must include 2-10 items
 	Media []InputMedia `json:"media"`
@@ -1402,7 +1402,7 @@ type SendLocationParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Latitude - Latitude of the location
 	Latitude float64 `json:"latitude"`
@@ -1484,7 +1484,7 @@ type SendVenueParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Latitude - Latitude of the venue
 	Latitude float64 `json:"latitude"`
@@ -1570,7 +1570,7 @@ type SendContactParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// PhoneNumber - Contact's phone number
 	PhoneNumber string `json:"phone_number"`
@@ -1787,7 +1787,7 @@ type SendDiceParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Emoji - Optional. Emoji on which the dice throw animation is based. Currently, must be one of “🎲”,
 	// “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”,
@@ -4638,7 +4638,7 @@ type SendStickerParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload
@@ -5202,7 +5202,7 @@ type SendInvoiceParams struct {
 
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
-	DirectMessagesTopicID int `json:"direct_messages_topic_id,omitempty"`
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
 	// Title - Product name, 1-32 characters
 	Title string `json:"title"`

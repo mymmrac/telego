@@ -360,7 +360,8 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 	}
 
 	if (parameter.name == "UserId" || parameter.name == "ChatId" || parameter.name == "NewOwnerChatId" ||
-		parameter.name == "SenderChatId" || strings.Contains(parameter.description, "number of seconds")) &&
+		parameter.name == "SenderChatId" || parameter.name == "DirectMessagesTopicId" ||
+		strings.Contains(parameter.description, "number of seconds")) &&
 		parameter.typ == "int" {
 		parameter.typ = "int64"
 	}

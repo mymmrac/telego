@@ -91,7 +91,7 @@ func (p *SendMessageParams) WithMessageThreadID(messageThreadID int) *SendMessag
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendMessageParams {
+func (p *SendMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendMessageParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -176,7 +176,7 @@ func (p *ForwardMessageParams) WithMessageThreadID(messageThreadID int) *Forward
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *ForwardMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int) *ForwardMessageParams {
+func (p *ForwardMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *ForwardMessageParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -237,7 +237,7 @@ func (p *ForwardMessagesParams) WithMessageThreadID(messageThreadID int) *Forwar
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *ForwardMessagesParams) WithDirectMessagesTopicID(directMessagesTopicID int) *ForwardMessagesParams {
+func (p *ForwardMessagesParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *ForwardMessagesParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -279,7 +279,7 @@ func (p *CopyMessageParams) WithMessageThreadID(messageThreadID int) *CopyMessag
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *CopyMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int) *CopyMessageParams {
+func (p *CopyMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *CopyMessageParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -382,7 +382,7 @@ func (p *CopyMessagesParams) WithMessageThreadID(messageThreadID int) *CopyMessa
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *CopyMessagesParams) WithDirectMessagesTopicID(directMessagesTopicID int) *CopyMessagesParams {
+func (p *CopyMessagesParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *CopyMessagesParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -436,7 +436,7 @@ func (p *SendPhotoParams) WithMessageThreadID(messageThreadID int) *SendPhotoPar
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendPhotoParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendPhotoParams {
+func (p *SendPhotoParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendPhotoParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -539,7 +539,7 @@ func (p *SendAudioParams) WithMessageThreadID(messageThreadID int) *SendAudioPar
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendAudioParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendAudioParams {
+func (p *SendAudioParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendAudioParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -654,7 +654,7 @@ func (p *SendDocumentParams) WithMessageThreadID(messageThreadID int) *SendDocum
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendDocumentParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendDocumentParams {
+func (p *SendDocumentParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendDocumentParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -757,7 +757,7 @@ func (p *SendVideoParams) WithMessageThreadID(messageThreadID int) *SendVideoPar
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendVideoParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVideoParams {
+func (p *SendVideoParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVideoParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -902,7 +902,7 @@ func (p *SendAnimationParams) WithMessageThreadID(messageThreadID int) *SendAnim
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendAnimationParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendAnimationParams {
+func (p *SendAnimationParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendAnimationParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1029,7 +1029,7 @@ func (p *SendVoiceParams) WithMessageThreadID(messageThreadID int) *SendVoicePar
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendVoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVoiceParams {
+func (p *SendVoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVoiceParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1126,7 +1126,7 @@ func (p *SendVideoNoteParams) WithMessageThreadID(messageThreadID int) *SendVide
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendVideoNoteParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVideoNoteParams {
+func (p *SendVideoNoteParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVideoNoteParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1217,7 +1217,7 @@ func (p *SendPaidMediaParams) WithMessageThreadID(messageThreadID int) *SendPaid
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendPaidMediaParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendPaidMediaParams {
+func (p *SendPaidMediaParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendPaidMediaParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1320,7 +1320,7 @@ func (p *SendMediaGroupParams) WithMessageThreadID(messageThreadID int) *SendMed
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendMediaGroupParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendMediaGroupParams {
+func (p *SendMediaGroupParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendMediaGroupParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1380,7 +1380,7 @@ func (p *SendLocationParams) WithMessageThreadID(messageThreadID int) *SendLocat
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendLocationParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendLocationParams {
+func (p *SendLocationParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendLocationParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1483,7 +1483,7 @@ func (p *SendVenueParams) WithMessageThreadID(messageThreadID int) *SendVenuePar
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendVenueParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendVenueParams {
+func (p *SendVenueParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVenueParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1598,7 +1598,7 @@ func (p *SendContactParams) WithMessageThreadID(messageThreadID int) *SendContac
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendContactParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendContactParams {
+func (p *SendContactParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendContactParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -1875,7 +1875,7 @@ func (p *SendDiceParams) WithMessageThreadID(messageThreadID int) *SendDiceParam
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendDiceParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendDiceParams {
+func (p *SendDiceParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendDiceParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -3978,7 +3978,7 @@ func (p *SendStickerParams) WithMessageThreadID(messageThreadID int) *SendSticke
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendStickerParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendStickerParams {
+func (p *SendStickerParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendStickerParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
@@ -4352,7 +4352,7 @@ func (p *SendInvoiceParams) WithMessageThreadID(messageThreadID int) *SendInvoic
 }
 
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
-func (p *SendInvoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int) *SendInvoiceParams {
+func (p *SendInvoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendInvoiceParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
 	return p
 }
