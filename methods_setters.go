@@ -2031,6 +2031,24 @@ func (p *GetUserProfilePhotosParams) WithLimit(limit int) *GetUserProfilePhotosP
 }
 
 // WithUserID adds user ID parameter
+func (p *GetUserProfileAudiosParams) WithUserID(userID int64) *GetUserProfileAudiosParams {
+	p.UserID = userID
+	return p
+}
+
+// WithOffset adds offset parameter
+func (p *GetUserProfileAudiosParams) WithOffset(offset int) *GetUserProfileAudiosParams {
+	p.Offset = offset
+	return p
+}
+
+// WithLimit adds limit parameter
+func (p *GetUserProfileAudiosParams) WithLimit(limit int) *GetUserProfileAudiosParams {
+	p.Limit = limit
+	return p
+}
+
+// WithUserID adds user ID parameter
 func (p *SetUserEmojiStatusParams) WithUserID(userID int64) *SetUserEmojiStatusParams {
 	p.UserID = userID
 	return p
@@ -2873,6 +2891,12 @@ func (p *SetMyShortDescriptionParams) WithLanguageCode(languageCode string) *Set
 // WithLanguageCode adds language code parameter
 func (p *GetMyShortDescriptionParams) WithLanguageCode(languageCode string) *GetMyShortDescriptionParams {
 	p.LanguageCode = languageCode
+	return p
+}
+
+// WithPhoto adds photo parameter
+func (p *SetMyProfilePhotoParams) WithPhoto(photo InputProfilePhoto) *SetMyProfilePhotoParams {
+	p.Photo = photo
 	return p
 }
 

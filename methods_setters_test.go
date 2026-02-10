@@ -867,6 +867,19 @@ func TestGetUserProfilePhotosParams_Setters(t *testing.T) {
 	}, g)
 }
 
+func TestGetUserProfileAudiosParams_Setters(t *testing.T) {
+	g := (&GetUserProfileAudiosParams{}).
+		WithUserID(3).
+		WithOffset(1).
+		WithLimit(2)
+
+	assert.Equal(t, &GetUserProfileAudiosParams{
+		UserID: 3,
+		Offset: 1,
+		Limit:  2,
+	}, g)
+}
+
 func TestSetUserEmojiStatusParams_Setters(t *testing.T) {
 	s := (&SetUserEmojiStatusParams{}).
 		WithUserID(3).
@@ -1537,6 +1550,15 @@ func TestGetMyShortDescriptionParams_Setters(t *testing.T) {
 	assert.Equal(t, &GetMyShortDescriptionParams{
 		LanguageCode: "LanguageCode",
 	}, g)
+}
+
+func TestSetMyProfilePhotoParams_Setters(t *testing.T) {
+	s := (&SetMyProfilePhotoParams{}).
+		WithPhoto(&InputProfilePhotoAnimated{Animation: testInputFile})
+
+	assert.Equal(t, &SetMyProfilePhotoParams{
+		Photo: &InputProfilePhotoAnimated{Animation: testInputFile},
+	}, s)
 }
 
 func TestSetChatMenuButtonParams_Setters(t *testing.T) {

@@ -1985,6 +1985,31 @@ func (b *Bot) GetUserProfilePhotos(ctx context.Context, params *GetUserProfilePh
 	return userProfilePhotos, nil
 }
 
+// GetUserProfileAudiosParams - Represents parameters of getUserProfileAudios method.
+type GetUserProfileAudiosParams struct {
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+
+	// Offset - Optional. Sequential number of the first audio to be returned. By default, all audios are
+	// returned.
+	Offset int `json:"offset,omitempty"`
+
+	// Limit - Optional. Limits the number of audios to be retrieved. Values between 1-100 are accepted.
+	// Defaults to 100.
+	Limit int `json:"limit,omitempty"`
+}
+
+// GetUserProfileAudios - Use this method to get a list of profile audios for a user. Returns a
+// UserProfileAudios (https://core.telegram.org/bots/api#userprofileaudios) object.
+func (b *Bot) GetUserProfileAudios(ctx context.Context, params *GetUserProfileAudiosParams) (*UserProfileAudios, error) {
+	var userProfileAudios *UserProfileAudios
+	err := b.performRequest(ctx, "getUserProfileAudios", params, &userProfileAudios)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getUserProfileAudios: %w", err)
+	}
+	return userProfileAudios, nil
+}
+
 // SetUserEmojiStatusParams - Represents parameters of setUserEmojiStatus method.
 type SetUserEmojiStatusParams struct {
 	// UserID - Unique identifier of the target user
@@ -2839,9 +2864,10 @@ type CreateForumTopicParams struct {
 	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
 }
 
-// CreateForumTopic - Use this method to create a topic in a forum supergroup chat. The bot must be an
-// administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns
-// information about the created topic as a ForumTopic (https://core.telegram.org/bots/api#forumtopic) object.
+// CreateForumTopic - Use this method to create a topic in a forum supergroup chat or a private chat with a
+// user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must
+// have the can_manage_topics administrator right. Returns information about the created topic as a ForumTopic
+// (https://core.telegram.org/bots/api#forumtopic) object.
 func (b *Bot) CreateForumTopic(ctx context.Context, params *CreateForumTopicParams) (*ForumTopic, error) {
 	var forumTopic *ForumTopic
 	err := b.performRequest(ctx, "createForumTopic", params, &forumTopic)
@@ -3341,6 +3367,31 @@ func (b *Bot) GetMyShortDescription(ctx context.Context, params *GetMyShortDescr
 		return nil, fmt.Errorf("telego: getMyShortDescription: %w", err)
 	}
 	return botShortDescription, nil
+}
+
+// SetMyProfilePhotoParams - Represents parameters of setMyProfilePhoto method.
+type SetMyProfilePhotoParams struct {
+	// Photo - The new profile photo to set
+	Photo InputProfilePhoto `json:"photo"`
+}
+
+// SetMyProfilePhoto - Changes the profile photo of the bot. Returns True on success.
+func (b *Bot) SetMyProfilePhoto(ctx context.Context, params *SetMyProfilePhotoParams) error {
+	err := b.performRequest(ctx, "setMyProfilePhoto", params)
+	if err != nil {
+		return fmt.Errorf("telego: setMyProfilePhoto: %w", err)
+	}
+	return nil
+}
+
+// RemoveMyProfilePhoto - Removes the profile photo of the bot. Requires no parameters. Returns True on
+// success.
+func (b *Bot) RemoveMyProfilePhoto(ctx context.Context) error {
+	err := b.performRequest(ctx, "removeMyProfilePhoto", nil)
+	if err != nil {
+		return fmt.Errorf("telego: removeMyProfilePhoto: %w", err)
+	}
+	return nil
 }
 
 // SetChatMenuButtonParams - Represents parameters of setChatMenuButton method.

@@ -947,6 +947,37 @@ func TestBot_GetUserProfilePhotos(t *testing.T) {
 	})
 }
 
+func TestBot_GetUserProfileAudios(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedUserProfileAudios := &UserProfileAudios{}
+		resp := telegoResponse(t, expectedUserProfileAudios)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		userProfileAudios, err := m.Bot.GetUserProfileAudios(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedUserProfileAudios, userProfileAudios)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		userProfileAudios, err := m.Bot.GetUserProfileAudios(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, userProfileAudios)
+	})
+}
+
 func TestBot_SetUserEmojiStatus(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2591,6 +2622,60 @@ func TestBot_GetMyShortDescription(t *testing.T) {
 		botShortDescription, err := m.Bot.GetMyShortDescription(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, botShortDescription)
+	})
+}
+
+func TestBot_SetMyProfilePhoto(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetMyProfilePhoto(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetMyProfilePhoto(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_RemoveMyProfilePhoto(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.RemoveMyProfilePhoto(t.Context())
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.RemoveMyProfilePhoto(t.Context())
+		require.Error(t, err)
 	})
 }
 
