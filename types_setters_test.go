@@ -98,6 +98,8 @@ func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 func TestKeyboardButton_Setters(t *testing.T) {
 	k := (KeyboardButton{}).
 		WithText("Text").
+		WithIconCustomEmojiID("IconCustomEmojiID").
+		WithStyle("Style").
 		WithRequestUsers(&KeyboardButtonRequestUsers{RequestID: 1}).
 		WithRequestChat(&KeyboardButtonRequestChat{RequestID: 2}).
 		WithRequestContact().
@@ -106,13 +108,15 @@ func TestKeyboardButton_Setters(t *testing.T) {
 		WithWebApp(&WebAppInfo{})
 
 	assert.Equal(t, KeyboardButton{
-		Text:            "Text",
-		RequestUsers:    &KeyboardButtonRequestUsers{RequestID: 1},
-		RequestChat:     &KeyboardButtonRequestChat{RequestID: 2},
-		RequestContact:  true,
-		RequestLocation: true,
-		RequestPoll:     &KeyboardButtonPollType{Type: "RequestPoll"},
-		WebApp:          &WebAppInfo{},
+		Text:              "Text",
+		IconCustomEmojiID: "IconCustomEmojiID",
+		Style:             "Style",
+		RequestUsers:      &KeyboardButtonRequestUsers{RequestID: 1},
+		RequestChat:       &KeyboardButtonRequestChat{RequestID: 2},
+		RequestContact:    true,
+		RequestLocation:   true,
+		RequestPoll:       &KeyboardButtonPollType{Type: "RequestPoll"},
+		WebApp:            &WebAppInfo{},
 	}, k)
 }
 
@@ -189,6 +193,8 @@ func TestInlineKeyboardMarkup_Setters(t *testing.T) {
 func TestInlineKeyboardButton_Setters(t *testing.T) {
 	i := (InlineKeyboardButton{}).
 		WithText("Text").
+		WithIconCustomEmojiID("IconCustomEmojiID").
+		WithStyle("Style").
 		WithURL("URL").
 		WithCallbackData("CallbackData").
 		WithWebApp(&WebAppInfo{}).
@@ -202,6 +208,8 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 
 	assert.Equal(t, InlineKeyboardButton{
 		Text:                         "Text",
+		IconCustomEmojiID:            "IconCustomEmojiID",
+		Style:                        "Style",
 		URL:                          "URL",
 		CallbackData:                 "CallbackData",
 		WebApp:                       &WebAppInfo{},

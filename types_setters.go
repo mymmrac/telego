@@ -168,6 +168,18 @@ func (k KeyboardButton) WithText(text string) KeyboardButton {
 	return k
 }
 
+// WithIconCustomEmojiID adds icon custom emoji ID parameter
+func (k KeyboardButton) WithIconCustomEmojiID(iconCustomEmojiID string) KeyboardButton {
+	k.IconCustomEmojiID = iconCustomEmojiID
+	return k
+}
+
+// WithStyle adds style parameter
+func (k KeyboardButton) WithStyle(style string) KeyboardButton {
+	k.Style = style
+	return k
+}
+
 // WithRequestUsers adds request users parameter
 func (k KeyboardButton) WithRequestUsers(requestUsers *KeyboardButtonRequestUsers) KeyboardButton {
 	k.RequestUsers = requestUsers
@@ -335,6 +347,18 @@ func (i *InlineKeyboardMarkup) WithInlineKeyboard(inlineKeyboard ...[]InlineKeyb
 // WithText adds text parameter
 func (i InlineKeyboardButton) WithText(text string) InlineKeyboardButton {
 	i.Text = text
+	return i
+}
+
+// WithIconCustomEmojiID adds icon custom emoji ID parameter
+func (i InlineKeyboardButton) WithIconCustomEmojiID(iconCustomEmojiID string) InlineKeyboardButton {
+	i.IconCustomEmojiID = iconCustomEmojiID
+	return i
+}
+
+// WithStyle adds style parameter
+func (i InlineKeyboardButton) WithStyle(style string) InlineKeyboardButton {
+	i.Style = style
 	return i
 }
 

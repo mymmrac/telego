@@ -255,6 +255,10 @@ type User struct {
 	// HasTopicsEnabled - Optional. True, if the bot has forum topic mode enabled in private chats. Returned
 	// only in getMe (https://core.telegram.org/bots/api#getme).
 	HasTopicsEnabled bool `json:"has_topics_enabled,omitempty"`
+
+	// AllowsUsersToCreateTopics - Optional. True, if the bot allows users to create and delete topics in
+	// private chats. Returned only in getMe (https://core.telegram.org/bots/api#getme).
+	AllowsUsersToCreateTopics bool `json:"allows_users_to_create_topics,omitempty"`
 }
 
 // Chat - This object represents a chat.
@@ -479,6 +483,9 @@ type ChatFullInfo struct {
 
 	// Rating - Optional. For private chats, the rating of the user if any
 	Rating *UserRating `json:"rating,omitempty"`
+
+	// FirstProfileAudio - Optional. For private chats, the first audio added to the profile of the user
+	FirstProfileAudio *Audio `json:"first_profile_audio,omitempty"`
 
 	// UniqueGiftColors - Optional. The color scheme based on a unique gift that must be used for the chat's
 	// name, message replies and link previews
@@ -728,6 +735,12 @@ type Message struct {
 	// LeftChatMember - Optional. A member was removed from the group, information about them (this member may
 	// be the bot itself)
 	LeftChatMember *User `json:"left_chat_member,omitempty"`
+
+	// ChatOwnerLeft - Optional. Service message: chat owner has left
+	ChatOwnerLeft *ChatOwnerLeft `json:"chat_owner_left,omitempty"`
+
+	// ChatOwnerChanged - Optional. Service message: chat owner has changed
+	ChatOwnerChanged *ChatOwnerChanged `json:"chat_owner_changed,omitempty"`
 
 	// NewChatTitle - Optional. A chat title was changed to this value
 	NewChatTitle string `json:"new_chat_title,omitempty"`
@@ -1541,6 +1554,30 @@ type Story struct {
 	ID int `json:"id"`
 }
 
+// VideoQuality - This object represents a video file of a specific quality.
+type VideoQuality struct {
+	// FileID - Identifier for this file, which can be used to download or reuse the file
+	FileID string `json:"file_id"`
+
+	// FileUniqueID - Unique identifier for this file, which is supposed to be the same over time and for
+	// different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
+
+	// Width - Video width
+	Width int `json:"width"`
+
+	// Height - Video height
+	Height int `json:"height"`
+
+	// Codec - Codec that was used to encode the video, for example, “h264”, “h265”, or “av01”
+	Codec string `json:"codec"`
+
+	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
+	// have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit
+	// integer or double-precision float type are safe for storing this value.
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
 // Video - This object represents a video file.
 type Video struct {
 	// FileID - Identifier for this file, which can be used to download or reuse the file
@@ -1567,6 +1604,9 @@ type Video struct {
 
 	// StartTimestamp - Optional. Timestamp in seconds from which the video will play in the message
 	StartTimestamp int `json:"start_timestamp,omitempty"`
+
+	// Qualities - Optional. List of available qualities of the video
+	Qualities []VideoQuality `json:"qualities,omitempty"`
 
 	// FileName - Optional. Original filename as defined by the sender
 	FileName string `json:"file_name,omitempty"`
@@ -2786,6 +2826,15 @@ type UserProfilePhotos struct {
 	Photos [][]PhotoSize `json:"photos"`
 }
 
+// UserProfileAudios - This object represents the audios displayed on a user's profile.
+type UserProfileAudios struct {
+	// TotalCount - Total number of profile audios for the target user
+	TotalCount int `json:"total_count"`
+
+	// Audios - Requested profile audios
+	Audios []Audio `json:"audios"`
+}
+
 // File - This object represents a file ready to be downloaded. The file can be downloaded via the link
 // https://api.telegram.org/file/bot<token>/<file_path>. It is guaranteed that the link will be valid for at
 // least 1 hour. When the link expires, a new one can be requested by calling getFile
@@ -2874,13 +2923,23 @@ func (r *ReplyKeyboardMarkup) ReplyType() string {
 
 func (r *ReplyKeyboardMarkup) iReplyMarkup() {}
 
-// KeyboardButton - This object represents one button of the reply keyboard. At most one of the optional
-// fields must be used to specify type of the button. For simple text buttons, String can be used instead of
-// this object to specify the button text.
+// KeyboardButton - This object represents one button of the reply keyboard. At most one of the fields other
+// than text, icon_custom_emoji_id, and style must be used to specify the type of the button. For simple text
+// buttons, String can be used instead of this object to specify the button text.
 type KeyboardButton struct {
-	// Text - Text of the button. If none of the optional fields are used, it will be sent as a message when the
-	// button is pressed
+	// Text - Text of the button. If none of the fields other than text, icon_custom_emoji_id, and style are
+	// used, it will be sent as a message when the button is pressed
 	Text string `json:"text"`
+
+	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown before the text of the button.
+	// Can only be used by bots that purchased additional usernames on Fragment (https://fragment.com) or in the
+	// messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a
+	// Telegram Premium subscription.
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+
+	// Style - Optional. Style of the button. Must be one of “danger” (red), “success” (green) or
+	// “primary” (blue). If omitted, then an app-specific style is used.
+	Style string `json:"style,omitempty"`
 
 	// RequestUsers - Optional. If specified, pressing the button will open a list of suitable users.
 	// Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in
@@ -3039,11 +3098,21 @@ func (i *InlineKeyboardMarkup) ReplyType() string {
 
 func (i *InlineKeyboardMarkup) iReplyMarkup() {}
 
-// InlineKeyboardButton - This object represents one button of an inline keyboard. Exactly one of the
-// optional fields must be used to specify type of the button.
+// InlineKeyboardButton - This object represents one button of an inline keyboard. Exactly one of the fields
+// other than text, icon_custom_emoji_id, and style must be used to specify the type of the button.
 type InlineKeyboardButton struct {
 	// Text - Label text on the button
 	Text string `json:"text"`
+
+	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown before the text of the button.
+	// Can only be used by bots that purchased additional usernames on Fragment (https://fragment.com) or in the
+	// messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a
+	// Telegram Premium subscription.
+	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
+
+	// Style - Optional. Style of the button. Must be one of “danger” (red), “success” (green) or
+	// “primary” (blue). If omitted, then an app-specific style is used.
+	Style string `json:"style,omitempty"`
 
 	// URL - Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id>
 	// can be used to mention a user by their identifier without using a username, if this is allowed by their
@@ -3098,6 +3167,13 @@ type InlineKeyboardButton struct {
 	// messages.
 	Pay bool `json:"pay,omitempty"`
 }
+
+// Keyboard button styles
+const (
+	ButtonStyleDanger  = "danger"
+	ButtonStyleSuccess = "success"
+	ButtonStylePrimary = "primary"
+)
 
 // LoginURL - This object represents a parameter of the inline keyboard button used to automatically
 // authorize a user. Serves as a great replacement for the Telegram Login Widget
@@ -4462,9 +4538,22 @@ type UniqueGiftModel struct {
 	// Sticker - The sticker that represents the unique gift
 	Sticker Sticker `json:"sticker"`
 
-	// RarityPerMille - The number of unique gifts that receive this model for every 1000 gifts upgraded
+	// RarityPerMille - The number of unique gifts that receive this model for every 1000 gift upgrades. Always
+	// 0 for crafted gifts.
 	RarityPerMille int `json:"rarity_per_mille"`
+
+	// Rarity - Optional. Rarity of the model if it is a crafted model. Currently, can be “uncommon”,
+	// “rare”, “epic”, or “legendary”.
+	Rarity string `json:"rarity,omitempty"`
 }
+
+// Girt rarities
+const (
+	GiftRarityUncommon  = "uncommon"
+	GiftRarityRare      = "rare"
+	GiftRarityEpic      = "epic"
+	GiftRarityLegendary = "legendary"
+)
 
 // UniqueGiftSymbol - This object describes the symbol shown on the pattern of a unique gift.
 type UniqueGiftSymbol struct {
@@ -4554,6 +4643,9 @@ type UniqueGift struct {
 	// subscribers
 	IsPremium bool `json:"is_premium,omitempty"`
 
+	// IsBurned - Optional. True, if the gift was used to craft another gift and isn't available anymore
+	IsBurned bool `json:"is_burned,omitempty"`
+
 	// IsFromBlockchain - Optional. True, if the gift is assigned from the TON blockchain and can't be resold or
 	// transferred in Telegram
 	IsFromBlockchain bool `json:"is_from_blockchain,omitempty"`
@@ -4638,9 +4730,11 @@ type UniqueGiftInfo struct {
 
 // Gift origins
 const (
-	GiftOriginUpgrade  = "upgrade"
-	GiftOriginTransfer = "transfer"
-	GiftOriginResale   = "resale"
+	GiftOriginUpgrade       = "upgrade"
+	GiftOriginTransfer      = "transfer"
+	GiftOriginResale        = "resale"
+	GiftOriginGiftedUpgrade = "gifted_upgrade"
+	GiftOriginOffer         = "offer"
 )
 
 // OwnedGift - This object describes a gift received and owned by a user or a chat. Currently, it can be one
@@ -5363,6 +5457,19 @@ func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
 	*b = ChatBoostRemoved(ub)
 
 	return nil
+}
+
+// ChatOwnerLeft - Describes a service message about the chat owner leaving the chat.
+type ChatOwnerLeft struct {
+	// NewOwner - Optional. The user which will be the new owner of the chat if the previous owner does not
+	// return to the chat
+	NewOwner *User `json:"new_owner,omitempty"`
+}
+
+// ChatOwnerChanged - Describes a service message about an ownership change in the chat.
+type ChatOwnerChanged struct {
+	// NewOwner - The new owner of the chat
+	NewOwner User `json:"new_owner"`
 }
 
 // UserChatBoosts - This object represents a list of boosts added to a chat by a user.

@@ -767,6 +767,9 @@ func TestTypesConstants(t *testing.T) {
 			MarkupTypeReplyKeyboard, MarkupTypeReplyKeyboardRemove, MarkupTypeInlineKeyboard, MarkupTypeForceReply,
 		},
 		{
+			ButtonStyleDanger, ButtonStyleSuccess, ButtonStylePrimary,
+		},
+		{
 			MemberStatusCreator, MemberStatusAdministrator, MemberStatusMember, MemberStatusRestricted,
 			MemberStatusLeft, MemberStatusBanned,
 		},
@@ -777,7 +780,10 @@ func TestTypesConstants(t *testing.T) {
 			ReactionEmoji, ReactionCustomEmoji, ReactionPaid,
 		},
 		{
-			GiftOriginUpgrade, GiftOriginTransfer, GiftOriginResale,
+			GiftRarityUncommon, GiftRarityRare, GiftRarityEpic, GiftRarityLegendary,
+		},
+		{
+			GiftOriginUpgrade, GiftOriginTransfer, GiftOriginResale, GiftOriginGiftedUpgrade, GiftOriginOffer,
 		},
 		{
 			GiftTypeRegular, GiftTypeUnique,
