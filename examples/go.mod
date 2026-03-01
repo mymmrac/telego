@@ -4,7 +4,7 @@ go 1.25.7
 
 require (
 	github.com/gofiber/fiber/v3 v3.1.0
-	github.com/mymmrac/telego v1.6.0
+	github.com/mymmrac/telego v1.7.0
 	github.com/valyala/fasthttp v1.69.0
 	golang.ngrok.com/ngrok v1.13.0
 )
@@ -31,7 +31,7 @@ require (
 	github.com/tinylib/msgp v1.6.3 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fastjson v1.6.7 // indirect
+	github.com/valyala/fastjson v1.6.10 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.ngrok.com/muxado/v2 v2.0.1 // indirect
 	golang.org/x/arch v0.6.0 // indirect
