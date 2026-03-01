@@ -966,7 +966,8 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		WithCanEditMessages(true).
 		WithCanPinMessages(true).
 		WithCanManageTopics(true).
-		WithCanManageDirectMessages(true)
+		WithCanManageDirectMessages(true).
+		WithCanManageTags(true)
 
 	assert.Equal(t, &PromoteChatMemberParams{
 		ChatID:                  ChatID{ID: 3},
@@ -987,6 +988,7 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 		CanPinMessages:          ToPtr(true),
 		CanManageTopics:         ToPtr(true),
 		CanManageDirectMessages: ToPtr(true),
+		CanManageTags:           ToPtr(true),
 	}, p)
 }
 
@@ -1000,6 +1002,19 @@ func TestSetChatAdministratorCustomTitleParams_Setters(t *testing.T) {
 		ChatID:      ChatID{ID: 2},
 		UserID:      1,
 		CustomTitle: "CustomTitle",
+	}, s)
+}
+
+func TestSetChatMemberTagParams_Setters(t *testing.T) {
+	s := (&SetChatMemberTagParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithUserID(1).
+		WithTag("Tag")
+
+	assert.Equal(t, &SetChatMemberTagParams{
+		ChatID: ChatID{ID: 2},
+		UserID: 1,
+		Tag:    "Tag",
 	}, s)
 }
 

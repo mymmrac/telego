@@ -2254,6 +2254,12 @@ func (p *PromoteChatMemberParams) WithCanManageDirectMessages(canManageDirectMes
 	return p
 }
 
+// WithCanManageTags adds can manage tags parameter
+func (p *PromoteChatMemberParams) WithCanManageTags(canManageTags bool) *PromoteChatMemberParams {
+	p.CanManageTags = &canManageTags
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SetChatAdministratorCustomTitleParams) WithChatID(chatID ChatID) *SetChatAdministratorCustomTitleParams {
 	p.ChatID = chatID
@@ -2270,6 +2276,24 @@ func (p *SetChatAdministratorCustomTitleParams) WithUserID(userID int64) *SetCha
 func (p *SetChatAdministratorCustomTitleParams) WithCustomTitle(customTitle string,
 ) *SetChatAdministratorCustomTitleParams {
 	p.CustomTitle = customTitle
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *SetChatMemberTagParams) WithChatID(chatID ChatID) *SetChatMemberTagParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithUserID adds user ID parameter
+func (p *SetChatMemberTagParams) WithUserID(userID int64) *SetChatMemberTagParams {
+	p.UserID = userID
+	return p
+}
+
+// WithTag adds tag parameter
+func (p *SetChatMemberTagParams) WithTag(tag string) *SetChatMemberTagParams {
+	p.Tag = tag
 	return p
 }
 

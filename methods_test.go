@@ -1173,6 +1173,33 @@ func TestBot_SetChatAdministratorCustomTitle(t *testing.T) {
 	})
 }
 
+func TestBot_SetChatMemberTag(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetChatMemberTag(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetChatMemberTag(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_BanChatSenderChat(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)

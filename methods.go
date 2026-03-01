@@ -1757,6 +1757,7 @@ type SendChecklistParams struct {
 	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1862,7 +1863,7 @@ type SendMessageDraftParams struct {
 }
 
 // SendMessageDraft - Use this method to stream a partial message to a user while the message is being
-// generated; supported only for bots with forum topic mode enabled. Returns True on success.
+// generated. Returns True on success.
 func (b *Bot) SendMessageDraft(ctx context.Context, params *SendMessageDraftParams) error {
 	err := b.performRequest(ctx, "sendMessageDraft", params)
 	if err != nil {
@@ -2216,6 +2217,10 @@ type PromoteChatMemberParams struct {
 	// CanManageDirectMessages - Optional. Pass True if the administrator can manage direct messages within the
 	// channel and decline suggested posts; for channels only
 	CanManageDirectMessages *bool `json:"can_manage_direct_messages,omitempty"`
+
+	// CanManageTags - Optional. Pass True if the administrator can edit the tags of regular members; for groups
+	// and supergroups only
+	CanManageTags *bool `json:"can_manage_tags,omitempty"`
 }
 
 // PromoteChatMember - Use this method to promote or demote a user in a supergroup or a channel. The bot must
@@ -2248,6 +2253,30 @@ func (b *Bot) SetChatAdministratorCustomTitle(ctx context.Context, params *SetCh
 	err := b.performRequest(ctx, "setChatAdministratorCustomTitle", params)
 	if err != nil {
 		return fmt.Errorf("telego: setChatAdministratorCustomTitle: %w", err)
+	}
+	return nil
+}
+
+// SetChatMemberTagParams - Represents parameters of setChatMemberTag method.
+type SetChatMemberTagParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @supergroup_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// UserID - Unique identifier of the target user
+	UserID int64 `json:"user_id"`
+
+	// Tag - Optional. New tag for the member; 0-16 characters, emoji are not allowed
+	Tag string `json:"tag,omitempty"`
+}
+
+// SetChatMemberTag - Use this method to set a tag for a regular member in a group or a supergroup. The bot
+// must be an administrator in the chat for this to work and must have the can_manage_tags administrator right.
+// Returns True on success.
+func (b *Bot) SetChatMemberTag(ctx context.Context, params *SetChatMemberTagParams) error {
+	err := b.performRequest(ctx, "setChatMemberTag", params)
+	if err != nil {
+		return fmt.Errorf("telego: setChatMemberTag: %w", err)
 	}
 	return nil
 }
@@ -4493,7 +4522,8 @@ type EditMessageChecklistParams struct {
 	// Checklist - A JSON-serialized object for the new checklist
 	Checklist InputChecklist `json:"checklist"`
 
-	// ReplyMarkup - Optional. A JSON-serialized object for the new inline keyboard for the message
+	// ReplyMarkup - Optional. A JSON-serialized object for the new inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards) for the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
