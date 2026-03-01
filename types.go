@@ -573,6 +573,9 @@ type Message struct {
 	// Available only for outgoing messages sent on behalf of the connected business account.
 	SenderBusinessBot *User `json:"sender_business_bot,omitempty"`
 
+	// SenderTag - Optional. Tag or custom title of the sender of the message; for supergroups only
+	SenderTag string `json:"sender_tag,omitempty"`
+
 	// Date - Date the message was sent in Unix time. It is always a positive number, representing a valid date.
 	Date int64 `json:"date"`
 
@@ -630,7 +633,8 @@ type Message struct {
 	// 24 hours to receive the payment and can't be edited.
 	IsPaidPost bool `json:"is_paid_post,omitempty"`
 
-	// MediaGroupID - Optional. The unique identifier of a media message group this message belongs to
+	// MediaGroupID - Optional. The unique identifier inside this chat of a media message group this message
+	// belongs to
 	MediaGroupID string `json:"media_group_id,omitempty"`
 
 	// AuthorSignature - Optional. Signature of the post author for messages in channels, or the custom title of
@@ -907,8 +911,8 @@ type Message struct {
 	// WebAppData - Optional. Service message: data sent by a Web App
 	WebAppData *WebAppData `json:"web_app_data,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard attached to the message. login_url buttons are represented as
-	// ordinary URL buttons.
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message. login_url buttons are represented as ordinary URL buttons.
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1076,7 +1080,7 @@ type MessageEntity struct {
 	// quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth
 	// string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for
 	// users without usernames (https://telegram.org/blog/edit#new-mentions)), “custom_emoji” (for inline custom
-	// emoji stickers)
+	// emoji stickers), or “date_time” (for formatted date and time)
 	Type string `json:"type"`
 
 	// Offset - Offset in UTF-16 code units (https://core.telegram.org/api/entities#entity-length) to the start
@@ -1099,6 +1103,14 @@ type MessageEntity struct {
 	// getCustomEmojiStickers (https://core.telegram.org/bots/api#getcustomemojistickers) to get full information
 	// about the sticker
 	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
+
+	// UnixTime - Optional. For “date_time” only, the Unix time associated with the entity
+	UnixTime int64 `json:"unix_time,omitempty"`
+
+	// DateTimeFormat - Optional. For “date_time” only, the string that defines the formatting of the date
+	// and time. See date-time entity formatting (https://core.telegram.org/bots/api#date-time-entity-formatting)
+	// for more details.
+	DateTimeFormat string `json:"date_time_format,omitempty"`
 }
 
 // MessageEntity types
@@ -1122,6 +1134,7 @@ const (
 	EntityTypeTextLink             = "text_link"
 	EntityTypeTextMention          = "text_mention"
 	EntityTypeCustomEmoji          = "custom_emoji"
+	EntityTypeDateTime             = "date_time"
 )
 
 // TextQuote - This object contains information about the quoted part of a message that is replied to by the
@@ -3443,6 +3456,10 @@ type ChatAdministratorRights struct {
 	// CanManageDirectMessages - Optional. True, if the administrator can manage direct messages of the channel
 	// and decline suggested posts; for channels only
 	CanManageDirectMessages bool `json:"can_manage_direct_messages,omitempty"`
+
+	// CanManageTags - Optional. True, if the administrator can edit the tags of regular members; for groups and
+	// supergroups only. If omitted defaults to the value of can_pin_messages.
+	CanManageTags bool `json:"can_manage_tags,omitempty"`
 }
 
 // ChatMemberUpdated - This object represents changes in the status of a chat member.
@@ -3718,6 +3735,10 @@ type ChatMemberAdministrator struct {
 	// and decline suggested posts; for channels only
 	CanManageDirectMessages bool `json:"can_manage_direct_messages,omitempty"`
 
+	// CanManageTags - Optional. True, if the administrator can edit the tags of regular members; for groups and
+	// supergroups only. If omitted defaults to the value of can_pin_messages.
+	CanManageTags bool `json:"can_manage_tags,omitempty"`
+
 	// CustomTitle - Optional. Custom title for this user
 	CustomTitle string `json:"custom_title,omitempty"`
 }
@@ -3744,6 +3765,9 @@ func (c *ChatMemberAdministrator) iChatMember() {}
 type ChatMemberMember struct {
 	// Status - The member's status in the chat, always “member”
 	Status string `json:"status"`
+
+	// Tag - Optional. Tag of the member
+	Tag string `json:"tag,omitempty"`
 
 	// User - Information about the user
 	User User `json:"user"`
@@ -3774,6 +3798,9 @@ func (c *ChatMemberMember) iChatMember() {}
 type ChatMemberRestricted struct {
 	// Status - The member's status in the chat, always “restricted”
 	Status string `json:"status"`
+
+	// Tag - Optional. Tag of the member
+	Tag string `json:"tag,omitempty"`
 
 	// User - Information about the user
 	User User `json:"user"`
@@ -3812,6 +3839,9 @@ type ChatMemberRestricted struct {
 
 	// CanAddWebPagePreviews - True, if the user is allowed to add web page previews to their messages
 	CanAddWebPagePreviews bool `json:"can_add_web_page_previews"`
+
+	// CanEditTag - True, if the user is allowed to edit their own tag
+	CanEditTag bool `json:"can_edit_tag"`
 
 	// CanChangeInfo - True, if the user is allowed to change the chat title, photo and other settings
 	CanChangeInfo bool `json:"can_change_info"`
@@ -3963,6 +3993,9 @@ type ChatPermissions struct {
 
 	// CanAddWebPagePreviews - Optional. True, if the user is allowed to add web page previews to their messages
 	CanAddWebPagePreviews *bool `json:"can_add_web_page_previews,omitempty"`
+
+	// CanEditTag - Optional. True, if the user is allowed to edit their own tag
+	CanEditTag *bool `json:"can_edit_tag,omitempty"`
 
 	// CanChangeInfo - Optional. True, if the user is allowed to change the chat title, photo and other
 	// settings. Ignored in public supergroups
@@ -6847,7 +6880,8 @@ type InlineQueryResultDocument struct {
 	// Description - Optional. Short description of the result
 	Description string `json:"description,omitempty"`
 
-	// ReplyMarkup - Optional. Inline keyboard attached to the message
+	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
+	// attached to the message
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 
 	// InputMessageContent - Optional. Content of the message to be sent instead of the file

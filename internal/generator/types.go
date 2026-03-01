@@ -301,7 +301,7 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		field.typ = "int32"
 	}
 
-	if field.name == "UserId" && field.typ == "int" {
+	if (field.name == "UserId" || field.name == "UnixTime") && field.typ == "int" {
 		field.typ = "int64"
 	}
 	if field.name == "UserIds" && field.typ == "[]int" {

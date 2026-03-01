@@ -747,6 +747,7 @@ func TestTypesConstants(t *testing.T) {
 			EntityTypeEmail, EntityTypePhoneNumber, EntityTypeBold, EntityTypeItalic, EntityTypeUnderline,
 			EntityTypeStrikethrough, EntityTypeSpoiler, EntityTypeBlockquote, EntityTypeExpandableBlockquote,
 			EntityTypeCode, EntityTypePre, EntityTypeTextLink, EntityTypeTextMention, EntityTypeCustomEmoji,
+			EntityTypeDateTime,
 		},
 		{
 			OriginTypeUser, OriginTypeHiddenUser, OriginTypeChat, OriginTypeChannel,

@@ -229,6 +229,17 @@ func (c MessageEntityCollection) CustomEmoji(emojiID string) MessageEntityCollec
 	return c
 }
 
+// DateTime assigns date-time entity and returns a new collection
+func (c MessageEntityCollection) DateTime(unixTime int64, format string) MessageEntityCollection {
+	c.entities = append(c.entities, telego.MessageEntity{
+		Type:           telego.EntityTypeDateTime,
+		Length:         UTF16TextLen(c.text),
+		UnixTime:       unixTime,
+		DateTimeFormat: format,
+	})
+	return c
+}
+
 // MessageEntities converts entity collections into the text and slice of [telego.MessageEntity] associated with text
 // Note: Entity length is not trimmed as described in docs on purpose, Telegram still handles all entities perfectly
 // fine, but trimming their length actually limits what can be sent
