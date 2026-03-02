@@ -120,7 +120,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download code coverage results
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: code-coverage-report
           path: bin
