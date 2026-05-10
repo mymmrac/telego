@@ -542,14 +542,6 @@ func MediaAnimation(media telego.InputFile) *telego.InputMediaAnimation {
 	}
 }
 
-// MediaDocument creates [telego.InputMediaDocument] with required fields
-func MediaDocument(media telego.InputFile) *telego.InputMediaDocument {
-	return &telego.InputMediaDocument{
-		Type:  telego.MediaTypeDocument,
-		Media: media,
-	}
-}
-
 // MediaAudio creates [telego.InputMediaAudio] with required fields
 func MediaAudio(media telego.InputFile) *telego.InputMediaAudio {
 	return &telego.InputMediaAudio{
@@ -558,11 +550,56 @@ func MediaAudio(media telego.InputFile) *telego.InputMediaAudio {
 	}
 }
 
+// MediaDocument creates [telego.InputMediaDocument] with required fields
+func MediaDocument(media telego.InputFile) *telego.InputMediaDocument {
+	return &telego.InputMediaDocument{
+		Type:  telego.MediaTypeDocument,
+		Media: media,
+	}
+}
+
+// MediaLivePhoto creates [telego.InputMediaLivePhoto] with required fields
+func MediaLivePhoto(media, photo telego.InputFile) *telego.InputMediaLivePhoto {
+	return &telego.InputMediaLivePhoto{
+		Type:  telego.MediaTypeLivePhoto,
+		Media: media,
+		Photo: photo,
+	}
+}
+
+// MediaLocation creates [telego.InputMediaLocation] with required fields
+func MediaLocation(latitude, longitude float64) *telego.InputMediaLocation {
+	return &telego.InputMediaLocation{
+		Type:      telego.MediaTypeLocation,
+		Latitude:  latitude,
+		Longitude: longitude,
+	}
+}
+
 // MediaPhoto creates [telego.InputMediaPhoto] with required fields
 func MediaPhoto(media telego.InputFile) *telego.InputMediaPhoto {
 	return &telego.InputMediaPhoto{
 		Type:  telego.MediaTypePhoto,
 		Media: media,
+	}
+}
+
+// MediaSticker creates [telego.InputMediaSticker] with required fields
+func MediaSticker(media telego.InputFile) *telego.InputMediaSticker {
+	return &telego.InputMediaSticker{
+		Type:  telego.MediaTypeSticker,
+		Media: media,
+	}
+}
+
+// MediaVenue creates [telego.InputMediaVenue] with required fields
+func MediaVenue(latitude, longitude float64, title, address string) *telego.InputMediaVenue {
+	return &telego.InputMediaVenue{
+		Type:      telego.MediaTypeVenue,
+		Latitude:  latitude,
+		Longitude: longitude,
+		Title:     title,
+		Address:   address,
 	}
 }
 

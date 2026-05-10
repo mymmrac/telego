@@ -23,7 +23,10 @@ func (t testNamedReader) Name() string {
 	return text1
 }
 
-var nr = testNamedReader{}
+var (
+	nr  = testNamedReader{}
+	nr2 = testNamedReader{}
+)
 
 func TestFile(t *testing.T) {
 	f := File(nr)
@@ -340,10 +343,39 @@ func TestMediaDocument(t *testing.T) {
 	assert.Equal(t, nr, m.Media.File)
 }
 
+func TestMediaLivePhoto(t *testing.T) {
+	m := MediaLivePhoto(telego.InputFile{File: nr}, telego.InputFile{File: nr2})
+	assert.Equal(t, telego.MediaTypeLivePhoto, m.Type)
+	assert.Equal(t, nr, m.Media.File)
+	assert.Equal(t, nr2, m.Photo.File)
+}
+
+func TestMediaLocation(t *testing.T) {
+	m := MediaLocation(latitude, longitude)
+	assert.Equal(t, telego.MediaTypeLocation, m.Type)
+	assert.InEpsilon(t, latitude, m.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, m.Longitude, epsilon)
+}
+
 func TestMediaPhoto(t *testing.T) {
 	m := MediaPhoto(telego.InputFile{File: nr})
 	assert.Equal(t, telego.MediaTypePhoto, m.Type)
 	assert.Equal(t, nr, m.Media.File)
+}
+
+func TestMediaSticker(t *testing.T) {
+	m := MediaSticker(telego.InputFile{File: nr})
+	assert.Equal(t, telego.MediaTypeSticker, m.Type)
+	assert.Equal(t, nr, m.Media.File)
+}
+
+func TestMediaVenue(t *testing.T) {
+	m := MediaVenue(latitude, longitude, text1, text2)
+	assert.Equal(t, telego.MediaTypeVenue, m.Type)
+	assert.InEpsilon(t, latitude, m.Latitude, epsilon)
+	assert.InEpsilon(t, longitude, m.Longitude, epsilon)
+	assert.Equal(t, text1, m.Title)
+	assert.Equal(t, text2, m.Address)
 }
 
 func TestMediaVideo(t *testing.T) {

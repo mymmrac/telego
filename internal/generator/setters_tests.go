@@ -151,6 +151,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return fmt.Sprintf("&MaskPosition{Point: \"%s\"}", setter.fieldName)
 	case "InputMedia":
 		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
+	case "InputPollOptionMedia":
+		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
 	case "ChatPermissions":
 		return "ChatPermissions{CanSendMessages: ToPtr(true)}"
 	case "InputMessageContent":

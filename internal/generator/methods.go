@@ -347,7 +347,7 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 		parameter.typ = "ReplyMarkup"
 	}
 
-	if parameter.typ == "[]InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo" {
+	if parameter.typ == "[]InputMediaAudio, InputMediaDocument, InputMediaLivePhoto, InputMediaPhoto and InputMediaVideo" {
 		parameter.typ = "[]InputMedia"
 	}
 

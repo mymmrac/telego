@@ -35,12 +35,14 @@ func TestInputPollOption_Setters(t *testing.T) {
 	i := (&InputPollOption{}).
 		WithText("Text").
 		WithTextParseMode("TextParseMode").
-		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...)
+		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...).
+		WithMedia(&InputMediaAnimation{Type: "Media"})
 
 	assert.Equal(t, &InputPollOption{
 		Text:          "Text",
 		TextParseMode: "TextParseMode",
 		TextEntities:  []MessageEntity{{Type: "TextEntities"}},
+		Media:         &InputMediaAnimation{Type: "Media"},
 	}, i)
 }
 
@@ -264,58 +266,6 @@ func TestMenuButtonWebApp_Setters(t *testing.T) {
 	}, m)
 }
 
-func TestInputMediaPhoto_Setters(t *testing.T) {
-	i := (&InputMediaPhoto{}).
-		WithMedia(testInputFile).
-		WithCaption("Caption").
-		WithParseMode("ParseMode").
-		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithShowCaptionAboveMedia().
-		WithHasSpoiler()
-
-	assert.Equal(t, &InputMediaPhoto{
-		Media:                 testInputFile,
-		Caption:               "Caption",
-		ParseMode:             "ParseMode",
-		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
-		ShowCaptionAboveMedia: true,
-		HasSpoiler:            true,
-	}, i)
-}
-
-func TestInputMediaVideo_Setters(t *testing.T) {
-	i := (&InputMediaVideo{}).
-		WithMedia(testInputFile).
-		WithThumbnail(&testInputFile).
-		WithCover(&testInputFile).
-		WithStartTimestamp(1).
-		WithCaption("Caption").
-		WithParseMode("ParseMode").
-		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithShowCaptionAboveMedia().
-		WithWidth(2).
-		WithHeight(3).
-		WithDuration(4).
-		WithSupportsStreaming().
-		WithHasSpoiler()
-
-	assert.Equal(t, &InputMediaVideo{
-		Media:                 testInputFile,
-		Thumbnail:             &testInputFile,
-		Cover:                 &testInputFile,
-		StartTimestamp:        1,
-		Caption:               "Caption",
-		ParseMode:             "ParseMode",
-		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
-		ShowCaptionAboveMedia: true,
-		Width:                 2,
-		Height:                3,
-		Duration:              4,
-		SupportsStreaming:     true,
-		HasSpoiler:            true,
-	}, i)
-}
-
 func TestInputMediaAnimation_Setters(t *testing.T) {
 	i := (&InputMediaAnimation{}).
 		WithMedia(testInputFile).
@@ -382,6 +332,126 @@ func TestInputMediaDocument_Setters(t *testing.T) {
 		ParseMode:                   "ParseMode",
 		CaptionEntities:             []MessageEntity{{Type: "CaptionEntities"}},
 		DisableContentTypeDetection: true,
+	}, i)
+}
+
+func TestInputMediaLivePhoto_Setters(t *testing.T) {
+	i := (&InputMediaLivePhoto{}).
+		WithMedia(testInputFile).
+		WithPhoto(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithHasSpoiler()
+
+	assert.Equal(t, &InputMediaLivePhoto{
+		Media:                 testInputFile,
+		Photo:                 testInputFile,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		HasSpoiler:            true,
+	}, i)
+}
+
+func TestInputMediaLocation_Setters(t *testing.T) {
+	i := (&InputMediaLocation{}).
+		WithLatitude(1.0).
+		WithLongitude(1.0).
+		WithHorizontalAccuracy(2.0)
+
+	assert.Equal(t, &InputMediaLocation{
+		Latitude:           1.0,
+		Longitude:          1.0,
+		HorizontalAccuracy: 2.0,
+	}, i)
+}
+
+func TestInputMediaPhoto_Setters(t *testing.T) {
+	i := (&InputMediaPhoto{}).
+		WithMedia(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithHasSpoiler()
+
+	assert.Equal(t, &InputMediaPhoto{
+		Media:                 testInputFile,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		HasSpoiler:            true,
+	}, i)
+}
+
+func TestInputMediaSticker_Setters(t *testing.T) {
+	i := (&InputMediaSticker{}).
+		WithMedia(testInputFile).
+		WithEmoji("Emoji")
+
+	assert.Equal(t, &InputMediaSticker{
+		Media: testInputFile,
+		Emoji: "Emoji",
+	}, i)
+}
+
+func TestInputMediaVenue_Setters(t *testing.T) {
+	i := (&InputMediaVenue{}).
+		WithLatitude(1.0).
+		WithLongitude(1.0).
+		WithTitle("Title").
+		WithAddress("Address").
+		WithFoursquareID("FoursquareID").
+		WithFoursquareType("FoursquareType").
+		WithGooglePlaceID("GooglePlaceID").
+		WithGooglePlaceType("GooglePlaceType")
+
+	assert.Equal(t, &InputMediaVenue{
+		Latitude:        1.0,
+		Longitude:       1.0,
+		Title:           "Title",
+		Address:         "Address",
+		FoursquareID:    "FoursquareID",
+		FoursquareType:  "FoursquareType",
+		GooglePlaceID:   "GooglePlaceID",
+		GooglePlaceType: "GooglePlaceType",
+	}, i)
+}
+
+func TestInputMediaVideo_Setters(t *testing.T) {
+	i := (&InputMediaVideo{}).
+		WithMedia(testInputFile).
+		WithThumbnail(&testInputFile).
+		WithCover(&testInputFile).
+		WithStartTimestamp(1).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithWidth(2).
+		WithHeight(3).
+		WithDuration(4).
+		WithSupportsStreaming().
+		WithHasSpoiler()
+
+	assert.Equal(t, &InputMediaVideo{
+		Media:                 testInputFile,
+		Thumbnail:             &testInputFile,
+		Cover:                 &testInputFile,
+		StartTimestamp:        1,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		Width:                 2,
+		Height:                3,
+		Duration:              4,
+		SupportsStreaming:     true,
+		HasSpoiler:            true,
 	}, i)
 }
 

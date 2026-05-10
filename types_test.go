@@ -24,11 +24,14 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginChannel{})
 	assert.Equal(t, OriginTypeChannel, (&MessageOriginChannel{}).OriginType())
 
-	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaPreview{})
-	assert.Equal(t, PaidMediaTypePreview, (&PaidMediaPreview{}).MediaType())
+	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaLivePhoto{})
+	assert.Equal(t, PaidMediaTypeLivePhoto, (&PaidMediaLivePhoto{}).MediaType())
 
 	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaPhoto{})
 	assert.Equal(t, PaidMediaTypePhoto, (&PaidMediaPhoto{}).MediaType())
+
+	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaPreview{})
+	assert.Equal(t, PaidMediaTypePreview, (&PaidMediaPreview{}).MediaType())
 
 	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaVideo{})
 	assert.Equal(t, PaidMediaTypeVideo, (&PaidMediaVideo{}).MediaType())
@@ -156,20 +159,47 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*ChatBoostSource)(nil), &ChatBoostSourceGiveaway{})
 	assert.Equal(t, BoostSourceGiveaway, (&ChatBoostSourceGiveaway{}).BoostSource())
 
-	assert.Implements(t, (*InputMedia)(nil), &InputMediaPhoto{})
-	assert.Equal(t, MediaTypePhoto, (&InputMediaPhoto{}).MediaType())
-
-	assert.Implements(t, (*InputMedia)(nil), &InputMediaVideo{})
-	assert.Equal(t, MediaTypeVideo, (&InputMediaVideo{}).MediaType())
-
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaAnimation{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaAnimation{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaAnimation{})
 	assert.Equal(t, MediaTypeAnimation, (&InputMediaAnimation{}).MediaType())
 
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaAudio{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaAudio{})
 	assert.Equal(t, MediaTypeAudio, (&InputMediaAudio{}).MediaType())
 
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaDocument{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaDocument{})
 	assert.Equal(t, MediaTypeDocument, (&InputMediaDocument{}).MediaType())
+
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaLivePhoto{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaLivePhoto{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaLivePhoto{})
+	assert.Equal(t, MediaTypeLivePhoto, (&InputMediaLivePhoto{}).MediaType())
+
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaLocation{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaLocation{})
+	assert.Equal(t, MediaTypeLocation, (&InputMediaLocation{}).MediaType())
+
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaPhoto{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaPhoto{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaPhoto{})
+	assert.Equal(t, MediaTypePhoto, (&InputMediaPhoto{}).MediaType())
+
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaSticker{})
+	assert.Equal(t, MediaTypeSticker, (&InputMediaSticker{}).MediaType())
+
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaVenue{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaVenue{})
+	assert.Equal(t, MediaTypeVenue, (&InputMediaVenue{}).MediaType())
+
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaVideo{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaVideo{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaVideo{})
+	assert.Equal(t, MediaTypeVideo, (&InputMediaVideo{}).MediaType())
+
+	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaLivePhoto{})
+	assert.Equal(t, PaidMediaTypeLivePhoto, (&InputPaidMediaLivePhoto{}).MediaType())
 
 	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaPhoto{})
 	assert.Equal(t, PaidMediaTypePhoto, (&InputPaidMediaPhoto{}).MediaType())
@@ -800,10 +830,11 @@ func TestTypesConstants(t *testing.T) {
 			BoostSourcePremium, BoostSourceGiftCode, BoostSourceGiveaway,
 		},
 		{
-			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,
+			MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument, MediaTypeLivePhoto, MediaTypeLocation,
+			MediaTypePhoto, MediaTypeSticker, MediaTypeVenue, MediaTypeVideo,
 		},
 		{
-			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo, paidMediaTypeOther,
+			PaidMediaTypeLivePhoto, PaidMediaTypePhoto, PaidMediaTypePreview, PaidMediaTypeVideo, paidMediaTypeOther,
 		},
 		{
 			PhotoTypeStatic, PhotoTypeAnimated,

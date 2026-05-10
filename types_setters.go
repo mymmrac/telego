@@ -72,6 +72,12 @@ func (i *InputPollOption) WithTextEntities(textEntities ...MessageEntity) *Input
 	return i
 }
 
+// WithMedia adds media parameter
+func (i *InputPollOption) WithMedia(media InputPollOptionMedia) *InputPollOption {
+	i.Media = media
+	return i
+}
+
 // WithID adds ID parameter
 func (i *InputChecklistTask) WithID(iD int) *InputChecklistTask {
 	i.ID = iD
@@ -488,120 +494,6 @@ func (m *MenuButtonWebApp) WithWebApp(webApp WebAppInfo) *MenuButtonWebApp {
 }
 
 // WithMedia adds media parameter
-func (i *InputMediaPhoto) WithMedia(media InputFile) *InputMediaPhoto {
-	i.Media = media
-	return i
-}
-
-// WithCaption adds caption parameter
-func (i *InputMediaPhoto) WithCaption(caption string) *InputMediaPhoto {
-	i.Caption = caption
-	return i
-}
-
-// WithParseMode adds parse mode parameter
-func (i *InputMediaPhoto) WithParseMode(parseMode string) *InputMediaPhoto {
-	i.ParseMode = parseMode
-	return i
-}
-
-// WithCaptionEntities adds caption entities parameter
-func (i *InputMediaPhoto) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaPhoto {
-	i.CaptionEntities = captionEntities
-	return i
-}
-
-// WithShowCaptionAboveMedia adds show caption above media parameter
-func (i *InputMediaPhoto) WithShowCaptionAboveMedia() *InputMediaPhoto {
-	i.ShowCaptionAboveMedia = true
-	return i
-}
-
-// WithHasSpoiler adds has spoiler parameter
-func (i *InputMediaPhoto) WithHasSpoiler() *InputMediaPhoto {
-	i.HasSpoiler = true
-	return i
-}
-
-// WithMedia adds media parameter
-func (i *InputMediaVideo) WithMedia(media InputFile) *InputMediaVideo {
-	i.Media = media
-	return i
-}
-
-// WithThumbnail adds thumbnail parameter
-func (i *InputMediaVideo) WithThumbnail(thumbnail *InputFile) *InputMediaVideo {
-	i.Thumbnail = thumbnail
-	return i
-}
-
-// WithCover adds cover parameter
-func (i *InputMediaVideo) WithCover(cover *InputFile) *InputMediaVideo {
-	i.Cover = cover
-	return i
-}
-
-// WithStartTimestamp adds start timestamp parameter
-func (i *InputMediaVideo) WithStartTimestamp(startTimestamp int) *InputMediaVideo {
-	i.StartTimestamp = startTimestamp
-	return i
-}
-
-// WithCaption adds caption parameter
-func (i *InputMediaVideo) WithCaption(caption string) *InputMediaVideo {
-	i.Caption = caption
-	return i
-}
-
-// WithParseMode adds parse mode parameter
-func (i *InputMediaVideo) WithParseMode(parseMode string) *InputMediaVideo {
-	i.ParseMode = parseMode
-	return i
-}
-
-// WithCaptionEntities adds caption entities parameter
-func (i *InputMediaVideo) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaVideo {
-	i.CaptionEntities = captionEntities
-	return i
-}
-
-// WithShowCaptionAboveMedia adds show caption above media parameter
-func (i *InputMediaVideo) WithShowCaptionAboveMedia() *InputMediaVideo {
-	i.ShowCaptionAboveMedia = true
-	return i
-}
-
-// WithWidth adds width parameter
-func (i *InputMediaVideo) WithWidth(width int) *InputMediaVideo {
-	i.Width = width
-	return i
-}
-
-// WithHeight adds height parameter
-func (i *InputMediaVideo) WithHeight(height int) *InputMediaVideo {
-	i.Height = height
-	return i
-}
-
-// WithDuration adds duration parameter
-func (i *InputMediaVideo) WithDuration(duration int) *InputMediaVideo {
-	i.Duration = duration
-	return i
-}
-
-// WithSupportsStreaming adds supports streaming parameter
-func (i *InputMediaVideo) WithSupportsStreaming() *InputMediaVideo {
-	i.SupportsStreaming = true
-	return i
-}
-
-// WithHasSpoiler adds has spoiler parameter
-func (i *InputMediaVideo) WithHasSpoiler() *InputMediaVideo {
-	i.HasSpoiler = true
-	return i
-}
-
-// WithMedia adds media parameter
 func (i *InputMediaAnimation) WithMedia(media InputFile) *InputMediaAnimation {
 	i.Media = media
 	return i
@@ -742,6 +634,240 @@ func (i *InputMediaDocument) WithCaptionEntities(captionEntities ...MessageEntit
 // WithDisableContentTypeDetection adds disable content type detection parameter
 func (i *InputMediaDocument) WithDisableContentTypeDetection() *InputMediaDocument {
 	i.DisableContentTypeDetection = true
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaLivePhoto) WithMedia(media InputFile) *InputMediaLivePhoto {
+	i.Media = media
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputMediaLivePhoto) WithPhoto(photo InputFile) *InputMediaLivePhoto {
+	i.Photo = photo
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaLivePhoto) WithCaption(caption string) *InputMediaLivePhoto {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaLivePhoto) WithParseMode(parseMode string) *InputMediaLivePhoto {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaLivePhoto) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaLivePhoto {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (i *InputMediaLivePhoto) WithShowCaptionAboveMedia() *InputMediaLivePhoto {
+	i.ShowCaptionAboveMedia = true
+	return i
+}
+
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaLivePhoto) WithHasSpoiler() *InputMediaLivePhoto {
+	i.HasSpoiler = true
+	return i
+}
+
+// WithLatitude adds latitude parameter
+func (i *InputMediaLocation) WithLatitude(latitude float64) *InputMediaLocation {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InputMediaLocation) WithLongitude(longitude float64) *InputMediaLocation {
+	i.Longitude = longitude
+	return i
+}
+
+// WithHorizontalAccuracy adds horizontal accuracy parameter
+func (i *InputMediaLocation) WithHorizontalAccuracy(horizontalAccuracy float64) *InputMediaLocation {
+	i.HorizontalAccuracy = horizontalAccuracy
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaPhoto) WithMedia(media InputFile) *InputMediaPhoto {
+	i.Media = media
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaPhoto) WithCaption(caption string) *InputMediaPhoto {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaPhoto) WithParseMode(parseMode string) *InputMediaPhoto {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaPhoto) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaPhoto {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (i *InputMediaPhoto) WithShowCaptionAboveMedia() *InputMediaPhoto {
+	i.ShowCaptionAboveMedia = true
+	return i
+}
+
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaPhoto) WithHasSpoiler() *InputMediaPhoto {
+	i.HasSpoiler = true
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaSticker) WithMedia(media InputFile) *InputMediaSticker {
+	i.Media = media
+	return i
+}
+
+// WithEmoji adds emoji parameter
+func (i *InputMediaSticker) WithEmoji(emoji string) *InputMediaSticker {
+	i.Emoji = emoji
+	return i
+}
+
+// WithLatitude adds latitude parameter
+func (i *InputMediaVenue) WithLatitude(latitude float64) *InputMediaVenue {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InputMediaVenue) WithLongitude(longitude float64) *InputMediaVenue {
+	i.Longitude = longitude
+	return i
+}
+
+// WithTitle adds title parameter
+func (i *InputMediaVenue) WithTitle(title string) *InputMediaVenue {
+	i.Title = title
+	return i
+}
+
+// WithAddress adds address parameter
+func (i *InputMediaVenue) WithAddress(address string) *InputMediaVenue {
+	i.Address = address
+	return i
+}
+
+// WithFoursquareID adds foursquare ID parameter
+func (i *InputMediaVenue) WithFoursquareID(foursquareID string) *InputMediaVenue {
+	i.FoursquareID = foursquareID
+	return i
+}
+
+// WithFoursquareType adds foursquare type parameter
+func (i *InputMediaVenue) WithFoursquareType(foursquareType string) *InputMediaVenue {
+	i.FoursquareType = foursquareType
+	return i
+}
+
+// WithGooglePlaceID adds google place ID parameter
+func (i *InputMediaVenue) WithGooglePlaceID(googlePlaceID string) *InputMediaVenue {
+	i.GooglePlaceID = googlePlaceID
+	return i
+}
+
+// WithGooglePlaceType adds google place type parameter
+func (i *InputMediaVenue) WithGooglePlaceType(googlePlaceType string) *InputMediaVenue {
+	i.GooglePlaceType = googlePlaceType
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaVideo) WithMedia(media InputFile) *InputMediaVideo {
+	i.Media = media
+	return i
+}
+
+// WithThumbnail adds thumbnail parameter
+func (i *InputMediaVideo) WithThumbnail(thumbnail *InputFile) *InputMediaVideo {
+	i.Thumbnail = thumbnail
+	return i
+}
+
+// WithCover adds cover parameter
+func (i *InputMediaVideo) WithCover(cover *InputFile) *InputMediaVideo {
+	i.Cover = cover
+	return i
+}
+
+// WithStartTimestamp adds start timestamp parameter
+func (i *InputMediaVideo) WithStartTimestamp(startTimestamp int) *InputMediaVideo {
+	i.StartTimestamp = startTimestamp
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaVideo) WithCaption(caption string) *InputMediaVideo {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaVideo) WithParseMode(parseMode string) *InputMediaVideo {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaVideo) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaVideo {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (i *InputMediaVideo) WithShowCaptionAboveMedia() *InputMediaVideo {
+	i.ShowCaptionAboveMedia = true
+	return i
+}
+
+// WithWidth adds width parameter
+func (i *InputMediaVideo) WithWidth(width int) *InputMediaVideo {
+	i.Width = width
+	return i
+}
+
+// WithHeight adds height parameter
+func (i *InputMediaVideo) WithHeight(height int) *InputMediaVideo {
+	i.Height = height
+	return i
+}
+
+// WithDuration adds duration parameter
+func (i *InputMediaVideo) WithDuration(duration int) *InputMediaVideo {
+	i.Duration = duration
+	return i
+}
+
+// WithSupportsStreaming adds supports streaming parameter
+func (i *InputMediaVideo) WithSupportsStreaming() *InputMediaVideo {
+	i.SupportsStreaming = true
+	return i
+}
+
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaVideo) WithHasSpoiler() *InputMediaVideo {
+	i.HasSpoiler = true
 	return i
 }
 

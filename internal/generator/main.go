@@ -79,9 +79,13 @@ var typeStructsSetters = []string{
 	"InlineQueryResultVoice",
 
 	"InputMediaAnimation",
-	"InputMediaDocument",
 	"InputMediaAudio",
+	"InputMediaDocument",
+	"InputMediaLivePhoto",
+	"InputMediaLocation",
 	"InputMediaPhoto",
+	"InputMediaSticker",
+	"InputMediaVenue",
 	"InputMediaVideo",
 
 	"InputPaidMediaPhoto",
