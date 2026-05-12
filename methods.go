@@ -1146,6 +1146,104 @@ func (b *Bot) SendVoice(ctx context.Context, params *SendVoiceParams) (*Message,
 	return message, nil
 }
 
+// SendLivePhotoParams - Represents parameters of sendLivePhoto method.
+type SendLivePhotoParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Unique identifier for the target chat or username of the target channel (in the format
+	// @channel_username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// LivePhoto - Live photo video to send. The video must be no longer than 10 seconds and must not exceed 10
+	// MB in size. Pass a file_id as String to send a video that exists on the Telegram servers (recommended) or
+	// upload a new video using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files). Sending live photos by a URL is currently unsupported.
+	LivePhoto InputFile `json:"live_photo"`
+
+	// Photo - The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram
+	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files). Sending live photos by a URL is currently unsupported.
+	Photo InputFile `json:"photo"`
+
+	// Caption - Optional. Video caption (may also be used when resending videos by file_id), 0-1024 characters
+	// after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the video caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
+	// HasSpoiler - Optional. Pass True if the video needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+
+	// DisableNotification - Optional. Sends the message silently
+	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
+
+	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user.
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+func (p *SendLivePhotoParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
+
+	fp["live_photo"] = p.LivePhoto.File
+	fp["photo"] = p.Photo.File
+
+	return fp
+}
+
+// SendLivePhoto - Use this method to send live photos. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
+func (b *Bot) SendLivePhoto(ctx context.Context, params *SendLivePhotoParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest(ctx, "sendLivePhoto", params, &message)
+	if err != nil {
+		return nil, fmt.Errorf("telego: sendLivePhoto: %w", err)
+	}
+	return message, nil
+}
+
 // SendVideoNoteParams - Represents parameters of sendVideoNote method.
 type SendVideoNoteParams struct {
 	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
@@ -1653,7 +1751,7 @@ type SendPollParams struct {
 	// It can be specified instead of question_parse_mode
 	QuestionEntities []MessageEntity `json:"question_entities,omitempty"`
 
-	// Options - A JSON-serialized list of 2-12 answer options
+	// Options - A JSON-serialized list of 1-12 answer options
 	Options []InputPollOption `json:"options"`
 
 	// IsAnonymous - Optional. True, if the poll needs to be anonymous, defaults to True
@@ -1679,6 +1777,16 @@ type SendPollParams struct {
 	// HideResultsUntilCloses - Optional. Pass True, if poll results must be shown only after the poll closes
 	HideResultsUntilCloses bool `json:"hide_results_until_closes,omitempty"`
 
+	// MembersOnly - Optional. Pass True, if voting is limited to users who have been members of the chat where
+	// the poll is being sent for more than 24 hours; for channel chats only
+	MembersOnly bool `json:"members_only,omitempty"`
+
+	// CountryCodes - Optional. A JSON-serialized list of 0-12 two-letter ISO 3166-1 alpha-2
+	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes indicating the countries from which users
+	// can vote in the poll; for channel chats only. Use "FT" as a country code to allow users with anonymous
+	// numbers to vote. If omitted or empty, then users from any country can participate in the poll.
+	CountryCodes []string `json:"country_codes,omitempty"`
+
 	// CorrectOptionIDs - Optional. A JSON-serialized list of monotonically increasing 0-based identifiers of
 	// the correct answer options, required for polls in quiz mode
 	CorrectOptionIDs []int `json:"correct_option_ids,omitempty"`
@@ -1694,6 +1802,9 @@ type SendPollParams struct {
 	// ExplanationEntities - Optional. A JSON-serialized list of special entities that appear in the poll
 	// explanation. It can be specified instead of explanation_parse_mode
 	ExplanationEntities []MessageEntity `json:"explanation_entities,omitempty"`
+
+	// ExplanationMedia - Optional. Media added to the quiz explanation
+	ExplanationMedia InputPollMedia `json:"explanation_media,omitempty"`
 
 	// OpenPeriod - Optional. Amount of time in seconds the poll will be active after creation, 5-2628000. Can't
 	// be used together with close_date.
@@ -1717,6 +1828,9 @@ type SendPollParams struct {
 	// DescriptionEntities - Optional. A JSON-serialized list of special entities that appear in the poll
 	// description, which can be specified instead of description_parse_mode
 	DescriptionEntities []MessageEntity `json:"description_entities,omitempty"`
+
+	// Media - Optional. Media added to the poll description
+	Media InputPollMedia `json:"media,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
 	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
@@ -1742,6 +1856,30 @@ type SendPollParams struct {
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
 	// reply from the user
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+func (p *SendPollParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
+
+	collect := func(m fileCompatible) {
+		if isNil(m) {
+			return
+		}
+		for _, v := range m.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	collect(p.Media)
+	collect(p.ExplanationMedia)
+	for i := range p.Options {
+		collect(p.Options[i].Media)
+	}
+
+	return fp
 }
 
 // SendPoll - Use this method to send a native poll. On success, the sent Message
@@ -1874,8 +2012,9 @@ type SendMessageDraftParams struct {
 	// identifier are animated
 	DraftID int `json:"draft_id"`
 
-	// Text - Text of the message to be sent, 1-4096 characters after entities parsing
-	Text string `json:"text"`
+	// Text - Optional. Text of the message to be sent, 0-4096 characters after entities parsing. Pass an empty
+	// text to show a "Thinking…" placeholder.
+	Text string `json:"text,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
@@ -1981,6 +2120,60 @@ func (b *Bot) SetMessageReaction(ctx context.Context, params *SetMessageReaction
 	err := b.performRequest(ctx, "setMessageReaction", params)
 	if err != nil {
 		return fmt.Errorf("telego: setMessageReaction: %w", err)
+	}
+	return nil
+}
+
+// DeleteMessageReactionParams - Represents parameters of deleteMessageReaction method.
+type DeleteMessageReactionParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @username)
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageID - Identifier of the target message
+	MessageID int `json:"message_id"`
+
+	// UserID - Optional. Identifier of the user whose reaction will be removed, if the reaction was added by a
+	// user
+	UserID int64 `json:"user_id,omitempty"`
+
+	// ActorChatID - Optional. Identifier of the chat whose reaction will be removed, if the reaction was added
+	// by a chat
+	ActorChatID int64 `json:"actor_chat_id,omitempty"`
+}
+
+// DeleteMessageReaction - Use this method to remove a reaction from a message in a group or a supergroup
+// chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success.
+func (b *Bot) DeleteMessageReaction(ctx context.Context, params *DeleteMessageReactionParams) error {
+	err := b.performRequest(ctx, "deleteMessageReaction", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteMessageReaction: %w", err)
+	}
+	return nil
+}
+
+// DeleteAllMessageReactionsParams - Represents parameters of deleteAllMessageReactions method.
+type DeleteAllMessageReactionsParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
+	// @username)
+	ChatID ChatID `json:"chat_id"`
+
+	// UserID - Optional. Identifier of the user whose reactions will be removed, if the reactions were added by
+	// a user
+	UserID int64 `json:"user_id,omitempty"`
+
+	// ActorChatID - Optional. Identifier of the chat whose reactions will be removed, if the reactions were
+	// added by a chat
+	ActorChatID int64 `json:"actor_chat_id,omitempty"`
+}
+
+// DeleteAllMessageReactions - Use this method to remove up to 10000 recent reactions in a group or a
+// supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator
+// right in the chat. Returns True on success.
+func (b *Bot) DeleteAllMessageReactions(ctx context.Context, params *DeleteAllMessageReactionsParams) error {
+	err := b.performRequest(ctx, "deleteAllMessageReactions", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteAllMessageReactions: %w", err)
 	}
 	return nil
 }
@@ -2788,10 +2981,14 @@ type GetChatAdministratorsParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup or channel (in the
 	// format @channel_username)
 	ChatID ChatID `json:"chat_id"`
+
+	// ReturnBots - Optional. Pass True to additionally receive all bots that are administrators of the chat. By
+	// default, bots other than the current bot are omitted.
+	ReturnBots bool `json:"return_bots,omitempty"`
 }
 
-// GetChatAdministrators - Use this method to get a list of administrators in a chat, which aren't bots.
-// Returns an Array of ChatMember (https://core.telegram.org/bots/api#chatmember) objects.
+// GetChatAdministrators - Use this method to get a list of administrators in a chat. Returns an Array of
+// ChatMember (https://core.telegram.org/bots/api#chatmember) objects.
 func (b *Bot) GetChatAdministrators(ctx context.Context, params *GetChatAdministratorsParams) ([]ChatMember, error) {
 	var chatMembersData []chatMemberData
 	err := b.performRequest(ctx, "getChatAdministrators", params, &chatMembersData)
@@ -3270,6 +3467,68 @@ func (b *Bot) ReplaceManagedBotToken(ctx context.Context, params *ReplaceManaged
 		return nil, fmt.Errorf("telego: replaceManagedBotToken: %w", err)
 	}
 	return token, nil
+}
+
+// GetManagedBotAccessSettingsParams - Represents parameters of getManagedBotAccessSettings method.
+type GetManagedBotAccessSettingsParams struct {
+	// UserID - User identifier of the managed bot whose access settings will be returned
+	UserID int64 `json:"user_id"`
+}
+
+// GetManagedBotAccessSettings - Use this method to get the access settings of a managed bot. Returns a
+// BotAccessSettings (https://core.telegram.org/bots/api#botaccesssettings) object on success.
+func (b *Bot) GetManagedBotAccessSettings(ctx context.Context, params *GetManagedBotAccessSettingsParams) (*BotAccessSettings, error) {
+	var botAccessSettings *BotAccessSettings
+	err := b.performRequest(ctx, "getManagedBotAccessSettings", params, &botAccessSettings)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getManagedBotAccessSettings: %w", err)
+	}
+	return botAccessSettings, nil
+}
+
+// SetManagedBotAccessSettingsParams - Represents parameters of setManagedBotAccessSettings method.
+type SetManagedBotAccessSettingsParams struct {
+	// UserID - User identifier of the managed bot whose access settings will be changed
+	UserID int64 `json:"user_id"`
+
+	// IsAccessRestricted - Pass True, if only selected users can access the bot. The bot's owner can always
+	// access it.
+	IsAccessRestricted bool `json:"is_access_restricted"`
+
+	// AddedUserIDs - Optional. A JSON-serialized list of up to 10 identifiers of users who will have access to
+	// the bot in addition to its owner. Ignored if is_access_restricted is false.
+	AddedUserIDs []int64 `json:"added_user_ids,omitempty"`
+}
+
+// SetManagedBotAccessSettings - Use this method to change the access settings of a managed bot. Returns True
+// on success.
+func (b *Bot) SetManagedBotAccessSettings(ctx context.Context, params *SetManagedBotAccessSettingsParams) error {
+	err := b.performRequest(ctx, "setManagedBotAccessSettings", params)
+	if err != nil {
+		return fmt.Errorf("telego: setManagedBotAccessSettings: %w", err)
+	}
+	return nil
+}
+
+// GetUserPersonalChatMessagesParams - Represents parameters of getUserPersonalChatMessages method.
+type GetUserPersonalChatMessagesParams struct {
+	// UserID - Unique identifier for the target user
+	UserID int64 `json:"user_id"`
+
+	// Limit - The maximum number of messages to return; 1-20
+	Limit int `json:"limit"`
+}
+
+// GetUserPersonalChatMessages - Use this method to get the last messages from the personal chat (i.e., the
+// chat currently added to their profile) of a given user. On success, an array of Message
+// (https://core.telegram.org/bots/api#message) objects is returned.
+func (b *Bot) GetUserPersonalChatMessages(ctx context.Context, params *GetUserPersonalChatMessagesParams) ([]Message, error) {
+	var messages []Message
+	err := b.performRequest(ctx, "getUserPersonalChatMessages", params, &messages)
+	if err != nil {
+		return nil, fmt.Errorf("telego: getUserPersonalChatMessages: %w", err)
+	}
+	return messages, nil
 }
 
 // SetMyCommandsParams - Represents parameters of setMyCommands method.
@@ -4528,14 +4787,14 @@ func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
 	return fp
 }
 
-// EditMessageMedia - Use this method to edit animation, audio, document, photo, or video messages, or to add
-// media to text messages. If a message is part of a message album, then it can be edited only to an audio for
-// audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline
-// message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a
-// URL. On success, if the edited message is not an inline message, the edited Message
-// (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
-// messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
-// hours from the time they were sent.
+// EditMessageMedia - Use this method to edit animation, audio, document, live photo, photo, or video
+// messages, or to add media to text messages. If a message is part of a message album, then it can be edited
+// only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a
+// video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded
+// file via its file_id or specify a URL. On success, if the edited message is not an inline message, the
+// edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note
+// that business messages that were not sent by the bot and do not contain an inline keyboard can only be
+// edited within 48 hours from the time they were sent.
 func (b *Bot) EditMessageMedia(ctx context.Context, params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -5350,6 +5609,26 @@ func (b *Bot) AnswerInlineQuery(ctx context.Context, params *AnswerInlineQueryPa
 		return fmt.Errorf("telego: answerInlineQuery: %w", err)
 	}
 	return nil
+}
+
+// AnswerGuestQueryParams - Represents parameters of answerGuestQuery method.
+type AnswerGuestQueryParams struct {
+	// GuestQueryID - Unique identifier for the query to be answered
+	GuestQueryID string `json:"guest_query_id"`
+
+	// Result - A JSON-serialized object describing the message to be sent
+	Result InlineQueryResult `json:"result"`
+}
+
+// AnswerGuestQuery - Use this method to reply to a received guest message. On success, a SentGuestMessage
+// (https://core.telegram.org/bots/api#sentguestmessage) object is returned.
+func (b *Bot) AnswerGuestQuery(ctx context.Context, params *AnswerGuestQueryParams) (*SentGuestMessage, error) {
+	var sentGuestMessage *SentGuestMessage
+	err := b.performRequest(ctx, "answerGuestQuery", params, &sentGuestMessage)
+	if err != nil {
+		return nil, fmt.Errorf("telego: answerGuestQuery: %w", err)
+	}
+	return sentGuestMessage, nil
 }
 
 // SendInvoiceParams - Represents parameters of sendInvoice method.

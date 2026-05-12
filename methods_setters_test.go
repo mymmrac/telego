@@ -470,6 +470,49 @@ func TestSendVoiceParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSendLivePhotoParams_Setters(t *testing.T) {
+	s := (&SendLivePhotoParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageThreadID(2).
+		WithDirectMessagesTopicID(3).
+		WithLivePhoto(testInputFile).
+		WithPhoto(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithHasSpoiler().
+		WithDisableNotification().
+		WithProtectContent().
+		WithAllowPaidBroadcast().
+		WithMessageEffectID("MessageEffectID").
+		WithSuggestedPostParameters(&SuggestedPostParameters{}).
+		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendLivePhotoParams{
+		BusinessConnectionID:    "BusinessConnectionID",
+		ChatID:                  ChatID{ID: 1},
+		MessageThreadID:         2,
+		DirectMessagesTopicID:   3,
+		LivePhoto:               testInputFile,
+		Photo:                   testInputFile,
+		Caption:                 "Caption",
+		ParseMode:               "ParseMode",
+		CaptionEntities:         []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia:   true,
+		HasSpoiler:              true,
+		DisableNotification:     true,
+		ProtectContent:          true,
+		AllowPaidBroadcast:      true,
+		MessageEffectID:         "MessageEffectID",
+		SuggestedPostParameters: &SuggestedPostParameters{},
+		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
 func TestSendVideoNoteParams_Setters(t *testing.T) {
 	s := (&SendVideoNoteParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
@@ -714,16 +757,20 @@ func TestSendPollParams_Setters(t *testing.T) {
 		WithShuffleOptions().
 		WithAllowAddingOptions().
 		WithHideResultsUntilCloses().
+		WithMembersOnly().
+		WithCountryCodes([]string{"FT"}...).
 		WithCorrectOptionIDs([]int{3}...).
 		WithExplanation("Explanation").
 		WithExplanationParseMode("ExplanationParseMode").
 		WithExplanationEntities([]MessageEntity{{Type: "ExplanationEntities"}}...).
+		WithExplanationMedia(&InputMediaPhoto{}).
 		WithOpenPeriod(4).
 		WithCloseDate(5).
 		WithIsClosed().
 		WithDescription("Description").
 		WithDescriptionParseMode("DescriptionParseMode").
 		WithDescriptionEntities([]MessageEntity{{Type: "DescriptionEntities"}}...).
+		WithMedia(&InputMediaPhoto{}).
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
@@ -746,16 +793,20 @@ func TestSendPollParams_Setters(t *testing.T) {
 		ShuffleOptions:         true,
 		AllowAddingOptions:     true,
 		HideResultsUntilCloses: true,
+		MembersOnly:            true,
+		CountryCodes:           []string{"FT"},
 		CorrectOptionIDs:       []int{3},
 		Explanation:            "Explanation",
 		ExplanationParseMode:   "ExplanationParseMode",
 		ExplanationEntities:    []MessageEntity{{Type: "ExplanationEntities"}},
+		ExplanationMedia:       &InputMediaPhoto{},
 		OpenPeriod:             4,
 		CloseDate:              5,
 		IsClosed:               true,
 		Description:            "Description",
 		DescriptionParseMode:   "DescriptionParseMode",
 		DescriptionEntities:    []MessageEntity{{Type: "DescriptionEntities"}},
+		Media:                  &InputMediaPhoto{},
 		DisableNotification:    true,
 		ProtectContent:         true,
 		AllowPaidBroadcast:     true,
@@ -866,6 +917,34 @@ func TestSetMessageReactionParams_Setters(t *testing.T) {
 		Reaction:  []ReactionType{&ReactionTypeEmoji{Type: ReactionEmoji}},
 		IsBig:     true,
 	}, s)
+}
+
+func TestDeleteMessageReactionParams_Setters(t *testing.T) {
+	d := (&DeleteMessageReactionParams{}).
+		WithChatID(ChatID{ID: 1}).
+		WithMessageID(2).
+		WithUserID(3).
+		WithActorChatID(4)
+
+	assert.Equal(t, &DeleteMessageReactionParams{
+		ChatID:      ChatID{ID: 1},
+		MessageID:   2,
+		UserID:      3,
+		ActorChatID: 4,
+	}, d)
+}
+
+func TestDeleteAllMessageReactionsParams_Setters(t *testing.T) {
+	d := (&DeleteAllMessageReactionsParams{}).
+		WithChatID(ChatID{ID: 1}).
+		WithUserID(2).
+		WithActorChatID(3)
+
+	assert.Equal(t, &DeleteAllMessageReactionsParams{
+		ChatID:      ChatID{ID: 1},
+		UserID:      2,
+		ActorChatID: 3,
+	}, d)
 }
 
 func TestGetUserProfilePhotosParams_Setters(t *testing.T) {
@@ -1272,10 +1351,12 @@ func TestGetChatParams_Setters(t *testing.T) {
 
 func TestGetChatAdministratorsParams_Setters(t *testing.T) {
 	g := (&GetChatAdministratorsParams{}).
-		WithChatID(ChatID{ID: 1})
+		WithChatID(ChatID{ID: 1}).
+		WithReturnBots()
 
 	assert.Equal(t, &GetChatAdministratorsParams{
-		ChatID: ChatID{ID: 1},
+		ChatID:     ChatID{ID: 1},
+		ReturnBots: true,
 	}, g)
 }
 
@@ -1502,6 +1583,39 @@ func TestReplaceManagedBotTokenParams_Setters(t *testing.T) {
 	assert.Equal(t, &ReplaceManagedBotTokenParams{
 		UserID: 1,
 	}, r)
+}
+
+func TestGetManagedBotAccessSettingsParams_Setters(t *testing.T) {
+	g := (&GetManagedBotAccessSettingsParams{}).
+		WithUserID(1)
+
+	assert.Equal(t, &GetManagedBotAccessSettingsParams{
+		UserID: 1,
+	}, g)
+}
+
+func TestSetManagedBotAccessSettingsParams_Setters(t *testing.T) {
+	s := (&SetManagedBotAccessSettingsParams{}).
+		WithUserID(1).
+		WithIsAccessRestricted(true).
+		WithAddedUserIDs([]int64{2}...)
+
+	assert.Equal(t, &SetManagedBotAccessSettingsParams{
+		UserID:             1,
+		IsAccessRestricted: true,
+		AddedUserIDs:       []int64{2},
+	}, s)
+}
+
+func TestGetUserPersonalChatMessagesParams_Setters(t *testing.T) {
+	g := (&GetUserPersonalChatMessagesParams{}).
+		WithUserID(1).
+		WithLimit(2)
+
+	assert.Equal(t, &GetUserPersonalChatMessagesParams{
+		UserID: 1,
+		Limit:  2,
+	}, g)
 }
 
 func TestSetMyCommandsParams_Setters(t *testing.T) {
@@ -2523,6 +2637,17 @@ func TestAnswerInlineQueryParams_Setters(t *testing.T) {
 		IsPersonal:    true,
 		NextOffset:    "NextOffset",
 		Button:        &InlineQueryResultsButton{},
+	}, a)
+}
+
+func TestAnswerGuestQueryParams_Setters(t *testing.T) {
+	a := (&AnswerGuestQueryParams{}).
+		WithGuestQueryID("GuestQueryID").
+		WithResult(&InlineQueryResultArticle{Type: "Result"})
+
+	assert.Equal(t, &AnswerGuestQueryParams{
+		GuestQueryID: "GuestQueryID",
+		Result:       &InlineQueryResultArticle{Type: "Result"},
 	}, a)
 }
 

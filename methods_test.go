@@ -559,6 +559,36 @@ func TestBot_SendVoice(t *testing.T) {
 	})
 }
 
+func TestBot_SendLivePhoto(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.SendLivePhoto(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.SendLivePhoto(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
 func TestBot_SendVideoNote(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -910,6 +940,60 @@ func TestBot_SetMessageReaction(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetMessageReaction(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_DeleteMessageReaction(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteMessageReaction(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteMessageReaction(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_DeleteAllMessageReactions(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteAllMessageReactions(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteAllMessageReactions(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -2443,6 +2527,95 @@ func TestBot_ReplaceManagedBotToken(t *testing.T) {
 		token, err := m.Bot.ReplaceManagedBotToken(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, token)
+	})
+}
+
+func TestBot_GetManagedBotAccessSettings(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expected := &BotAccessSettings{IsAccessRestricted: true}
+		resp := telegoResponse(t, expected)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		settings, err := m.Bot.GetManagedBotAccessSettings(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expected, settings)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		settings, err := m.Bot.GetManagedBotAccessSettings(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, settings)
+	})
+}
+
+func TestBot_SetManagedBotAccessSettings(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetManagedBotAccessSettings(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetManagedBotAccessSettings(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_GetUserPersonalChatMessages(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expected := []Message{{MessageID: 1}}
+		resp := telegoResponse(t, expected)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		messages, err := m.Bot.GetUserPersonalChatMessages(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expected, messages)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		messages, err := m.Bot.GetUserPersonalChatMessages(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, messages)
 	})
 }
 
@@ -4585,6 +4758,37 @@ func TestBot_AnswerInlineQuery(t *testing.T) {
 	})
 }
 
+func TestBot_AnswerGuestQuery(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expected := &SentGuestMessage{InlineMessageID: "1"}
+		resp := telegoResponse(t, expected)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		sent, err := m.Bot.AnswerGuestQuery(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expected, sent)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		sent, err := m.Bot.AnswerGuestQuery(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, sent)
+	})
+}
+
 func TestBot_SendInvoice(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -5048,6 +5252,31 @@ func TestSendMediaGroupParams_fileParameters(t *testing.T) {
 	assert.Equal(t, map[string]ta.NamedReader{
 		"test": testNamedReader{},
 	}, p.fileParameters())
+}
+
+func TestSendPollParams_fileParameters(t *testing.T) {
+	t.Run("nil media", func(t *testing.T) {
+		p := &SendPollParams{}
+		assert.Equal(t, map[string]ta.NamedReader{}, p.fileParameters())
+	})
+
+	t.Run("aggregates media + explanation_media + options", func(t *testing.T) {
+		p := &SendPollParams{
+			Media: &InputMediaPhoto{Media: testInputFile},
+			ExplanationMedia: &InputMediaDocument{
+				Media:     testInputFile,
+				Thumbnail: &InputFile{File: nil},
+			},
+			Options: []InputPollOption{
+				{Media: &InputMediaSticker{Media: testInputFile}},
+				{},
+			},
+		}
+
+		assert.Equal(t, map[string]ta.NamedReader{
+			"test": testNamedReader{},
+		}, p.fileParameters())
+	})
 }
 
 func TestSetChatPhotoParams_fileParameters(t *testing.T) {
