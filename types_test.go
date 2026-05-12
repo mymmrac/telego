@@ -33,6 +33,9 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaVideo{})
 	assert.Equal(t, PaidMediaTypeVideo, (&PaidMediaVideo{}).MediaType())
 
+	assert.Implements(t, (*PaidMedia)(nil), &PaidMediaLivePhoto{})
+	assert.Equal(t, PaidMediaTypeLivePhoto, (&PaidMediaLivePhoto{}).MediaType())
+
 	assert.Implements(t, (*PaidMedia)(nil), &paidMediaOther{})
 	assert.Equal(t, paidMediaTypeOther, (&paidMediaOther{}).MediaType())
 
@@ -171,11 +174,37 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaDocument{})
 	assert.Equal(t, MediaTypeDocument, (&InputMediaDocument{}).MediaType())
 
+	assert.Implements(t, (*InputMedia)(nil), &InputMediaLivePhoto{})
+	assert.Equal(t, MediaTypeLivePhoto, (&InputMediaLivePhoto{}).MediaType())
+
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaPhoto{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaVideo{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaAnimation{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaAudio{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaDocument{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaLivePhoto{})
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaLocation{})
+	assert.Equal(t, MediaTypeLocation, (&InputMediaLocation{}).MediaType())
+	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaVenue{})
+	assert.Equal(t, MediaTypeVenue, (&InputMediaVenue{}).MediaType())
+
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaPhoto{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaVideo{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaAnimation{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaLivePhoto{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaLocation{})
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaSticker{})
+	assert.Equal(t, MediaTypeSticker, (&InputMediaSticker{}).MediaType())
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaVenue{})
+
 	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaPhoto{})
 	assert.Equal(t, PaidMediaTypePhoto, (&InputPaidMediaPhoto{}).MediaType())
 
 	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaVideo{})
 	assert.Equal(t, PaidMediaTypeVideo, (&InputPaidMediaVideo{}).MediaType())
+
+	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaLivePhoto{})
+	assert.Equal(t, PaidMediaTypeLivePhoto, (&InputPaidMediaLivePhoto{}).MediaType())
 
 	assert.Implements(t, (*InputProfilePhoto)(nil), &InputProfilePhotoStatic{})
 	assert.Equal(t, PhotoTypeStatic, (&InputProfilePhotoStatic{}).ProfilePhotoType())
@@ -801,9 +830,10 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			MediaTypePhoto, MediaTypeVideo, MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument,
+			MediaTypeLivePhoto, MediaTypeLocation, MediaTypeSticker, MediaTypeVenue,
 		},
 		{
-			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo, paidMediaTypeOther,
+			PaidMediaTypePreview, PaidMediaTypePhoto, PaidMediaTypeVideo, PaidMediaTypeLivePhoto, paidMediaTypeOther,
 		},
 		{
 			PhotoTypeStatic, PhotoTypeAnimated,

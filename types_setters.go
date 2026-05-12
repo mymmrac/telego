@@ -72,6 +72,12 @@ func (i *InputPollOption) WithTextEntities(textEntities ...MessageEntity) *Input
 	return i
 }
 
+// WithMedia adds media parameter
+func (i *InputPollOption) WithMedia(media InputPollOptionMedia) *InputPollOption {
+	i.Media = media
+	return i
+}
+
 // WithID adds ID parameter
 func (i *InputChecklistTask) WithID(iD int) *InputChecklistTask {
 	i.ID = iD
@@ -796,6 +802,138 @@ func (i *InputPaidMediaVideo) WithDuration(duration int) *InputPaidMediaVideo {
 // WithSupportsStreaming adds supports streaming parameter
 func (i *InputPaidMediaVideo) WithSupportsStreaming() *InputPaidMediaVideo {
 	i.SupportsStreaming = true
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputPaidMediaLivePhoto) WithMedia(media InputFile) *InputPaidMediaLivePhoto {
+	i.Media = media
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputPaidMediaLivePhoto) WithPhoto(photo InputFile) *InputPaidMediaLivePhoto {
+	i.Photo = photo
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaLivePhoto) WithMedia(media InputFile) *InputMediaLivePhoto {
+	i.Media = media
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputMediaLivePhoto) WithPhoto(photo InputFile) *InputMediaLivePhoto {
+	i.Photo = photo
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputMediaLivePhoto) WithCaption(caption string) *InputMediaLivePhoto {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputMediaLivePhoto) WithParseMode(parseMode string) *InputMediaLivePhoto {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputMediaLivePhoto) WithCaptionEntities(captionEntities ...MessageEntity) *InputMediaLivePhoto {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (i *InputMediaLivePhoto) WithShowCaptionAboveMedia() *InputMediaLivePhoto {
+	i.ShowCaptionAboveMedia = true
+	return i
+}
+
+// WithHasSpoiler adds has spoiler parameter
+func (i *InputMediaLivePhoto) WithHasSpoiler() *InputMediaLivePhoto {
+	i.HasSpoiler = true
+	return i
+}
+
+// WithLatitude adds latitude parameter
+func (i *InputMediaLocation) WithLatitude(latitude float64) *InputMediaLocation {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InputMediaLocation) WithLongitude(longitude float64) *InputMediaLocation {
+	i.Longitude = longitude
+	return i
+}
+
+// WithHorizontalAccuracy adds horizontal accuracy parameter
+func (i *InputMediaLocation) WithHorizontalAccuracy(horizontalAccuracy float64) *InputMediaLocation {
+	i.HorizontalAccuracy = horizontalAccuracy
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputMediaSticker) WithMedia(media InputFile) *InputMediaSticker {
+	i.Media = media
+	return i
+}
+
+// WithEmoji adds emoji parameter
+func (i *InputMediaSticker) WithEmoji(emoji string) *InputMediaSticker {
+	i.Emoji = emoji
+	return i
+}
+
+// WithLatitude adds latitude parameter
+func (i *InputMediaVenue) WithLatitude(latitude float64) *InputMediaVenue {
+	i.Latitude = latitude
+	return i
+}
+
+// WithLongitude adds longitude parameter
+func (i *InputMediaVenue) WithLongitude(longitude float64) *InputMediaVenue {
+	i.Longitude = longitude
+	return i
+}
+
+// WithTitle adds title parameter
+func (i *InputMediaVenue) WithTitle(title string) *InputMediaVenue {
+	i.Title = title
+	return i
+}
+
+// WithAddress adds address parameter
+func (i *InputMediaVenue) WithAddress(address string) *InputMediaVenue {
+	i.Address = address
+	return i
+}
+
+// WithFoursquareID adds foursquare ID parameter
+func (i *InputMediaVenue) WithFoursquareID(foursquareID string) *InputMediaVenue {
+	i.FoursquareID = foursquareID
+	return i
+}
+
+// WithFoursquareType adds foursquare type parameter
+func (i *InputMediaVenue) WithFoursquareType(foursquareType string) *InputMediaVenue {
+	i.FoursquareType = foursquareType
+	return i
+}
+
+// WithGooglePlaceID adds google place ID parameter
+func (i *InputMediaVenue) WithGooglePlaceID(googlePlaceID string) *InputMediaVenue {
+	i.GooglePlaceID = googlePlaceID
+	return i
+}
+
+// WithGooglePlaceType adds google place type parameter
+func (i *InputMediaVenue) WithGooglePlaceType(googlePlaceType string) *InputMediaVenue {
+	i.GooglePlaceType = googlePlaceType
 	return i
 }
 

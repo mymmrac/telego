@@ -49,6 +49,10 @@ type Update struct {
 	// DeletedBusinessMessages - Optional. Messages were deleted from a connected business account
 	DeletedBusinessMessages *BusinessMessagesDeleted `json:"deleted_business_messages,omitempty"`
 
+	// GuestMessage - Optional. New guest message. The bot can use the field Message.guest_query_id and the
+	// method answerGuestQuery (https://core.telegram.org/bots/api#answerguestquery) to send a message in response.
+	GuestMessage *Message `json:"guest_message,omitempty"`
+
 	// MessageReaction - Optional. A reaction to a message was changed by a user. The bot must be an
 	// administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to
 	// receive these updates. The update isn't received for reactions set by bots.
@@ -242,6 +246,10 @@ type User struct {
 	// (https://core.telegram.org/bots/features#privacy-mode) is disabled for the bot. Returned only in getMe
 	// (https://core.telegram.org/bots/api#getme).
 	CanReadAllGroupMessages bool `json:"can_read_all_group_messages,omitempty"`
+
+	// SupportsGuestQueries - Optional. True, if the bot supports guest queries from chats it is not a member of.
+	// Returned only in getMe (https://core.telegram.org/bots/api#getme).
+	SupportsGuestQueries bool `json:"supports_guest_queries,omitempty"`
 
 	// SupportsInlineQueries - Optional. True, if the bot supports inline queries. Returned only in getMe
 	// (https://core.telegram.org/bots/api#getme).
@@ -586,6 +594,12 @@ type Message struct {
 	// Date - Date the message was sent in Unix time. It is always a positive number, representing a valid date.
 	Date int64 `json:"date"`
 
+	// GuestQueryID - Optional. The unique identifier for the guest query. Use this identifier with the method
+	// answerGuestQuery (https://core.telegram.org/bots/api#answerguestquery) to send a response message. If
+	// non-empty, the message belongs to the chat where the guest bot was summoned, which may not coincide with
+	// other existing bot chats sharing the same identifier.
+	GuestQueryID string `json:"guest_query_id,omitempty"`
+
 	// BusinessConnectionID - Optional. Unique identifier of the business connection from which the message was
 	// received. If non-empty, the message belongs to a chat of the corresponding business account that is
 	// independent from any potential bot chat which might share the same identifier.
@@ -629,6 +643,14 @@ type Message struct {
 
 	// ViaBot - Optional. Bot through which the message was sent
 	ViaBot *User `json:"via_bot,omitempty"`
+
+	// GuestBotCallerUser - Optional. For a message sent by a guest bot, this is the user whose original message
+	// triggered the bot's response.
+	GuestBotCallerUser *User `json:"guest_bot_caller_user,omitempty"`
+
+	// GuestBotCallerChat - Optional. For a message sent by a guest bot, this is the chat whose original message
+	// triggered the bot's response.
+	GuestBotCallerChat *Chat `json:"guest_bot_caller_chat,omitempty"`
 
 	// EditDate - Optional. Date the message was last edited in Unix time
 	EditDate int64 `json:"edit_date,omitempty"`
@@ -684,6 +706,10 @@ type Message struct {
 
 	// Document - Optional. Message is a general file, information about the file
 	Document *Document `json:"document,omitempty"`
+
+	// LivePhoto - Optional. Message is a live photo, information about the live photo. For backward
+	// compatibility, when this field is set, the photo field will also be set.
+	LivePhoto *LivePhoto `json:"live_photo,omitempty"`
 
 	// PaidMedia - Optional. Message contains paid media; information about the paid media
 	PaidMedia *PaidMediaInfo `json:"paid_media,omitempty"`
@@ -1203,6 +1229,9 @@ type ExternalReplyInfo struct {
 	// Document - Optional. Message is a general file, information about the file
 	Document *Document `json:"document,omitempty"`
 
+	// LivePhoto - Optional. Message is a live photo, information about the live photo.
+	LivePhoto *LivePhoto `json:"live_photo,omitempty"`
+
 	// PaidMedia - Optional. Message contains paid media; information about the paid media
 	PaidMedia *PaidMediaInfo `json:"paid_media,omitempty"`
 
@@ -1701,6 +1730,36 @@ type Voice struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
+// LivePhoto - This object represents a live photo.
+type LivePhoto struct {
+	// Photo - Optional. Available sizes of the corresponding static photo
+	Photo []PhotoSize `json:"photo,omitempty"`
+
+	// FileID - Identifier for the video file which can be used to download or reuse the file
+	FileID string `json:"file_id"`
+
+	// FileUniqueID - Unique identifier for the video file which is supposed to be the same over time and for
+	// different bots. Can't be used to download or reuse the file.
+	FileUniqueID string `json:"file_unique_id"`
+
+	// Width - Video width as defined by the sender
+	Width int `json:"width"`
+
+	// Height - Video height as defined by the sender
+	Height int `json:"height"`
+
+	// Duration - Duration of the video in seconds as defined by the sender
+	Duration int `json:"duration"`
+
+	// MimeType - Optional. MIME type of the file as defined by the sender
+	MimeType string `json:"mime_type,omitempty"`
+
+	// FileSize - Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may
+	// have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit
+	// integer or double-precision float type are safe for storing this value.
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
 // PaidMediaInfo - Describes the paid media added to a message.
 type PaidMediaInfo struct {
 	// StarCount - The number of Telegram Stars that must be paid to buy access to the media
@@ -1735,6 +1794,8 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 				um.PaidMedia[i] = &PaidMediaPhoto{}
 			case PaidMediaTypeVideo:
 				um.PaidMedia[i] = &PaidMediaVideo{}
+			case PaidMediaTypeLivePhoto:
+				um.PaidMedia[i] = &PaidMediaLivePhoto{}
 			case paidMediaTypeOther:
 				um.PaidMedia[i] = &paidMediaOther{}
 			default:
@@ -1755,6 +1816,7 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 // PaidMediaPreview (https://core.telegram.org/bots/api#paidmediapreview)
 // PaidMediaPhoto (https://core.telegram.org/bots/api#paidmediaphoto)
 // PaidMediaVideo (https://core.telegram.org/bots/api#paidmediavideo)
+// PaidMediaLivePhoto (https://core.telegram.org/bots/api#paidmedialivephoto)
 //
 // WARNING: Telegram introduced undocumented type "other", it will be correctly parsed by Telego, but will not be
 // exposed to users directly as it's not documented anywhere, but still used by Telegram
@@ -1767,10 +1829,11 @@ type PaidMedia interface {
 
 // Paid media types
 const (
-	PaidMediaTypePreview = "preview"
-	PaidMediaTypePhoto   = "photo"
-	PaidMediaTypeVideo   = "video"
-	paidMediaTypeOther   = "other"
+	PaidMediaTypePreview   = "preview"
+	PaidMediaTypePhoto     = "photo"
+	PaidMediaTypeVideo     = "video"
+	PaidMediaTypeLivePhoto = "live_photo"
+	paidMediaTypeOther     = "other"
 )
 
 // PaidMediaPreview - The paid media isn't available before the payment.
@@ -1826,6 +1889,22 @@ func (m *PaidMediaVideo) MediaType() string {
 }
 
 func (m *PaidMediaVideo) iPaidMedia() {}
+
+// PaidMediaLivePhoto - The paid media is a live photo (https://core.telegram.org/bots/api#livephoto).
+type PaidMediaLivePhoto struct {
+	// Type - Type of the paid media, always “live_photo”
+	Type string `json:"type"`
+
+	// LivePhoto - The photo
+	LivePhoto LivePhoto `json:"live_photo"`
+}
+
+// MediaType returns PaidMedia type
+func (m *PaidMediaLivePhoto) MediaType() string {
+	return PaidMediaTypeLivePhoto
+}
+
+func (m *PaidMediaLivePhoto) iPaidMedia() {}
 
 // paidMediaOther - The paid media is a other.
 //
@@ -1896,6 +1975,9 @@ type PollOption struct {
 	// entities are allowed in poll option texts
 	TextEntities []MessageEntity `json:"text_entities,omitempty"`
 
+	// Media - Optional. Media added to the poll option
+	Media *PollMedia `json:"media,omitempty"`
+
 	// VoterCount - Number of users who voted for this option; may be 0 if unknown
 	VoterCount int `json:"voter_count"`
 
@@ -1925,6 +2007,9 @@ type InputPollOption struct {
 	// TextEntities - Optional. A JSON-serialized list of special entities that appear in the poll option text.
 	// It can be specified instead of text_parse_mode
 	TextEntities []MessageEntity `json:"text_entities,omitempty"`
+
+	// Media - Optional. Media added to the poll option
+	Media InputPollOptionMedia `json:"media,omitempty"`
 }
 
 // PollAnswer - This object represents an answer of a user in a non-anonymous poll.
@@ -1979,6 +2064,16 @@ type Poll struct {
 	// AllowsRevoting - True, if the poll allows to change the chosen answer options
 	AllowsRevoting bool `json:"allows_revoting"`
 
+	// MembersOnly - True if voting is limited to users who have been members of the chat where the poll was
+	// originally sent for more than 24 hours
+	MembersOnly bool `json:"members_only"`
+
+	// CountryCodes - Optional. A list of two-letter ISO 3166-1 alpha-2
+	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes indicating the countries from which users
+	// can vote in the poll. The country code "FT" is used for users with anonymous numbers. If omitted, then users
+	// from any country can participate in the poll.
+	CountryCodes []string `json:"country_codes,omitempty"`
+
 	// CorrectOptionIDs - Optional. Array of 0-based identifiers of the correct answer options. Available only
 	// for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with
 	// the bot.
@@ -1991,6 +2086,9 @@ type Poll struct {
 	// ExplanationEntities - Optional. Special entities like usernames, URLs, bot commands, etc. that appear in
 	// the explanation
 	ExplanationEntities []MessageEntity `json:"explanation_entities,omitempty"`
+
+	// ExplanationMedia - Optional. Media added to the quiz explanation
+	ExplanationMedia *PollMedia `json:"explanation_media,omitempty"`
 
 	// OpenPeriod - Optional. Amount of time in seconds the poll will be active after creation
 	OpenPeriod int `json:"open_period,omitempty"`
@@ -2005,6 +2103,10 @@ type Poll struct {
 	// DescriptionEntities - Optional. Special entities like usernames, URLs, bot commands, etc. that appear in
 	// the description
 	DescriptionEntities []MessageEntity `json:"description_entities,omitempty"`
+
+	// Media - Optional. Media added to the poll description; for polls inside the Message
+	// (https://core.telegram.org/bots/api#message) object only
+	Media *PollMedia `json:"media,omitempty"`
 }
 
 // Poll types
@@ -2012,6 +2114,39 @@ const (
 	PollTypeRegular = "regular"
 	PollTypeQuiz    = "quiz"
 )
+
+// PollMedia - This object represents a media in a poll. At most one of the optional fields can be present
+// in any given object.
+type PollMedia struct {
+	// Animation - Optional. Media is an animation, information about the animation
+	Animation *Animation `json:"animation,omitempty"`
+
+	// Audio - Optional. Media is an audio file, information about the file; currently, can't be received in a
+	// poll option
+	Audio *Audio `json:"audio,omitempty"`
+
+	// Document - Optional. Media is a general file, information about the file; currently, can't be received in
+	// a poll option
+	Document *Document `json:"document,omitempty"`
+
+	// LivePhoto - Optional. Media is a live photo, information about the live photo
+	LivePhoto *LivePhoto `json:"live_photo,omitempty"`
+
+	// Location - Optional. Media is a shared location, information about the location
+	Location *Location `json:"location,omitempty"`
+
+	// Photo - Optional. Media is a photo, available sizes of the photo
+	Photo []PhotoSize `json:"photo,omitempty"`
+
+	// Sticker - Optional. Media is a sticker, information about the sticker; currently, for poll options only
+	Sticker *Sticker `json:"sticker,omitempty"`
+
+	// Venue - Optional. Media is a venue, information about the venue
+	Venue *Venue `json:"venue,omitempty"`
+
+	// Video - Optional. Media is a video, information about the video
+	Video *Video `json:"video,omitempty"`
+}
 
 // ChecklistTask - Describes a task in a checklist.
 type ChecklistTask struct {
@@ -2220,6 +2355,22 @@ type ManagedBotUpdated struct {
 	// Bot - Information about the bot. Token of the bot can be fetched using the method getManagedBotToken
 	// (https://core.telegram.org/bots/api#getmanagedbottoken).
 	Bot User `json:"bot"`
+}
+
+// BotAccessSettings - This object describes the access settings of a bot.
+type BotAccessSettings struct {
+	// IsAccessRestricted - True, if only selected users can access the bot. The bot's owner can always access
+	// it.
+	IsAccessRestricted bool `json:"is_access_restricted"`
+
+	// AddedUsers - Optional. The list of other users who have access to the bot if the access is restricted
+	AddedUsers []User `json:"added_users,omitempty"`
+}
+
+// SentGuestMessage - Describes an inline message sent by a guest bot.
+type SentGuestMessage struct {
+	// InlineMessageID - Identifier of the sent inline message
+	InlineMessageID string `json:"inline_message_id"`
 }
 
 // PollOptionAdded - Describes a service message about an option added to a poll.
@@ -3966,6 +4117,9 @@ type ChatMemberRestricted struct {
 	// CanAddWebPagePreviews - True, if the user is allowed to add web page previews to their messages
 	CanAddWebPagePreviews bool `json:"can_add_web_page_previews"`
 
+	// CanReactToMessages - True, if the user is allowed to react to messages
+	CanReactToMessages bool `json:"can_react_to_messages"`
+
 	// CanEditTag - True, if the user is allowed to edit their own tag
 	CanEditTag bool `json:"can_edit_tag"`
 
@@ -4119,6 +4273,10 @@ type ChatPermissions struct {
 
 	// CanAddWebPagePreviews - Optional. True, if the user is allowed to add web page previews to their messages
 	CanAddWebPagePreviews *bool `json:"can_add_web_page_previews,omitempty"`
+
+	// CanReactToMessages - Optional. True, if the user is allowed to react to messages. If omitted, defaults to
+	// the value of can_send_messages
+	CanReactToMessages *bool `json:"can_react_to_messages,omitempty"`
 
 	// CanEditTag - Optional. True, if the user is allowed to edit their own tag
 	CanEditTag *bool `json:"can_edit_tag,omitempty"`
@@ -5760,6 +5918,7 @@ type fileCompatible interface {
 // InputMediaAnimation (https://core.telegram.org/bots/api#inputmediaanimation)
 // InputMediaDocument (https://core.telegram.org/bots/api#inputmediadocument)
 // InputMediaAudio (https://core.telegram.org/bots/api#inputmediaaudio)
+// InputMediaLivePhoto (https://core.telegram.org/bots/api#inputmedialivephoto)
 // InputMediaPhoto (https://core.telegram.org/bots/api#inputmediaphoto)
 // InputMediaVideo (https://core.telegram.org/bots/api#inputmediavideo)
 type InputMedia interface {
@@ -5770,6 +5929,41 @@ type InputMedia interface {
 	fileCompatible
 }
 
+// InputPollMedia - This object represents the content of a poll description or a quiz explanation to be
+// sent. It should be one of
+// InputMediaAnimation (https://core.telegram.org/bots/api#inputmediaanimation)
+// InputMediaAudio (https://core.telegram.org/bots/api#inputmediaaudio)
+// InputMediaDocument (https://core.telegram.org/bots/api#inputmediadocument)
+// InputMediaLivePhoto (https://core.telegram.org/bots/api#inputmedialivephoto)
+// InputMediaLocation (https://core.telegram.org/bots/api#inputmedialocation)
+// InputMediaPhoto (https://core.telegram.org/bots/api#inputmediaphoto)
+// InputMediaVenue (https://core.telegram.org/bots/api#inputmediavenue)
+// InputMediaVideo (https://core.telegram.org/bots/api#inputmediavideo)
+type InputPollMedia interface {
+	// MediaType return InputPollMedia type
+	MediaType() string
+	// Disallow external implementations
+	iInputPollMedia()
+	fileCompatible
+}
+
+// InputPollOptionMedia - This object represents the content of a poll option to be sent. It should be one
+// of
+// InputMediaAnimation (https://core.telegram.org/bots/api#inputmediaanimation)
+// InputMediaLivePhoto (https://core.telegram.org/bots/api#inputmedialivephoto)
+// InputMediaLocation (https://core.telegram.org/bots/api#inputmedialocation)
+// InputMediaPhoto (https://core.telegram.org/bots/api#inputmediaphoto)
+// InputMediaSticker (https://core.telegram.org/bots/api#inputmediasticker)
+// InputMediaVenue (https://core.telegram.org/bots/api#inputmediavenue)
+// InputMediaVideo (https://core.telegram.org/bots/api#inputmediavideo)
+type InputPollOptionMedia interface {
+	// MediaType return InputPollOptionMedia type
+	MediaType() string
+	// Disallow external implementations
+	iInputPollOptionMedia()
+	fileCompatible
+}
+
 // InputMedia types
 const (
 	MediaTypePhoto     = "photo"
@@ -5777,6 +5971,10 @@ const (
 	MediaTypeAnimation = "animation"
 	MediaTypeAudio     = "audio"
 	MediaTypeDocument  = "document"
+	MediaTypeLivePhoto = "live_photo"
+	MediaTypeLocation  = "location"
+	MediaTypeSticker   = "sticker"
+	MediaTypeVenue     = "venue"
 )
 
 // InputMediaPhoto - Represents a photo to be sent.
@@ -5814,6 +6012,10 @@ func (i *InputMediaPhoto) MediaType() string {
 }
 
 func (i *InputMediaPhoto) iInputMedia() {}
+
+func (i *InputMediaPhoto) iInputPollMedia() {}
+
+func (i *InputMediaPhoto) iInputPollOptionMedia() {}
 
 func (i *InputMediaPhoto) fileParameters() map[string]telegoapi.NamedReader {
 	i.Media.needAttach = true
@@ -5887,6 +6089,10 @@ func (i *InputMediaVideo) MediaType() string {
 
 func (i *InputMediaVideo) iInputMedia() {}
 
+func (i *InputMediaVideo) iInputPollMedia() {}
+
+func (i *InputMediaVideo) iInputPollOptionMedia() {}
+
 func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
@@ -5958,6 +6164,10 @@ func (i *InputMediaAnimation) MediaType() string {
 
 func (i *InputMediaAnimation) iInputMedia() {}
 
+func (i *InputMediaAnimation) iInputPollMedia() {}
+
+func (i *InputMediaAnimation) iInputPollOptionMedia() {}
+
 func (i *InputMediaAnimation) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
@@ -6018,6 +6228,8 @@ func (i *InputMediaAudio) MediaType() string {
 
 func (i *InputMediaAudio) iInputMedia() {}
 
+func (i *InputMediaAudio) iInputPollMedia() {}
+
 func (i *InputMediaAudio) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
@@ -6073,6 +6285,8 @@ func (i *InputMediaDocument) MediaType() string {
 
 func (i *InputMediaDocument) iInputMedia() {}
 
+func (i *InputMediaDocument) iInputPollMedia() {}
+
 func (i *InputMediaDocument) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
 
@@ -6084,6 +6298,166 @@ func (i *InputMediaDocument) fileParameters() map[string]telegoapi.NamedReader {
 	}
 
 	return fp
+}
+
+// InputMediaLivePhoto - Represents a live photo to be sent.
+type InputMediaLivePhoto struct {
+	// Type - Type of the result, must be live_photo
+	Type string `json:"type"`
+
+	// Media - Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram servers
+	// (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under
+	// <file_attach_name> name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files).
+	// Sending live photos by a URL is currently unsupported.
+	Media InputFile `json:"media"`
+
+	// Photo - The static photo to send. Pass a file_id to send a file that exists on the Telegram servers
+	// (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under
+	// <file_attach_name> name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files).
+	// Sending live photos by a URL is currently unsupported.
+	Photo InputFile `json:"photo"`
+
+	// Caption - Optional. Caption of the live photo to be sent, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the live photo caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
+	// instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
+	// HasSpoiler - Optional. Pass True if the live photo needs to be covered with a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+}
+
+// MediaType return InputMedia type
+func (i *InputMediaLivePhoto) MediaType() string {
+	return MediaTypeLivePhoto
+}
+
+func (i *InputMediaLivePhoto) iInputMedia() {}
+
+func (i *InputMediaLivePhoto) iInputPollMedia() {}
+
+func (i *InputMediaLivePhoto) iInputPollOptionMedia() {}
+
+func (i *InputMediaLivePhoto) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	i.Media.needAttach = true
+	fp["media"] = i.Media.File
+	i.Photo.needAttach = true
+	fp["photo"] = i.Photo.File
+
+	return fp
+}
+
+// InputMediaLocation - Represents a location to be sent.
+type InputMediaLocation struct {
+	// Type - Type of the result, must be location
+	Type string `json:"type"`
+
+	// Latitude - Latitude of the location
+	Latitude float64 `json:"latitude"`
+
+	// Longitude - Longitude of the location
+	Longitude float64 `json:"longitude"`
+
+	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
+	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
+}
+
+// MediaType return InputMedia type
+func (i *InputMediaLocation) MediaType() string {
+	return MediaTypeLocation
+}
+
+func (i *InputMediaLocation) iInputPollMedia() {}
+
+func (i *InputMediaLocation) iInputPollOptionMedia() {}
+
+func (i *InputMediaLocation) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
+// InputMediaSticker - Represents a sticker file to be sent.
+type InputMediaSticker struct {
+	// Type - Type of the result, must be sticker
+	Type string `json:"type"`
+
+	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
+	// pass an HTTP URL for Telegram to get a .WEBP sticker from the Internet, or pass
+	// “attach://<file_attach_name>” to upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data
+	// under <file_attach_name> name. More information on Sending Files »
+	// (https://core.telegram.org/bots/api#sending-files)
+	Media InputFile `json:"media"`
+
+	// Emoji - Optional. Emoji associated with the sticker; only for just uploaded stickers
+	Emoji string `json:"emoji,omitempty"`
+}
+
+// MediaType return InputMedia type
+func (i *InputMediaSticker) MediaType() string {
+	return MediaTypeSticker
+}
+
+func (i *InputMediaSticker) iInputPollOptionMedia() {}
+
+func (i *InputMediaSticker) fileParameters() map[string]telegoapi.NamedReader {
+	i.Media.needAttach = true
+	return map[string]telegoapi.NamedReader{
+		"media": i.Media.File,
+	}
+}
+
+// InputMediaVenue - Represents a venue to be sent.
+type InputMediaVenue struct {
+	// Type - Type of the result, must be venue
+	Type string `json:"type"`
+
+	// Latitude - Latitude of the location
+	Latitude float64 `json:"latitude"`
+
+	// Longitude - Longitude of the location
+	Longitude float64 `json:"longitude"`
+
+	// Title - Name of the venue
+	Title string `json:"title"`
+
+	// Address - Address of the venue
+	Address string `json:"address"`
+
+	// FoursquareID - Optional. Foursquare identifier of the venue
+	FoursquareID string `json:"foursquare_id,omitempty"`
+
+	// FoursquareType - Optional. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”,
+	// “arts_entertainment/aquarium” or “food/icecream”.)
+	FoursquareType string `json:"foursquare_type,omitempty"`
+
+	// GooglePlaceID - Optional. Google Places identifier of the venue
+	GooglePlaceID string `json:"google_place_id,omitempty"`
+
+	// GooglePlaceType - Optional. Google Places type of the venue. (See supported types
+	// (https://developers.google.com/places/web-service/supported_types).)
+	GooglePlaceType string `json:"google_place_type,omitempty"`
+}
+
+// MediaType return InputMedia type
+func (i *InputMediaVenue) MediaType() string {
+	return MediaTypeVenue
+}
+
+func (i *InputMediaVenue) iInputPollMedia() {}
+
+func (i *InputMediaVenue) iInputPollOptionMedia() {}
+
+func (i *InputMediaVenue) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
 }
 
 // InputFile - This object represents the contents of a file to be uploaded. Must be posted using
@@ -6143,6 +6517,7 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 // InputPaidMedia - This object describes the paid media to be sent. Currently, it can be one of
 // InputPaidMediaPhoto (https://core.telegram.org/bots/api#inputpaidmediaphoto)
 // InputPaidMediaVideo (https://core.telegram.org/bots/api#inputpaidmediavideo)
+// InputPaidMediaLivePhoto (https://core.telegram.org/bots/api#inputpaidmedialivephoto)
 type InputPaidMedia interface {
 	// MediaType returns InputPaidMedia type
 	MediaType() string
@@ -6250,6 +6625,47 @@ func (i *InputPaidMediaVideo) fileParameters() map[string]telegoapi.NamedReader 
 		i.Cover.needAttach = true
 		fp["cover"] = i.Cover.File
 	}
+
+	return fp
+}
+
+// InputPaidMediaLivePhoto - The paid media to send is a live photo.
+type InputPaidMediaLivePhoto struct {
+	// Type - Type of the media, must be live_photo
+	Type string `json:"type"`
+
+	// Media - Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram servers
+	// (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under
+	// <file_attach_name> name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files).
+	// Sending live photos by a URL is currently unsupported.
+	Media InputFile `json:"media"`
+
+	// Photo - The static photo to send. Pass a file_id to send a file that exists on the Telegram servers
+	// (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under
+	// <file_attach_name> name. More information on Sending Files » (https://core.telegram.org/bots/api#sending-files).
+	// Sending live photos by a URL is currently unsupported.
+	Photo InputFile `json:"photo"`
+}
+
+// MediaType returns InputPaidMedia type
+func (i *InputPaidMediaLivePhoto) MediaType() string {
+	return PaidMediaTypeLivePhoto
+}
+
+// MediaFile returns InputPaidMedia file
+func (i *InputPaidMediaLivePhoto) MediaFile() InputFile {
+	return i.Media
+}
+
+func (i *InputPaidMediaLivePhoto) iInputPaidMedia() {}
+
+func (i *InputPaidMediaLivePhoto) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	i.Media.needAttach = true
+	fp["media"] = i.Media.File
+	i.Photo.needAttach = true
+	fp["photo"] = i.Photo.File
 
 	return fp
 }

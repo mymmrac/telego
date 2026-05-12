@@ -35,12 +35,14 @@ func TestInputPollOption_Setters(t *testing.T) {
 	i := (&InputPollOption{}).
 		WithText("Text").
 		WithTextParseMode("TextParseMode").
-		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...)
+		WithTextEntities([]MessageEntity{{Type: "TextEntities"}}...).
+		WithMedia(&InputMediaPhoto{})
 
 	assert.Equal(t, &InputPollOption{
 		Text:          "Text",
 		TextParseMode: "TextParseMode",
 		TextEntities:  []MessageEntity{{Type: "TextEntities"}},
+		Media:         &InputMediaPhoto{},
 	}, i)
 }
 
@@ -414,6 +416,85 @@ func TestInputPaidMediaVideo_Setters(t *testing.T) {
 		Height:            3,
 		Duration:          4,
 		SupportsStreaming: true,
+	}, i)
+}
+
+func TestInputPaidMediaLivePhoto_Setters(t *testing.T) {
+	i := (&InputPaidMediaLivePhoto{}).
+		WithMedia(testInputFile).
+		WithPhoto(testInputFile)
+
+	assert.Equal(t, &InputPaidMediaLivePhoto{
+		Media: testInputFile,
+		Photo: testInputFile,
+	}, i)
+}
+
+func TestInputMediaLivePhoto_Setters(t *testing.T) {
+	i := (&InputMediaLivePhoto{}).
+		WithMedia(testInputFile).
+		WithPhoto(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithHasSpoiler()
+
+	assert.Equal(t, &InputMediaLivePhoto{
+		Media:                 testInputFile,
+		Photo:                 testInputFile,
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		HasSpoiler:            true,
+	}, i)
+}
+
+func TestInputMediaLocation_Setters(t *testing.T) {
+	i := (&InputMediaLocation{}).
+		WithLatitude(1.0).
+		WithLongitude(2.0).
+		WithHorizontalAccuracy(3.0)
+
+	assert.Equal(t, &InputMediaLocation{
+		Latitude:           1.0,
+		Longitude:          2.0,
+		HorizontalAccuracy: 3.0,
+	}, i)
+}
+
+func TestInputMediaSticker_Setters(t *testing.T) {
+	i := (&InputMediaSticker{}).
+		WithMedia(testInputFile).
+		WithEmoji("Emoji")
+
+	assert.Equal(t, &InputMediaSticker{
+		Media: testInputFile,
+		Emoji: "Emoji",
+	}, i)
+}
+
+func TestInputMediaVenue_Setters(t *testing.T) {
+	i := (&InputMediaVenue{}).
+		WithLatitude(1.0).
+		WithLongitude(2.0).
+		WithTitle("Title").
+		WithAddress("Address").
+		WithFoursquareID("FoursquareID").
+		WithFoursquareType("FoursquareType").
+		WithGooglePlaceID("GooglePlaceID").
+		WithGooglePlaceType("GooglePlaceType")
+
+	assert.Equal(t, &InputMediaVenue{
+		Latitude:        1.0,
+		Longitude:       2.0,
+		Title:           "Title",
+		Address:         "Address",
+		FoursquareID:    "FoursquareID",
+		FoursquareType:  "FoursquareType",
+		GooglePlaceID:   "GooglePlaceID",
+		GooglePlaceType: "GooglePlaceType",
 	}, i)
 }
 
