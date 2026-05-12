@@ -145,6 +145,22 @@ func (h *BotHandler) HandleDeletedBusinessMessages(handler DeletedBusinessMessag
 	h.baseGroup.HandleDeletedBusinessMessages(handler, predicates...)
 }
 
+// HandleGuestMessage same as [BotHandler.Handle], but assumes that the update contains a guest message
+func (h *HandlerGroup) HandleGuestMessage(handler MessageHandler, predicates ...Predicate) {
+	if handler == nil {
+		panic("Telego: nil guest message handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.GuestMessage)
+	}, append([]Predicate{AnyGuestMessage()}, predicates...)...)
+}
+
+// HandleGuestMessage same as [BotHandler.Handle], but assumes that the update contains a guest message
+func (h *BotHandler) HandleGuestMessage(handler MessageHandler, predicates ...Predicate) {
+	h.baseGroup.HandleGuestMessage(handler, predicates...)
+}
+
 // MessageReactionHandler handles message reaction that came from bot
 type MessageReactionHandler func(ctx *Context, reaction telego.MessageReactionUpdated) error
 

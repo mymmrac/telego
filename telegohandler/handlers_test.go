@@ -194,6 +194,24 @@ func TestBotHandler_HandleDeletedBusinessMessages(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleGuestMessage(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleGuestMessage(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error { wg.Done(); return nil })
+
+	bh.HandleGuestMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{GuestMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleMessageReaction(t *testing.T) {
 	bh := newTestBotHandler(t)
 

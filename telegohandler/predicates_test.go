@@ -727,6 +727,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_guest_message_matches",
+			predicate: AnyGuestMessage(),
+			update:    telego.Update{GuestMessage: &telego.Message{Chat: telego.Chat{ID: 1}}},
+			matches:   true,
+		},
+		{
+			name:      "any_guest_message_not_matches",
+			predicate: AnyGuestMessage(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
 			name:      "any_message_reaction_matches",
 			predicate: AnyMessageReaction(),
 			update:    telego.Update{MessageReaction: &telego.MessageReactionUpdated{}},

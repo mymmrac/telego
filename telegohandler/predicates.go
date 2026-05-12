@@ -519,6 +519,13 @@ func AnyDeletedBusinessMessages() Predicate {
 	}
 }
 
+// AnyGuestMessage is true if the guest message isn't nil
+func AnyGuestMessage() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return baseAnyMessage(update.GuestMessage)
+	}
+}
+
 // AnyMessageReaction is true if message reaction isn't nil
 func AnyMessageReaction() Predicate {
 	return func(_ context.Context, update telego.Update) bool {
