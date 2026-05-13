@@ -65,6 +65,7 @@ var (
 	curTypeRegexp   = regexp.MustCompile(`^type (\w+) (struct|interface) {`)
 	curConstRegexp  = regexp.MustCompile(`^const \(`)
 	curFuncRegexp   = regexp.MustCompile(`^func \(`)
+	emptyFuncRegexp = regexp.MustCompile(`\(\)\s+{}$`)
 )
 
 func generateTypes(docs string) tgTypes {
@@ -180,7 +181,7 @@ func parseCurrentTypes(types string) map[string]typeAddition {
 				}
 
 				if lines[end] == "}" ||
-					(strings.HasPrefix(lines[end], "func (") && strings.HasSuffix(lines[end], "() {}")) {
+					(strings.HasPrefix(lines[end], "func (") && emptyFuncRegexp.MatchString(lines[end])) {
 					break
 				}
 			}
@@ -275,6 +276,10 @@ import (
 		data.WriteString("}\n\n")
 
 		for _, a := range addition.Additions {
+			// It's a hack to fix methods repeating
+			if strings.Count(a, "func ") == 2 {
+				a = a[strings.Index(a, "\n")+1:]
+			}
 			data.WriteString(a)
 			data.WriteString("\n")
 		}
@@ -320,6 +325,10 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 
 	if field.name == "InputMessageContent" && field.typ == "*InputMessageContent" {
 		field.typ = "InputMessageContent"
+	}
+
+	if field.name == "Media" && field.typ == "*InputPollOptionMedia" {
+		field.typ = "InputPollOptionMedia"
 	}
 
 	if typeName == "ChatPermissions" ||

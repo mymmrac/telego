@@ -367,6 +367,18 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 		parameter.typ = parameter.typ[1:]
 	}
 
+	if parameter.name == "ExplanationMedia" && parameter.typ == "*InputPollMedia" {
+		parameter.typ = parameter.typ[1:]
+	}
+
+	if parameter.name == "Media" && parameter.typ == "*InputPollMedia" {
+		parameter.typ = parameter.typ[1:]
+	}
+
+	if parameter.name == "AddedUserIds" && parameter.typ == "[]int" {
+		parameter.typ = "[]int64"
+	}
+
 	if strings.Contains(parameter.name, "Date") && parameter.typ == "int" {
 		parameter.typ = "int64"
 	}

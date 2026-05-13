@@ -76,7 +76,7 @@ func (b *Bot) GetUpdates(ctx context.Context, params *GetUpdatesParams) ([]Updat
 
 // SetWebhookParams - Represents parameters of setWebhook method.
 type SetWebhookParams struct {
-	// URL - HTTPS URL to send updates to. Use an empty string to remove webhook integration
+	// URL - HTTPS URL to send updates to. Use an empty string to remove webhook integration.
 	URL string `json:"url"`
 
 	// Certificate - Optional. Upload your public key certificate so that the root certificate in use can be
@@ -260,7 +260,7 @@ type SendMessageParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -402,7 +402,7 @@ type CopyMessageParams struct {
 	VideoStartTimestamp int `json:"video_start_timestamp,omitempty"`
 
 	// Caption - Optional. New caption for media, 0-1024 characters after entities parsing. If not specified,
-	// the original caption is kept
+	// the original caption is kept.
 	Caption string `json:"caption,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the new caption. See formatting options
@@ -444,7 +444,7 @@ type CopyMessageParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -583,7 +583,7 @@ type SendPhotoParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -779,7 +779,7 @@ type SendAudioParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -883,7 +883,7 @@ type SendDocumentParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1008,7 +1008,7 @@ type SendVideoParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1125,7 +1125,7 @@ type SendAnimationParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1217,7 +1217,7 @@ type SendVoiceParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1262,7 +1262,7 @@ type SendVideoNoteParams struct {
 
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
-	// (https://core.telegram.org/bots/api#sending-files). Sending video notes by a URL is currently unsupported
+	// (https://core.telegram.org/bots/api#sending-files). Sending video notes by a URL is currently unsupported.
 	VideoNote InputFile `json:"video_note"`
 
 	// Duration - Optional. Duration of sent video in seconds
@@ -1306,7 +1306,7 @@ type SendVideoNoteParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1399,7 +1399,7 @@ type SendPaidMediaParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1511,7 +1511,7 @@ type SendLocationParams struct {
 
 	// LivePeriod - Optional. Period in seconds during which the location will be updated (see Live Locations
 	// (https://telegram.org/blog/live-locations), should be between 60 and 86400, or 0x7FFFFFFF for live locations
-	// that can be edited indefinitely.
+	// that can be edited indefinitely
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// Heading - Optional. For live locations, a direction in which the user is moving, in degrees. Must be
@@ -1549,7 +1549,7 @@ type SendLocationParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1635,7 +1635,7 @@ type SendVenueParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1708,7 +1708,7 @@ type SendContactParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1742,11 +1742,11 @@ type SendPollParams struct {
 
 	// QuestionParseMode - Optional. Mode for parsing entities in the question. See formatting options
 	// (https://core.telegram.org/bots/api#formatting-options) for more details. Currently, only custom emoji
-	// entities are allowed
+	// entities are allowed.
 	QuestionParseMode string `json:"question_parse_mode,omitempty"`
 
 	// QuestionEntities - Optional. A JSON-serialized list of special entities that appear in the poll question.
-	// It can be specified instead of question_parse_mode
+	// It can be specified instead of question_parse_mode.
 	QuestionEntities []MessageEntity `json:"question_entities,omitempty"`
 
 	// Options - A JSON-serialized list of 1-12 answer options
@@ -1781,8 +1781,8 @@ type SendPollParams struct {
 
 	// CountryCodes - Optional. A JSON-serialized list of 0-12 two-letter ISO 3166-1 alpha-2
 	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes indicating the countries from which users
-	// can vote in the poll; for channel chats only. If omitted or empty, then users from any country can
-	// participate in the poll.
+	// can vote in the poll; for channel chats only. Use “FT” as a country code to allow users with anonymous
+	// numbers to vote. If omitted or empty, then users from any country can participate in the poll.
 	CountryCodes []string `json:"country_codes,omitempty"`
 
 	// CorrectOptionIDs - Optional. A JSON-serialized list of monotonically increasing 0-based identifiers of
@@ -1798,7 +1798,7 @@ type SendPollParams struct {
 	ExplanationParseMode string `json:"explanation_parse_mode,omitempty"`
 
 	// ExplanationEntities - Optional. A JSON-serialized list of special entities that appear in the poll
-	// explanation. It can be specified instead of explanation_parse_mode
+	// explanation. It can be specified instead of explanation_parse_mode.
 	ExplanationEntities []MessageEntity `json:"explanation_entities,omitempty"`
 
 	// ExplanationMedia - Optional. Media added to the quiz explanation
@@ -1852,7 +1852,7 @@ type SendPollParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -1929,7 +1929,7 @@ type SendDiceParams struct {
 	// Emoji - Optional. Emoji on which the dice throw animation is based. Currently, must be one of “🎲”,
 	// “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”,
 	// “🎯” and “🎳”, values 1-5 for “🏀” and “⚽”, and values 1-64 for “🎰”. Defaults
-	// to “🎲”
+	// to “🎲”.
 	Emoji string `json:"emoji,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -1959,7 +1959,7 @@ type SendDiceParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -2017,8 +2017,8 @@ type SendChatActionParams struct {
 	// action will be sent
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
-	// ChatID - Unique identifier for the target chat or username of the target bot, supergroup or channel in
-	// the format @username. Channel chats and channel direct messages chats aren't supported.
+	// ChatID - Unique identifier for the target chat or username of the target bot or supergroup in the format
+	// @username. Channel chats and channel direct messages chats aren't supported.
 	ChatID ChatID `json:"chat_id"`
 
 	// MessageThreadID - Optional. Unique identifier for the target message thread or topic of a forum; for
@@ -2274,7 +2274,7 @@ type RestrictChatMemberParams struct {
 
 	// UntilDate - Optional. Date when restrictions will be lifted for the user; Unix time. If user is
 	// restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be
-	// restricted forever
+	// restricted forever.
 	UntilDate int64 `json:"until_date,omitempty"`
 }
 
@@ -2313,7 +2313,7 @@ type PromoteChatMemberParams struct {
 
 	// CanRestrictMembers - Optional. Pass True if the administrator can restrict, ban or unban chat members, or
 	// access supergroup statistics. For backward compatibility, defaults to True for promotions of channel
-	// administrators
+	// administrators.
 	CanRestrictMembers *bool `json:"can_restrict_members,omitempty"`
 
 	// CanPromoteMembers - Optional. Pass True if the administrator can add new administrators with a subset of
@@ -2521,7 +2521,7 @@ type CreateChatInviteLinkParams struct {
 	MemberLimit int `json:"member_limit,omitempty"`
 
 	// CreatesJoinRequest - Optional. True, if users joining the chat via the link need to be approved by chat
-	// administrators. If True, member_limit can't be specified
+	// administrators. If True, member_limit can't be specified.
 	CreatesJoinRequest bool `json:"creates_join_request,omitempty"`
 }
 
@@ -2557,7 +2557,7 @@ type EditChatInviteLinkParams struct {
 	MemberLimit int `json:"member_limit,omitempty"`
 
 	// CreatesJoinRequest - Optional. True, if users joining the chat via the link need to be approved by chat
-	// administrators. If True, member_limit can't be specified
+	// administrators. If True, member_limit can't be specified.
 	CreatesJoinRequest bool `json:"creates_join_request,omitempty"`
 }
 
@@ -3030,7 +3030,7 @@ type CreateForumTopicParams struct {
 
 	// IconColor - Optional. Color of the topic icon in RGB format. Currently, must be one of 7322096
 	// (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047
-	// (0xFB6F5F)
+	// (0xFB6F5F).
 	IconColor int `json:"icon_color,omitempty"`
 
 	// IconCustomEmojiID - Optional. Unique identifier of the custom emoji shown as the topic icon. Use
@@ -3062,13 +3062,13 @@ type EditForumTopicParams struct {
 	MessageThreadID int `json:"message_thread_id"`
 
 	// Name - Optional. New topic name, 0-128 characters. If not specified or empty, the current name of the
-	// topic will be kept
+	// topic will be kept.
 	Name string `json:"name,omitempty"`
 
 	// IconCustomEmojiID - Optional. New unique identifier of the custom emoji shown as the topic icon. Use
 	// getForumTopicIconStickers (https://core.telegram.org/bots/api#getforumtopiciconstickers) to get all allowed
 	// custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be
-	// kept
+	// kept.
 	IconCustomEmojiID *string `json:"icon_custom_emoji_id,omitempty"`
 }
 
@@ -3288,7 +3288,7 @@ type AnswerCallbackQueryParams struct {
 	CallbackQueryID string `json:"callback_query_id"`
 
 	// Text - Optional. Text of the notification. If not specified, nothing will be shown to the user, 0-200
-	// characters
+	// characters.
 	Text string `json:"text,omitempty"`
 
 	// ShowAlert - Optional. If True, an alert will be shown by the client instead of a notification at the top
@@ -3466,7 +3466,7 @@ type SetMyCommandsParams struct {
 	Scope BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, commands will be applied to all
-	// users from the given scope, for whose language there are no dedicated commands
+	// users from the given scope, for whose language there are no dedicated commands.
 	LanguageCode string `json:"language_code,omitempty"`
 }
 
@@ -3488,7 +3488,7 @@ type DeleteMyCommandsParams struct {
 	Scope BotCommandScope `json:"scope,omitempty"`
 
 	// LanguageCode - Optional. A two-letter ISO 639-1 language code. If empty, commands will be applied to all
-	// users from the given scope, for whose language there are no dedicated commands
+	// users from the given scope, for whose language there are no dedicated commands.
 	LanguageCode string `json:"language_code,omitempty"`
 }
 
@@ -3667,11 +3667,11 @@ func (b *Bot) RemoveMyProfilePhoto(ctx context.Context) error {
 // SetChatMenuButtonParams - Represents parameters of setChatMenuButton method.
 type SetChatMenuButtonParams struct {
 	// ChatID - Optional. Unique identifier for the target private chat. If not specified, default bot's menu
-	// button will be changed
+	// button will be changed.
 	ChatID int64 `json:"chat_id,omitempty"`
 
 	// MenuButton - Optional. A JSON-serialized object for the bot's new menu button. Defaults to
-	// MenuButtonDefault (https://core.telegram.org/bots/api#menubuttondefault)
+	// MenuButtonDefault (https://core.telegram.org/bots/api#menubuttondefault).
 	MenuButton MenuButton `json:"menu_button,omitempty"`
 }
 
@@ -3688,7 +3688,7 @@ func (b *Bot) SetChatMenuButton(ctx context.Context, params *SetChatMenuButtonPa
 // GetChatMenuButtonParams - Represents parameters of getChatMenuButton method.
 type GetChatMenuButtonParams struct {
 	// ChatID - Optional. Unique identifier for the target private chat. If not specified, default bot's menu
-	// button will be returned
+	// button will be returned.
 	ChatID int64 `json:"chat_id,omitempty"`
 }
 
@@ -3945,7 +3945,7 @@ type DeleteBusinessMessagesParams struct {
 
 	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from
 	// the same chat. See deleteMessage (https://core.telegram.org/bots/api#deletemessage) for limitations on which
-	// messages can be deleted
+	// messages can be deleted.
 	MessageIDs []int `json:"message_ids"`
 }
 
@@ -4163,7 +4163,7 @@ type GetBusinessAccountGiftsParams struct {
 	// string to get the first chunk of results
 	Offset string `json:"offset,omitempty"`
 
-	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100
+	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100.
 	Limit int `json:"limit,omitempty"`
 }
 
@@ -4211,7 +4211,7 @@ type GetUserGiftsParams struct {
 	// empty string to get the first chunk of results
 	Offset string `json:"offset,omitempty"`
 
-	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100
+	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100.
 	Limit int `json:"limit,omitempty"`
 }
 
@@ -4266,7 +4266,7 @@ type GetChatGiftsParams struct {
 	// empty string to get the first chunk of results
 	Offset string `json:"offset,omitempty"`
 
-	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100
+	// Limit - Optional. The maximum number of gifts to be returned; 1-100. Defaults to 100.
 	Limit int `json:"limit,omitempty"`
 }
 
@@ -4555,7 +4555,7 @@ type SavePreparedKeyboardButtonParams struct {
 	UserID int64 `json:"user_id"`
 
 	// Button - A JSON-serialized object describing the button to be saved. The button must be of the type
-	// request_users, request_chat, or request_managed_bot
+	// request_users, request_chat, or request_managed_bot.
 	Button KeyboardButton `json:"button"`
 }
 
@@ -4580,11 +4580,11 @@ type EditMessageTextParams struct {
 	// or username of the target bot, supergroup or channel in the format @username.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Text - New text of the message, 1-4096 characters after entities parsing
@@ -4602,7 +4602,7 @@ type EditMessageTextParams struct {
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4631,11 +4631,11 @@ type EditMessageCaptionParams struct {
 	// or username of the target bot, supergroup or channel in the format @username.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Caption - Optional. New caption of the message, 0-1024 characters after entities parsing
@@ -4654,7 +4654,7 @@ type EditMessageCaptionParams struct {
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4682,18 +4682,18 @@ type EditMessageMediaParams struct {
 	// or username of the target bot, supergroup or channel in the format @username.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Media - A JSON-serialized object for a new media content of the message
 	Media InputMedia `json:"media"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4738,11 +4738,11 @@ type EditMessageLiveLocationParams struct {
 	// or username of the target bot, supergroup or channel in the format @username.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// Latitude - Latitude of new location
@@ -4754,7 +4754,7 @@ type EditMessageLiveLocationParams struct {
 	// LivePeriod - Optional. New period in seconds during which the location can be updated, starting from the
 	// message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new
 	// value must not exceed the current live_period by more than a day, and the live location expiration date must
-	// remain within the next 90 days. If not specified, then live_period remains unchanged
+	// remain within the next 90 days. If not specified, then live_period remains unchanged.
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// HorizontalAccuracy - Optional. The radius of uncertainty for the location, measured in meters; 0-1500
@@ -4769,7 +4769,7 @@ type EditMessageLiveLocationParams struct {
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4799,15 +4799,15 @@ type StopMessageLiveLocationParams struct {
 	ChatID ChatID `json:"chat_id,omitzero"`
 
 	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message with live
-	// location to stop
+	// location to stop.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4865,15 +4865,15 @@ type EditMessageReplyMarkupParams struct {
 	// or username of the target bot, supergroup or channel in the format @username.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the message to edit.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4905,7 +4905,7 @@ type StopPollParams struct {
 	MessageID int `json:"message_id"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new message inline keyboard
-	// (https://core.telegram.org/bots/features#inline-keyboards).
+	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -4930,7 +4930,7 @@ type ApproveSuggestedPostParams struct {
 
 	// SendDate - Optional. Point in time (Unix timestamp) when the post is expected to be published; omit if
 	// the date has already been specified when the suggested post was created. If specified, then the date must be
-	// not more than 2678400 seconds (30 days) in the future
+	// not more than 2678400 seconds (30 days) in the future.
 	SendDate int64 `json:"send_date,omitempty"`
 }
 
@@ -5006,7 +5006,7 @@ type DeleteMessagesParams struct {
 	ChatID ChatID `json:"chat_id"`
 
 	// MessageIDs - A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage
-	// (https://core.telegram.org/bots/api#deletemessage) for limitations on which messages can be deleted
+	// (https://core.telegram.org/bots/api#deletemessage) for limitations on which messages can be deleted.
 	MessageIDs []int `json:"message_ids"`
 }
 
@@ -5022,8 +5022,8 @@ func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) 
 
 // DeleteMessageReactionParams - Represents parameters of deleteMessageReaction method.
 type DeleteMessageReactionParams struct {
-	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @username)
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
 	ChatID ChatID `json:"chat_id"`
 
 	// MessageID - Identifier of the target message
@@ -5050,8 +5050,8 @@ func (b *Bot) DeleteMessageReaction(ctx context.Context, params *DeleteMessageRe
 
 // DeleteAllMessageReactionsParams - Represents parameters of deleteAllMessageReactions method.
 type DeleteAllMessageReactionsParams struct {
-	// ChatID - Unique identifier for the target chat or username of the target supergroup (in the format
-	// @username)
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
 	ChatID ChatID `json:"chat_id"`
 
 	// UserID - Optional. Identifier of the user whose reactions will be removed, if the reactions were added by
@@ -5129,7 +5129,7 @@ type SendStickerParams struct {
 	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
 	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
-	// reply from the user
+	// reply from the user.
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
@@ -5523,7 +5523,7 @@ type SetCustomEmojiStickerSetThumbnailParams struct {
 	Name string `json:"name"`
 
 	// CustomEmojiID - Optional. Custom emoji identifier of a sticker from the sticker set; pass an empty string
-	// to drop the thumbnail and use the first sticker as the thumbnail.
+	// to drop the thumbnail and use the first sticker as the thumbnail
 	CustomEmojiID string `json:"custom_emoji_id,omitempty"`
 }
 
@@ -5642,7 +5642,7 @@ type SendInvoiceParams struct {
 	// StartParameter - Optional. Unique deep-linking parameter. If left empty, forwarded copies of the sent
 	// message will have a Pay button, allowing multiple users to pay directly from the forwarded message, using the
 	// same invoice. If non-empty, forwarded copies of the sent message will have a URL button with a deep link to
-	// the bot (instead of a Pay button), with the value used as the start parameter
+	// the bot (instead of a Pay button), with the value used as the start parameter.
 	StartParameter string `json:"start_parameter,omitempty"`
 
 	// ProviderData - Optional. JSON-serialized data about the invoice, which will be shared with the payment
@@ -6058,21 +6058,21 @@ type SetGameScoreParams struct {
 	Score int `json:"score"`
 
 	// Force - Optional. Pass True if the high score is allowed to decrease. This can be useful when fixing
-	// mistakes or banning cheaters
+	// mistakes or banning cheaters.
 	Force bool `json:"force,omitempty"`
 
 	// DisableEditMessage - Optional. Pass True if the game message should not be automatically edited to
 	// include the current scoreboard
 	DisableEditMessage bool `json:"disable_edit_message,omitempty"`
 
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat.
 	ChatID int64 `json:"chat_id,omitempty"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 }
 
@@ -6095,14 +6095,14 @@ type GetGameHighScoresParams struct {
 	// UserID - Target user ID
 	UserID int64 `json:"user_id"`
 
-	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat
+	// ChatID - Optional. Required if inline_message_id is not specified. Unique identifier for the target chat.
 	ChatID int64 `json:"chat_id,omitempty"`
 
-	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message
+	// MessageID - Optional. Required if inline_message_id is not specified. Identifier of the sent message.
 	MessageID int `json:"message_id,omitempty"`
 
 	// InlineMessageID - Optional. Required if chat_id and message_id are not specified. Identifier of the
-	// inline message
+	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 }
 
