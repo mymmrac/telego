@@ -86,8 +86,8 @@ func TestDocument(t *testing.T) {
 }
 
 func TestGame(t *testing.T) {
-	g := Game(id1.ID, text1)
-	assert.Equal(t, id1.ID, g.ChatID)
+	g := Game(id1, text1)
+	assert.Equal(t, id1, g.ChatID)
 	assert.Equal(t, text1, g.GameShortName)
 }
 

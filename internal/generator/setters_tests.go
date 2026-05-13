@@ -120,6 +120,9 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return fmt.Sprintf("ChatID{ID: %d}", *counter)
 	case "[]string":
 		return fmt.Sprintf("[]string{\"%s\"}", setter.fieldName)
+	case "[]int64":
+		*counter++
+		return fmt.Sprintf("[]int64{%d}", *counter)
 	case "InputFile":
 		return "testInputFile"
 	case "*InputFile":
@@ -150,6 +153,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "*MaskPosition":
 		return fmt.Sprintf("&MaskPosition{Point: \"%s\"}", setter.fieldName)
 	case "InputMedia":
+		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
+	case "InputPollMedia":
 		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
 	case "InputPollOptionMedia":
 		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)

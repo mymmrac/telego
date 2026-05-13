@@ -241,6 +241,49 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSendLivePhotoParams_Setters(t *testing.T) {
+	s := (&SendLivePhotoParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageThreadID(2).
+		WithDirectMessagesTopicID(3).
+		WithLivePhoto(testInputFile).
+		WithPhoto(testInputFile).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithHasSpoiler().
+		WithDisableNotification().
+		WithProtectContent().
+		WithAllowPaidBroadcast().
+		WithMessageEffectID("MessageEffectID").
+		WithSuggestedPostParameters(&SuggestedPostParameters{}).
+		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendLivePhotoParams{
+		BusinessConnectionID:    "BusinessConnectionID",
+		ChatID:                  ChatID{ID: 1},
+		MessageThreadID:         2,
+		DirectMessagesTopicID:   3,
+		LivePhoto:               testInputFile,
+		Photo:                   testInputFile,
+		Caption:                 "Caption",
+		ParseMode:               "ParseMode",
+		CaptionEntities:         []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia:   true,
+		HasSpoiler:              true,
+		DisableNotification:     true,
+		ProtectContent:          true,
+		AllowPaidBroadcast:      true,
+		MessageEffectID:         "MessageEffectID",
+		SuggestedPostParameters: &SuggestedPostParameters{},
+		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
 func TestSendAudioParams_Setters(t *testing.T) {
 	s := (&SendAudioParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
@@ -714,16 +757,20 @@ func TestSendPollParams_Setters(t *testing.T) {
 		WithShuffleOptions().
 		WithAllowAddingOptions().
 		WithHideResultsUntilCloses().
+		WithMembersOnly().
+		WithCountryCodes([]string{"CountryCodes"}...).
 		WithCorrectOptionIDs([]int{3}...).
 		WithExplanation("Explanation").
 		WithExplanationParseMode("ExplanationParseMode").
 		WithExplanationEntities([]MessageEntity{{Type: "ExplanationEntities"}}...).
+		WithExplanationMedia(&InputMediaAnimation{Type: "ExplanationMedia"}).
 		WithOpenPeriod(4).
 		WithCloseDate(5).
 		WithIsClosed().
 		WithDescription("Description").
 		WithDescriptionParseMode("DescriptionParseMode").
 		WithDescriptionEntities([]MessageEntity{{Type: "DescriptionEntities"}}...).
+		WithMedia(&InputMediaAnimation{Type: "Media"}).
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
@@ -746,16 +793,20 @@ func TestSendPollParams_Setters(t *testing.T) {
 		ShuffleOptions:         true,
 		AllowAddingOptions:     true,
 		HideResultsUntilCloses: true,
+		MembersOnly:            true,
+		CountryCodes:           []string{"CountryCodes"},
 		CorrectOptionIDs:       []int{3},
 		Explanation:            "Explanation",
 		ExplanationParseMode:   "ExplanationParseMode",
 		ExplanationEntities:    []MessageEntity{{Type: "ExplanationEntities"}},
+		ExplanationMedia:       &InputMediaAnimation{Type: "ExplanationMedia"},
 		OpenPeriod:             4,
 		CloseDate:              5,
 		IsClosed:               true,
 		Description:            "Description",
 		DescriptionParseMode:   "DescriptionParseMode",
 		DescriptionEntities:    []MessageEntity{{Type: "DescriptionEntities"}},
+		Media:                  &InputMediaAnimation{Type: "Media"},
 		DisableNotification:    true,
 		ProtectContent:         true,
 		AllowPaidBroadcast:     true,
@@ -768,7 +819,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 func TestSendChecklistParams_Setters(t *testing.T) {
 	s := (&SendChecklistParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
-		WithChatID(1).
+		WithChatID(ChatID{ID: 1}).
 		WithChecklist(InputChecklist{Tasks: []InputChecklistTask{{}}}).
 		WithDisableNotification().
 		WithProtectContent().
@@ -778,7 +829,7 @@ func TestSendChecklistParams_Setters(t *testing.T) {
 
 	assert.Equal(t, &SendChecklistParams{
 		BusinessConnectionID: "BusinessConnectionID",
-		ChatID:               1,
+		ChatID:               ChatID{ID: 1},
 		Checklist:            InputChecklist{Tasks: []InputChecklistTask{{}}},
 		DisableNotification:  true,
 		ProtectContent:       true,
@@ -1272,10 +1323,12 @@ func TestGetChatParams_Setters(t *testing.T) {
 
 func TestGetChatAdministratorsParams_Setters(t *testing.T) {
 	g := (&GetChatAdministratorsParams{}).
-		WithChatID(ChatID{ID: 1})
+		WithChatID(ChatID{ID: 1}).
+		WithReturnBots()
 
 	assert.Equal(t, &GetChatAdministratorsParams{
-		ChatID: ChatID{ID: 1},
+		ChatID:     ChatID{ID: 1},
+		ReturnBots: true,
 	}, g)
 }
 
@@ -1296,6 +1349,17 @@ func TestGetChatMemberParams_Setters(t *testing.T) {
 	assert.Equal(t, &GetChatMemberParams{
 		ChatID: ChatID{ID: 1},
 		UserID: 1,
+	}, g)
+}
+
+func TestGetUserPersonalChatMessagesParams_Setters(t *testing.T) {
+	g := (&GetUserPersonalChatMessagesParams{}).
+		WithUserID(2).
+		WithLimit(1)
+
+	assert.Equal(t, &GetUserPersonalChatMessagesParams{
+		UserID: 2,
+		Limit:  1,
 	}, g)
 }
 
@@ -1466,13 +1530,24 @@ func TestAnswerCallbackQueryParams_Setters(t *testing.T) {
 	}, a)
 }
 
+func TestAnswerGuestQueryParams_Setters(t *testing.T) {
+	a := (&AnswerGuestQueryParams{}).
+		WithGuestQueryID("GuestQueryID").
+		WithResult(&InlineQueryResultArticle{Type: "Result"})
+
+	assert.Equal(t, &AnswerGuestQueryParams{
+		GuestQueryID: "GuestQueryID",
+		Result:       &InlineQueryResultArticle{Type: "Result"},
+	}, a)
+}
+
 func TestGetUserChatBoostsParams_Setters(t *testing.T) {
 	g := (&GetUserChatBoostsParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 1}).
 		WithUserID(1)
 
 	assert.Equal(t, &GetUserChatBoostsParams{
-		ChatID: ChatID{ID: 2},
+		ChatID: ChatID{ID: 1},
 		UserID: 1,
 	}, g)
 }
@@ -1502,6 +1577,28 @@ func TestReplaceManagedBotTokenParams_Setters(t *testing.T) {
 	assert.Equal(t, &ReplaceManagedBotTokenParams{
 		UserID: 1,
 	}, r)
+}
+
+func TestGetManagedBotAccessSettingsParams_Setters(t *testing.T) {
+	g := (&GetManagedBotAccessSettingsParams{}).
+		WithUserID(1)
+
+	assert.Equal(t, &GetManagedBotAccessSettingsParams{
+		UserID: 1,
+	}, g)
+}
+
+func TestSetManagedBotAccessSettingsParams_Setters(t *testing.T) {
+	s := (&SetManagedBotAccessSettingsParams{}).
+		WithUserID(1).
+		WithIsAccessRestricted().
+		WithAddedUserIDs([]int64{1}...)
+
+	assert.Equal(t, &SetManagedBotAccessSettingsParams{
+		UserID:             1,
+		IsAccessRestricted: true,
+		AddedUserIDs:       []int64{1},
+	}, s)
 }
 
 func TestSetMyCommandsParams_Setters(t *testing.T) {
@@ -2203,14 +2300,14 @@ func TestStopMessageLiveLocationParams_Setters(t *testing.T) {
 func TestEditMessageChecklistParams_Setters(t *testing.T) {
 	e := (&EditMessageChecklistParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
-		WithChatID(1).
+		WithChatID(ChatID{ID: 1}).
 		WithMessageID(2).
 		WithChecklist(InputChecklist{Tasks: []InputChecklistTask{{}}}).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageChecklistParams{
 		BusinessConnectionID: "BusinessConnectionID",
-		ChatID:               1,
+		ChatID:               ChatID{ID: 1},
 		MessageID:            2,
 		Checklist:            InputChecklist{Tasks: []InputChecklistTask{{}}},
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
@@ -2294,6 +2391,34 @@ func TestDeleteMessagesParams_Setters(t *testing.T) {
 	assert.Equal(t, &DeleteMessagesParams{
 		ChatID:     ChatID{ID: 2},
 		MessageIDs: []int{1},
+	}, d)
+}
+
+func TestDeleteMessageReactionParams_Setters(t *testing.T) {
+	d := (&DeleteMessageReactionParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithMessageID(1).
+		WithUserID(2).
+		WithActorChatID(3)
+
+	assert.Equal(t, &DeleteMessageReactionParams{
+		ChatID:      ChatID{ID: 2},
+		MessageID:   1,
+		UserID:      2,
+		ActorChatID: 3,
+	}, d)
+}
+
+func TestDeleteAllMessageReactionsParams_Setters(t *testing.T) {
+	d := (&DeleteAllMessageReactionsParams{}).
+		WithChatID(ChatID{ID: 4}).
+		WithUserID(1).
+		WithActorChatID(2)
+
+	assert.Equal(t, &DeleteAllMessageReactionsParams{
+		ChatID:      ChatID{ID: 4},
+		UserID:      1,
+		ActorChatID: 2,
 	}, d)
 }
 
@@ -2723,7 +2848,7 @@ func TestSetPassportDataErrorsParams_Setters(t *testing.T) {
 func TestSendGameParams_Setters(t *testing.T) {
 	s := (&SendGameParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
-		WithChatID(1).
+		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithGameShortName("GameShortName").
 		WithDisableNotification().
@@ -2735,7 +2860,7 @@ func TestSendGameParams_Setters(t *testing.T) {
 
 	assert.Equal(t, &SendGameParams{
 		BusinessConnectionID: "BusinessConnectionID",
-		ChatID:               1,
+		ChatID:               ChatID{ID: 1},
 		MessageThreadID:      2,
 		GameShortName:        "GameShortName",
 		DisableNotification:  true,
