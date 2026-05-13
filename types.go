@@ -6212,6 +6212,7 @@ func (i *InputMediaLivePhoto) fileParameters() map[string]telegoapi.NamedReader 
 
 	i.Media.needAttach = true
 	fp["media"] = i.Media.File
+	i.Photo.needAttach = true
 	fp["photo"] = i.Photo.File
 
 	return fp
