@@ -455,6 +455,17 @@ func TestInputMediaVideo_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestInputPaidMediaLivePhoto_Setters(t *testing.T) {
+	i := (&InputPaidMediaLivePhoto{}).
+		WithMedia(testInputFile).
+		WithPhoto(testInputFile)
+
+	assert.Equal(t, &InputPaidMediaLivePhoto{
+		Media: testInputFile,
+		Photo: testInputFile,
+	}, i)
+}
+
 func TestInputPaidMediaPhoto_Setters(t *testing.T) {
 	i := (&InputPaidMediaPhoto{}).
 		WithMedia(testInputFile)

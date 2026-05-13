@@ -872,6 +872,18 @@ func (i *InputMediaVideo) WithHasSpoiler() *InputMediaVideo {
 }
 
 // WithMedia adds media parameter
+func (i *InputPaidMediaLivePhoto) WithMedia(media InputFile) *InputPaidMediaLivePhoto {
+	i.Media = media
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputPaidMediaLivePhoto) WithPhoto(photo InputFile) *InputPaidMediaLivePhoto {
+	i.Photo = photo
+	return i
+}
+
+// WithMedia adds media parameter
 func (i *InputPaidMediaPhoto) WithMedia(media InputFile) *InputPaidMediaPhoto {
 	i.Media = media
 	return i

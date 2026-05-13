@@ -45,6 +45,7 @@ const (
 	BusinessMessageUpdates         = "business_message"
 	EditedBusinessMessageUpdates   = "edited_business_message"
 	DeletedBusinessMessagesUpdates = "deleted_business_messages"
+	GuestMessageUpdates            = "guest_message"
 	MessageReactionUpdates         = "message_reaction"
 	MessageReactionCountUpdates    = "message_reaction_count"
 	InlineQueryUpdates             = "inline_query"
@@ -60,6 +61,7 @@ const (
 	ChatJoinRequestUpdates         = "chat_join_request"
 	ChatBoostUpdates               = "chat_boost"
 	RemovedChatBoostUpdates        = "removed_chat_boost"
+	ManagedBot                     = "managed_bot"
 )
 
 // GetUpdates - Use this method to receive incoming updates using long polling (wiki
