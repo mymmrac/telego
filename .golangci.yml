@@ -27,6 +27,9 @@ linters:
     - wrapcheck
     - wsl
     - wsl_v5
+
+    # Temporary disabled because go:fix not supported as of golangci-lint v2.12.2
+    - gocheckcompilerdirectives
   settings:
     errcheck:
       check-type-assertions: true

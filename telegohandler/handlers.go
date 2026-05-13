@@ -145,6 +145,22 @@ func (h *BotHandler) HandleDeletedBusinessMessages(handler DeletedBusinessMessag
 	h.baseGroup.HandleDeletedBusinessMessages(handler, predicates...)
 }
 
+// HandleGuestMessage same as [BotHandler.Handle], but assumes that the update contains a guest message
+func (h *HandlerGroup) HandleGuestMessage(handler MessageHandler, predicates ...Predicate) {
+	if handler == nil {
+		panic("Telego: nil guest message handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.GuestMessage)
+	}, append([]Predicate{AnyGuestMessage()}, predicates...)...)
+}
+
+// HandleGuestMessage same as [BotHandler.Handle], but assumes that the update contains a guest message
+func (h *BotHandler) HandleGuestMessage(handler MessageHandler, predicates ...Predicate) {
+	h.baseGroup.HandleGuestMessage(handler, predicates...)
+}
+
 // MessageReactionHandler handles message reaction that came from bot
 type MessageReactionHandler func(ctx *Context, reaction telego.MessageReactionUpdated) error
 
@@ -335,13 +351,20 @@ func (h *BotHandler) HandlePollAnswer(handler PollAnswerHandler, predicates ...P
 	h.baseGroup.HandlePollAnswer(handler, predicates...)
 }
 
-// ChatMemberUpdatedHandler handles chat member that came from bot
-type ChatMemberUpdatedHandler func(ctx *Context, chatMember telego.ChatMemberUpdated) error
+// ChatMemberHandler handles chat member that came from bot
+type ChatMemberHandler func(ctx *Context, chatMember telego.ChatMemberUpdated) error
 
-// HandleMyChatMemberUpdated same as [BotHandler.Handle], but assumes that the update contains my chat member
-func (h *HandlerGroup) HandleMyChatMemberUpdated(handler ChatMemberUpdatedHandler, predicates ...Predicate) {
+// ChatMemberUpdatedHandler handles chat member that came from bot
+//
+// Deprecated: use ChatMemberHandler instead
+//
+//go:fix inline
+type ChatMemberUpdatedHandler = ChatMemberHandler
+
+// HandleMyChatMember same as [BotHandler.Handle], but assumes that the update contains my chat member
+func (h *HandlerGroup) HandleMyChatMember(handler ChatMemberHandler, predicates ...Predicate) {
 	if handler == nil {
-		panic("Telego: nil my chat member update handlers not allowed")
+		panic("Telego: nil my chat member handlers not allowed")
 	}
 
 	h.Handle(func(ctx *Context, update telego.Update) error {
@@ -350,14 +373,32 @@ func (h *HandlerGroup) HandleMyChatMemberUpdated(handler ChatMemberUpdatedHandle
 }
 
 // HandleMyChatMemberUpdated same as [BotHandler.Handle], but assumes that the update contains my chat member
-func (h *BotHandler) HandleMyChatMemberUpdated(handler ChatMemberUpdatedHandler, predicates ...Predicate) {
-	h.baseGroup.HandleMyChatMemberUpdated(handler, predicates...)
+//
+// Deprecated: use HandleMyChatMember instead
+//
+//go:fix inline
+func (h *HandlerGroup) HandleMyChatMemberUpdated(handler ChatMemberHandler, predicates ...Predicate) {
+	h.HandleMyChatMember(handler, predicates...)
 }
 
-// HandleChatMemberUpdated same as [BotHandler.Handle], but assumes that the update contains chat member
-func (h *HandlerGroup) HandleChatMemberUpdated(handler ChatMemberUpdatedHandler, predicates ...Predicate) {
+// HandleMyChatMember same as [BotHandler.Handle], but assumes that the update contains my chat member
+func (h *BotHandler) HandleMyChatMember(handler ChatMemberHandler, predicates ...Predicate) {
+	h.baseGroup.HandleMyChatMember(handler, predicates...)
+}
+
+// HandleMyChatMemberUpdated same as [BotHandler.Handle], but assumes that the update contains my chat member
+//
+// Deprecated: use HandleMyChatMember instead
+//
+//go:fix inline
+func (h *BotHandler) HandleMyChatMemberUpdated(handler ChatMemberHandler, predicates ...Predicate) {
+	h.HandleMyChatMember(handler, predicates...)
+}
+
+// HandleChatMember same as [BotHandler.Handle], but assumes that the update contains chat member
+func (h *HandlerGroup) HandleChatMember(handler ChatMemberHandler, predicates ...Predicate) {
 	if handler == nil {
-		panic("Telego: nil chat member update handlers not allowed")
+		panic("Telego: nil chat member handlers not allowed")
 	}
 
 	h.Handle(func(ctx *Context, update telego.Update) error {
@@ -366,8 +407,26 @@ func (h *HandlerGroup) HandleChatMemberUpdated(handler ChatMemberUpdatedHandler,
 }
 
 // HandleChatMemberUpdated same as [BotHandler.Handle], but assumes that the update contains chat member
-func (h *BotHandler) HandleChatMemberUpdated(handler ChatMemberUpdatedHandler, predicates ...Predicate) {
-	h.baseGroup.HandleChatMemberUpdated(handler, predicates...)
+//
+// Deprecated: use HandleChatMember instead
+//
+//go:fix inline
+func (h *HandlerGroup) HandleChatMemberUpdated(handler ChatMemberHandler, predicates ...Predicate) {
+	h.HandleChatMember(handler, predicates...)
+}
+
+// HandleChatMember same as [BotHandler.Handle], but assumes that the update contains chat member
+func (h *BotHandler) HandleChatMember(handler ChatMemberHandler, predicates ...Predicate) {
+	h.baseGroup.HandleChatMember(handler, predicates...)
+}
+
+// HandleChatMemberUpdated same as [BotHandler.Handle], but assumes that the update contains chat member
+//
+// Deprecated: use HandleChatMember instead
+//
+//go:fix inline
+func (h *BotHandler) HandleChatMemberUpdated(handler ChatMemberHandler, predicates ...Predicate) {
+	h.HandleChatMember(handler, predicates...)
 }
 
 // ChatJoinRequestHandler handles chat join request that came from bot
@@ -425,4 +484,23 @@ func (h *HandlerGroup) HandleRemovedChatBoost(handler RemovedChatBoostHandler, p
 // HandleRemovedChatBoost same as [BotHandler.Handle], but assumes that the update contains removed chat boost
 func (h *BotHandler) HandleRemovedChatBoost(handler RemovedChatBoostHandler, predicates ...Predicate) {
 	h.baseGroup.HandleRemovedChatBoost(handler, predicates...)
+}
+
+// ManagedBotHandler handles managed bot that came from bot
+type ManagedBotHandler func(ctx *Context, managedBot telego.ManagedBotUpdated) error
+
+// HandleManagedBot same as [BotHandler.Handle], but assumes that the update contains managed bot
+func (h *HandlerGroup) HandleManagedBot(handler ManagedBotHandler, predicates ...Predicate) {
+	if handler == nil {
+		panic("Telego: nil managed bot handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.ManagedBot)
+	}, append([]Predicate{AnyManagedBot()}, predicates...)...)
+}
+
+// HandleManagedBot same as [BotHandler.Handle], but assumes that the update contains managed bot
+func (h *BotHandler) HandleManagedBot(handler ManagedBotHandler, predicates ...Predicate) {
+	h.baseGroup.HandleManagedBot(handler, predicates...)
 }

@@ -194,6 +194,27 @@ func TestBotHandler_HandleDeletedBusinessMessages(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleGuestMessage(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleGuestMessage(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := MessageHandler(func(_ *Context, _ telego.Message) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandleGuestMessage(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{GuestMessage: &telego.Message{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleMessageReaction(t *testing.T) {
 	bh := newTestBotHandler(t)
 
@@ -389,15 +410,17 @@ func TestBotHandler_HandlePollAnswer(t *testing.T) {
 func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 	bh := newTestBotHandler(t)
 
+	require.Panics(t, func() { bh.HandleMyChatMember(nil) })
 	require.Panics(t, func() { bh.HandleMyChatMemberUpdated(nil) })
+	require.Panics(t, func() { bh.BaseGroup().HandleMyChatMemberUpdated(nil) }) //nolint:govet
 
 	wg := &sync.WaitGroup{}
-	handler := ChatMemberUpdatedHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
+	handler := ChatMemberHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
 		wg.Done()
 		return nil
 	})
 
-	bh.HandleMyChatMemberUpdated(handler)
+	bh.HandleMyChatMember(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -413,15 +436,17 @@ func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
 	bh := newTestBotHandler(t)
 
+	require.Panics(t, func() { bh.HandleChatMember(nil) })
 	require.Panics(t, func() { bh.HandleChatMemberUpdated(nil) })
+	require.Panics(t, func() { bh.BaseGroup().HandleChatMemberUpdated(nil) }) //nolint:govet
 
 	wg := &sync.WaitGroup{}
-	handler := ChatMemberUpdatedHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
+	handler := ChatMemberHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
 		wg.Done()
 		return nil
 	})
 
-	bh.HandleChatMemberUpdated(handler)
+	bh.HandleChatMember(handler)
 	testHandlerSetup(t, bh)
 
 	updates := make(chan telego.Update, 1)
@@ -493,6 +518,24 @@ func TestBotHandler_HandleRemovedChatBoost(t *testing.T) {
 			Source: telego.BoostSourcePremium,
 		},
 	}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleManagedBot(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleManagedBot(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := ManagedBotHandler(func(_ *Context, _ telego.ManagedBotUpdated) error { wg.Done(); return nil })
+
+	bh.HandleManagedBot(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{ManagedBot: &telego.ManagedBotUpdated{}}
 
 	bh.updates = updates
 	testHandler(t, bh, wg)
