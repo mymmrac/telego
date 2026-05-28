@@ -9,6 +9,10 @@ require (
 	golang.ngrok.com/ngrok v1.13.0
 )
 
+// Use the local parent module so examples can import packages added in this
+// repository before they are available in the latest released telego version.
+replace github.com/mymmrac/telego => ..
+
 require (
 	github.com/andybalholm/brotli v1.2.1 // indirect
 	github.com/bytedance/gopkg v0.1.3 // indirect
