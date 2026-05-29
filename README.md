@@ -635,7 +635,7 @@ Contribution guidelines listed [here](docs/CONTRIBUTING.md).
 
 ## :star: Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/mymmrac/telego.svg)](https://starchart.cc/mymmrac/telego)
+[![Stargazers over time](https://starchart.cc/mymmrac/telego.svg?variant=adaptive)](https://starchart.cc/mymmrac/telego)
 
 > Powered by [caarlos0/starcharts](https://github.com/caarlos0/starcharts)
 
