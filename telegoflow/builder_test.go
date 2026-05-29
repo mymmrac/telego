@@ -110,7 +110,8 @@ func TestStep_BuilderMethods(t *testing.T) {
 		Handle(handle).
 		Fallback(fallback).
 		Use(mw).
-		CanGo("next")
+		CanGo("next").
+		CanComplete()
 
 	assert.Same(t, step, returned)
 	assert.Equal(t, "step", step.ID())
@@ -120,6 +121,7 @@ func TestStep_BuilderMethods(t *testing.T) {
 	assert.NotNil(t, step.fallback)
 	require.Len(t, step.middlewares, 1)
 	assert.True(t, step.allows("next"))
+	assert.True(t, step.canComplete)
 	assert.False(t, step.allows("missing"))
 	assert.Empty(t, (*Step[testData])(nil).ID())
 }

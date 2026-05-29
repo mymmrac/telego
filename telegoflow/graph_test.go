@@ -47,6 +47,26 @@ name
         └─> age (cycle)`, flow.Graph())
 	})
 
+	t.Run("completion_exit_and_cycle", func(t *testing.T) {
+		flow, err := New[testData]("registration").
+			Steps(
+				NewStep[testData]("name").CanGo("age"),
+				NewStep[testData]("age").CanGo("email"),
+				NewStep[testData]("email").CanGo("confirm"),
+				NewStep[testData]("confirm").CanGo("name").CanComplete(),
+			).
+			Build()
+		require.NoError(t, err)
+
+		assert.Equal(t, `flow registration (start: name)
+name
+└─> age
+    └─> email
+        └─> confirm
+            ├─> exit (complete)
+            └─> name (cycle)`, flow.Graph())
+	})
+
 	t.Run("unreachable", func(t *testing.T) {
 		flow, err := New[testData]("flow").
 			Steps(

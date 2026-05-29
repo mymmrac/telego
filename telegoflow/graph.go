@@ -10,13 +10,16 @@ const (
 	graphLast   = "└─> "
 	graphPipe   = "│   "
 	graphSpace  = "    "
+	graphExit   = "exit (complete)"
 )
 
 // Graph returns a deterministic text representation of the flow transitions.
 //
 // The graph starts from the configured start step and follows transitions
-// declared with [Step.CanGo]. Steps with no outgoing transitions are marked as
-// terminal. Cycles are marked explicitly and not expanded recursively.
+// declared with [Step.CanGo]. Steps with no outgoing transitions and no
+// declared completion are marked as terminal. Steps declared with
+// [Step.CanComplete] show an explicit flow exit. Cycles are marked explicitly
+// and not expanded recursively.
 func (f *Flow[T]) Graph() string {
 	if f == nil {
 		return ""
@@ -86,13 +89,21 @@ func (f *Flow[T]) writeGraphStep(
 	defer delete(stack, stepID)
 
 	transitions := step.transitions()
-	if len(transitions) == 0 {
+	if len(transitions) == 0 && !step.canComplete {
 		writeGraphString(builder, " (terminal)\n")
 		return
 	}
 
 	writeGraphString(builder, "\n")
 	nextPrefix := prefix + graphPrefix(connector)
+	edgeCount := len(transitions)
+	if step.canComplete {
+		edgeCount++
+		writeGraphString(builder, nextPrefix)
+		writeGraphString(builder, graphConnector(edgeCount == 1))
+		writeGraphString(builder, graphExit)
+		writeGraphString(builder, "\n")
+	}
 	for i, transition := range transitions {
 		f.writeGraphStep(builder, transition, nextPrefix, graphConnector(i == len(transitions)-1), visited, stack)
 	}

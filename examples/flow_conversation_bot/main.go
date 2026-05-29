@@ -181,7 +181,7 @@ func newRegistrationFlow() (*tf.Flow[UserData], error) {
 					_, err := ctx.Bot().SendMessage(ctx, tu.Message(ctx.ChatID(), "Please use the buttons below"))
 					return err
 				}).
-				CanGo("name"),
+				CanGo("name").CanComplete(),
 		).
 		StartWith("name").
 		OnComplete(func(ctx *tf.Context[UserData]) error {

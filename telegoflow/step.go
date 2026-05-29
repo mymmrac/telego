@@ -38,6 +38,7 @@ type Step[T any] struct {
 	fallback    Handler[T]
 	middlewares []Middleware[T]
 	canGo       map[string]struct{}
+	canComplete bool
 }
 
 // NewStep creates a step with the provided ID.
@@ -95,6 +96,15 @@ func (s *Step[T]) CanGo(stepIDs ...string) *Step[T] {
 	for _, stepID := range stepIDs {
 		s.canGo[stepID] = struct{}{}
 	}
+	return s
+}
+
+// CanComplete declares that this step can complete the flow.
+//
+// Context.Complete is still allowed from any handler; this declaration is used
+// by Flow.Graph to show the intended flow exit explicitly.
+func (s *Step[T]) CanComplete() *Step[T] {
+	s.canComplete = true
 	return s
 }
 

@@ -147,7 +147,8 @@ func main() {
                         return err
                     }
                 }, th.AnyMessageWithText()).
-                CanGo("name"),
+                CanGo("name").
+                CanComplete(),
         ).
         StartWith("name").
         OnComplete(func(ctx *tf.Context[Registration]) error {
@@ -187,6 +188,8 @@ tf.NewStep[Data]("name").
 If a handler tries to jump to a step that wasn't declared with `CanGo`, Telegoflow returns
 `TransitionNotAllowedError`. During `Build`, Telegoflow also validates that all declared transition targets exist.
 
+If a step can finish the flow with `ctx.Complete()`, declare that exit with `CanComplete()` so `Graph()` can show it.
+
 This keeps dialog graphs explicit and easier to audit.
 
 ### :chart_with_upwards_trend: Text graph
@@ -205,14 +208,15 @@ Example output:
 flow registration (start: name)
 name
 └─> age
-    ├─> email
-    │   └─> confirm (terminal)
-    └─> retry
-        └─> age (cycle)
+    └─> email
+        └─> confirm
+            ├─> exit (complete)
+            └─> name (cycle)
 ```
 
-The graph is deterministic: transitions are sorted, terminal steps are marked with `(terminal)`, and loops are marked
-with `(cycle)`. Steps that are not reachable from the start step are shown in an `unreachable` section.
+The graph is deterministic: transitions are sorted, terminal steps are marked with `(terminal)`, declared completion
+exits are marked with `exit (complete)`, and loops are marked with `(cycle)`. Steps that are not reachable from the
+start step are shown in an `unreachable` section.
 
 ### :floppy_disk: Session storage
 
@@ -301,6 +305,6 @@ flows := telegoflow.NewManager(storage, telegoflow.WithKeyFunc(func(update teleg
 
 - **Manager** stores registered flows and routes active sessions through `telegohandler` middleware.
 - **Flow** is a typed dialog graph with lifecycle hooks: `OnComplete`, `OnCancel`, `OnTimeout`, and `OnError`.
-- **Step** is a state in the graph. It can have `Enter`, input `Handle` routes, `Fallback`, middleware, and `CanGo` transitions.
+- **Step** is a state in the graph. It can have `Enter`, input `Handle` routes, `Fallback`, middleware, `CanGo` transitions, and `CanComplete` exits.
 - **Context** embeds `*telegohandler.Context` and adds flow helpers: `Data`, `Go`, `Stay`, `Complete`, `Cancel`, `Message`, `CallbackQuery`, `ChatID`, and `UserID`.
 - **Storage** persists the current step and typed data encoded as JSON.
