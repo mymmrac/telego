@@ -855,6 +855,13 @@ func TestTypesConstants(t *testing.T) {
 			StickerStatic, StickerAnimated, StickerVideo,
 		},
 		{
+			TextTypeBold, TextTypeItalic, TextTypeUnderline, TextTypeStrikethrough, TextTypeSpoiler, TextTypeDateTime,
+			TextTypeTextMention, TextTypeSubscript, TextTypeSuperscript, TextTypeMarked, TextTypeCode,
+			TextTypeCustomEmoji, TextTypeMathematicalExpression, TextTypeURL, TextTypeEmailAddress,
+			TextTypePhoneNumber, TextTypeBankCardNumber, TextTypeMention, TextTypeHashtag, TextTypeCashtag,
+			TextTypeBotCommand, TextTypeAnchor, TextTypeAnchorLink, TextTypeReference, TextTypeReferenceLink,
+		},
+		{
 			BlockTypeParagraph, BlockTypeSectionHeading, BlockTypePreformatted, BlockTypeFooter, BlockTypeDivider,
 			BlockTypeMathematicalExpression, BlockTypeAnchor, BlockTypeList, BlockTypeBlockQuotation,
 			BlockTypePullQuotation, BlockTypeCollage, BlockTypeSlideshow, BlockTypeTable, BlockTypeDetails,

@@ -7021,7 +7021,34 @@ type RichText interface {
 	iRichText()
 }
 
-// TODO: RichText can be string, []RichText or any of types RichText...
+// Rick text types.
+const (
+	TextTypeBold                   = "bold"
+	TextTypeItalic                 = "italic"
+	TextTypeUnderline              = "underline"
+	TextTypeStrikethrough          = "strikethrough"
+	TextTypeSpoiler                = "spoiler"
+	TextTypeDateTime               = "date_time"
+	TextTypeTextMention            = "text_mention"
+	TextTypeSubscript              = "subscript"
+	TextTypeSuperscript            = "superscript"
+	TextTypeMarked                 = "marked"
+	TextTypeCode                   = "code"
+	TextTypeCustomEmoji            = "custom_emoji"
+	TextTypeMathematicalExpression = "mathematical_expression"
+	TextTypeURL                    = "url"
+	TextTypeEmailAddress           = "email_address"
+	TextTypePhoneNumber            = "phone_number"
+	TextTypeBankCardNumber         = "bank_card_number"
+	TextTypeMention                = "mention"
+	TextTypeHashtag                = "hashtag"
+	TextTypeCashtag                = "cashtag"
+	TextTypeBotCommand             = "bot_command"
+	TextTypeAnchor                 = "anchor"
+	TextTypeAnchorLink             = "anchor_link"
+	TextTypeReference              = "reference"
+	TextTypeReferenceLink          = "reference_link"
+)
 
 // RichTextBold - A bold text.
 type RichTextBold struct {
@@ -7032,6 +7059,13 @@ type RichTextBold struct {
 	Text RichText `json:"text"`
 }
 
+// TextType return RichText type
+func (i *RichTextBold) TextType() string {
+	return TextTypeBold
+}
+
+func (i *RichTextBold) iRichText() {}
+
 // RichTextItalic - An italicized text.
 type RichTextItalic struct {
 	// Type - Type of the rich text, always “italic”
@@ -7040,6 +7074,13 @@ type RichTextItalic struct {
 	// Text - The text
 	Text RichText `json:"text"`
 }
+
+// TextType return RichText type
+func (i *RichTextItalic) TextType() string {
+	return TextTypeItalic
+}
+
+func (i *RichTextItalic) iRichText() {}
 
 // RichTextUnderline - An underlined text.
 type RichTextUnderline struct {
@@ -7050,6 +7091,13 @@ type RichTextUnderline struct {
 	Text RichText `json:"text"`
 }
 
+// TextType return RichText type
+func (i *RichTextUnderline) TextType() string {
+	return TextTypeUnderline
+}
+
+func (i *RichTextUnderline) iRichText() {}
+
 // RichTextStrikethrough - A strikethrough text.
 type RichTextStrikethrough struct {
 	// Type - Type of the rich text, always “strikethrough”
@@ -7059,6 +7107,13 @@ type RichTextStrikethrough struct {
 	Text RichText `json:"text"`
 }
 
+// TextType return RichText type
+func (i *RichTextStrikethrough) TextType() string {
+	return TextTypeStrikethrough
+}
+
+func (i *RichTextStrikethrough) iRichText() {}
+
 // RichTextSpoiler - A text covered by a spoiler.
 type RichTextSpoiler struct {
 	// Type - Type of the rich text, always “spoiler”
@@ -7067,6 +7122,13 @@ type RichTextSpoiler struct {
 	// Text - The text
 	Text RichText `json:"text"`
 }
+
+// TextType return RichText type
+func (i *RichTextSpoiler) TextType() string {
+	return TextTypeSpoiler
+}
+
+func (i *RichTextSpoiler) iRichText() {}
 
 // RichTextDateTime - Formatted date and time.
 type RichTextDateTime struct {
@@ -7084,6 +7146,13 @@ type RichTextDateTime struct {
 	DateTimeFormat string `json:"date_time_format"`
 }
 
+// TextType return RichText type
+func (i *RichTextDateTime) TextType() string {
+	return TextTypeDateTime
+}
+
+func (i *RichTextDateTime) iRichText() {}
+
 // RichTextTextMention - A mention of a Telegram user by their identifier.
 type RichTextTextMention struct {
 	// Type - Type of the rich text, always “text_mention”
@@ -7096,6 +7165,13 @@ type RichTextTextMention struct {
 	User User `json:"user"`
 }
 
+// TextType return RichText type
+func (i *RichTextTextMention) TextType() string {
+	return TextTypeTextMention
+}
+
+func (i *RichTextTextMention) iRichText() {}
+
 // RichTextSubscript - A subscript text.
 type RichTextSubscript struct {
 	// Type - Type of the rich text, always “subscript”
@@ -7104,6 +7180,13 @@ type RichTextSubscript struct {
 	// Text - The text
 	Text RichText `json:"text"`
 }
+
+// TextType return RichText type
+func (i *RichTextSubscript) TextType() string {
+	return TextTypeSubscript
+}
+
+func (i *RichTextSubscript) iRichText() {}
 
 // RichTextSuperscript - A superscript text.
 type RichTextSuperscript struct {
@@ -7114,6 +7197,13 @@ type RichTextSuperscript struct {
 	Text RichText `json:"text"`
 }
 
+// TextType return RichText type
+func (i *RichTextSuperscript) TextType() string {
+	return TextTypeSuperscript
+}
+
+func (i *RichTextSuperscript) iRichText() {}
+
 // RichTextMarked - A marked text.
 type RichTextMarked struct {
 	// Type - Type of the rich text, always “marked”
@@ -7123,6 +7213,13 @@ type RichTextMarked struct {
 	Text RichText `json:"text"`
 }
 
+// TextType return RichText type
+func (i *RichTextMarked) TextType() string {
+	return TextTypeMarked
+}
+
+func (i *RichTextMarked) iRichText() {}
+
 // RichTextCode - A monowidth text.
 type RichTextCode struct {
 	// Type - Type of the rich text, always “code”
@@ -7131,6 +7228,13 @@ type RichTextCode struct {
 	// Text - The text
 	Text RichText `json:"text"`
 }
+
+// TextType return RichText type
+func (i *RichTextCode) TextType() string {
+	return TextTypeCode
+}
+
+func (i *RichTextCode) iRichText() {}
 
 // RichTextCustomEmoji - A custom emoji.
 type RichTextCustomEmoji struct {
@@ -7145,6 +7249,13 @@ type RichTextCustomEmoji struct {
 	AlternativeText string `json:"alternative_text"`
 }
 
+// TextType return RichText type
+func (i *RichTextCustomEmoji) TextType() string {
+	return TextTypeCustomEmoji
+}
+
+func (i *RichTextCustomEmoji) iRichText() {}
+
 // RichTextMathematicalExpression - A mathematical expression.
 type RichTextMathematicalExpression struct {
 	// Type - Type of the rich text, always “mathematical_expression”
@@ -7153,6 +7264,13 @@ type RichTextMathematicalExpression struct {
 	// Expression - The expression in LaTeX format
 	Expression string `json:"expression"`
 }
+
+// TextType return RichText type
+func (i *RichTextMathematicalExpression) TextType() string {
+	return TextTypeMathematicalExpression
+}
+
+func (i *RichTextMathematicalExpression) iRichText() {}
 
 // RichTextURL - A text with a link.
 type RichTextURL struct {
@@ -7166,6 +7284,13 @@ type RichTextURL struct {
 	URL string `json:"url"`
 }
 
+// TextType return RichText type
+func (i *RichTextURL) TextType() string {
+	return TextTypeURL
+}
+
+func (i *RichTextURL) iRichText() {}
+
 // RichTextEmailAddress - A text with an email address.
 type RichTextEmailAddress struct {
 	// Type - Type of the rich text, always “email_address”
@@ -7177,6 +7302,13 @@ type RichTextEmailAddress struct {
 	// EmailAddress - The email address
 	EmailAddress string `json:"email_address"`
 }
+
+// TextType return RichText type
+func (i *RichTextEmailAddress) TextType() string {
+	return TextTypeEmailAddress
+}
+
+func (i *RichTextEmailAddress) iRichText() {}
 
 // RichTextPhoneNumber - A text with a phone number.
 type RichTextPhoneNumber struct {
@@ -7190,6 +7322,13 @@ type RichTextPhoneNumber struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
+// TextType return RichText type
+func (i *RichTextPhoneNumber) TextType() string {
+	return TextTypePhoneNumber
+}
+
+func (i *RichTextPhoneNumber) iRichText() {}
+
 // RichTextBankCardNumber - A text with a bank card number.
 type RichTextBankCardNumber struct {
 	// Type - Type of the rich text, always “bank_card_number”
@@ -7201,6 +7340,13 @@ type RichTextBankCardNumber struct {
 	// BankCardNumber - The bank card number
 	BankCardNumber string `json:"bank_card_number"`
 }
+
+// TextType return RichText type
+func (i *RichTextBankCardNumber) TextType() string {
+	return TextTypeBankCardNumber
+}
+
+func (i *RichTextBankCardNumber) iRichText() {}
 
 // RichTextMention - A mention by a username.
 type RichTextMention struct {
@@ -7214,6 +7360,13 @@ type RichTextMention struct {
 	Username string `json:"username"`
 }
 
+// TextType return RichText type
+func (i *RichTextMention) TextType() string {
+	return TextTypeMention
+}
+
+func (i *RichTextMention) iRichText() {}
+
 // RichTextHashtag - A hashtag.
 type RichTextHashtag struct {
 	// Type - Type of the rich text, always “hashtag”
@@ -7225,6 +7378,13 @@ type RichTextHashtag struct {
 	// Hashtag - The hashtag
 	Hashtag string `json:"hashtag"`
 }
+
+// TextType return RichText type
+func (i *RichTextHashtag) TextType() string {
+	return TextTypeHashtag
+}
+
+func (i *RichTextHashtag) iRichText() {}
 
 // RichTextCashtag - A cashtag.
 type RichTextCashtag struct {
@@ -7238,6 +7398,13 @@ type RichTextCashtag struct {
 	Cashtag string `json:"cashtag"`
 }
 
+// TextType return RichText type
+func (i *RichTextCashtag) TextType() string {
+	return TextTypeCashtag
+}
+
+func (i *RichTextCashtag) iRichText() {}
+
 // RichTextBotCommand - A bot command.
 type RichTextBotCommand struct {
 	// Type - Type of the rich text, always “bot_command”
@@ -7250,6 +7417,13 @@ type RichTextBotCommand struct {
 	BotCommand string `json:"bot_command"`
 }
 
+// TextType return RichText type
+func (i *RichTextBotCommand) TextType() string {
+	return TextTypeBotCommand
+}
+
+func (i *RichTextBotCommand) iRichText() {}
+
 // RichTextAnchor - An anchor.
 type RichTextAnchor struct {
 	// Type - Type of the rich text, always “anchor”
@@ -7258,6 +7432,13 @@ type RichTextAnchor struct {
 	// Name - The name of the anchor
 	Name string `json:"name"`
 }
+
+// TextType return RichText type
+func (i *RichTextAnchor) TextType() string {
+	return TextTypeAnchor
+}
+
+func (i *RichTextAnchor) iRichText() {}
 
 // RichTextAnchorLink - A link to an anchor.
 type RichTextAnchorLink struct {
@@ -7272,6 +7453,13 @@ type RichTextAnchorLink struct {
 	AnchorName string `json:"anchor_name"`
 }
 
+// TextType return RichText type
+func (i *RichTextAnchorLink) TextType() string {
+	return TextTypeAnchorLink
+}
+
+func (i *RichTextAnchorLink) iRichText() {}
+
 // RichTextReference - A reference.
 type RichTextReference struct {
 	// Type - Type of the rich text, always “reference”
@@ -7284,6 +7472,13 @@ type RichTextReference struct {
 	Name string `json:"name"`
 }
 
+// TextType return RichText type
+func (i *RichTextReference) TextType() string {
+	return TextTypeReference
+}
+
+func (i *RichTextReference) iRichText() {}
+
 // RichTextReferenceLink - A link to a reference.
 type RichTextReferenceLink struct {
 	// Type - Type of the rich text, always “reference_link”
@@ -7295,6 +7490,13 @@ type RichTextReferenceLink struct {
 	// ReferenceName - The name of the reference
 	ReferenceName string `json:"reference_name"`
 }
+
+// TextType return RichText type
+func (i *RichTextReferenceLink) TextType() string {
+	return TextTypeReferenceLink
+}
+
+func (i *RichTextReferenceLink) iRichText() {}
 
 // RichBlockCaption - Caption of a rich formatted block.
 type RichBlockCaption struct {
