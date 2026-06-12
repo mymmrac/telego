@@ -2666,6 +2666,33 @@ func (p *DeclineChatJoinRequestParams) WithUserID(userID int64) *DeclineChatJoin
 	return p
 }
 
+// WithChatJoinRequestQueryID adds chat join request query ID parameter
+func (p *AnswerChatJoinRequestQueryParams) WithChatJoinRequestQueryID(
+	chatJoinRequestQueryID string,
+) *AnswerChatJoinRequestQueryParams {
+	p.ChatJoinRequestQueryID = chatJoinRequestQueryID
+	return p
+}
+
+// WithResult adds result parameter
+func (p *AnswerChatJoinRequestQueryParams) WithResult(result string) *AnswerChatJoinRequestQueryParams {
+	p.Result = result
+	return p
+}
+
+// WithChatJoinRequestQueryID adds chat join request query ID parameter
+func (p *SendChatJoinRequestWebAppParams) WithChatJoinRequestQueryID(chatJoinRequestQueryID string,
+) *SendChatJoinRequestWebAppParams {
+	p.ChatJoinRequestQueryID = chatJoinRequestQueryID
+	return p
+}
+
+// WithWebAppURL adds web app URL parameter
+func (p *SendChatJoinRequestWebAppParams) WithWebAppURL(webAppURL string) *SendChatJoinRequestWebAppParams {
+	p.WebAppURL = webAppURL
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *SetChatPhotoParams) WithChatID(chatID ChatID) *SetChatPhotoParams {
 	p.ChatID = chatID
@@ -3964,6 +3991,12 @@ func (p *EditMessageTextParams) WithLinkPreviewOptions(linkPreviewOptions *LinkP
 	return p
 }
 
+// WithRichMessage adds rich message parameter
+func (p *EditMessageTextParams) WithRichMessage(richMessage *InputRichMessage) *EditMessageTextParams {
+	p.RichMessage = richMessage
+	return p
+}
+
 // WithReplyMarkup adds reply markup parameter
 func (p *EditMessageTextParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageTextParams {
 	p.ReplyMarkup = replyMarkup
@@ -4643,6 +4676,103 @@ func (p *SetCustomEmojiStickerSetThumbnailParams) WithCustomEmojiID(customEmojiI
 // WithName adds name parameter
 func (p *DeleteStickerSetParams) WithName(name string) *DeleteStickerSetParams {
 	p.Name = name
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *SendRichMessageParams) WithBusinessConnectionID(businessConnectionID string) *SendRichMessageParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *SendRichMessageParams) WithChatID(chatID ChatID) *SendRichMessageParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendRichMessageParams) WithMessageThreadID(messageThreadID int) *SendRichMessageParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDirectMessagesTopicID adds direct messages topic ID parameter
+func (p *SendRichMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendRichMessageParams {
+	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithRichMessage adds rich message parameter
+func (p *SendRichMessageParams) WithRichMessage(richMessage InputRichMessage) *SendRichMessageParams {
+	p.RichMessage = richMessage
+	return p
+}
+
+// WithDisableNotification adds disable notification parameter
+func (p *SendRichMessageParams) WithDisableNotification() *SendRichMessageParams {
+	p.DisableNotification = true
+	return p
+}
+
+// WithProtectContent adds protect content parameter
+func (p *SendRichMessageParams) WithProtectContent() *SendRichMessageParams {
+	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendRichMessageParams) WithAllowPaidBroadcast() *SendRichMessageParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
+// WithMessageEffectID adds message effect ID parameter
+func (p *SendRichMessageParams) WithMessageEffectID(messageEffectID string) *SendRichMessageParams {
+	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithSuggestedPostParameters adds suggested post parameters parameter
+func (p *SendRichMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+) *SendRichMessageParams {
+	p.SuggestedPostParameters = suggestedPostParameters
+	return p
+}
+
+// WithReplyParameters adds reply parameters parameter
+func (p *SendRichMessageParams) WithReplyParameters(replyParameters *ReplyParameters) *SendRichMessageParams {
+	p.ReplyParameters = replyParameters
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *SendRichMessageParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendRichMessageParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *SendRichMessageDraftParams) WithChatID(chatID int64) *SendRichMessageDraftParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendRichMessageDraftParams) WithMessageThreadID(messageThreadID int) *SendRichMessageDraftParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithDraftID adds draft ID parameter
+func (p *SendRichMessageDraftParams) WithDraftID(draftID int) *SendRichMessageDraftParams {
+	p.DraftID = draftID
+	return p
+}
+
+// WithRichMessage adds rich message parameter
+func (p *SendRichMessageDraftParams) WithRichMessage(richMessage InputRichMessage) *SendRichMessageDraftParams {
+	p.RichMessage = richMessage
 	return p
 }
 

@@ -1224,13 +1224,35 @@ func TestDeclineChatJoinRequestParams_Setters(t *testing.T) {
 	}, d)
 }
 
+func TestAnswerChatJoinRequestQueryParams_Setters(t *testing.T) {
+	a := (&AnswerChatJoinRequestQueryParams{}).
+		WithChatJoinRequestQueryID("ChatJoinRequestQueryID").
+		WithResult("Result")
+
+	assert.Equal(t, &AnswerChatJoinRequestQueryParams{
+		ChatJoinRequestQueryID: "ChatJoinRequestQueryID",
+		Result:                 "Result",
+	}, a)
+}
+
+func TestSendChatJoinRequestWebAppParams_Setters(t *testing.T) {
+	s := (&SendChatJoinRequestWebAppParams{}).
+		WithChatJoinRequestQueryID("ChatJoinRequestQueryID").
+		WithWebAppURL("WebAppURL")
+
+	assert.Equal(t, &SendChatJoinRequestWebAppParams{
+		ChatJoinRequestQueryID: "ChatJoinRequestQueryID",
+		WebAppURL:              "WebAppURL",
+	}, s)
+}
+
 func TestSetChatPhotoParams_Setters(t *testing.T) {
 	s := (&SetChatPhotoParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 1}).
 		WithPhoto(testInputFile)
 
 	assert.Equal(t, &SetChatPhotoParams{
-		ChatID: ChatID{ID: 2},
+		ChatID: ChatID{ID: 1},
 		Photo:  testInputFile,
 	}, s)
 }
@@ -2192,6 +2214,7 @@ func TestEditMessageTextParams_Setters(t *testing.T) {
 		WithParseMode("ParseMode").
 		WithEntities([]MessageEntity{{Type: "Entities"}}...).
 		WithLinkPreviewOptions(&LinkPreviewOptions{IsDisabled: true}).
+		WithRichMessage(&InputRichMessage{}).
 		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
 
 	assert.Equal(t, &EditMessageTextParams{
@@ -2203,6 +2226,7 @@ func TestEditMessageTextParams_Setters(t *testing.T) {
 		ParseMode:            "ParseMode",
 		Entities:             []MessageEntity{{Type: "Entities"}},
 		LinkPreviewOptions:   &LinkPreviewOptions{IsDisabled: true},
+		RichMessage:          &InputRichMessage{},
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
 	}, e)
 }
@@ -2630,6 +2654,52 @@ func TestDeleteStickerSetParams_Setters(t *testing.T) {
 	assert.Equal(t, &DeleteStickerSetParams{
 		Name: "Name",
 	}, d)
+}
+
+func TestSendRichMessageParams_Setters(t *testing.T) {
+	s := (&SendRichMessageParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithChatID(ChatID{ID: 1}).
+		WithMessageThreadID(2).
+		WithDirectMessagesTopicID(3).
+		WithRichMessage(InputRichMessage{}).
+		WithDisableNotification().
+		WithProtectContent().
+		WithAllowPaidBroadcast().
+		WithMessageEffectID("MessageEffectID").
+		WithSuggestedPostParameters(&SuggestedPostParameters{}).
+		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendRichMessageParams{
+		BusinessConnectionID:    "BusinessConnectionID",
+		ChatID:                  ChatID{ID: 1},
+		MessageThreadID:         2,
+		DirectMessagesTopicID:   3,
+		RichMessage:             InputRichMessage{},
+		DisableNotification:     true,
+		ProtectContent:          true,
+		AllowPaidBroadcast:      true,
+		MessageEffectID:         "MessageEffectID",
+		SuggestedPostParameters: &SuggestedPostParameters{},
+		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
+func TestSendRichMessageDraftParams_Setters(t *testing.T) {
+	s := (&SendRichMessageDraftParams{}).
+		WithChatID(5).
+		WithMessageThreadID(1).
+		WithDraftID(2).
+		WithRichMessage(InputRichMessage{})
+
+	assert.Equal(t, &SendRichMessageDraftParams{
+		ChatID:          5,
+		MessageThreadID: 1,
+		DraftID:         2,
+		RichMessage:     InputRichMessage{},
+	}, s)
 }
 
 func TestAnswerInlineQueryParams_Setters(t *testing.T) {

@@ -1984,7 +1984,7 @@ type SendMessageDraftParams struct {
 	// MessageThreadID - Optional. Unique identifier for the target message thread
 	MessageThreadID int `json:"message_thread_id,omitempty"`
 
-	// DraftID - Unique identifier of the message draft; must be non-zero. Changes of drafts with the same
+	// DraftID - Unique identifier of the message draft; must be non-zero. Changes to drafts with the same
 	// identifier are animated.
 	DraftID int `json:"draft_id"`
 
@@ -2688,6 +2688,53 @@ func (b *Bot) DeclineChatJoinRequest(ctx context.Context, params *DeclineChatJoi
 	err := b.performRequest(ctx, "declineChatJoinRequest", params)
 	if err != nil {
 		return fmt.Errorf("telego: declineChatJoinRequest: %w", err)
+	}
+	return nil
+}
+
+// AnswerChatJoinRequestQueryParams - Represents parameters of answerChatJoinRequestQuery method.
+type AnswerChatJoinRequestQueryParams struct {
+	// ChatJoinRequestQueryID - Unique identifier of the join request query
+	ChatJoinRequestQueryID string `json:"chat_join_request_query_id"`
+
+	// Result - Result of the query. Must be either “approve” to allow the user to join the chat,
+	// “decline” to disallow the user to join the chat, or “queue” to leave the decision to other
+	// administrators.
+	Result string `json:"result"`
+}
+
+// Join request resuls.
+const (
+	JoinRequestApprove = "approve"
+	JoinRequestDecline = "decline"
+	JoinRequestQueue   = "queue"
+)
+
+// AnswerChatJoinRequestQuery - Use this method to process a received chat join request query. Returns True
+// on success.
+func (b *Bot) AnswerChatJoinRequestQuery(ctx context.Context, params *AnswerChatJoinRequestQueryParams) error {
+	err := b.performRequest(ctx, "answerChatJoinRequestQuery", params)
+	if err != nil {
+		return fmt.Errorf("telego: answerChatJoinRequestQuery: %w", err)
+	}
+	return nil
+}
+
+// SendChatJoinRequestWebAppParams - Represents parameters of sendChatJoinRequestWebApp method.
+type SendChatJoinRequestWebAppParams struct {
+	// ChatJoinRequestQueryID - Unique identifier of the join request query
+	ChatJoinRequestQueryID string `json:"chat_join_request_query_id"`
+
+	// WebAppURL - The URL of the Mini App to be opened
+	WebAppURL string `json:"web_app_url"`
+}
+
+// SendChatJoinRequestWebApp - Use this method to process a received chat join request query by showing a
+// Mini App to the user before deciding the outcome. Returns True on success.
+func (b *Bot) SendChatJoinRequestWebApp(ctx context.Context, params *SendChatJoinRequestWebAppParams) error {
+	err := b.performRequest(ctx, "sendChatJoinRequestWebApp", params)
+	if err != nil {
+		return fmt.Errorf("telego: sendChatJoinRequestWebApp: %w", err)
 	}
 	return nil
 }
@@ -3668,8 +3715,8 @@ func (b *Bot) RemoveMyProfilePhoto(ctx context.Context) error {
 
 // SetChatMenuButtonParams - Represents parameters of setChatMenuButton method.
 type SetChatMenuButtonParams struct {
-	// ChatID - Optional. Unique identifier for the target private chat. If not specified, default bot's menu
-	// button will be changed.
+	// ChatID - Optional. Unique identifier for the target private chat. If not specified, the bot's default
+	// menu button will be changed.
 	ChatID int64 `json:"chat_id,omitempty"`
 
 	// MenuButton - Optional. A JSON-serialized object for the bot's new menu button. Defaults to
@@ -3689,8 +3736,8 @@ func (b *Bot) SetChatMenuButton(ctx context.Context, params *SetChatMenuButtonPa
 
 // GetChatMenuButtonParams - Represents parameters of getChatMenuButton method.
 type GetChatMenuButtonParams struct {
-	// ChatID - Optional. Unique identifier for the target private chat. If not specified, default bot's menu
-	// button will be returned.
+	// ChatID - Optional. Unique identifier for the target private chat. If not specified, the bot's default
+	// menu button will be returned.
 	ChatID int64 `json:"chat_id,omitempty"`
 }
 
@@ -4589,8 +4636,9 @@ type EditMessageTextParams struct {
 	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
-	// Text - New text of the message, 1-4096 characters after entities parsing
-	Text string `json:"text"`
+	// Text - Optional. New text of the message, 1-4096 characters after entity parsing; required if
+	// rich_message isn't specified
+	Text string `json:"text,omitempty"`
 
 	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
 	// (https://core.telegram.org/bots/api#formatting-options) for more details.
@@ -4603,12 +4651,15 @@ type EditMessageTextParams struct {
 	// LinkPreviewOptions - Optional. Link preview generation options for the message
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
+	// RichMessage - Optional. New rich content of the message; required if text isn't specified
+	RichMessage *InputRichMessage `json:"rich_message,omitempty"`
+
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
 	// (https://core.telegram.org/bots/features#inline-keyboards)
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
-// EditMessageText - Use this method to edit text and game (https://core.telegram.org/bots/api#games)
+// EditMessageText - Use this method to edit text, rich and game (https://core.telegram.org/bots/api#games)
 // messages. On success, if the edited message is not an inline message, the edited Message
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
 // messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48
@@ -4713,13 +4764,13 @@ func (p *EditMessageMediaParams) fileParameters() map[string]ta.NamedReader {
 }
 
 // EditMessageMedia - Use this method to edit animation, audio, document, live photo, photo, or video
-// messages, or to add media to text messages. If a message is part of a message album, then it can be edited
-// only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a
-// video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded
-// file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited
-// Message (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that
-// business messages that were not sent by the bot and do not contain an inline keyboard can only be edited
-// within 48 hours from the time they were sent.
+// messages, or to replace a text or a rich message with a media. If a message is part of a message album, then
+// it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a
+// live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a
+// previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline
+// message, the edited Message (https://core.telegram.org/bots/api#message) is returned, otherwise True is
+// returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can
+// only be edited within 48 hours from the time they were sent.
 func (b *Bot) EditMessageMedia(ctx context.Context, params *EditMessageMediaParams) (*Message, error) {
 	var message *Message
 	var success *bool
@@ -5551,6 +5602,98 @@ func (b *Bot) DeleteStickerSet(ctx context.Context, params *DeleteStickerSetPara
 	err := b.performRequest(ctx, "deleteStickerSet", params)
 	if err != nil {
 		return fmt.Errorf("telego: deleteStickerSet: %w", err)
+	}
+	return nil
+}
+
+// SendRichMessageParams - Represents parameters of sendRichMessage method.
+type SendRichMessageParams struct {
+	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
+	// message will be sent
+	BusinessConnectionID string `json:"business_connection_id,omitempty"`
+
+	// ChatID - Unique identifier for the target chat or username of the target bot, supergroup or channel in
+	// the format @username
+	ChatID ChatID `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread (topic) of a forum; for forum
+	// supergroups and private chats of bots with forum topic mode enabled only
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
+	// sent; required if the message is sent to a direct messages chat
+	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// RichMessage - The message to be sent
+	RichMessage InputRichMessage `json:"rich_message"`
+
+	// DisableNotification - Optional. Sends the message silently
+	// (https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+	DisableNotification bool `json:"disable_notification,omitempty"`
+
+	// ProtectContent - Optional. Protects the contents of the sent message from forwarding and saving
+	ProtectContent bool `json:"protect_content,omitempty"`
+
+	// AllowPaidBroadcast - Optional. Pass True to allow up to 1000 messages per second, ignoring broadcasting
+	// limits (https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee
+	// of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
+	AllowPaidBroadcast bool `json:"allow_paid_broadcast,omitempty"`
+
+	// MessageEffectID - Optional. Unique identifier of the message effect to be added to the message; for
+	// private chats only
+	MessageEffectID string `json:"message_effect_id,omitempty"`
+
+	// SuggestedPostParameters - Optional. A JSON-serialized object containing the parameters of the suggested
+	// post to send; for direct messages chats only. If the message is sent as a reply to another suggested post,
+	// then that suggested post is automatically declined.
+	SuggestedPostParameters *SuggestedPostParameters `json:"suggested_post_parameters,omitempty"`
+
+	// ReplyParameters - Optional. Description of the message to reply to
+	ReplyParameters *ReplyParameters `json:"reply_parameters,omitempty"`
+
+	// ReplyMarkup - Optional. Additional interface options. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards), custom reply keyboard
+	// (https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a
+	// reply from the user.
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
+}
+
+// SendRichMessage - Use this method to send rich messages. If the message contains a block with a media
+// element, then the bot must have the right to send the media to the chat. On success, the sent Message
+// (https://core.telegram.org/bots/api#message) is returned.
+func (b *Bot) SendRichMessage(ctx context.Context, params *SendRichMessageParams) (*Message, error) {
+	var message *Message
+	err := b.performRequest(ctx, "sendRichMessage", params, &message)
+	if err != nil {
+		return nil, fmt.Errorf("telego: sendRichMessage: %w", err)
+	}
+	return message, nil
+}
+
+// SendRichMessageDraftParams - Represents parameters of sendRichMessageDraft method.
+type SendRichMessageDraftParams struct {
+	// ChatID - Unique identifier for the target private chat
+	ChatID int64 `json:"chat_id"`
+
+	// MessageThreadID - Optional. Unique identifier for the target message thread
+	MessageThreadID int `json:"message_thread_id,omitempty"`
+
+	// DraftID - Unique identifier of the message draft; must be non-zero. Changes to drafts with the same
+	// identifier are animated.
+	DraftID int `json:"draft_id"`
+
+	// RichMessage - The partial message to be streamed
+	RichMessage InputRichMessage `json:"rich_message"`
+}
+
+// SendRichMessageDraft - Use this method to stream a partial rich message to a user while the message is
+// being generated. Note that the streamed draft is ephemeral and acts as a temporary 30-second preview - once
+// the output is finalized, you must call sendRichMessage (https://core.telegram.org/bots/api#sendrichmessage)
+// with the complete message to persist it in the user's chat. Returns True on success.
+func (b *Bot) SendRichMessageDraft(ctx context.Context, params *SendRichMessageDraftParams) error {
+	err := b.performRequest(ctx, "sendRichMessageDraft", params)
+	if err != nil {
+		return fmt.Errorf("telego: sendRichMessageDraft: %w", err)
 	}
 	return nil
 }

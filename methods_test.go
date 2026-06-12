@@ -1561,6 +1561,60 @@ func TestBot_DeclineChatJoinRequest(t *testing.T) {
 	})
 }
 
+func TestBot_AnswerChatJoinRequestQuery(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.AnswerChatJoinRequestQuery(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.AnswerChatJoinRequestQuery(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SendChatJoinRequestWebApp(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SendChatJoinRequestWebApp(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SendChatJoinRequestWebApp(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_SetChatPhoto(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -4762,6 +4816,63 @@ func TestBot_DeleteStickerSet(t *testing.T) {
 	})
 }
 
+func TestBot_SendRichMessage(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.SendRichMessage(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.SendRichMessage(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
+func TestBot_SendRichMessageDraft(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SendRichMessageDraft(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SendRichMessageDraft(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_AnswerInlineQuery(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -5352,6 +5463,9 @@ func TestMethodsConstants(t *testing.T) {
 			ChatActionTyping, ChatActionUploadPhoto, ChatActionRecordVideo, ChatActionUploadVideo,
 			ChatActionRecordVoice, ChatActionUploadVoice, ChatActionUploadDocument, ChatActionChooseSticker,
 			ChatActionFindLocation, ChatActionRecordVideoNote, ChatActionUploadVideoNote,
+		},
+		{
+			JoinRequestApprove, JoinRequestDecline, JoinRequestQueue,
 		},
 		{
 			StickerFormatStatic, StickerFormatAnimated, StickerFormatVideo,
