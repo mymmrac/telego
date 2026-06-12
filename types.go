@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/valyala/fastjson"
+
 	"github.com/mymmrac/telego/internal/json"
 	"github.com/mymmrac/telego/telegoapi"
 )
@@ -7053,25 +7055,106 @@ const (
 	TextTypeReferenceLink          = "reference_link"
 )
 
+func unmarshalRichText(value *fastjson.Value) (RichText, error) { //nolint:gocyclo
+	if value == nil {
+		return nil, nil //nolint:nilnil
+	}
+
+	richTextType := value.Type()
+	switch richTextType {
+	case fastjson.TypeString:
+		return ToPtr(RichTextPlain("")), nil
+	case fastjson.TypeArray:
+		var err error
+		values := value.GetArray()
+		list := make(RichTextList, len(values))
+		for i, v := range values {
+			list[i], err = unmarshalRichText(v)
+			if err != nil {
+				return nil, fmt.Errorf("array item %d: %w", i, err)
+			}
+		}
+		return &list, nil
+	case fastjson.TypeObject:
+		textType := string(value.GetStringBytes("type"))
+		switch textType {
+		case TextTypeBold:
+			return &RichTextBold{}, nil
+		case TextTypeItalic:
+			return &RichTextItalic{}, nil
+		case TextTypeUnderline:
+			return &RichTextUnderline{}, nil
+		case TextTypeStrikethrough:
+			return &RichTextStrikethrough{}, nil
+		case TextTypeSpoiler:
+			return &RichTextSpoiler{}, nil
+		case TextTypeDateTime:
+			return &RichTextDateTime{}, nil
+		case TextTypeTextMention:
+			return &RichTextTextMention{}, nil
+		case TextTypeSubscript:
+			return &RichTextSubscript{}, nil
+		case TextTypeSuperscript:
+			return &RichTextSuperscript{}, nil
+		case TextTypeMarked:
+			return &RichTextMarked{}, nil
+		case TextTypeCode:
+			return &RichTextCode{}, nil
+		case TextTypeCustomEmoji:
+			return &RichTextCustomEmoji{}, nil
+		case TextTypeMathematicalExpression:
+			return &RichTextMathematicalExpression{}, nil
+		case TextTypeURL:
+			return &RichTextURL{}, nil
+		case TextTypeEmailAddress:
+			return &RichTextEmailAddress{}, nil
+		case TextTypePhoneNumber:
+			return &RichTextPhoneNumber{}, nil
+		case TextTypeBankCardNumber:
+			return &RichTextBankCardNumber{}, nil
+		case TextTypeMention:
+			return &RichTextMention{}, nil
+		case TextTypeHashtag:
+			return &RichTextHashtag{}, nil
+		case TextTypeCashtag:
+			return &RichTextCashtag{}, nil
+		case TextTypeBotCommand:
+			return &RichTextBotCommand{}, nil
+		case TextTypeAnchor:
+			return &RichTextAnchor{}, nil
+		case TextTypeAnchorLink:
+			return &RichTextAnchorLink{}, nil
+		case TextTypeReference:
+			return &RichTextReference{}, nil
+		case TextTypeReferenceLink:
+			return &RichTextReferenceLink{}, nil
+		default:
+			return nil, fmt.Errorf("unknown rich text type: %q", textType)
+		}
+	default:
+		return nil, fmt.Errorf("unknown rich text value type: %q", richTextType)
+	}
+}
+
 // RichTextPlain - A plain text.
 type RichTextPlain string
 
 // TextType return RichText type
-func (i RichTextPlain) TextType() string {
+func (i *RichTextPlain) TextType() string {
 	return TextTypePlain
 }
 
-func (i RichTextPlain) iRichText() {}
+func (i *RichTextPlain) iRichText() {}
 
 // RichTextList - A array of rich texts.
 type RichTextList []RichText
 
 // TextType return RichText type
-func (i RichTextList) TextType() string {
+func (i *RichTextList) TextType() string {
 	return TextTypeList
 }
 
-func (i RichTextList) iRichText() {}
+func (i *RichTextList) iRichText() {}
 
 // RichTextBold - A bold text.
 type RichTextBold struct {
@@ -7088,6 +7171,32 @@ func (i *RichTextBold) TextType() string {
 }
 
 func (i *RichTextBold) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextBold
+func (i *RichTextBold) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextBold RichTextBold
+	var ui uRichTextBold
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextBold(ui)
+
+	return nil
+}
 
 // RichTextItalic - An italicized text.
 type RichTextItalic struct {

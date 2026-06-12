@@ -222,11 +222,11 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*InputStoryContent)(nil), &InputStoryContentVideo{})
 	assert.Equal(t, StoryTypeVideo, (&InputStoryContentVideo{}).StoryType())
 
-	assert.Implements(t, (*RichText)(nil), RichTextPlain(""))
-	assert.Equal(t, TextTypePlain, (RichTextPlain("")).TextType())
+	assert.Implements(t, (*RichText)(nil), ToPtr(RichTextPlain("")))
+	assert.Equal(t, TextTypePlain, (ToPtr(RichTextPlain(""))).TextType())
 
-	assert.Implements(t, (*RichText)(nil), RichTextList{})
-	assert.Equal(t, TextTypeList, (RichTextList{}).TextType())
+	assert.Implements(t, (*RichText)(nil), ToPtr(RichTextList{}))
+	assert.Equal(t, TextTypeList, (ToPtr(RichTextList{})).TextType())
 
 	assert.Implements(t, (*RichText)(nil), &RichTextBold{})
 	assert.Equal(t, TextTypeBold, (&RichTextBold{}).TextType())
@@ -1774,6 +1774,93 @@ func Test_ChatBackground_UnmarshalJSON(t *testing.T) {
 			}
 			require.NoError(t, err)
 			assert.Equal(t, tt.data, c)
+		})
+	}
+}
+
+func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *RichTextBold
+		isError bool
+	}{
+		{
+			name: "success_text",
+			json: `{"text": "hello"}`,
+			data: &RichTextBold{
+				Text: ToPtr(RichTextPlain("hello")),
+			},
+			isError: false,
+		},
+		{
+			name: "success_list",
+			json: `{"text": [ "hello", "world" ]}`,
+			data: &RichTextBold{
+				Text: &RichTextList{
+					ToPtr(RichTextPlain("hello")),
+					ToPtr(RichTextPlain("world")),
+				},
+			},
+			isError: false,
+		},
+		{
+			name: "success_bold",
+			json: `{"text": {"type": "bold", "text": "hello"}}`,
+			data: &RichTextBold{
+				Text: &RichTextBold{
+					Type: TextTypeBold,
+					Text: ToPtr(RichTextPlain("hello")),
+				},
+			},
+			isError: false,
+		},
+		{
+			name: "success_list_bold",
+			json: `{"text": [ "hello", {"type": "bold", "text": "world"} ]}`,
+			data: &RichTextBold{
+				Text: &RichTextList{
+					ToPtr(RichTextPlain("hello")),
+					&RichTextBold{
+						Type: TextTypeBold,
+						Text: ToPtr(RichTextPlain("world")),
+					},
+				},
+			},
+			isError: false,
+		},
+		{
+			name: "success_list_list_bold",
+			json: `{"text": [ "hello", [ "world", {"type": "bold", "text": "there"} ] ]}`,
+			data: &RichTextBold{
+				Text: &RichTextList{
+					ToPtr(RichTextPlain("hello")),
+					&RichTextList{
+						ToPtr(RichTextPlain("world")),
+						&RichTextBold{
+							Type: TextTypeBold,
+							Text: ToPtr(RichTextPlain("there")),
+						},
+					},
+				},
+			},
+			isError: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p := &RichTextBold{}
+			err := p.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+
+			formated, _ := json.Marshal(p) //nolint:errcheck
+			t.Log(string(formated))
+
+			require.NoError(t, err)
+			assert.Equal(t, tt.data, p)
 		})
 	}
 }
