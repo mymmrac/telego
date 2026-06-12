@@ -11,7 +11,7 @@ import (
 	ta "github.com/mymmrac/telego/telegoapi"
 )
 
-func TestTypesInterfaces(t *testing.T) {
+func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*MessageOrigin)(nil), &MessageOriginUser{})
 	assert.Equal(t, OriginTypeUser, (&MessageOriginUser{}).OriginType())
 
@@ -221,6 +221,144 @@ func TestTypesInterfaces(t *testing.T) {
 
 	assert.Implements(t, (*InputStoryContent)(nil), &InputStoryContentVideo{})
 	assert.Equal(t, StoryTypeVideo, (&InputStoryContentVideo{}).StoryType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextBold{})
+	assert.Equal(t, TextTypeBold, (&RichTextBold{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextItalic{})
+	assert.Equal(t, TextTypeItalic, (&RichTextItalic{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextUnderline{})
+	assert.Equal(t, TextTypeUnderline, (&RichTextUnderline{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextStrikethrough{})
+	assert.Equal(t, TextTypeStrikethrough, (&RichTextStrikethrough{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextSpoiler{})
+	assert.Equal(t, TextTypeSpoiler, (&RichTextSpoiler{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextDateTime{})
+	assert.Equal(t, TextTypeDateTime, (&RichTextDateTime{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextTextMention{})
+	assert.Equal(t, TextTypeTextMention, (&RichTextTextMention{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextSubscript{})
+	assert.Equal(t, TextTypeSubscript, (&RichTextSubscript{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextSuperscript{})
+	assert.Equal(t, TextTypeSuperscript, (&RichTextSuperscript{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextMarked{})
+	assert.Equal(t, TextTypeMarked, (&RichTextMarked{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextCode{})
+	assert.Equal(t, TextTypeCode, (&RichTextCode{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextCustomEmoji{})
+	assert.Equal(t, TextTypeCustomEmoji, (&RichTextCustomEmoji{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextMathematicalExpression{})
+	assert.Equal(t, TextTypeMathematicalExpression, (&RichTextMathematicalExpression{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextURL{})
+	assert.Equal(t, TextTypeURL, (&RichTextURL{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextEmailAddress{})
+	assert.Equal(t, TextTypeEmailAddress, (&RichTextEmailAddress{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextPhoneNumber{})
+	assert.Equal(t, TextTypePhoneNumber, (&RichTextPhoneNumber{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextBankCardNumber{})
+	assert.Equal(t, TextTypeBankCardNumber, (&RichTextBankCardNumber{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextMention{})
+	assert.Equal(t, TextTypeMention, (&RichTextMention{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextHashtag{})
+	assert.Equal(t, TextTypeHashtag, (&RichTextHashtag{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextCashtag{})
+	assert.Equal(t, TextTypeCashtag, (&RichTextCashtag{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextBotCommand{})
+	assert.Equal(t, TextTypeBotCommand, (&RichTextBotCommand{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextAnchor{})
+	assert.Equal(t, TextTypeAnchor, (&RichTextAnchor{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextAnchorLink{})
+	assert.Equal(t, TextTypeAnchorLink, (&RichTextAnchorLink{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextReference{})
+	assert.Equal(t, TextTypeReference, (&RichTextReference{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextReferenceLink{})
+	assert.Equal(t, TextTypeReferenceLink, (&RichTextReferenceLink{}).TextType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockParagraph{})
+	assert.Equal(t, BlockTypeParagraph, (&RichBlockParagraph{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockSectionHeading{})
+	assert.Equal(t, BlockTypeSectionHeading, (&RichBlockSectionHeading{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockPreformatted{})
+	assert.Equal(t, BlockTypePreformatted, (&RichBlockPreformatted{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockFooter{})
+	assert.Equal(t, BlockTypeFooter, (&RichBlockFooter{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockDivider{})
+	assert.Equal(t, BlockTypeDivider, (&RichBlockDivider{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockMathematicalExpression{})
+	assert.Equal(t, BlockTypeMathematicalExpression, (&RichBlockMathematicalExpression{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockAnchor{})
+	assert.Equal(t, BlockTypeAnchor, (&RichBlockAnchor{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockList{})
+	assert.Equal(t, BlockTypeList, (&RichBlockList{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockBlockQuotation{})
+	assert.Equal(t, BlockTypeBlockQuotation, (&RichBlockBlockQuotation{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockPullQuotation{})
+	assert.Equal(t, BlockTypePullQuotation, (&RichBlockPullQuotation{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockCollage{})
+	assert.Equal(t, BlockTypeCollage, (&RichBlockCollage{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockSlideshow{})
+	assert.Equal(t, BlockTypeSlideshow, (&RichBlockSlideshow{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockTable{})
+	assert.Equal(t, BlockTypeTable, (&RichBlockTable{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockDetails{})
+	assert.Equal(t, BlockTypeDetails, (&RichBlockDetails{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockMap{})
+	assert.Equal(t, BlockTypeMap, (&RichBlockMap{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockAnimation{})
+	assert.Equal(t, BlockTypeAnimation, (&RichBlockAnimation{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockAudio{})
+	assert.Equal(t, BlockTypeAudio, (&RichBlockAudio{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockPhoto{})
+	assert.Equal(t, BlockTypePhoto, (&RichBlockPhoto{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockVideo{})
+	assert.Equal(t, BlockTypeVideo, (&RichBlockVideo{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockVoiceNote{})
+	assert.Equal(t, BlockTypeVoiceNote, (&RichBlockVoiceNote{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockThinking{})
+	assert.Equal(t, BlockTypeThinking, (&RichBlockThinking{}).BlockType())
 
 	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultArticle{})
 	assert.Equal(t, ResultTypeArticle, (&InlineQueryResultArticle{}).ResultType())
