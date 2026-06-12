@@ -222,6 +222,12 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*InputStoryContent)(nil), &InputStoryContentVideo{})
 	assert.Equal(t, StoryTypeVideo, (&InputStoryContentVideo{}).StoryType())
 
+	assert.Implements(t, (*RichText)(nil), RichTextPlain(""))
+	assert.Equal(t, TextTypePlain, (RichTextPlain("")).TextType())
+
+	assert.Implements(t, (*RichText)(nil), RichTextList{})
+	assert.Equal(t, TextTypeList, (RichTextList{}).TextType())
+
 	assert.Implements(t, (*RichText)(nil), &RichTextBold{})
 	assert.Equal(t, TextTypeBold, (&RichTextBold{}).TextType())
 
@@ -991,6 +997,9 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			StickerStatic, StickerAnimated, StickerVideo,
+		},
+		{
+			TextTypePlain, TextTypeList,
 		},
 		{
 			TextTypeBold, TextTypeItalic, TextTypeUnderline, TextTypeStrikethrough, TextTypeSpoiler, TextTypeDateTime,

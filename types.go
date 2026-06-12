@@ -7023,6 +7023,9 @@ type RichText interface {
 
 // Rick text types.
 const (
+	TextTypePlain = "Plain"
+	TextTypeList  = "List"
+
 	TextTypeBold                   = "bold"
 	TextTypeItalic                 = "italic"
 	TextTypeUnderline              = "underline"
@@ -7049,6 +7052,26 @@ const (
 	TextTypeReference              = "reference"
 	TextTypeReferenceLink          = "reference_link"
 )
+
+// RichTextPlain - A plain text.
+type RichTextPlain string
+
+// TextType return RichText type
+func (i RichTextPlain) TextType() string {
+	return TextTypePlain
+}
+
+func (i RichTextPlain) iRichText() {}
+
+// RichTextList - A array of rich texts.
+type RichTextList []RichText
+
+// TextType return RichText type
+func (i RichTextList) TextType() string {
+	return TextTypeList
+}
+
+func (i RichTextList) iRichText() {}
 
 // RichTextBold - A bold text.
 type RichTextBold struct {
