@@ -7381,7 +7381,30 @@ type RichBlock interface {
 	iRichBlock()
 }
 
-// TODO: RichBlock can be any of types RichBlock...
+// Rich block types.
+const (
+	BlockTypeParagraph              = "paragraph"
+	BlockTypeSectionHeading         = "heading"
+	BlockTypePreformatted           = "pre"
+	BlockTypeFooter                 = "footer"
+	BlockTypeDivider                = "divider"
+	BlockTypeMathematicalExpression = "mathematical_expression"
+	BlockTypeAnchor                 = "anchor"
+	BlockTypeList                   = "list"
+	BlockTypeBlockQuotation         = "blockquote"
+	BlockTypePullQuotation          = "pullquote"
+	BlockTypeCollage                = "collage"
+	BlockTypeSlideshow              = "slideshow"
+	BlockTypeTable                  = "table"
+	BlockTypeDetails                = "details"
+	BlockTypeMap                    = "map"
+	BlockTypeAnimation              = "animation"
+	BlockTypeAudio                  = "audio"
+	BlockTypePhoto                  = "photo"
+	BlockTypeVideo                  = "video"
+	BlockTypeVoiceNote              = "voice_note"
+	BlockTypeThinking               = "thinking"
+)
 
 // RichBlockParagraph - A text paragraph, corresponding to the HTML tag <p>.
 type RichBlockParagraph struct {
@@ -7391,6 +7414,13 @@ type RichBlockParagraph struct {
 	// Text - Text of the block
 	Text RichText `json:"text"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockParagraph) BlockType() string {
+	return BlockTypeParagraph
+}
+
+func (i *RichBlockParagraph) iRichBlock() {}
 
 // RichBlockSectionHeading - A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>,
 // or <h6>.
@@ -7405,6 +7435,13 @@ type RichBlockSectionHeading struct {
 	Size int `json:"size"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockSectionHeading) BlockType() string {
+	return BlockTypeSectionHeading
+}
+
+func (i *RichBlockSectionHeading) iRichBlock() {}
+
 // RichBlockPreformatted - A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
 type RichBlockPreformatted struct {
 	// Type - Type of the block, always “pre”
@@ -7417,6 +7454,13 @@ type RichBlockPreformatted struct {
 	Language string `json:"language,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockPreformatted) BlockType() string {
+	return BlockTypePreformatted
+}
+
+func (i *RichBlockPreformatted) iRichBlock() {}
+
 // RichBlockFooter - A footer, corresponding to the HTML tag <footer>.
 type RichBlockFooter struct {
 	// Type - Type of the block, always “footer”
@@ -7426,11 +7470,25 @@ type RichBlockFooter struct {
 	Text RichText `json:"text"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockFooter) BlockType() string {
+	return BlockTypeFooter
+}
+
+func (i *RichBlockFooter) iRichBlock() {}
+
 // RichBlockDivider - A divider, corresponding to the HTML tag <hr/>.
 type RichBlockDivider struct {
 	// Type - Type of the block, always “divider”
 	Type string `json:"type"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockDivider) BlockType() string {
+	return BlockTypeDivider
+}
+
+func (i *RichBlockDivider) iRichBlock() {}
 
 // RichBlockMathematicalExpression - A block with a mathematical expression in LaTeX format, corresponding to
 // the custom HTML tag <tg-math-block>.
@@ -7442,6 +7500,13 @@ type RichBlockMathematicalExpression struct {
 	Expression string `json:"expression"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockMathematicalExpression) BlockType() string {
+	return BlockTypeMathematicalExpression
+}
+
+func (i *RichBlockMathematicalExpression) iRichBlock() {}
+
 // RichBlockAnchor - A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
 type RichBlockAnchor struct {
 	// Type - Type of the block, always “anchor”
@@ -7450,6 +7515,13 @@ type RichBlockAnchor struct {
 	// Name - The name of the anchor
 	Name string `json:"name"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockAnchor) BlockType() string {
+	return BlockTypeAnchor
+}
+
+func (i *RichBlockAnchor) iRichBlock() {}
 
 // RichBlockList - A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested tags
 // <li>.
@@ -7460,6 +7532,13 @@ type RichBlockList struct {
 	// Items - Items of the list
 	Items []RichBlockListItem `json:"items"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockList) BlockType() string {
+	return BlockTypeList
+}
+
+func (i *RichBlockList) iRichBlock() {}
 
 // RichBlockBlockQuotation - A block quotation, corresponding to the HTML tag <blockquote>.
 type RichBlockBlockQuotation struct {
@@ -7473,6 +7552,13 @@ type RichBlockBlockQuotation struct {
 	Credit *RichText `json:"credit,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockBlockQuotation) BlockType() string {
+	return BlockTypeBlockQuotation
+}
+
+func (i *RichBlockBlockQuotation) iRichBlock() {}
+
 // RichBlockPullQuotation - A quotation with centered text, loosely corresponding to the HTML tag <aside>.
 type RichBlockPullQuotation struct {
 	// Type - Type of the block, always “pullquote”
@@ -7484,6 +7570,13 @@ type RichBlockPullQuotation struct {
 	// Credit - Optional. Credit of the block
 	Credit *RichText `json:"credit,omitempty"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockPullQuotation) BlockType() string {
+	return BlockTypePullQuotation
+}
+
+func (i *RichBlockPullQuotation) iRichBlock() {}
 
 // RichBlockCollage - A collage, corresponding to the custom HTML tag <tg-collage>.
 type RichBlockCollage struct {
@@ -7497,6 +7590,13 @@ type RichBlockCollage struct {
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockCollage) BlockType() string {
+	return BlockTypeCollage
+}
+
+func (i *RichBlockCollage) iRichBlock() {}
+
 // RichBlockSlideshow - A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
 type RichBlockSlideshow struct {
 	// Type - Type of the block, always “slideshow”
@@ -7508,6 +7608,13 @@ type RichBlockSlideshow struct {
 	// Caption - Optional. Caption of the block
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockSlideshow) BlockType() string {
+	return BlockTypeSlideshow
+}
+
+func (i *RichBlockSlideshow) iRichBlock() {}
 
 // RichBlockTable - A table, corresponding to the HTML tag <table>.
 type RichBlockTable struct {
@@ -7527,6 +7634,13 @@ type RichBlockTable struct {
 	Caption *RichText `json:"caption,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockTable) BlockType() string {
+	return BlockTypeTable
+}
+
+func (i *RichBlockTable) iRichBlock() {}
+
 // RichBlockDetails - An expandable block for details disclosure, corresponding to the HTML tag <details>.
 type RichBlockDetails struct {
 	// Type - Type of the block, always “details”
@@ -7541,6 +7655,13 @@ type RichBlockDetails struct {
 	// IsOpen - Optional. True, if the content of the block is visible by default
 	IsOpen bool `json:"is_open,omitempty"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockDetails) BlockType() string {
+	return BlockTypeDetails
+}
+
+func (i *RichBlockDetails) iRichBlock() {}
 
 // RichBlockMap - A block with a map, corresponding to the custom HTML tag <tg-map>.
 type RichBlockMap struct {
@@ -7563,6 +7684,13 @@ type RichBlockMap struct {
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockMap) BlockType() string {
+	return BlockTypeMap
+}
+
+func (i *RichBlockMap) iRichBlock() {}
+
 // RichBlockAnimation - A block with an animation, corresponding to the HTML tag <video>.
 type RichBlockAnimation struct {
 	// Type - Type of the block, always “animation”
@@ -7578,6 +7706,13 @@ type RichBlockAnimation struct {
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockAnimation) BlockType() string {
+	return BlockTypeAnimation
+}
+
+func (i *RichBlockAnimation) iRichBlock() {}
+
 // RichBlockAudio - A block with a music file, corresponding to the HTML tag <audio>.
 type RichBlockAudio struct {
 	// Type - Type of the block, always “audio”
@@ -7589,6 +7724,13 @@ type RichBlockAudio struct {
 	// Caption - Optional. Caption of the block
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockAudio) BlockType() string {
+	return BlockTypeAudio
+}
+
+func (i *RichBlockAudio) iRichBlock() {}
 
 // RichBlockPhoto - A block with a photo, corresponding to the HTML tag <photo>.
 type RichBlockPhoto struct {
@@ -7605,6 +7747,13 @@ type RichBlockPhoto struct {
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockPhoto) BlockType() string {
+	return BlockTypePhoto
+}
+
+func (i *RichBlockPhoto) iRichBlock() {}
+
 // RichBlockVideo - A block with a video, corresponding to the HTML tag <video>.
 type RichBlockVideo struct {
 	// Type - Type of the block, always “video”
@@ -7620,6 +7769,13 @@ type RichBlockVideo struct {
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
 
+// BlockType return RichBlock type
+func (i *RichBlockVideo) BlockType() string {
+	return BlockTypeVideo
+}
+
+func (i *RichBlockVideo) iRichBlock() {}
+
 // RichBlockVoiceNote - A block with a voice note, corresponding to the HTML tag <audio>.
 type RichBlockVoiceNote struct {
 	// Type - Type of the block, always “voice_note”
@@ -7631,6 +7787,13 @@ type RichBlockVoiceNote struct {
 	// Caption - Optional. Caption of the block
 	Caption *RichBlockCaption `json:"caption,omitempty"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockVoiceNote) BlockType() string {
+	return BlockTypeVoiceNote
+}
+
+func (i *RichBlockVoiceNote) iRichBlock() {}
 
 // RichBlockThinking - A block with a “Thinking…” placeholder, corresponding to the custom HTML tag
 // <tg-thinking>. The block may be used only in sendRichMessageDraft
@@ -7645,6 +7808,13 @@ type RichBlockThinking struct {
 	// examples of custom emoji, which are recommended for usage in the block.
 	Text RichText `json:"text"`
 }
+
+// BlockType return RichBlock type
+func (i *RichBlockThinking) BlockType() string {
+	return BlockTypeThinking
+}
+
+func (i *RichBlockThinking) iRichBlock() {}
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.

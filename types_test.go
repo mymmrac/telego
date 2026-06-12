@@ -855,6 +855,13 @@ func TestTypesConstants(t *testing.T) {
 			StickerStatic, StickerAnimated, StickerVideo,
 		},
 		{
+			BlockTypeParagraph, BlockTypeSectionHeading, BlockTypePreformatted, BlockTypeFooter, BlockTypeDivider,
+			BlockTypeMathematicalExpression, BlockTypeAnchor, BlockTypeList, BlockTypeBlockQuotation,
+			BlockTypePullQuotation, BlockTypeCollage, BlockTypeSlideshow, BlockTypeTable, BlockTypeDetails,
+			BlockTypeMap, BlockTypeAnimation, BlockTypeAudio, BlockTypePhoto, BlockTypeVideo, BlockTypeVoiceNote,
+			BlockTypeThinking,
+		},
+		{
 			ResultTypeArticle, ResultTypePhoto, ResultTypeGif, ResultTypeMpeg4Gif, ResultTypeVideo, ResultTypeAudio,
 			ResultTypeVoice, ResultTypeDocument, ResultTypeLocation, ResultTypeVenue, ResultTypeContact,
 			ResultTypeGame, ResultTypeSticker,
