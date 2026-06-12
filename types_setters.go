@@ -1015,6 +1015,30 @@ func (i *InputSticker) WithKeywords(keywords ...string) *InputSticker {
 	return i
 }
 
+// WithHTML adds html parameter
+func (i *InputRichMessage) WithHTML(html string) *InputRichMessage {
+	i.HTML = html
+	return i
+}
+
+// WithMarkdown adds markdown parameter
+func (i *InputRichMessage) WithMarkdown(markdown string) *InputRichMessage {
+	i.Markdown = markdown
+	return i
+}
+
+// WithIsRtl adds is rtl parameter
+func (i *InputRichMessage) WithIsRtl() *InputRichMessage {
+	i.IsRtl = true
+	return i
+}
+
+// WithSkipEntityDetection adds skip entity detection parameter
+func (i *InputRichMessage) WithSkipEntityDetection() *InputRichMessage {
+	i.SkipEntityDetection = true
+	return i
+}
+
 // WithID adds ID parameter
 func (i *InlineQueryResultArticle) WithID(iD string) *InlineQueryResultArticle {
 	i.ID = iD
@@ -2287,6 +2311,12 @@ func (i *InputTextMessageContent) WithLinkPreviewOptions(
 	linkPreviewOptions *LinkPreviewOptions,
 ) *InputTextMessageContent {
 	i.LinkPreviewOptions = linkPreviewOptions
+	return i
+}
+
+// WithRichMessage adds rich message parameter
+func (i *InputRichMessageContent) WithRichMessage(richMessage InputRichMessage) *InputRichMessageContent {
+	i.RichMessage = richMessage
 	return i
 }
 

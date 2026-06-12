@@ -228,6 +228,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "&CopyTextButton{}"
 	case "*SuggestedPostParameters":
 		return "&SuggestedPostParameters{}"
+	case "InputRichMessage":
+		return "InputRichMessage{}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

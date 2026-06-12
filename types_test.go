@@ -172,6 +172,9 @@ func TestTypesInterfaces(t *testing.T) {
 	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaDocument{})
 	assert.Equal(t, MediaTypeDocument, (&InputMediaDocument{}).MediaType())
 
+	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaLink{})
+	assert.Equal(t, MediaTypeLink, (&InputMediaLink{}).MediaType())
+
 	assert.Implements(t, (*InputMedia)(nil), &InputMediaLivePhoto{})
 	assert.Implements(t, (*InputPollMedia)(nil), &InputMediaLivePhoto{})
 	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaLivePhoto{})
@@ -281,6 +284,9 @@ func TestTypesInterfaces(t *testing.T) {
 
 	assert.Implements(t, (*InputMessageContent)(nil), &InputTextMessageContent{})
 	assert.Equal(t, ContentTypeText, (&InputTextMessageContent{}).ContentType())
+
+	assert.Implements(t, (*InputMessageContent)(nil), &InputRichMessageContent{})
+	assert.Equal(t, ContentTypeRich, (&InputRichMessageContent{}).ContentType())
 
 	assert.Implements(t, (*InputMessageContent)(nil), &InputLocationMessageContent{})
 	assert.Equal(t, ContentTypeLocation, (&InputLocationMessageContent{}).ContentType())
@@ -830,7 +836,7 @@ func TestTypesConstants(t *testing.T) {
 			BoostSourcePremium, BoostSourceGiftCode, BoostSourceGiveaway,
 		},
 		{
-			MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument, MediaTypeLivePhoto, MediaTypeLocation,
+			MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument, MediaTypeLink, MediaTypeLivePhoto, MediaTypeLocation,
 			MediaTypePhoto, MediaTypeSticker, MediaTypeVenue, MediaTypeVideo,
 		},
 		{
@@ -858,7 +864,8 @@ func TestTypesConstants(t *testing.T) {
 			MimeTypeApplicationZip,
 		},
 		{
-			ContentTypeText, ContentTypeLocation, ContentTypeVenue, ContentTypeContact, ContentTypeInvoice,
+			ContentTypeText, ContentTypeRich, ContentTypeLocation, ContentTypeVenue, ContentTypeContact,
+			ContentTypeInvoice,
 		},
 		{
 			WithdrawalStatePending, WithdrawalStateSucceeded, WithdrawalStateFailed,

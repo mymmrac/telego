@@ -237,6 +237,8 @@ func uppercaseWords(text string) string {
 	text = strings.ReplaceAll(text, "uRL", "url")
 	text = strings.ReplaceAll(text, "iPAddress", "ipAddress")
 
+	text = strings.ReplaceAll(text, "Html", "HTML")
+
 	return text
 }
 

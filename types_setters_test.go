@@ -559,6 +559,21 @@ func TestInputSticker_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestInputRichMessage_Setters(t *testing.T) {
+	i := (&InputRichMessage{}).
+		WithHTML("Html").
+		WithMarkdown("Markdown").
+		WithIsRtl().
+		WithSkipEntityDetection()
+
+	assert.Equal(t, &InputRichMessage{
+		HTML:                "Html",
+		Markdown:            "Markdown",
+		IsRtl:               true,
+		SkipEntityDetection: true,
+	}, i)
+}
+
 func TestInlineQueryResultArticle_Setters(t *testing.T) {
 	i := (&InlineQueryResultArticle{}).
 		WithID("ID").
@@ -1117,6 +1132,15 @@ func TestInputTextMessageContent_Setters(t *testing.T) {
 		ParseMode:          "ParseMode",
 		Entities:           []MessageEntity{{Type: "Entities"}},
 		LinkPreviewOptions: &LinkPreviewOptions{IsDisabled: true},
+	}, i)
+}
+
+func TestInputRichMessageContent_Setters(t *testing.T) {
+	i := (&InputRichMessageContent{}).
+		WithRichMessage(InputRichMessage{})
+
+	assert.Equal(t, &InputRichMessageContent{
+		RichMessage: InputRichMessage{},
 	}, i)
 }
 

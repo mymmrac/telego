@@ -93,12 +93,15 @@ var typeStructsSetters = []string{
 	"InputPaidMediaVideo",
 
 	"InputTextMessageContent",
+	"InputRichMessageContent",
 	"InputLocationMessageContent",
 	"InputVenueMessageContent",
 	"InputContactMessageContent",
 	"InputInvoiceMessageContent",
 
 	"InputSticker",
+
+	"InputRichMessage",
 
 	"InputProfilePhotoStatic",
 	"InputProfilePhotoAnimated",

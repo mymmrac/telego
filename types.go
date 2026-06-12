@@ -275,6 +275,10 @@ type User struct {
 	// CanManageBots - Optional. True, if other bots can be created to be controlled by the bot. Returned only
 	// in getMe (https://core.telegram.org/bots/api#getme).
 	CanManageBots bool `json:"can_manage_bots,omitempty"`
+
+	// SupportsJoinRequestQueries - Optional. True, if the bot supports join request queries and can be assigned
+	// to process them. Returned only in getMe (https://core.telegram.org/bots/api#getme).
+	SupportsJoinRequestQueries bool `json:"supports_join_request_queries,omitempty"`
 }
 
 // Chat - This object represents a chat.
@@ -507,9 +511,13 @@ type ChatFullInfo struct {
 	// name, message replies and link previews
 	UniqueGiftColors *UniqueGiftColors `json:"unique_gift_colors,omitempty"`
 
-	// PaidMessageStarCount - Optional. The number of Telegram Stars a general user have to pay to send a
-	// message to the chat
+	// PaidMessageStarCount - Optional. The number of Telegram Stars a general user has to pay to send a message
+	// to the chat
 	PaidMessageStarCount int `json:"paid_message_star_count,omitempty"`
+
+	// GuardBot - Optional. The bot that processes join request queries in the chat. The field is only available
+	// to chat administrators.
+	GuardBot *User `json:"guard_bot,omitempty"`
 }
 
 // unknownReactionTypeErr is an error for unknown reaction type
@@ -697,6 +705,9 @@ type Message struct {
 
 	// EffectID - Optional. Unique identifier of the message effect added to the message
 	EffectID string `json:"effect_id,omitempty"`
+
+	// RichMessage - Optional. Message is a rich formatted message
+	RichMessage *RichMessage `json:"rich_message,omitempty"`
 
 	// Animation - Optional. Message is an animation, information about the animation. For backward
 	// compatibility, when this field is set, the document field will also be set.
@@ -1964,6 +1975,12 @@ const (
 	EmojiSlotMachine = "🎰"
 )
 
+// Link - Represents an HTTP link.
+type Link struct {
+	// URL - URL of the link
+	URL string `json:"url"`
+}
+
 // PollMedia - At most one of the optional fields can be present in any given object.
 type PollMedia struct {
 	// Animation - Optional. Media is an animation, information about the animation
@@ -1976,6 +1993,9 @@ type PollMedia struct {
 	// Document - Optional. Media is a general file, information about the file; currently, can't be received in
 	// a poll option
 	Document *Document `json:"document,omitempty"`
+
+	// Link - Optional. The HTTP link attached to the poll option
+	Link *Link `json:"link,omitempty"`
 
 	// LivePhoto - Optional. Media is a live photo, information about the live photo
 	LivePhoto *LivePhoto `json:"live_photo,omitempty"`
@@ -2016,6 +2036,7 @@ type InputPollMedia interface {
 
 // InputPollOptionMedia - This object represents the content of a poll option to be sent. It should be one of
 // InputMediaAnimation (https://core.telegram.org/bots/api#inputmediaanimation)
+// InputMediaLink (https://core.telegram.org/bots/api#inputmedialink)
 // InputMediaLivePhoto (https://core.telegram.org/bots/api#inputmedialivephoto)
 // InputMediaLocation (https://core.telegram.org/bots/api#inputmedialocation)
 // InputMediaPhoto (https://core.telegram.org/bots/api#inputmediaphoto)
@@ -4103,8 +4124,8 @@ type ChatMemberRestricted struct {
 	// IsMember - True, if the user is a member of the chat at the moment of the request
 	IsMember bool `json:"is_member"`
 
-	// CanSendMessages - True, if the user is allowed to send text messages, contacts, giveaways, giveaway
-	// winners, invoices, locations and venues
+	// CanSendMessages - True, if the user is allowed to send text messages, rich messages, contacts, giveaways,
+	// giveaway winners, invoices, locations and venues
 	CanSendMessages bool `json:"can_send_messages"`
 
 	// CanSendAudios - True, if the user is allowed to send audios
@@ -4256,12 +4277,17 @@ type ChatJoinRequest struct {
 
 	// InviteLink - Optional. Chat invite link that was used by the user to send the join request
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
+
+	// QueryID - Optional. Identifier of the join request query. If present, then the bot must call
+	// sendChatJoinRequestWebApp (https://core.telegram.org/bots/api#sendchatjoinrequestwebapp) or directly call
+	// answerChatJoinRequestQuery (https://core.telegram.org/bots/api#answerchatjoinrequestquery) within 10 seconds.
+	QueryID string `json:"query_id,omitempty"`
 }
 
 // ChatPermissions - Describes actions that a non-administrator user is allowed to take in a chat.
 type ChatPermissions struct {
-	// CanSendMessages - Optional. True, if the user is allowed to send text messages, contacts, giveaways,
-	// giveaway winners, invoices, locations and venues
+	// CanSendMessages - Optional. True, if the user is allowed to send text messages, rich messages, contacts,
+	// giveaways, giveaway winners, invoices, locations and venues
 	CanSendMessages *bool `json:"can_send_messages,omitempty"`
 
 	// CanSendAudios - Optional. True, if the user is allowed to send audios
@@ -5969,6 +5995,7 @@ const (
 	MediaTypeAnimation = "animation"
 	MediaTypeAudio     = "audio"
 	MediaTypeDocument  = "document"
+	MediaTypeLink      = "link"
 	MediaTypeLivePhoto = "live_photo"
 	MediaTypeLocation  = "location"
 	MediaTypePhoto     = "photo"
@@ -5980,7 +6007,7 @@ const (
 // InputMediaAnimation - Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be
 // sent.
 type InputMediaAnimation struct {
-	// Type - Type of the result, must be animation
+	// Type - Type of the media, must be animation
 	Type string `json:"type"`
 
 	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
@@ -6048,7 +6075,7 @@ func (i *InputMediaAnimation) fileParameters() map[string]telegoapi.NamedReader 
 
 // InputMediaAudio - Represents an audio file to be treated as music to be sent.
 type InputMediaAudio struct {
-	// Type - Type of the result, must be audio
+	// Type - Type of the media, must be audio
 	Type string `json:"type"`
 
 	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
@@ -6109,7 +6136,7 @@ func (i *InputMediaAudio) fileParameters() map[string]telegoapi.NamedReader {
 
 // InputMediaDocument - Represents a general file to be sent.
 type InputMediaDocument struct {
-	// Type - Type of the result, must be document
+	// Type - Type of the media, must be document
 	Type string `json:"type"`
 
 	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
@@ -6163,9 +6190,29 @@ func (i *InputMediaDocument) fileParameters() map[string]telegoapi.NamedReader {
 	return fp
 }
 
+// InputMediaLink - Represents an HTTP link to be sent.
+type InputMediaLink struct {
+	// Type - Type of the media, must be link
+	Type string `json:"type"`
+
+	// URL - HTTP URL of the link
+	URL string `json:"url"`
+}
+
+// MediaType return InputMedia type
+func (i *InputMediaLink) MediaType() string {
+	return MediaTypeLink
+}
+
+func (i *InputMediaLink) iInputPollOptionMedia() {}
+
+func (i *InputMediaLink) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputMediaLivePhoto - Represents a live photo to be sent.
 type InputMediaLivePhoto struct {
-	// Type - Type of the result, must be live_photo
+	// Type - Type of the media, must be live_photo
 	Type string `json:"type"`
 
 	// Media - Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram
@@ -6220,7 +6267,7 @@ func (i *InputMediaLivePhoto) fileParameters() map[string]telegoapi.NamedReader 
 
 // InputMediaLocation - Represents a location to be sent.
 type InputMediaLocation struct {
-	// Type - Type of the result, must be location
+	// Type - Type of the media, must be location
 	Type string `json:"type"`
 
 	// Latitude - Latitude of the location
@@ -6247,7 +6294,7 @@ func (i *InputMediaLocation) fileParameters() map[string]telegoapi.NamedReader {
 
 // InputMediaPhoto - Represents a photo to be sent.
 type InputMediaPhoto struct {
-	// Type - Type of the result, must be photo
+	// Type - Type of the media, must be photo
 	Type string `json:"type"`
 
 	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
@@ -6292,7 +6339,7 @@ func (i *InputMediaPhoto) fileParameters() map[string]telegoapi.NamedReader {
 
 // InputMediaSticker - Represents a sticker file to be sent.
 type InputMediaSticker struct {
-	// Type - Type of the result, must be sticker
+	// Type - Type of the media, must be sticker
 	Type string `json:"type"`
 
 	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
@@ -6322,7 +6369,7 @@ func (i *InputMediaSticker) fileParameters() map[string]telegoapi.NamedReader {
 
 // InputMediaVenue - Represents a venue to be sent.
 type InputMediaVenue struct {
-	// Type - Type of the result, must be venue
+	// Type - Type of the media, must be venue
 	Type string `json:"type"`
 
 	// Latitude - Latitude of the location
@@ -6366,7 +6413,7 @@ func (i *InputMediaVenue) fileParameters() map[string]telegoapi.NamedReader {
 
 // InputMediaVideo - Represents a video to be sent.
 type InputMediaVideo struct {
-	// Type - Type of the result, must be video
+	// Type - Type of the media, must be video
 	Type string `json:"type"`
 
 	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
@@ -6910,6 +6957,694 @@ const (
 	StickerAnimated = "animated"
 	StickerVideo    = "video"
 )
+
+// RichMessage - Rich formatted message.
+type RichMessage struct {
+	// Blocks - Content of the message
+	Blocks []RichBlock `json:"blocks"`
+
+	// IsRtl - Optional. True, if the rich message must be shown right-to-left
+	IsRtl bool `json:"is_rtl,omitempty"`
+}
+
+// InputRichMessage - Describes a rich message to be sent. Exactly one of the fields html or markdown must be
+// used.
+type InputRichMessage struct {
+	// HTML - Optional. Content of the rich message to send described using HTML formatting. See rich message
+	// formatting options (https://core.telegram.org/bots/api#rich-message-formatting-options) for more details.
+	HTML string `json:"html,omitempty"`
+
+	// Markdown - Optional. Content of the rich message to send described using Markdown formatting. See rich
+	// message formatting options (https://core.telegram.org/bots/api#rich-message-formatting-options) for more
+	// details.
+	Markdown string `json:"markdown,omitempty"`
+
+	// IsRtl - Optional. Pass True if the rich message must be shown right-to-left
+	IsRtl bool `json:"is_rtl,omitempty"`
+
+	// SkipEntityDetection - Optional. Pass True to skip automatic detection of entities (e.g., URLs, email
+	// addresses, username mentions, hashtags, cashtags, bot commands, or phone numbers) in the text
+	SkipEntityDetection bool `json:"skip_entity_detection,omitempty"`
+}
+
+// RichText - This object represents a rich formatted text. Currently, it can be either a String for plain
+// text, an Array of RichText (https://core.telegram.org/bots/api#richtext), or any of the following types:
+// RichTextBold (https://core.telegram.org/bots/api#richtextbold)
+// RichTextItalic (https://core.telegram.org/bots/api#richtextitalic)
+// RichTextUnderline (https://core.telegram.org/bots/api#richtextunderline)
+// RichTextStrikethrough (https://core.telegram.org/bots/api#richtextstrikethrough)
+// RichTextSpoiler (https://core.telegram.org/bots/api#richtextspoiler)
+// RichTextDateTime (https://core.telegram.org/bots/api#richtextdatetime)
+// RichTextTextMention (https://core.telegram.org/bots/api#richtexttextmention)
+// RichTextSubscript (https://core.telegram.org/bots/api#richtextsubscript)
+// RichTextSuperscript (https://core.telegram.org/bots/api#richtextsuperscript)
+// RichTextMarked (https://core.telegram.org/bots/api#richtextmarked)
+// RichTextCode (https://core.telegram.org/bots/api#richtextcode)
+// RichTextCustomEmoji (https://core.telegram.org/bots/api#richtextcustomemoji)
+// RichTextMathematicalExpression (https://core.telegram.org/bots/api#richtextmathematicalexpression)
+// RichTextURL (https://core.telegram.org/bots/api#richtexturl)
+// RichTextEmailAddress (https://core.telegram.org/bots/api#richtextemailaddress)
+// RichTextPhoneNumber (https://core.telegram.org/bots/api#richtextphonenumber)
+// RichTextBankCardNumber (https://core.telegram.org/bots/api#richtextbankcardnumber)
+// RichTextMention (https://core.telegram.org/bots/api#richtextmention)
+// RichTextHashtag (https://core.telegram.org/bots/api#richtexthashtag)
+// RichTextCashtag (https://core.telegram.org/bots/api#richtextcashtag)
+// RichTextBotCommand (https://core.telegram.org/bots/api#richtextbotcommand)
+// RichTextAnchor (https://core.telegram.org/bots/api#richtextanchor)
+// RichTextAnchorLink (https://core.telegram.org/bots/api#richtextanchorlink)
+// RichTextReference (https://core.telegram.org/bots/api#richtextreference)
+// RichTextReferenceLink (https://core.telegram.org/bots/api#richtextreferencelink)
+type RichText interface {
+	// TextType return RichText type
+	TextType() string
+	// Disallow external implementations
+	iRichText()
+}
+
+// TODO: RichText can be string, []RichText or any of types RichText...
+
+// RichTextBold - A bold text.
+type RichTextBold struct {
+	// Type - Type of the rich text, always “bold”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextItalic - An italicized text.
+type RichTextItalic struct {
+	// Type - Type of the rich text, always “italic”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextUnderline - An underlined text.
+type RichTextUnderline struct {
+	// Type - Type of the rich text, always “underline”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextStrikethrough - A strikethrough text.
+type RichTextStrikethrough struct {
+	// Type - Type of the rich text, always “strikethrough”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextSpoiler - A text covered by a spoiler.
+type RichTextSpoiler struct {
+	// Type - Type of the rich text, always “spoiler”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextDateTime - Formatted date and time.
+type RichTextDateTime struct {
+	// Type - Type of the rich text, always “date_time”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// UnixTime - The Unix time associated with the entity
+	UnixTime int64 `json:"unix_time"`
+
+	// DateTimeFormat - The string that defines the formatting of the date and time. See date-time entity
+	// formatting (https://core.telegram.org/bots/api#date-time-entity-formatting) for more details.
+	DateTimeFormat string `json:"date_time_format"`
+}
+
+// RichTextTextMention - A mention of a Telegram user by their identifier.
+type RichTextTextMention struct {
+	// Type - Type of the rich text, always “text_mention”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// User - The mentioned user
+	User User `json:"user"`
+}
+
+// RichTextSubscript - A subscript text.
+type RichTextSubscript struct {
+	// Type - Type of the rich text, always “subscript”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextSuperscript - A superscript text.
+type RichTextSuperscript struct {
+	// Type - Type of the rich text, always “superscript”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextMarked - A marked text.
+type RichTextMarked struct {
+	// Type - Type of the rich text, always “marked”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextCode - A monowidth text.
+type RichTextCode struct {
+	// Type - Type of the rich text, always “code”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+}
+
+// RichTextCustomEmoji - A custom emoji.
+type RichTextCustomEmoji struct {
+	// Type - Type of the rich text, always “custom_emoji”
+	Type string `json:"type"`
+
+	// CustomEmojiID - Unique identifier of the custom emoji. Use getCustomEmojiStickers
+	// (https://core.telegram.org/bots/api#getcustomemojistickers) to get full information about the sticker.
+	CustomEmojiID string `json:"custom_emoji_id"`
+
+	// AlternativeText - Alternative emoji for the custom emoji
+	AlternativeText string `json:"alternative_text"`
+}
+
+// RichTextMathematicalExpression - A mathematical expression.
+type RichTextMathematicalExpression struct {
+	// Type - Type of the rich text, always “mathematical_expression”
+	Type string `json:"type"`
+
+	// Expression - The expression in LaTeX format
+	Expression string `json:"expression"`
+}
+
+// RichTextURL - A text with a link.
+type RichTextURL struct {
+	// Type - Type of the rich text, always “url”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// URL - URL of the link
+	URL string `json:"url"`
+}
+
+// RichTextEmailAddress - A text with an email address.
+type RichTextEmailAddress struct {
+	// Type - Type of the rich text, always “email_address”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// EmailAddress - The email address
+	EmailAddress string `json:"email_address"`
+}
+
+// RichTextPhoneNumber - A text with a phone number.
+type RichTextPhoneNumber struct {
+	// Type - Type of the rich text, always “phone_number”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// PhoneNumber - The phone number
+	PhoneNumber string `json:"phone_number"`
+}
+
+// RichTextBankCardNumber - A text with a bank card number.
+type RichTextBankCardNumber struct {
+	// Type - Type of the rich text, always “bank_card_number”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// BankCardNumber - The bank card number
+	BankCardNumber string `json:"bank_card_number"`
+}
+
+// RichTextMention - A mention by a username.
+type RichTextMention struct {
+	// Type - Type of the rich text, always “mention”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// Username - The username
+	Username string `json:"username"`
+}
+
+// RichTextHashtag - A hashtag.
+type RichTextHashtag struct {
+	// Type - Type of the rich text, always “hashtag”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// Hashtag - The hashtag
+	Hashtag string `json:"hashtag"`
+}
+
+// RichTextCashtag - A cashtag.
+type RichTextCashtag struct {
+	// Type - Type of the rich text, always “cashtag”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// Cashtag - The cashtag
+	Cashtag string `json:"cashtag"`
+}
+
+// RichTextBotCommand - A bot command.
+type RichTextBotCommand struct {
+	// Type - Type of the rich text, always “bot_command”
+	Type string `json:"type"`
+
+	// Text - The text
+	Text RichText `json:"text"`
+
+	// BotCommand - The bot command
+	BotCommand string `json:"bot_command"`
+}
+
+// RichTextAnchor - An anchor.
+type RichTextAnchor struct {
+	// Type - Type of the rich text, always “anchor”
+	Type string `json:"type"`
+
+	// Name - The name of the anchor
+	Name string `json:"name"`
+}
+
+// RichTextAnchorLink - A link to an anchor.
+type RichTextAnchorLink struct {
+	// Type - Type of the rich text, always “anchor_link”
+	Type string `json:"type"`
+
+	// Text - The link text
+	Text RichText `json:"text"`
+
+	// AnchorName - The name of the anchor. If the name is empty, then the link brings back to the top of the
+	// message.
+	AnchorName string `json:"anchor_name"`
+}
+
+// RichTextReference - A reference.
+type RichTextReference struct {
+	// Type - Type of the rich text, always “reference”
+	Type string `json:"type"`
+
+	// Text - Text of the reference
+	Text RichText `json:"text"`
+
+	// Name - The name of the reference
+	Name string `json:"name"`
+}
+
+// RichTextReferenceLink - A link to a reference.
+type RichTextReferenceLink struct {
+	// Type - Type of the rich text, always “reference_link”
+	Type string `json:"type"`
+
+	// Text - The link text
+	Text RichText `json:"text"`
+
+	// ReferenceName - The name of the reference
+	ReferenceName string `json:"reference_name"`
+}
+
+// RichBlockCaption - Caption of a rich formatted block.
+type RichBlockCaption struct {
+	// Text - Block caption
+	Text RichText `json:"text"`
+
+	// Credit - Optional. Block credit which corresponds to the HTML tag <cite>
+	Credit *RichText `json:"credit,omitempty"`
+}
+
+// RichBlockTableCell - Cell in a table.
+type RichBlockTableCell struct {
+	// Text - Optional. Text in the cell. If omitted, then the cell is invisible.
+	Text *RichText `json:"text,omitempty"`
+
+	// IsHeader - Optional. True, if the cell is a header cell
+	IsHeader bool `json:"is_header,omitempty"`
+
+	// Colspan - Optional. The number of columns the cell spans if it is bigger than 1
+	Colspan int `json:"colspan,omitempty"`
+
+	// Rowspan - Optional. The number of rows the cell spans if it is bigger than 1
+	Rowspan int `json:"rowspan,omitempty"`
+
+	// Align - Horizontal cell content alignment. Currently, must be one of “left”, “center”, or
+	// “right”.
+	Align string `json:"align"`
+
+	// Valign - Vertical cell content alignment. Currently, must be one of “top”, “middle”, or
+	// “bottom”.
+	Valign string `json:"valign"`
+}
+
+// RichBlockListItem - An item of a list.
+type RichBlockListItem struct {
+	// Label - Label of the item
+	Label string `json:"label"`
+
+	// Blocks - The content of the item
+	Blocks []RichBlock `json:"blocks"`
+
+	// HasCheckbox - Optional. True, if the item has a checkbox
+	HasCheckbox bool `json:"has_checkbox,omitempty"`
+
+	// IsChecked - Optional. True, if the item has a checked checkbox
+	IsChecked bool `json:"is_checked,omitempty"`
+
+	// Value - Optional. For ordered lists, the numeric value of the item label
+	Value int `json:"value,omitempty"`
+
+	// Type - Optional. For ordered lists, the type of the item label; must be one of “a” for lowercase
+	// letters, “A” for uppercase letters, “i” for lowercase Roman numerals, “I” for uppercase Roman
+	// numerals, or “1” for decimal numbers
+	Type string `json:"type,omitempty"`
+}
+
+// RichBlock - This object represents a block in a rich formatted message. Currently, it can be any of the
+// following types:
+// RichBlockParagraph (https://core.telegram.org/bots/api#richblockparagraph)
+// RichBlockSectionHeading (https://core.telegram.org/bots/api#richblocksectionheading)
+// RichBlockPreformatted (https://core.telegram.org/bots/api#richblockpreformatted)
+// RichBlockFooter (https://core.telegram.org/bots/api#richblockfooter)
+// RichBlockDivider (https://core.telegram.org/bots/api#richblockdivider)
+// RichBlockMathematicalExpression (https://core.telegram.org/bots/api#richblockmathematicalexpression)
+// RichBlockAnchor (https://core.telegram.org/bots/api#richblockanchor)
+// RichBlockList (https://core.telegram.org/bots/api#richblocklist)
+// RichBlockBlockQuotation (https://core.telegram.org/bots/api#richblockblockquotation)
+// RichBlockPullQuotation (https://core.telegram.org/bots/api#richblockpullquotation)
+// RichBlockCollage (https://core.telegram.org/bots/api#richblockcollage)
+// RichBlockSlideshow (https://core.telegram.org/bots/api#richblockslideshow)
+// RichBlockTable (https://core.telegram.org/bots/api#richblocktable)
+// RichBlockDetails (https://core.telegram.org/bots/api#richblockdetails)
+// RichBlockMap (https://core.telegram.org/bots/api#richblockmap)
+// RichBlockAnimation (https://core.telegram.org/bots/api#richblockanimation)
+// RichBlockAudio (https://core.telegram.org/bots/api#richblockaudio)
+// RichBlockPhoto (https://core.telegram.org/bots/api#richblockphoto)
+// RichBlockVideo (https://core.telegram.org/bots/api#richblockvideo)
+// RichBlockVoiceNote (https://core.telegram.org/bots/api#richblockvoicenote)
+// RichBlockThinking (https://core.telegram.org/bots/api#richblockthinking)
+type RichBlock interface {
+	// BlockType return RichBlock type
+	BlockType() string
+	// Disallow external implementations
+	iRichBlock()
+}
+
+// TODO: RichBlock can be any of types RichBlock...
+
+// RichBlockParagraph - A text paragraph, corresponding to the HTML tag <p>.
+type RichBlockParagraph struct {
+	// Type - Type of the block, always “paragraph”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+}
+
+// RichBlockSectionHeading - A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>,
+// or <h6>.
+type RichBlockSectionHeading struct {
+	// Type - Type of the block, always “heading”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+
+	// Size - Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest
+	Size int `json:"size"`
+}
+
+// RichBlockPreformatted - A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
+type RichBlockPreformatted struct {
+	// Type - Type of the block, always “pre”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+
+	// Language - Optional. The programming language of the text
+	Language string `json:"language,omitempty"`
+}
+
+// RichBlockFooter - A footer, corresponding to the HTML tag <footer>.
+type RichBlockFooter struct {
+	// Type - Type of the block, always “footer”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+}
+
+// RichBlockDivider - A divider, corresponding to the HTML tag <hr/>.
+type RichBlockDivider struct {
+	// Type - Type of the block, always “divider”
+	Type string `json:"type"`
+}
+
+// RichBlockMathematicalExpression - A block with a mathematical expression in LaTeX format, corresponding to
+// the custom HTML tag <tg-math-block>.
+type RichBlockMathematicalExpression struct {
+	// Type - Type of the block, always “mathematical_expression”
+	Type string `json:"type"`
+
+	// Expression - The mathematical expression in LaTeX format
+	Expression string `json:"expression"`
+}
+
+// RichBlockAnchor - A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
+type RichBlockAnchor struct {
+	// Type - Type of the block, always “anchor”
+	Type string `json:"type"`
+
+	// Name - The name of the anchor
+	Name string `json:"name"`
+}
+
+// RichBlockList - A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested tags
+// <li>.
+type RichBlockList struct {
+	// Type - Type of the block, always “list”
+	Type string `json:"type"`
+
+	// Items - Items of the list
+	Items []RichBlockListItem `json:"items"`
+}
+
+// RichBlockBlockQuotation - A block quotation, corresponding to the HTML tag <blockquote>.
+type RichBlockBlockQuotation struct {
+	// Type - Type of the block, always “blockquote”
+	Type string `json:"type"`
+
+	// Blocks - Content of the block
+	Blocks []RichBlock `json:"blocks"`
+
+	// Credit - Optional. Credit of the block
+	Credit *RichText `json:"credit,omitempty"`
+}
+
+// RichBlockPullQuotation - A quotation with centered text, loosely corresponding to the HTML tag <aside>.
+type RichBlockPullQuotation struct {
+	// Type - Type of the block, always “pullquote”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+
+	// Credit - Optional. Credit of the block
+	Credit *RichText `json:"credit,omitempty"`
+}
+
+// RichBlockCollage - A collage, corresponding to the custom HTML tag <tg-collage>.
+type RichBlockCollage struct {
+	// Type - Type of the block, always “collage”
+	Type string `json:"type"`
+
+	// Blocks - Elements of the collage
+	Blocks []RichBlock `json:"blocks"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockSlideshow - A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
+type RichBlockSlideshow struct {
+	// Type - Type of the block, always “slideshow”
+	Type string `json:"type"`
+
+	// Blocks - Elements of the slideshow
+	Blocks []RichBlock `json:"blocks"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockTable - A table, corresponding to the HTML tag <table>.
+type RichBlockTable struct {
+	// Type - Type of the block, always “table”
+	Type string `json:"type"`
+
+	// Cells - Cells of the table
+	Cells [][]RichBlockTableCell `json:"cells"`
+
+	// IsBordered - Optional. True, if the table has borders
+	IsBordered bool `json:"is_bordered,omitempty"`
+
+	// IsStriped - Optional. True, if the table is striped
+	IsStriped bool `json:"is_striped,omitempty"`
+
+	// Caption - Optional. Caption of the table
+	Caption *RichText `json:"caption,omitempty"`
+}
+
+// RichBlockDetails - An expandable block for details disclosure, corresponding to the HTML tag <details>.
+type RichBlockDetails struct {
+	// Type - Type of the block, always “details”
+	Type string `json:"type"`
+
+	// Summary - Always shown summary of the block
+	Summary RichText `json:"summary"`
+
+	// Blocks - Content of the block
+	Blocks []RichBlock `json:"blocks"`
+
+	// IsOpen - Optional. True, if the content of the block is visible by default
+	IsOpen bool `json:"is_open,omitempty"`
+}
+
+// RichBlockMap - A block with a map, corresponding to the custom HTML tag <tg-map>.
+type RichBlockMap struct {
+	// Type - Type of the block, always “map”
+	Type string `json:"type"`
+
+	// Location - Location of the center of the map
+	Location Location `json:"location"`
+
+	// Zoom - Map zoom level; 13-20
+	Zoom int `json:"zoom"`
+
+	// Width - Expected width of the map
+	Width int `json:"width"`
+
+	// Height - Expected height of the map
+	Height int `json:"height"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockAnimation - A block with an animation, corresponding to the HTML tag <video>.
+type RichBlockAnimation struct {
+	// Type - Type of the block, always “animation”
+	Type string `json:"type"`
+
+	// Animation - The animation
+	Animation Animation `json:"animation"`
+
+	// HasSpoiler - Optional. True, if the media preview is covered by a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockAudio - A block with a music file, corresponding to the HTML tag <audio>.
+type RichBlockAudio struct {
+	// Type - Type of the block, always “audio”
+	Type string `json:"type"`
+
+	// Audio - The audio
+	Audio Audio `json:"audio"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockPhoto - A block with a photo, corresponding to the HTML tag <photo>.
+type RichBlockPhoto struct {
+	// Type - Type of the block, always “photo”
+	Type string `json:"type"`
+
+	// Photo - Available sizes of the photo
+	Photo []PhotoSize `json:"photo"`
+
+	// HasSpoiler - Optional. True, if the media preview is covered by a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockVideo - A block with a video, corresponding to the HTML tag <video>.
+type RichBlockVideo struct {
+	// Type - Type of the block, always “video”
+	Type string `json:"type"`
+
+	// Video - The video
+	Video Video `json:"video"`
+
+	// HasSpoiler - Optional. True, if the media preview is covered by a spoiler animation
+	HasSpoiler bool `json:"has_spoiler,omitempty"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockVoiceNote - A block with a voice note, corresponding to the HTML tag <audio>.
+type RichBlockVoiceNote struct {
+	// Type - Type of the block, always “voice_note”
+	Type string `json:"type"`
+
+	// VoiceNote - The voice note
+	VoiceNote Voice `json:"voice_note"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// RichBlockThinking - A block with a “Thinking…” placeholder, corresponding to the custom HTML tag
+// <tg-thinking>. The block may be used only in sendRichMessageDraft
+// (https://core.telegram.org/bots/api#sendrichmessagedraft), therefore it can't be received in messages. See
+// https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for examples of custom emoji, which are
+// recommended for usage in the block.
+type RichBlockThinking struct {
+	// Type - Type of the block, always “thinking”
+	Type string `json:"type"`
+
+	// Text - Text of the block. See https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for
+	// examples of custom emoji, which are recommended for usage in the block.
+	Text RichText `json:"text"`
+}
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.
@@ -7984,8 +8719,9 @@ func (i *InlineQueryResultCachedAudio) ResultType() string {
 func (i *InlineQueryResultCachedAudio) iInlineQueryResult() {}
 
 // InputMessageContent - This object represents the content of a message to be sent as a result of an inline
-// query. Telegram clients currently support the following 5 types:
+// query. Telegram clients currently support the following types:
 // InputTextMessageContent (https://core.telegram.org/bots/api#inputtextmessagecontent)
+// InputRichMessageContent (https://core.telegram.org/bots/api#inputrichmessagecontent)
 // InputLocationMessageContent (https://core.telegram.org/bots/api#inputlocationmessagecontent)
 // InputVenueMessageContent (https://core.telegram.org/bots/api#inputvenuemessagecontent)
 // InputContactMessageContent (https://core.telegram.org/bots/api#inputcontactmessagecontent)
@@ -8000,6 +8736,7 @@ type InputMessageContent interface {
 // InputMessageContent types
 const (
 	ContentTypeText     = "InputTextMessage"
+	ContentTypeRich     = "InputRichMessage"
 	ContentTypeLocation = "InputLocationMessage"
 	ContentTypeVenue    = "InputVenueMessage"
 	ContentTypeContact  = "InputContactMessage"
@@ -8030,6 +8767,20 @@ func (i *InputTextMessageContent) ContentType() string {
 }
 
 func (i *InputTextMessageContent) iInputMessageContent() {}
+
+// InputRichMessageContent - Represents the content (https://core.telegram.org/bots/api#inputmessagecontent)
+// of a rich message to be sent as the result of an inline query.
+type InputRichMessageContent struct {
+	// RichMessage - The message to be sent
+	RichMessage InputRichMessage `json:"rich_message"`
+}
+
+// ContentType returns InputMessageContent type
+func (i *InputRichMessageContent) ContentType() string {
+	return ContentTypeRich
+}
+
+func (i *InputRichMessageContent) iInputMessageContent() {}
 
 // InputLocationMessageContent - Represents the content
 // (https://core.telegram.org/bots/api#inputmessagecontent) of a location message to be sent as the result of an
