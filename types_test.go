@@ -1864,3 +1864,1336 @@ func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+//nolint:lll
+func Test_Message_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		json    string
+		data    *Message
+		isError bool
+	}{
+		{
+			name: "success_rich_text",
+			json: `
+{
+    "message_id": 568,
+    "from": {
+        "id": 1,
+        "is_bot": false,
+        "first_name": "A",
+        "last_name": "B",
+        "username": "C",
+        "language_code": "en"
+    },
+    "date": 1781429550,
+    "chat": {
+        "id": 1,
+        "type": "private",
+        "username": "C",
+        "first_name": "A",
+        "last_name": "B"
+    },
+    "forward_origin": {
+        "type": "user",
+        "date": 1781292642,
+        "sender_user": {
+            "id": 8886479340,
+            "is_bot": true,
+            "first_name": "Rich Text Demo",
+            "username": "richtextdemobot"
+        }
+    },
+    "rich_message": {
+        "blocks": [
+            {
+                "type": "anchor",
+                "name": "top"
+            },
+            {
+                "type": "heading",
+                "text": "All Types Demo",
+                "size": 1
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    "Jump to ",
+                    {
+                        "type": "anchor_link",
+                        "text": "text",
+                        "anchor_name": "text"
+                    },
+                    " | ",
+                    {
+                        "type": "anchor_link",
+                        "text": "structure",
+                        "anchor_name": "structure"
+                    },
+                    " | ",
+                    {
+                        "type": "anchor_link",
+                        "text": "media",
+                        "anchor_name": "media"
+                    },
+                    " | ",
+                    {
+                        "type": "anchor_link",
+                        "text": "advanced",
+                        "anchor_name": "advanced"
+                    }
+                ]
+            },
+            {
+                "type": "anchor",
+                "name": "text"
+            },
+            {
+                "type": "heading",
+                "text": "Text Formatting",
+                "size": 2
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    "I want to see ",
+                    {
+                        "type": "bold",
+                        "text": "mountains"
+                    },
+                    " again, Gandalf ",
+                    {
+                        "type": "italic",
+                        "text": "You talking to me?"
+                    },
+                    " It's alive! ",
+                    {
+                        "type": "underline",
+                        "text": "It's alive!"
+                    },
+                    " One, two, ",
+                    {
+                        "type": "strikethrough",
+                        "text": "five!"
+                    },
+                    ", three! The name's Bond. ",
+                    {
+                        "type": "spoiler",
+                        "text": "James Bond"
+                    },
+                    " You're a ",
+                    {
+                        "type": "marked",
+                        "text": "wizard"
+                    },
+                    ", Harry ",
+                    {
+                        "type": "code",
+                        "text": "I'm sorry, Dave."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "text": {
+                    "type": "reference",
+                    "text": "I understood that reference",
+                    "name": "note1"
+                }
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    "Show any emotion with custom emoji ",
+                    {
+                        "type": "custom_emoji",
+                        "custom_emoji_id": "5208541126583136130",
+                        "alternative_text": "🎉"
+                    },
+                    {
+                        "type": "custom_emoji",
+                        "custom_emoji_id": "5384182985224374928",
+                        "alternative_text": "🧐"
+                    },
+                    {
+                        "type": "custom_emoji",
+                        "custom_emoji_id": "6052851174929860280",
+                        "alternative_text": "😓"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    "Solve for ",
+                    {
+                        "type": "mathematical_expression",
+                        "expression": "x"
+                    },
+                    " and other variables ",
+                    {
+                        "type": "mathematical_expression",
+                        "expression": "E = mc^2"
+                    },
+                    ", ",
+                    {
+                        "type": "mathematical_expression",
+                        "expression": "a^2 + b^2 = c^2"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    "Keep track of important dates ",
+                    {
+                        "type": "date_time",
+                        "text": "Aug 13, 2013",
+                        "unix_time": 1735689600,
+                        "date_time_format": "D"
+                    }
+                ]
+            },
+            {
+                "type": "anchor",
+                "name": "structure"
+            },
+            {
+                "type": "heading",
+                "text": "Structure",
+                "size": 2
+            },
+            {
+                "type": "blockquote",
+                "blocks": [
+                    {
+                        "type": "paragraph",
+                        "text": "That's what she said"
+                    }
+                ]
+            },
+            {
+                "type": "blockquote",
+                "blocks": [
+                    {
+                        "type": "paragraph",
+                        "text": [
+                            "Also available in multiple lines With ",
+                            {
+                                "type": "bold",
+                                "text": "formatting"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "paragraph",
+                        "text": "for useful context, and not just jokes"
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "items": [
+                    {
+                        "label": "•",
+                        "blocks": [
+                            {
+                                "type": "paragraph",
+                                "text": "To the point"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "•",
+                        "blocks": [
+                            {
+                                "type": "paragraph",
+                                "text": "Mission Accomplished"
+                            }
+                        ],
+                        "has_checkbox": true,
+                        "is_checked": true
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "items": [
+                    {
+                        "label": "1.",
+                        "blocks": [
+                            {
+                                "type": "paragraph",
+                                "text": "Step 1"
+                            }
+                        ],
+                        "value": 1,
+                        "type": "1"
+                    },
+                    {
+                        "label": "2.",
+                        "blocks": [
+                            {
+                                "type": "paragraph",
+                                "text": "Step 2"
+                            }
+                        ],
+                        "value": 2,
+                        "type": "1"
+                    },
+                    {
+                        "label": "3.",
+                        "blocks": [
+                            {
+                                "type": "paragraph",
+                                "text": "???"
+                            }
+                        ],
+                        "value": 3,
+                        "type": "1"
+                    },
+                    {
+                        "label": "4.",
+                        "blocks": [
+                            {
+                                "type": "paragraph",
+                                "text": "Profit"
+                            }
+                        ],
+                        "value": 4,
+                        "type": "1"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "text": "Communicate with the machines"
+            },
+            {
+                "type": "pre",
+                "text": "echo \"hello\";",
+                "language": "php"
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "details",
+                "summary": "Show me more",
+                "blocks": [
+                    {
+                        "type": "paragraph",
+                        "text": "Oh, you actually opened this section. I guess I should've thought of something clever to put here but I didn't think you'd actually do it."
+                    }
+                ]
+            },
+            {
+                "type": "anchor",
+                "name": "media"
+            },
+            {
+                "type": "heading",
+                "text": "Media",
+                "size": 2
+            },
+            {
+                "type": "photo",
+                "photo": [
+                    {
+                        "file_id": "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADcwADPAQ",
+                        "file_unique_id": "AQADiw5rGziAWEV4",
+                        "width": 90,
+                        "height": 90,
+                        "file_size": 1842
+                    },
+                    {
+                        "file_id": "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADbQADPAQ",
+                        "file_unique_id": "AQADiw5rGziAWEVy",
+                        "width": 320,
+                        "height": 320,
+                        "file_size": 28310
+                    },
+                    {
+                        "file_id": "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADeAADPAQ",
+                        "file_unique_id": "AQADiw5rGziAWEV9",
+                        "width": 800,
+                        "height": 800,
+                        "file_size": 140648
+                    },
+                    {
+                        "file_id": "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADeQADPAQ",
+                        "file_unique_id": "AQADiw5rGziAWEV-",
+                        "width": 1024,
+                        "height": 1024,
+                        "file_size": 195428
+                    }
+                ]
+            },
+            {
+                "type": "video",
+                "video": {
+                    "file_id": "BAACAgEAAxUAAWoudS66mV3Q_3p10EoaSjkwU3QeAAKTBQACOIBYRcgXAAHZYA8vPTwE",
+                    "file_unique_id": "AgADkwUAAjiAWEU",
+                    "width": 1088,
+                    "height": 1088,
+                    "duration": 6,
+                    "thumbnail": {
+                        "file_id": "AAMCAQADFQABai51LrqZXdD_enXQShpKOTBTdB4AApMFAAI4gFhFyBcAAdlgDy89AQAHbQADPAQ",
+                        "file_unique_id": "AQADkwUAAjiAWEVy",
+                        "width": 320,
+                        "height": 320,
+                        "file_size": 24168
+                    },
+                    "file_name": "dubaiVideo.mp4",
+                    "mime_type": "video/mp4",
+                    "file_size": 5045080
+                }
+            },
+            {
+                "type": "audio",
+                "audio": {
+                    "file_id": "CQACAgEAAxUAAWoudS5SVRzsS6c0eGqZh1j9SQq_AAKNBQACOIBYRbYY6PeTTClJPAQ",
+                    "file_unique_id": "AgADjQUAAjiAWEU",
+                    "duration": 224,
+                    "performer": "alphavano",
+                    "title": "Neon Rain Train",
+                    "file_name": "Neon Rain Train.mp3",
+                    "mime_type": "audio/mpeg",
+                    "file_size": 5328656,
+                    "thumbnail": {
+                        "file_id": "AAMCAQADFQABai51LlJVHOxLpzR4apmHWP1JCr8AAo0FAAI4gFhFthjo95NMKUkBAAdtAAM8BA",
+                        "file_unique_id": "AQADjQUAAjiAWEVy",
+                        "width": 320,
+                        "height": 320,
+                        "file_size": 26468
+                    }
+                }
+            },
+            {
+                "type": "collage",
+                "blocks": [
+                    {
+                        "type": "photo",
+                        "photo": [
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADcwADPAQ",
+                                "file_unique_id": "AQADiA5rGziAWEV4",
+                                "width": 90,
+                                "height": 48,
+                                "file_size": 1359
+                            },
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADbQADPAQ",
+                                "file_unique_id": "AQADiA5rGziAWEVy",
+                                "width": 320,
+                                "height": 169,
+                                "file_size": 25622
+                            },
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADeAADPAQ",
+                                "file_unique_id": "AQADiA5rGziAWEV9",
+                                "width": 800,
+                                "height": 422,
+                                "file_size": 122928
+                            },
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADeQADPAQ",
+                                "file_unique_id": "AQADiA5rGziAWEV-",
+                                "width": 1100,
+                                "height": 580,
+                                "file_size": 176934
+                            }
+                        ]
+                    },
+                    {
+                        "type": "photo",
+                        "photo": [
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA3MAAzwE",
+                                "file_unique_id": "AQADhg5rGziAWEV4",
+                                "width": 90,
+                                "height": 60,
+                                "file_size": 1851
+                            },
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA20AAzwE",
+                                "file_unique_id": "AQADhg5rGziAWEVy",
+                                "width": 320,
+                                "height": 213,
+                                "file_size": 31488
+                            },
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA3gAAzwE",
+                                "file_unique_id": "AQADhg5rGziAWEV9",
+                                "width": 800,
+                                "height": 533,
+                                "file_size": 140763
+                            },
+                            {
+                                "file_id": "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA3kAAzwE",
+                                "file_unique_id": "AQADhg5rGziAWEV-",
+                                "width": 1170,
+                                "height": 780,
+                                "file_size": 222750
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "map",
+                "location": {
+                    "latitude": 25.195949,
+                    "longitude": 55.273412
+                },
+                "zoom": 15,
+                "width": 400,
+                "height": 200,
+                "caption": {
+                    "text": "Where are we?"
+                }
+            },
+            {
+                "type": "anchor",
+                "name": "advanced"
+            },
+            {
+                "type": "heading",
+                "text": "Advanced",
+                "size": 2
+            },
+            {
+                "type": "table",
+                "cells": [
+                    [
+                        {
+                            "text": "Type",
+                            "is_header": true,
+                            "align": "center",
+                            "valign": "middle"
+                        },
+                        {
+                            "text": "Supported",
+                            "is_header": true,
+                            "align": "center",
+                            "valign": "middle"
+                        },
+                        {
+                            "text": "Composition",
+                            "is_header": true,
+                            "align": "center",
+                            "valign": "middle"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Table",
+                            "align": "left",
+                            "valign": "middle"
+                        },
+                        {
+                            "text": {
+                                "type": "bold",
+                                "text": "Yes"
+                            },
+                            "align": "left",
+                            "valign": "middle"
+                        },
+                        {
+                            "text": "100% text",
+                            "align": "left",
+                            "valign": "middle"
+                        }
+                    ]
+                ],
+                "is_bordered": true,
+                "is_striped": true
+            },
+            {
+                "type": "paragraph",
+                "text": "I don't know what this is but apparently it's also math 👇"
+            },
+            {
+                "type": "mathematical_expression",
+                "expression": "\\sum_{i=1}^n i = \\frac{n(n+1)}{2}"
+            },
+            {
+                "type": "pullquote",
+                "text": "To be truly free, you should be ready to risk everything for freedom.",
+                "credit": "Pavel Durov"
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    "Make sure to always cite your sources",
+                    {
+                        "type": "superscript",
+                        "text": [
+                            {
+                                "type": "anchor",
+                                "name": "fnref-1-1"
+                            },
+                            {
+                                "type": "reference_link",
+                                "text": "1",
+                                "reference_name": "fn-1"
+                            }
+                        ]
+                    },
+                    "."
+                ]
+            },
+            {
+                "type": "paragraph",
+                "text": [
+                    {
+                        "type": "url",
+                        "text": "Link",
+                        "url": "https://youtu.be/dQw4w9WgXcQ"
+                    },
+                    " · ",
+                    {
+                        "type": "email_address",
+                        "text": "Email",
+                        "email_address": "user@example.com"
+                    },
+                    " · ",
+                    {
+                        "type": "text_mention",
+                        "text": "User Mention",
+                        "user": {
+                            "id": 777000,
+                            "is_bot": false,
+                            "first_name": "Telegram"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "footer",
+                "text": [
+                    "1. ",
+                    {
+                        "type": "reference",
+                        "text": "Source: me, because I said so.",
+                        "name": "fn-1"
+                    },
+                    " ",
+                    {
+                        "type": "anchor_link",
+                        "text": "↩",
+                        "anchor_name": "fnref-1-1"
+                    }
+                ]
+            }
+        ]
+    }
+}
+`,
+			data: &Message{
+				MessageID: 568,
+				From: &User{
+					ID:           1,
+					FirstName:    "A",
+					LastName:     "B",
+					Username:     "C",
+					LanguageCode: "en",
+				},
+				Date: 1781429550,
+				Chat: Chat{
+					ID:               1,
+					Type:             "private",
+					Title:            "",
+					Username:         "C",
+					FirstName:        "A",
+					LastName:         "B",
+					IsForum:          false,
+					IsDirectMessages: false,
+				},
+				ForwardOrigin: &MessageOriginUser{
+					Type: "user",
+					Date: 1781292642,
+					SenderUser: User{
+						ID:        8886479340,
+						IsBot:     true,
+						FirstName: "Rich Text Demo",
+						Username:  "richtextdemobot",
+					},
+				},
+				RichMessage: &RichMessage{
+					Blocks: []RichBlock{
+						&RichBlockAnchor{
+							Type: "anchor",
+							Name: "top",
+						},
+						&RichBlockSectionHeading{
+							Type: "heading",
+							Text: ToPtr(RichTextPlain("All Types Demo")),
+							Size: 1,
+						},
+						&RichBlockDivider{
+							Type: "divider",
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("Jump to ")),
+								&RichTextAnchorLink{
+									Type:       "anchor_link",
+									Text:       ToPtr(RichTextPlain("text")),
+									AnchorName: "text",
+								},
+								ToPtr(RichTextPlain(" | ")),
+								&RichTextAnchorLink{
+									Type:       "anchor_link",
+									Text:       ToPtr(RichTextPlain("structure")),
+									AnchorName: "structure",
+								},
+								ToPtr(RichTextPlain(" | ")),
+								&RichTextAnchorLink{
+									Type:       "anchor_link",
+									Text:       ToPtr(RichTextPlain("media")),
+									AnchorName: "media",
+								},
+								ToPtr(RichTextPlain(" | ")),
+								&RichTextAnchorLink{
+									Type:       "anchor_link",
+									Text:       ToPtr(RichTextPlain("advanced")),
+									AnchorName: "advanced",
+								},
+							},
+						},
+						&RichBlockAnchor{
+							Type: "anchor",
+							Name: "text",
+						},
+						&RichBlockSectionHeading{
+							Type: "heading",
+							Text: ToPtr(RichTextPlain("Text Formatting")),
+							Size: 2,
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("I want to see ")),
+								&RichTextBold{
+									Type: "bold",
+									Text: ToPtr(RichTextPlain("mountains")),
+								},
+								ToPtr(RichTextPlain(" again, Gandalf ")),
+								&RichTextItalic{
+									Type: "italic",
+									Text: ToPtr(RichTextPlain("You talking to me?")),
+								},
+								ToPtr(RichTextPlain(" It's alive! ")),
+								&RichTextUnderline{
+									Type: "underline",
+									Text: ToPtr(RichTextPlain("It's alive!")),
+								},
+								ToPtr(RichTextPlain(" One, two, ")),
+								&RichTextStrikethrough{
+									Type: "strikethrough",
+									Text: ToPtr(RichTextPlain("five!")),
+								},
+								ToPtr(RichTextPlain(", three! The name's Bond. ")),
+								&RichTextSpoiler{
+									Type: "spoiler",
+									Text: ToPtr(RichTextPlain("James Bond")),
+								},
+								ToPtr(RichTextPlain(" You're a ")),
+								&RichTextMarked{
+									Type: "marked",
+									Text: ToPtr(RichTextPlain("wizard")),
+								},
+								ToPtr(RichTextPlain(", Harry ")),
+								&RichTextCode{
+									Type: "code",
+									Text: ToPtr(RichTextPlain("I'm sorry, Dave.")),
+								},
+							},
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextReference{
+								Type: "reference",
+								Text: ToPtr(RichTextPlain("I understood that reference")),
+								Name: "note1",
+							},
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("Show any emotion with custom emoji ")),
+								&RichTextCustomEmoji{
+									Type:            "custom_emoji",
+									CustomEmojiID:   "5208541126583136130",
+									AlternativeText: "🎉",
+								},
+								&RichTextCustomEmoji{
+									Type:            "custom_emoji",
+									CustomEmojiID:   "5384182985224374928",
+									AlternativeText: "🧐",
+								},
+								&RichTextCustomEmoji{
+									Type:            "custom_emoji",
+									CustomEmojiID:   "6052851174929860280",
+									AlternativeText: "😓",
+								},
+							},
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("Solve for ")),
+								&RichTextMathematicalExpression{
+									Type:       "mathematical_expression",
+									Expression: "x",
+								},
+								ToPtr(RichTextPlain(" and other variables ")),
+								&RichTextMathematicalExpression{
+									Type:       "mathematical_expression",
+									Expression: "E = mc^2",
+								},
+								ToPtr(RichTextPlain(", ")),
+								&RichTextMathematicalExpression{
+									Type:       "mathematical_expression",
+									Expression: "a^2 + b^2 = c^2",
+								},
+							},
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("Keep track of important dates ")),
+								&RichTextDateTime{
+									Type:           "date_time",
+									Text:           ToPtr(RichTextPlain("Aug 13, 2013")),
+									UnixTime:       1735689600,
+									DateTimeFormat: "D",
+								},
+							},
+						},
+						&RichBlockAnchor{
+							Type: "anchor",
+							Name: "structure",
+						},
+						&RichBlockSectionHeading{
+							Type: "heading",
+							Text: ToPtr(RichTextPlain("Structure")),
+							Size: 2,
+						},
+						&RichBlockBlockQuotation{
+							Type: "blockquote",
+							Blocks: []RichBlock{
+								&RichBlockParagraph{
+									Type: "paragraph",
+									Text: ToPtr(RichTextPlain("That's what she said")),
+								},
+							},
+							Credit: nil,
+						},
+						&RichBlockBlockQuotation{
+							Type: "blockquote",
+							Blocks: []RichBlock{
+								&RichBlockParagraph{
+									Type: "paragraph",
+									Text: &RichTextList{
+										ToPtr(RichTextPlain("Also available in multiple lines With ")),
+										&RichTextBold{
+											Type: "bold",
+											Text: ToPtr(RichTextPlain("formatting")),
+										},
+									},
+								},
+								&RichBlockParagraph{
+									Type: "paragraph",
+									Text: ToPtr(RichTextPlain("for useful context, and not just jokes")),
+								},
+							},
+							Credit: nil,
+						},
+						&RichBlockList{
+							Type: "list",
+							Items: []RichBlockListItem{
+								{
+									Label: "•",
+									Blocks: []RichBlock{
+										&RichBlockParagraph{
+											Type: "paragraph",
+											Text: ToPtr(RichTextPlain("To the point")),
+										},
+									},
+									HasCheckbox: false,
+									IsChecked:   false,
+									Value:       0,
+									Type:        "",
+								},
+								{
+									Label: "•",
+									Blocks: []RichBlock{
+										&RichBlockParagraph{
+											Type: "paragraph",
+											Text: ToPtr(RichTextPlain("Mission Accomplished")),
+										},
+									},
+									HasCheckbox: true,
+									IsChecked:   true,
+									Value:       0,
+									Type:        "",
+								},
+							},
+						},
+						&RichBlockList{
+							Type: "list",
+							Items: []RichBlockListItem{
+								{
+									Label: "1.",
+									Blocks: []RichBlock{
+										&RichBlockParagraph{
+											Type: "paragraph",
+											Text: ToPtr(RichTextPlain("Step 1")),
+										},
+									},
+									HasCheckbox: false,
+									IsChecked:   false,
+									Value:       1,
+									Type:        "1",
+								},
+								{
+									Label: "2.",
+									Blocks: []RichBlock{
+										&RichBlockParagraph{
+											Type: "paragraph",
+											Text: ToPtr(RichTextPlain("Step 2")),
+										},
+									},
+									HasCheckbox: false,
+									IsChecked:   false,
+									Value:       2,
+									Type:        "1",
+								},
+								{
+									Label: "3.",
+									Blocks: []RichBlock{
+										&RichBlockParagraph{
+											Type: "paragraph",
+											Text: ToPtr(RichTextPlain("???")),
+										},
+									},
+									HasCheckbox: false,
+									IsChecked:   false,
+									Value:       3,
+									Type:        "1",
+								},
+								{
+									Label: "4.",
+									Blocks: []RichBlock{
+										&RichBlockParagraph{
+											Type: "paragraph",
+											Text: ToPtr(RichTextPlain("Profit")),
+										},
+									},
+									HasCheckbox: false,
+									IsChecked:   false,
+									Value:       4,
+									Type:        "1",
+								},
+							},
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: ToPtr(RichTextPlain("Communicate with the machines")),
+						},
+						&RichBlockPreformatted{
+							Type:     "pre",
+							Text:     ToPtr(RichTextPlain("echo \"hello\";")),
+							Language: "php",
+						},
+						&RichBlockDivider{
+							Type: "divider",
+						},
+						&RichBlockDetails{
+							Type:    "details",
+							Summary: ToPtr(RichTextPlain("Show me more")),
+							Blocks: []RichBlock{
+								&RichBlockParagraph{
+									Type: "paragraph",
+									Text: ToPtr(RichTextPlain("Oh, you actually opened this section. I guess I should've thought of something clever to put here but I didn't think you'd actually do it.")),
+								},
+							},
+							IsOpen: false,
+						},
+						&RichBlockAnchor{
+							Type: "anchor",
+							Name: "media",
+						},
+						&RichBlockSectionHeading{
+							Type: "heading",
+							Text: ToPtr(RichTextPlain("Media")),
+							Size: 2,
+						},
+						&RichBlockPhoto{
+							Type: "photo",
+							Photo: []PhotoSize{
+								{
+									FileID:       "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADcwADPAQ",
+									FileUniqueID: "AQADiw5rGziAWEV4",
+									Width:        90,
+									Height:       90,
+									FileSize:     1842,
+								},
+								{
+									FileID:       "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADbQADPAQ",
+									FileUniqueID: "AQADiw5rGziAWEVy",
+									Width:        320,
+									Height:       320,
+									FileSize:     28310,
+								},
+								{
+									FileID:       "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADeAADPAQ",
+									FileUniqueID: "AQADiw5rGziAWEV9",
+									Width:        800,
+									Height:       800,
+									FileSize:     140648,
+								},
+								{
+									FileID:       "AgACAgEAAxUAAWoudS4p50CO_voLJEmVF1xcPxFzAAKLDmsbOIBYRYg7EJIa7FX4AQADAgADeQADPAQ",
+									FileUniqueID: "AQADiw5rGziAWEV-",
+									Width:        1024,
+									Height:       1024,
+									FileSize:     195428,
+								},
+							},
+							HasSpoiler: false,
+							Caption:    (*RichBlockCaption)(nil),
+						},
+						&RichBlockVideo{
+							Type: "video",
+							Video: Video{
+								FileID:       "BAACAgEAAxUAAWoudS66mV3Q_3p10EoaSjkwU3QeAAKTBQACOIBYRcgXAAHZYA8vPTwE",
+								FileUniqueID: "AgADkwUAAjiAWEU",
+								Width:        1088,
+								Height:       1088,
+								Duration:     6,
+								Thumbnail: &PhotoSize{
+									FileID:       "AAMCAQADFQABai51LrqZXdD_enXQShpKOTBTdB4AApMFAAI4gFhFyBcAAdlgDy89AQAHbQADPAQ",
+									FileUniqueID: "AQADkwUAAjiAWEVy",
+									Width:        320,
+									Height:       320,
+									FileSize:     24168,
+								},
+								Cover:          []PhotoSize(nil),
+								StartTimestamp: 0,
+								Qualities:      []VideoQuality(nil),
+								FileName:       "dubaiVideo.mp4",
+								MimeType:       "video/mp4",
+								FileSize:       5045080,
+							},
+							HasSpoiler: false,
+							Caption:    (*RichBlockCaption)(nil),
+						},
+						&RichBlockAudio{
+							Type: "audio",
+							Audio: Audio{
+								FileID:       "CQACAgEAAxUAAWoudS5SVRzsS6c0eGqZh1j9SQq_AAKNBQACOIBYRbYY6PeTTClJPAQ",
+								FileUniqueID: "AgADjQUAAjiAWEU",
+								Duration:     224,
+								Performer:    "alphavano",
+								Title:        "Neon Rain Train",
+								FileName:     "Neon Rain Train.mp3",
+								MimeType:     "audio/mpeg",
+								FileSize:     5328656,
+								Thumbnail: &PhotoSize{
+									FileID:       "AAMCAQADFQABai51LlJVHOxLpzR4apmHWP1JCr8AAo0FAAI4gFhFthjo95NMKUkBAAdtAAM8BA",
+									FileUniqueID: "AQADjQUAAjiAWEVy",
+									Width:        320,
+									Height:       320,
+									FileSize:     26468,
+								},
+							},
+							Caption: (*RichBlockCaption)(nil),
+						},
+						&RichBlockCollage{
+							Type: "collage",
+							Blocks: []RichBlock{
+								&RichBlockPhoto{
+									Type: "photo",
+									Photo: []PhotoSize{
+										{
+											FileID:       "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADcwADPAQ",
+											FileUniqueID: "AQADiA5rGziAWEV4",
+											Width:        90,
+											Height:       48,
+											FileSize:     1359,
+										},
+										{
+											FileID:       "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADbQADPAQ",
+											FileUniqueID: "AQADiA5rGziAWEVy",
+											Width:        320,
+											Height:       169,
+											FileSize:     25622,
+										},
+										{
+											FileID:       "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADeAADPAQ",
+											FileUniqueID: "AQADiA5rGziAWEV9",
+											Width:        800,
+											Height:       422,
+											FileSize:     122928,
+										},
+										{
+											FileID:       "AgACAgEAAxUAAWoudS6Wk9IK8vQ_tDMCCGoPEg-oAAKIDmsbOIBYRYZeWkDKYjtCAQADAgADeQADPAQ",
+											FileUniqueID: "AQADiA5rGziAWEV-",
+											Width:        1100,
+											Height:       580,
+											FileSize:     176934,
+										},
+									},
+									HasSpoiler: false,
+									Caption:    (*RichBlockCaption)(nil),
+								},
+								&RichBlockPhoto{
+									Type: "photo",
+									Photo: []PhotoSize{
+										{
+											FileID:       "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA3MAAzwE",
+											FileUniqueID: "AQADhg5rGziAWEV4",
+											Width:        90,
+											Height:       60,
+											FileSize:     1851,
+										},
+										{
+											FileID:       "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA20AAzwE",
+											FileUniqueID: "AQADhg5rGziAWEVy",
+											Width:        320,
+											Height:       213,
+											FileSize:     31488,
+										},
+										{
+											FileID:       "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA3gAAzwE",
+											FileUniqueID: "AQADhg5rGziAWEV9",
+											Width:        800,
+											Height:       533,
+											FileSize:     140763,
+										},
+										{
+											FileID:       "AgACAgEAAxUAAWoudS51v4w_bPsXHwABPGxSEW6tPwAChg5rGziAWEVkghk4Jtl-5gEAAwIAA3kAAzwE",
+											FileUniqueID: "AQADhg5rGziAWEV-",
+											Width:        1170,
+											Height:       780,
+											FileSize:     222750,
+										},
+									},
+									HasSpoiler: false,
+									Caption:    (*RichBlockCaption)(nil),
+								},
+							},
+							Caption: (*RichBlockCaption)(nil),
+						},
+						&RichBlockMap{
+							Type: "map",
+							Location: Location{
+								Latitude:             25.195949,
+								Longitude:            55.273412,
+								HorizontalAccuracy:   0.000000,
+								LivePeriod:           0,
+								Heading:              0,
+								ProximityAlertRadius: 0,
+							},
+							Zoom:   15,
+							Width:  400,
+							Height: 200,
+							Caption: &RichBlockCaption{
+								Text:   ToPtr(RichTextPlain("Where are we?")),
+								Credit: nil,
+							},
+						},
+						&RichBlockAnchor{
+							Type: "anchor",
+							Name: "advanced",
+						},
+						&RichBlockSectionHeading{
+							Type: "heading",
+							Text: ToPtr(RichTextPlain("Advanced")),
+							Size: 2,
+						},
+						&RichBlockTable{
+							Type: "table",
+							Cells: [][]RichBlockTableCell{
+								{
+									{
+										Text:     ToPtr(RichTextPlain("Type")),
+										IsHeader: true,
+										Colspan:  0,
+										Rowspan:  0,
+										Align:    "center",
+										Valign:   "middle",
+									},
+									{
+										Text:     ToPtr(RichTextPlain("Supported")),
+										IsHeader: true,
+										Colspan:  0,
+										Rowspan:  0,
+										Align:    "center",
+										Valign:   "middle",
+									},
+									{
+										Text:     ToPtr(RichTextPlain("Composition")),
+										IsHeader: true,
+										Colspan:  0,
+										Rowspan:  0,
+										Align:    "center",
+										Valign:   "middle",
+									},
+								},
+								{
+									{
+										Text:     ToPtr(RichTextPlain("Table")),
+										IsHeader: false,
+										Colspan:  0,
+										Rowspan:  0,
+										Align:    "left",
+										Valign:   "middle",
+									},
+									{
+										Text: &RichTextBold{
+											Type: "bold",
+											Text: ToPtr(RichTextPlain("Yes")),
+										},
+										IsHeader: false,
+										Colspan:  0,
+										Rowspan:  0,
+										Align:    "left",
+										Valign:   "middle",
+									},
+									{
+										Text:     ToPtr(RichTextPlain("100% text")),
+										IsHeader: false,
+										Colspan:  0,
+										Rowspan:  0,
+										Align:    "left",
+										Valign:   "middle",
+									},
+								},
+							},
+							IsBordered: true,
+							IsStriped:  true,
+							Caption:    nil,
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: ToPtr(RichTextPlain("I don't know what this is but apparently it's also math 👇")),
+						},
+						&RichBlockMathematicalExpression{
+							Type:       "mathematical_expression",
+							Expression: "\\sum_{i=1}^n i = \\frac{n(n+1)}{2}",
+						},
+						&RichBlockPullQuotation{
+							Type:   "pullquote",
+							Text:   ToPtr(RichTextPlain("To be truly free, you should be ready to risk everything for freedom.")),
+							Credit: ToPtr(RichTextPlain("Pavel Durov")),
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("Make sure to always cite your sources")),
+								&RichTextSuperscript{
+									Type: "superscript",
+									Text: &RichTextList{
+										&RichTextAnchor{
+											Type: "anchor",
+											Name: "fnref-1-1",
+										},
+										&RichTextReferenceLink{
+											Type:          "reference_link",
+											Text:          ToPtr(RichTextPlain("1")),
+											ReferenceName: "fn-1",
+										},
+									},
+								},
+								ToPtr(RichTextPlain(".")),
+							},
+						},
+						&RichBlockParagraph{
+							Type: "paragraph",
+							Text: &RichTextList{
+								&RichTextURL{
+									Type: "url",
+									Text: ToPtr(RichTextPlain("Link")),
+									URL:  "https://youtu.be/dQw4w9WgXcQ",
+								},
+								ToPtr(RichTextPlain(" · ")),
+								&RichTextEmailAddress{
+									Type:         "email_address",
+									Text:         ToPtr(RichTextPlain("Email")),
+									EmailAddress: "user@example.com",
+								},
+								ToPtr(RichTextPlain(" · ")),
+								&RichTextTextMention{
+									Type: "text_mention",
+									Text: ToPtr(RichTextPlain("User Mention")),
+									User: User{
+										ID:                         777000,
+										IsBot:                      false,
+										FirstName:                  "Telegram",
+										LastName:                   "",
+										Username:                   "",
+										LanguageCode:               "",
+										IsPremium:                  false,
+										AddedToAttachmentMenu:      false,
+										CanJoinGroups:              false,
+										CanReadAllGroupMessages:    false,
+										SupportsGuestQueries:       false,
+										SupportsInlineQueries:      false,
+										CanConnectToBusiness:       false,
+										HasMainWebApp:              false,
+										HasTopicsEnabled:           false,
+										AllowsUsersToCreateTopics:  false,
+										CanManageBots:              false,
+										SupportsJoinRequestQueries: false,
+									},
+								},
+							},
+						},
+						&RichBlockFooter{
+							Type: "footer",
+							Text: &RichTextList{
+								ToPtr(RichTextPlain("1. ")),
+								&RichTextReference{
+									Type: "reference",
+									Text: ToPtr(RichTextPlain("Source: me, because I said so.")),
+									Name: "fn-1",
+								},
+								ToPtr(RichTextPlain(" ")),
+								&RichTextAnchorLink{
+									Type:       "anchor_link",
+									Text:       ToPtr(RichTextPlain("↩")),
+									AnchorName: "fnref-1-1",
+								},
+							},
+						},
+					},
+				},
+			},
+			isError: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := &Message{}
+			err := m.UnmarshalJSON([]byte(tt.json))
+			if tt.isError {
+				require.Error(t, err)
+				return
+			}
+
+			formated, _ := json.Marshal(m) //nolint:errcheck
+			t.Log(string(formated))
+
+			require.NoError(t, err)
+			assert.Equal(t, tt.data.RichMessage, m.RichMessage)
+		})
+	}
+}

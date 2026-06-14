@@ -8451,7 +8451,7 @@ func unmarshalRichBlock(value *fastjson.Value) (RichBlock, error) { //nolint:goc
 
 func unmarshalRichBlocks(value *fastjson.Value) ([]RichBlock, error) {
 	if value == nil {
-		return nil, nil //nolint:nilnil
+		return nil, nil
 	}
 
 	var err error
