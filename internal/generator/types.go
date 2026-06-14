@@ -365,4 +365,8 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if field.typ == "*TransactionPartner" {
 		field.typ = "TransactionPartner"
 	}
+
+	if field.typ == "*RichText" {
+		field.typ = "RichText"
+	}
 }

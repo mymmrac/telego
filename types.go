@@ -7214,6 +7214,32 @@ func (i *RichTextItalic) TextType() string {
 
 func (i *RichTextItalic) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextItalic
+func (i *RichTextItalic) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextItalic RichTextBold
+	var ui uRichTextItalic
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextItalic(ui)
+
+	return nil
+}
+
 // RichTextUnderline - An underlined text.
 type RichTextUnderline struct {
 	// Type - Type of the rich text, always “underline”
@@ -7229,6 +7255,32 @@ func (i *RichTextUnderline) TextType() string {
 }
 
 func (i *RichTextUnderline) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextUnderline
+func (i *RichTextUnderline) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextUnderline RichTextUnderline
+	var ui uRichTextUnderline
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextUnderline(ui)
+
+	return nil
+}
 
 // RichTextStrikethrough - A strikethrough text.
 type RichTextStrikethrough struct {
@@ -7246,6 +7298,32 @@ func (i *RichTextStrikethrough) TextType() string {
 
 func (i *RichTextStrikethrough) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextStrikethrough
+func (i *RichTextStrikethrough) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextStrikethrough RichTextStrikethrough
+	var ui uRichTextStrikethrough
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextStrikethrough(ui)
+
+	return nil
+}
+
 // RichTextSpoiler - A text covered by a spoiler.
 type RichTextSpoiler struct {
 	// Type - Type of the rich text, always “spoiler”
@@ -7261,6 +7339,32 @@ func (i *RichTextSpoiler) TextType() string {
 }
 
 func (i *RichTextSpoiler) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextSpoiler
+func (i *RichTextSpoiler) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextSpoiler RichTextSpoiler
+	var ui uRichTextSpoiler
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextSpoiler(ui)
+
+	return nil
+}
 
 // RichTextDateTime - Formatted date and time.
 type RichTextDateTime struct {
@@ -7285,6 +7389,32 @@ func (i *RichTextDateTime) TextType() string {
 
 func (i *RichTextDateTime) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextDateTime
+func (i *RichTextDateTime) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextDateTime RichTextDateTime
+	var ui uRichTextDateTime
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextDateTime(ui)
+
+	return nil
+}
+
 // RichTextTextMention - A mention of a Telegram user by their identifier.
 type RichTextTextMention struct {
 	// Type - Type of the rich text, always “text_mention”
@@ -7304,6 +7434,32 @@ func (i *RichTextTextMention) TextType() string {
 
 func (i *RichTextTextMention) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextTextMention
+func (i *RichTextTextMention) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextTextMention RichTextTextMention
+	var ui uRichTextTextMention
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextTextMention(ui)
+
+	return nil
+}
+
 // RichTextSubscript - A subscript text.
 type RichTextSubscript struct {
 	// Type - Type of the rich text, always “subscript”
@@ -7319,6 +7475,32 @@ func (i *RichTextSubscript) TextType() string {
 }
 
 func (i *RichTextSubscript) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextSubscript
+func (i *RichTextSubscript) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextSubscript RichTextSubscript
+	var ui uRichTextSubscript
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextSubscript(ui)
+
+	return nil
+}
 
 // RichTextSuperscript - A superscript text.
 type RichTextSuperscript struct {
@@ -7336,6 +7518,32 @@ func (i *RichTextSuperscript) TextType() string {
 
 func (i *RichTextSuperscript) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextSuperscript
+func (i *RichTextSuperscript) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextSuperscript RichTextSuperscript
+	var ui uRichTextSuperscript
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextSuperscript(ui)
+
+	return nil
+}
+
 // RichTextMarked - A marked text.
 type RichTextMarked struct {
 	// Type - Type of the rich text, always “marked”
@@ -7352,6 +7560,32 @@ func (i *RichTextMarked) TextType() string {
 
 func (i *RichTextMarked) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextMarked
+func (i *RichTextMarked) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextMarked RichTextMarked
+	var ui uRichTextMarked
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextMarked(ui)
+
+	return nil
+}
+
 // RichTextCode - A monowidth text.
 type RichTextCode struct {
 	// Type - Type of the rich text, always “code”
@@ -7367,6 +7601,32 @@ func (i *RichTextCode) TextType() string {
 }
 
 func (i *RichTextCode) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextCode
+func (i *RichTextCode) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextCode RichTextCode
+	var ui uRichTextCode
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextCode(ui)
+
+	return nil
+}
 
 // RichTextCustomEmoji - A custom emoji.
 type RichTextCustomEmoji struct {
@@ -7423,6 +7683,32 @@ func (i *RichTextURL) TextType() string {
 
 func (i *RichTextURL) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextURL
+func (i *RichTextURL) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextURL RichTextURL
+	var ui uRichTextURL
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextURL(ui)
+
+	return nil
+}
+
 // RichTextEmailAddress - A text with an email address.
 type RichTextEmailAddress struct {
 	// Type - Type of the rich text, always “email_address”
@@ -7441,6 +7727,32 @@ func (i *RichTextEmailAddress) TextType() string {
 }
 
 func (i *RichTextEmailAddress) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextEmailAddress
+func (i *RichTextEmailAddress) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextEmailAddress RichTextEmailAddress
+	var ui uRichTextEmailAddress
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextEmailAddress(ui)
+
+	return nil
+}
 
 // RichTextPhoneNumber - A text with a phone number.
 type RichTextPhoneNumber struct {
@@ -7461,6 +7773,32 @@ func (i *RichTextPhoneNumber) TextType() string {
 
 func (i *RichTextPhoneNumber) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextPhoneNumber
+func (i *RichTextPhoneNumber) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextPhoneNumber RichTextPhoneNumber
+	var ui uRichTextPhoneNumber
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextPhoneNumber(ui)
+
+	return nil
+}
+
 // RichTextBankCardNumber - A text with a bank card number.
 type RichTextBankCardNumber struct {
 	// Type - Type of the rich text, always “bank_card_number”
@@ -7479,6 +7817,32 @@ func (i *RichTextBankCardNumber) TextType() string {
 }
 
 func (i *RichTextBankCardNumber) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextBankCardNumber
+func (i *RichTextBankCardNumber) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextBankCardNumber RichTextBankCardNumber
+	var ui uRichTextBankCardNumber
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextBankCardNumber(ui)
+
+	return nil
+}
 
 // RichTextMention - A mention by a username.
 type RichTextMention struct {
@@ -7499,6 +7863,32 @@ func (i *RichTextMention) TextType() string {
 
 func (i *RichTextMention) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextMention
+func (i *RichTextMention) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextMention RichTextMention
+	var ui uRichTextMention
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextMention(ui)
+
+	return nil
+}
+
 // RichTextHashtag - A hashtag.
 type RichTextHashtag struct {
 	// Type - Type of the rich text, always “hashtag”
@@ -7517,6 +7907,32 @@ func (i *RichTextHashtag) TextType() string {
 }
 
 func (i *RichTextHashtag) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextHashtag
+func (i *RichTextHashtag) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextHashtag RichTextHashtag
+	var ui uRichTextHashtag
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextHashtag(ui)
+
+	return nil
+}
 
 // RichTextCashtag - A cashtag.
 type RichTextCashtag struct {
@@ -7537,6 +7953,32 @@ func (i *RichTextCashtag) TextType() string {
 
 func (i *RichTextCashtag) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextCashtag
+func (i *RichTextCashtag) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextCashtag RichTextCashtag
+	var ui uRichTextCashtag
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextCashtag(ui)
+
+	return nil
+}
+
 // RichTextBotCommand - A bot command.
 type RichTextBotCommand struct {
 	// Type - Type of the rich text, always “bot_command”
@@ -7555,6 +7997,32 @@ func (i *RichTextBotCommand) TextType() string {
 }
 
 func (i *RichTextBotCommand) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextBotCommand
+func (i *RichTextBotCommand) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextBotCommand RichTextBotCommand
+	var ui uRichTextBotCommand
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextBotCommand(ui)
+
+	return nil
+}
 
 // RichTextAnchor - An anchor.
 type RichTextAnchor struct {
@@ -7592,6 +8060,32 @@ func (i *RichTextAnchorLink) TextType() string {
 
 func (i *RichTextAnchorLink) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextAnchorLink
+func (i *RichTextAnchorLink) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextAnchorLink RichTextAnchorLink
+	var ui uRichTextAnchorLink
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextAnchorLink(ui)
+
+	return nil
+}
+
 // RichTextReference - A reference.
 type RichTextReference struct {
 	// Type - Type of the rich text, always “reference”
@@ -7610,6 +8104,32 @@ func (i *RichTextReference) TextType() string {
 }
 
 func (i *RichTextReference) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextReference
+func (i *RichTextReference) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextReference RichTextReference
+	var ui uRichTextReference
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextReference(ui)
+
+	return nil
+}
 
 // RichTextReferenceLink - A link to a reference.
 type RichTextReferenceLink struct {
@@ -7630,19 +8150,76 @@ func (i *RichTextReferenceLink) TextType() string {
 
 func (i *RichTextReferenceLink) iRichText() {}
 
+// UnmarshalJSON converts JSON to RichTextReferenceLink
+func (i *RichTextReferenceLink) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextReferenceLink RichTextReferenceLink
+	var ui uRichTextReferenceLink
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichTextReferenceLink(ui)
+
+	return nil
+}
+
 // RichBlockCaption - Caption of a rich formatted block.
 type RichBlockCaption struct {
 	// Text - Block caption
 	Text RichText `json:"text"`
 
 	// Credit - Optional. Block credit which corresponds to the HTML tag <cite>
-	Credit *RichText `json:"credit,omitempty"`
+	Credit RichText `json:"credit,omitempty"`
+}
+
+// UnmarshalJSON converts JSON to RichBlockCaption
+func (i *RichBlockCaption) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockCaption RichBlockCaption
+	var ui uRichBlockCaption
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	ui.Credit, err = unmarshalRichText(value.Get("credit"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockCaption(ui)
+
+	return nil
 }
 
 // RichBlockTableCell - Cell in a table.
 type RichBlockTableCell struct {
 	// Text - Optional. Text in the cell. If omitted, then the cell is invisible.
-	Text *RichText `json:"text,omitempty"`
+	Text RichText `json:"text,omitempty"`
 
 	// IsHeader - Optional. True, if the cell is a header cell
 	IsHeader bool `json:"is_header,omitempty"`
@@ -7660,6 +8237,32 @@ type RichBlockTableCell struct {
 	// Valign - Vertical cell content alignment. Currently, must be one of “top”, “middle”, or
 	// “bottom”.
 	Valign string `json:"valign"`
+}
+
+// UnmarshalJSON converts JSON to RichBlockTableCell
+func (i *RichBlockTableCell) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockTableCell RichBlockTableCell
+	var ui uRichBlockTableCell
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockTableCell(ui)
+
+	return nil
 }
 
 // RichBlockListItem - An item of a list.
@@ -7756,6 +8359,32 @@ func (i *RichBlockParagraph) BlockType() string {
 
 func (i *RichBlockParagraph) iRichBlock() {}
 
+// UnmarshalJSON converts JSON to RichBlockParagraph
+func (i *RichBlockParagraph) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockParagraph RichBlockParagraph
+	var ui uRichBlockParagraph
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockParagraph(ui)
+
+	return nil
+}
+
 // RichBlockSectionHeading - A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>,
 // or <h6>.
 type RichBlockSectionHeading struct {
@@ -7776,6 +8405,32 @@ func (i *RichBlockSectionHeading) BlockType() string {
 
 func (i *RichBlockSectionHeading) iRichBlock() {}
 
+// UnmarshalJSON converts JSON to RichBlockSectionHeading
+func (i *RichBlockSectionHeading) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockSectionHeading RichBlockSectionHeading
+	var ui uRichBlockSectionHeading
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockSectionHeading(ui)
+
+	return nil
+}
+
 // RichBlockPreformatted - A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
 type RichBlockPreformatted struct {
 	// Type - Type of the block, always “pre”
@@ -7795,6 +8450,32 @@ func (i *RichBlockPreformatted) BlockType() string {
 
 func (i *RichBlockPreformatted) iRichBlock() {}
 
+// UnmarshalJSON converts JSON to RichBlockPreformatted
+func (i *RichBlockPreformatted) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockPreformatted RichBlockPreformatted
+	var ui uRichBlockPreformatted
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockPreformatted(ui)
+
+	return nil
+}
+
 // RichBlockFooter - A footer, corresponding to the HTML tag <footer>.
 type RichBlockFooter struct {
 	// Type - Type of the block, always “footer”
@@ -7810,6 +8491,32 @@ func (i *RichBlockFooter) BlockType() string {
 }
 
 func (i *RichBlockFooter) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockFooter
+func (i *RichBlockFooter) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockFooter RichBlockFooter
+	var ui uRichBlockFooter
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockFooter(ui)
+
+	return nil
+}
 
 // RichBlockDivider - A divider, corresponding to the HTML tag <hr/>.
 type RichBlockDivider struct {
@@ -7883,7 +8590,7 @@ type RichBlockBlockQuotation struct {
 	Blocks []RichBlock `json:"blocks"`
 
 	// Credit - Optional. Credit of the block
-	Credit *RichText `json:"credit,omitempty"`
+	Credit RichText `json:"credit,omitempty"`
 }
 
 // BlockType return RichBlock type
@@ -7892,6 +8599,32 @@ func (i *RichBlockBlockQuotation) BlockType() string {
 }
 
 func (i *RichBlockBlockQuotation) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockTableCell
+func (i *RichBlockBlockQuotation) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockBlockQuotation RichBlockBlockQuotation
+	var ui uRichBlockBlockQuotation
+
+	ui.Credit, err = unmarshalRichText(value.Get("credit"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockBlockQuotation(ui)
+
+	return nil
+}
 
 // RichBlockPullQuotation - A quotation with centered text, loosely corresponding to the HTML tag <aside>.
 type RichBlockPullQuotation struct {
@@ -7902,7 +8635,7 @@ type RichBlockPullQuotation struct {
 	Text RichText `json:"text"`
 
 	// Credit - Optional. Credit of the block
-	Credit *RichText `json:"credit,omitempty"`
+	Credit RichText `json:"credit,omitempty"`
 }
 
 // BlockType return RichBlock type
@@ -7911,6 +8644,37 @@ func (i *RichBlockPullQuotation) BlockType() string {
 }
 
 func (i *RichBlockPullQuotation) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockPullQuotation
+func (i *RichBlockPullQuotation) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockPullQuotation RichBlockPullQuotation
+	var ui uRichBlockPullQuotation
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	ui.Credit, err = unmarshalRichText(value.Get("credit"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockPullQuotation(ui)
+
+	return nil
+}
 
 // RichBlockCollage - A collage, corresponding to the custom HTML tag <tg-collage>.
 type RichBlockCollage struct {
@@ -7965,7 +8729,7 @@ type RichBlockTable struct {
 	IsStriped bool `json:"is_striped,omitempty"`
 
 	// Caption - Optional. Caption of the table
-	Caption *RichText `json:"caption,omitempty"`
+	Caption RichText `json:"caption,omitempty"`
 }
 
 // BlockType return RichBlock type
@@ -7974,6 +8738,32 @@ func (i *RichBlockTable) BlockType() string {
 }
 
 func (i *RichBlockTable) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockTable
+func (i *RichBlockTable) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockTable RichBlockTable
+	var ui uRichBlockTable
+
+	ui.Caption, err = unmarshalRichText(value.Get("caption"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockTable(ui)
+
+	return nil
+}
 
 // RichBlockDetails - An expandable block for details disclosure, corresponding to the HTML tag <details>.
 type RichBlockDetails struct {
@@ -7996,6 +8786,32 @@ func (i *RichBlockDetails) BlockType() string {
 }
 
 func (i *RichBlockDetails) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockDetails
+func (i *RichBlockDetails) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockDetails RichBlockDetails
+	var ui uRichBlockDetails
+
+	ui.Summary, err = unmarshalRichText(value.Get("summary"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockDetails(ui)
+
+	return nil
+}
 
 // RichBlockMap - A block with a map, corresponding to the custom HTML tag <tg-map>.
 type RichBlockMap struct {
@@ -8149,6 +8965,32 @@ func (i *RichBlockThinking) BlockType() string {
 }
 
 func (i *RichBlockThinking) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockThinking
+func (i *RichBlockThinking) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockThinking RichBlockThinking
+	var ui uRichBlockThinking
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockThinking(ui)
+
+	return nil
+}
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.
