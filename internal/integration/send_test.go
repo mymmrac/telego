@@ -221,12 +221,12 @@ func TestSendPoll(t *testing.T) {
 
 	t.Run("correct_option_id", func(t *testing.T) {
 		msg, err := bot.SendPoll(ctx, &telego.SendPollParams{
-			ChatID:          tu.ID(chatID),
-			Question:        "Test",
-			Options:         []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
-			IsAnonymous:     telego.ToPtr(false),
-			Type:            telego.PollTypeQuiz,
-			CorrectOptionID: telego.ToPtr(0),
+			ChatID:           tu.ID(chatID),
+			Question:         "Test",
+			Options:          []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
+			IsAnonymous:      telego.ToPtr(false),
+			Type:             telego.PollTypeQuiz,
+			CorrectOptionIDs: []int{0},
 		})
 
 		require.NoError(t, err)
