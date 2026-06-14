@@ -6969,6 +6969,32 @@ type RichMessage struct {
 	IsRtl bool `json:"is_rtl,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to RichMessage
+func (i *RichMessage) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichMessage RichMessage
+	var ui uRichMessage
+
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichMessage(ui)
+
+	return nil
+}
+
 // InputRichMessage - Describes a rich message to be sent. Exactly one of the fields html or markdown must be
 // used.
 type InputRichMessage struct {
@@ -8288,6 +8314,32 @@ type RichBlockListItem struct {
 	Type string `json:"type,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to RichBlockListItem
+func (i *RichBlockListItem) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockListItem RichBlockListItem
+	var ui uRichBlockListItem
+
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockListItem(ui)
+
+	return nil
+}
+
 // RichBlock - This object represents a block in a rich formatted message. Currently, it can be any of the
 // following types:
 // RichBlockParagraph (https://core.telegram.org/bots/api#richblockparagraph)
@@ -8342,6 +8394,77 @@ const (
 	BlockTypeVoiceNote              = "voice_note"
 	BlockTypeThinking               = "thinking"
 )
+
+func unmarshalRichBlock(value *fastjson.Value) (RichBlock, error) { //nolint:gocyclo
+	if value == nil {
+		return nil, nil //nolint:nilnil
+	}
+
+	blockType := string(value.GetStringBytes("type"))
+	switch blockType {
+	case BlockTypeParagraph:
+		return &RichBlockParagraph{}, nil
+	case BlockTypeSectionHeading:
+		return &RichBlockSectionHeading{}, nil
+	case BlockTypePreformatted:
+		return &RichBlockPreformatted{}, nil
+	case BlockTypeFooter:
+		return &RichBlockFooter{}, nil
+	case BlockTypeDivider:
+		return &RichBlockDivider{}, nil
+	case BlockTypeMathematicalExpression:
+		return &RichBlockMathematicalExpression{}, nil
+	case BlockTypeAnchor:
+		return &RichBlockAnchor{}, nil
+	case BlockTypeList:
+		return &RichBlockList{}, nil
+	case BlockTypeBlockQuotation:
+		return &RichBlockBlockQuotation{}, nil
+	case BlockTypePullQuotation:
+		return &RichBlockPullQuotation{}, nil
+	case BlockTypeCollage:
+		return &RichBlockCollage{}, nil
+	case BlockTypeSlideshow:
+		return &RichBlockSlideshow{}, nil
+	case BlockTypeTable:
+		return &RichBlockTable{}, nil
+	case BlockTypeDetails:
+		return &RichBlockDetails{}, nil
+	case BlockTypeMap:
+		return &RichBlockMap{}, nil
+	case BlockTypeAnimation:
+		return &RichBlockAnimation{}, nil
+	case BlockTypeAudio:
+		return &RichBlockAudio{}, nil
+	case BlockTypePhoto:
+		return &RichBlockPhoto{}, nil
+	case BlockTypeVideo:
+		return &RichBlockVideo{}, nil
+	case BlockTypeVoiceNote:
+		return &RichBlockVoiceNote{}, nil
+	case BlockTypeThinking:
+		return &RichBlockThinking{}, nil
+	default:
+		return nil, fmt.Errorf("unknown rich block type: %q", blockType)
+	}
+}
+
+func unmarshalRichBlocks(value *fastjson.Value) ([]RichBlock, error) {
+	if value == nil {
+		return nil, nil //nolint:nilnil
+	}
+
+	var err error
+	values := value.GetArray()
+	list := make([]RichBlock, len(values))
+	for i, v := range values {
+		list[i], err = unmarshalRichBlock(v)
+		if err != nil {
+			return nil, fmt.Errorf("array item %d: %w", i, err)
+		}
+	}
+	return list, nil
+}
 
 // RichBlockParagraph - A text paragraph, corresponding to the HTML tag <p>.
 type RichBlockParagraph struct {
@@ -8613,6 +8736,11 @@ func (i *RichBlockBlockQuotation) UnmarshalJSON(data []byte) error {
 	type uRichBlockBlockQuotation RichBlockBlockQuotation
 	var ui uRichBlockBlockQuotation
 
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
+	if err != nil {
+		return err
+	}
+
 	ui.Credit, err = unmarshalRichText(value.Get("credit"))
 	if err != nil {
 		return err
@@ -8695,6 +8823,32 @@ func (i *RichBlockCollage) BlockType() string {
 
 func (i *RichBlockCollage) iRichBlock() {}
 
+// UnmarshalJSON converts JSON to RichBlockCollage
+func (i *RichBlockCollage) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockCollage RichBlockCollage
+	var ui uRichBlockCollage
+
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockCollage(ui)
+
+	return nil
+}
+
 // RichBlockSlideshow - A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
 type RichBlockSlideshow struct {
 	// Type - Type of the block, always “slideshow”
@@ -8713,6 +8867,32 @@ func (i *RichBlockSlideshow) BlockType() string {
 }
 
 func (i *RichBlockSlideshow) iRichBlock() {}
+
+// UnmarshalJSON converts JSON to RichBlockSlideshow
+func (i *RichBlockSlideshow) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichBlockSlideshow RichBlockSlideshow
+	var ui uRichBlockSlideshow
+
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*i = RichBlockSlideshow(ui)
+
+	return nil
+}
 
 // RichBlockTable - A table, corresponding to the HTML tag <table>.
 type RichBlockTable struct {
@@ -8801,6 +8981,11 @@ func (i *RichBlockDetails) UnmarshalJSON(data []byte) error {
 	var ui uRichBlockDetails
 
 	ui.Summary, err = unmarshalRichText(value.Get("summary"))
+	if err != nil {
+		return err
+	}
+
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
 	if err != nil {
 		return err
 	}
