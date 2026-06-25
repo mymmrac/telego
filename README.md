@@ -36,6 +36,10 @@ For more detailed documentation, see docs at [telego.pixelbox.dev](https://teleg
 > Note: Telego uses [fasthttp](https://github.com/valyala/fasthttp) instead of `net/http`
 > and [go-json](https://github.com/goccy/go-json) instead of `encoding/json` by default (both can be changed).
 
+###  :rocket: Powered by
+
+[![GoLand logo](https://resources.jetbrains.com/storage/products/company/brand/logos/GoLand.svg)](https://jb.gg/GoLand)
+
 ### :clipboard: Table Of Content
 
 <details>
