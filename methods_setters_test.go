@@ -57,6 +57,8 @@ func TestSendMessageParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithText("Text").
 		WithParseMode("ParseMode").
 		WithEntities([]MessageEntity{{Type: "Entities"}}...).
@@ -66,7 +68,7 @@ func TestSendMessageParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendMessageParams{
@@ -74,6 +76,8 @@ func TestSendMessageParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Text:                    "Text",
 		ParseMode:               "ParseMode",
 		Entities:                []MessageEntity{{Type: "Entities"}},
@@ -83,14 +87,14 @@ func TestSendMessageParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyParameters:         &ReplyParameters{MessageID: 5},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
 
 func TestForwardMessageParams_Setters(t *testing.T) {
 	f := (&ForwardMessageParams{}).
-		WithChatID(ChatID{ID: 5}).
+		WithChatID(ChatID{ID: 6}).
 		WithMessageThreadID(1).
 		WithDirectMessagesTopicID(2).
 		WithFromChatID(ChatID{ID: 3}).
@@ -102,7 +106,7 @@ func TestForwardMessageParams_Setters(t *testing.T) {
 		WithMessageID(5)
 
 	assert.Equal(t, &ForwardMessageParams{
-		ChatID:                  ChatID{ID: 5},
+		ChatID:                  ChatID{ID: 6},
 		MessageThreadID:         1,
 		DirectMessagesTopicID:   2,
 		FromChatID:              ChatID{ID: 3},
@@ -206,6 +210,8 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithPhoto(testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -217,7 +223,7 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendPhotoParams{
@@ -225,6 +231,8 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Photo:                   testInputFile,
 		Caption:                 "Caption",
 		ParseMode:               "ParseMode",
@@ -236,7 +244,7 @@ func TestSendPhotoParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyParameters:         &ReplyParameters{MessageID: 5},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -247,6 +255,8 @@ func TestSendLivePhotoParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithLivePhoto(testInputFile).
 		WithPhoto(testInputFile).
 		WithCaption("Caption").
@@ -259,7 +269,7 @@ func TestSendLivePhotoParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendLivePhotoParams{
@@ -267,6 +277,8 @@ func TestSendLivePhotoParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		LivePhoto:               testInputFile,
 		Photo:                   testInputFile,
 		Caption:                 "Caption",
@@ -279,7 +291,7 @@ func TestSendLivePhotoParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyParameters:         &ReplyParameters{MessageID: 5},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -290,11 +302,13 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithAudio(testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithDuration(4).
+		WithDuration(5).
 		WithPerformer("Performer").
 		WithTitle("Title").
 		WithThumbnail(&testInputFile).
@@ -303,7 +317,7 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 5}).
+		WithReplyParameters(&ReplyParameters{MessageID: 6}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendAudioParams{
@@ -311,11 +325,13 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Audio:                   testInputFile,
 		Caption:                 "Caption",
 		ParseMode:               "ParseMode",
 		CaptionEntities:         []MessageEntity{{Type: "CaptionEntities"}},
-		Duration:                4,
+		Duration:                5,
 		Performer:               "Performer",
 		Title:                   "Title",
 		Thumbnail:               &testInputFile,
@@ -324,7 +340,7 @@ func TestSendAudioParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 5},
+		ReplyParameters:         &ReplyParameters{MessageID: 6},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -335,6 +351,8 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithDocument(testInputFile).
 		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
@@ -346,7 +364,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendDocumentParams{
@@ -354,6 +372,8 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		ChatID:                      ChatID{ID: 1},
 		MessageThreadID:             2,
 		DirectMessagesTopicID:       3,
+		ReceiverUserID:              4,
+		CallbackQueryID:             "CallbackQueryID",
 		Document:                    testInputFile,
 		Thumbnail:                   &testInputFile,
 		Caption:                     "Caption",
@@ -365,7 +385,7 @@ func TestSendDocumentParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:          true,
 		MessageEffectID:             "MessageEffectID",
 		SuggestedPostParameters:     &SuggestedPostParameters{},
-		ReplyParameters:             &ReplyParameters{MessageID: 4},
+		ReplyParameters:             &ReplyParameters{MessageID: 5},
 		ReplyMarkup:                 &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -376,13 +396,15 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithVideo(testInputFile).
-		WithDuration(4).
-		WithWidth(5).
-		WithHeight(6).
+		WithDuration(5).
+		WithWidth(6).
+		WithHeight(7).
 		WithThumbnail(&testInputFile).
 		WithCover(&testInputFile).
-		WithStartTimestamp(7).
+		WithStartTimestamp(8).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
@@ -394,7 +416,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 8}).
+		WithReplyParameters(&ReplyParameters{MessageID: 9}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVideoParams{
@@ -402,13 +424,15 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Video:                   testInputFile,
-		Duration:                4,
-		Width:                   5,
-		Height:                  6,
+		Duration:                5,
+		Width:                   6,
+		Height:                  7,
 		Thumbnail:               &testInputFile,
 		Cover:                   &testInputFile,
-		StartTimestamp:          7,
+		StartTimestamp:          8,
 		Caption:                 "Caption",
 		ParseMode:               "ParseMode",
 		CaptionEntities:         []MessageEntity{{Type: "CaptionEntities"}},
@@ -420,7 +444,7 @@ func TestSendVideoParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 8},
+		ReplyParameters:         &ReplyParameters{MessageID: 9},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -431,10 +455,12 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithAnimation(testInputFile).
-		WithDuration(4).
-		WithWidth(5).
-		WithHeight(6).
+		WithDuration(5).
+		WithWidth(6).
+		WithHeight(7).
 		WithThumbnail(&testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
@@ -446,7 +472,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 7}).
+		WithReplyParameters(&ReplyParameters{MessageID: 8}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendAnimationParams{
@@ -454,10 +480,12 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Animation:               testInputFile,
-		Duration:                4,
-		Width:                   5,
-		Height:                  6,
+		Duration:                5,
+		Width:                   6,
+		Height:                  7,
 		Thumbnail:               &testInputFile,
 		Caption:                 "Caption",
 		ParseMode:               "ParseMode",
@@ -469,7 +497,7 @@ func TestSendAnimationParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 7},
+		ReplyParameters:         &ReplyParameters{MessageID: 8},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -480,17 +508,19 @@ func TestSendVoiceParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithVoice(testInputFile).
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithDuration(4).
+		WithDuration(5).
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 5}).
+		WithReplyParameters(&ReplyParameters{MessageID: 6}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVoiceParams{
@@ -498,17 +528,19 @@ func TestSendVoiceParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Voice:                   testInputFile,
 		Caption:                 "Caption",
 		ParseMode:               "ParseMode",
 		CaptionEntities:         []MessageEntity{{Type: "CaptionEntities"}},
-		Duration:                4,
+		Duration:                5,
 		DisableNotification:     true,
 		ProtectContent:          true,
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 5},
+		ReplyParameters:         &ReplyParameters{MessageID: 6},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -519,16 +551,18 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithVideoNote(testInputFile).
-		WithDuration(4).
-		WithLength(5).
+		WithDuration(5).
+		WithLength(6).
 		WithThumbnail(&testInputFile).
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 6}).
+		WithReplyParameters(&ReplyParameters{MessageID: 7}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVideoNoteParams{
@@ -536,16 +570,18 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		VideoNote:               testInputFile,
-		Duration:                4,
-		Length:                  5,
+		Duration:                5,
+		Length:                  6,
 		Thumbnail:               &testInputFile,
 		DisableNotification:     true,
 		ProtectContent:          true,
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 6},
+		ReplyParameters:         &ReplyParameters{MessageID: 7},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -624,18 +660,20 @@ func TestSendLocationParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
-		WithLatitude(4.0).
-		WithLongitude(5.0).
-		WithHorizontalAccuracy(6.0).
-		WithLivePeriod(7).
-		WithHeading(8).
-		WithProximityAlertRadius(9).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
+		WithLatitude(5.0).
+		WithLongitude(6.0).
+		WithHorizontalAccuracy(7.0).
+		WithLivePeriod(8).
+		WithHeading(9).
+		WithProximityAlertRadius(10).
 		WithDisableNotification().
 		WithProtectContent().
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 10}).
+		WithReplyParameters(&ReplyParameters{MessageID: 11}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendLocationParams{
@@ -643,18 +681,20 @@ func TestSendLocationParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
-		Latitude:                4.0,
-		Longitude:               5.0,
-		HorizontalAccuracy:      6.0,
-		LivePeriod:              7,
-		Heading:                 8,
-		ProximityAlertRadius:    9,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
+		Latitude:                5.0,
+		Longitude:               6.0,
+		HorizontalAccuracy:      7.0,
+		LivePeriod:              8,
+		Heading:                 9,
+		ProximityAlertRadius:    10,
 		DisableNotification:     true,
 		ProtectContent:          true,
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 10},
+		ReplyParameters:         &ReplyParameters{MessageID: 11},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -665,8 +705,10 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
-		WithLatitude(4.0).
-		WithLongitude(5.0).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
+		WithLatitude(5.0).
+		WithLongitude(6.0).
 		WithTitle("Title").
 		WithAddress("Address").
 		WithFoursquareID("FoursquareID").
@@ -678,7 +720,7 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 6}).
+		WithReplyParameters(&ReplyParameters{MessageID: 7}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendVenueParams{
@@ -686,8 +728,10 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
-		Latitude:                4.0,
-		Longitude:               5.0,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
+		Latitude:                5.0,
+		Longitude:               6.0,
 		Title:                   "Title",
 		Address:                 "Address",
 		FoursquareID:            "FoursquareID",
@@ -699,7 +743,7 @@ func TestSendVenueParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 6},
+		ReplyParameters:         &ReplyParameters{MessageID: 7},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -710,6 +754,8 @@ func TestSendContactParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithPhoneNumber("PhoneNumber").
 		WithFirstName("FirstName").
 		WithLastName("LastName").
@@ -719,7 +765,7 @@ func TestSendContactParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendContactParams{
@@ -727,6 +773,8 @@ func TestSendContactParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		PhoneNumber:             "PhoneNumber",
 		FirstName:               "FirstName",
 		LastName:                "LastName",
@@ -736,7 +784,7 @@ func TestSendContactParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyParameters:         &ReplyParameters{MessageID: 5},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }
@@ -2370,6 +2418,82 @@ func TestStopPollParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestEditEphemeralMessageTextParams_Setters(t *testing.T) {
+	e := (&EditEphemeralMessageTextParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithReceiverUserID(1).
+		WithEphemeralMessageID(2).
+		WithText("Text").
+		WithParseMode("ParseMode").
+		WithEntities([]MessageEntity{{Type: "Entities"}}...).
+		WithLinkPreviewOptions(&LinkPreviewOptions{IsDisabled: true}).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &EditEphemeralMessageTextParams{
+		ChatID:             ChatID{ID: 3},
+		ReceiverUserID:     1,
+		EphemeralMessageID: 2,
+		Text:               "Text",
+		ParseMode:          "ParseMode",
+		Entities:           []MessageEntity{{Type: "Entities"}},
+		LinkPreviewOptions: &LinkPreviewOptions{IsDisabled: true},
+		ReplyMarkup:        &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
+}
+
+func TestEditEphemeralMessageMediaParams_Setters(t *testing.T) {
+	e := (&EditEphemeralMessageMediaParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithReceiverUserID(1).
+		WithEphemeralMessageID(2).
+		WithMedia(&InputMediaAnimation{Type: "Media"}).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &EditEphemeralMessageMediaParams{
+		ChatID:             ChatID{ID: 3},
+		ReceiverUserID:     1,
+		EphemeralMessageID: 2,
+		Media:              &InputMediaAnimation{Type: "Media"},
+		ReplyMarkup:        &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
+}
+
+func TestEditEphemeralMessageCaptionParams_Setters(t *testing.T) {
+	e := (&EditEphemeralMessageCaptionParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithReceiverUserID(1).
+		WithEphemeralMessageID(2).
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &EditEphemeralMessageCaptionParams{
+		ChatID:             ChatID{ID: 3},
+		ReceiverUserID:     1,
+		EphemeralMessageID: 2,
+		Caption:            "Caption",
+		ParseMode:          "ParseMode",
+		CaptionEntities:    []MessageEntity{{Type: "CaptionEntities"}},
+		ReplyMarkup:        &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
+}
+
+func TestEditEphemeralMessageReplyMarkupParams_Setters(t *testing.T) {
+	e := (&EditEphemeralMessageReplyMarkupParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithReceiverUserID(1).
+		WithEphemeralMessageID(2).
+		WithReplyMarkup(&InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}})
+
+	assert.Equal(t, &EditEphemeralMessageReplyMarkupParams{
+		ChatID:             ChatID{ID: 3},
+		ReceiverUserID:     1,
+		EphemeralMessageID: 2,
+		ReplyMarkup:        &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
+}
+
 func TestApproveSuggestedPostParams_Setters(t *testing.T) {
 	a := (&ApproveSuggestedPostParams{}).
 		WithChatID(3).
@@ -2418,15 +2542,28 @@ func TestDeleteMessagesParams_Setters(t *testing.T) {
 	}, d)
 }
 
+func TestDeleteEphemeralMessageParams_Setters(t *testing.T) {
+	d := (&DeleteEphemeralMessageParams{}).
+		WithChatID(ChatID{ID: 2}).
+		WithReceiverUserID(1).
+		WithEphemeralMessageID(2)
+
+	assert.Equal(t, &DeleteEphemeralMessageParams{
+		ChatID:             ChatID{ID: 2},
+		ReceiverUserID:     1,
+		EphemeralMessageID: 2,
+	}, d)
+}
+
 func TestDeleteMessageReactionParams_Setters(t *testing.T) {
 	d := (&DeleteMessageReactionParams{}).
-		WithChatID(ChatID{ID: 2}).
+		WithChatID(ChatID{ID: 3}).
 		WithMessageID(1).
 		WithUserID(2).
 		WithActorChatID(3)
 
 	assert.Equal(t, &DeleteMessageReactionParams{
-		ChatID:      ChatID{ID: 2},
+		ChatID:      ChatID{ID: 3},
 		MessageID:   1,
 		UserID:      2,
 		ActorChatID: 3,
@@ -2452,6 +2589,8 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		WithChatID(ChatID{ID: 1}).
 		WithMessageThreadID(2).
 		WithDirectMessagesTopicID(3).
+		WithReceiverUserID(4).
+		WithCallbackQueryID("CallbackQueryID").
 		WithSticker(testInputFile).
 		WithEmoji("Emoji").
 		WithDisableNotification().
@@ -2459,7 +2598,7 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		WithAllowPaidBroadcast().
 		WithMessageEffectID("MessageEffectID").
 		WithSuggestedPostParameters(&SuggestedPostParameters{}).
-		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyParameters(&ReplyParameters{MessageID: 5}).
 		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
 
 	assert.Equal(t, &SendStickerParams{
@@ -2467,6 +2606,8 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		ChatID:                  ChatID{ID: 1},
 		MessageThreadID:         2,
 		DirectMessagesTopicID:   3,
+		ReceiverUserID:          4,
+		CallbackQueryID:         "CallbackQueryID",
 		Sticker:                 testInputFile,
 		Emoji:                   "Emoji",
 		DisableNotification:     true,
@@ -2474,7 +2615,7 @@ func TestSendStickerParams_Setters(t *testing.T) {
 		AllowPaidBroadcast:      true,
 		MessageEffectID:         "MessageEffectID",
 		SuggestedPostParameters: &SuggestedPostParameters{},
-		ReplyParameters:         &ReplyParameters{MessageID: 4},
+		ReplyParameters:         &ReplyParameters{MessageID: 5},
 		ReplyMarkup:             &ReplyKeyboardRemove{RemoveKeyboard: true},
 	}, s)
 }

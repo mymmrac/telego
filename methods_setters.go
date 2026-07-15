@@ -96,6 +96,18 @@ func (p *SendMessageParams) WithDirectMessagesTopicID(directMessagesTopicID int6
 	return p
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendMessageParams) WithReceiverUserID(receiverUserID int64) *SendMessageParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendMessageParams) WithCallbackQueryID(callbackQueryID string) *SendMessageParams {
+	p.CallbackQueryID = callbackQueryID
+	return p
+}
+
 // WithText adds text parameter
 func (p *SendMessageParams) WithText(text string) *SendMessageParams {
 	p.Text = text
@@ -441,6 +453,18 @@ func (p *SendPhotoParams) WithDirectMessagesTopicID(directMessagesTopicID int64)
 	return p
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendPhotoParams) WithReceiverUserID(receiverUserID int64) *SendPhotoParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendPhotoParams) WithCallbackQueryID(callbackQueryID string) *SendPhotoParams {
+	p.CallbackQueryID = callbackQueryID
+	return p
+}
+
 // WithPhoto adds photo parameter
 func (p *SendPhotoParams) WithPhoto(photo InputFile) *SendPhotoParams {
 	p.Photo = photo
@@ -541,6 +565,18 @@ func (p *SendLivePhotoParams) WithMessageThreadID(messageThreadID int) *SendLive
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendLivePhotoParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendLivePhotoParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendLivePhotoParams) WithReceiverUserID(receiverUserID int64) *SendLivePhotoParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendLivePhotoParams) WithCallbackQueryID(callbackQueryID string) *SendLivePhotoParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 
@@ -650,6 +686,18 @@ func (p *SendAudioParams) WithMessageThreadID(messageThreadID int) *SendAudioPar
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendAudioParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendAudioParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendAudioParams) WithReceiverUserID(receiverUserID int64) *SendAudioParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendAudioParams) WithCallbackQueryID(callbackQueryID string) *SendAudioParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 
@@ -768,6 +816,18 @@ func (p *SendDocumentParams) WithDirectMessagesTopicID(directMessagesTopicID int
 	return p
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendDocumentParams) WithReceiverUserID(receiverUserID int64) *SendDocumentParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendDocumentParams) WithCallbackQueryID(callbackQueryID string) *SendDocumentParams {
+	p.CallbackQueryID = callbackQueryID
+	return p
+}
+
 // WithDocument adds document parameter
 func (p *SendDocumentParams) WithDocument(document InputFile) *SendDocumentParams {
 	p.Document = document
@@ -868,6 +928,18 @@ func (p *SendVideoParams) WithMessageThreadID(messageThreadID int) *SendVideoPar
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendVideoParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVideoParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendVideoParams) WithReceiverUserID(receiverUserID int64) *SendVideoParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendVideoParams) WithCallbackQueryID(callbackQueryID string) *SendVideoParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 
@@ -1016,6 +1088,18 @@ func (p *SendAnimationParams) WithDirectMessagesTopicID(directMessagesTopicID in
 	return p
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendAnimationParams) WithReceiverUserID(receiverUserID int64) *SendAnimationParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendAnimationParams) WithCallbackQueryID(callbackQueryID string) *SendAnimationParams {
+	p.CallbackQueryID = callbackQueryID
+	return p
+}
+
 // WithAnimation adds animation parameter
 func (p *SendAnimationParams) WithAnimation(animation InputFile) *SendAnimationParams {
 	p.Animation = animation
@@ -1143,6 +1227,18 @@ func (p *SendVoiceParams) WithDirectMessagesTopicID(directMessagesTopicID int64)
 	return p
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendVoiceParams) WithReceiverUserID(receiverUserID int64) *SendVoiceParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendVoiceParams) WithCallbackQueryID(callbackQueryID string) *SendVoiceParams {
+	p.CallbackQueryID = callbackQueryID
+	return p
+}
+
 // WithVoice adds voice parameter
 func (p *SendVoiceParams) WithVoice(voice InputFile) *SendVoiceParams {
 	p.Voice = voice
@@ -1237,6 +1333,18 @@ func (p *SendVideoNoteParams) WithMessageThreadID(messageThreadID int) *SendVide
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendVideoNoteParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVideoNoteParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendVideoNoteParams) WithReceiverUserID(receiverUserID int64) *SendVideoNoteParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendVideoNoteParams) WithCallbackQueryID(callbackQueryID string) *SendVideoNoteParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 
@@ -1494,6 +1602,18 @@ func (p *SendLocationParams) WithDirectMessagesTopicID(directMessagesTopicID int
 	return p
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendLocationParams) WithReceiverUserID(receiverUserID int64) *SendLocationParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendLocationParams) WithCallbackQueryID(callbackQueryID string) *SendLocationParams {
+	p.CallbackQueryID = callbackQueryID
+	return p
+}
+
 // WithLatitude adds latitude parameter
 func (p *SendLocationParams) WithLatitude(latitude float64) *SendLocationParams {
 	p.Latitude = latitude
@@ -1594,6 +1714,18 @@ func (p *SendVenueParams) WithMessageThreadID(messageThreadID int) *SendVenuePar
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendVenueParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendVenueParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendVenueParams) WithReceiverUserID(receiverUserID int64) *SendVenueParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendVenueParams) WithCallbackQueryID(callbackQueryID string) *SendVenueParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 
@@ -1709,6 +1841,18 @@ func (p *SendContactParams) WithMessageThreadID(messageThreadID int) *SendContac
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendContactParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendContactParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendContactParams) WithReceiverUserID(receiverUserID int64) *SendContactParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendContactParams) WithCallbackQueryID(callbackQueryID string) *SendContactParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 
@@ -4282,6 +4426,162 @@ func (p *StopPollParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *Sto
 }
 
 // WithChatID adds chat ID parameter
+func (p *EditEphemeralMessageTextParams) WithChatID(chatID ChatID) *EditEphemeralMessageTextParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *EditEphemeralMessageTextParams) WithReceiverUserID(receiverUserID int64) *EditEphemeralMessageTextParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithEphemeralMessageID adds ephemeral message ID parameter
+func (p *EditEphemeralMessageTextParams) WithEphemeralMessageID(ephemeralMessageID int,
+) *EditEphemeralMessageTextParams {
+	p.EphemeralMessageID = ephemeralMessageID
+	return p
+}
+
+// WithText adds text parameter
+func (p *EditEphemeralMessageTextParams) WithText(text string) *EditEphemeralMessageTextParams {
+	p.Text = text
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *EditEphemeralMessageTextParams) WithParseMode(parseMode string) *EditEphemeralMessageTextParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithEntities adds entities parameter
+func (p *EditEphemeralMessageTextParams) WithEntities(entities ...MessageEntity) *EditEphemeralMessageTextParams {
+	p.Entities = entities
+	return p
+}
+
+// WithLinkPreviewOptions adds link preview options parameter
+func (p *EditEphemeralMessageTextParams) WithLinkPreviewOptions(linkPreviewOptions *LinkPreviewOptions,
+) *EditEphemeralMessageTextParams {
+	p.LinkPreviewOptions = linkPreviewOptions
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditEphemeralMessageTextParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditEphemeralMessageTextParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditEphemeralMessageMediaParams) WithChatID(chatID ChatID) *EditEphemeralMessageMediaParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *EditEphemeralMessageMediaParams) WithReceiverUserID(receiverUserID int64) *EditEphemeralMessageMediaParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithEphemeralMessageID adds ephemeral message ID parameter
+func (p *EditEphemeralMessageMediaParams) WithEphemeralMessageID(ephemeralMessageID int,
+) *EditEphemeralMessageMediaParams {
+	p.EphemeralMessageID = ephemeralMessageID
+	return p
+}
+
+// WithMedia adds media parameter
+func (p *EditEphemeralMessageMediaParams) WithMedia(media InputMedia) *EditEphemeralMessageMediaParams {
+	p.Media = media
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditEphemeralMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditEphemeralMessageMediaParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditEphemeralMessageCaptionParams) WithChatID(chatID ChatID) *EditEphemeralMessageCaptionParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *EditEphemeralMessageCaptionParams) WithReceiverUserID(receiverUserID int64,
+) *EditEphemeralMessageCaptionParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithEphemeralMessageID adds ephemeral message ID parameter
+func (p *EditEphemeralMessageCaptionParams) WithEphemeralMessageID(ephemeralMessageID int,
+) *EditEphemeralMessageCaptionParams {
+	p.EphemeralMessageID = ephemeralMessageID
+	return p
+}
+
+// WithCaption adds caption parameter
+func (p *EditEphemeralMessageCaptionParams) WithCaption(caption string) *EditEphemeralMessageCaptionParams {
+	p.Caption = caption
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *EditEphemeralMessageCaptionParams) WithParseMode(parseMode string) *EditEphemeralMessageCaptionParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (p *EditEphemeralMessageCaptionParams) WithCaptionEntities(captionEntities ...MessageEntity,
+) *EditEphemeralMessageCaptionParams {
+	p.CaptionEntities = captionEntities
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditEphemeralMessageCaptionParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditEphemeralMessageCaptionParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditEphemeralMessageReplyMarkupParams) WithChatID(chatID ChatID) *EditEphemeralMessageReplyMarkupParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *EditEphemeralMessageReplyMarkupParams) WithReceiverUserID(receiverUserID int64,
+) *EditEphemeralMessageReplyMarkupParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithEphemeralMessageID adds ephemeral message ID parameter
+func (p *EditEphemeralMessageReplyMarkupParams) WithEphemeralMessageID(ephemeralMessageID int,
+) *EditEphemeralMessageReplyMarkupParams {
+	p.EphemeralMessageID = ephemeralMessageID
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *EditEphemeralMessageReplyMarkupParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+) *EditEphemeralMessageReplyMarkupParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
 func (p *ApproveSuggestedPostParams) WithChatID(chatID int64) *ApproveSuggestedPostParams {
 	p.ChatID = chatID
 	return p
@@ -4338,6 +4638,24 @@ func (p *DeleteMessagesParams) WithChatID(chatID ChatID) *DeleteMessagesParams {
 // WithMessageIDs adds message ids parameter
 func (p *DeleteMessagesParams) WithMessageIDs(messageIDs ...int) *DeleteMessagesParams {
 	p.MessageIDs = messageIDs
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *DeleteEphemeralMessageParams) WithChatID(chatID ChatID) *DeleteEphemeralMessageParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *DeleteEphemeralMessageParams) WithReceiverUserID(receiverUserID int64) *DeleteEphemeralMessageParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithEphemeralMessageID adds ephemeral message ID parameter
+func (p *DeleteEphemeralMessageParams) WithEphemeralMessageID(ephemeralMessageID int) *DeleteEphemeralMessageParams {
+	p.EphemeralMessageID = ephemeralMessageID
 	return p
 }
 
@@ -4404,6 +4722,18 @@ func (p *SendStickerParams) WithMessageThreadID(messageThreadID int) *SendSticke
 // WithDirectMessagesTopicID adds direct messages topic ID parameter
 func (p *SendStickerParams) WithDirectMessagesTopicID(directMessagesTopicID int64) *SendStickerParams {
 	p.DirectMessagesTopicID = directMessagesTopicID
+	return p
+}
+
+// WithReceiverUserID adds receiver user ID parameter
+func (p *SendStickerParams) WithReceiverUserID(receiverUserID int64) *SendStickerParams {
+	p.ReceiverUserID = receiverUserID
+	return p
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (p *SendStickerParams) WithCallbackQueryID(callbackQueryID string) *SendStickerParams {
+	p.CallbackQueryID = callbackQueryID
 	return p
 }
 

@@ -221,6 +221,16 @@ type SendMessageParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// Text - Text of the message to be sent, 1-4096 characters after entities parsing
 	Text string `json:"text"`
 
@@ -368,7 +378,7 @@ type ForwardMessagesParams struct {
 
 // ForwardMessages - Use this method to forward multiple messages of any kind. If some of the specified
 // messages can't be found or forwarded, they are skipped. Service messages and messages with protected content
-// can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageID
+// can't be forwarded. Album grouping is kept for forwarded messages. On success, an Array of MessageID
 // (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
 func (b *Bot) ForwardMessages(ctx context.Context, params *ForwardMessagesParams) ([]MessageID, error) {
 	var messageIDs []MessageID
@@ -415,8 +425,8 @@ type CopyMessageParams struct {
 	// which can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media.
-	// Ignored if a new caption isn't specified.
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media. Ignored
+	// if a new caption isn't specified.
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -504,7 +514,7 @@ type CopyMessagesParams struct {
 // messages, and invoice messages can't be copied. A quiz poll (https://core.telegram.org/bots/api#poll) can be
 // copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the
 // method forwardMessages (https://core.telegram.org/bots/api#forwardmessages), but the copied messages don't
-// have a link to the original message. Album grouping is kept for copied messages. On success, an array of
+// have a link to the original message. Album grouping is kept for copied messages. On success, an Array of
 // MessageID (https://core.telegram.org/bots/api#messageid) of the sent messages is returned.
 func (b *Bot) CopyMessages(ctx context.Context, params *CopyMessagesParams) ([]MessageID, error) {
 	var messageIDs []MessageID
@@ -533,6 +543,16 @@ type SendPhotoParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// Photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new
 	// photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must
@@ -552,7 +572,7 @@ type SendPhotoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasSpoiler - Optional. Pass True if the photo needs to be covered with a spoiler animation
@@ -624,6 +644,16 @@ type SendLivePhotoParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// LivePhoto - Live photo video to send. The video must be no longer than 10 seconds and must not exceed 10
 	// MB in size. Pass a file_id as String to send a video that exists on the Telegram servers (recommended) or
 	// upload a new video using multipart/form-data. More information on Sending Files »
@@ -647,7 +677,7 @@ type SendLivePhotoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasSpoiler - Optional. Pass True if the video needs to be covered with a spoiler animation
@@ -719,6 +749,16 @@ type SendAudioParams struct {
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// Audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or
@@ -828,6 +868,16 @@ type SendDocumentParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// Document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
 	// using multipart/form-data. More information on Sending Files »
@@ -930,6 +980,16 @@ type SendVideoParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// Video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new
 	// video using multipart/form-data. More information on Sending Files »
@@ -974,7 +1034,7 @@ type SendVideoParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasSpoiler - Optional. Pass True if the video needs to be covered with a spoiler animation
@@ -1059,6 +1119,16 @@ type SendAnimationParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// Animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram
 	// servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or
 	// upload a new animation using multipart/form-data. More information on Sending Files »
@@ -1094,7 +1164,7 @@ type SendAnimationParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasSpoiler - Optional. Pass True if the animation needs to be covered with a spoiler animation
@@ -1171,6 +1241,16 @@ type SendVoiceParams struct {
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// Voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
@@ -1261,6 +1341,16 @@ type SendVideoNoteParams struct {
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// VideoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram
 	// servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files »
@@ -1357,7 +1447,7 @@ type SendPaidMediaParams struct {
 	// StarCount - The number of Telegram Stars that must be paid to buy access to the media; 1-25000
 	StarCount int `json:"star_count"`
 
-	// Media - A JSON-serialized array describing the media to be sent; up to 10 items
+	// Media - A JSON-serialized Array describing the media to be sent; up to 10 items
 	Media []InputPaidMedia `json:"media"`
 
 	// Payload - Optional. Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user,
@@ -1375,7 +1465,7 @@ type SendPaidMediaParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// DisableNotification - Optional. Sends the message silently
@@ -1434,7 +1524,7 @@ type SendMediaGroupParams struct {
 	// sent; required if the messages are sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
-	// Media - A JSON-serialized array describing messages to be sent, must include 2-10 items
+	// Media - A JSON-serialized Array describing messages to be sent, must include 2-10 items
 	Media []InputMedia `json:"media"`
 
 	// DisableNotification - Optional. Sends messages silently
@@ -1474,7 +1564,7 @@ func (p *SendMediaGroupParams) fileParameters() map[string]ta.NamedReader {
 
 // SendMediaGroup - Use this method to send a group of photos, live photos, videos, documents or audios as an
 // album. Documents and audio files can be only grouped in an album with messages of the same type. On success,
-// an array of Message (https://core.telegram.org/bots/api#message) objects that were sent is returned.
+// an Array of Message (https://core.telegram.org/bots/api#message) objects that were sent is returned.
 func (b *Bot) SendMediaGroup(ctx context.Context, params *SendMediaGroupParams) ([]Message, error) {
 	var messages []Message
 	err := b.performRequest(ctx, "sendMediaGroup", params, &messages)
@@ -1502,6 +1592,16 @@ type SendLocationParams struct {
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
 
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
+
 	// Latitude - Latitude of the location
 	Latitude float64 `json:"latitude"`
 
@@ -1512,8 +1612,8 @@ type SendLocationParams struct {
 	HorizontalAccuracy float64 `json:"horizontal_accuracy,omitempty"`
 
 	// LivePeriod - Optional. Period in seconds during which the location will be updated (see Live Locations
-	// (https://telegram.org/blog/live-locations), should be between 60 and 86400, or 0x7FFFFFFF for live locations
-	// that can be edited indefinitely
+	// (https://telegram.org/blog/live-locations)), must be between 60 and 86400, or 0x7FFFFFFF for live locations
+	// that can be edited indefinitely. Must be 0 for ephemeral messages.
 	LivePeriod int `json:"live_period,omitempty"`
 
 	// Heading - Optional. For live locations, a direction in which the user is moving, in degrees. Must be
@@ -1583,6 +1683,16 @@ type SendVenueParams struct {
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// Latitude - Latitude of the venue
 	Latitude float64 `json:"latitude"`
@@ -1669,6 +1779,16 @@ type SendContactParams struct {
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// PhoneNumber - Contact's phone number
 	PhoneNumber string `json:"phone_number"`
@@ -1760,24 +1880,24 @@ type SendPollParams struct {
 	// Type - Optional. Poll type, “quiz” or “regular”, defaults to “regular”
 	Type string `json:"type,omitempty"`
 
-	// AllowsMultipleAnswers - Optional. Pass True, if the poll allows multiple answers, defaults to False
+	// AllowsMultipleAnswers - Optional. Pass True if the poll allows multiple answers, defaults to False
 	AllowsMultipleAnswers bool `json:"allows_multiple_answers,omitempty"`
 
-	// AllowsRevoting - Optional. Pass True, if the poll allows to change chosen answer options, defaults to
+	// AllowsRevoting - Optional. Pass True if the poll allows to change chosen answer options, defaults to
 	// False for quizzes and to True for regular polls
 	AllowsRevoting bool `json:"allows_revoting,omitempty"`
 
-	// ShuffleOptions - Optional. Pass True, if the poll options must be shown in random order
+	// ShuffleOptions - Optional. Pass True if the poll options must be shown in random order
 	ShuffleOptions bool `json:"shuffle_options,omitempty"`
 
-	// AllowAddingOptions - Optional. Pass True, if answer options can be added to the poll after creation; not
+	// AllowAddingOptions - Optional. Pass True if answer options can be added to the poll after creation; not
 	// supported for anonymous polls and quizzes
 	AllowAddingOptions bool `json:"allow_adding_options,omitempty"`
 
-	// HideResultsUntilCloses - Optional. Pass True, if poll results must be shown only after the poll closes
+	// HideResultsUntilCloses - Optional. Pass True if poll results must be shown only after the poll closes
 	HideResultsUntilCloses bool `json:"hide_results_until_closes,omitempty"`
 
-	// MembersOnly - Optional. Pass True, if voting is limited to users who have been members of the chat where
+	// MembersOnly - Optional. Pass True if voting is limited to users who have been members of the chat where
 	// the poll is being sent for more than 24 hours; for channel chats only
 	MembersOnly bool `json:"members_only,omitempty"`
 
@@ -2725,12 +2845,15 @@ type SendChatJoinRequestWebAppParams struct {
 	// ChatJoinRequestQueryID - Unique identifier of the join request query
 	ChatJoinRequestQueryID string `json:"chat_join_request_query_id"`
 
-	// WebAppURL - The URL of the Mini App to be opened
+	// WebAppURL - An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web
+	// Apps (https://core.telegram.org/bots/webapps#initializing-mini-apps)
 	WebAppURL string `json:"web_app_url"`
 }
 
 // SendChatJoinRequestWebApp - Use this method to process a received chat join request query by showing a
-// Mini App to the user before deciding the outcome. Returns True on success.
+// Mini App to the user before deciding the outcome. Call answerChatJoinRequestQuery
+// (https://core.telegram.org/bots/api#answerchatjoinrequestquery) to resolve the join request query based on
+// the user interaction with the Mini App. Returns True on success.
 func (b *Bot) SendChatJoinRequestWebApp(ctx context.Context, params *SendChatJoinRequestWebAppParams) error {
 	err := b.performRequest(ctx, "sendChatJoinRequestWebApp", params)
 	if err != nil {
@@ -2962,7 +3085,7 @@ type GetChatMemberCountParams struct {
 	ChatID ChatID `json:"chat_id"`
 }
 
-// GetChatMemberCount - Use this method to get the number of members in a chat. Returns Int on success.
+// GetChatMemberCount - Use this method to get the number of members in a chat. Returns Integer on success.
 func (b *Bot) GetChatMemberCount(ctx context.Context, params *GetChatMemberCountParams) (*int, error) {
 	var chatMemberCount *int
 	err := b.performRequest(ctx, "getChatMemberCount", params, &chatMemberCount)
@@ -3004,7 +3127,7 @@ type GetUserPersonalChatMessagesParams struct {
 }
 
 // GetUserPersonalChatMessages - Use this method to get the last messages from the personal chat (i.e., the
-// chat currently added to their profile) of a given user. On success, an array of Message
+// chat currently added to their profile) of a given user. On success, an Array of Message
 // (https://core.telegram.org/bots/api#message) objects is returned.
 func (b *Bot) GetUserPersonalChatMessages(ctx context.Context, params *GetUserPersonalChatMessagesParams) ([]Message, error) {
 	var messages []Message
@@ -3341,7 +3464,7 @@ type AnswerCallbackQueryParams struct {
 	Text string `json:"text,omitempty"`
 
 	// ShowAlert - Optional. If True, an alert will be shown by the client instead of a notification at the top
-	// of the chat screen. Defaults to false.
+	// of the chat screen. Defaults to False.
 	ShowAlert bool `json:"show_alert,omitempty"`
 
 	// URL - Optional. URL that will be opened by the user's client. If you have created a Game
@@ -3485,12 +3608,12 @@ type SetManagedBotAccessSettingsParams struct {
 	// UserID - User identifier of the managed bot whose access settings will be changed
 	UserID int64 `json:"user_id"`
 
-	// IsAccessRestricted - Pass True, if only selected users can access the bot. The bot's owner can always
+	// IsAccessRestricted - Pass True if only selected users can access the bot. The bot's owner can always
 	// access it.
 	IsAccessRestricted bool `json:"is_access_restricted"`
 
 	// AddedUserIDs - Optional. A JSON-serialized list of up to 10 identifiers of users who will have access to
-	// the bot in addition to its owner. Ignored if is_access_restricted is false.
+	// the bot in addition to its owner. Ignored if is_access_restricted is False.
 	AddedUserIDs []int64 `json:"added_user_ids,omitempty"`
 }
 
@@ -4119,7 +4242,7 @@ type SetBusinessAccountGiftSettingsParams struct {
 	// BusinessConnectionID - Unique identifier of the business connection
 	BusinessConnectionID string `json:"business_connection_id"`
 
-	// ShowGiftButton - Pass True, if a button for sending a gift to the user or by the business account must
+	// ShowGiftButton - Pass True if a button for sending a gift to the user or by the business account must
 	// always be shown in the input field
 	ShowGiftButton bool `json:"show_gift_button"`
 
@@ -4651,7 +4774,8 @@ type EditMessageTextParams struct {
 	// LinkPreviewOptions - Optional. Link preview generation options for the message
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 
-	// RichMessage - Optional. New rich content of the message; required if text isn't specified
+	// RichMessage - Optional. New rich content of the message; required if text isn't specified. Direct upload
+	// of new files isn't supported when an inline message is edited.
 	RichMessage *InputRichMessage `json:"rich_message,omitempty"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
@@ -4702,7 +4826,7 @@ type EditMessageCaptionParams struct {
 	// can be specified instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media.
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media.
 	// Supported only for animation, photo and video messages.
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
@@ -4742,7 +4866,7 @@ type EditMessageMediaParams struct {
 	// inline message.
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
-	// Media - A JSON-serialized object for a new media content of the message
+	// Media - A JSON-serialized object for the new media content of the message
 	Media InputMedia `json:"media"`
 
 	// ReplyMarkup - Optional. A JSON-serialized object for a new inline keyboard
@@ -4973,6 +5097,147 @@ func (b *Bot) StopPoll(ctx context.Context, params *StopPollParams) (*Poll, erro
 	return poll, nil
 }
 
+// EditEphemeralMessageTextParams - Represents parameters of editEphemeralMessageText method.
+type EditEphemeralMessageTextParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
+	ChatID ChatID `json:"chat_id"`
+
+	// ReceiverUserID - Identifier of the user who received the message
+	ReceiverUserID int64 `json:"receiver_user_id"`
+
+	// EphemeralMessageID - Identifier of the ephemeral message to edit
+	EphemeralMessageID int `json:"ephemeral_message_id"`
+
+	// Text - New text of the message, 1-4096 characters after entity parsing
+	Text string `json:"text"`
+
+	// ParseMode - Optional. Mode for parsing entities in the message text. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// Entities - Optional. A JSON-serialized list of special entities that appear in message text, which can be
+	// specified instead of parse_mode
+	Entities []MessageEntity `json:"entities,omitempty"`
+
+	// LinkPreviewOptions - Optional. Link preview generation options for the message
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards)
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditEphemeralMessageText - Use this method to edit an ephemeral text message. Note that it is not
+// guaranteed that the user will receive the message edit event, especially if they are offline. On success,
+// True is returned.
+func (b *Bot) EditEphemeralMessageText(ctx context.Context, params *EditEphemeralMessageTextParams) error {
+	err := b.performRequest(ctx, "editEphemeralMessageText", params)
+	if err != nil {
+		return fmt.Errorf("telego: editEphemeralMessageText: %w", err)
+	}
+	return nil
+}
+
+// EditEphemeralMessageMediaParams - Represents parameters of editEphemeralMessageMedia method.
+type EditEphemeralMessageMediaParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
+	ChatID ChatID `json:"chat_id"`
+
+	// ReceiverUserID - Identifier of the user who received the message
+	ReceiverUserID int64 `json:"receiver_user_id"`
+
+	// EphemeralMessageID - Identifier of the ephemeral message to edit
+	EphemeralMessageID int `json:"ephemeral_message_id"`
+
+	// Media - A JSON-serialized object for the new media content of the message. A new file can't be uploaded;
+	// use a previously uploaded file via its file_id or specify a URL.
+	Media InputMedia `json:"media"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards)
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditEphemeralMessageMedia - Use this method to edit the media of an ephemeral message. Note that it is not
+// guaranteed that the user will receive the message edit event, especially if they are offline. On success,
+// True is returned.
+func (b *Bot) EditEphemeralMessageMedia(ctx context.Context, params *EditEphemeralMessageMediaParams) error {
+	err := b.performRequest(ctx, "editEphemeralMessageMedia", params)
+	if err != nil {
+		return fmt.Errorf("telego: editEphemeralMessageMedia: %w", err)
+	}
+	return nil
+}
+
+// EditEphemeralMessageCaptionParams - Represents parameters of editEphemeralMessageCaption method.
+type EditEphemeralMessageCaptionParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
+	ChatID ChatID `json:"chat_id"`
+
+	// ReceiverUserID - Identifier of the user who received the message
+	ReceiverUserID int64 `json:"receiver_user_id"`
+
+	// EphemeralMessageID - Identifier of the ephemeral message to edit
+	EphemeralMessageID int `json:"ephemeral_message_id"`
+
+	// Caption - Optional. New caption of the message, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the message caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. A JSON-serialized list of special entities that appear in the caption, which
+	// can be specified instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards)
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditEphemeralMessageCaption - Use this method to edit the caption of an ephemeral message. Note that it is
+// not guaranteed that the user will receive the message edit event, especially if they are offline. On success,
+// True is returned.
+func (b *Bot) EditEphemeralMessageCaption(ctx context.Context, params *EditEphemeralMessageCaptionParams) error {
+	err := b.performRequest(ctx, "editEphemeralMessageCaption", params)
+	if err != nil {
+		return fmt.Errorf("telego: editEphemeralMessageCaption: %w", err)
+	}
+	return nil
+}
+
+// EditEphemeralMessageReplyMarkupParams - Represents parameters of editEphemeralMessageReplyMarkup method.
+type EditEphemeralMessageReplyMarkupParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
+	ChatID ChatID `json:"chat_id"`
+
+	// ReceiverUserID - Identifier of the user who received the message
+	ReceiverUserID int64 `json:"receiver_user_id"`
+
+	// EphemeralMessageID - Identifier of the ephemeral message to edit
+	EphemeralMessageID int `json:"ephemeral_message_id"`
+
+	// ReplyMarkup - Optional. A JSON-serialized object for an inline keyboard
+	// (https://core.telegram.org/bots/features#inline-keyboards)
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+}
+
+// EditEphemeralMessageReplyMarkup - Use this method to edit only the reply markup of an ephemeral message.
+// Note that it is not guaranteed that the user will receive the message edit event, especially if they are
+// offline. On success, True is returned.
+func (b *Bot) EditEphemeralMessageReplyMarkup(ctx context.Context, params *EditEphemeralMessageReplyMarkupParams) error {
+	err := b.performRequest(ctx, "editEphemeralMessageReplyMarkup", params)
+	if err != nil {
+		return fmt.Errorf("telego: editEphemeralMessageReplyMarkup: %w", err)
+	}
+	return nil
+}
+
 // ApproveSuggestedPostParams - Represents parameters of approveSuggestedPost method.
 type ApproveSuggestedPostParams struct {
 	// ChatID - Unique identifier for the target direct messages chat
@@ -5073,6 +5338,30 @@ func (b *Bot) DeleteMessages(ctx context.Context, params *DeleteMessagesParams) 
 	return nil
 }
 
+// DeleteEphemeralMessageParams - Represents parameters of deleteEphemeralMessage method.
+type DeleteEphemeralMessageParams struct {
+	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
+	// @username
+	ChatID ChatID `json:"chat_id"`
+
+	// ReceiverUserID - Identifier of the user who received the message
+	ReceiverUserID int64 `json:"receiver_user_id"`
+
+	// EphemeralMessageID - Identifier of the ephemeral message to delete
+	EphemeralMessageID int `json:"ephemeral_message_id"`
+}
+
+// DeleteEphemeralMessage - Use this method to delete an ephemeral message. Note that it is not guaranteed
+// that the user will receive the message deletion event, especially if they are offline. Returns True on
+// success.
+func (b *Bot) DeleteEphemeralMessage(ctx context.Context, params *DeleteEphemeralMessageParams) error {
+	err := b.performRequest(ctx, "deleteEphemeralMessage", params)
+	if err != nil {
+		return fmt.Errorf("telego: deleteEphemeralMessage: %w", err)
+	}
+	return nil
+}
+
 // DeleteMessageReactionParams - Represents parameters of deleteMessageReaction method.
 type DeleteMessageReactionParams struct {
 	// ChatID - Unique identifier for the target chat or username of the target supergroup in the format
@@ -5144,6 +5433,16 @@ type SendStickerParams struct {
 	// DirectMessagesTopicID - Optional. Identifier of the direct messages topic to which the message will be
 	// sent; required if the message is sent to a direct messages chat
 	DirectMessagesTopicID int64 `json:"direct_messages_topic_id,omitempty"`
+
+	// ReceiverUserID - Optional. For outgoing ephemeral messages, unique identifier of the user who will
+	// receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the
+	// message, especially if they are offline. See ephemeral message sending
+	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
+	ReceiverUserID int64 `json:"receiver_user_id,omitempty"`
+
+	// CallbackQueryID - Optional. For outgoing ephemeral messages, identifier of the callback query which
+	// triggered the message if any
+	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// Sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers
 	// (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload
@@ -5609,7 +5908,8 @@ func (b *Bot) DeleteStickerSet(ctx context.Context, params *DeleteStickerSetPara
 // SendRichMessageParams - Represents parameters of sendRichMessage method.
 type SendRichMessageParams struct {
 	// BusinessConnectionID - Optional. Unique identifier of the business connection on behalf of which the
-	// message will be sent
+	// message will be sent. Bot can send rich messages on behalf of a business account only if the corresponding
+	// user can send rich messages.
 	BusinessConnectionID string `json:"business_connection_id,omitempty"`
 
 	// ChatID - Unique identifier for the target chat or username of the target bot, supergroup or channel in
@@ -5682,7 +5982,7 @@ type SendRichMessageDraftParams struct {
 	// identifier are animated.
 	DraftID int `json:"draft_id"`
 
-	// RichMessage - The partial message to be streamed
+	// RichMessage - The partial message to be streamed. Direct upload of new files isn't supported.
 	RichMessage InputRichMessage `json:"rich_message"`
 }
 
@@ -5703,7 +6003,7 @@ type AnswerInlineQueryParams struct {
 	// InlineQueryID - Unique identifier for the answered query
 	InlineQueryID string `json:"inline_query_id"`
 
-	// Results - A JSON-serialized array of results for the inline query
+	// Results - A JSON-serialized Array of results for the inline query
 	Results []InlineQueryResult `json:"results"`
 
 	// CacheTime - Optional. The maximum amount of time in seconds that the result of the inline query may be
@@ -5778,7 +6078,7 @@ type SendInvoiceParams struct {
 	// Not supported for payments in Telegram Stars (https://t.me/BotNews/90).
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
-	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest
+	// SuggestedTipAmounts - Optional. A JSON-serialized Array of suggested amounts of tips in the smallest
 	// units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The
 	// suggested tip amounts must be positive, passed in a strictly increased order and must not exceed
 	// max_tip_amount.
@@ -5920,7 +6220,7 @@ type CreateInvoiceLinkParams struct {
 	// Not supported for payments in Telegram Stars (https://t.me/BotNews/90).
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
-	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tips in the smallest
+	// SuggestedTipAmounts - Optional. A JSON-serialized Array of suggested amounts of tips in the smallest
 	// units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The
 	// suggested tip amounts must be positive, passed in a strictly increased order and must not exceed
 	// max_tip_amount.
@@ -5992,7 +6292,7 @@ type AnswerShippingQueryParams struct {
 	// example, if delivery to the specified address is not possible)
 	Ok bool `json:"ok"`
 
-	// ShippingOptions - Optional. Required if ok is True. A JSON-serialized array of available shipping
+	// ShippingOptions - Optional. Required if ok is True. A JSON-serialized Array of available shipping
 	// options.
 	ShippingOptions []ShippingOption `json:"shipping_options,omitempty"`
 
@@ -6121,7 +6421,7 @@ type SetPassportDataErrorsParams struct {
 	// UserID - User identifier
 	UserID int64 `json:"user_id"`
 
-	// Errors - A JSON-serialized array describing the errors
+	// Errors - A JSON-serialized Array describing the errors
 	Errors []PassportElementError `json:"errors"`
 }
 

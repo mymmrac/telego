@@ -4205,6 +4205,114 @@ func TestBot_StopPoll(t *testing.T) {
 	})
 }
 
+func TestBot_EditEphemeralMessageText(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditEphemeralMessageText(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditEphemeralMessageText(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_EditEphemeralMessageMedia(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditEphemeralMessageMedia(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditEphemeralMessageMedia(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_EditEphemeralMessageCaption(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditEphemeralMessageCaption(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditEphemeralMessageCaption(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_EditEphemeralMessageReplyMarkup(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditEphemeralMessageReplyMarkup(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditEphemeralMessageReplyMarkup(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
 func TestBot_ApproveSuggestedPost(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -4309,6 +4417,33 @@ func TestBot_DeleteMessages(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.DeleteMessages(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_DeleteEphemeralMessage(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteEphemeralMessage(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteEphemeralMessage(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
