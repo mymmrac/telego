@@ -232,6 +232,10 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "InputRichMessage{}"
 	case "*InputRichMessage":
 		return "&InputRichMessage{}"
+	case "[]InputRichBlock":
+		return "[]InputRichBlock{&InputRichBlockParagraph{}}"
+	case "[]InputRichMessageMedia":
+		return "[]InputRichMessageMedia{{}}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

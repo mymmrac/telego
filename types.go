@@ -120,6 +120,9 @@ type Update struct {
 	// was changed
 	ManagedBot *ManagedBotUpdated `json:"managed_bot,omitempty"`
 
+	// Subscription - Optional. User payment subscription has changed
+	Subscription *BotSubscriptionUpdated `json:"subscription,omitempty"`
+
 	// ctx - Internal context value can be retrieved using [Update.Context] and set by [Update.WithContext].
 	// Value can't be cloned; thus, after calling [Update.Clone] or [Update.CloneSafe] ctx will be the same as in the
 	// original update.
@@ -520,6 +523,10 @@ type ChatFullInfo struct {
 	// GuardBot - Optional. The bot that processes join request queries in the chat. The field is only available
 	// to chat administrators.
 	GuardBot *User `json:"guard_bot,omitempty"`
+
+	// Community - Optional. The Community (https://core.telegram.org/bots/api#community) to which the chat
+	// belongs
+	Community *Community `json:"community,omitempty"`
 }
 
 // unknownReactionTypeErr is an error for unknown reaction type
@@ -566,10 +573,10 @@ func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 
 // Message - This object represents a message.
 type Message struct {
-	// MessageID - Unique message identifier inside this chat. In specific instances (e.g., message containing a
-	// video sent to a big chat), the server might automatically schedule a message instead of sending it
-	// immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is
-	// actually sent.
+	// MessageID - Unique message identifier inside this chat; 0 for ephemeral messages. In specific instances
+	// (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message
+	// instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be
+	// unusable until it is actually sent.
 	MessageID int `json:"message_id"`
 
 	// MessageThreadID - Optional. Unique identifier of a message thread or forum topic to which the message
@@ -602,6 +609,13 @@ type Message struct {
 	// SenderTag - Optional. Tag or custom title of the sender of the message; for supergroups only
 	SenderTag string `json:"sender_tag,omitempty"`
 
+	// ReceiverUser - Optional. For ephemeral messages, the user who received the message
+	ReceiverUser *User `json:"receiver_user,omitempty"`
+
+	// EphemeralMessageID - Optional. For ephemeral messages, identifier of the ephemeral message inside this
+	// chat. The identifier may be reused for another ephemeral message after the message is deleted or expires.
+	EphemeralMessageID int `json:"ephemeral_message_id,omitempty"`
+
 	// Date - Date the message was sent in Unix time. It is always a positive number, representing a valid date.
 	Date int64 `json:"date"`
 
@@ -632,7 +646,8 @@ type Message struct {
 
 	// ReplyToMessage - Optional. For replies in the same chat and message thread, the original message. Note
 	// that the Message (https://core.telegram.org/bots/api#message) object in this field will not contain further
-	// reply_to_message fields even if it itself is a reply.
+	// reply_to_message fields even if it itself is a reply. If the message is a reply to an ephemeral message, then
+	// this field may be omitted.
 	ReplyToMessage *Message `json:"reply_to_message,omitempty"`
 
 	// ExternalReply - Optional. Information about the message that is being replied to, which may come from
@@ -879,8 +894,8 @@ type Message struct {
 	// PassportData - Optional. Telegram Passport data
 	PassportData *PassportData `json:"passport_data,omitempty"`
 
-	// ProximityAlertTriggered - Optional. Service message. A user in the chat triggered another user's
-	// proximity alert while sharing Live Location.
+	// ProximityAlertTriggered - Optional. Service message: a user in the chat triggered another user's
+	// proximity alert while sharing Live Location
 	ProximityAlertTriggered *ProximityAlertTriggered `json:"proximity_alert_triggered,omitempty"`
 
 	// BoostAdded - Optional. Service message: user boosted the chat
@@ -894,6 +909,14 @@ type Message struct {
 
 	// ChecklistTasksAdded - Optional. Service message: tasks were added to a checklist
 	ChecklistTasksAdded *ChecklistTasksAdded `json:"checklist_tasks_added,omitempty"`
+
+	// CommunityChatAdded - Optional. Service message: chat added to a Community
+	// (https://core.telegram.org/bots/api#community)
+	CommunityChatAdded *CommunityChatAdded `json:"community_chat_added,omitempty"`
+
+	// CommunityChatRemoved - Optional. Service message: chat removed from a Community
+	// (https://core.telegram.org/bots/api#community)
+	CommunityChatRemoved *CommunityChatRemoved `json:"community_chat_removed,omitempty"`
 
 	// DirectMessagePriceChanged - Optional. Service message: the price for paid messages in the corresponding
 	// direct messages chat of a channel has changed
@@ -1345,24 +1368,29 @@ func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
 
 // ReplyParameters - Describes reply parameters for the message that is being sent.
 type ReplyParameters struct {
-	// MessageID - Identifier of the message that will be replied to in the current chat, or in the chat chat_id
-	// if it is specified
-	MessageID int `json:"message_id"`
+	// MessageID - Optional. Identifier of the message that will be replied to in the current chat, or in the
+	// chat chat_id if it is specified. Required if ephemeral_message_id isn't specified.
+	MessageID int `json:"message_id,omitempty"`
 
 	// ChatID - Optional. If the message to be replied to is from a different chat, unique identifier for the
 	// chat or username of the bot, supergroup or channel in the format @username. Not supported for messages sent
-	// on behalf of a business account and messages from channel direct messages chats.
+	// on behalf of a business account, messages from channel direct messages chats and ephemeral messages.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
+	// EphemeralMessageID - Optional. Identifier of the incoming ephemeral message that will be replied to in
+	// the current chat. A reply to an ephemeral message must itself be an ephemeral message. An ephemeral message
+	// may only be replied to within 15 seconds of being sent. Required if message_id isn't specified.
+	EphemeralMessageID int `json:"ephemeral_message_id,omitempty"`
+
 	// AllowSendingWithoutReply - Optional. Pass True if the message should be sent even if the specified
-	// message to be replied to is not found. Always False for replies in another chat or forum topic. Always True
-	// for messages sent on behalf of a business account.
+	// message to be replied to is not found. Always False for replies in another chat or forum topic, and sent
+	// ephemeral messages. Always True for messages sent on behalf of a business account.
 	AllowSendingWithoutReply bool `json:"allow_sending_without_reply,omitempty"`
 
 	// Quote - Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing.
 	// The quote must be an exact substring of the message to be replied to, including bold, italic, underline,
 	// strikethrough, spoiler, custom_emoji, and date_time entities. The message will fail to send if the quote
-	// isn't found in the original message.
+	// isn't found in the original message. Ignored for ephemeral messages.
 	Quote string `json:"quote,omitempty"`
 
 	// QuoteParseMode - Optional. Mode for parsing entities in the quote. See formatting options
@@ -2290,31 +2318,6 @@ type InputChecklist struct {
 	OthersCanMarkTasksAsDone bool `json:"others_can_mark_tasks_as_done,omitempty"`
 }
 
-// ChecklistTasksDone - Describes a service message about checklist tasks marked as done or not done.
-type ChecklistTasksDone struct {
-	// ChecklistMessage - Optional. Message containing the checklist whose tasks were marked as done or not
-	// done. Note that the Message (https://core.telegram.org/bots/api#message) object in this field will not
-	// contain the reply_to_message field even if it itself is a reply.
-	ChecklistMessage *Message `json:"checklist_message,omitempty"`
-
-	// MarkedAsDoneTaskIDs - Optional. Identifiers of the tasks that were marked as done
-	MarkedAsDoneTaskIDs []int `json:"marked_as_done_task_ids,omitempty"`
-
-	// MarkedAsNotDoneTaskIDs - Optional. Identifiers of the tasks that were marked as not done
-	MarkedAsNotDoneTaskIDs []int `json:"marked_as_not_done_task_ids,omitempty"`
-}
-
-// ChecklistTasksAdded - Describes a service message about tasks added to a checklist.
-type ChecklistTasksAdded struct {
-	// ChecklistMessage - Optional. Message containing the checklist to which the tasks were added. Note that
-	// the Message (https://core.telegram.org/bots/api#message) object in this field will not contain the
-	// reply_to_message field even if it itself is a reply.
-	ChecklistMessage *Message `json:"checklist_message,omitempty"`
-
-	// Tasks - List of tasks added to the checklist
-	Tasks []ChecklistTask `json:"tasks"`
-}
-
 // Location - This object represents a point on the map.
 type Location struct {
 	// Latitude - Latitude as defined by the sender
@@ -2412,6 +2415,21 @@ type ManagedBotUpdated struct {
 	// Bot - Information about the bot. Token of the bot can be fetched using the method getManagedBotToken
 	// (https://core.telegram.org/bots/api#getmanagedbottoken).
 	Bot User `json:"bot"`
+}
+
+// BotSubscriptionUpdated - This object contains information about changes to a user payment subscription
+// toward the current bot.
+type BotSubscriptionUpdated struct {
+	// User - User who subscribed for payments toward the bot
+	User User `json:"user"`
+
+	// InvoicePayload - Bot-specified invoice payload
+	InvoicePayload string `json:"invoice_payload"`
+
+	// State - The new state of the subscription. Currently, it can be one of “canceled” if the user
+	// canceled the subscription, “active” if the user re-enabled a previously canceled subscription, or
+	// “failed” if payment for the subscription failed.
+	State string `json:"state"`
 }
 
 // PollOptionAdded - Describes a service message about an option added to a poll.
@@ -2725,6 +2743,41 @@ func (c *ChatBackground) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// ChecklistTasksDone - Describes a service message about checklist tasks marked as done or not done.
+type ChecklistTasksDone struct {
+	// ChecklistMessage - Optional. Message containing the checklist whose tasks were marked as done or not
+	// done. Note that the Message (https://core.telegram.org/bots/api#message) object in this field will not
+	// contain the reply_to_message field even if it itself is a reply.
+	ChecklistMessage *Message `json:"checklist_message,omitempty"`
+
+	// MarkedAsDoneTaskIDs - Optional. Identifiers of the tasks that were marked as done
+	MarkedAsDoneTaskIDs []int `json:"marked_as_done_task_ids,omitempty"`
+
+	// MarkedAsNotDoneTaskIDs - Optional. Identifiers of the tasks that were marked as not done
+	MarkedAsNotDoneTaskIDs []int `json:"marked_as_not_done_task_ids,omitempty"`
+}
+
+// ChecklistTasksAdded - Describes a service message about tasks added to a checklist.
+type ChecklistTasksAdded struct {
+	// ChecklistMessage - Optional. Message containing the checklist to which the tasks were added. Note that
+	// the Message (https://core.telegram.org/bots/api#message) object in this field will not contain the
+	// reply_to_message field even if it itself is a reply.
+	ChecklistMessage *Message `json:"checklist_message,omitempty"`
+
+	// Tasks - List of tasks added to the checklist
+	Tasks []ChecklistTask `json:"tasks"`
+}
+
+// CommunityChatAdded - Describes a service message about a chat being added to a community.
+type CommunityChatAdded struct {
+	// Community - The new community to which the chat belongs
+	Community Community `json:"community"`
+}
+
+// CommunityChatRemoved - Describes a service message about a chat being removed from a community. Currently
+// holds no information.
+type CommunityChatRemoved struct{}
+
 // ForumTopicCreated - This object represents a service message about a new forum topic created in the chat.
 type ForumTopicCreated struct {
 	// Name - Name of the topic
@@ -2877,7 +2930,7 @@ type PaidMessagePriceChanged struct {
 // DirectMessagePriceChanged - Describes a service message about a change in the price of direct messages
 // sent to a channel chat.
 type DirectMessagePriceChanged struct {
-	// AreDirectMessagesEnabled - True, if direct messages are enabled for the channel chat; false otherwise
+	// AreDirectMessagesEnabled - True, if direct messages are enabled for the channel chat; False otherwise
 	AreDirectMessagesEnabled bool `json:"are_direct_messages_enabled"`
 
 	// DirectMessageStarCount - Optional. The new number of Telegram Stars that must be paid by users for each
@@ -2931,11 +2984,11 @@ type SuggestedPostPaid struct {
 	SuggestedPostMessage *Message `json:"suggested_post_message,omitempty"`
 
 	// Currency - Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or
-	// “TON” for toncoins.
+	// “TON” for TON grams.
 	Currency string `json:"currency"`
 
-	// Amount - Optional. The amount of the currency that was received by the channel in nanotoncoins; for
-	// payments in toncoins only
+	// Amount - Optional. The amount of the currency that was received by the channel in nanograms; for payments
+	// in TON grams only
 	Amount int `json:"amount,omitempty"`
 
 	// StarAmount - Optional. The amount of Telegram Stars that was received by the channel; for payments in
@@ -3084,12 +3137,12 @@ type LinkPreviewOptions struct {
 // SuggestedPostPrice - Describes the price of a suggested post.
 type SuggestedPostPrice struct {
 	// Currency - Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram
-	// Stars or “TON” for toncoins.
+	// Stars or “TON” for TON grams.
 	Currency string `json:"currency"`
 
 	// Amount - The amount of the currency that will be paid for the post in the smallest units of the currency,
-	// i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and
-	// price in nanotoncoins must be between 10000000 and 10000000000000.
+	// i.e. Telegram Stars or nanograms. Currently, price in Telegram Stars must be between 5 and 100000, and price
+	// in nanograms must be between 10000000 and 10000000000000.
 	Amount int `json:"amount"`
 }
 
@@ -3202,17 +3255,17 @@ type ReplyKeyboardMarkup struct {
 	Keyboard [][]KeyboardButton `json:"keyboard"`
 
 	// IsPersistent - Optional. Requests clients to always show the keyboard when the regular keyboard is
-	// hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
+	// hidden. Defaults to False, in which case the custom keyboard can be hidden and opened with a keyboard icon.
 	IsPersistent bool `json:"is_persistent,omitempty"`
 
 	// ResizeKeyboard - Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make
-	// the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom
+	// the keyboard smaller if there are just two rows of buttons). Defaults to False, in which case the custom
 	// keyboard is always of the same height as the app's standard keyboard.
 	ResizeKeyboard bool `json:"resize_keyboard,omitempty"`
 
 	// OneTimeKeyboard - Optional. Requests clients to hide the keyboard as soon as it's been used. The keyboard
 	// will still be available, but clients will automatically display the usual letter-keyboard in the chat - the
-	// user can press a special button in the input field to see the custom keyboard again. Defaults to false.
+	// user can press a special button in the input field to see the custom keyboard again. Defaults to False.
 	OneTimeKeyboard bool `json:"one_time_keyboard,omitempty"`
 
 	// InputFieldPlaceholder - Optional. The placeholder to be shown in the input field when the keyboard is
@@ -3655,6 +3708,18 @@ func (f *ForceReply) ReplyType() string {
 
 func (f *ForceReply) iReplyMarkup() {}
 
+// Community - Represents a community (a group of chats).
+type Community struct {
+	// ID - Unique identifier for this community. This number may have more than 32 significant bits and some
+	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52
+	// significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this
+	// identifier.
+	ID int64 `json:"id"`
+
+	// Name - Name of the community
+	Name string `json:"name"`
+}
+
 // ChatPhoto - This object represents a chat photo.
 type ChatPhoto struct {
 	// SmallFileID - File identifier of small (160x160) chat photo. This file_id can be used only for photo
@@ -3776,7 +3841,7 @@ type ChatAdministratorRights struct {
 	CanManageDirectMessages bool `json:"can_manage_direct_messages,omitempty"`
 
 	// CanManageTags - Optional. True, if the administrator can edit the tags of regular members; for groups and
-	// supergroups only. If omitted defaults to the value of can_pin_messages.
+	// supergroups only. If omitted, defaults to the value of can_pin_messages.
 	CanManageTags bool `json:"can_manage_tags,omitempty"`
 }
 
@@ -4054,7 +4119,7 @@ type ChatMemberAdministrator struct {
 	CanManageDirectMessages bool `json:"can_manage_direct_messages,omitempty"`
 
 	// CanManageTags - Optional. True, if the administrator can edit the tags of regular members; for groups and
-	// supergroups only. If omitted defaults to the value of can_pin_messages.
+	// supergroups only. If omitted, defaults to the value of can_pin_messages.
 	CanManageTags bool `json:"can_manage_tags,omitempty"`
 
 	// CustomTitle - Optional. Custom title for this user
@@ -4280,9 +4345,10 @@ type ChatJoinRequest struct {
 	// InviteLink - Optional. Chat invite link that was used by the user to send the join request
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
 
-	// QueryID - Optional. Identifier of the join request query. If present, then the bot must call
-	// sendChatJoinRequestWebApp (https://core.telegram.org/bots/api#sendchatjoinrequestwebapp) or directly call
-	// answerChatJoinRequestQuery (https://core.telegram.org/bots/api#answerchatjoinrequestquery) within 10 seconds.
+	// QueryID - Optional. Identifier of the join request query; for bots assigned to process join requests
+	// only. If present, then the bot must call sendChatJoinRequestWebApp
+	// (https://core.telegram.org/bots/api#sendchatjoinrequestwebapp) or directly call answerChatJoinRequestQuery
+	// (https://core.telegram.org/bots/api#answerchatjoinrequestquery) within 10 seconds.
 	QueryID string `json:"query_id,omitempty"`
 }
 
@@ -4338,7 +4404,7 @@ type ChatPermissions struct {
 	// CanPinMessages - Optional. True, if the user is allowed to pin messages. Ignored in public supergroups.
 	CanPinMessages *bool `json:"can_pin_messages,omitempty"`
 
-	// CanManageTopics - Optional. True, if the user is allowed to create forum topics. If omitted defaults to
+	// CanManageTopics - Optional. True, if the user is allowed to create forum topics. If omitted, defaults to
 	// the value of can_pin_messages.
 	CanManageTopics *bool `json:"can_manage_topics,omitempty"`
 }
@@ -5072,11 +5138,11 @@ type UniqueGiftInfo struct {
 	Origin string `json:"origin"`
 
 	// LastResaleCurrency - Optional. For gifts bought from other users, the currency in which the payment for
-	// the gift was done. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins.
+	// the gift was done. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
 	LastResaleCurrency string `json:"last_resale_currency,omitempty"`
 
 	// LastResaleAmount - Optional. For gifts bought from other users, the price paid for the gift in either
-	// Telegram Stars or nanotoncoins
+	// Telegram Stars or nanograms
 	LastResaleAmount int `json:"last_resale_amount,omitempty"`
 
 	// OwnedGiftID - Optional. Unique identifier of the received gift for the bot; only present for gifts
@@ -5319,6 +5385,10 @@ type BotCommand struct {
 
 	// Description - Description of the command; 1-256 characters
 	Description string `json:"description"`
+
+	// IsEphemeral - Optional. True, if the command sends an ephemeral message, which can be seen only by the
+	// sender of the message and the bot
+	IsEphemeral bool `json:"is_ephemeral,omitempty"`
 }
 
 // ChatID - Represents chat ID as int64 or string
@@ -6004,6 +6074,7 @@ const (
 	MediaTypeSticker   = "sticker"
 	MediaTypeVenue     = "venue"
 	MediaTypeVideo     = "video"
+	MediaTypeVoiceNote = "voice_note"
 )
 
 // InputMediaAnimation - Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be
@@ -6037,7 +6108,7 @@ type InputMediaAnimation struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// Width - Optional. Animation width
@@ -6061,6 +6132,7 @@ func (i *InputMediaAnimation) MediaType() string {
 func (i *InputMediaAnimation) iInputMedia()           {}
 func (i *InputMediaAnimation) iInputPollMedia()       {}
 func (i *InputMediaAnimation) iInputPollOptionMedia() {}
+func (i *InputMediaAnimation) iRichMessageMedia()     {}
 
 func (i *InputMediaAnimation) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
@@ -6120,8 +6192,9 @@ func (i *InputMediaAudio) MediaType() string {
 	return MediaTypeAudio
 }
 
-func (i *InputMediaAudio) iInputMedia()     {}
-func (i *InputMediaAudio) iInputPollMedia() {}
+func (i *InputMediaAudio) iInputMedia()       {}
+func (i *InputMediaAudio) iInputPollMedia()   {}
+func (i *InputMediaAudio) iRichMessageMedia() {}
 
 func (i *InputMediaAudio) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
@@ -6240,7 +6313,7 @@ type InputMediaLivePhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasSpoiler - Optional. Pass True if the live photo needs to be covered with a spoiler animation
@@ -6316,7 +6389,7 @@ type InputMediaPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasSpoiler - Optional. Pass True if the photo needs to be covered with a spoiler animation
@@ -6331,6 +6404,7 @@ func (i *InputMediaPhoto) MediaType() string {
 func (i *InputMediaPhoto) iInputMedia()           {}
 func (i *InputMediaPhoto) iInputPollMedia()       {}
 func (i *InputMediaPhoto) iInputPollOptionMedia() {}
+func (i *InputMediaPhoto) iRichMessageMedia()     {}
 
 func (i *InputMediaPhoto) fileParameters() map[string]telegoapi.NamedReader {
 	i.Media.needAttach = true
@@ -6452,7 +6526,7 @@ type InputMediaVideo struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// Width - Optional. Video width
@@ -6479,6 +6553,7 @@ func (i *InputMediaVideo) MediaType() string {
 func (i *InputMediaVideo) iInputMedia()           {}
 func (i *InputMediaVideo) iInputPollMedia()       {}
 func (i *InputMediaVideo) iInputPollOptionMedia() {}
+func (i *InputMediaVideo) iRichMessageMedia()     {}
 
 func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
 	fp := make(map[string]telegoapi.NamedReader)
@@ -6493,6 +6568,48 @@ func (i *InputMediaVideo) fileParameters() map[string]telegoapi.NamedReader {
 		i.Cover.needAttach = true
 		fp["cover"] = i.Cover.File
 	}
+
+	return fp
+}
+
+// InputMediaVoiceNote - Represents a voice message file to be sent.
+type InputMediaVoiceNote struct {
+	// Type - Type of the media, must be voice_note
+	Type string `json:"type"`
+
+	// Media - File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended),
+	// pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to
+	// upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files
+	// » (https://core.telegram.org/bots/api#sending-files)
+	Media InputFile `json:"media"`
+
+	// Caption - Optional. Caption of the voice message to be sent, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the voice message caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
+	// instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// Duration - Optional. Duration of the voice message in seconds
+	Duration int `json:"duration,omitempty"`
+}
+
+// MediaType return InputMedia type
+func (i *InputMediaVoiceNote) MediaType() string {
+	return MediaTypeVoiceNote
+}
+
+func (i *InputMediaVoiceNote) iRichMessageMedia() {}
+
+func (i *InputMediaVoiceNote) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	i.Media.needAttach = true
+	fp["media"] = i.Media.File
 
 	return fp
 }
@@ -6995,17 +7112,25 @@ func (i *RichMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// InputRichMessage - Describes a rich message to be sent. Exactly one of the fields html or markdown must be
-// used.
+// InputRichMessage - Describes a rich message to be sent. Exactly one of the fields html, markdown, or
+// blocks must be used.
 type InputRichMessage struct {
+	// Blocks - Optional. Content of the rich message to send described as a list of blocks
+	Blocks []InputRichBlock `json:"blocks,omitempty"`
+
 	// HTML - Optional. Content of the rich message to send described using HTML formatting. See rich message
-	// formatting options (https://core.telegram.org/bots/api#rich-message-formatting-options) for more details.
+	// formatting options (https://core.telegram.org/bots/api#rich-message-formatting-options) for more details. Use
+	// media field to specify the media used in the message.
 	HTML string `json:"html,omitempty"`
 
 	// Markdown - Optional. Content of the rich message to send described using Markdown formatting. See rich
 	// message formatting options (https://core.telegram.org/bots/api#rich-message-formatting-options) for more
-	// details.
+	// details. Use media field to specify the media used in the message.
 	Markdown string `json:"markdown,omitempty"`
+
+	// Media - Optional. List of media that are specified in the markdown or html fields using tg://photo?id=,
+	// tg://video?id=, and tg://audio?id= links
+	Media []InputRichMessageMedia `json:"media,omitempty"`
 
 	// IsRtl - Optional. Pass True if the rich message must be shown right-to-left
 	IsRtl bool `json:"is_rtl,omitempty"`
@@ -7013,6 +7138,24 @@ type InputRichMessage struct {
 	// SkipEntityDetection - Optional. Pass True to skip automatic detection of entities (e.g., URLs, email
 	// addresses, username mentions, hashtags, cashtags, bot commands, or phone numbers) in the text
 	SkipEntityDetection bool `json:"skip_entity_detection,omitempty"`
+}
+
+// RichMessageMedia - Represents rich message media.
+type RichMessageMedia interface {
+	// MediaType return RichMessageMedia type
+	MediaType() string
+	// Disallow external implementations
+	iRichMessageMedia()
+}
+
+// InputRichMessageMedia - Describes a media element embedded in an outgoing rich message.
+type InputRichMessageMedia struct {
+	// ID - Unique identifier of the media used in a tg://photo?id=, tg://video?id=, or tg://audio?id= link.
+	// 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
+	ID string `json:"id"`
+
+	// Media - The media to be sent. Everything except the media itself and its properties is ignored.
+	Media RichMessageMedia `json:"media"`
 }
 
 // RichText - This object represents a rich formatted text. Currently, it can be either a String for plain
@@ -9067,7 +9210,7 @@ func (i *RichBlockAudio) BlockType() string {
 
 func (i *RichBlockAudio) iRichBlock() {}
 
-// RichBlockPhoto - A block with a photo, corresponding to the HTML tag <photo>.
+// RichBlockPhoto - A block with a photo, corresponding to the HTML tag <img>.
 type RichBlockPhoto struct {
 	// Type - Type of the block, always “photo”
 	Type string `json:"type"`
@@ -9133,14 +9276,14 @@ func (i *RichBlockVoiceNote) iRichBlock() {}
 // RichBlockThinking - A block with a “Thinking…” placeholder, corresponding to the custom HTML tag
 // <tg-thinking>. The block may be used only in sendRichMessageDraft
 // (https://core.telegram.org/bots/api#sendrichmessagedraft), therefore it can't be received in messages. See
-// https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for examples of custom emoji, which are
+// https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for examples of custom emoji that are
 // recommended for usage in the block.
 type RichBlockThinking struct {
 	// Type - Type of the block, always “thinking”
 	Type string `json:"type"`
 
 	// Text - Text of the block. See https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for
-	// examples of custom emoji, which are recommended for usage in the block.
+	// examples of custom emoji that are recommended for usage in the block.
 	Text RichText `json:"text"`
 }
 
@@ -9176,6 +9319,462 @@ func (i *RichBlockThinking) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+// InputRichBlockListItem - An item of a list to be sent.
+type InputRichBlockListItem struct {
+	// Blocks - The content of the item
+	Blocks []InputRichBlock `json:"blocks"`
+
+	// HasCheckbox - Optional. Pass True if the item has a checkbox
+	HasCheckbox bool `json:"has_checkbox,omitempty"`
+
+	// IsChecked - Optional. Pass True if the item has a checked checkbox
+	IsChecked bool `json:"is_checked,omitempty"`
+
+	// Value - Optional. For ordered lists, the numeric value of the item label
+	Value int `json:"value,omitempty"`
+
+	// Type - Optional. For ordered lists, the type of the item label; must be one of “a” for lowercase
+	// letters, “A” for uppercase letters, “i” for lowercase Roman numerals, “I” for uppercase Roman
+	// numerals, or “1” for decimal numbers
+	Type string `json:"type,omitempty"`
+}
+
+// InputRichBlock - This object represents a block in a rich formatted message to be sent. Currently, it can
+// be any of the following types:
+// InputRichBlockParagraph (https://core.telegram.org/bots/api#inputrichblockparagraph)
+// InputRichBlockSectionHeading (https://core.telegram.org/bots/api#inputrichblocksectionheading)
+// InputRichBlockPreformatted (https://core.telegram.org/bots/api#inputrichblockpreformatted)
+// InputRichBlockFooter (https://core.telegram.org/bots/api#inputrichblockfooter)
+// InputRichBlockDivider (https://core.telegram.org/bots/api#inputrichblockdivider)
+// InputRichBlockMathematicalExpression
+// (https://core.telegram.org/bots/api#inputrichblockmathematicalexpression)
+// InputRichBlockAnchor (https://core.telegram.org/bots/api#inputrichblockanchor)
+// InputRichBlockList (https://core.telegram.org/bots/api#inputrichblocklist)
+// InputRichBlockBlockQuotation (https://core.telegram.org/bots/api#inputrichblockblockquotation)
+// InputRichBlockPullQuotation (https://core.telegram.org/bots/api#inputrichblockpullquotation)
+// InputRichBlockCollage (https://core.telegram.org/bots/api#inputrichblockcollage)
+// InputRichBlockSlideshow (https://core.telegram.org/bots/api#inputrichblockslideshow)
+// InputRichBlockTable (https://core.telegram.org/bots/api#inputrichblocktable)
+// InputRichBlockDetails (https://core.telegram.org/bots/api#inputrichblockdetails)
+// InputRichBlockMap (https://core.telegram.org/bots/api#inputrichblockmap)
+// InputRichBlockAnimation (https://core.telegram.org/bots/api#inputrichblockanimation)
+// InputRichBlockAudio (https://core.telegram.org/bots/api#inputrichblockaudio)
+// InputRichBlockPhoto (https://core.telegram.org/bots/api#inputrichblockphoto)
+// InputRichBlockVideo (https://core.telegram.org/bots/api#inputrichblockvideo)
+// InputRichBlockVoiceNote (https://core.telegram.org/bots/api#inputrichblockvoicenote)
+// InputRichBlockThinking (https://core.telegram.org/bots/api#inputrichblockthinking)
+type InputRichBlock interface {
+	// BlockType return InputRichBlock type
+	BlockType() string
+	// Disallow external implementations
+	iInputRichBlock()
+}
+
+// InputRichBlockParagraph - A text paragraph, corresponding to the HTML tag <p>.
+type InputRichBlockParagraph struct {
+	// Type - Type of the block, always “paragraph”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockParagraph) BlockType() string {
+	return BlockTypeParagraph
+}
+
+func (i *InputRichBlockParagraph) iInputRichBlock() {}
+
+// InputRichBlockSectionHeading - A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>,
+// <h5>, or <h6>.
+type InputRichBlockSectionHeading struct {
+	// Type - Type of the block, always “heading”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+
+	// Size - Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest
+	Size int `json:"size"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockSectionHeading) BlockType() string {
+	return BlockTypeSectionHeading
+}
+
+func (i *InputRichBlockSectionHeading) iInputRichBlock() {}
+
+// InputRichBlockPreformatted - A preformatted text block, corresponding to the nested HTML tags <pre> and
+// <code>.
+type InputRichBlockPreformatted struct {
+	// Type - Type of the block, always “pre”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+
+	// Language - Optional. The programming language of the text
+	Language string `json:"language,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockPreformatted) BlockType() string {
+	return BlockTypePreformatted
+}
+
+func (i *InputRichBlockPreformatted) iInputRichBlock() {}
+
+// InputRichBlockFooter - A footer, corresponding to the HTML tag <footer>.
+type InputRichBlockFooter struct {
+	// Type - Type of the block, always “footer”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockFooter) BlockType() string {
+	return BlockTypeFooter
+}
+
+func (i *InputRichBlockFooter) iInputRichBlock() {}
+
+// InputRichBlockDivider - A divider, corresponding to the HTML tag <hr/>.
+type InputRichBlockDivider struct {
+	// Type - Type of the block, always “divider”
+	Type string `json:"type"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockDivider) BlockType() string {
+	return BlockTypeDivider
+}
+
+func (i *InputRichBlockDivider) iInputRichBlock() {}
+
+// InputRichBlockMathematicalExpression - A block with a mathematical expression in LaTeX format,
+// corresponding to the custom HTML tag <tg-math-block>.
+type InputRichBlockMathematicalExpression struct {
+	// Type - Type of the block, always “mathematical_expression”
+	Type string `json:"type"`
+
+	// Expression - The mathematical expression in LaTeX format
+	Expression string `json:"expression"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockMathematicalExpression) BlockType() string {
+	return BlockTypeMathematicalExpression
+}
+
+func (i *InputRichBlockMathematicalExpression) iInputRichBlock() {}
+
+// InputRichBlockAnchor - A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
+type InputRichBlockAnchor struct {
+	// Type - Type of the block, always “anchor”
+	Type string `json:"type"`
+
+	// Name - The name of the anchor
+	Name string `json:"name"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockAnchor) BlockType() string {
+	return BlockTypeAnchor
+}
+
+func (i *InputRichBlockAnchor) iInputRichBlock() {}
+
+// InputRichBlockList - A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested
+// tags <li>.
+type InputRichBlockList struct {
+	// Type - Type of the block, always “list”
+	Type string `json:"type"`
+
+	// Items - Items of the list
+	Items []InputRichBlockListItem `json:"items"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockList) BlockType() string {
+	return BlockTypeList
+}
+
+func (i *InputRichBlockList) iInputRichBlock() {}
+
+// InputRichBlockBlockQuotation - A block quotation, corresponding to the HTML tag <blockquote>.
+type InputRichBlockBlockQuotation struct {
+	// Type - Type of the block, always “blockquote”
+	Type string `json:"type"`
+
+	// Blocks - Content of the block
+	Blocks []InputRichBlock `json:"blocks"`
+
+	// Credit - Optional. Credit of the block
+	Credit RichText `json:"credit,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockBlockQuotation) BlockType() string {
+	return BlockTypeBlockQuotation
+}
+
+func (i *InputRichBlockBlockQuotation) iInputRichBlock() {}
+
+// InputRichBlockPullQuotation - A quotation with centered text, loosely corresponding to the HTML tag
+// <aside>.
+type InputRichBlockPullQuotation struct {
+	// Type - Type of the block, always “pullquote”
+	Type string `json:"type"`
+
+	// Text - Text of the block
+	Text RichText `json:"text"`
+
+	// Credit - Optional. Credit of the block
+	Credit RichText `json:"credit,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockPullQuotation) BlockType() string {
+	return BlockTypePullQuotation
+}
+
+func (i *InputRichBlockPullQuotation) iInputRichBlock() {}
+
+// InputRichBlockCollage - A collage, corresponding to the custom HTML tag <tg-collage>.
+type InputRichBlockCollage struct {
+	// Type - Type of the block, always “collage”
+	Type string `json:"type"`
+
+	// Blocks - Elements of the collage
+	Blocks []InputRichBlock `json:"blocks"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockCollage) BlockType() string {
+	return BlockTypeCollage
+}
+
+func (i *InputRichBlockCollage) iInputRichBlock() {}
+
+// InputRichBlockSlideshow - A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
+type InputRichBlockSlideshow struct {
+	// Type - Type of the block, always “slideshow”
+	Type string `json:"type"`
+
+	// Blocks - Elements of the slideshow
+	Blocks []InputRichBlock `json:"blocks"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockSlideshow) BlockType() string {
+	return BlockTypeSlideshow
+}
+
+func (i *InputRichBlockSlideshow) iInputRichBlock() {}
+
+// InputRichBlockTable - A table, corresponding to the HTML tag <table>.
+type InputRichBlockTable struct {
+	// Type - Type of the block, always “table”
+	Type string `json:"type"`
+
+	// Cells - Cells of the table
+	Cells [][]RichBlockTableCell `json:"cells"`
+
+	// IsBordered - Optional. Pass True if the table has borders
+	IsBordered bool `json:"is_bordered,omitempty"`
+
+	// IsStriped - Optional. Pass True if the table is striped
+	IsStriped bool `json:"is_striped,omitempty"`
+
+	// Caption - Optional. Caption of the table
+	Caption RichText `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockTable) BlockType() string {
+	return BlockTypeTable
+}
+
+func (i *InputRichBlockTable) iInputRichBlock() {}
+
+// InputRichBlockDetails - An expandable block for details disclosure, corresponding to the HTML tag
+// <details>.
+type InputRichBlockDetails struct {
+	// Type - Type of the block, always “details”
+	Type string `json:"type"`
+
+	// Summary - Always shown summary of the block
+	Summary RichText `json:"summary"`
+
+	// Blocks - Content of the block
+	Blocks []InputRichBlock `json:"blocks"`
+
+	// IsOpen - Optional. Pass True if the content of the block is visible by default
+	IsOpen bool `json:"is_open,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockDetails) BlockType() string {
+	return BlockTypeDetails
+}
+
+func (i *InputRichBlockDetails) iInputRichBlock() {}
+
+// InputRichBlockMap - A block with a map, corresponding to the custom HTML tag <tg-map>. The map's width and
+// height must not exceed 10000 in total. The width and height ratio must be at most 20.
+type InputRichBlockMap struct {
+	// Type - Type of the block, always “map”
+	Type string `json:"type"`
+
+	// Location - Location of the center of the map
+	Location Location `json:"location"`
+
+	// Zoom - Map zoom level; 0-24
+	Zoom int `json:"zoom"`
+
+	// Width - Map width; 0-10000
+	Width int `json:"width"`
+
+	// Height - Map height; 0-10000
+	Height int `json:"height"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockMap) BlockType() string {
+	return BlockTypeMap
+}
+
+func (i *InputRichBlockMap) iInputRichBlock() {}
+
+// InputRichBlockAnimation - A block with an animation, corresponding to the HTML tag <video>.
+type InputRichBlockAnimation struct {
+	// Type - Type of the block, always “animation”
+	Type string `json:"type"`
+
+	// Animation - The animation. Caption is ignored.
+	Animation InputMediaAnimation `json:"animation"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockAnimation) BlockType() string {
+	return BlockTypeAnimation
+}
+
+func (i *InputRichBlockAnimation) iInputRichBlock() {}
+
+// InputRichBlockAudio - A block with a music file, corresponding to the HTML tag <audio>.
+type InputRichBlockAudio struct {
+	// Type - Type of the block, always “audio”
+	Type string `json:"type"`
+
+	// Audio - The audio. Caption is ignored.
+	Audio InputMediaAudio `json:"audio"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockAudio) BlockType() string {
+	return BlockTypeAudio
+}
+
+func (i *InputRichBlockAudio) iInputRichBlock() {}
+
+// InputRichBlockPhoto - A block with a photo, corresponding to the HTML tag <img>.
+type InputRichBlockPhoto struct {
+	// Type - Type of the block, always “photo”
+	Type string `json:"type"`
+
+	// Photo - The photo. Caption is ignored.
+	Photo InputMediaPhoto `json:"photo"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockPhoto) BlockType() string {
+	return BlockTypePhoto
+}
+
+func (i *InputRichBlockPhoto) iInputRichBlock() {}
+
+// InputRichBlockVideo - A block with a video, corresponding to the HTML tag <video>.
+type InputRichBlockVideo struct {
+	// Type - Type of the block, always “video”
+	Type string `json:"type"`
+
+	// Video - The video. Caption is ignored.
+	Video InputMediaVideo `json:"video"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockVideo) BlockType() string {
+	return BlockTypeVideo
+}
+
+func (i *InputRichBlockVideo) iInputRichBlock() {}
+
+// InputRichBlockVoiceNote - A block with a voice note, corresponding to the HTML tag <audio>.
+type InputRichBlockVoiceNote struct {
+	// Type - Type of the block, always “voice_note”
+	Type string `json:"type"`
+
+	// VoiceNote - The voice note. Caption is ignored.
+	VoiceNote InputMediaVoiceNote `json:"voice_note"`
+
+	// Caption - Optional. Caption of the block
+	Caption *RichBlockCaption `json:"caption,omitempty"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockVoiceNote) BlockType() string {
+	return BlockTypeVoiceNote
+}
+
+func (i *InputRichBlockVoiceNote) iInputRichBlock() {}
+
+// InputRichBlockThinking - A block with a “Thinking…” placeholder, corresponding to the custom HTML
+// tag <tg-thinking>. The block may be used only in sendRichMessageDraft
+// (https://core.telegram.org/bots/api#sendrichmessagedraft), therefore it can't be received in messages. See
+// https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for examples of custom emoji that are
+// recommended for usage in the block.
+type InputRichBlockThinking struct {
+	// Type - Type of the block, always “thinking”
+	Type string `json:"type"`
+
+	// Text - Text of the block. See https://t.me/addemoji/AIActions (https://t.me/addemoji/AIActions) for
+	// examples of custom emoji that are recommended for usage in the block.
+	Text RichText `json:"text"`
+}
+
+// BlockType return InputRichBlock type
+func (i *InputRichBlockThinking) BlockType() string {
+	return BlockTypeThinking
+}
+
+func (i *InputRichBlockThinking) iInputRichBlock() {}
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.
@@ -9354,7 +9953,7 @@ type InlineQueryResultPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -9415,7 +10014,7 @@ type InlineQueryResultGif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -9486,7 +10085,7 @@ type InlineQueryResultMpeg4Gif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -9539,7 +10138,7 @@ type InlineQueryResultVideo struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// VideoWidth - Optional. Video width
@@ -9938,7 +10537,7 @@ type InlineQueryResultCachedPhoto struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -9983,7 +10582,7 @@ type InlineQueryResultCachedGif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -10029,7 +10628,7 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -10150,7 +10749,7 @@ type InlineQueryResultCachedVideo struct {
 	// instead of parse_mode
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. Pass True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the message media
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// ReplyMarkup - Optional. Inline keyboard (https://core.telegram.org/bots/features#inline-keyboards)
@@ -10443,7 +11042,7 @@ type InputInvoiceMessageContent struct {
 	// Not supported for payments in Telegram Stars (https://t.me/BotNews/90).
 	MaxTipAmount int `json:"max_tip_amount,omitempty"`
 
-	// SuggestedTipAmounts - Optional. A JSON-serialized array of suggested amounts of tip in the smallest units
+	// SuggestedTipAmounts - Optional. A JSON-serialized Array of suggested amounts of tip in the smallest units
 	// of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested
 	// tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
 	SuggestedTipAmounts []int `json:"suggested_tip_amounts,omitempty"`

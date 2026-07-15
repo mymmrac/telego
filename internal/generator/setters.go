@@ -103,6 +103,11 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 
 		convertToPtr := setter.fieldType == "*bool" || setter.fieldType == "*string" || setter.fieldType == "*int"
 
+		varName := firstToLower(setter.fieldName)
+		if varName == "hTML" {
+			varName = "html"
+		}
+
 		var s string
 		if setter.fieldType != "bool" {
 			if convertToPtr {
@@ -110,7 +115,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 			}
 
 			s = fmt.Sprintf("func (%s *%s) With%s(%s %s) *%s {\n", r, setter.structType,
-				setter.fieldName, firstToLower(setter.fieldName), setter.fieldType, setter.structType)
+				setter.fieldName, varName, setter.fieldType, setter.structType)
 
 			if convertToPtr {
 				setter.fieldType = "*" + setter.fieldType
@@ -132,7 +137,7 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		data.WriteString(s)
 
 		if setter.fieldType != "bool" {
-			value := firstToLower(setter.fieldName)
+			value := varName
 			if convertToPtr {
 				value = "&" + value
 			}

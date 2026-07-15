@@ -10,23 +10,25 @@ func TestReplyParameters_Setters(t *testing.T) {
 	r := (&ReplyParameters{}).
 		WithMessageID(1).
 		WithChatID(ChatID{ID: 2}).
+		WithEphemeralMessageID(3).
 		WithAllowSendingWithoutReply().
 		WithQuote("Quote").
 		WithQuoteParseMode("QuoteParseMode").
 		WithQuoteEntities([]MessageEntity{{Type: "QuoteEntities"}}...).
-		WithQuotePosition(3).
-		WithChecklistTaskID(4).
+		WithQuotePosition(4).
+		WithChecklistTaskID(5).
 		WithPollOptionID("PollOptionID")
 
 	assert.Equal(t, &ReplyParameters{
 		MessageID:                1,
 		ChatID:                   ChatID{ID: 2},
+		EphemeralMessageID:       3,
 		AllowSendingWithoutReply: true,
 		Quote:                    "Quote",
 		QuoteParseMode:           "QuoteParseMode",
 		QuoteEntities:            []MessageEntity{{Type: "QuoteEntities"}},
-		QuotePosition:            3,
-		ChecklistTaskID:          4,
+		QuotePosition:            4,
+		ChecklistTaskID:          5,
 		PollOptionID:             "PollOptionID",
 	}, r)
 }
@@ -561,14 +563,18 @@ func TestInputSticker_Setters(t *testing.T) {
 
 func TestInputRichMessage_Setters(t *testing.T) {
 	i := (&InputRichMessage{}).
-		WithHTML("Html").
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
+		WithHTML("HTML").
 		WithMarkdown("Markdown").
+		WithMedia([]InputRichMessageMedia{{}}...).
 		WithIsRtl().
 		WithSkipEntityDetection()
 
 	assert.Equal(t, &InputRichMessage{
-		HTML:                "Html",
+		Blocks:              []InputRichBlock{&InputRichBlockParagraph{}},
+		HTML:                "HTML",
 		Markdown:            "Markdown",
+		Media:               []InputRichMessageMedia{{}},
 		IsRtl:               true,
 		SkipEntityDetection: true,
 	}, i)

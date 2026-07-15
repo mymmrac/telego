@@ -12,6 +12,12 @@ func (r *ReplyParameters) WithChatID(chatID ChatID) *ReplyParameters {
 	return r
 }
 
+// WithEphemeralMessageID adds ephemeral message ID parameter
+func (r *ReplyParameters) WithEphemeralMessageID(ephemeralMessageID int) *ReplyParameters {
+	r.EphemeralMessageID = ephemeralMessageID
+	return r
+}
+
 // WithAllowSendingWithoutReply adds allow sending without reply parameter
 func (r *ReplyParameters) WithAllowSendingWithoutReply() *ReplyParameters {
 	r.AllowSendingWithoutReply = true
@@ -1015,6 +1021,12 @@ func (i *InputSticker) WithKeywords(keywords ...string) *InputSticker {
 	return i
 }
 
+// WithBlocks adds blocks parameter
+func (i *InputRichMessage) WithBlocks(blocks ...InputRichBlock) *InputRichMessage {
+	i.Blocks = blocks
+	return i
+}
+
 // WithHTML adds html parameter
 func (i *InputRichMessage) WithHTML(html string) *InputRichMessage {
 	i.HTML = html
@@ -1024,6 +1036,12 @@ func (i *InputRichMessage) WithHTML(html string) *InputRichMessage {
 // WithMarkdown adds markdown parameter
 func (i *InputRichMessage) WithMarkdown(markdown string) *InputRichMessage {
 	i.Markdown = markdown
+	return i
+}
+
+// WithMedia adds media parameter
+func (i *InputRichMessage) WithMedia(media ...InputRichMessageMedia) *InputRichMessage {
+	i.Media = media
 	return i
 }
 

@@ -323,6 +323,10 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		}
 	}
 
+	if field.typ == "InputMediaAnimation or InputMediaAudio or InputMediaPhoto or InputMediaVideo or InputMediaVoiceNote" {
+		field.typ = "RichMessageMedia"
+	}
+
 	if field.name == "InputMessageContent" && field.typ == "*InputMessageContent" {
 		field.typ = "InputMessageContent"
 	}

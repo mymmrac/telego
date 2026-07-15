@@ -201,6 +201,9 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*InputPollOptionMedia)(nil), &InputMediaVideo{})
 	assert.Equal(t, MediaTypeVideo, (&InputMediaVideo{}).MediaType())
 
+	assert.Implements(t, (*RichMessageMedia)(nil), &InputMediaVoiceNote{})
+	assert.Equal(t, MediaTypeVoiceNote, (&InputMediaVoiceNote{}).MediaType())
+
 	assert.Implements(t, (*InputPaidMedia)(nil), &InputPaidMediaLivePhoto{})
 	assert.Equal(t, PaidMediaTypeLivePhoto, (&InputPaidMediaLivePhoto{}).MediaType())
 
@@ -365,6 +368,69 @@ func TestTypesRichBlocks(t *testing.T) {
 
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockThinking{})
 	assert.Equal(t, BlockTypeThinking, (&RichBlockThinking{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockParagraph{})
+	assert.Equal(t, BlockTypeParagraph, (&InputRichBlockParagraph{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockSectionHeading{})
+	assert.Equal(t, BlockTypeSectionHeading, (&InputRichBlockSectionHeading{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockPreformatted{})
+	assert.Equal(t, BlockTypePreformatted, (&InputRichBlockPreformatted{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockFooter{})
+	assert.Equal(t, BlockTypeFooter, (&InputRichBlockFooter{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockDivider{})
+	assert.Equal(t, BlockTypeDivider, (&InputRichBlockDivider{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockMathematicalExpression{})
+	assert.Equal(t, BlockTypeMathematicalExpression, (&InputRichBlockMathematicalExpression{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockAnchor{})
+	assert.Equal(t, BlockTypeAnchor, (&InputRichBlockAnchor{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockList{})
+	assert.Equal(t, BlockTypeList, (&InputRichBlockList{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockBlockQuotation{})
+	assert.Equal(t, BlockTypeBlockQuotation, (&InputRichBlockBlockQuotation{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockPullQuotation{})
+	assert.Equal(t, BlockTypePullQuotation, (&InputRichBlockPullQuotation{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockCollage{})
+	assert.Equal(t, BlockTypeCollage, (&InputRichBlockCollage{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockSlideshow{})
+	assert.Equal(t, BlockTypeSlideshow, (&InputRichBlockSlideshow{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockTable{})
+	assert.Equal(t, BlockTypeTable, (&InputRichBlockTable{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockDetails{})
+	assert.Equal(t, BlockTypeDetails, (&InputRichBlockDetails{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockMap{})
+	assert.Equal(t, BlockTypeMap, (&InputRichBlockMap{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockAnimation{})
+	assert.Equal(t, BlockTypeAnimation, (&InputRichBlockAnimation{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockAudio{})
+	assert.Equal(t, BlockTypeAudio, (&InputRichBlockAudio{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockPhoto{})
+	assert.Equal(t, BlockTypePhoto, (&InputRichBlockPhoto{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockVideo{})
+	assert.Equal(t, BlockTypeVideo, (&InputRichBlockVideo{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockVoiceNote{})
+	assert.Equal(t, BlockTypeVoiceNote, (&InputRichBlockVoiceNote{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockThinking{})
+	assert.Equal(t, BlockTypeThinking, (&InputRichBlockThinking{}).BlockType())
 
 	assert.Implements(t, (*InlineQueryResult)(nil), &InlineQueryResultArticle{})
 	assert.Equal(t, ResultTypeArticle, (&InlineQueryResultArticle{}).ResultType())
@@ -981,7 +1047,7 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			MediaTypeAnimation, MediaTypeAudio, MediaTypeDocument, MediaTypeLink, MediaTypeLivePhoto, MediaTypeLocation,
-			MediaTypePhoto, MediaTypeSticker, MediaTypeVenue, MediaTypeVideo,
+			MediaTypePhoto, MediaTypeSticker, MediaTypeVenue, MediaTypeVideo, MediaTypeVoiceNote,
 		},
 		{
 			PaidMediaTypeLivePhoto, PaidMediaTypePhoto, PaidMediaTypePreview, PaidMediaTypeVideo, paidMediaTypeOther,
