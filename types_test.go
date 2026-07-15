@@ -1005,6 +1005,9 @@ func TestTypesConstants(t *testing.T) {
 			PollTypeRegular, PollTypeQuiz,
 		},
 		{
+			SubscriptionStateActive, SubscriptionStateCanceled, SubscriptionStateFailed,
+		},
+		{
 			BackgroundFilledSolid, BackgroundFilledGradient, BackgroundFilledFreeformGradient,
 		},
 		{

@@ -504,3 +504,22 @@ func (h *HandlerGroup) HandleManagedBot(handler ManagedBotHandler, predicates ..
 func (h *BotHandler) HandleManagedBot(handler ManagedBotHandler, predicates ...Predicate) {
 	h.baseGroup.HandleManagedBot(handler, predicates...)
 }
+
+// SubscriptionHandler handles subscription that came from bot
+type SubscriptionHandler func(ctx *Context, subscription telego.BotSubscriptionUpdated) error
+
+// HandleSubscription same as [BotHandler.Handle], but assumes that the update contains subscription
+func (h *HandlerGroup) HandleSubscription(handler SubscriptionHandler, predicates ...Predicate) {
+	if handler == nil {
+		panic("Telego: nil subscription handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.Subscription)
+	}, append([]Predicate{AnySubscription()}, predicates...)...)
+}
+
+// HandleSubscription same as [BotHandler.Handle], but assumes that the update contains subscription
+func (h *BotHandler) HandleSubscription(handler SubscriptionHandler, predicates ...Predicate) {
+	h.baseGroup.HandleSubscription(handler, predicates...)
+}

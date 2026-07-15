@@ -731,6 +731,13 @@ func AnyManagedBot() Predicate {
 	}
 }
 
+// AnySubscription is true if subscription isn't nil
+func AnySubscription() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.Subscription != nil
+	}
+}
+
 func baseAnyMessageWithCaption(message *telego.Message) bool {
 	return message != nil && message.Caption != ""
 }

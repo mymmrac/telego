@@ -540,3 +540,21 @@ func TestBotHandler_HandleManagedBot(t *testing.T) {
 	bh.updates = updates
 	testHandler(t, bh, wg)
 }
+
+func TestBotHandler_HandleSubscription(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleSubscription(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := SubscriptionHandler(func(_ *Context, _ telego.BotSubscriptionUpdated) error { wg.Done(); return nil })
+
+	bh.HandleSubscription(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{Subscription: &telego.BotSubscriptionUpdated{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}

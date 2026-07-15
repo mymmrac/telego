@@ -1087,6 +1087,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_subscription_matches",
+			predicate: AnySubscription(),
+			update:    telego.Update{Subscription: &telego.BotSubscriptionUpdated{}},
+			matches:   true,
+		},
+		{
+			name:      "any_subscription_not_matches",
+			predicate: AnySubscription(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
 			name:      "any_message_with_caption_matches",
 			predicate: AnyMessageWithCaption(),
 			update:    telego.Update{Message: &telego.Message{Caption: testText}},

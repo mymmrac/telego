@@ -2432,6 +2432,13 @@ type BotSubscriptionUpdated struct {
 	State string `json:"state"`
 }
 
+// Bot subscription states.
+const (
+	SubscriptionStateActive   = "active"
+	SubscriptionStateCanceled = "canceled"
+	SubscriptionStateFailed   = "failed"
+)
+
 // PollOptionAdded - Describes a service message about an option added to a poll.
 type PollOptionAdded struct {
 	// PollMessage - Optional. Message containing the poll to which the option was added, if known. Note that
