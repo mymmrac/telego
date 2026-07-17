@@ -978,3 +978,18 @@ func TestRichTextReferenceLink(t *testing.T) {
 	r := RichTextReferenceLink(richText1, text2)
 	assert.Equal(t, telego.TextTypeReferenceLink, r.Type)
 }
+
+func TestRichMessage(t *testing.T) {
+	m := RichMessage(RichBlockParagraph(richText1))
+	assert.Equal(t, []telego.InputRichBlock{RichBlockParagraph(richText1)}, m.Blocks)
+}
+
+func TestRichMessageHTML(t *testing.T) {
+	m := RichMessageHTML(text1)
+	assert.Equal(t, text1, m.HTML)
+}
+
+func TestRichMessageMarkdown(t *testing.T) {
+	m := RichMessageMarkdown(text1)
+	assert.Equal(t, text1, m.Markdown)
+}

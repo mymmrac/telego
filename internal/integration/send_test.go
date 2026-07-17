@@ -361,4 +361,34 @@ Image 3:
 		require.NoError(t, err)
 		assert.NotNil(t, msg)
 	})
+
+	t.Run("blocks_util", func(t *testing.T) {
+		msg, err := bot.SendRichMessage(ctx, &telego.SendRichMessageParams{
+			ChatID: tu.ID(chatID),
+			RichMessage: tu.RichMessage(
+				tu.RichBlockSectionHeading(tu.RichTextPlain("Hello"), 1),
+				tu.RichBlockParagraph(tu.RichTextPlain("World")),
+				tu.RichBlockPhoto(*tu.MediaPhoto(tu.File(open(img1Jpg)))).
+					WithCaption(
+						tu.RichBlockCaption(tu.RichTextPlain("Image")).
+							WithCredit(tu.RichTextPlain("Internet")),
+					),
+				tu.RichBlockCollage(
+					tu.RichBlockPhoto(*tu.MediaPhoto(tu.File(open(img1Jpg)))).
+						WithCaption(tu.RichBlockCaption(tu.RichTextBold(tu.RichTextPlain("Image 1")))),
+					tu.RichBlockPhoto(*tu.MediaPhoto(tu.File(open(img2Jpg)))).
+						WithCaption(tu.RichBlockCaption(tu.RichTextItalic(tu.RichTextPlain("Image 2")))),
+				).WithCaption(tu.RichBlockCaption(tu.RichTextPlain("Collage"))),
+				tu.RichBlockTableGrid(tu.RichBlockTableCols(3,
+					tu.RichBlockTableCell(tu.RichTextPlain("Cell 1")),
+					tu.RichBlockTableCell(tu.RichTextStrikethrough(tu.RichTextBold(tu.RichTextPlain("Cell 2")))),
+					tu.RichBlockTableCell(tu.RichTextPlain("Cell 3")),
+					tu.RichBlockTableCell(tu.RichTextSpoiler(tu.RichTextPlain("Cell 4"))),
+				)),
+			),
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
 }

@@ -1286,3 +1286,24 @@ func RichTextReferenceLink(text telego.RichText, referenceName string) *telego.R
 		ReferenceName: referenceName,
 	}
 }
+
+// RichMessage creates [telego.InputRichMessage] with required fields from blocks
+func RichMessage(blocks ...telego.InputRichBlock) telego.InputRichMessage {
+	return telego.InputRichMessage{
+		Blocks: blocks,
+	}
+}
+
+// RichMessageHTML creates [telego.InputRichMessage] with required fields from HTML
+func RichMessageHTML(html string) telego.InputRichMessage {
+	return telego.InputRichMessage{
+		HTML: html,
+	}
+}
+
+// RichMessageMarkdown creates [telego.InputRichMessage] with required fields from markdown
+func RichMessageMarkdown(markdown string) telego.InputRichMessage {
+	return telego.InputRichMessage{
+		Markdown: markdown,
+	}
+}
