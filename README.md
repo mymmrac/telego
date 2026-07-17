@@ -88,6 +88,7 @@ More examples can be seen here:
 - [Downloading files](examples/download_file/main.go)
 - [Inline keyboard](examples/inline_keyboard/main.go)
 - [Keyboard](examples/keyboard/main.go)
+- [Rich text](examples/rich_text/main.go)
 - [Edit message](examples/edit_message/main.go)
 - [Utility methods](examples/utility_methods/main.go)
 - [Inline query bot](examples/inline_query_bot/main.go)
