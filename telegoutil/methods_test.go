@@ -19,6 +19,9 @@ var (
 	text4 = "test4"
 	text5 = "test5"
 
+	richText1 = telego.ToPtr(telego.RichTextPlain(text1))
+	richText2 = telego.ToPtr(telego.RichTextPlain(text1))
+
 	textNonASCII = "Hello, 世界" //nolint:gosmopolitan
 
 	format1 = "%s %s"
@@ -28,6 +31,8 @@ var (
 
 	number1       = 123
 	number2 int64 = 1234
+	number3       = 3
+	number4       = 4
 
 	prices = []telego.LabeledPrice{
 		{

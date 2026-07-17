@@ -795,3 +795,494 @@ func ReactionPaid() *telego.ReactionTypePaid {
 		Type: telego.ReactionPaid,
 	}
 }
+
+// RichBlockParagraph creates [telego.InputRichBlockParagraph] with required fields
+func RichBlockParagraph(text telego.RichText) *telego.InputRichBlockParagraph {
+	return &telego.InputRichBlockParagraph{
+		Type: telego.BlockTypeParagraph,
+		Text: text,
+	}
+}
+
+// RichBlockSectionHeading creates [telego.InputRichBlockSectionHeading] with required fields
+func RichBlockSectionHeading(text telego.RichText, size int) *telego.InputRichBlockSectionHeading {
+	return &telego.InputRichBlockSectionHeading{
+		Type: telego.BlockTypeSectionHeading,
+		Text: text,
+		Size: size,
+	}
+}
+
+// RichBlockPreformatted creates [telego.InputRichBlockPreformatted] with required fields
+func RichBlockPreformatted(text telego.RichText) *telego.InputRichBlockPreformatted {
+	return &telego.InputRichBlockPreformatted{
+		Type: telego.BlockTypePreformatted,
+		Text: text,
+	}
+}
+
+// RichBlockFooter creates [telego.InputRichBlockFooter] with required fields
+func RichBlockFooter(text telego.RichText) *telego.InputRichBlockFooter {
+	return &telego.InputRichBlockFooter{
+		Type: telego.BlockTypeFooter,
+		Text: text,
+	}
+}
+
+// RichBlockDivider creates [telego.InputRichBlockDivider] with required fields
+func RichBlockDivider() *telego.InputRichBlockDivider {
+	return &telego.InputRichBlockDivider{
+		Type: telego.BlockTypeDivider,
+	}
+}
+
+// RichBlockMathematicalExpression creates [telego.InputRichBlockMathematicalExpression] with required fields
+func RichBlockMathematicalExpression(expression string) *telego.InputRichBlockMathematicalExpression {
+	return &telego.InputRichBlockMathematicalExpression{
+		Type:       telego.BlockTypeMathematicalExpression,
+		Expression: expression,
+	}
+}
+
+// RichBlockAnchor creates [telego.InputRichBlockAnchor] with required fields
+func RichBlockAnchor(name string) *telego.InputRichBlockAnchor {
+	return &telego.InputRichBlockAnchor{
+		Type: telego.BlockTypeAnchor,
+		Name: name,
+	}
+}
+
+// RichBlockList creates [telego.InputRichBlockList] with required fields
+func RichBlockList(items ...telego.InputRichBlockListItem) *telego.InputRichBlockList {
+	return &telego.InputRichBlockList{
+		Type:  telego.BlockTypeList,
+		Items: items,
+	}
+}
+
+// RichBlockBlockQuotation creates [telego.InputRichBlockBlockQuotation] with required fields
+func RichBlockBlockQuotation(blocks ...telego.InputRichBlock) *telego.InputRichBlockBlockQuotation {
+	return &telego.InputRichBlockBlockQuotation{
+		Type:   telego.BlockTypeBlockQuotation,
+		Blocks: blocks,
+	}
+}
+
+// RichBlockPullQuotation creates [telego.InputRichBlockPullQuotation] with required fields
+func RichBlockPullQuotation(text telego.RichText) *telego.InputRichBlockPullQuotation {
+	return &telego.InputRichBlockPullQuotation{
+		Type: telego.BlockTypePullQuotation,
+		Text: text,
+	}
+}
+
+// RichBlockCollage creates [telego.InputRichBlockCollage] with required fields
+func RichBlockCollage(blocks ...telego.InputRichBlock) *telego.InputRichBlockCollage {
+	return &telego.InputRichBlockCollage{
+		Type:   telego.BlockTypeCollage,
+		Blocks: blocks,
+	}
+}
+
+// RichBlockSlideshow creates [telego.InputRichBlockSlideshow] with required fields
+func RichBlockSlideshow(blocks ...telego.InputRichBlock) *telego.InputRichBlockSlideshow {
+	return &telego.InputRichBlockSlideshow{
+		Type:   telego.BlockTypeSlideshow,
+		Blocks: blocks,
+	}
+}
+
+// RichBlockTable creates [telego.InputRichBlockTable] with required fields
+func RichBlockTable(cells ...[]telego.RichBlockTableCell) *telego.InputRichBlockTable {
+	return &telego.InputRichBlockTable{
+		Type:  telego.BlockTypeTable,
+		Cells: cells,
+	}
+}
+
+// RichBlockTableRow creates a slice of telego.RichBlockTableCell
+func RichBlockTableRow(cells ...telego.RichBlockTableCell) []telego.RichBlockTableCell {
+	return cells
+}
+
+// RichBlockTableGrid creates a [telego.InputRichBlockTable] from grid of cells
+func RichBlockTableGrid(cells [][]telego.RichBlockTableCell) *telego.InputRichBlockTable {
+	return &telego.InputRichBlockTable{
+		Type:  telego.BlockTypeTable,
+		Cells: cells,
+	}
+}
+
+// RichBlockTableCols creates a grid of cells containing specified number of columns
+func RichBlockTableCols(cols int, cells ...telego.RichBlockTableCell) [][]telego.RichBlockTableCell {
+	if cols <= 0 {
+		return nil
+	}
+
+	col := 0
+	row := 0
+
+	rows := len(cells) / cols
+	if len(cells)%cols != 0 {
+		rows++
+	}
+
+	grid := make([][]telego.RichBlockTableCell, 0, rows)
+	for i := range cells {
+		if col >= cols {
+			col = 0
+			row++
+		}
+		if col == 0 {
+			grid = append(grid, make([]telego.RichBlockTableCell, 0, cols))
+		}
+		grid[row] = append(grid[row], cells[i])
+		col++
+	}
+
+	return grid
+}
+
+// RichBlockTableRows creates a grid of cells containing specified number of rows
+func RichBlockTableRows(rows int, cells ...telego.RichBlockTableCell) [][]telego.RichBlockTableCell {
+	if rows <= 0 {
+		return nil
+	}
+
+	col := 0
+	row := 0
+
+	cols := len(cells) / rows
+	if len(cells)%rows != 0 {
+		cols++
+	}
+
+	grid := make([][]telego.RichBlockTableCell, 0, rows)
+	for i := range cells {
+		if col >= cols {
+			col = 0
+			row++
+		}
+		if col == 0 {
+			grid = append(grid, make([]telego.RichBlockTableCell, 0, cols))
+		}
+		grid[row] = append(grid[row], cells[i])
+		col++
+	}
+
+	return grid
+}
+
+// RichBlockTableCell creates [telego.RichBlockTableCell] with required fields
+func RichBlockTableCell(text telego.RichText) telego.RichBlockTableCell {
+	return telego.RichBlockTableCell{
+		Text: text,
+	}
+}
+
+// RichBlockDetails creates [telego.InputRichBlockDetails] with required fields
+func RichBlockDetails(summary telego.RichText, blocks ...telego.InputRichBlock) *telego.InputRichBlockDetails {
+	return &telego.InputRichBlockDetails{
+		Type:    telego.BlockTypeDetails,
+		Summary: summary,
+		Blocks:  blocks,
+	}
+}
+
+// RichBlockMap creates [telego.InputRichBlockMap] with required fields
+func RichBlockMap(location telego.Location, zoom, width, height int) *telego.InputRichBlockMap {
+	return &telego.InputRichBlockMap{
+		Type:     telego.BlockTypeMap,
+		Location: location,
+		Zoom:     zoom,
+		Width:    width,
+		Height:   height,
+	}
+}
+
+// RichBlockAnimation creates [telego.InputRichBlockAnimation] with required fields
+func RichBlockAnimation(animation telego.InputMediaAnimation) *telego.InputRichBlockAnimation {
+	return &telego.InputRichBlockAnimation{
+		Type:      telego.BlockTypeAnimation,
+		Animation: animation,
+	}
+}
+
+// RichBlockAudio creates [telego.InputRichBlockAudio] with required fields
+func RichBlockAudio(audio telego.InputMediaAudio) *telego.InputRichBlockAudio {
+	return &telego.InputRichBlockAudio{
+		Type:  telego.BlockTypeAudio,
+		Audio: audio,
+	}
+}
+
+// RichBlockPhoto creates [telego.InputRichBlockPhoto] with required fields
+func RichBlockPhoto(photo telego.InputMediaPhoto) *telego.InputRichBlockPhoto {
+	return &telego.InputRichBlockPhoto{
+		Type:  telego.BlockTypePhoto,
+		Photo: photo,
+	}
+}
+
+// RichBlockVideo creates [telego.InputRichBlockVideo] with required fields
+func RichBlockVideo(video telego.InputMediaVideo) *telego.InputRichBlockVideo {
+	return &telego.InputRichBlockVideo{
+		Type:  telego.BlockTypeVideo,
+		Video: video,
+	}
+}
+
+// RichBlockVoiceNote creates [telego.InputRichBlockVoiceNote] with required fields
+func RichBlockVoiceNote(voiceNote telego.InputMediaVoiceNote) *telego.InputRichBlockVoiceNote {
+	return &telego.InputRichBlockVoiceNote{
+		Type:      telego.BlockTypeVoiceNote,
+		VoiceNote: voiceNote,
+	}
+}
+
+// RichBlockThinking creates [telego.InputRichBlockThinking] with required fields
+func RichBlockThinking(text telego.RichText) *telego.InputRichBlockThinking {
+	return &telego.InputRichBlockThinking{
+		Type: telego.BlockTypeThinking,
+		Text: text,
+	}
+}
+
+// RichBlockCaption creates [telego.RichBlockCaption] with required fields
+func RichBlockCaption(text telego.RichText) *telego.RichBlockCaption {
+	return &telego.RichBlockCaption{
+		Text: text,
+	}
+}
+
+// RichBlockListItem creates [telego.InputRichBlockListItem] with required fields
+func RichBlockListItem(blocks ...telego.InputRichBlock) telego.InputRichBlockListItem {
+	return telego.InputRichBlockListItem{
+		Blocks: blocks,
+	}
+}
+
+// RichTextPlain creates [telego.RichTextPlain] from text
+func RichTextPlain(text string) *telego.RichTextPlain {
+	return telego.ToPtr(telego.RichTextPlain(text))
+}
+
+// RichTextList creates [telego.RichTextList] from the list of texts
+func RichTextList(texts ...telego.RichText) *telego.RichTextList {
+	return telego.ToPtr(telego.RichTextList(texts))
+}
+
+// RichTextBold creates [telego.RichTextBold] with required fields
+func RichTextBold(text telego.RichText) *telego.RichTextBold {
+	return &telego.RichTextBold{
+		Type: telego.TextTypeBold,
+		Text: text,
+	}
+}
+
+// RichTextItalic creates [telego.RichTextItalic] with required fields
+func RichTextItalic(text telego.RichText) *telego.RichTextItalic {
+	return &telego.RichTextItalic{
+		Type: telego.TextTypeItalic,
+		Text: text,
+	}
+}
+
+// RichTextUnderline creates [telego.RichTextUnderline] with required fields
+func RichTextUnderline(text telego.RichText) *telego.RichTextUnderline {
+	return &telego.RichTextUnderline{
+		Type: telego.TextTypeUnderline,
+		Text: text,
+	}
+}
+
+// RichTextStrikethrough creates [telego.RichTextStrikethrough] with required fields
+func RichTextStrikethrough(text telego.RichText) *telego.RichTextStrikethrough {
+	return &telego.RichTextStrikethrough{
+		Type: telego.TextTypeStrikethrough,
+		Text: text,
+	}
+}
+
+// RichTextSpoiler creates [telego.RichTextSpoiler] with required fields
+func RichTextSpoiler(text telego.RichText) *telego.RichTextSpoiler {
+	return &telego.RichTextSpoiler{
+		Type: telego.TextTypeSpoiler,
+		Text: text,
+	}
+}
+
+// RichTextDateTime creates [telego.RichTextDateTime] with required fields
+func RichTextDateTime(text telego.RichText, unixTime int64, dateTimeFormat string) *telego.RichTextDateTime {
+	return &telego.RichTextDateTime{
+		Type:           telego.TextTypeDateTime,
+		Text:           text,
+		UnixTime:       unixTime,
+		DateTimeFormat: dateTimeFormat,
+	}
+}
+
+// RichTextTextMention creates [telego.RichTextTextMention] with required fields
+func RichTextTextMention(text telego.RichText, user telego.User) *telego.RichTextTextMention {
+	return &telego.RichTextTextMention{
+		Type: telego.TextTypeTextMention,
+		Text: text,
+		User: user,
+	}
+}
+
+// RichTextSubscript creates [telego.RichTextSubscript] with required fields
+func RichTextSubscript(text telego.RichText) *telego.RichTextSubscript {
+	return &telego.RichTextSubscript{
+		Type: telego.TextTypeSubscript,
+		Text: text,
+	}
+}
+
+// RichTextSuperscript creates [telego.RichTextSuperscript] with required fields
+func RichTextSuperscript(text telego.RichText) *telego.RichTextSuperscript {
+	return &telego.RichTextSuperscript{
+		Type: telego.TextTypeSuperscript,
+		Text: text,
+	}
+}
+
+// RichTextMarked creates [telego.RichTextMarked] with required fields
+func RichTextMarked(text telego.RichText) *telego.RichTextMarked {
+	return &telego.RichTextMarked{
+		Type: telego.TextTypeMarked,
+		Text: text,
+	}
+}
+
+// RichTextCode creates [telego.RichTextCode] with required fields
+func RichTextCode(text telego.RichText) *telego.RichTextCode {
+	return &telego.RichTextCode{
+		Type: telego.TextTypeCode,
+		Text: text,
+	}
+}
+
+// RichTextCustomEmoji creates [telego.RichTextCustomEmoji] with required fields
+func RichTextCustomEmoji(customEmojiID, alternativeText string) *telego.RichTextCustomEmoji {
+	return &telego.RichTextCustomEmoji{
+		Type:            telego.TextTypeCustomEmoji,
+		CustomEmojiID:   customEmojiID,
+		AlternativeText: alternativeText,
+	}
+}
+
+// RichTextMathematicalExpression creates [telego.RichTextMathematicalExpression] with required fields
+func RichTextMathematicalExpression(expression string) *telego.RichTextMathematicalExpression {
+	return &telego.RichTextMathematicalExpression{
+		Type:       telego.TextTypeMathematicalExpression,
+		Expression: expression,
+	}
+}
+
+// RichTextURL creates [telego.RichTextURL] with required fields
+func RichTextURL(text telego.RichText, url string) *telego.RichTextURL {
+	return &telego.RichTextURL{
+		Type: telego.TextTypeURL,
+		Text: text,
+		URL:  url,
+	}
+}
+
+// RichTextEmailAddress creates [telego.RichTextEmailAddress] with required fields
+func RichTextEmailAddress(text telego.RichText, email string) *telego.RichTextEmailAddress {
+	return &telego.RichTextEmailAddress{
+		Type:         telego.TextTypeEmailAddress,
+		Text:         text,
+		EmailAddress: email,
+	}
+}
+
+// RichTextPhoneNumber creates [telego.RichTextPhoneNumber] with required fields
+func RichTextPhoneNumber(text telego.RichText, phoneNumber string) *telego.RichTextPhoneNumber {
+	return &telego.RichTextPhoneNumber{
+		Type:        telego.TextTypePhoneNumber,
+		Text:        text,
+		PhoneNumber: phoneNumber,
+	}
+}
+
+// RichTextBankCardNumber creates [telego.RichTextBankCardNumber] with required fields
+func RichTextBankCardNumber(text telego.RichText, bankCardNumber string) *telego.RichTextBankCardNumber {
+	return &telego.RichTextBankCardNumber{
+		Type:           telego.TextTypeBankCardNumber,
+		Text:           text,
+		BankCardNumber: bankCardNumber,
+	}
+}
+
+// RichTextMention creates [telego.RichTextMention] with required fields
+func RichTextMention(text telego.RichText, username string) *telego.RichTextMention {
+	return &telego.RichTextMention{
+		Type:     telego.TextTypeMention,
+		Text:     text,
+		Username: username,
+	}
+}
+
+// RichTextHashtag creates [telego.RichTextHashtag] with required fields
+func RichTextHashtag(text telego.RichText, hashtag string) *telego.RichTextHashtag {
+	return &telego.RichTextHashtag{
+		Type:    telego.TextTypeHashtag,
+		Text:    text,
+		Hashtag: hashtag,
+	}
+}
+
+// RichTextCashtag creates [telego.RichTextCashtag] with required fields
+func RichTextCashtag(text telego.RichText, cashtag string) *telego.RichTextCashtag {
+	return &telego.RichTextCashtag{
+		Type:    telego.TextTypeCashtag,
+		Text:    text,
+		Cashtag: cashtag,
+	}
+}
+
+// RichTextBotCommand creates [telego.RichTextBotCommand] with required fields
+func RichTextBotCommand(text telego.RichText, botCommand string) *telego.RichTextBotCommand {
+	return &telego.RichTextBotCommand{
+		Type:       telego.TextTypeBotCommand,
+		Text:       text,
+		BotCommand: botCommand,
+	}
+}
+
+// RichTextAnchor creates [telego.RichTextAnchor] with required fields
+func RichTextAnchor(name string) *telego.RichTextAnchor {
+	return &telego.RichTextAnchor{
+		Type: telego.TextTypeAnchor,
+		Name: name,
+	}
+}
+
+// RichTextAnchorLink creates [telego.RichTextAnchorLink] with required fields
+func RichTextAnchorLink(text telego.RichText, anchorName string) *telego.RichTextAnchorLink {
+	return &telego.RichTextAnchorLink{
+		Type:       telego.TextTypeAnchorLink,
+		Text:       text,
+		AnchorName: anchorName,
+	}
+}
+
+// RichTextReference creates [telego.RichTextReference] with required fields
+func RichTextReference(text telego.RichText, name string) *telego.RichTextReference {
+	return &telego.RichTextReference{
+		Type: telego.TextTypeReference,
+		Text: text,
+		Name: name,
+	}
+}
+
+// RichTextReferenceLink creates [telego.RichTextReferenceLink] with required fields
+func RichTextReferenceLink(text telego.RichText, referenceName string) *telego.RichTextReferenceLink {
+	return &telego.RichTextReferenceLink{
+		Type:          telego.TextTypeReferenceLink,
+		Text:          text,
+		ReferenceName: referenceName,
+	}
+}

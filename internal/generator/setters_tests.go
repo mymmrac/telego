@@ -236,6 +236,28 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputRichBlock{&InputRichBlockParagraph{}}"
 	case "[]InputRichMessageMedia":
 		return "[]InputRichMessageMedia{{}}"
+	case "RichText":
+		return "&RichTextBold{}"
+	case "User":
+		return "User{ID: 1}"
+	case "[]InputRichBlockListItem":
+		return "[]InputRichBlockListItem{{}}"
+	case "*RichBlockCaption":
+		return "&RichBlockCaption{}"
+	case "[][]RichBlockTableCell":
+		return "[][]RichBlockTableCell{{}}"
+	case "Location":
+		return "Location{Latitude: 1, Longitude: 1}"
+	case "InputMediaAnimation":
+		return "InputMediaAnimation{}"
+	case "InputMediaAudio":
+		return "InputMediaAudio{}"
+	case "InputMediaPhoto":
+		return "InputMediaPhoto{}"
+	case "InputMediaVideo":
+		return "InputMediaVideo{}"
+	case "InputMediaVoiceNote":
+		return "InputMediaVoiceNote{}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

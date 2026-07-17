@@ -7343,14 +7343,14 @@ type RichTextBold struct {
 }
 
 // TextType return RichText type
-func (i *RichTextBold) TextType() string {
+func (r *RichTextBold) TextType() string {
 	return TextTypeBold
 }
 
-func (i *RichTextBold) iRichText() {}
+func (r *RichTextBold) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextBold
-func (i *RichTextBold) UnmarshalJSON(data []byte) error {
+func (r *RichTextBold) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7370,7 +7370,7 @@ func (i *RichTextBold) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextBold(ui)
+	*r = RichTextBold(ui)
 
 	return nil
 }
@@ -7385,14 +7385,14 @@ type RichTextItalic struct {
 }
 
 // TextType return RichText type
-func (i *RichTextItalic) TextType() string {
+func (r *RichTextItalic) TextType() string {
 	return TextTypeItalic
 }
 
-func (i *RichTextItalic) iRichText() {}
+func (r *RichTextItalic) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextItalic
-func (i *RichTextItalic) UnmarshalJSON(data []byte) error {
+func (r *RichTextItalic) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7412,7 +7412,7 @@ func (i *RichTextItalic) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextItalic(ui)
+	*r = RichTextItalic(ui)
 
 	return nil
 }
@@ -7427,14 +7427,14 @@ type RichTextUnderline struct {
 }
 
 // TextType return RichText type
-func (i *RichTextUnderline) TextType() string {
+func (r *RichTextUnderline) TextType() string {
 	return TextTypeUnderline
 }
 
-func (i *RichTextUnderline) iRichText() {}
+func (r *RichTextUnderline) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextUnderline
-func (i *RichTextUnderline) UnmarshalJSON(data []byte) error {
+func (r *RichTextUnderline) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7454,7 +7454,7 @@ func (i *RichTextUnderline) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextUnderline(ui)
+	*r = RichTextUnderline(ui)
 
 	return nil
 }
@@ -7469,14 +7469,14 @@ type RichTextStrikethrough struct {
 }
 
 // TextType return RichText type
-func (i *RichTextStrikethrough) TextType() string {
+func (r *RichTextStrikethrough) TextType() string {
 	return TextTypeStrikethrough
 }
 
-func (i *RichTextStrikethrough) iRichText() {}
+func (r *RichTextStrikethrough) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextStrikethrough
-func (i *RichTextStrikethrough) UnmarshalJSON(data []byte) error {
+func (r *RichTextStrikethrough) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7496,7 +7496,7 @@ func (i *RichTextStrikethrough) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextStrikethrough(ui)
+	*r = RichTextStrikethrough(ui)
 
 	return nil
 }
@@ -7511,14 +7511,14 @@ type RichTextSpoiler struct {
 }
 
 // TextType return RichText type
-func (i *RichTextSpoiler) TextType() string {
+func (r *RichTextSpoiler) TextType() string {
 	return TextTypeSpoiler
 }
 
-func (i *RichTextSpoiler) iRichText() {}
+func (r *RichTextSpoiler) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextSpoiler
-func (i *RichTextSpoiler) UnmarshalJSON(data []byte) error {
+func (r *RichTextSpoiler) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7538,7 +7538,7 @@ func (i *RichTextSpoiler) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextSpoiler(ui)
+	*r = RichTextSpoiler(ui)
 
 	return nil
 }
@@ -7560,14 +7560,14 @@ type RichTextDateTime struct {
 }
 
 // TextType return RichText type
-func (i *RichTextDateTime) TextType() string {
+func (r *RichTextDateTime) TextType() string {
 	return TextTypeDateTime
 }
 
-func (i *RichTextDateTime) iRichText() {}
+func (r *RichTextDateTime) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextDateTime
-func (i *RichTextDateTime) UnmarshalJSON(data []byte) error {
+func (r *RichTextDateTime) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7587,7 +7587,7 @@ func (i *RichTextDateTime) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextDateTime(ui)
+	*r = RichTextDateTime(ui)
 
 	return nil
 }
@@ -7605,14 +7605,14 @@ type RichTextTextMention struct {
 }
 
 // TextType return RichText type
-func (i *RichTextTextMention) TextType() string {
+func (r *RichTextTextMention) TextType() string {
 	return TextTypeTextMention
 }
 
-func (i *RichTextTextMention) iRichText() {}
+func (r *RichTextTextMention) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextTextMention
-func (i *RichTextTextMention) UnmarshalJSON(data []byte) error {
+func (r *RichTextTextMention) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7632,7 +7632,7 @@ func (i *RichTextTextMention) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextTextMention(ui)
+	*r = RichTextTextMention(ui)
 
 	return nil
 }
@@ -7647,14 +7647,14 @@ type RichTextSubscript struct {
 }
 
 // TextType return RichText type
-func (i *RichTextSubscript) TextType() string {
+func (r *RichTextSubscript) TextType() string {
 	return TextTypeSubscript
 }
 
-func (i *RichTextSubscript) iRichText() {}
+func (r *RichTextSubscript) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextSubscript
-func (i *RichTextSubscript) UnmarshalJSON(data []byte) error {
+func (r *RichTextSubscript) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7674,7 +7674,7 @@ func (i *RichTextSubscript) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextSubscript(ui)
+	*r = RichTextSubscript(ui)
 
 	return nil
 }
@@ -7689,14 +7689,14 @@ type RichTextSuperscript struct {
 }
 
 // TextType return RichText type
-func (i *RichTextSuperscript) TextType() string {
+func (r *RichTextSuperscript) TextType() string {
 	return TextTypeSuperscript
 }
 
-func (i *RichTextSuperscript) iRichText() {}
+func (r *RichTextSuperscript) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextSuperscript
-func (i *RichTextSuperscript) UnmarshalJSON(data []byte) error {
+func (r *RichTextSuperscript) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7716,7 +7716,7 @@ func (i *RichTextSuperscript) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextSuperscript(ui)
+	*r = RichTextSuperscript(ui)
 
 	return nil
 }
@@ -7731,14 +7731,14 @@ type RichTextMarked struct {
 }
 
 // TextType return RichText type
-func (i *RichTextMarked) TextType() string {
+func (r *RichTextMarked) TextType() string {
 	return TextTypeMarked
 }
 
-func (i *RichTextMarked) iRichText() {}
+func (r *RichTextMarked) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextMarked
-func (i *RichTextMarked) UnmarshalJSON(data []byte) error {
+func (r *RichTextMarked) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7758,7 +7758,7 @@ func (i *RichTextMarked) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextMarked(ui)
+	*r = RichTextMarked(ui)
 
 	return nil
 }
@@ -7773,14 +7773,14 @@ type RichTextCode struct {
 }
 
 // TextType return RichText type
-func (i *RichTextCode) TextType() string {
+func (r *RichTextCode) TextType() string {
 	return TextTypeCode
 }
 
-func (i *RichTextCode) iRichText() {}
+func (r *RichTextCode) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextCode
-func (i *RichTextCode) UnmarshalJSON(data []byte) error {
+func (r *RichTextCode) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7800,7 +7800,7 @@ func (i *RichTextCode) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextCode(ui)
+	*r = RichTextCode(ui)
 
 	return nil
 }
@@ -7819,11 +7819,11 @@ type RichTextCustomEmoji struct {
 }
 
 // TextType return RichText type
-func (i *RichTextCustomEmoji) TextType() string {
+func (r *RichTextCustomEmoji) TextType() string {
 	return TextTypeCustomEmoji
 }
 
-func (i *RichTextCustomEmoji) iRichText() {}
+func (r *RichTextCustomEmoji) iRichText() {}
 
 // RichTextMathematicalExpression - A mathematical expression.
 type RichTextMathematicalExpression struct {
@@ -7835,11 +7835,11 @@ type RichTextMathematicalExpression struct {
 }
 
 // TextType return RichText type
-func (i *RichTextMathematicalExpression) TextType() string {
+func (r *RichTextMathematicalExpression) TextType() string {
 	return TextTypeMathematicalExpression
 }
 
-func (i *RichTextMathematicalExpression) iRichText() {}
+func (r *RichTextMathematicalExpression) iRichText() {}
 
 // RichTextURL - A text with a link.
 type RichTextURL struct {
@@ -7854,14 +7854,14 @@ type RichTextURL struct {
 }
 
 // TextType return RichText type
-func (i *RichTextURL) TextType() string {
+func (r *RichTextURL) TextType() string {
 	return TextTypeURL
 }
 
-func (i *RichTextURL) iRichText() {}
+func (r *RichTextURL) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextURL
-func (i *RichTextURL) UnmarshalJSON(data []byte) error {
+func (r *RichTextURL) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7881,7 +7881,7 @@ func (i *RichTextURL) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextURL(ui)
+	*r = RichTextURL(ui)
 
 	return nil
 }
@@ -7899,14 +7899,14 @@ type RichTextEmailAddress struct {
 }
 
 // TextType return RichText type
-func (i *RichTextEmailAddress) TextType() string {
+func (r *RichTextEmailAddress) TextType() string {
 	return TextTypeEmailAddress
 }
 
-func (i *RichTextEmailAddress) iRichText() {}
+func (r *RichTextEmailAddress) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextEmailAddress
-func (i *RichTextEmailAddress) UnmarshalJSON(data []byte) error {
+func (r *RichTextEmailAddress) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7926,7 +7926,7 @@ func (i *RichTextEmailAddress) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextEmailAddress(ui)
+	*r = RichTextEmailAddress(ui)
 
 	return nil
 }
@@ -7944,14 +7944,14 @@ type RichTextPhoneNumber struct {
 }
 
 // TextType return RichText type
-func (i *RichTextPhoneNumber) TextType() string {
+func (r *RichTextPhoneNumber) TextType() string {
 	return TextTypePhoneNumber
 }
 
-func (i *RichTextPhoneNumber) iRichText() {}
+func (r *RichTextPhoneNumber) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextPhoneNumber
-func (i *RichTextPhoneNumber) UnmarshalJSON(data []byte) error {
+func (r *RichTextPhoneNumber) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -7971,7 +7971,7 @@ func (i *RichTextPhoneNumber) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextPhoneNumber(ui)
+	*r = RichTextPhoneNumber(ui)
 
 	return nil
 }
@@ -7989,14 +7989,14 @@ type RichTextBankCardNumber struct {
 }
 
 // TextType return RichText type
-func (i *RichTextBankCardNumber) TextType() string {
+func (r *RichTextBankCardNumber) TextType() string {
 	return TextTypeBankCardNumber
 }
 
-func (i *RichTextBankCardNumber) iRichText() {}
+func (r *RichTextBankCardNumber) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextBankCardNumber
-func (i *RichTextBankCardNumber) UnmarshalJSON(data []byte) error {
+func (r *RichTextBankCardNumber) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8016,7 +8016,7 @@ func (i *RichTextBankCardNumber) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextBankCardNumber(ui)
+	*r = RichTextBankCardNumber(ui)
 
 	return nil
 }
@@ -8034,14 +8034,14 @@ type RichTextMention struct {
 }
 
 // TextType return RichText type
-func (i *RichTextMention) TextType() string {
+func (r *RichTextMention) TextType() string {
 	return TextTypeMention
 }
 
-func (i *RichTextMention) iRichText() {}
+func (r *RichTextMention) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextMention
-func (i *RichTextMention) UnmarshalJSON(data []byte) error {
+func (r *RichTextMention) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8061,7 +8061,7 @@ func (i *RichTextMention) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextMention(ui)
+	*r = RichTextMention(ui)
 
 	return nil
 }
@@ -8079,14 +8079,14 @@ type RichTextHashtag struct {
 }
 
 // TextType return RichText type
-func (i *RichTextHashtag) TextType() string {
+func (r *RichTextHashtag) TextType() string {
 	return TextTypeHashtag
 }
 
-func (i *RichTextHashtag) iRichText() {}
+func (r *RichTextHashtag) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextHashtag
-func (i *RichTextHashtag) UnmarshalJSON(data []byte) error {
+func (r *RichTextHashtag) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8106,7 +8106,7 @@ func (i *RichTextHashtag) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextHashtag(ui)
+	*r = RichTextHashtag(ui)
 
 	return nil
 }
@@ -8124,14 +8124,14 @@ type RichTextCashtag struct {
 }
 
 // TextType return RichText type
-func (i *RichTextCashtag) TextType() string {
+func (r *RichTextCashtag) TextType() string {
 	return TextTypeCashtag
 }
 
-func (i *RichTextCashtag) iRichText() {}
+func (r *RichTextCashtag) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextCashtag
-func (i *RichTextCashtag) UnmarshalJSON(data []byte) error {
+func (r *RichTextCashtag) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8151,7 +8151,7 @@ func (i *RichTextCashtag) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextCashtag(ui)
+	*r = RichTextCashtag(ui)
 
 	return nil
 }
@@ -8169,14 +8169,14 @@ type RichTextBotCommand struct {
 }
 
 // TextType return RichText type
-func (i *RichTextBotCommand) TextType() string {
+func (r *RichTextBotCommand) TextType() string {
 	return TextTypeBotCommand
 }
 
-func (i *RichTextBotCommand) iRichText() {}
+func (r *RichTextBotCommand) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextBotCommand
-func (i *RichTextBotCommand) UnmarshalJSON(data []byte) error {
+func (r *RichTextBotCommand) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8196,7 +8196,7 @@ func (i *RichTextBotCommand) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextBotCommand(ui)
+	*r = RichTextBotCommand(ui)
 
 	return nil
 }
@@ -8211,11 +8211,11 @@ type RichTextAnchor struct {
 }
 
 // TextType return RichText type
-func (i *RichTextAnchor) TextType() string {
+func (r *RichTextAnchor) TextType() string {
 	return TextTypeAnchor
 }
 
-func (i *RichTextAnchor) iRichText() {}
+func (r *RichTextAnchor) iRichText() {}
 
 // RichTextAnchorLink - A link to an anchor.
 type RichTextAnchorLink struct {
@@ -8231,14 +8231,14 @@ type RichTextAnchorLink struct {
 }
 
 // TextType return RichText type
-func (i *RichTextAnchorLink) TextType() string {
+func (r *RichTextAnchorLink) TextType() string {
 	return TextTypeAnchorLink
 }
 
-func (i *RichTextAnchorLink) iRichText() {}
+func (r *RichTextAnchorLink) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextAnchorLink
-func (i *RichTextAnchorLink) UnmarshalJSON(data []byte) error {
+func (r *RichTextAnchorLink) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8258,7 +8258,7 @@ func (i *RichTextAnchorLink) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextAnchorLink(ui)
+	*r = RichTextAnchorLink(ui)
 
 	return nil
 }
@@ -8276,14 +8276,14 @@ type RichTextReference struct {
 }
 
 // TextType return RichText type
-func (i *RichTextReference) TextType() string {
+func (r *RichTextReference) TextType() string {
 	return TextTypeReference
 }
 
-func (i *RichTextReference) iRichText() {}
+func (r *RichTextReference) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextReference
-func (i *RichTextReference) UnmarshalJSON(data []byte) error {
+func (r *RichTextReference) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8303,7 +8303,7 @@ func (i *RichTextReference) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextReference(ui)
+	*r = RichTextReference(ui)
 
 	return nil
 }
@@ -8321,14 +8321,14 @@ type RichTextReferenceLink struct {
 }
 
 // TextType return RichText type
-func (i *RichTextReferenceLink) TextType() string {
+func (r *RichTextReferenceLink) TextType() string {
 	return TextTypeReferenceLink
 }
 
-func (i *RichTextReferenceLink) iRichText() {}
+func (r *RichTextReferenceLink) iRichText() {}
 
 // UnmarshalJSON converts JSON to RichTextReferenceLink
-func (i *RichTextReferenceLink) UnmarshalJSON(data []byte) error {
+func (r *RichTextReferenceLink) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8348,7 +8348,7 @@ func (i *RichTextReferenceLink) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichTextReferenceLink(ui)
+	*r = RichTextReferenceLink(ui)
 
 	return nil
 }
@@ -8363,7 +8363,7 @@ type RichBlockCaption struct {
 }
 
 // UnmarshalJSON converts JSON to RichBlockCaption
-func (i *RichBlockCaption) UnmarshalJSON(data []byte) error {
+func (r *RichBlockCaption) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8388,7 +8388,7 @@ func (i *RichBlockCaption) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichBlockCaption(ui)
+	*r = RichBlockCaption(ui)
 
 	return nil
 }
@@ -8417,7 +8417,7 @@ type RichBlockTableCell struct {
 }
 
 // UnmarshalJSON converts JSON to RichBlockTableCell
-func (i *RichBlockTableCell) UnmarshalJSON(data []byte) error {
+func (r *RichBlockTableCell) UnmarshalJSON(data []byte) error {
 	parser := json.ParserPoll.Get()
 	defer json.ParserPoll.Put(parser)
 
@@ -8437,7 +8437,7 @@ func (i *RichBlockTableCell) UnmarshalJSON(data []byte) error {
 	if err = json.Unmarshal(data, &ui); err != nil {
 		return err
 	}
-	*i = RichBlockTableCell(ui)
+	*r = RichBlockTableCell(ui)
 
 	return nil
 }
@@ -9362,6 +9362,15 @@ func (i *InputRichBlockListItem) fileParameters() map[string]telegoapi.NamedRead
 
 	return fp
 }
+
+// Ordered list types
+const (
+	OrderedListDecimal    = "1"
+	OrderedListLowerAlpha = "a"
+	OrderedListUpperAlpha = "A"
+	OrderedListLowerRoman = "i"
+	OrderedListUpperRoman = "I"
+)
 
 // InputRichBlock - This object represents a block in a rich formatted message to be sent. Currently, it can
 // be any of the following types:

@@ -662,3 +662,319 @@ func TestReactionPaid(t *testing.T) {
 	r := ReactionPaid()
 	assert.Equal(t, telego.ReactionPaid, r.Type)
 }
+
+func TestRichBlockParagraph(t *testing.T) {
+	r := RichBlockParagraph(richText1)
+	assert.Equal(t, telego.BlockTypeParagraph, r.Type)
+}
+
+func TestRichBlockSectionHeading(t *testing.T) {
+	r := RichBlockSectionHeading(richText1, number1)
+	assert.Equal(t, telego.BlockTypeSectionHeading, r.Type)
+}
+
+func TestRichBlockPreformatted(t *testing.T) {
+	r := RichBlockPreformatted(richText1)
+	assert.Equal(t, telego.BlockTypePreformatted, r.Type)
+}
+
+func TestRichBlockFooter(t *testing.T) {
+	r := RichBlockFooter(richText1)
+	assert.Equal(t, telego.BlockTypeFooter, r.Type)
+}
+
+func TestRichBlockDivider(t *testing.T) {
+	r := RichBlockDivider()
+	assert.Equal(t, telego.BlockTypeDivider, r.Type)
+}
+
+func TestRichBlockMathematicalExpression(t *testing.T) {
+	r := RichBlockMathematicalExpression(text1)
+	assert.Equal(t, telego.BlockTypeMathematicalExpression, r.Type)
+}
+
+func TestRichBlockAnchor(t *testing.T) {
+	r := RichBlockAnchor(text1)
+	assert.Equal(t, telego.BlockTypeAnchor, r.Type)
+}
+
+func TestRichBlockList(t *testing.T) {
+	r := RichBlockList(RichBlockListItem(RichBlockParagraph(richText1)))
+	assert.Equal(t, telego.BlockTypeList, r.Type)
+}
+
+func TestRichBlockBlockQuotation(t *testing.T) {
+	r := RichBlockBlockQuotation(RichBlockParagraph(richText1))
+	assert.Equal(t, telego.BlockTypeBlockQuotation, r.Type)
+}
+
+func TestRichBlockPullQuotation(t *testing.T) {
+	r := RichBlockPullQuotation(richText1)
+	assert.Equal(t, telego.BlockTypePullQuotation, r.Type)
+}
+
+func TestRichBlockCollage(t *testing.T) {
+	r := RichBlockCollage(RichBlockParagraph(richText1))
+	assert.Equal(t, telego.BlockTypeCollage, r.Type)
+}
+
+func TestRichBlockSlideshow(t *testing.T) {
+	r := RichBlockSlideshow(RichBlockParagraph(richText1))
+	assert.Equal(t, telego.BlockTypeSlideshow, r.Type)
+}
+
+func TestRichBlockTable(t *testing.T) {
+	r := RichBlockTable(RichBlockTableRow(RichBlockTableCell(richText1)))
+	assert.Equal(t, telego.BlockTypeTable, r.Type)
+}
+
+func TestRichBlockTableRow(t *testing.T) {
+	i := RichBlockTableRow(telego.RichBlockTableCell{}, telego.RichBlockTableCell{})
+	assert.Len(t, i, 2)
+}
+
+func TestRichBlockTableGrid(t *testing.T) {
+	i := RichBlockTableGrid([][]telego.RichBlockTableCell{
+		{{}},
+		{{}, {}, {}},
+	})
+	require.Len(t, i.Cells, 2)
+	assert.Len(t, i.Cells[0], 1)
+	assert.Len(t, i.Cells[1], 3)
+}
+
+func TestRichBlockTableCols(t *testing.T) {
+	t.Run("full", func(t *testing.T) {
+		b := telego.RichBlockTableCell{}
+		i := RichBlockTableCols(2, b, b, b, b)
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 2)
+	})
+
+	t.Run("one_off", func(t *testing.T) {
+		b := telego.RichBlockTableCell{}
+		i := RichBlockTableCols(2, b, b, b)
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 1)
+	})
+
+	t.Run("nil", func(t *testing.T) {
+		i := RichBlockTableCols(0)
+		assert.Nil(t, i)
+	})
+}
+
+func TestRichBlockTableRows(t *testing.T) {
+	t.Run("full", func(t *testing.T) {
+		b := telego.RichBlockTableCell{}
+		i := RichBlockTableRows(2, b, b, b, b)
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 2)
+	})
+
+	t.Run("one_off", func(t *testing.T) {
+		b := telego.RichBlockTableCell{}
+		i := RichBlockTableRows(2, b, b, b)
+		require.Len(t, i, 2)
+		assert.Len(t, i[0], 2)
+		assert.Len(t, i[1], 1)
+	})
+
+	t.Run("nil", func(t *testing.T) {
+		i := RichBlockTableRows(0)
+		assert.Nil(t, i)
+	})
+}
+
+func TestRichBlockTableCell(t *testing.T) {
+	r := RichBlockTableCell(richText1)
+	assert.Equal(t, richText1, r.Text)
+}
+
+func TestRichBlockDetails(t *testing.T) {
+	r := RichBlockDetails(richText1, RichBlockParagraph(richText1))
+	assert.Equal(t, telego.BlockTypeDetails, r.Type)
+}
+
+func TestRichBlockMap(t *testing.T) {
+	r := RichBlockMap(telego.Location{Latitude: latitude}, number1, number3, number4)
+	assert.Equal(t, telego.BlockTypeMap, r.Type)
+}
+
+func TestRichBlockAnimation(t *testing.T) {
+	r := RichBlockAnimation(telego.InputMediaAnimation{Type: text1})
+	assert.Equal(t, telego.BlockTypeAnimation, r.Type)
+}
+
+func TestRichBlockAudio(t *testing.T) {
+	r := RichBlockAudio(telego.InputMediaAudio{Type: text1})
+	assert.Equal(t, telego.BlockTypeAudio, r.Type)
+}
+
+func TestRichBlockPhoto(t *testing.T) {
+	r := RichBlockPhoto(telego.InputMediaPhoto{Type: text1})
+	assert.Equal(t, telego.BlockTypePhoto, r.Type)
+}
+
+func TestRichBlockVideo(t *testing.T) {
+	r := RichBlockVideo(telego.InputMediaVideo{Type: text1})
+	assert.Equal(t, telego.BlockTypeVideo, r.Type)
+}
+
+func TestRichBlockVoiceNote(t *testing.T) {
+	r := RichBlockVoiceNote(telego.InputMediaVoiceNote{Type: text1})
+	assert.Equal(t, telego.BlockTypeVoiceNote, r.Type)
+}
+
+func TestRichBlockThinking(t *testing.T) {
+	r := RichBlockThinking(richText1)
+	assert.Equal(t, telego.BlockTypeThinking, r.Type)
+}
+
+func TestRichBlockCaption(t *testing.T) {
+	r := RichBlockCaption(richText1)
+	assert.Equal(t, richText1, r.Text)
+}
+
+func TestRichBlockListItem(t *testing.T) {
+	r := RichBlockListItem(RichBlockParagraph(richText1))
+	assert.Equal(t, []telego.InputRichBlock{RichBlockParagraph(richText1)}, r.Blocks)
+}
+
+func TestRichTextPlain(t *testing.T) {
+	r := RichTextPlain(text1)
+	assert.EqualValues(t, &text1, r)
+}
+
+func TestRichTextList(t *testing.T) {
+	r := RichTextList(richText1, richText2)
+	assert.EqualValues(t, &[]telego.RichText{richText1, richText2}, r)
+}
+
+func TestRichTextBold(t *testing.T) {
+	r := RichTextBold(richText1)
+	assert.Equal(t, telego.TextTypeBold, r.Type)
+}
+
+func TestRichTextItalic(t *testing.T) {
+	r := RichTextItalic(richText1)
+	assert.Equal(t, telego.TextTypeItalic, r.Type)
+}
+
+func TestRichTextUnderline(t *testing.T) {
+	r := RichTextUnderline(richText1)
+	assert.Equal(t, telego.TextTypeUnderline, r.Type)
+}
+
+func TestRichTextStrikethrough(t *testing.T) {
+	r := RichTextStrikethrough(richText1)
+	assert.Equal(t, telego.TextTypeStrikethrough, r.Type)
+}
+
+func TestRichTextSpoiler(t *testing.T) {
+	r := RichTextSpoiler(richText1)
+	assert.Equal(t, telego.TextTypeSpoiler, r.Type)
+}
+
+func TestRichTextDateTime(t *testing.T) {
+	r := RichTextDateTime(richText1, number2, text2)
+	assert.Equal(t, telego.TextTypeDateTime, r.Type)
+}
+
+func TestRichTextTextMention(t *testing.T) {
+	r := RichTextTextMention(richText1, telego.User{})
+	assert.Equal(t, telego.TextTypeTextMention, r.Type)
+}
+
+func TestRichTextSubscript(t *testing.T) {
+	r := RichTextSubscript(richText1)
+	assert.Equal(t, telego.TextTypeSubscript, r.Type)
+}
+
+func TestRichTextSuperscript(t *testing.T) {
+	r := RichTextSuperscript(richText1)
+	assert.Equal(t, telego.TextTypeSuperscript, r.Type)
+}
+
+func TestRichTextMarked(t *testing.T) {
+	r := RichTextMarked(richText1)
+	assert.Equal(t, telego.TextTypeMarked, r.Type)
+}
+
+func TestRichTextCode(t *testing.T) {
+	r := RichTextCode(richText1)
+	assert.Equal(t, telego.TextTypeCode, r.Type)
+}
+
+func TestRichTextCustomEmoji(t *testing.T) {
+	r := RichTextCustomEmoji(text1, text2)
+	assert.Equal(t, telego.TextTypeCustomEmoji, r.Type)
+}
+
+func TestRichTextMathematicalExpression(t *testing.T) {
+	r := RichTextMathematicalExpression(text1)
+	assert.Equal(t, telego.TextTypeMathematicalExpression, r.Type)
+}
+
+func TestRichTextURL(t *testing.T) {
+	r := RichTextURL(richText1, text2)
+	assert.Equal(t, telego.TextTypeURL, r.Type)
+}
+
+func TestRichTextEmailAddress(t *testing.T) {
+	r := RichTextEmailAddress(richText1, text2)
+	assert.Equal(t, telego.TextTypeEmailAddress, r.Type)
+}
+
+func TestRichTextPhoneNumber(t *testing.T) {
+	r := RichTextPhoneNumber(richText1, text2)
+	assert.Equal(t, telego.TextTypePhoneNumber, r.Type)
+}
+
+func TestRichTextBankCardNumber(t *testing.T) {
+	r := RichTextBankCardNumber(richText1, text2)
+	assert.Equal(t, telego.TextTypeBankCardNumber, r.Type)
+}
+
+func TestRichTextMention(t *testing.T) {
+	r := RichTextMention(richText1, text2)
+	assert.Equal(t, telego.TextTypeMention, r.Type)
+}
+
+func TestRichTextHashtag(t *testing.T) {
+	r := RichTextHashtag(richText1, text2)
+	assert.Equal(t, telego.TextTypeHashtag, r.Type)
+}
+
+func TestRichTextCashtag(t *testing.T) {
+	r := RichTextCashtag(richText1, text2)
+	assert.Equal(t, telego.TextTypeCashtag, r.Type)
+}
+
+func TestRichTextBotCommand(t *testing.T) {
+	r := RichTextBotCommand(richText1, text2)
+	assert.Equal(t, telego.TextTypeBotCommand, r.Type)
+}
+
+func TestRichTextAnchor(t *testing.T) {
+	r := RichTextAnchor(text1)
+	assert.Equal(t, telego.TextTypeAnchor, r.Type)
+}
+
+func TestRichTextAnchorLink(t *testing.T) {
+	r := RichTextAnchorLink(richText1, text2)
+	assert.Equal(t, telego.TextTypeAnchorLink, r.Type)
+}
+
+func TestRichTextReference(t *testing.T) {
+	r := RichTextReference(richText1, text2)
+	assert.Equal(t, telego.TextTypeReference, r.Type)
+}
+
+func TestRichTextReferenceLink(t *testing.T) {
+	r := RichTextReferenceLink(richText1, text2)
+	assert.Equal(t, telego.TextTypeReferenceLink, r.Type)
+}

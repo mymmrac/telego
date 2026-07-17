@@ -1085,6 +1085,10 @@ func TestTypesConstants(t *testing.T) {
 			BlockTypeThinking,
 		},
 		{
+			OrderedListDecimal, OrderedListLowerAlpha, OrderedListUpperAlpha, OrderedListLowerRoman,
+			OrderedListUpperRoman,
+		},
+		{
 			ResultTypeArticle, ResultTypePhoto, ResultTypeGif, ResultTypeMpeg4Gif, ResultTypeVideo, ResultTypeAudio,
 			ResultTypeVoice, ResultTypeDocument, ResultTypeLocation, ResultTypeVenue, ResultTypeContact,
 			ResultTypeGame, ResultTypeSticker,

@@ -1057,6 +1057,558 @@ func (i *InputRichMessage) WithSkipEntityDetection() *InputRichMessage {
 	return i
 }
 
+// WithText adds text parameter
+func (r *RichTextBold) WithText(text RichText) *RichTextBold {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextItalic) WithText(text RichText) *RichTextItalic {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextUnderline) WithText(text RichText) *RichTextUnderline {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextStrikethrough) WithText(text RichText) *RichTextStrikethrough {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextSpoiler) WithText(text RichText) *RichTextSpoiler {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextDateTime) WithText(text RichText) *RichTextDateTime {
+	r.Text = text
+	return r
+}
+
+// WithUnixTime adds unix time parameter
+func (r *RichTextDateTime) WithUnixTime(unixTime int64) *RichTextDateTime {
+	r.UnixTime = unixTime
+	return r
+}
+
+// WithDateTimeFormat adds date time format parameter
+func (r *RichTextDateTime) WithDateTimeFormat(dateTimeFormat string) *RichTextDateTime {
+	r.DateTimeFormat = dateTimeFormat
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextTextMention) WithText(text RichText) *RichTextTextMention {
+	r.Text = text
+	return r
+}
+
+// WithUser adds user parameter
+func (r *RichTextTextMention) WithUser(user User) *RichTextTextMention {
+	r.User = user
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextSubscript) WithText(text RichText) *RichTextSubscript {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextSuperscript) WithText(text RichText) *RichTextSuperscript {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextMarked) WithText(text RichText) *RichTextMarked {
+	r.Text = text
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextCode) WithText(text RichText) *RichTextCode {
+	r.Text = text
+	return r
+}
+
+// WithCustomEmojiID adds custom emoji ID parameter
+func (r *RichTextCustomEmoji) WithCustomEmojiID(customEmojiID string) *RichTextCustomEmoji {
+	r.CustomEmojiID = customEmojiID
+	return r
+}
+
+// WithAlternativeText adds alternative text parameter
+func (r *RichTextCustomEmoji) WithAlternativeText(alternativeText string) *RichTextCustomEmoji {
+	r.AlternativeText = alternativeText
+	return r
+}
+
+// WithExpression adds expression parameter
+func (r *RichTextMathematicalExpression) WithExpression(expression string) *RichTextMathematicalExpression {
+	r.Expression = expression
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextURL) WithText(text RichText) *RichTextURL {
+	r.Text = text
+	return r
+}
+
+// WithURL adds URL parameter
+func (r *RichTextURL) WithURL(url string) *RichTextURL {
+	r.URL = url
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextEmailAddress) WithText(text RichText) *RichTextEmailAddress {
+	r.Text = text
+	return r
+}
+
+// WithEmailAddress adds email address parameter
+func (r *RichTextEmailAddress) WithEmailAddress(emailAddress string) *RichTextEmailAddress {
+	r.EmailAddress = emailAddress
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextPhoneNumber) WithText(text RichText) *RichTextPhoneNumber {
+	r.Text = text
+	return r
+}
+
+// WithPhoneNumber adds phone number parameter
+func (r *RichTextPhoneNumber) WithPhoneNumber(phoneNumber string) *RichTextPhoneNumber {
+	r.PhoneNumber = phoneNumber
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextBankCardNumber) WithText(text RichText) *RichTextBankCardNumber {
+	r.Text = text
+	return r
+}
+
+// WithBankCardNumber adds bank card number parameter
+func (r *RichTextBankCardNumber) WithBankCardNumber(bankCardNumber string) *RichTextBankCardNumber {
+	r.BankCardNumber = bankCardNumber
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextMention) WithText(text RichText) *RichTextMention {
+	r.Text = text
+	return r
+}
+
+// WithUsername adds username parameter
+func (r *RichTextMention) WithUsername(username string) *RichTextMention {
+	r.Username = username
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextHashtag) WithText(text RichText) *RichTextHashtag {
+	r.Text = text
+	return r
+}
+
+// WithHashtag adds hashtag parameter
+func (r *RichTextHashtag) WithHashtag(hashtag string) *RichTextHashtag {
+	r.Hashtag = hashtag
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextCashtag) WithText(text RichText) *RichTextCashtag {
+	r.Text = text
+	return r
+}
+
+// WithCashtag adds cashtag parameter
+func (r *RichTextCashtag) WithCashtag(cashtag string) *RichTextCashtag {
+	r.Cashtag = cashtag
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextBotCommand) WithText(text RichText) *RichTextBotCommand {
+	r.Text = text
+	return r
+}
+
+// WithBotCommand adds bot command parameter
+func (r *RichTextBotCommand) WithBotCommand(botCommand string) *RichTextBotCommand {
+	r.BotCommand = botCommand
+	return r
+}
+
+// WithName adds name parameter
+func (r *RichTextAnchor) WithName(name string) *RichTextAnchor {
+	r.Name = name
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextAnchorLink) WithText(text RichText) *RichTextAnchorLink {
+	r.Text = text
+	return r
+}
+
+// WithAnchorName adds anchor name parameter
+func (r *RichTextAnchorLink) WithAnchorName(anchorName string) *RichTextAnchorLink {
+	r.AnchorName = anchorName
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextReference) WithText(text RichText) *RichTextReference {
+	r.Text = text
+	return r
+}
+
+// WithName adds name parameter
+func (r *RichTextReference) WithName(name string) *RichTextReference {
+	r.Name = name
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextReferenceLink) WithText(text RichText) *RichTextReferenceLink {
+	r.Text = text
+	return r
+}
+
+// WithReferenceName adds reference name parameter
+func (r *RichTextReferenceLink) WithReferenceName(referenceName string) *RichTextReferenceLink {
+	r.ReferenceName = referenceName
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichBlockCaption) WithText(text RichText) *RichBlockCaption {
+	r.Text = text
+	return r
+}
+
+// WithCredit adds credit parameter
+func (r *RichBlockCaption) WithCredit(credit RichText) *RichBlockCaption {
+	r.Credit = credit
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichBlockTableCell) WithText(text RichText) *RichBlockTableCell {
+	r.Text = text
+	return r
+}
+
+// WithIsHeader adds is header parameter
+func (r *RichBlockTableCell) WithIsHeader() *RichBlockTableCell {
+	r.IsHeader = true
+	return r
+}
+
+// WithColspan adds colspan parameter
+func (r *RichBlockTableCell) WithColspan(colspan int) *RichBlockTableCell {
+	r.Colspan = colspan
+	return r
+}
+
+// WithRowspan adds rowspan parameter
+func (r *RichBlockTableCell) WithRowspan(rowspan int) *RichBlockTableCell {
+	r.Rowspan = rowspan
+	return r
+}
+
+// WithAlign adds align parameter
+func (r *RichBlockTableCell) WithAlign(align string) *RichBlockTableCell {
+	r.Align = align
+	return r
+}
+
+// WithValign adds valign parameter
+func (r *RichBlockTableCell) WithValign(valign string) *RichBlockTableCell {
+	r.Valign = valign
+	return r
+}
+
+// WithBlocks adds blocks parameter
+func (i *InputRichBlockListItem) WithBlocks(blocks ...InputRichBlock) *InputRichBlockListItem {
+	i.Blocks = blocks
+	return i
+}
+
+// WithHasCheckbox adds has checkbox parameter
+func (i *InputRichBlockListItem) WithHasCheckbox() *InputRichBlockListItem {
+	i.HasCheckbox = true
+	return i
+}
+
+// WithIsChecked adds is checked parameter
+func (i *InputRichBlockListItem) WithIsChecked() *InputRichBlockListItem {
+	i.IsChecked = true
+	return i
+}
+
+// WithValue adds value parameter
+func (i *InputRichBlockListItem) WithValue(value int) *InputRichBlockListItem {
+	i.Value = value
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputRichBlockParagraph) WithText(text RichText) *InputRichBlockParagraph {
+	i.Text = text
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputRichBlockSectionHeading) WithText(text RichText) *InputRichBlockSectionHeading {
+	i.Text = text
+	return i
+}
+
+// WithSize adds size parameter
+func (i *InputRichBlockSectionHeading) WithSize(size int) *InputRichBlockSectionHeading {
+	i.Size = size
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputRichBlockPreformatted) WithText(text RichText) *InputRichBlockPreformatted {
+	i.Text = text
+	return i
+}
+
+// WithLanguage adds language parameter
+func (i *InputRichBlockPreformatted) WithLanguage(language string) *InputRichBlockPreformatted {
+	i.Language = language
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputRichBlockFooter) WithText(text RichText) *InputRichBlockFooter {
+	i.Text = text
+	return i
+}
+
+// WithExpression adds expression parameter
+func (i *InputRichBlockMathematicalExpression) WithExpression(expression string) *InputRichBlockMathematicalExpression {
+	i.Expression = expression
+	return i
+}
+
+// WithName adds name parameter
+func (i *InputRichBlockAnchor) WithName(name string) *InputRichBlockAnchor {
+	i.Name = name
+	return i
+}
+
+// WithItems adds items parameter
+func (i *InputRichBlockList) WithItems(items ...InputRichBlockListItem) *InputRichBlockList {
+	i.Items = items
+	return i
+}
+
+// WithBlocks adds blocks parameter
+func (i *InputRichBlockBlockQuotation) WithBlocks(blocks ...InputRichBlock) *InputRichBlockBlockQuotation {
+	i.Blocks = blocks
+	return i
+}
+
+// WithCredit adds credit parameter
+func (i *InputRichBlockBlockQuotation) WithCredit(credit RichText) *InputRichBlockBlockQuotation {
+	i.Credit = credit
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputRichBlockPullQuotation) WithText(text RichText) *InputRichBlockPullQuotation {
+	i.Text = text
+	return i
+}
+
+// WithCredit adds credit parameter
+func (i *InputRichBlockPullQuotation) WithCredit(credit RichText) *InputRichBlockPullQuotation {
+	i.Credit = credit
+	return i
+}
+
+// WithBlocks adds blocks parameter
+func (i *InputRichBlockCollage) WithBlocks(blocks ...InputRichBlock) *InputRichBlockCollage {
+	i.Blocks = blocks
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockCollage) WithCaption(caption *RichBlockCaption) *InputRichBlockCollage {
+	i.Caption = caption
+	return i
+}
+
+// WithBlocks adds blocks parameter
+func (i *InputRichBlockSlideshow) WithBlocks(blocks ...InputRichBlock) *InputRichBlockSlideshow {
+	i.Blocks = blocks
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockSlideshow) WithCaption(caption *RichBlockCaption) *InputRichBlockSlideshow {
+	i.Caption = caption
+	return i
+}
+
+// WithCells adds cells parameter
+func (i *InputRichBlockTable) WithCells(cells ...[]RichBlockTableCell) *InputRichBlockTable {
+	i.Cells = cells
+	return i
+}
+
+// WithIsBordered adds is bordered parameter
+func (i *InputRichBlockTable) WithIsBordered() *InputRichBlockTable {
+	i.IsBordered = true
+	return i
+}
+
+// WithIsStriped adds is striped parameter
+func (i *InputRichBlockTable) WithIsStriped() *InputRichBlockTable {
+	i.IsStriped = true
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockTable) WithCaption(caption RichText) *InputRichBlockTable {
+	i.Caption = caption
+	return i
+}
+
+// WithSummary adds summary parameter
+func (i *InputRichBlockDetails) WithSummary(summary RichText) *InputRichBlockDetails {
+	i.Summary = summary
+	return i
+}
+
+// WithBlocks adds blocks parameter
+func (i *InputRichBlockDetails) WithBlocks(blocks ...InputRichBlock) *InputRichBlockDetails {
+	i.Blocks = blocks
+	return i
+}
+
+// WithIsOpen adds is open parameter
+func (i *InputRichBlockDetails) WithIsOpen() *InputRichBlockDetails {
+	i.IsOpen = true
+	return i
+}
+
+// WithLocation adds location parameter
+func (i *InputRichBlockMap) WithLocation(location Location) *InputRichBlockMap {
+	i.Location = location
+	return i
+}
+
+// WithZoom adds zoom parameter
+func (i *InputRichBlockMap) WithZoom(zoom int) *InputRichBlockMap {
+	i.Zoom = zoom
+	return i
+}
+
+// WithWidth adds width parameter
+func (i *InputRichBlockMap) WithWidth(width int) *InputRichBlockMap {
+	i.Width = width
+	return i
+}
+
+// WithHeight adds height parameter
+func (i *InputRichBlockMap) WithHeight(height int) *InputRichBlockMap {
+	i.Height = height
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockMap) WithCaption(caption *RichBlockCaption) *InputRichBlockMap {
+	i.Caption = caption
+	return i
+}
+
+// WithAnimation adds animation parameter
+func (i *InputRichBlockAnimation) WithAnimation(animation InputMediaAnimation) *InputRichBlockAnimation {
+	i.Animation = animation
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockAnimation) WithCaption(caption *RichBlockCaption) *InputRichBlockAnimation {
+	i.Caption = caption
+	return i
+}
+
+// WithAudio adds audio parameter
+func (i *InputRichBlockAudio) WithAudio(audio InputMediaAudio) *InputRichBlockAudio {
+	i.Audio = audio
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockAudio) WithCaption(caption *RichBlockCaption) *InputRichBlockAudio {
+	i.Caption = caption
+	return i
+}
+
+// WithPhoto adds photo parameter
+func (i *InputRichBlockPhoto) WithPhoto(photo InputMediaPhoto) *InputRichBlockPhoto {
+	i.Photo = photo
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockPhoto) WithCaption(caption *RichBlockCaption) *InputRichBlockPhoto {
+	i.Caption = caption
+	return i
+}
+
+// WithVideo adds video parameter
+func (i *InputRichBlockVideo) WithVideo(video InputMediaVideo) *InputRichBlockVideo {
+	i.Video = video
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockVideo) WithCaption(caption *RichBlockCaption) *InputRichBlockVideo {
+	i.Caption = caption
+	return i
+}
+
+// WithVoiceNote adds voice note parameter
+func (i *InputRichBlockVoiceNote) WithVoiceNote(voiceNote InputMediaVoiceNote) *InputRichBlockVoiceNote {
+	i.VoiceNote = voiceNote
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockVoiceNote) WithCaption(caption *RichBlockCaption) *InputRichBlockVoiceNote {
+	i.Caption = caption
+	return i
+}
+
+// WithText adds text parameter
+func (i *InputRichBlockThinking) WithText(text RichText) *InputRichBlockThinking {
+	i.Text = text
+	return i
+}
+
 // WithID adds ID parameter
 func (i *InlineQueryResultArticle) WithID(iD string) *InlineQueryResultArticle {
 	i.ID = iD

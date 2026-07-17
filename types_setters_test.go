@@ -580,6 +580,526 @@ func TestInputRichMessage_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestRichTextBold_Setters(t *testing.T) {
+	r := (&RichTextBold{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextBold{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextItalic_Setters(t *testing.T) {
+	r := (&RichTextItalic{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextItalic{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextUnderline_Setters(t *testing.T) {
+	r := (&RichTextUnderline{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextUnderline{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextStrikethrough_Setters(t *testing.T) {
+	r := (&RichTextStrikethrough{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextStrikethrough{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextSpoiler_Setters(t *testing.T) {
+	r := (&RichTextSpoiler{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextSpoiler{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextDateTime_Setters(t *testing.T) {
+	r := (&RichTextDateTime{}).
+		WithText(&RichTextBold{}).
+		WithUnixTime(1).
+		WithDateTimeFormat("DateTimeFormat")
+
+	assert.Equal(t, &RichTextDateTime{
+		Text:           &RichTextBold{},
+		UnixTime:       1,
+		DateTimeFormat: "DateTimeFormat",
+	}, r)
+}
+
+func TestRichTextTextMention_Setters(t *testing.T) {
+	r := (&RichTextTextMention{}).
+		WithText(&RichTextBold{}).
+		WithUser(User{ID: 1})
+
+	assert.Equal(t, &RichTextTextMention{
+		Text: &RichTextBold{},
+		User: User{ID: 1},
+	}, r)
+}
+
+func TestRichTextSubscript_Setters(t *testing.T) {
+	r := (&RichTextSubscript{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextSubscript{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextSuperscript_Setters(t *testing.T) {
+	r := (&RichTextSuperscript{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextSuperscript{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextMarked_Setters(t *testing.T) {
+	r := (&RichTextMarked{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextMarked{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextCode_Setters(t *testing.T) {
+	r := (&RichTextCode{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &RichTextCode{
+		Text: &RichTextBold{},
+	}, r)
+}
+
+func TestRichTextCustomEmoji_Setters(t *testing.T) {
+	r := (&RichTextCustomEmoji{}).
+		WithCustomEmojiID("CustomEmojiID").
+		WithAlternativeText("AlternativeText")
+
+	assert.Equal(t, &RichTextCustomEmoji{
+		CustomEmojiID:   "CustomEmojiID",
+		AlternativeText: "AlternativeText",
+	}, r)
+}
+
+func TestRichTextMathematicalExpression_Setters(t *testing.T) {
+	r := (&RichTextMathematicalExpression{}).
+		WithExpression("Expression")
+
+	assert.Equal(t, &RichTextMathematicalExpression{
+		Expression: "Expression",
+	}, r)
+}
+
+func TestRichTextURL_Setters(t *testing.T) {
+	r := (&RichTextURL{}).
+		WithText(&RichTextBold{}).
+		WithURL("URL")
+
+	assert.Equal(t, &RichTextURL{
+		Text: &RichTextBold{},
+		URL:  "URL",
+	}, r)
+}
+
+func TestRichTextEmailAddress_Setters(t *testing.T) {
+	r := (&RichTextEmailAddress{}).
+		WithText(&RichTextBold{}).
+		WithEmailAddress("EmailAddress")
+
+	assert.Equal(t, &RichTextEmailAddress{
+		Text:         &RichTextBold{},
+		EmailAddress: "EmailAddress",
+	}, r)
+}
+
+func TestRichTextPhoneNumber_Setters(t *testing.T) {
+	r := (&RichTextPhoneNumber{}).
+		WithText(&RichTextBold{}).
+		WithPhoneNumber("PhoneNumber")
+
+	assert.Equal(t, &RichTextPhoneNumber{
+		Text:        &RichTextBold{},
+		PhoneNumber: "PhoneNumber",
+	}, r)
+}
+
+func TestRichTextBankCardNumber_Setters(t *testing.T) {
+	r := (&RichTextBankCardNumber{}).
+		WithText(&RichTextBold{}).
+		WithBankCardNumber("BankCardNumber")
+
+	assert.Equal(t, &RichTextBankCardNumber{
+		Text:           &RichTextBold{},
+		BankCardNumber: "BankCardNumber",
+	}, r)
+}
+
+func TestRichTextMention_Setters(t *testing.T) {
+	r := (&RichTextMention{}).
+		WithText(&RichTextBold{}).
+		WithUsername("Username")
+
+	assert.Equal(t, &RichTextMention{
+		Text:     &RichTextBold{},
+		Username: "Username",
+	}, r)
+}
+
+func TestRichTextHashtag_Setters(t *testing.T) {
+	r := (&RichTextHashtag{}).
+		WithText(&RichTextBold{}).
+		WithHashtag("Hashtag")
+
+	assert.Equal(t, &RichTextHashtag{
+		Text:    &RichTextBold{},
+		Hashtag: "Hashtag",
+	}, r)
+}
+
+func TestRichTextCashtag_Setters(t *testing.T) {
+	r := (&RichTextCashtag{}).
+		WithText(&RichTextBold{}).
+		WithCashtag("Cashtag")
+
+	assert.Equal(t, &RichTextCashtag{
+		Text:    &RichTextBold{},
+		Cashtag: "Cashtag",
+	}, r)
+}
+
+func TestRichTextBotCommand_Setters(t *testing.T) {
+	r := (&RichTextBotCommand{}).
+		WithText(&RichTextBold{}).
+		WithBotCommand("BotCommand")
+
+	assert.Equal(t, &RichTextBotCommand{
+		Text:       &RichTextBold{},
+		BotCommand: "BotCommand",
+	}, r)
+}
+
+func TestRichTextAnchor_Setters(t *testing.T) {
+	r := (&RichTextAnchor{}).
+		WithName("Name")
+
+	assert.Equal(t, &RichTextAnchor{
+		Name: "Name",
+	}, r)
+}
+
+func TestRichTextAnchorLink_Setters(t *testing.T) {
+	r := (&RichTextAnchorLink{}).
+		WithText(&RichTextBold{}).
+		WithAnchorName("AnchorName")
+
+	assert.Equal(t, &RichTextAnchorLink{
+		Text:       &RichTextBold{},
+		AnchorName: "AnchorName",
+	}, r)
+}
+
+func TestRichTextReference_Setters(t *testing.T) {
+	r := (&RichTextReference{}).
+		WithText(&RichTextBold{}).
+		WithName("Name")
+
+	assert.Equal(t, &RichTextReference{
+		Text: &RichTextBold{},
+		Name: "Name",
+	}, r)
+}
+
+func TestRichTextReferenceLink_Setters(t *testing.T) {
+	r := (&RichTextReferenceLink{}).
+		WithText(&RichTextBold{}).
+		WithReferenceName("ReferenceName")
+
+	assert.Equal(t, &RichTextReferenceLink{
+		Text:          &RichTextBold{},
+		ReferenceName: "ReferenceName",
+	}, r)
+}
+
+func TestRichBlockCaption_Setters(t *testing.T) {
+	r := (&RichBlockCaption{}).
+		WithText(&RichTextBold{}).
+		WithCredit(&RichTextBold{})
+
+	assert.Equal(t, &RichBlockCaption{
+		Text:   &RichTextBold{},
+		Credit: &RichTextBold{},
+	}, r)
+}
+
+func TestRichBlockTableCell_Setters(t *testing.T) {
+	r := (&RichBlockTableCell{}).
+		WithText(&RichTextBold{}).
+		WithIsHeader().
+		WithColspan(1).
+		WithRowspan(2).
+		WithAlign("Align").
+		WithValign("Valign")
+
+	assert.Equal(t, &RichBlockTableCell{
+		Text:     &RichTextBold{},
+		IsHeader: true,
+		Colspan:  1,
+		Rowspan:  2,
+		Align:    "Align",
+		Valign:   "Valign",
+	}, r)
+}
+
+func TestInputRichBlockListItem_Setters(t *testing.T) {
+	i := (&InputRichBlockListItem{}).
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
+		WithHasCheckbox().
+		WithIsChecked().
+		WithValue(1)
+
+	assert.Equal(t, &InputRichBlockListItem{
+		Blocks:      []InputRichBlock{&InputRichBlockParagraph{}},
+		HasCheckbox: true,
+		IsChecked:   true,
+		Value:       1,
+	}, i)
+}
+
+func TestInputRichBlockParagraph_Setters(t *testing.T) {
+	i := (&InputRichBlockParagraph{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockParagraph{
+		Text: &RichTextBold{},
+	}, i)
+}
+
+func TestInputRichBlockSectionHeading_Setters(t *testing.T) {
+	i := (&InputRichBlockSectionHeading{}).
+		WithText(&RichTextBold{}).
+		WithSize(1)
+
+	assert.Equal(t, &InputRichBlockSectionHeading{
+		Text: &RichTextBold{},
+		Size: 1,
+	}, i)
+}
+
+func TestInputRichBlockPreformatted_Setters(t *testing.T) {
+	i := (&InputRichBlockPreformatted{}).
+		WithText(&RichTextBold{}).
+		WithLanguage("Language")
+
+	assert.Equal(t, &InputRichBlockPreformatted{
+		Text:     &RichTextBold{},
+		Language: "Language",
+	}, i)
+}
+
+func TestInputRichBlockFooter_Setters(t *testing.T) {
+	i := (&InputRichBlockFooter{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockFooter{
+		Text: &RichTextBold{},
+	}, i)
+}
+
+func TestInputRichBlockMathematicalExpression_Setters(t *testing.T) {
+	i := (&InputRichBlockMathematicalExpression{}).
+		WithExpression("Expression")
+
+	assert.Equal(t, &InputRichBlockMathematicalExpression{
+		Expression: "Expression",
+	}, i)
+}
+
+func TestInputRichBlockAnchor_Setters(t *testing.T) {
+	i := (&InputRichBlockAnchor{}).
+		WithName("Name")
+
+	assert.Equal(t, &InputRichBlockAnchor{
+		Name: "Name",
+	}, i)
+}
+
+func TestInputRichBlockList_Setters(t *testing.T) {
+	i := (&InputRichBlockList{}).
+		WithItems([]InputRichBlockListItem{{}}...)
+
+	assert.Equal(t, &InputRichBlockList{
+		Items: []InputRichBlockListItem{{}},
+	}, i)
+}
+
+func TestInputRichBlockBlockQuotation_Setters(t *testing.T) {
+	i := (&InputRichBlockBlockQuotation{}).
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
+		WithCredit(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockBlockQuotation{
+		Blocks: []InputRichBlock{&InputRichBlockParagraph{}},
+		Credit: &RichTextBold{},
+	}, i)
+}
+
+func TestInputRichBlockPullQuotation_Setters(t *testing.T) {
+	i := (&InputRichBlockPullQuotation{}).
+		WithText(&RichTextBold{}).
+		WithCredit(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockPullQuotation{
+		Text:   &RichTextBold{},
+		Credit: &RichTextBold{},
+	}, i)
+}
+
+func TestInputRichBlockCollage_Setters(t *testing.T) {
+	i := (&InputRichBlockCollage{}).
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockCollage{
+		Blocks:  []InputRichBlock{&InputRichBlockParagraph{}},
+		Caption: &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockSlideshow_Setters(t *testing.T) {
+	i := (&InputRichBlockSlideshow{}).
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockSlideshow{
+		Blocks:  []InputRichBlock{&InputRichBlockParagraph{}},
+		Caption: &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockTable_Setters(t *testing.T) {
+	i := (&InputRichBlockTable{}).
+		WithCells([][]RichBlockTableCell{{}}...).
+		WithIsBordered().
+		WithIsStriped().
+		WithCaption(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockTable{
+		Cells:      [][]RichBlockTableCell{{}},
+		IsBordered: true,
+		IsStriped:  true,
+		Caption:    &RichTextBold{},
+	}, i)
+}
+
+func TestInputRichBlockDetails_Setters(t *testing.T) {
+	i := (&InputRichBlockDetails{}).
+		WithSummary(&RichTextBold{}).
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
+		WithIsOpen()
+
+	assert.Equal(t, &InputRichBlockDetails{
+		Summary: &RichTextBold{},
+		Blocks:  []InputRichBlock{&InputRichBlockParagraph{}},
+		IsOpen:  true,
+	}, i)
+}
+
+func TestInputRichBlockMap_Setters(t *testing.T) {
+	i := (&InputRichBlockMap{}).
+		WithLocation(Location{Latitude: 1, Longitude: 1}).
+		WithZoom(1).
+		WithWidth(2).
+		WithHeight(3).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockMap{
+		Location: Location{Latitude: 1, Longitude: 1},
+		Zoom:     1,
+		Width:    2,
+		Height:   3,
+		Caption:  &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockAnimation_Setters(t *testing.T) {
+	i := (&InputRichBlockAnimation{}).
+		WithAnimation(InputMediaAnimation{}).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockAnimation{
+		Animation: InputMediaAnimation{},
+		Caption:   &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockAudio_Setters(t *testing.T) {
+	i := (&InputRichBlockAudio{}).
+		WithAudio(InputMediaAudio{}).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockAudio{
+		Audio:   InputMediaAudio{},
+		Caption: &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockPhoto_Setters(t *testing.T) {
+	i := (&InputRichBlockPhoto{}).
+		WithPhoto(InputMediaPhoto{}).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockPhoto{
+		Photo:   InputMediaPhoto{},
+		Caption: &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockVideo_Setters(t *testing.T) {
+	i := (&InputRichBlockVideo{}).
+		WithVideo(InputMediaVideo{}).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockVideo{
+		Video:   InputMediaVideo{},
+		Caption: &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockVoiceNote_Setters(t *testing.T) {
+	i := (&InputRichBlockVoiceNote{}).
+		WithVoiceNote(InputMediaVoiceNote{}).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockVoiceNote{
+		VoiceNote: InputMediaVoiceNote{},
+		Caption:   &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockThinking_Setters(t *testing.T) {
+	i := (&InputRichBlockThinking{}).
+		WithText(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockThinking{
+		Text: &RichTextBold{},
+	}, i)
+}
+
 func TestInlineQueryResultArticle_Setters(t *testing.T) {
 	i := (&InlineQueryResultArticle{}).
 		WithID("ID").
