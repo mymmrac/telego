@@ -4783,6 +4783,23 @@ type EditMessageTextParams struct {
 	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *EditMessageTextParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
+
+	if p.RichMessage != nil {
+		for _, m := range p.RichMessage.Media {
+			for _, v := range m.Media.fileParameters() {
+				if isNil(v) {
+					continue
+				}
+				fp[v.Name()] = v
+			}
+		}
+	}
+
+	return fp
+}
+
 // EditMessageText - Use this method to edit text, rich and game (https://core.telegram.org/bots/api#games)
 // messages. On success, if the edited message is not an inline message, the edited Message
 // (https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Note that business
@@ -5958,6 +5975,30 @@ type SendRichMessageParams struct {
 	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 }
 
+func (p *SendRichMessageParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
+
+	for _, block := range p.RichMessage.Blocks {
+		for _, v := range block.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	for _, media := range p.RichMessage.Media {
+		for _, v := range media.Media.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
+
 // SendRichMessage - Use this method to send rich messages. If the message contains a block with a media
 // element, then the bot must have the right to send the media to the chat. On success, the sent Message
 // (https://core.telegram.org/bots/api#message) is returned.
@@ -5984,6 +6025,21 @@ type SendRichMessageDraftParams struct {
 
 	// RichMessage - The partial message to be streamed. Direct upload of new files isn't supported.
 	RichMessage InputRichMessage `json:"rich_message"`
+}
+
+func (p *SendRichMessageDraftParams) fileParameters() map[string]ta.NamedReader {
+	fp := make(map[string]ta.NamedReader)
+
+	for _, m := range p.RichMessage.Media {
+		for _, v := range m.Media.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
 }
 
 // SendRichMessageDraft - Use this method to stream a partial rich message to a user while the message is

@@ -7153,6 +7153,7 @@ type RichMessageMedia interface {
 	MediaType() string
 	// Disallow external implementations
 	iRichMessageMedia()
+	fileCompatible
 }
 
 // InputRichMessageMedia - Describes a media element embedded in an outgoing rich message.
@@ -9347,6 +9348,21 @@ type InputRichBlockListItem struct {
 	Type string `json:"type,omitempty"`
 }
 
+func (i *InputRichBlockListItem) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	for _, block := range i.Blocks {
+		for _, v := range block.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
+
 // InputRichBlock - This object represents a block in a rich formatted message to be sent. Currently, it can
 // be any of the following types:
 // InputRichBlockParagraph (https://core.telegram.org/bots/api#inputrichblockparagraph)
@@ -9376,6 +9392,7 @@ type InputRichBlock interface {
 	BlockType() string
 	// Disallow external implementations
 	iInputRichBlock()
+	fileCompatible
 }
 
 // InputRichBlockParagraph - A text paragraph, corresponding to the HTML tag <p>.
@@ -9393,6 +9410,10 @@ func (i *InputRichBlockParagraph) BlockType() string {
 }
 
 func (i *InputRichBlockParagraph) iInputRichBlock() {}
+
+func (i *InputRichBlockParagraph) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
 
 // InputRichBlockSectionHeading - A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>,
 // <h5>, or <h6>.
@@ -9414,6 +9435,10 @@ func (i *InputRichBlockSectionHeading) BlockType() string {
 
 func (i *InputRichBlockSectionHeading) iInputRichBlock() {}
 
+func (i *InputRichBlockSectionHeading) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockPreformatted - A preformatted text block, corresponding to the nested HTML tags <pre> and
 // <code>.
 type InputRichBlockPreformatted struct {
@@ -9434,6 +9459,10 @@ func (i *InputRichBlockPreformatted) BlockType() string {
 
 func (i *InputRichBlockPreformatted) iInputRichBlock() {}
 
+func (i *InputRichBlockPreformatted) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockFooter - A footer, corresponding to the HTML tag <footer>.
 type InputRichBlockFooter struct {
 	// Type - Type of the block, always “footer”
@@ -9450,6 +9479,10 @@ func (i *InputRichBlockFooter) BlockType() string {
 
 func (i *InputRichBlockFooter) iInputRichBlock() {}
 
+func (i *InputRichBlockFooter) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockDivider - A divider, corresponding to the HTML tag <hr/>.
 type InputRichBlockDivider struct {
 	// Type - Type of the block, always “divider”
@@ -9462,6 +9495,10 @@ func (i *InputRichBlockDivider) BlockType() string {
 }
 
 func (i *InputRichBlockDivider) iInputRichBlock() {}
+
+func (i *InputRichBlockDivider) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
 
 // InputRichBlockMathematicalExpression - A block with a mathematical expression in LaTeX format,
 // corresponding to the custom HTML tag <tg-math-block>.
@@ -9480,6 +9517,10 @@ func (i *InputRichBlockMathematicalExpression) BlockType() string {
 
 func (i *InputRichBlockMathematicalExpression) iInputRichBlock() {}
 
+func (i *InputRichBlockMathematicalExpression) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockAnchor - A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
 type InputRichBlockAnchor struct {
 	// Type - Type of the block, always “anchor”
@@ -9495,6 +9536,10 @@ func (i *InputRichBlockAnchor) BlockType() string {
 }
 
 func (i *InputRichBlockAnchor) iInputRichBlock() {}
+
+func (i *InputRichBlockAnchor) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
 
 // InputRichBlockList - A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested
 // tags <li>.
@@ -9512,6 +9557,21 @@ func (i *InputRichBlockList) BlockType() string {
 }
 
 func (i *InputRichBlockList) iInputRichBlock() {}
+
+func (i *InputRichBlockList) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	for _, item := range i.Items {
+		for _, v := range item.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
 
 // InputRichBlockBlockQuotation - A block quotation, corresponding to the HTML tag <blockquote>.
 type InputRichBlockBlockQuotation struct {
@@ -9531,6 +9591,21 @@ func (i *InputRichBlockBlockQuotation) BlockType() string {
 }
 
 func (i *InputRichBlockBlockQuotation) iInputRichBlock() {}
+
+func (i *InputRichBlockBlockQuotation) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	for _, block := range i.Blocks {
+		for _, v := range block.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
 
 // InputRichBlockPullQuotation - A quotation with centered text, loosely corresponding to the HTML tag
 // <aside>.
@@ -9552,6 +9627,10 @@ func (i *InputRichBlockPullQuotation) BlockType() string {
 
 func (i *InputRichBlockPullQuotation) iInputRichBlock() {}
 
+func (i *InputRichBlockPullQuotation) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockCollage - A collage, corresponding to the custom HTML tag <tg-collage>.
 type InputRichBlockCollage struct {
 	// Type - Type of the block, always “collage”
@@ -9571,6 +9650,21 @@ func (i *InputRichBlockCollage) BlockType() string {
 
 func (i *InputRichBlockCollage) iInputRichBlock() {}
 
+func (i *InputRichBlockCollage) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	for _, block := range i.Blocks {
+		for _, v := range block.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
+
 // InputRichBlockSlideshow - A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
 type InputRichBlockSlideshow struct {
 	// Type - Type of the block, always “slideshow”
@@ -9589,6 +9683,21 @@ func (i *InputRichBlockSlideshow) BlockType() string {
 }
 
 func (i *InputRichBlockSlideshow) iInputRichBlock() {}
+
+func (i *InputRichBlockSlideshow) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	for _, block := range i.Blocks {
+		for _, v := range block.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
 
 // InputRichBlockTable - A table, corresponding to the HTML tag <table>.
 type InputRichBlockTable struct {
@@ -9615,6 +9724,10 @@ func (i *InputRichBlockTable) BlockType() string {
 
 func (i *InputRichBlockTable) iInputRichBlock() {}
 
+func (i *InputRichBlockTable) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockDetails - An expandable block for details disclosure, corresponding to the HTML tag
 // <details>.
 type InputRichBlockDetails struct {
@@ -9637,6 +9750,21 @@ func (i *InputRichBlockDetails) BlockType() string {
 }
 
 func (i *InputRichBlockDetails) iInputRichBlock() {}
+
+func (i *InputRichBlockDetails) fileParameters() map[string]telegoapi.NamedReader {
+	fp := make(map[string]telegoapi.NamedReader)
+
+	for _, block := range i.Blocks {
+		for _, v := range block.fileParameters() {
+			if isNil(v) {
+				continue
+			}
+			fp[v.Name()] = v
+		}
+	}
+
+	return fp
+}
 
 // InputRichBlockMap - A block with a map, corresponding to the custom HTML tag <tg-map>. The map's width and
 // height must not exceed 10000 in total. The width and height ratio must be at most 20.
@@ -9667,6 +9795,10 @@ func (i *InputRichBlockMap) BlockType() string {
 
 func (i *InputRichBlockMap) iInputRichBlock() {}
 
+func (i *InputRichBlockMap) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
+
 // InputRichBlockAnimation - A block with an animation, corresponding to the HTML tag <video>.
 type InputRichBlockAnimation struct {
 	// Type - Type of the block, always “animation”
@@ -9685,6 +9817,10 @@ func (i *InputRichBlockAnimation) BlockType() string {
 }
 
 func (i *InputRichBlockAnimation) iInputRichBlock() {}
+
+func (i *InputRichBlockAnimation) fileParameters() map[string]telegoapi.NamedReader {
+	return i.Animation.fileParameters()
+}
 
 // InputRichBlockAudio - A block with a music file, corresponding to the HTML tag <audio>.
 type InputRichBlockAudio struct {
@@ -9705,6 +9841,10 @@ func (i *InputRichBlockAudio) BlockType() string {
 
 func (i *InputRichBlockAudio) iInputRichBlock() {}
 
+func (i *InputRichBlockAudio) fileParameters() map[string]telegoapi.NamedReader {
+	return i.Audio.fileParameters()
+}
+
 // InputRichBlockPhoto - A block with a photo, corresponding to the HTML tag <img>.
 type InputRichBlockPhoto struct {
 	// Type - Type of the block, always “photo”
@@ -9723,6 +9863,10 @@ func (i *InputRichBlockPhoto) BlockType() string {
 }
 
 func (i *InputRichBlockPhoto) iInputRichBlock() {}
+
+func (i *InputRichBlockPhoto) fileParameters() map[string]telegoapi.NamedReader {
+	return i.Photo.fileParameters()
+}
 
 // InputRichBlockVideo - A block with a video, corresponding to the HTML tag <video>.
 type InputRichBlockVideo struct {
@@ -9743,6 +9887,10 @@ func (i *InputRichBlockVideo) BlockType() string {
 
 func (i *InputRichBlockVideo) iInputRichBlock() {}
 
+func (i *InputRichBlockVideo) fileParameters() map[string]telegoapi.NamedReader {
+	return i.Video.fileParameters()
+}
+
 // InputRichBlockVoiceNote - A block with a voice note, corresponding to the HTML tag <audio>.
 type InputRichBlockVoiceNote struct {
 	// Type - Type of the block, always “voice_note”
@@ -9761,6 +9909,10 @@ func (i *InputRichBlockVoiceNote) BlockType() string {
 }
 
 func (i *InputRichBlockVoiceNote) iInputRichBlock() {}
+
+func (i *InputRichBlockVoiceNote) fileParameters() map[string]telegoapi.NamedReader {
+	return i.VoiceNote.fileParameters()
+}
 
 // InputRichBlockThinking - A block with a “Thinking…” placeholder, corresponding to the custom HTML
 // tag <tg-thinking>. The block may be used only in sendRichMessageDraft
@@ -9782,6 +9934,10 @@ func (i *InputRichBlockThinking) BlockType() string {
 }
 
 func (i *InputRichBlockThinking) iInputRichBlock() {}
+
+func (i *InputRichBlockThinking) fileParameters() map[string]telegoapi.NamedReader {
+	return nil
+}
 
 // InlineQuery - This object represents an incoming inline query. When the user sends an empty query, your
 // bot could return some default or trending results.

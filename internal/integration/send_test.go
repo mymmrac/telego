@@ -233,3 +233,132 @@ func TestSendPoll(t *testing.T) {
 		assert.NotNil(t, msg)
 	})
 }
+
+func TestSendRichMessage(t *testing.T) {
+	ctx := t.Context()
+
+	t.Run("blocks", func(t *testing.T) {
+		msg, err := bot.SendRichMessage(ctx, &telego.SendRichMessageParams{
+			ChatID: tu.ID(chatID),
+			RichMessage: telego.InputRichMessage{
+				Blocks: []telego.InputRichBlock{
+					&telego.InputRichBlockSectionHeading{
+						Type: telego.BlockTypeSectionHeading,
+						Text: telego.ToPtr(telego.RichTextPlain("Hello")),
+						Size: 1,
+					},
+					&telego.InputRichBlockParagraph{
+						Type: telego.BlockTypeParagraph,
+						Text: telego.ToPtr(telego.RichTextPlain("World")),
+					},
+					&telego.InputRichBlockPhoto{
+						Type:  telego.BlockTypePhoto,
+						Photo: *tu.MediaPhoto(tu.File(open(img1Jpg))),
+						Caption: &telego.RichBlockCaption{
+							Text:   telego.ToPtr(telego.RichTextPlain("Image")),
+							Credit: telego.ToPtr(telego.RichTextPlain("Internet")),
+						},
+					},
+					&telego.InputRichBlockCollage{
+						Type: telego.BlockTypeCollage,
+						Blocks: []telego.InputRichBlock{
+							&telego.InputRichBlockPhoto{
+								Type:  telego.BlockTypePhoto,
+								Photo: *tu.MediaPhoto(tu.File(open(img1Jpg))),
+								Caption: &telego.RichBlockCaption{
+									Text: telego.ToPtr(telego.RichTextPlain("Image 1")),
+								},
+							},
+							&telego.InputRichBlockPhoto{
+								Type:  telego.BlockTypePhoto,
+								Photo: *tu.MediaPhoto(tu.File(open(img2Jpg))),
+								Caption: &telego.RichBlockCaption{
+									Text: telego.ToPtr(telego.RichTextPlain("Image 2")),
+								},
+							},
+						},
+						Caption: &telego.RichBlockCaption{
+							Text: telego.ToPtr(telego.RichTextPlain("Collage")),
+						},
+					},
+				},
+			},
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+
+	t.Run("html", func(t *testing.T) {
+		msg, err := bot.SendRichMessage(ctx, &telego.SendRichMessageParams{
+			ChatID: tu.ID(chatID),
+			RichMessage: telego.InputRichMessage{
+				HTML: `
+<a name="chapter-0"></a>
+<b>bold text</b>, <strong>bold text</strong>
+<i>italic text</i>, <em>italic text</em>
+<u>underlined text</u>, <ins>underlined text</ins>
+<s>strikethrough text</s>, <strike>strikethrough text</strike>, <del>strikethrough text</del>
+<code>inline fixed-width code</code>
+<mark>marked text</mark>
+<sub>subscript text</sub>
+<sup>superscript text</sup>
+<tg-spoiler>spoiler</tg-spoiler>
+`,
+			},
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+
+	t.Run("markdown", func(t *testing.T) {
+		msg, err := bot.SendRichMessage(ctx, &telego.SendRichMessageParams{
+			ChatID: tu.ID(chatID),
+			RichMessage: telego.InputRichMessage{
+				Markdown: `
+**bold text**
+__bold text__
+*italic text*
+_italic text_
+~~strikethrough text~~
+` + "`inline fixed-width code`" + `
+==marked text==
+||spoiler||
+`,
+			},
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+
+	t.Run("with_media", func(t *testing.T) {
+		msg, err := bot.SendRichMessage(ctx, &telego.SendRichMessageParams{
+			ChatID: tu.ID(chatID),
+			RichMessage: telego.InputRichMessage{
+				Markdown: `
+Image 1:
+![](https://telegram.org/example/photo.jpg)
+Image 2:
+![](tg://photo?id=ph1)
+Image 3:
+![](tg://photo?id=ph2)
+`,
+				Media: []telego.InputRichMessageMedia{
+					{
+						ID:    "ph1",
+						Media: tu.MediaPhoto(tu.FileFromURL("https://telegram.org/example/animation.gif")),
+					},
+					{
+						ID:    "ph2",
+						Media: tu.MediaPhoto(tu.File(open(img1Jpg))),
+					},
+				},
+			},
+		})
+
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+}
