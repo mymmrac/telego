@@ -1310,61 +1310,61 @@ func (r *RichBlockCaption) WithCredit(credit RichText) *RichBlockCaption {
 }
 
 // WithText adds text parameter
-func (r *RichBlockTableCell) WithText(text RichText) *RichBlockTableCell {
+func (r RichBlockTableCell) WithText(text RichText) RichBlockTableCell {
 	r.Text = text
 	return r
 }
 
 // WithIsHeader adds is header parameter
-func (r *RichBlockTableCell) WithIsHeader() *RichBlockTableCell {
+func (r RichBlockTableCell) WithIsHeader() RichBlockTableCell {
 	r.IsHeader = true
 	return r
 }
 
 // WithColspan adds colspan parameter
-func (r *RichBlockTableCell) WithColspan(colspan int) *RichBlockTableCell {
+func (r RichBlockTableCell) WithColspan(colspan int) RichBlockTableCell {
 	r.Colspan = colspan
 	return r
 }
 
 // WithRowspan adds rowspan parameter
-func (r *RichBlockTableCell) WithRowspan(rowspan int) *RichBlockTableCell {
+func (r RichBlockTableCell) WithRowspan(rowspan int) RichBlockTableCell {
 	r.Rowspan = rowspan
 	return r
 }
 
 // WithAlign adds align parameter
-func (r *RichBlockTableCell) WithAlign(align string) *RichBlockTableCell {
+func (r RichBlockTableCell) WithAlign(align string) RichBlockTableCell {
 	r.Align = align
 	return r
 }
 
 // WithValign adds valign parameter
-func (r *RichBlockTableCell) WithValign(valign string) *RichBlockTableCell {
+func (r RichBlockTableCell) WithValign(valign string) RichBlockTableCell {
 	r.Valign = valign
 	return r
 }
 
 // WithBlocks adds blocks parameter
-func (i *InputRichBlockListItem) WithBlocks(blocks ...InputRichBlock) *InputRichBlockListItem {
+func (i InputRichBlockListItem) WithBlocks(blocks ...InputRichBlock) InputRichBlockListItem {
 	i.Blocks = blocks
 	return i
 }
 
 // WithHasCheckbox adds has checkbox parameter
-func (i *InputRichBlockListItem) WithHasCheckbox() *InputRichBlockListItem {
+func (i InputRichBlockListItem) WithHasCheckbox() InputRichBlockListItem {
 	i.HasCheckbox = true
 	return i
 }
 
 // WithIsChecked adds is checked parameter
-func (i *InputRichBlockListItem) WithIsChecked() *InputRichBlockListItem {
+func (i InputRichBlockListItem) WithIsChecked() InputRichBlockListItem {
 	i.IsChecked = true
 	return i
 }
 
 // WithValue adds value parameter
-func (i *InputRichBlockListItem) WithValue(value int) *InputRichBlockListItem {
+func (i InputRichBlockListItem) WithValue(value int) InputRichBlockListItem {
 	i.Value = value
 	return i
 }

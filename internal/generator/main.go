@@ -168,6 +168,8 @@ var typeStructsSetters = []string{
 var typeStructsNoPointerSetters = []string{
 	"KeyboardButton",
 	"InlineKeyboardButton",
+	"RichBlockTableCell",
+	"InputRichBlockListItem",
 }
 
 func main() {

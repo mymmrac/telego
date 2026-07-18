@@ -847,7 +847,7 @@ func TestRichBlockCaption_Setters(t *testing.T) {
 }
 
 func TestRichBlockTableCell_Setters(t *testing.T) {
-	r := (&RichBlockTableCell{}).
+	r := (RichBlockTableCell{}).
 		WithText(&RichTextBold{}).
 		WithIsHeader().
 		WithColspan(1).
@@ -855,7 +855,7 @@ func TestRichBlockTableCell_Setters(t *testing.T) {
 		WithAlign("Align").
 		WithValign("Valign")
 
-	assert.Equal(t, &RichBlockTableCell{
+	assert.Equal(t, RichBlockTableCell{
 		Text:     &RichTextBold{},
 		IsHeader: true,
 		Colspan:  1,
@@ -866,13 +866,13 @@ func TestRichBlockTableCell_Setters(t *testing.T) {
 }
 
 func TestInputRichBlockListItem_Setters(t *testing.T) {
-	i := (&InputRichBlockListItem{}).
+	i := (InputRichBlockListItem{}).
 		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
 		WithHasCheckbox().
 		WithIsChecked().
 		WithValue(1)
 
-	assert.Equal(t, &InputRichBlockListItem{
+	assert.Equal(t, InputRichBlockListItem{
 		Blocks:      []InputRichBlock{&InputRichBlockParagraph{}},
 		HasCheckbox: true,
 		IsChecked:   true,
