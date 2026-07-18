@@ -1078,6 +1078,12 @@ func TestTypesConstants(t *testing.T) {
 			TextTypeBotCommand, TextTypeAnchor, TextTypeAnchorLink, TextTypeReference, TextTypeReferenceLink,
 		},
 		{
+			CellAlignLeft, CellAlignCenter, CellAlignRight,
+		},
+		{
+			CallValignTop, CellValignMiddle, CellValignBottom,
+		},
+		{
 			BlockTypeParagraph, BlockTypeSectionHeading, BlockTypePreformatted, BlockTypeFooter, BlockTypeDivider,
 			BlockTypeMathematicalExpression, BlockTypeAnchor, BlockTypeList, BlockTypeBlockQuotation,
 			BlockTypePullQuotation, BlockTypeCollage, BlockTypeSlideshow, BlockTypeTable, BlockTypeDetails,

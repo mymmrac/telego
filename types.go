@@ -8442,6 +8442,20 @@ func (r *RichBlockTableCell) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Table cell horizontal aligment
+const (
+	CellAlignLeft   = "left"
+	CellAlignCenter = "center"
+	CellAlignRight  = "right"
+)
+
+// Table cell vertical aligment
+const (
+	CallValignTop    = "top"
+	CellValignMiddle = "middle"
+	CellValignBottom = "bottom"
+)
+
 // RichBlockListItem - An item of a list.
 type RichBlockListItem struct {
 	// Label - Label of the item
