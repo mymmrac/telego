@@ -63,7 +63,7 @@ func generateSetters(typesData string, desiredStructs []string) tgSetters {
 				strings.HasPrefix(setter.structType, "InputPaidMedia") ||
 				strings.HasPrefix(setter.structType, "InputProfilePhoto") ||
 				strings.HasPrefix(setter.structType, "InputStoryContent") ||
-				strings.HasPrefix(setter.structType, "InputRichBlock") ||
+				(strings.HasPrefix(setter.structType, "InputRichBlock") && setter.structType != "InputRichBlockListItem") ||
 				strings.HasPrefix(setter.structType, "RichText") ||
 				setter.structType == "MenuButtonWebApp") &&
 				setter.fieldName == "Type" {
@@ -88,10 +88,6 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		data.WriteString(fmt.Sprintf("// With%s adds %s parameter\n", setter.fieldName,
 			strings.ReplaceAll(setter.fieldSnakeCaseName, "_", " ")))
 
-		if setter.fieldName == "Type" && setter.structType == "SendPollParams" {
-			setter.fieldName = "XXXType"
-		}
-
 		if strings.HasPrefix(setter.fieldType, "[]") {
 			setter.fieldType = strings.Replace(setter.fieldType, "[]", "...", 1)
 		}
@@ -108,6 +104,17 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 		varName := firstToLower(setter.fieldName)
 		if varName == "hTML" {
 			varName = "html"
+		}
+
+		if varName == "type" {
+			switch setter.structType {
+			case "SendPollParams":
+				varName = "pollType"
+			case "InputRichBlockListItem":
+				varName = "listType"
+			default:
+				panic("unknown type: " + setter.structType)
+			}
 		}
 
 		var s string

@@ -1369,6 +1369,12 @@ func (i InputRichBlockListItem) WithValue(value int) InputRichBlockListItem {
 	return i
 }
 
+// WithType adds type parameter
+func (i InputRichBlockListItem) WithType(listType string) InputRichBlockListItem {
+	i.Type = listType
+	return i
+}
+
 // WithText adds text parameter
 func (i *InputRichBlockParagraph) WithText(text RichText) *InputRichBlockParagraph {
 	i.Text = text

@@ -870,13 +870,15 @@ func TestInputRichBlockListItem_Setters(t *testing.T) {
 		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
 		WithHasCheckbox().
 		WithIsChecked().
-		WithValue(1)
+		WithValue(1).
+		WithType("Type")
 
 	assert.Equal(t, InputRichBlockListItem{
 		Blocks:      []InputRichBlock{&InputRichBlockParagraph{}},
 		HasCheckbox: true,
 		IsChecked:   true,
 		Value:       1,
+		Type:        "Type",
 	}, i)
 }
 
