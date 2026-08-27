@@ -3,7 +3,7 @@ module github.com/mymmrac/telego
 go 1.25.7
 
 require (
-	github.com/bytedance/sonic v1.15.2
+	github.com/bytedance/sonic v1.15.3
 	github.com/stretchr/testify v1.12.1
 	github.com/valyala/fasthttp v1.73.0
 	github.com/valyala/fastjson v1.6.10
@@ -17,7 +17,7 @@ require github.com/grbit/go-json v0.11.0
 require (
 	github.com/andybalholm/brotli v1.2.2 // indirect
 	github.com/bytedance/gopkg v0.1.3 // indirect
-	github.com/bytedance/sonic/loader v0.5.1 // indirect
+	github.com/bytedance/sonic/loader v0.5.2 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
 	github.com/klauspost/compress v1.19.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
