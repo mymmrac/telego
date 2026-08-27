@@ -376,6 +376,8 @@ func logRequest(debug *strings.Builder, parameters any) {
 }
 
 // ToPtr converts value into a pointer to value
+//
+//go:fix inline
 func ToPtr[T any](value T) *T {
-	return &value
+	return new(value)
 }

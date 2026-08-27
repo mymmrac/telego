@@ -19,8 +19,8 @@ var (
 	text4 = "test4"
 	text5 = "test5"
 
-	richText1 = telego.ToPtr(telego.RichTextPlain(text1))
-	richText2 = telego.ToPtr(telego.RichTextPlain(text1))
+	richText1 = new(telego.RichTextPlain(text1))
+	richText2 = new(telego.RichTextPlain(text1))
 
 	textNonASCII = "Hello, 世界" //nolint:gosmopolitan
 

@@ -140,12 +140,12 @@ func TestKeyboardButtonRequestUsers_Setters(t *testing.T) {
 
 	assert.Equal(t, &KeyboardButtonRequestUsers{
 		RequestID:       4,
-		UserIsBot:       ToPtr(true),
-		UserIsPremium:   ToPtr(true),
+		UserIsBot:       new(true),
+		UserIsPremium:   new(true),
 		MaxQuantity:     1,
-		RequestName:     ToPtr(true),
-		RequestUsername: ToPtr(true),
-		RequestPhoto:    ToPtr(true),
+		RequestName:     new(true),
+		RequestUsername: new(true),
+		RequestPhoto:    new(true),
 	}, k)
 }
 
@@ -166,15 +166,15 @@ func TestKeyboardButtonRequestChat_Setters(t *testing.T) {
 	assert.Equal(t, &KeyboardButtonRequestChat{
 		RequestID:               2,
 		ChatIsChannel:           true,
-		ChatIsForum:             ToPtr(true),
-		ChatHasUsername:         ToPtr(true),
-		ChatIsCreated:           ToPtr(true),
+		ChatIsForum:             new(true),
+		ChatHasUsername:         new(true),
+		ChatIsCreated:           new(true),
 		UserAdministratorRights: &ChatAdministratorRights{IsAnonymous: true},
 		BotAdministratorRights:  &ChatAdministratorRights{IsAnonymous: true},
-		BotIsMember:             ToPtr(true),
-		RequestTitle:            ToPtr(true),
-		RequestUsername:         ToPtr(true),
-		RequestPhoto:            ToPtr(true),
+		BotIsMember:             new(true),
+		RequestTitle:            new(true),
+		RequestUsername:         new(true),
+		RequestPhoto:            new(true),
 	}, k)
 }
 
@@ -235,8 +235,8 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		CallbackData:                 "CallbackData",
 		WebApp:                       &WebAppInfo{},
 		LoginURL:                     &LoginURL{URL: "LoginURL"},
-		SwitchInlineQuery:            ToPtr("SwitchInlineQuery"),
-		SwitchInlineQueryCurrentChat: ToPtr("SwitchInlineQueryCurrentChat"),
+		SwitchInlineQuery:            new("SwitchInlineQuery"),
+		SwitchInlineQueryCurrentChat: new("SwitchInlineQueryCurrentChat"),
 		SwitchInlineQueryChosenChat:  &SwitchInlineQueryChosenChat{AllowUserChats: true},
 		CopyText:                     &CopyTextButton{},
 		CallbackGame:                 &CallbackGame{},

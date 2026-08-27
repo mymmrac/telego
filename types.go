@@ -7335,7 +7335,7 @@ func unmarshalRichText(value *fastjson.Value) (RichText, error) { //nolint:gocyc
 	richTextType := value.Type()
 	switch richTextType {
 	case fastjson.TypeString:
-		return ToPtr(RichTextPlain("")), nil
+		return new(RichTextPlain("")), nil
 	case fastjson.TypeArray:
 		var err error
 		values := value.GetArray()

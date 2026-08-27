@@ -68,8 +68,7 @@ func Test_Error(t *testing.T) {
 		ErrorCode: 1,
 	}
 
-	var apiErr *Error
-	if errors.As(err, &apiErr) {
+	if apiErr, ok := errors.AsType[*Error](err); ok {
 		assert.Equal(t, 1, apiErr.ErrorCode)
 	} else {
 		assert.Fail(t, "not an API error")

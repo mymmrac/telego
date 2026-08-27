@@ -225,11 +225,11 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*InputStoryContent)(nil), &InputStoryContentVideo{})
 	assert.Equal(t, StoryTypeVideo, (&InputStoryContentVideo{}).StoryType())
 
-	assert.Implements(t, (*RichText)(nil), ToPtr(RichTextPlain("")))
-	assert.Equal(t, TextTypePlain, ToPtr(RichTextPlain("")).TextType())
+	assert.Implements(t, (*RichText)(nil), new(RichTextPlain("")))
+	assert.Equal(t, TextTypePlain, new(RichTextPlain("")).TextType())
 
-	assert.Implements(t, (*RichText)(nil), ToPtr(RichTextList{}))
-	assert.Equal(t, TextTypeList, ToPtr(RichTextList{}).TextType())
+	assert.Implements(t, (*RichText)(nil), new(RichTextList{}))
+	assert.Equal(t, TextTypeList, new(RichTextList{}).TextType())
 
 	assert.Implements(t, (*RichText)(nil), &RichTextBold{})
 	assert.Equal(t, TextTypeBold, (&RichTextBold{}).TextType())
@@ -1868,7 +1868,7 @@ func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
 			name: "success_text",
 			json: `{"text": "hello"}`,
 			data: &RichTextBold{
-				Text: ToPtr(RichTextPlain("hello")),
+				Text: new(RichTextPlain("hello")),
 			},
 			isError: false,
 		},
@@ -1877,8 +1877,8 @@ func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
 			json: `{"text": [ "hello", "world" ]}`,
 			data: &RichTextBold{
 				Text: &RichTextList{
-					ToPtr(RichTextPlain("hello")),
-					ToPtr(RichTextPlain("world")),
+					new(RichTextPlain("hello")),
+					new(RichTextPlain("world")),
 				},
 			},
 			isError: false,
@@ -1889,7 +1889,7 @@ func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
 			data: &RichTextBold{
 				Text: &RichTextBold{
 					Type: TextTypeBold,
-					Text: ToPtr(RichTextPlain("hello")),
+					Text: new(RichTextPlain("hello")),
 				},
 			},
 			isError: false,
@@ -1899,10 +1899,10 @@ func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
 			json: `{"text": [ "hello", {"type": "bold", "text": "world"} ]}`,
 			data: &RichTextBold{
 				Text: &RichTextList{
-					ToPtr(RichTextPlain("hello")),
+					new(RichTextPlain("hello")),
 					&RichTextBold{
 						Type: TextTypeBold,
-						Text: ToPtr(RichTextPlain("world")),
+						Text: new(RichTextPlain("world")),
 					},
 				},
 			},
@@ -1913,12 +1913,12 @@ func Test_RichTextBold_UnmarshalJSON(t *testing.T) {
 			json: `{"text": [ "hello", [ "world", {"type": "bold", "text": "there"} ] ]}`,
 			data: &RichTextBold{
 				Text: &RichTextList{
-					ToPtr(RichTextPlain("hello")),
+					new(RichTextPlain("hello")),
 					&RichTextList{
-						ToPtr(RichTextPlain("world")),
+						new(RichTextPlain("world")),
 						&RichTextBold{
 							Type: TextTypeBold,
-							Text: ToPtr(RichTextPlain("there")),
+							Text: new(RichTextPlain("there")),
 						},
 					},
 				},
@@ -2610,7 +2610,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockSectionHeading{
 							Type: "heading",
-							Text: ToPtr(RichTextPlain("All Types Demo")),
+							Text: new(RichTextPlain("All Types Demo")),
 							Size: 1,
 						},
 						&RichBlockDivider{
@@ -2619,28 +2619,28 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						&RichBlockParagraph{
 							Type: "paragraph",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("Jump to ")),
+								new(RichTextPlain("Jump to ")),
 								&RichTextAnchorLink{
 									Type:       "anchor_link",
-									Text:       ToPtr(RichTextPlain("text")),
+									Text:       new(RichTextPlain("text")),
 									AnchorName: "text",
 								},
-								ToPtr(RichTextPlain(" | ")),
+								new(RichTextPlain(" | ")),
 								&RichTextAnchorLink{
 									Type:       "anchor_link",
-									Text:       ToPtr(RichTextPlain("structure")),
+									Text:       new(RichTextPlain("structure")),
 									AnchorName: "structure",
 								},
-								ToPtr(RichTextPlain(" | ")),
+								new(RichTextPlain(" | ")),
 								&RichTextAnchorLink{
 									Type:       "anchor_link",
-									Text:       ToPtr(RichTextPlain("media")),
+									Text:       new(RichTextPlain("media")),
 									AnchorName: "media",
 								},
-								ToPtr(RichTextPlain(" | ")),
+								new(RichTextPlain(" | ")),
 								&RichTextAnchorLink{
 									Type:       "anchor_link",
-									Text:       ToPtr(RichTextPlain("advanced")),
+									Text:       new(RichTextPlain("advanced")),
 									AnchorName: "advanced",
 								},
 							},
@@ -2651,46 +2651,46 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockSectionHeading{
 							Type: "heading",
-							Text: ToPtr(RichTextPlain("Text Formatting")),
+							Text: new(RichTextPlain("Text Formatting")),
 							Size: 2,
 						},
 						&RichBlockParagraph{
 							Type: "paragraph",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("I want to see ")),
+								new(RichTextPlain("I want to see ")),
 								&RichTextBold{
 									Type: "bold",
-									Text: ToPtr(RichTextPlain("mountains")),
+									Text: new(RichTextPlain("mountains")),
 								},
-								ToPtr(RichTextPlain(" again, Gandalf ")),
+								new(RichTextPlain(" again, Gandalf ")),
 								&RichTextItalic{
 									Type: "italic",
-									Text: ToPtr(RichTextPlain("You talking to me?")),
+									Text: new(RichTextPlain("You talking to me?")),
 								},
-								ToPtr(RichTextPlain(" It's alive! ")),
+								new(RichTextPlain(" It's alive! ")),
 								&RichTextUnderline{
 									Type: "underline",
-									Text: ToPtr(RichTextPlain("It's alive!")),
+									Text: new(RichTextPlain("It's alive!")),
 								},
-								ToPtr(RichTextPlain(" One, two, ")),
+								new(RichTextPlain(" One, two, ")),
 								&RichTextStrikethrough{
 									Type: "strikethrough",
-									Text: ToPtr(RichTextPlain("five!")),
+									Text: new(RichTextPlain("five!")),
 								},
-								ToPtr(RichTextPlain(", three! The name's Bond. ")),
+								new(RichTextPlain(", three! The name's Bond. ")),
 								&RichTextSpoiler{
 									Type: "spoiler",
-									Text: ToPtr(RichTextPlain("James Bond")),
+									Text: new(RichTextPlain("James Bond")),
 								},
-								ToPtr(RichTextPlain(" You're a ")),
+								new(RichTextPlain(" You're a ")),
 								&RichTextMarked{
 									Type: "marked",
-									Text: ToPtr(RichTextPlain("wizard")),
+									Text: new(RichTextPlain("wizard")),
 								},
-								ToPtr(RichTextPlain(", Harry ")),
+								new(RichTextPlain(", Harry ")),
 								&RichTextCode{
 									Type: "code",
-									Text: ToPtr(RichTextPlain("I'm sorry, Dave.")),
+									Text: new(RichTextPlain("I'm sorry, Dave.")),
 								},
 							},
 						},
@@ -2698,14 +2698,14 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 							Type: "paragraph",
 							Text: &RichTextReference{
 								Type: "reference",
-								Text: ToPtr(RichTextPlain("I understood that reference")),
+								Text: new(RichTextPlain("I understood that reference")),
 								Name: "note1",
 							},
 						},
 						&RichBlockParagraph{
 							Type: "paragraph",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("Show any emotion with custom emoji ")),
+								new(RichTextPlain("Show any emotion with custom emoji ")),
 								&RichTextCustomEmoji{
 									Type:            "custom_emoji",
 									CustomEmojiID:   "5208541126583136130",
@@ -2726,17 +2726,17 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						&RichBlockParagraph{
 							Type: "paragraph",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("Solve for ")),
+								new(RichTextPlain("Solve for ")),
 								&RichTextMathematicalExpression{
 									Type:       "mathematical_expression",
 									Expression: "x",
 								},
-								ToPtr(RichTextPlain(" and other variables ")),
+								new(RichTextPlain(" and other variables ")),
 								&RichTextMathematicalExpression{
 									Type:       "mathematical_expression",
 									Expression: "E = mc^2",
 								},
-								ToPtr(RichTextPlain(", ")),
+								new(RichTextPlain(", ")),
 								&RichTextMathematicalExpression{
 									Type:       "mathematical_expression",
 									Expression: "a^2 + b^2 = c^2",
@@ -2746,10 +2746,10 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						&RichBlockParagraph{
 							Type: "paragraph",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("Keep track of important dates ")),
+								new(RichTextPlain("Keep track of important dates ")),
 								&RichTextDateTime{
 									Type:           "date_time",
-									Text:           ToPtr(RichTextPlain("Aug 13, 2013")),
+									Text:           new(RichTextPlain("Aug 13, 2013")),
 									UnixTime:       1735689600,
 									DateTimeFormat: "D",
 								},
@@ -2761,7 +2761,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockSectionHeading{
 							Type: "heading",
-							Text: ToPtr(RichTextPlain("Structure")),
+							Text: new(RichTextPlain("Structure")),
 							Size: 2,
 						},
 						&RichBlockBlockQuotation{
@@ -2769,7 +2769,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 							Blocks: []RichBlock{
 								&RichBlockParagraph{
 									Type: "paragraph",
-									Text: ToPtr(RichTextPlain("That's what she said")),
+									Text: new(RichTextPlain("That's what she said")),
 								},
 							},
 							Credit: nil,
@@ -2780,16 +2780,16 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 								&RichBlockParagraph{
 									Type: "paragraph",
 									Text: &RichTextList{
-										ToPtr(RichTextPlain("Also available in multiple lines With ")),
+										new(RichTextPlain("Also available in multiple lines With ")),
 										&RichTextBold{
 											Type: "bold",
-											Text: ToPtr(RichTextPlain("formatting")),
+											Text: new(RichTextPlain("formatting")),
 										},
 									},
 								},
 								&RichBlockParagraph{
 									Type: "paragraph",
-									Text: ToPtr(RichTextPlain("for useful context, and not just jokes")),
+									Text: new(RichTextPlain("for useful context, and not just jokes")),
 								},
 							},
 							Credit: nil,
@@ -2802,7 +2802,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									Blocks: []RichBlock{
 										&RichBlockParagraph{
 											Type: "paragraph",
-											Text: ToPtr(RichTextPlain("To the point")),
+											Text: new(RichTextPlain("To the point")),
 										},
 									},
 									HasCheckbox: false,
@@ -2815,7 +2815,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									Blocks: []RichBlock{
 										&RichBlockParagraph{
 											Type: "paragraph",
-											Text: ToPtr(RichTextPlain("Mission Accomplished")),
+											Text: new(RichTextPlain("Mission Accomplished")),
 										},
 									},
 									HasCheckbox: true,
@@ -2833,7 +2833,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									Blocks: []RichBlock{
 										&RichBlockParagraph{
 											Type: "paragraph",
-											Text: ToPtr(RichTextPlain("Step 1")),
+											Text: new(RichTextPlain("Step 1")),
 										},
 									},
 									HasCheckbox: false,
@@ -2846,7 +2846,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									Blocks: []RichBlock{
 										&RichBlockParagraph{
 											Type: "paragraph",
-											Text: ToPtr(RichTextPlain("Step 2")),
+											Text: new(RichTextPlain("Step 2")),
 										},
 									},
 									HasCheckbox: false,
@@ -2859,7 +2859,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									Blocks: []RichBlock{
 										&RichBlockParagraph{
 											Type: "paragraph",
-											Text: ToPtr(RichTextPlain("???")),
+											Text: new(RichTextPlain("???")),
 										},
 									},
 									HasCheckbox: false,
@@ -2872,7 +2872,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									Blocks: []RichBlock{
 										&RichBlockParagraph{
 											Type: "paragraph",
-											Text: ToPtr(RichTextPlain("Profit")),
+											Text: new(RichTextPlain("Profit")),
 										},
 									},
 									HasCheckbox: false,
@@ -2884,11 +2884,11 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockParagraph{
 							Type: "paragraph",
-							Text: ToPtr(RichTextPlain("Communicate with the machines")),
+							Text: new(RichTextPlain("Communicate with the machines")),
 						},
 						&RichBlockPreformatted{
 							Type:     "pre",
-							Text:     ToPtr(RichTextPlain("echo \"hello\";")),
+							Text:     new(RichTextPlain("echo \"hello\";")),
 							Language: "php",
 						},
 						&RichBlockDivider{
@@ -2896,11 +2896,11 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockDetails{
 							Type:    "details",
-							Summary: ToPtr(RichTextPlain("Show me more")),
+							Summary: new(RichTextPlain("Show me more")),
 							Blocks: []RichBlock{
 								&RichBlockParagraph{
 									Type: "paragraph",
-									Text: ToPtr(RichTextPlain("Oh, you actually opened this section. I guess I should've thought of something clever to put here but I didn't think you'd actually do it.")),
+									Text: new(RichTextPlain("Oh, you actually opened this section. I guess I should've thought of something clever to put here but I didn't think you'd actually do it.")),
 								},
 							},
 							IsOpen: false,
@@ -2911,7 +2911,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockSectionHeading{
 							Type: "heading",
-							Text: ToPtr(RichTextPlain("Media")),
+							Text: new(RichTextPlain("Media")),
 							Size: 2,
 						},
 						&RichBlockPhoto{
@@ -3085,7 +3085,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 							Width:  400,
 							Height: 200,
 							Caption: &RichBlockCaption{
-								Text:   ToPtr(RichTextPlain("Where are we?")),
+								Text:   new(RichTextPlain("Where are we?")),
 								Credit: nil,
 							},
 						},
@@ -3095,7 +3095,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockSectionHeading{
 							Type: "heading",
-							Text: ToPtr(RichTextPlain("Advanced")),
+							Text: new(RichTextPlain("Advanced")),
 							Size: 2,
 						},
 						&RichBlockTable{
@@ -3103,7 +3103,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 							Cells: [][]RichBlockTableCell{
 								{
 									{
-										Text:     ToPtr(RichTextPlain("Type")),
+										Text:     new(RichTextPlain("Type")),
 										IsHeader: true,
 										Colspan:  0,
 										Rowspan:  0,
@@ -3111,7 +3111,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 										Valign:   "middle",
 									},
 									{
-										Text:     ToPtr(RichTextPlain("Supported")),
+										Text:     new(RichTextPlain("Supported")),
 										IsHeader: true,
 										Colspan:  0,
 										Rowspan:  0,
@@ -3119,7 +3119,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 										Valign:   "middle",
 									},
 									{
-										Text:     ToPtr(RichTextPlain("Composition")),
+										Text:     new(RichTextPlain("Composition")),
 										IsHeader: true,
 										Colspan:  0,
 										Rowspan:  0,
@@ -3129,7 +3129,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 								},
 								{
 									{
-										Text:     ToPtr(RichTextPlain("Table")),
+										Text:     new(RichTextPlain("Table")),
 										IsHeader: false,
 										Colspan:  0,
 										Rowspan:  0,
@@ -3139,7 +3139,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 									{
 										Text: &RichTextBold{
 											Type: "bold",
-											Text: ToPtr(RichTextPlain("Yes")),
+											Text: new(RichTextPlain("Yes")),
 										},
 										IsHeader: false,
 										Colspan:  0,
@@ -3148,7 +3148,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 										Valign:   "middle",
 									},
 									{
-										Text:     ToPtr(RichTextPlain("100% text")),
+										Text:     new(RichTextPlain("100% text")),
 										IsHeader: false,
 										Colspan:  0,
 										Rowspan:  0,
@@ -3163,7 +3163,7 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockParagraph{
 							Type: "paragraph",
-							Text: ToPtr(RichTextPlain("I don't know what this is but apparently it's also math 👇")),
+							Text: new(RichTextPlain("I don't know what this is but apparently it's also math 👇")),
 						},
 						&RichBlockMathematicalExpression{
 							Type:       "mathematical_expression",
@@ -3171,13 +3171,13 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						},
 						&RichBlockPullQuotation{
 							Type:   "pullquote",
-							Text:   ToPtr(RichTextPlain("To be truly free, you should be ready to risk everything for freedom.")),
-							Credit: ToPtr(RichTextPlain("Pavel Durov")),
+							Text:   new(RichTextPlain("To be truly free, you should be ready to risk everything for freedom.")),
+							Credit: new(RichTextPlain("Pavel Durov")),
 						},
 						&RichBlockParagraph{
 							Type: "paragraph",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("Make sure to always cite your sources")),
+								new(RichTextPlain("Make sure to always cite your sources")),
 								&RichTextSuperscript{
 									Type: "superscript",
 									Text: &RichTextList{
@@ -3187,12 +3187,12 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 										},
 										&RichTextReferenceLink{
 											Type:          "reference_link",
-											Text:          ToPtr(RichTextPlain("1")),
+											Text:          new(RichTextPlain("1")),
 											ReferenceName: "fn-1",
 										},
 									},
 								},
-								ToPtr(RichTextPlain(".")),
+								new(RichTextPlain(".")),
 							},
 						},
 						&RichBlockParagraph{
@@ -3200,19 +3200,19 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 							Text: &RichTextList{
 								&RichTextURL{
 									Type: "url",
-									Text: ToPtr(RichTextPlain("Link")),
+									Text: new(RichTextPlain("Link")),
 									URL:  "https://youtu.be/dQw4w9WgXcQ",
 								},
-								ToPtr(RichTextPlain(" · ")),
+								new(RichTextPlain(" · ")),
 								&RichTextEmailAddress{
 									Type:         "email_address",
-									Text:         ToPtr(RichTextPlain("Email")),
+									Text:         new(RichTextPlain("Email")),
 									EmailAddress: "user@example.com",
 								},
-								ToPtr(RichTextPlain(" · ")),
+								new(RichTextPlain(" · ")),
 								&RichTextTextMention{
 									Type: "text_mention",
-									Text: ToPtr(RichTextPlain("User Mention")),
+									Text: new(RichTextPlain("User Mention")),
 									User: User{
 										ID:                         777000,
 										IsBot:                      false,
@@ -3239,16 +3239,16 @@ func Test_Message_UnmarshalJSON(t *testing.T) {
 						&RichBlockFooter{
 							Type: "footer",
 							Text: &RichTextList{
-								ToPtr(RichTextPlain("1. ")),
+								new(RichTextPlain("1. ")),
 								&RichTextReference{
 									Type: "reference",
-									Text: ToPtr(RichTextPlain("Source: me, because I said so.")),
+									Text: new(RichTextPlain("Source: me, because I said so.")),
 									Name: "fn-1",
 								},
-								ToPtr(RichTextPlain(" ")),
+								new(RichTextPlain(" ")),
 								&RichTextAnchorLink{
 									Type:       "anchor_link",
-									Text:       ToPtr(RichTextPlain("↩")),
+									Text:       new(RichTextPlain("↩")),
 									AnchorName: "fnref-1-1",
 								},
 							},

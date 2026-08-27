@@ -834,7 +834,7 @@ func TestSendPollParams_Setters(t *testing.T) {
 		QuestionParseMode:      "QuestionParseMode",
 		QuestionEntities:       []MessageEntity{{Type: "QuestionEntities"}},
 		Options:                []InputPollOption{{}},
-		IsAnonymous:            ToPtr(true),
+		IsAnonymous:            new(true),
 		Type:                   "Type",
 		AllowsMultipleAnswers:  true,
 		AllowsRevoting:         true,
@@ -1047,14 +1047,14 @@ func TestRestrictChatMemberParams_Setters(t *testing.T) {
 	r := (&RestrictChatMemberParams{}).
 		WithChatID(ChatID{ID: 2}).
 		WithUserID(1).
-		WithPermissions(ChatPermissions{CanSendMessages: ToPtr(true)}).
+		WithPermissions(ChatPermissions{CanSendMessages: new(true)}).
 		WithUseIndependentChatPermissions().
 		WithUntilDate(2)
 
 	assert.Equal(t, &RestrictChatMemberParams{
 		ChatID:                        ChatID{ID: 2},
 		UserID:                        1,
-		Permissions:                   ChatPermissions{CanSendMessages: ToPtr(true)},
+		Permissions:                   ChatPermissions{CanSendMessages: new(true)},
 		UseIndependentChatPermissions: true,
 		UntilDate:                     2,
 	}, r)
@@ -1085,23 +1085,23 @@ func TestPromoteChatMemberParams_Setters(t *testing.T) {
 	assert.Equal(t, &PromoteChatMemberParams{
 		ChatID:                  ChatID{ID: 3},
 		UserID:                  1,
-		IsAnonymous:             ToPtr(true),
-		CanManageChat:           ToPtr(true),
-		CanDeleteMessages:       ToPtr(true),
-		CanManageVideoChats:     ToPtr(true),
-		CanRestrictMembers:      ToPtr(true),
-		CanPromoteMembers:       ToPtr(true),
-		CanChangeInfo:           ToPtr(true),
-		CanInviteUsers:          ToPtr(true),
-		CanPostStories:          ToPtr(true),
-		CanEditStories:          ToPtr(true),
-		CanDeleteStories:        ToPtr(true),
-		CanPostMessages:         ToPtr(true),
-		CanEditMessages:         ToPtr(true),
-		CanPinMessages:          ToPtr(true),
-		CanManageTopics:         ToPtr(true),
-		CanManageDirectMessages: ToPtr(true),
-		CanManageTags:           ToPtr(true),
+		IsAnonymous:             new(true),
+		CanManageChat:           new(true),
+		CanDeleteMessages:       new(true),
+		CanManageVideoChats:     new(true),
+		CanRestrictMembers:      new(true),
+		CanPromoteMembers:       new(true),
+		CanChangeInfo:           new(true),
+		CanInviteUsers:          new(true),
+		CanPostStories:          new(true),
+		CanEditStories:          new(true),
+		CanDeleteStories:        new(true),
+		CanPostMessages:         new(true),
+		CanEditMessages:         new(true),
+		CanPinMessages:          new(true),
+		CanManageTopics:         new(true),
+		CanManageDirectMessages: new(true),
+		CanManageTags:           new(true),
 	}, p)
 }
 
@@ -1156,12 +1156,12 @@ func TestUnbanChatSenderChatParams_Setters(t *testing.T) {
 func TestSetChatPermissionsParams_Setters(t *testing.T) {
 	s := (&SetChatPermissionsParams{}).
 		WithChatID(ChatID{ID: 2}).
-		WithPermissions(ChatPermissions{CanSendMessages: ToPtr(true)}).
+		WithPermissions(ChatPermissions{CanSendMessages: new(true)}).
 		WithUseIndependentChatPermissions()
 
 	assert.Equal(t, &SetChatPermissionsParams{
 		ChatID:                        ChatID{ID: 2},
-		Permissions:                   ChatPermissions{CanSendMessages: ToPtr(true)},
+		Permissions:                   ChatPermissions{CanSendMessages: new(true)},
 		UseIndependentChatPermissions: true,
 	}, s)
 }
@@ -1479,7 +1479,7 @@ func TestEditForumTopicParams_Setters(t *testing.T) {
 		ChatID:            ChatID{ID: 2},
 		MessageThreadID:   1,
 		Name:              "Name",
-		IconCustomEmojiID: ToPtr("IconCustomEmojiID"),
+		IconCustomEmojiID: new("IconCustomEmojiID"),
 	}, e)
 }
 

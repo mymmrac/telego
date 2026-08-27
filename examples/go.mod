@@ -1,6 +1,6 @@
 module github.com/mymmrac/telego/examples
 
-go 1.25.7
+go 1.26.7
 
 require (
 	github.com/gofiber/fiber/v3 v3.5.0

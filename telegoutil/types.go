@@ -1064,12 +1064,12 @@ func RichBlockListItem(blocks ...telego.InputRichBlock) telego.InputRichBlockLis
 
 // RichTextPlain creates [telego.RichTextPlain] from text
 func RichTextPlain(text string) *telego.RichTextPlain {
-	return telego.ToPtr(telego.RichTextPlain(text))
+	return new(telego.RichTextPlain(text))
 }
 
 // RichTextList creates [telego.RichTextList] from the list of texts
 func RichTextList(texts ...telego.RichText) *telego.RichTextList {
-	return telego.ToPtr(telego.RichTextList(texts))
+	return new(telego.RichTextList(texts))
 }
 
 // RichTextBold creates [telego.RichTextBold] with required fields
