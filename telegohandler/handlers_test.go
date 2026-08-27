@@ -412,7 +412,7 @@ func TestBotHandler_HandleMyChatMemberUpdated(t *testing.T) {
 
 	require.Panics(t, func() { bh.HandleMyChatMember(nil) })
 	require.Panics(t, func() { bh.HandleMyChatMemberUpdated(nil) })
-	require.Panics(t, func() { bh.BaseGroup().HandleMyChatMemberUpdated(nil) }) //nolint:govet
+	require.Panics(t, func() { bh.BaseGroup().HandleMyChatMemberUpdated(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ChatMemberHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {
@@ -438,7 +438,7 @@ func TestBotHandler_HandleChatMemberUpdated(t *testing.T) {
 
 	require.Panics(t, func() { bh.HandleChatMember(nil) })
 	require.Panics(t, func() { bh.HandleChatMemberUpdated(nil) })
-	require.Panics(t, func() { bh.BaseGroup().HandleChatMemberUpdated(nil) }) //nolint:govet
+	require.Panics(t, func() { bh.BaseGroup().HandleChatMemberUpdated(nil) })
 
 	wg := &sync.WaitGroup{}
 	handler := ChatMemberHandler(func(_ *Context, _ telego.ChatMemberUpdated) error {

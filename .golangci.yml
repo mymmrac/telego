@@ -10,6 +10,7 @@ linters:
     - dupword
     - err113
     - exhaustruct
+    - exhaustruct_v5
     - funcorder
     - gochecknoglobals
     - godot

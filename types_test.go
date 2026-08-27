@@ -226,10 +226,10 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Equal(t, StoryTypeVideo, (&InputStoryContentVideo{}).StoryType())
 
 	assert.Implements(t, (*RichText)(nil), ToPtr(RichTextPlain("")))
-	assert.Equal(t, TextTypePlain, (ToPtr(RichTextPlain(""))).TextType())
+	assert.Equal(t, TextTypePlain, ToPtr(RichTextPlain("")).TextType())
 
 	assert.Implements(t, (*RichText)(nil), ToPtr(RichTextList{}))
-	assert.Equal(t, TextTypeList, (ToPtr(RichTextList{})).TextType())
+	assert.Equal(t, TextTypeList, ToPtr(RichTextList{}).TextType())
 
 	assert.Implements(t, (*RichText)(nil), &RichTextBold{})
 	assert.Equal(t, TextTypeBold, (&RichTextBold{}).TextType())

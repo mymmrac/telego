@@ -5494,7 +5494,7 @@ type BotCommand struct {
 }
 
 // ChatID - Represents chat ID as int64 or string
-type ChatID struct { //nolint:recvcheck
+type ChatID struct {
 	// ID - Unique identifier for the target chat
 	ID int64
 
@@ -8489,7 +8489,7 @@ func (r *RichBlockCaption) UnmarshalJSON(data []byte) error {
 }
 
 // RichBlockTableCell - Cell in a table.
-type RichBlockTableCell struct { //nolint:recvcheck
+type RichBlockTableCell struct {
 	// Text - Optional. Text in the cell. If omitted, then the cell is invisible.
 	Text RichText `json:"text,omitempty"`
 
