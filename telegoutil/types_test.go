@@ -708,6 +708,11 @@ func TestRichBlockBlockQuotation(t *testing.T) {
 	assert.Equal(t, telego.BlockTypeBlockQuotation, r.Type)
 }
 
+func TestRichBlockExpandableBlockQuotation(t *testing.T) {
+	r := RichBlockExpandableBlockQuotation(richText1)
+	assert.Equal(t, telego.BlockTypeExpandableBlockQuotation, r.Type)
+}
+
 func TestRichBlockPullQuotation(t *testing.T) {
 	r := RichBlockPullQuotation(richText1)
 	assert.Equal(t, telego.BlockTypePullQuotation, r.Type)
@@ -804,6 +809,11 @@ func TestRichBlockMap(t *testing.T) {
 	assert.Equal(t, telego.BlockTypeMap, r.Type)
 }
 
+func TestRichBlockButtons(t *testing.T) {
+	r := RichBlockButtons()
+	assert.Equal(t, telego.BlockTypeButtons, r.Type)
+}
+
 func TestRichBlockAnimation(t *testing.T) {
 	r := RichBlockAnimation(telego.InputMediaAnimation{Type: text1})
 	assert.Equal(t, telego.BlockTypeAnimation, r.Type)
@@ -812,6 +822,11 @@ func TestRichBlockAnimation(t *testing.T) {
 func TestRichBlockAudio(t *testing.T) {
 	r := RichBlockAudio(telego.InputMediaAudio{Type: text1})
 	assert.Equal(t, telego.BlockTypeAudio, r.Type)
+}
+
+func TestRichBlockDocument(t *testing.T) {
+	r := RichBlockDocument(telego.InputMediaDocument{Type: text1})
+	assert.Equal(t, telego.BlockTypeDocument, r.Type)
 }
 
 func TestRichBlockPhoto(t *testing.T) {
@@ -957,6 +972,16 @@ func TestRichTextCashtag(t *testing.T) {
 func TestRichTextBotCommand(t *testing.T) {
 	r := RichTextBotCommand(richText1, text2)
 	assert.Equal(t, telego.TextTypeBotCommand, r.Type)
+}
+
+func TestRichTextButton(t *testing.T) {
+	r := RichTextButton(telego.RichMessageButton{})
+	assert.Equal(t, telego.TextTypeButton, r.Type)
+}
+
+func TestRichMessageButton(t *testing.T) {
+	r := RichMessageButton(richText1)
+	assert.Equal(t, richText1, r.Text)
 }
 
 func TestRichTextAnchor(t *testing.T) {

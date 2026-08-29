@@ -60,6 +60,24 @@ func (r *ReplyParameters) WithPollOptionID(pollOptionID string) *ReplyParameters
 	return r
 }
 
+// WithReceiverUserID adds receiver user ID parameter
+func (e *EphemeralMessageParameters) WithReceiverUserID(receiverUserID int) *EphemeralMessageParameters {
+	e.ReceiverUserID = receiverUserID
+	return e
+}
+
+// WithCallbackQueryID adds callback query ID parameter
+func (e *EphemeralMessageParameters) WithCallbackQueryID(callbackQueryID string) *EphemeralMessageParameters {
+	e.CallbackQueryID = callbackQueryID
+	return e
+}
+
+// WithReplaceCallbackQueryMessage adds replace callback query message parameter
+func (e *EphemeralMessageParameters) WithReplaceCallbackQueryMessage() *EphemeralMessageParameters {
+	e.ReplaceCallbackQueryMessage = true
+	return e
+}
+
 // WithText adds text parameter
 func (i *InputPollOption) WithText(text string) *InputPollOption {
 	i.Text = text
@@ -177,6 +195,12 @@ func (r *ReplyKeyboardMarkup) WithInputFieldPlaceholder(inputFieldPlaceholder st
 // WithSelective adds selective parameter
 func (r *ReplyKeyboardMarkup) WithSelective() *ReplyKeyboardMarkup {
 	r.Selective = true
+	return r
+}
+
+// WithForceReply adds force reply parameter
+func (r *ReplyKeyboardMarkup) WithForceReply() *ReplyKeyboardMarkup {
+	r.ForceReply = true
 	return r
 }
 
@@ -387,6 +411,12 @@ func (i *InlineKeyboardMarkup) WithInlineKeyboard(inlineKeyboard ...[]InlineKeyb
 	return i
 }
 
+// WithForceReply adds force reply parameter
+func (i *InlineKeyboardMarkup) WithForceReply() *InlineKeyboardMarkup {
+	i.ForceReply = true
+	return i
+}
+
 // WithText adds text parameter
 func (i InlineKeyboardButton) WithText(text string) InlineKeyboardButton {
 	i.Text = text
@@ -466,6 +496,12 @@ func (i InlineKeyboardButton) WithCallbackGame(callbackGame *CallbackGame) Inlin
 // WithPay adds pay parameter
 func (i InlineKeyboardButton) WithPay() InlineKeyboardButton {
 	i.Pay = true
+	return i
+}
+
+// WithDisabled adds disabled parameter
+func (i InlineKeyboardButton) WithDisabled(disabled *DisabledButton) InlineKeyboardButton {
+	i.Disabled = disabled
 	return i
 }
 
@@ -1058,6 +1094,74 @@ func (i *InputRichMessage) WithSkipEntityDetection() *InputRichMessage {
 }
 
 // WithText adds text parameter
+func (r RichMessageButton) WithText(text RichText) RichMessageButton {
+	r.Text = text
+	return r
+}
+
+// WithStyle adds style parameter
+func (r RichMessageButton) WithStyle(style string) RichMessageButton {
+	r.Style = style
+	return r
+}
+
+// WithURL adds URL parameter
+func (r RichMessageButton) WithURL(url string) RichMessageButton {
+	r.URL = url
+	return r
+}
+
+// WithCallbackData adds callback data parameter
+func (r RichMessageButton) WithCallbackData(callbackData string) RichMessageButton {
+	r.CallbackData = callbackData
+	return r
+}
+
+// WithWebApp adds web app parameter
+func (r RichMessageButton) WithWebApp(webApp *WebAppInfo) RichMessageButton {
+	r.WebApp = webApp
+	return r
+}
+
+// WithLoginURL adds login URL parameter
+func (r RichMessageButton) WithLoginURL(loginURL *LoginURL) RichMessageButton {
+	r.LoginURL = loginURL
+	return r
+}
+
+// WithSwitchInlineQuery adds switch inline query parameter
+func (r RichMessageButton) WithSwitchInlineQuery(switchInlineQuery string) RichMessageButton {
+	r.SwitchInlineQuery = switchInlineQuery
+	return r
+}
+
+// WithSwitchInlineQueryCurrentChat adds switch inline query current chat parameter
+func (r RichMessageButton) WithSwitchInlineQueryCurrentChat(switchInlineQueryCurrentChat string) RichMessageButton {
+	r.SwitchInlineQueryCurrentChat = switchInlineQueryCurrentChat
+	return r
+}
+
+// WithSwitchInlineQueryChosenChat adds switch inline query chosen chat parameter
+func (r RichMessageButton) WithSwitchInlineQueryChosenChat(
+	switchInlineQueryChosenChat *SwitchInlineQueryChosenChat,
+) RichMessageButton {
+	r.SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
+	return r
+}
+
+// WithCopyText adds copy text parameter
+func (r RichMessageButton) WithCopyText(copyText *CopyTextButton) RichMessageButton {
+	r.CopyText = copyText
+	return r
+}
+
+// WithDisabled adds disabled parameter
+func (r RichMessageButton) WithDisabled(disabled *DisabledButton) RichMessageButton {
+	r.Disabled = disabled
+	return r
+}
+
+// WithText adds text parameter
 func (r *RichTextBold) WithText(text RichText) *RichTextBold {
 	r.Text = text
 	return r
@@ -1255,6 +1359,12 @@ func (r *RichTextBotCommand) WithBotCommand(botCommand string) *RichTextBotComma
 	return r
 }
 
+// WithButton adds button parameter
+func (r *RichTextButton) WithButton(button RichMessageButton) *RichTextButton {
+	r.Button = button
+	return r
+}
+
 // WithName adds name parameter
 func (r *RichTextAnchor) WithName(name string) *RichTextAnchor {
 	r.Name = name
@@ -1442,6 +1552,18 @@ func (i *InputRichBlockBlockQuotation) WithCredit(credit RichText) *InputRichBlo
 }
 
 // WithText adds text parameter
+func (i *InputRichBlockExpandableBlockQuotation) WithText(text RichText) *InputRichBlockExpandableBlockQuotation {
+	i.Text = text
+	return i
+}
+
+// WithCredit adds credit parameter
+func (i *InputRichBlockExpandableBlockQuotation) WithCredit(credit RichText) *InputRichBlockExpandableBlockQuotation {
+	i.Credit = credit
+	return i
+}
+
+// WithText adds text parameter
 func (i *InputRichBlockPullQuotation) WithText(text RichText) *InputRichBlockPullQuotation {
 	i.Text = text
 	return i
@@ -1492,6 +1614,12 @@ func (i *InputRichBlockTable) WithIsBordered() *InputRichBlockTable {
 // WithIsStriped adds is striped parameter
 func (i *InputRichBlockTable) WithIsStriped() *InputRichBlockTable {
 	i.IsStriped = true
+	return i
+}
+
+// WithIsCompact adds is compact parameter
+func (i *InputRichBlockTable) WithIsCompact() *InputRichBlockTable {
+	i.IsCompact = true
 	return i
 }
 
@@ -1549,6 +1677,18 @@ func (i *InputRichBlockMap) WithCaption(caption *RichBlockCaption) *InputRichBlo
 	return i
 }
 
+// WithButtons adds buttons parameter
+func (i *InputRichBlockButtons) WithButtons(buttons ...RichMessageButton) *InputRichBlockButtons {
+	i.Buttons = buttons
+	return i
+}
+
+// WithAlign adds align parameter
+func (i *InputRichBlockButtons) WithAlign(align string) *InputRichBlockButtons {
+	i.Align = align
+	return i
+}
+
 // WithAnimation adds animation parameter
 func (i *InputRichBlockAnimation) WithAnimation(animation InputMediaAnimation) *InputRichBlockAnimation {
 	i.Animation = animation
@@ -1569,6 +1709,18 @@ func (i *InputRichBlockAudio) WithAudio(audio InputMediaAudio) *InputRichBlockAu
 
 // WithCaption adds caption parameter
 func (i *InputRichBlockAudio) WithCaption(caption *RichBlockCaption) *InputRichBlockAudio {
+	i.Caption = caption
+	return i
+}
+
+// WithDocument adds document parameter
+func (i *InputRichBlockDocument) WithDocument(document InputMediaDocument) *InputRichBlockDocument {
+	i.Document = document
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputRichBlockDocument) WithCaption(caption *RichBlockCaption) *InputRichBlockDocument {
 	i.Caption = caption
 	return i
 }

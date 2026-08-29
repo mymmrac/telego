@@ -55,6 +55,8 @@ var typeStructsSetters = []string{
 	"KeyboardButtonRequestChat",
 	"KeyboardButtonRequestManagedBot",
 	"ReplyParameters",
+	"EphemeralMessageParameters",
+
 	"InputPollOption",
 
 	"InlineQueryResultCachedAudio",
@@ -121,14 +123,17 @@ var typeStructsSetters = []string{
 	"InputRichBlockAnchor",
 	"InputRichBlockList",
 	"InputRichBlockBlockQuotation",
+	"InputRichBlockExpandableBlockQuotation",
 	"InputRichBlockPullQuotation",
 	"InputRichBlockCollage",
 	"InputRichBlockSlideshow",
 	"InputRichBlockTable",
 	"InputRichBlockDetails",
 	"InputRichBlockMap",
+	"InputRichBlockButtons",
 	"InputRichBlockAnimation",
 	"InputRichBlockAudio",
+	"InputRichBlockDocument",
 	"InputRichBlockPhoto",
 	"InputRichBlockVideo",
 	"InputRichBlockVoiceNote",
@@ -159,10 +164,13 @@ var typeStructsSetters = []string{
 	"RichTextHashtag",
 	"RichTextCashtag",
 	"RichTextBotCommand",
+	"RichTextButton",
 	"RichTextAnchor",
 	"RichTextAnchorLink",
 	"RichTextReference",
 	"RichTextReferenceLink",
+
+	"RichMessageButton",
 }
 
 var typeStructsNoPointerSetters = []string{
@@ -170,6 +178,7 @@ var typeStructsNoPointerSetters = []string{
 	"InlineKeyboardButton",
 	"RichBlockTableCell",
 	"InputRichBlockListItem",
+	"RichMessageButton",
 }
 
 func main() {

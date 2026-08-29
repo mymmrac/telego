@@ -172,7 +172,7 @@ func TestSendAudio(t *testing.T) {
 			ChatID:    tu.ID(chatID),
 			Audio:     tu.File(open(kittenMp3)),
 			Caption:   "SendAudio " + timeNow,
-			Thumbnail: telego.ToPtr(tu.File(open(img1Jpg))),
+			Thumbnail: new(tu.File(open(img1Jpg))),
 		})
 
 		require.NoError(t, err)
@@ -184,7 +184,7 @@ func TestSendAudio(t *testing.T) {
 			ChatID:    tu.ID(chatID),
 			Audio:     tu.FileFromURL(exampleMp3),
 			Caption:   "SendAudio " + timeNow,
-			Thumbnail: telego.ToPtr(tu.File(open(img1Jpg))), // Expected to be not displayed
+			Thumbnail: new(tu.File(open(img1Jpg))), // Expected to be not displayed
 		})
 
 		require.NoError(t, err)
@@ -212,7 +212,7 @@ func TestSendPoll(t *testing.T) {
 			ChatID:      tu.ID(chatID),
 			Question:    "Test",
 			Options:     []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
-			IsAnonymous: telego.ToPtr(false),
+			IsAnonymous: new(false),
 		})
 
 		require.NoError(t, err)
@@ -224,7 +224,7 @@ func TestSendPoll(t *testing.T) {
 			ChatID:           tu.ID(chatID),
 			Question:         "Test",
 			Options:          []telego.InputPollOption{tu.PollOption("Option 1"), tu.PollOption("Option 2")},
-			IsAnonymous:      telego.ToPtr(false),
+			IsAnonymous:      new(false),
 			Type:             telego.PollTypeQuiz,
 			CorrectOptionIDs: []int{0},
 		})
@@ -244,19 +244,19 @@ func TestSendRichMessage(t *testing.T) {
 				Blocks: []telego.InputRichBlock{
 					&telego.InputRichBlockSectionHeading{
 						Type: telego.BlockTypeSectionHeading,
-						Text: telego.ToPtr(telego.RichTextPlain("Hello")),
+						Text: new(telego.RichTextPlain("Hello")),
 						Size: 1,
 					},
 					&telego.InputRichBlockParagraph{
 						Type: telego.BlockTypeParagraph,
-						Text: telego.ToPtr(telego.RichTextPlain("World")),
+						Text: new(telego.RichTextPlain("World")),
 					},
 					&telego.InputRichBlockPhoto{
 						Type:  telego.BlockTypePhoto,
 						Photo: *tu.MediaPhoto(tu.File(open(img1Jpg))),
 						Caption: &telego.RichBlockCaption{
-							Text:   telego.ToPtr(telego.RichTextPlain("Image")),
-							Credit: telego.ToPtr(telego.RichTextPlain("Internet")),
+							Text:   new(telego.RichTextPlain("Image")),
+							Credit: new(telego.RichTextPlain("Internet")),
 						},
 					},
 					&telego.InputRichBlockCollage{
@@ -266,19 +266,19 @@ func TestSendRichMessage(t *testing.T) {
 								Type:  telego.BlockTypePhoto,
 								Photo: *tu.MediaPhoto(tu.File(open(img1Jpg))),
 								Caption: &telego.RichBlockCaption{
-									Text: telego.ToPtr(telego.RichTextPlain("Image 1")),
+									Text: new(telego.RichTextPlain("Image 1")),
 								},
 							},
 							&telego.InputRichBlockPhoto{
 								Type:  telego.BlockTypePhoto,
 								Photo: *tu.MediaPhoto(tu.File(open(img2Jpg))),
 								Caption: &telego.RichBlockCaption{
-									Text: telego.ToPtr(telego.RichTextPlain("Image 2")),
+									Text: new(telego.RichTextPlain("Image 2")),
 								},
 							},
 						},
 						Caption: &telego.RichBlockCaption{
-							Text: telego.ToPtr(telego.RichTextPlain("Collage")),
+							Text: new(telego.RichTextPlain("Collage")),
 						},
 					},
 				},

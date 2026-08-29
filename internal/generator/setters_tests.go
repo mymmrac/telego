@@ -73,7 +73,7 @@ import (
 
 		for _, s := range currentSetters {
 			if strings.HasPrefix(s.value, " ") {
-				s.value = "ToPtr(" + s.value + ")"
+				s.value = "new(" + s.value + ")"
 			}
 
 			data.WriteString(fmt.Sprintf("\t\t%s: %s,\n", s.name, s.value))
@@ -159,7 +159,7 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "InputPollOptionMedia":
 		return fmt.Sprintf("&InputMediaAnimation{Type: \"%s\"}", setter.fieldName)
 	case "ChatPermissions":
-		return "ChatPermissions{CanSendMessages: ToPtr(true)}"
+		return "ChatPermissions{CanSendMessages: new(true)}"
 	case "InputMessageContent":
 		return "&InputTextMessageContent{}"
 	case "*CallbackGame":
@@ -252,12 +252,20 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "InputMediaAnimation{}"
 	case "InputMediaAudio":
 		return "InputMediaAudio{}"
+	case "InputMediaDocument":
+		return "InputMediaDocument{}"
 	case "InputMediaPhoto":
 		return "InputMediaPhoto{}"
 	case "InputMediaVideo":
 		return "InputMediaVideo{}"
 	case "InputMediaVoiceNote":
 		return "InputMediaVoiceNote{}"
+	case "*DisabledButton":
+		return "&DisabledButton{}"
+	case "RichMessageButton":
+		return "RichMessageButton{}"
+	case "[]RichMessageButton":
+		return "[]RichMessageButton{{}}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}

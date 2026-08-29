@@ -73,6 +73,12 @@ func generateTypes(docs string) tgTypes {
 	types := make(tgTypes, len(typeGroups))
 
 	for i, typeGroup := range typeGroups {
+		// Hack, because EphemeralMessageParameters is a type with no description
+		if typeGroup[1] == "EphemeralMessageParameters" && typeGroup[3] == "" {
+			typeGroup[2], typeGroup[3] = typeGroup[3], typeGroup[2]
+			typeGroup[2] = "The parameters of an ephemeral message."
+		}
+
 		types[i] = tgType{
 			name:        typeGroup[1],
 			description: replaceHTML(typeGroup[2]),
@@ -323,7 +329,7 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 		}
 	}
 
-	if field.typ == "InputMediaAnimation or InputMediaAudio or InputMediaPhoto or InputMediaVideo or InputMediaVoiceNote" {
+	if field.typ == "InputMediaAnimation or InputMediaAudio or InputMediaDocument or InputMediaPhoto or InputMediaVideo or InputMediaVoiceNote" {
 		field.typ = "RichMessageMedia"
 	}
 

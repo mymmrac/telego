@@ -868,6 +868,14 @@ func RichBlockBlockQuotation(blocks ...telego.InputRichBlock) *telego.InputRichB
 	}
 }
 
+// RichBlockExpandableBlockQuotation creates [telego.InputRichBlockExpandableBlockQuotation] with required fields
+func RichBlockExpandableBlockQuotation(text telego.RichText) *telego.InputRichBlockExpandableBlockQuotation {
+	return &telego.InputRichBlockExpandableBlockQuotation{
+		Type: telego.BlockTypeExpandableBlockQuotation,
+		Text: text,
+	}
+}
+
 // RichBlockPullQuotation creates [telego.InputRichBlockPullQuotation] with required fields
 func RichBlockPullQuotation(text telego.RichText) *telego.InputRichBlockPullQuotation {
 	return &telego.InputRichBlockPullQuotation{
@@ -1000,6 +1008,14 @@ func RichBlockMap(location telego.Location, zoom, width, height int) *telego.Inp
 	}
 }
 
+// RichBlockButtons creates [telego.InputRichBlockButtons] with required fields
+func RichBlockButtons(buttons ...telego.RichMessageButton) *telego.InputRichBlockButtons {
+	return &telego.InputRichBlockButtons{
+		Type:    telego.BlockTypeButtons,
+		Buttons: buttons,
+	}
+}
+
 // RichBlockAnimation creates [telego.InputRichBlockAnimation] with required fields
 func RichBlockAnimation(animation telego.InputMediaAnimation) *telego.InputRichBlockAnimation {
 	return &telego.InputRichBlockAnimation{
@@ -1013,6 +1029,14 @@ func RichBlockAudio(audio telego.InputMediaAudio) *telego.InputRichBlockAudio {
 	return &telego.InputRichBlockAudio{
 		Type:  telego.BlockTypeAudio,
 		Audio: audio,
+	}
+}
+
+// RichBlockDocument creates [telego.InputRichBlockDocument] with required fields
+func RichBlockDocument(document telego.InputMediaDocument) *telego.InputRichBlockDocument {
+	return &telego.InputRichBlockDocument{
+		Type:     telego.BlockTypeDocument,
+		Document: document,
 	}
 }
 
@@ -1249,6 +1273,21 @@ func RichTextBotCommand(text telego.RichText, botCommand string) *telego.RichTex
 		Type:       telego.TextTypeBotCommand,
 		Text:       text,
 		BotCommand: botCommand,
+	}
+}
+
+// RichTextButton creates [telego.RichTextButton] with required fields
+func RichTextButton(button telego.RichMessageButton) *telego.RichTextButton {
+	return &telego.RichTextButton{
+		Type:   telego.TextTypeButton,
+		Button: button,
+	}
+}
+
+// RichMessageButton creates [telego.RichMessageButton] with required fields
+func RichMessageButton(text telego.RichText) telego.RichMessageButton {
+	return telego.RichMessageButton{
+		Text: text,
 	}
 }
 

@@ -1095,6 +1095,9 @@ func TestTypesConstants(t *testing.T) {
 			OrderedListUpperRoman,
 		},
 		{
+			ButtonAlignLeft, ButtonAlignCenter, ButtonAlignRight,
+		},
+		{
 			ResultTypeArticle, ResultTypePhoto, ResultTypeGif, ResultTypeMpeg4Gif, ResultTypeVideo, ResultTypeAudio,
 			ResultTypeVoice, ResultTypeDocument, ResultTypeLocation, ResultTypeVenue, ResultTypeContact,
 			ResultTypeGame, ResultTypeSticker,

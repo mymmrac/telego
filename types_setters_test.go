@@ -33,6 +33,19 @@ func TestReplyParameters_Setters(t *testing.T) {
 	}, r)
 }
 
+func TestEphemeralMessageParameters_Setters(t *testing.T) {
+	e := (&EphemeralMessageParameters{}).
+		WithReceiverUserID(6).
+		WithCallbackQueryID("CallbackQueryID").
+		WithReplaceCallbackQueryMessage()
+
+	assert.Equal(t, &EphemeralMessageParameters{
+		ReceiverUserID:              6,
+		CallbackQueryID:             "CallbackQueryID",
+		ReplaceCallbackQueryMessage: true,
+	}, e)
+}
+
 func TestInputPollOption_Setters(t *testing.T) {
 	i := (&InputPollOption{}).
 		WithText("Text").
@@ -89,7 +102,8 @@ func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 		WithResizeKeyboard().
 		WithOneTimeKeyboard().
 		WithInputFieldPlaceholder("InputFieldPlaceholder").
-		WithSelective()
+		WithSelective().
+		WithForceReply()
 
 	assert.Equal(t, &ReplyKeyboardMarkup{
 		Keyboard:              [][]KeyboardButton{{}},
@@ -98,6 +112,7 @@ func TestReplyKeyboardMarkup_Setters(t *testing.T) {
 		OneTimeKeyboard:       true,
 		InputFieldPlaceholder: "InputFieldPlaceholder",
 		Selective:             true,
+		ForceReply:            true,
 	}, r)
 }
 
@@ -204,10 +219,12 @@ func TestReplyKeyboardRemove_Setters(t *testing.T) {
 
 func TestInlineKeyboardMarkup_Setters(t *testing.T) {
 	i := (&InlineKeyboardMarkup{}).
-		WithInlineKeyboard([][]InlineKeyboardButton{{}}...)
+		WithInlineKeyboard([][]InlineKeyboardButton{{}}...).
+		WithForceReply()
 
 	assert.Equal(t, &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{{}},
+		ForceReply:     true,
 	}, i)
 }
 
@@ -225,7 +242,8 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		WithSwitchInlineQueryChosenChat(&SwitchInlineQueryChosenChat{AllowUserChats: true}).
 		WithCopyText(&CopyTextButton{}).
 		WithCallbackGame(&CallbackGame{}).
-		WithPay()
+		WithPay().
+		WithDisabled(&DisabledButton{})
 
 	assert.Equal(t, InlineKeyboardButton{
 		Text:                         "Text",
@@ -241,6 +259,7 @@ func TestInlineKeyboardButton_Setters(t *testing.T) {
 		CopyText:                     &CopyTextButton{},
 		CallbackGame:                 &CallbackGame{},
 		Pay:                          true,
+		Disabled:                     &DisabledButton{},
 	}, i)
 }
 
@@ -580,6 +599,35 @@ func TestInputRichMessage_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestRichMessageButton_Setters(t *testing.T) {
+	r := (RichMessageButton{}).
+		WithText(&RichTextBold{}).
+		WithStyle("Style").
+		WithURL("URL").
+		WithCallbackData("CallbackData").
+		WithWebApp(&WebAppInfo{}).
+		WithLoginURL(&LoginURL{URL: "LoginURL"}).
+		WithSwitchInlineQuery("SwitchInlineQuery").
+		WithSwitchInlineQueryCurrentChat("SwitchInlineQueryCurrentChat").
+		WithSwitchInlineQueryChosenChat(&SwitchInlineQueryChosenChat{AllowUserChats: true}).
+		WithCopyText(&CopyTextButton{}).
+		WithDisabled(&DisabledButton{})
+
+	assert.Equal(t, RichMessageButton{
+		Text:                         &RichTextBold{},
+		Style:                        "Style",
+		URL:                          "URL",
+		CallbackData:                 "CallbackData",
+		WebApp:                       &WebAppInfo{},
+		LoginURL:                     &LoginURL{URL: "LoginURL"},
+		SwitchInlineQuery:            "SwitchInlineQuery",
+		SwitchInlineQueryCurrentChat: "SwitchInlineQueryCurrentChat",
+		SwitchInlineQueryChosenChat:  &SwitchInlineQueryChosenChat{AllowUserChats: true},
+		CopyText:                     &CopyTextButton{},
+		Disabled:                     &DisabledButton{},
+	}, r)
+}
+
 func TestRichTextBold_Setters(t *testing.T) {
 	r := (&RichTextBold{}).
 		WithText(&RichTextBold{})
@@ -793,6 +841,15 @@ func TestRichTextBotCommand_Setters(t *testing.T) {
 	}, r)
 }
 
+func TestRichTextButton_Setters(t *testing.T) {
+	r := (&RichTextButton{}).
+		WithButton(RichMessageButton{})
+
+	assert.Equal(t, &RichTextButton{
+		Button: RichMessageButton{},
+	}, r)
+}
+
 func TestRichTextAnchor_Setters(t *testing.T) {
 	r := (&RichTextAnchor{}).
 		WithName("Name")
@@ -960,6 +1017,17 @@ func TestInputRichBlockBlockQuotation_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestInputRichBlockExpandableBlockQuotation_Setters(t *testing.T) {
+	i := (&InputRichBlockExpandableBlockQuotation{}).
+		WithText(&RichTextBold{}).
+		WithCredit(&RichTextBold{})
+
+	assert.Equal(t, &InputRichBlockExpandableBlockQuotation{
+		Text:   &RichTextBold{},
+		Credit: &RichTextBold{},
+	}, i)
+}
+
 func TestInputRichBlockPullQuotation_Setters(t *testing.T) {
 	i := (&InputRichBlockPullQuotation{}).
 		WithText(&RichTextBold{}).
@@ -998,12 +1066,14 @@ func TestInputRichBlockTable_Setters(t *testing.T) {
 		WithCells([][]RichBlockTableCell{{}}...).
 		WithIsBordered().
 		WithIsStriped().
+		WithIsCompact().
 		WithCaption(&RichTextBold{})
 
 	assert.Equal(t, &InputRichBlockTable{
 		Cells:      [][]RichBlockTableCell{{}},
 		IsBordered: true,
 		IsStriped:  true,
+		IsCompact:  true,
 		Caption:    &RichTextBold{},
 	}, i)
 }
@@ -1038,6 +1108,17 @@ func TestInputRichBlockMap_Setters(t *testing.T) {
 	}, i)
 }
 
+func TestInputRichBlockButtons_Setters(t *testing.T) {
+	i := (&InputRichBlockButtons{}).
+		WithButtons([]RichMessageButton{{}}...).
+		WithAlign("Align")
+
+	assert.Equal(t, &InputRichBlockButtons{
+		Buttons: []RichMessageButton{{}},
+		Align:   "Align",
+	}, i)
+}
+
 func TestInputRichBlockAnimation_Setters(t *testing.T) {
 	i := (&InputRichBlockAnimation{}).
 		WithAnimation(InputMediaAnimation{}).
@@ -1057,6 +1138,17 @@ func TestInputRichBlockAudio_Setters(t *testing.T) {
 	assert.Equal(t, &InputRichBlockAudio{
 		Audio:   InputMediaAudio{},
 		Caption: &RichBlockCaption{},
+	}, i)
+}
+
+func TestInputRichBlockDocument_Setters(t *testing.T) {
+	i := (&InputRichBlockDocument{}).
+		WithDocument(InputMediaDocument{}).
+		WithCaption(&RichBlockCaption{})
+
+	assert.Equal(t, &InputRichBlockDocument{
+		Document: InputMediaDocument{},
+		Caption:  &RichBlockCaption{},
 	}, i)
 }
 
