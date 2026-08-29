@@ -266,6 +266,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "RichMessageButton{}"
 	case "[]RichMessageButton":
 		return "[]RichMessageButton{{}}"
+	case "*EphemeralMessageParameters":
+		return "&EphemeralMessageParameters{}"
 	default:
 		return "UNKNOWN: " + setter.fieldType
 	}
