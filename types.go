@@ -3712,6 +3712,7 @@ const (
 	ButtonStyleDanger  = "danger"
 	ButtonStyleSuccess = "success"
 	ButtonStylePrimary = "primary"
+	ButtonStyleLink    = "link"
 )
 
 // LoginURL - This object represents a parameter of the inline keyboard button used to automatically
@@ -7554,6 +7555,8 @@ func unmarshalRichText(value *fastjson.Value) (RichText, error) { //nolint:gocyc
 			return &RichTextCashtag{}, nil
 		case TextTypeBotCommand:
 			return &RichTextBotCommand{}, nil
+		case TextTypeButton:
+			return &RichTextButton{}, nil
 		case TextTypeAnchor:
 			return &RichTextAnchor{}, nil
 		case TextTypeAnchorLink:
@@ -8864,6 +8867,8 @@ func unmarshalRichBlock(value *fastjson.Value) (RichBlock, error) { //nolint:goc
 		return &RichBlockList{}, nil
 	case BlockTypeBlockQuotation:
 		return &RichBlockBlockQuotation{}, nil
+	case BlockTypeExpandableBlockQuotation:
+		return &RichBlockExpandableBlockQuotation{}, nil
 	case BlockTypePullQuotation:
 		return &RichBlockPullQuotation{}, nil
 	case BlockTypeCollage:
@@ -8876,10 +8881,14 @@ func unmarshalRichBlock(value *fastjson.Value) (RichBlock, error) { //nolint:goc
 		return &RichBlockDetails{}, nil
 	case BlockTypeMap:
 		return &RichBlockMap{}, nil
+	case BlockTypeButtons:
+		return &RichBlockButtons{}, nil
 	case BlockTypeAnimation:
 		return &RichBlockAnimation{}, nil
 	case BlockTypeAudio:
 		return &RichBlockAudio{}, nil
+	case BlockTypeDocument:
+		return &RichBlockDocument{}, nil
 	case BlockTypePhoto:
 		return &RichBlockPhoto{}, nil
 	case BlockTypeVideo:

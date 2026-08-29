@@ -294,6 +294,9 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*RichText)(nil), &RichTextBotCommand{})
 	assert.Equal(t, TextTypeBotCommand, (&RichTextBotCommand{}).TextType())
 
+	assert.Implements(t, (*RichText)(nil), &RichTextButton{})
+	assert.Equal(t, TextTypeButton, (&RichTextButton{}).TextType())
+
 	assert.Implements(t, (*RichText)(nil), &RichTextAnchor{})
 	assert.Equal(t, TextTypeAnchor, (&RichTextAnchor{}).TextType())
 
@@ -333,6 +336,9 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockBlockQuotation{})
 	assert.Equal(t, BlockTypeBlockQuotation, (&RichBlockBlockQuotation{}).BlockType())
 
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockExpandableBlockQuotation{})
+	assert.Equal(t, BlockTypeExpandableBlockQuotation, (&RichBlockExpandableBlockQuotation{}).BlockType())
+
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockPullQuotation{})
 	assert.Equal(t, BlockTypePullQuotation, (&RichBlockPullQuotation{}).BlockType())
 
@@ -351,11 +357,17 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockMap{})
 	assert.Equal(t, BlockTypeMap, (&RichBlockMap{}).BlockType())
 
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockButtons{})
+	assert.Equal(t, BlockTypeButtons, (&RichBlockButtons{}).BlockType())
+
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockAnimation{})
 	assert.Equal(t, BlockTypeAnimation, (&RichBlockAnimation{}).BlockType())
 
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockAudio{})
 	assert.Equal(t, BlockTypeAudio, (&RichBlockAudio{}).BlockType())
+
+	assert.Implements(t, (*RichBlock)(nil), &RichBlockDocument{})
+	assert.Equal(t, BlockTypeDocument, (&RichBlockDocument{}).BlockType())
 
 	assert.Implements(t, (*RichBlock)(nil), &RichBlockPhoto{})
 	assert.Equal(t, BlockTypePhoto, (&RichBlockPhoto{}).BlockType())
@@ -396,6 +408,9 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockBlockQuotation{})
 	assert.Equal(t, BlockTypeBlockQuotation, (&InputRichBlockBlockQuotation{}).BlockType())
 
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockExpandableBlockQuotation{})
+	assert.Equal(t, BlockTypeExpandableBlockQuotation, (&InputRichBlockExpandableBlockQuotation{}).BlockType())
+
 	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockPullQuotation{})
 	assert.Equal(t, BlockTypePullQuotation, (&InputRichBlockPullQuotation{}).BlockType())
 
@@ -414,11 +429,17 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockMap{})
 	assert.Equal(t, BlockTypeMap, (&InputRichBlockMap{}).BlockType())
 
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockButtons{})
+	assert.Equal(t, BlockTypeButtons, (&InputRichBlockButtons{}).BlockType())
+
 	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockAnimation{})
 	assert.Equal(t, BlockTypeAnimation, (&InputRichBlockAnimation{}).BlockType())
 
 	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockAudio{})
 	assert.Equal(t, BlockTypeAudio, (&InputRichBlockAudio{}).BlockType())
+
+	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockDocument{})
+	assert.Equal(t, BlockTypeDocument, (&InputRichBlockDocument{}).BlockType())
 
 	assert.Implements(t, (*InputRichBlock)(nil), &InputRichBlockPhoto{})
 	assert.Equal(t, BlockTypePhoto, (&InputRichBlockPhoto{}).BlockType())
@@ -1017,7 +1038,7 @@ func TestTypesConstants(t *testing.T) {
 			MarkupTypeReplyKeyboard, MarkupTypeReplyKeyboardRemove, MarkupTypeInlineKeyboard, MarkupTypeForceReply,
 		},
 		{
-			ButtonStyleDanger, ButtonStyleSuccess, ButtonStylePrimary,
+			ButtonStyleDanger, ButtonStyleSuccess, ButtonStylePrimary, ButtonStyleLink,
 		},
 		{
 			MemberStatusCreator, MemberStatusAdministrator, MemberStatusMember, MemberStatusRestricted,
@@ -1075,7 +1096,8 @@ func TestTypesConstants(t *testing.T) {
 			TextTypeTextMention, TextTypeSubscript, TextTypeSuperscript, TextTypeMarked, TextTypeCode,
 			TextTypeCustomEmoji, TextTypeMathematicalExpression, TextTypeURL, TextTypeEmailAddress,
 			TextTypePhoneNumber, TextTypeBankCardNumber, TextTypeMention, TextTypeHashtag, TextTypeCashtag,
-			TextTypeBotCommand, TextTypeAnchor, TextTypeAnchorLink, TextTypeReference, TextTypeReferenceLink,
+			TextTypeBotCommand, TextTypeButton, TextTypeAnchor, TextTypeAnchorLink, TextTypeReference,
+			TextTypeReferenceLink,
 		},
 		{
 			CellAlignLeft, CellAlignCenter, CellAlignRight,
@@ -1086,9 +1108,9 @@ func TestTypesConstants(t *testing.T) {
 		{
 			BlockTypeParagraph, BlockTypeSectionHeading, BlockTypePreformatted, BlockTypeFooter, BlockTypeDivider,
 			BlockTypeMathematicalExpression, BlockTypeAnchor, BlockTypeList, BlockTypeBlockQuotation,
-			BlockTypePullQuotation, BlockTypeCollage, BlockTypeSlideshow, BlockTypeTable, BlockTypeDetails,
-			BlockTypeMap, BlockTypeAnimation, BlockTypeAudio, BlockTypePhoto, BlockTypeVideo, BlockTypeVoiceNote,
-			BlockTypeThinking,
+			BlockTypeExpandableBlockQuotation, BlockTypePullQuotation, BlockTypeCollage, BlockTypeSlideshow,
+			BlockTypeTable, BlockTypeDetails, BlockTypeMap, BlockTypeButtons, BlockTypeAnimation, BlockTypeAudio,
+			BlockTypeDocument, BlockTypePhoto, BlockTypeVideo, BlockTypeVoiceNote, BlockTypeThinking,
 		},
 		{
 			OrderedListDecimal, OrderedListLowerAlpha, OrderedListUpperAlpha, OrderedListLowerRoman,
