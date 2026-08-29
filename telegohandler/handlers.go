@@ -523,3 +523,26 @@ func (h *HandlerGroup) HandleSubscription(handler SubscriptionHandler, predicate
 func (h *BotHandler) HandleSubscription(handler SubscriptionHandler, predicates ...Predicate) {
 	h.baseGroup.HandleSubscription(handler, predicates...)
 }
+
+// StoppedMessageGenerationHandler handles stopped message generation that came from bot
+type StoppedMessageGenerationHandler func(ctx *Context, message telego.MessageGenerationStopped) error
+
+// HandleStoppedMessageGeneration same as [BotHandler.Handle], but assumes that the update contains stopped message
+// generation
+func (h *HandlerGroup) HandleStoppedMessageGeneration(
+	handler StoppedMessageGenerationHandler, predicates ...Predicate,
+) {
+	if handler == nil {
+		panic("Telego: nil stopped message generation handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.StoppedMessageGeneration)
+	}, append([]Predicate{AnyStoppedMessageGeneration()}, predicates...)...)
+}
+
+// HandleStoppedMessageGeneration same as [BotHandler.Handle], but assumes that the update contains stopped message
+// generation
+func (h *BotHandler) HandleStoppedMessageGeneration(handler StoppedMessageGenerationHandler, predicates ...Predicate) {
+	h.baseGroup.HandleStoppedMessageGeneration(handler, predicates...)
+}

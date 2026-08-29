@@ -738,6 +738,13 @@ func AnySubscription() Predicate {
 	}
 }
 
+// AnyStoppedMessageGeneration is true if stopped message generation isn't nil
+func AnyStoppedMessageGeneration() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.StoppedMessageGeneration != nil
+	}
+}
+
 func baseAnyMessageWithCaption(message *telego.Message) bool {
 	return message != nil && message.Caption != ""
 }

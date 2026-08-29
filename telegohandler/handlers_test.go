@@ -558,3 +558,24 @@ func TestBotHandler_HandleSubscription(t *testing.T) {
 	bh.updates = updates
 	testHandler(t, bh, wg)
 }
+
+func TestBotHandler_HandleStoppedMessageGeneration(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleStoppedMessageGeneration(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := StoppedMessageGenerationHandler(func(_ *Context, _ telego.MessageGenerationStopped) error {
+		wg.Done()
+		return nil
+	})
+
+	bh.HandleStoppedMessageGeneration(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{StoppedMessageGeneration: &telego.MessageGenerationStopped{}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}

@@ -1099,6 +1099,18 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_stopped_message_generation_matches",
+			predicate: AnyStoppedMessageGeneration(),
+			update:    telego.Update{StoppedMessageGeneration: &telego.MessageGenerationStopped{}},
+			matches:   true,
+		},
+		{
+			name:      "any_stopped_message_generation_not_matches",
+			predicate: AnyStoppedMessageGeneration(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
 			name:      "any_message_with_caption_matches",
 			predicate: AnyMessageWithCaption(),
 			update:    telego.Update{Message: &telego.Message{Caption: testText}},
