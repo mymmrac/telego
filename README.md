@@ -284,6 +284,8 @@ For running multiple bots from a single server, see [this](examples/multi_bot_we
 > It's as simple as `ngrok http 8080`.
 > Or follow [Telego + Ngrok example](examples/ngrok/main.go) using [ngrok/ngrok-go](https://github.com/ngrok/ngrok-go)
 > for most convenient bot testing.
+> Or, with nothing to install and no account, use [tunnl.gg](https://tunnl.gg) over SSH:
+> `ssh -t -R 80:localhost:8080 proxy.tunnl.gg`.
 
 > Tip: You may wish to use [Let's Encrypt](https://letsencrypt.org) in order to generate your free TLS certificate.
 
