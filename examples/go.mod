@@ -5,7 +5,7 @@ go 1.26.7
 require (
 	github.com/gofiber/fiber/v3 v3.6.1
 	github.com/mymmrac/telego v1.12.1
-	github.com/valyala/fasthttp v1.75.0
+	github.com/valyala/fasthttp v1.76.0
 	golang.ngrok.com/ngrok v1.13.0
 )
 
