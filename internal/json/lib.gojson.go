@@ -2,7 +2,7 @@
 
 package json
 
-import "github.com/grbit/go-json"
+import "github.com/goccy/go-json"
 
 func init() {
 	Marshal = json.Marshal

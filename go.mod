@@ -4,15 +4,12 @@ go 1.26.11
 
 require (
 	github.com/bytedance/sonic v1.15.5
+	github.com/goccy/go-json v0.12.0
 	github.com/stretchr/testify v1.12.1
 	github.com/valyala/fasthttp v1.78.0
 	github.com/valyala/fastjson v1.6.10
 	go.uber.org/mock v0.6.0
 )
-
-// Temporary fix for issue https://github.com/goccy/go-json/issues/405
-// require github.com/goccy/go-json v0.10.2
-require github.com/grbit/go-json v0.11.0
 
 require (
 	github.com/bytedance/gopkg v0.1.3 // indirect
