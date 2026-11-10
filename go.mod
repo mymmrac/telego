@@ -1,6 +1,6 @@
 module github.com/mymmrac/telego
 
-go 1.26.7
+go 1.26.11
 
 require (
 	github.com/bytedance/sonic v1.15.5
