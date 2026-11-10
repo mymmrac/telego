@@ -2125,7 +2125,7 @@ func TestPostStoryParams_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithAreas([]StoryArea{{Position: StoryAreaPosition{XPercentage: 1.0}}}...).
+		WithAreas([]StoryArea{{Position: AreaPosition{XPercentage: 1.0}}}...).
 		WithPostToChatPage().
 		WithProtectContent()
 
@@ -2136,7 +2136,7 @@ func TestPostStoryParams_Setters(t *testing.T) {
 		Caption:              "Caption",
 		ParseMode:            "ParseMode",
 		CaptionEntities:      []MessageEntity{{Type: "CaptionEntities"}},
-		Areas:                []StoryArea{{Position: StoryAreaPosition{XPercentage: 1.0}}},
+		Areas:                []StoryArea{{Position: AreaPosition{XPercentage: 1.0}}},
 		PostToChatPage:       true,
 		ProtectContent:       true,
 	}, p)
@@ -2169,7 +2169,7 @@ func TestEditStoryParams_Setters(t *testing.T) {
 		WithCaption("Caption").
 		WithParseMode("ParseMode").
 		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
-		WithAreas([]StoryArea{{Position: StoryAreaPosition{XPercentage: 1.0}}}...)
+		WithAreas([]StoryArea{{Position: AreaPosition{XPercentage: 1.0}}}...)
 
 	assert.Equal(t, &EditStoryParams{
 		BusinessConnectionID: "BusinessConnectionID",
@@ -2178,7 +2178,7 @@ func TestEditStoryParams_Setters(t *testing.T) {
 		Caption:              "Caption",
 		ParseMode:            "ParseMode",
 		CaptionEntities:      []MessageEntity{{Type: "CaptionEntities"}},
-		Areas:                []StoryArea{{Position: StoryAreaPosition{XPercentage: 1.0}}},
+		Areas:                []StoryArea{{Position: AreaPosition{XPercentage: 1.0}}},
 	}, e)
 }
 

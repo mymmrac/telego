@@ -78,6 +78,12 @@ type Update struct {
 	// CallbackQuery - Optional. New incoming callback query
 	CallbackQuery *CallbackQuery `json:"callback_query,omitempty"`
 
+	// WidgetQuery - Optional. New incoming query from a widget in a message sent by the bot or via the bot
+	WidgetQuery *WidgetQuery `json:"widget_query,omitempty"`
+
+	// SharedWidgetQuery - Optional. New incoming query from a forwarded message with a shared widget
+	SharedWidgetQuery *SharedWidgetQuery `json:"shared_widget_query,omitempty"`
+
 	// ShippingQuery - Optional. New incoming shipping query. Only for invoices with flexible price.
 	ShippingQuery *ShippingQuery `json:"shipping_query,omitempty"`
 
@@ -530,6 +536,14 @@ type ChatFullInfo struct {
 	// Community - Optional. The Community (https://core.telegram.org/bots/api#community) to which the chat
 	// belongs
 	Community *Community `json:"community,omitempty"`
+
+	// TonWalletCard - Optional. For private chats, the TON wallet card of the user, which is shown on their
+	// profile page
+	TonWalletCard *TonWalletCard `json:"ton_wallet_card,omitempty"`
+
+	// ShareTheme - Optional. For private chats, supergroups and channels, the theme of the screen for sharing a
+	// link to the user or the chat; omitted if the default theme is used
+	ShareTheme ChatShareTheme `json:"share_theme,omitempty"`
 }
 
 // unknownReactionTypeErr is an error for unknown reaction type
@@ -548,8 +562,8 @@ func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 	type uChatFullInfo ChatFullInfo
 	var uc uChatFullInfo
 
-	if value.Exists("available_reactions") {
-		availableReactions := value.GetArray("available_reactions")
+	if v := value.Get("available_reactions"); v != nil {
+		availableReactions := v.GetArray()
 		uc.AvailableReactions = make([]ReactionType, len(availableReactions))
 		for i, reaction := range availableReactions {
 			reactionType := string(reaction.GetStringBytes("type"))
@@ -563,6 +577,18 @@ func (c *ChatFullInfo) UnmarshalJSON(data []byte) error {
 			default:
 				return fmt.Errorf(unknownReactionTypeErr, reactionType)
 			}
+		}
+	}
+
+	if v := value.Get("share_theme"); v != nil {
+		shareThemeType := string(v.GetStringBytes("type"))
+		switch shareThemeType {
+		case ThemeTypeEmoji:
+			uc.ShareTheme = &ChatShareThemeEmoji{}
+		case ThemeTypeUniqueGift:
+			uc.ShareTheme = &ChatShareThemeUniqueGift{}
+		default:
+			return fmt.Errorf("unknown share theme type: %q", shareThemeType)
 		}
 	}
 
@@ -765,14 +791,19 @@ type Message struct {
 	// Voice - Optional. Message is a voice message, information about the file
 	Voice *Voice `json:"voice,omitempty"`
 
-	// Caption - Optional. Caption for the animation, audio, document, paid media, photo, video or voice
+	// Widget - Optional. Message is an HTML widget, information about the widget
+	Widget *Widget `json:"widget,omitempty"`
+
+	// Caption - Optional. Caption for the animation, audio, document, live photo, paid media, photo, video,
+	// voice, or widget
 	Caption string `json:"caption,omitempty"`
 
 	// CaptionEntities - Optional. For messages with a caption, special entities like usernames, URLs, bot
 	// commands, etc. that appear in the caption
 	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
 
-	// ShowCaptionAboveMedia - Optional. True, if the caption must be shown above the message media
+	// ShowCaptionAboveMedia - Optional. True, if the caption must be shown above the message media or the
+	// widget
 	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
 
 	// HasMediaSpoiler - Optional. True, if the message media is covered by a spoiler animation
@@ -965,6 +996,10 @@ type Message struct {
 	// PaidMessagePriceChanged - Optional. Service message: the price for paid messages has changed in the chat
 	PaidMessagePriceChanged *PaidMessagePriceChanged `json:"paid_message_price_changed,omitempty"`
 
+	// PaidMessagesWaived - Optional. Service message: the sender of the message used a link of the other user,
+	// which allows sending messages to the user without paying Telegram Stars
+	PaidMessagesWaived *PaidMessagesWaived `json:"paid_messages_waived,omitempty"`
+
 	// PollOptionAdded - Optional. Service message: answer option was added to a poll
 	PollOptionAdded *PollOptionAdded `json:"poll_option_added,omitempty"`
 
@@ -985,6 +1020,9 @@ type Message struct {
 
 	// SuggestedPostRefunded - Optional. Service message: payment for a suggested post was refunded
 	SuggestedPostRefunded *SuggestedPostRefunded `json:"suggested_post_refunded,omitempty"`
+
+	// TonWalletTransfer - Optional. Service message: a transfer with a TON wallet
+	TonWalletTransfer *TonWalletTransfer `json:"ton_wallet_transfer,omitempty"`
 
 	// VideoChatScheduled - Optional. Service message: video chat scheduled
 	VideoChatScheduled *VideoChatScheduled `json:"video_chat_scheduled,omitempty"`
@@ -1165,7 +1203,8 @@ type MessageEntity struct {
 	// Type - Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or
 	// #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot),
 	// “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number”
-	// (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text),
+	// (+1-212-555-0123), “bank_card_number” (bank card number), “ton_address” (address in the TON
+	// blockchain), “bold” (bold text), “italic” (italic text), “underline” (underlined text),
 	// “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block
 	// quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth
 	// string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for
@@ -1212,6 +1251,8 @@ const (
 	EntityTypeURL                  = "url"
 	EntityTypeEmail                = "email"
 	EntityTypePhoneNumber          = "phone_number"
+	EntityTypeBankCardNumber       = "bank_card_number"
+	EntityTypeTonAddress           = "ton_address"
 	EntityTypeBold                 = "bold"
 	EntityTypeItalic               = "italic"
 	EntityTypeUnderline            = "underline"
@@ -1230,20 +1271,62 @@ const (
 // TextQuote - This object contains information about the quoted part of a message that is replied to by the
 // given message.
 type TextQuote struct {
-	// Text - Text of the quoted part of a message that is replied to by the given message
+	// Text - Text of the quoted part of a message that is replied to by the given message; may be empty if the
+	// quote was chosen from a rich message
 	Text string `json:"text"`
 
 	// Entities - Optional. Special entities that appear in the quote. Currently, only bold, italic, underline,
 	// strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes.
 	Entities []MessageEntity `json:"entities,omitempty"`
 
+	// RichTexts - Optional. Rich text of the quote if it was chosen from a rich message
+	// (https://core.telegram.org/bots/api#richmessage). May contain only plain text, RichTextBold
+	// (https://core.telegram.org/bots/api#richtextbold), RichTextItalic
+	// (https://core.telegram.org/bots/api#richtextitalic), RichTextUnderline
+	// (https://core.telegram.org/bots/api#richtextunderline), RichTextStrikethrough
+	// (https://core.telegram.org/bots/api#richtextstrikethrough), RichTextSpoiler
+	// (https://core.telegram.org/bots/api#richtextspoiler), RichTextSubscript
+	// (https://core.telegram.org/bots/api#richtextsubscript), RichTextSuperscript
+	// (https://core.telegram.org/bots/api#richtextsuperscript), RichTextDateTime
+	// (https://core.telegram.org/bots/api#richtextdatetime), RichTextCustomEmoji
+	// (https://core.telegram.org/bots/api#richtextcustomemoji), RichTextMathematicalExpression
+	// (https://core.telegram.org/bots/api#richtextmathematicalexpression), and arrays of them.
+	RichTexts []RichText `json:"rich_texts,omitempty"`
+
 	// Position - Approximate quote position in the original message in UTF-16 code units as specified by the
-	// sender
+	// sender. For quotes from rich messages, it is the position in the text formed by joining plain texts of all
+	// quotable texts of the message, separated by line feeds.
 	Position int `json:"position"`
 
 	// IsManual - Optional. True, if the quote was chosen manually by the message sender. Otherwise, the quote
 	// was added automatically by the server.
 	IsManual bool `json:"is_manual,omitempty"`
+}
+
+// UnmarshalJSON converts JSON to TextQuote
+func (t *TextQuote) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uTextQuote TextQuote
+	var ut uTextQuote
+
+	ut.RichTexts, err = unmarshalRichTexts(value.Get("rich_texts"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ut); err != nil {
+		return err
+	}
+	*t = TextQuote(ut)
+
+	return nil
 }
 
 // ExternalReplyInfo - This object contains information about a message that is being replied to, which may
@@ -1297,6 +1380,9 @@ type ExternalReplyInfo struct {
 
 	// Voice - Optional. Message is a voice message, information about the file
 	Voice *Voice `json:"voice,omitempty"`
+
+	// Widget - Optional. Message is an HTML widget, information about the widget
+	Widget *Widget `json:"widget,omitempty"`
 
 	// HasMediaSpoiler - Optional. True, if the message media is covered by a spoiler animation
 	HasMediaSpoiler bool `json:"has_media_spoiler,omitempty"`
@@ -1380,7 +1466,7 @@ type ReplyParameters struct {
 	MessageID int `json:"message_id,omitempty"`
 
 	// ChatID - Optional. If the message to be replied to is from a different chat, unique identifier for the
-	// chat or username of the bot, supergroup or channel in the format @username. Not supported for messages sent
+	// chat or username of the bot, supergroup, or channel in the format @username. Not supported for messages sent
 	// on behalf of a business account, messages from channel direct messages chats and ephemeral messages.
 	ChatID ChatID `json:"chat_id,omitzero"`
 
@@ -1408,7 +1494,35 @@ type ReplyParameters struct {
 	// specified instead of quote_parse_mode.
 	QuoteEntities []MessageEntity `json:"quote_entities,omitempty"`
 
-	// QuotePosition - Optional. Position of the quote in the original message in UTF-16 code units
+	// QuoteRichTexts - Optional. A JSON-serialized list of quoted parts of the rich message
+	// (https://core.telegram.org/bots/api#richmessage) to be replied to. Must contain one element for each quoted
+	// text of the message in the order of their appearance. Each of the following is a separate quoted text: the
+	// text of a paragraph, a heading, a preformatted block, a footer, or a mathematical expression; the text and
+	// the credit of a block quotation or a pull quotation; the summary of a details block; the caption and each
+	// cell of a table; the text and the credit of a caption of a media block, a collage, a slideshow, or a map.
+	// Texts of blocks nested in lists, block quotations, details, collages, and slideshows are separate quoted
+	// texts too. The first and the last elements can contain only a part of the corresponding text; all other
+	// elements must contain the whole text. Formatting of the quoted parts must be kept, and rich texts must be
+	// nested in the same way as in the message received from the server. Mathematical expressions must be quoted
+	// entirely. Buttons in RichBlockButtons (https://core.telegram.org/bots/api#richblockbuttons), anchors and
+	// dividers can't be quoted. Up to 32 quoted texts with total length up to 1024 characters can be specified.
+	// Only plain text, RichTextBold (https://core.telegram.org/bots/api#richtextbold), RichTextItalic
+	// (https://core.telegram.org/bots/api#richtextitalic), RichTextUnderline
+	// (https://core.telegram.org/bots/api#richtextunderline), RichTextStrikethrough
+	// (https://core.telegram.org/bots/api#richtextstrikethrough), RichTextSpoiler
+	// (https://core.telegram.org/bots/api#richtextspoiler), RichTextSubscript
+	// (https://core.telegram.org/bots/api#richtextsubscript), RichTextSuperscript
+	// (https://core.telegram.org/bots/api#richtextsuperscript), RichTextDateTime
+	// (https://core.telegram.org/bots/api#richtextdatetime), RichTextCustomEmoji
+	// (https://core.telegram.org/bots/api#richtextcustomemoji), RichTextMathematicalExpression
+	// (https://core.telegram.org/bots/api#richtextmathematicalexpression), and arrays of them are kept in the
+	// quote; other rich text types are replaced with their text. If non-empty, then quote, quote_parse_mode and
+	// quote_entities are ignored.
+	QuoteRichTexts []RichText `json:"quote_rich_texts,omitempty"`
+
+	// QuotePosition - Optional. Position of the quote in the original message in UTF-16 code units. For quotes
+	// from rich messages, it is the position in the text formed by joining plain texts of all quotable texts of the
+	// message, separated by line feeds.
 	QuotePosition int `json:"quote_position,omitempty"`
 
 	// ChecklistTaskID - Optional. Identifier of the specific checklist task to be replied to
@@ -1418,14 +1532,48 @@ type ReplyParameters struct {
 	PollOptionID string `json:"poll_option_id,omitempty"`
 }
 
+// UnmarshalJSON converts JSON to ReplyParameters
+func (r *ReplyParameters) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uReplyParameters ReplyParameters
+	var ur uReplyParameters
+
+	ur.QuoteRichTexts, err = unmarshalRichTexts(value.Get("quote_rich_texts"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ur); err != nil {
+		return err
+	}
+	*r = ReplyParameters(ur)
+
+	return nil
+}
+
 // EphemeralMessageParameters - The parameters of an ephemeral message.
 type EphemeralMessageParameters struct {
-	// ReceiverUserID - Identifier of the user who will receive the message. It is not guaranteed that the user
-	// will receive the message, especially if they are offline. See here
-	// (https://core.telegram.org/bots/api#ephemeral-messages-and-commands) for more details.
-	ReceiverUserID int `json:"receiver_user_id"`
+	// ReceiverUserID - Optional. Identifier of the user who will receive the message; required unless the
+	// message is sent as an ephemeral reply to a callback query. If omitted, then the parameter chat_id of the
+	// method is ignored. If specified together with callback_query_id, then it must be the identifier of the user
+	// who pressed the button. Must be omitted for messages sent in chats where the bot isn't a member, unless the
+	// message is a reply to an ephemeral message. It is not guaranteed that the user will receive the message,
+	// especially if they are offline. See here (https://core.telegram.org/bots/api#ephemeral-messages-and-commands)
+	// for more details.
+	ReceiverUserID int `json:"receiver_user_id,omitempty"`
 
-	// CallbackQueryID - Optional. Identifier of the callback query which triggered the message, if any
+	// CallbackQueryID - Optional. Identifier of the callback query which triggered the message, if any. If
+	// specified and receiver_user_id is omitted, then the message is sent as an ephemeral reply to the callback
+	// query and will be shown only to the user who pressed the button. Ephemeral replies can't be sent to callback
+	// queries from messages in channel direct messages chats. The bot must still answer the callback query using
+	// answerCallbackQuery (https://core.telegram.org/bots/api#answercallbackquery).
 	CallbackQueryID string `json:"callback_query_id,omitempty"`
 
 	// ReplaceCallbackQueryMessage - Optional. Pass True if the ephemeral message must be shown in place of the
@@ -1822,6 +1970,32 @@ type Voice struct {
 	// have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit
 	// integer or double-precision float type are safe for storing this value.
 	FileSize int64 `json:"file_size,omitempty"`
+}
+
+// Widget - This object describes an HTML widget (https://core.telegram.org/bots/widgets).
+type Widget struct {
+	// ID - Optional. Unique identifier of the shared widget, which can be used to send the widget again using
+	// the method sendSharedWidget (https://core.telegram.org/bots/api#sendsharedwidget); omitted if the widget
+	// isn't shared
+	ID string `json:"id,omitempty"`
+
+	// Width - Optional. Width of the widget in logical pixels; omitted if the widget must occupy the whole
+	// width of the message bubble
+	Width int `json:"width,omitempty"`
+
+	// Height - Optional. Height of the widget in logical pixels; omitted if the height of the widget isn't
+	// fixed
+	Height int `json:"height,omitempty"`
+
+	// HTML - HTML code of the widget
+	HTML string `json:"html"`
+
+	// PublicData - Optional. Public data of the widget, which is available wherever the widget is shown. All
+	// messages with a shared widget have the same public data.
+	PublicData string `json:"public_data,omitempty"`
+
+	// ChatData - Optional. Data of the widget, which is specific to the message
+	ChatData string `json:"chat_data,omitempty"`
 }
 
 // PaidMediaInfo - Describes the paid media added to a message.
@@ -3151,6 +3325,27 @@ type SuggestedPostRefunded struct {
 	Reason string `json:"reason"`
 }
 
+// PaidMessagesWaived - Describes a service message about the sender of the message using a link of the other
+// user, which allows sending messages to the user without paying Telegram Stars. Currently holds no
+// information.
+type PaidMessagesWaived struct{}
+
+// TonWalletTransfer - Describes a service message about a transfer with a TON wallet.
+type TonWalletTransfer struct {
+	// TransactionID - Unique identifier of the transaction; may be empty if the transfer hasn't been sent yet
+	TransactionID string `json:"transaction_id"`
+
+	// PeerAddress - Address of the transfer peer in the TON blockchain
+	PeerAddress string `json:"peer_address"`
+
+	// Amount - The amount of transferred cryptocurrency, in the smallest units of the cryptocurrency, as a
+	// decimal number; negative for outgoing transfers
+	Amount string `json:"amount"`
+
+	// Comment - Optional. Comment added to the transfer; omitted if the comment is encrypted
+	Comment string `json:"comment,omitempty"`
+}
+
 // GiveawayCreated - This object represents a service message about the creation of a scheduled giveaway.
 type GiveawayCreated struct {
 	// PrizeStarCount - Optional. The number of Telegram Stars to be split between giveaway winners; for
@@ -3572,7 +3767,11 @@ type KeyboardButtonRequestManagedBot struct {
 	// SuggestedName - Optional. Suggested name for the bot
 	SuggestedName string `json:"suggested_name,omitempty"`
 
-	// SuggestedUsername - Optional. Suggested username for the bot
+	// SuggestedUsername - Optional. Suggested username for the bot. The username must end with “bot”. If
+	// the user creating the bot has a Telegram Premium subscription, then the username can also end with
+	// “agent”, “ai”, “app”, “game”, or “gay”; in this case, the username will be assigned to
+	// the bot as a secondary username, and a regular username ending with “bot” will be assigned to the bot
+	// automatically.
 	SuggestedUsername string `json:"suggested_username,omitempty"`
 }
 
@@ -3662,7 +3861,7 @@ type InlineKeyboardButton struct {
 	// launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of
 	// the user using the method answerWebAppQuery (https://core.telegram.org/bots/api#answerwebappquery). Available
 	// only in private chats between a user and the bot. Not supported for messages sent on behalf of a business
-	// account.
+	// account and ephemeral messages.
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 
 	// LoginURL - Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement
@@ -3835,6 +4034,235 @@ func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*q = CallbackQuery(uq)
+
+	return nil
+}
+
+// WidgetQueryType - This object describes the type of a query from a widget. Currently, it can be one of
+// WidgetQueryTypeData (https://core.telegram.org/bots/api#widgetquerytypedata)
+// WidgetQueryTypeSignData (https://core.telegram.org/bots/api#widgetquerytypesigndata)
+// WidgetQueryTypeSentTransaction (https://core.telegram.org/bots/api#widgetquerytypesenttransaction)
+type WidgetQueryType interface {
+	// WidgetQueryType returns WidgetQueryType type
+	WidgetQueryType() string
+	// Disallow external implementations
+	iWidgetQueryType()
+}
+
+// Wdiget query types
+const (
+	WidgetQueryData            = "data"
+	WidgetQuerySignData        = "sign_data"
+	WidgetQuerySendTransaction = "sent_transaction"
+)
+
+// WidgetQueryTypeData - The query contains data for the bot.
+type WidgetQueryTypeData struct {
+	// Type - Type of the query, always “data”
+	Type string `json:"type"`
+
+	// WalletCard - Optional. TON wallet card of the user who sent the query, if it was sent to the bot along
+	// with the query
+	WalletCard *TonWalletCard `json:"wallet_card,omitempty"`
+}
+
+// WidgetQueryType returns WidgetQueryType type
+func (w *WidgetQueryTypeData) WidgetQueryType() string {
+	return WidgetQueryData
+}
+
+func (w *WidgetQueryTypeData) iWidgetQueryType() {}
+
+// WidgetQueryTypeSignData - The query contains data signed by a TON wallet of the user who sent the query.
+// The data is signed for the domain bot<bot_id>, where <bot_id> is the identifier of the bot.
+type WidgetQueryTypeSignData struct {
+	// Type - Type of the query, always “sign_data”
+	Type string `json:"type"`
+
+	// Wallet - The wallet that signed the data
+	Wallet WidgetQueryWallet `json:"wallet"`
+
+	// SignData - JSON-serialized signed data
+	SignData string `json:"sign_data"`
+}
+
+// WidgetQueryType returns WidgetQueryType type
+func (w *WidgetQueryTypeSignData) WidgetQueryType() string {
+	return WidgetQuerySignData
+}
+
+func (w *WidgetQueryTypeSignData) iWidgetQueryType() {}
+
+// WidgetQueryTypeSentTransaction - The query notifies the bot about a transaction sent from a TON wallet of
+// the user who sent the query.
+type WidgetQueryTypeSentTransaction struct {
+	// Type - Type of the query, always “sent_transaction”
+	Type string `json:"type"`
+
+	// Wallet - The wallet from which the transaction was sent
+	Wallet WidgetQueryWallet `json:"wallet"`
+
+	// MsgHash - Value of msg_hash of the transaction
+	MsgHash string `json:"msg_hash"`
+}
+
+// WidgetQueryType returns WidgetQueryType type
+func (w *WidgetQueryTypeSentTransaction) WidgetQueryType() string {
+	return WidgetQuerySendTransaction
+}
+
+func (w *WidgetQueryTypeSentTransaction) iWidgetQueryType() {}
+
+// WidgetQueryWallet - This object describes a TON wallet of the user, which is used in a query from a
+// widget.
+type WidgetQueryWallet struct {
+	// Address - Address of the wallet
+	Address string `json:"address"`
+
+	// Amount - Balance of the wallet, in the smallest units of the cryptocurrency, as a decimal number
+	Amount string `json:"amount"`
+
+	// PublicKey - Optional. Hex-encoded public key of the wallet; omitted if unknown
+	PublicKey string `json:"public_key,omitempty"`
+
+	// StateInit - Optional. Base64-encoded serialized StateInit of the wallet contract; omitted if and only if
+	// public_key is omitted
+	StateInit string `json:"state_init,omitempty"`
+}
+
+// WidgetQuery - This object represents an incoming query from a widget in a message sent by the bot or via
+// the bot. Use answerWidgetQuery (https://core.telegram.org/bots/api#answerwidgetquery) to answer the query.
+// Each user can send at most 5 queries per 5 seconds to the bot from all its widgets.
+type WidgetQuery struct {
+	// ID - Unique identifier for this query
+	ID string `json:"id"`
+
+	// From - Sender
+	From User `json:"from"`
+
+	// Chat - Optional. Chat with the message containing the widget; omitted if the widget is in an inline
+	// message
+	Chat *Chat `json:"chat,omitempty"`
+
+	// MessageID - Optional. Identifier of the message containing the widget; omitted if the widget is in an
+	// inline message
+	MessageID int `json:"message_id,omitempty"`
+
+	// InlineMessageID - Optional. Identifier of the inline message containing the widget
+	InlineMessageID string `json:"inline_message_id,omitempty"`
+
+	// ChatInstance - Global identifier, uniquely corresponding to the chat to which the message with the widget
+	// was sent
+	ChatInstance string `json:"chat_instance"`
+
+	// ChatType - Optional. For widgets in inline messages, type of the chat to which the message was sent. Can
+	// be either “sender” for a private chat with the inline query sender, “private”, “group”,
+	// “supergroup”, or “channel”.
+	ChatType string `json:"chat_type,omitempty"`
+
+	// Type - Type of the query
+	Type WidgetQueryType `json:"type"`
+
+	// Data - Data of the query, 1-64 bytes
+	Data string `json:"data"`
+
+	// WidgetID - Optional. Unique identifier of the shared widget, which sent the query; omitted if the widget
+	// isn't shared
+	WidgetID string `json:"widget_id,omitempty"`
+}
+
+// UnmarshalJSON converts JSON to WidgetQuery
+func (w *WidgetQuery) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	v := value.Get("type")
+	if v == nil {
+		return errors.New(noTypeErr)
+	}
+
+	type uWidgetQuery WidgetQuery
+	var uw uWidgetQuery
+
+	widgetQueryType := string(v.GetStringBytes("type"))
+	switch widgetQueryType {
+	case WidgetQueryData:
+		uw.Type = &WidgetQueryTypeData{}
+	case WidgetQuerySignData:
+		uw.Type = &WidgetQueryTypeSignData{}
+	case WidgetQuerySendTransaction:
+		uw.Type = &WidgetQueryTypeSentTransaction{}
+	default:
+		return fmt.Errorf("unknown widget query type: %q", widgetQueryType)
+	}
+
+	if err = json.Unmarshal(data, &uw); err != nil {
+		return err
+	}
+	*w = WidgetQuery(uw)
+
+	return nil
+}
+
+// SharedWidgetQuery - This object represents an incoming query from a forwarded message with a shared widget
+// created by the bot. Use answerWidgetQuery (https://core.telegram.org/bots/api#answerwidgetquery) to answer
+// the query. Each user can send at most 5 queries per 5 seconds to the bot from all its widgets.
+type SharedWidgetQuery struct {
+	// ID - Unique identifier for this query
+	ID string `json:"id"`
+
+	// From - Sender
+	From User `json:"from"`
+
+	// Type - Type of the query
+	Type WidgetQueryType `json:"type"`
+
+	// Data - Data of the query, 1-64 bytes
+	Data string `json:"data"`
+
+	// WidgetID - Unique identifier of the shared widget, which sent the query
+	WidgetID string `json:"widget_id"`
+}
+
+// UnmarshalJSON converts JSON to SharedWidgetQuery
+func (w *SharedWidgetQuery) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	v := value.Get("type")
+	if v == nil {
+		return errors.New(noTypeErr)
+	}
+
+	type uSharedWidgetQuery SharedWidgetQuery
+	var uw uSharedWidgetQuery
+
+	widgetQueryType := string(v.GetStringBytes("type"))
+	switch widgetQueryType {
+	case WidgetQueryData:
+		uw.Type = &WidgetQueryTypeData{}
+	case WidgetQuerySignData:
+		uw.Type = &WidgetQueryTypeSignData{}
+	case WidgetQuerySendTransaction:
+		uw.Type = &WidgetQueryTypeSentTransaction{}
+	default:
+		return fmt.Errorf("unknown widget query type: %q", widgetQueryType)
+	}
+
+	if err = json.Unmarshal(data, &uw); err != nil {
+		return err
+	}
+	*w = SharedWidgetQuery(uw)
 
 	return nil
 }
@@ -4383,8 +4811,8 @@ type ChatMemberRestricted struct {
 	// CanSendPolls - True, if the user is allowed to send polls and checklists
 	CanSendPolls bool `json:"can_send_polls"`
 
-	// CanSendOtherMessages - True, if the user is allowed to send animations, games, stickers and use inline
-	// bots
+	// CanSendOtherMessages - True, if the user is allowed to send animations, games, stickers, widgets and use
+	// inline bots
 	CanSendOtherMessages bool `json:"can_send_other_messages"`
 
 	// CanAddWebPagePreviews - True, if the user is allowed to add web page previews to their messages
@@ -4546,8 +4974,8 @@ type ChatPermissions struct {
 	// CanSendPolls - Optional. True, if the user is allowed to send polls and checklists
 	CanSendPolls *bool `json:"can_send_polls,omitempty"`
 
-	// CanSendOtherMessages - Optional. True, if the user is allowed to send animations, games, stickers and use
-	// inline bots
+	// CanSendOtherMessages - Optional. True, if the user is allowed to send animations, games, stickers,
+	// widgets and use inline bots
 	CanSendOtherMessages *bool `json:"can_send_other_messages,omitempty"`
 
 	// CanAddWebPagePreviews - Optional. True, if the user is allowed to add web page previews to their messages
@@ -4646,25 +5074,245 @@ type UserRating struct {
 	NextLevelRating int `json:"next_level_rating,omitempty"`
 }
 
-// StoryAreaPosition - Describes the position of a clickable area within a story.
-type StoryAreaPosition struct {
-	// XPercentage - The abscissa of the area's center, as a percentage of the media width
+// AreaPosition - Describes the position of a rectangle area on a story media or a TON wallet card.
+type AreaPosition struct {
+	// XPercentage - The abscissa of the area's center, as a percentage of the media or the card width
 	XPercentage float64 `json:"x_percentage"`
 
-	// YPercentage - The ordinate of the area's center, as a percentage of the media height
+	// YPercentage - The ordinate of the area's center, as a percentage of the media or the card height
 	YPercentage float64 `json:"y_percentage"`
 
-	// WidthPercentage - The width of the area's rectangle, as a percentage of the media width
+	// WidthPercentage - The width of the area's rectangle, as a percentage of the media or the card width
 	WidthPercentage float64 `json:"width_percentage"`
 
-	// HeightPercentage - The height of the area's rectangle, as a percentage of the media height
+	// HeightPercentage - The height of the area's rectangle, as a percentage of the media or the card height
 	HeightPercentage float64 `json:"height_percentage"`
 
 	// RotationAngle - The clockwise rotation angle of the rectangle, in degrees; 0-360
 	RotationAngle float64 `json:"rotation_angle"`
 
-	// CornerRadiusPercentage - The radius of the rectangle corner rounding, as a percentage of the media width
+	// CornerRadiusPercentage - The radius of the rectangle corner rounding, as a percentage of the media or the
+	// card width
 	CornerRadiusPercentage float64 `json:"corner_radius_percentage"`
+}
+
+// TonNft - This object represents an NFT in the TON blockchain.
+type TonNft struct {
+	// Address - Address of the NFT
+	Address string `json:"address"`
+
+	// CollectionAddress - Optional. Address of the collection to which the NFT belongs; omitted if unknown
+	CollectionAddress string `json:"collection_address,omitempty"`
+
+	// Index - Index of the NFT among all NFTs from the collection as a decimal number
+	Index string `json:"index"`
+
+	// Name - Name of the NFT
+	Name string `json:"name"`
+
+	// Description - Description of the NFT
+	Description string `json:"description"`
+
+	// Attributes - Optional. Attributes of the NFT
+	Attributes []TonNftAttribute `json:"attributes,omitempty"`
+
+	// Gift - Optional. The unique gift corresponding to the NFT
+	Gift *UniqueGift `json:"gift,omitempty"`
+}
+
+// TonNftAttribute - This object represents an attribute of an NFT in the TON blockchain.
+type TonNftAttribute struct {
+	// TraitType - Trait type of the attribute
+	TraitType string `json:"trait_type"`
+
+	// Value - Value of the attribute
+	Value string `json:"value"`
+}
+
+// TonWalletCardSticker - This object describes a sticker on a TON wallet card.
+type TonWalletCardSticker struct {
+	// Position - Position of the sticker on the card
+	Position AreaPosition `json:"position"`
+
+	// Nft - The NFT shown as the sticker
+	Nft TonNft `json:"nft"`
+}
+
+// TonWalletCard - This object describes a TON wallet card, which is shown on the profile page of a user to
+// everyone.
+type TonWalletCard struct {
+	// Address - Address of the wallet
+	Address string `json:"address"`
+
+	// Amount - Balance of the wallet, in the smallest units of the cryptocurrency, as a decimal number
+	Amount string `json:"amount"`
+
+	// Stickers - Stickers placed on the card
+	Stickers []TonWalletCardSticker `json:"stickers"`
+
+	// BackgroundNftAddress - Optional. Address of the NFT of one of the stickers, whose colors must be used for
+	// the card background; omitted if the default background must be used
+	BackgroundNftAddress string `json:"background_nft_address,omitempty"`
+}
+
+// EmojiType - This object describes an emoji. Currently, it can be one of
+// EmojiTypeEmoji (https://core.telegram.org/bots/api#emojitypeemoji)
+// EmojiTypeCustomEmoji (https://core.telegram.org/bots/api#emojitypecustomemoji)
+type EmojiType interface {
+	// EmojiType returns EmojiType type
+	EmojiType() string
+	// Disallow external implementations
+	iEmojiType()
+}
+
+// Emoji types
+const (
+	EmojiKindEmoji       = "emoji"
+	EmojiKindCustomEmoji = "custom_emoji"
+)
+
+// EmojiTypeEmoji - A regular emoji.
+type EmojiTypeEmoji struct {
+	// Type - Type of the emoji, always “emoji”
+	Type string `json:"type"`
+
+	// Emoji - The emoji
+	Emoji string `json:"emoji"`
+}
+
+// EmojiType returns EmojiType type
+func (e *EmojiTypeEmoji) EmojiType() string {
+	return EmojiKindEmoji
+}
+
+func (e *EmojiTypeEmoji) iEmojiType() {}
+
+// EmojiTypeCustomEmoji - A custom emoji.
+type EmojiTypeCustomEmoji struct {
+	// Type - Type of the emoji, always “custom_emoji”
+	Type string `json:"type"`
+
+	// CustomEmojiID - Identifier of the custom emoji. Use getCustomEmojiStickers
+	// (https://core.telegram.org/bots/api#getcustomemojistickers) to get full information about the sticker.
+	CustomEmojiID string `json:"custom_emoji_id"`
+}
+
+// EmojiType returns EmojiType type
+func (e *EmojiTypeCustomEmoji) EmojiType() string {
+	return EmojiKindCustomEmoji
+}
+
+func (e *EmojiTypeCustomEmoji) iEmojiType() {}
+
+// ChatShareTheme - This object describes the theme of the screen for sharing a link to a user or a chat.
+// Currently, it can be one of
+// ChatShareThemeEmoji (https://core.telegram.org/bots/api#chatsharethemeemoji)
+// ChatShareThemeUniqueGift (https://core.telegram.org/bots/api#chatsharethemeuniquegift)
+type ChatShareTheme interface {
+	// ThemeType returns ChatShareTheme type
+	ThemeType() string
+	// Disallow external implementations
+	iChatShareTheme()
+}
+
+// Chat share theme types
+const (
+	ThemeTypeEmoji      = "emoji"
+	ThemeTypeUniqueGift = "unique_gift"
+)
+
+// ChatShareThemeEmoji - The theme with emoji placed on a background.
+type ChatShareThemeEmoji struct {
+	// Type - Type of the theme, always “emoji”
+	Type string `json:"type"`
+
+	// Emojis - The emoji; 0-6 regular or custom emoji
+	Emojis []EmojiType `json:"emojis"`
+
+	// BackgroundBackdropID - Optional. Identifier of the backdrop used as the background; omitted if the
+	// default background is used. Use getChatShareThemeBackdrops
+	// (https://core.telegram.org/bots/api#getchatsharethemebackdrops) to get details about the backdrop.
+	BackgroundBackdropID int `json:"background_backdrop_id,omitempty"`
+}
+
+// ThemeType returns ChatShareTheme type
+func (c *ChatShareThemeEmoji) ThemeType() string {
+	return ThemeTypeEmoji
+}
+
+func (c *ChatShareThemeEmoji) iChatShareTheme() {}
+
+// UnmarshalJSON converts JSON to ChatShareThemeEmoji
+func (c *ChatShareThemeEmoji) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uChatShareThemeEmoji ChatShareThemeEmoji
+	var uc uChatShareThemeEmoji
+
+	if v := value.Get("emojis"); v != nil {
+		emojis := v.GetArray()
+		uc.Emojis = make([]EmojiType, len(emojis))
+		for i, emoji := range emojis {
+			emojiType := string(emoji.GetStringBytes("type"))
+			switch emojiType {
+			case EmojiKindEmoji:
+				uc.Emojis[i] = &EmojiTypeEmoji{}
+			case EmojiKindCustomEmoji:
+				uc.Emojis[i] = &EmojiTypeCustomEmoji{}
+			default:
+				return fmt.Errorf("unknown emoji type: %q", emojiType)
+			}
+		}
+	}
+
+	if err = json.Unmarshal(data, &uc); err != nil {
+		return err
+	}
+	*c = ChatShareThemeEmoji(uc)
+
+	return nil
+}
+
+// ChatShareThemeUniqueGift - The theme based on a unique gift owned by the user or the chat.
+type ChatShareThemeUniqueGift struct {
+	// Type - Type of the theme, always “unique_gift”
+	Type string `json:"type"`
+
+	// Gift - The gift
+	Gift UniqueGift `json:"gift"`
+}
+
+// ThemeType returns ChatShareTheme type
+func (c *ChatShareThemeUniqueGift) ThemeType() string {
+	return ThemeTypeUniqueGift
+}
+
+func (c *ChatShareThemeUniqueGift) iChatShareTheme() {}
+
+// ChatShareThemeBackdrops - This object contains a list of backdrops, which can be used as the background of
+// a theme of the screen for sharing a link to a user or a chat.
+type ChatShareThemeBackdrops struct {
+	// Backdrops - The list of backdrops
+	Backdrops []ChatShareThemeBackdrop `json:"backdrops"`
+}
+
+// ChatShareThemeBackdrop - This object describes a backdrop, which can be used as the background of a theme
+// of the screen for sharing a link to a user or a chat.
+type ChatShareThemeBackdrop struct {
+	// ID - Unique identifier of the backdrop
+	ID int `json:"id"`
+
+	// Name - Name of the backdrop
+	Name string `json:"name"`
+
+	// Colors - Colors of the backdrop
+	Colors UniqueGiftBackdropColors `json:"colors"`
 }
 
 // LocationAddress - Describes the physical address of a location.
@@ -4810,7 +5458,7 @@ func (s *StoryAreaTypeUniqueGift) iStoryAreaType() {}
 // StoryArea - Describes a clickable area on a story media.
 type StoryArea struct {
 	// Position - Position of the area
-	Position StoryAreaPosition `json:"position"`
+	Position AreaPosition `json:"position"`
 
 	// Type - Type of the area
 	Type StoryAreaType `json:"type"`
@@ -7441,6 +8089,7 @@ func (r *RichMessageButton) UnmarshalJSON(data []byte) error {
 // RichTextEmailAddress (https://core.telegram.org/bots/api#richtextemailaddress)
 // RichTextPhoneNumber (https://core.telegram.org/bots/api#richtextphonenumber)
 // RichTextBankCardNumber (https://core.telegram.org/bots/api#richtextbankcardnumber)
+// RichTextTonAddress (https://core.telegram.org/bots/api#richtexttonaddress)
 // RichTextMention (https://core.telegram.org/bots/api#richtextmention)
 // RichTextHashtag (https://core.telegram.org/bots/api#richtexthashtag)
 // RichTextCashtag (https://core.telegram.org/bots/api#richtextcashtag)
@@ -7480,6 +8129,7 @@ const (
 	TextTypePhoneNumber            = "phone_number"
 	TextTypeBankCardNumber         = "bank_card_number"
 	TextTypeMention                = "mention"
+	TextTypeTonAddress             = "ton_address"
 	TextTypeHashtag                = "hashtag"
 	TextTypeCashtag                = "cashtag"
 	TextTypeBotCommand             = "bot_command"
@@ -7549,6 +8199,8 @@ func unmarshalRichText(value *fastjson.Value) (RichText, error) { //nolint:gocyc
 			return &RichTextBankCardNumber{}, nil
 		case TextTypeMention:
 			return &RichTextMention{}, nil
+		case TextTypeTonAddress:
+			return &RichTextTonAddress{}, nil
 		case TextTypeHashtag:
 			return &RichTextHashtag{}, nil
 		case TextTypeCashtag:
@@ -7571,6 +8223,23 @@ func unmarshalRichText(value *fastjson.Value) (RichText, error) { //nolint:gocyc
 	default:
 		return nil, fmt.Errorf("unknown rich text value type: %q", richTextType)
 	}
+}
+
+func unmarshalRichTexts(value *fastjson.Value) ([]RichText, error) {
+	if value == nil {
+		return nil, nil
+	}
+
+	var err error
+	values := value.GetArray()
+	list := make([]RichText, len(values))
+	for i, v := range values {
+		list[i], err = unmarshalRichText(v)
+		if err != nil {
+			return nil, fmt.Errorf("array item %d: %w", i, err)
+		}
+	}
+	return list, nil
 }
 
 // RichTextPlain - A plain text.
@@ -8277,6 +8946,51 @@ func (r *RichTextBankCardNumber) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RichTextBankCardNumber(ui)
+
+	return nil
+}
+
+// RichTextTonAddress - An address in the TON blockchain.
+type RichTextTonAddress struct {
+	// Type - Type of the rich text, always “ton_address”
+	Type string `json:"type"`
+
+	// Text - Text of the address
+	Text RichText `json:"text"`
+
+	// Address - The address
+	Address string `json:"address"`
+}
+
+// TextType return RichText type
+func (r *RichTextTonAddress) TextType() string {
+	return TextTypeTonAddress
+}
+
+func (r *RichTextTonAddress) iRichText() {}
+
+// UnmarshalJSON converts JSON to RichTextMention
+func (r *RichTextTonAddress) UnmarshalJSON(data []byte) error {
+	parser := json.ParserPoll.Get()
+	defer json.ParserPoll.Put(parser)
+
+	value, err := parser.ParseBytes(data)
+	if err != nil {
+		return err
+	}
+
+	type uRichTextTonAddress RichTextTonAddress
+	var ui uRichTextTonAddress
+
+	ui.Text, err = unmarshalRichText(value.Get("text"))
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(data, &ui); err != nil {
+		return err
+	}
+	*r = RichTextTonAddress(ui)
 
 	return nil
 }
@@ -11510,6 +12224,8 @@ func (i *InlineQueryResultCachedAudio) iInlineQueryResult() {}
 // InputVenueMessageContent (https://core.telegram.org/bots/api#inputvenuemessagecontent)
 // InputContactMessageContent (https://core.telegram.org/bots/api#inputcontactmessagecontent)
 // InputInvoiceMessageContent (https://core.telegram.org/bots/api#inputinvoicemessagecontent)
+// InputWidgetMessageContent (https://core.telegram.org/bots/api#inputwidgetmessagecontent)
+// InputSharedWidgetMessageContent (https://core.telegram.org/bots/api#inputsharedwidgetmessagecontent)
 type InputMessageContent interface {
 	// ContentType returns InputMessageContent type
 	ContentType() string
@@ -11519,12 +12235,14 @@ type InputMessageContent interface {
 
 // InputMessageContent types
 const (
-	ContentTypeText     = "InputTextMessage"
-	ContentTypeRich     = "InputRichMessage"
-	ContentTypeLocation = "InputLocationMessage"
-	ContentTypeVenue    = "InputVenueMessage"
-	ContentTypeContact  = "InputContactMessage"
-	ContentTypeInvoice  = "InputInvoiceMessage"
+	ContentTypeText         = "InputTextMessage"
+	ContentTypeRich         = "InputRichMessage"
+	ContentTypeLocation     = "InputLocationMessage"
+	ContentTypeVenue        = "InputVenueMessage"
+	ContentTypeContact      = "InputContactMessage"
+	ContentTypeInvoice      = "InputInvoiceMessage"
+	ContentTypeWidget       = "InputWidgetMessage"
+	ContentTypeSharedWidget = "InputSharedWidgetMessage"
 )
 
 // InputTextMessageContent - Represents the content (https://core.telegram.org/bots/api#inputmessagecontent)
@@ -11754,6 +12472,95 @@ func (i *InputInvoiceMessageContent) ContentType() string {
 }
 
 func (i *InputInvoiceMessageContent) iInputMessageContent() {}
+
+// InputWidgetMessageContent - Represents the content
+// (https://core.telegram.org/bots/api#inputmessagecontent) of a message with an HTML widget
+// (https://core.telegram.org/bots/widgets) to be sent as the result of an inline query. Currently, widgets
+// can't be sent in response to inline queries in the production environment.
+type InputWidgetMessageContent struct {
+	// HTML - HTML code of the widget, 1-32768 bytes. The code must not exceed 4096 bytes when compressed by
+	// zlib with the maximum compression level.
+	HTML string `json:"html"`
+
+	// Width - Optional. Width of the widget in logical pixels; omit if the widget must occupy the whole width
+	// of the message bubble. The width is clamped by the app to the range from 200 to the maximum width of the
+	// message bubble.
+	Width int `json:"width,omitempty"`
+
+	// Height - Optional. Height of the widget in logical pixels; omit if the height of the widget isn't fixed.
+	// The height is clamped by the app to the range 50-600.
+	Height int `json:"height,omitempty"`
+
+	// PublicData - Optional. Public data of the widget, 0-1024 bytes, which will be available wherever the
+	// widget is shown. If the widget is shared, then all messages with it will have the same public data.
+	PublicData string `json:"public_data,omitempty"`
+
+	// ChatData - Optional. Data of the widget, which is specific to the message, 0-1024 bytes
+	ChatData string `json:"chat_data,omitempty"`
+
+	// Caption - Optional. Widget caption, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the widget caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
+	// instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the widget
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+
+	// AllowQueries - Optional. Pass True to allow the widget to send queries to the bot
+	AllowQueries bool `json:"allow_queries,omitempty"`
+
+	// IsShared - Optional. Pass True to create a shared widget. Each message sent from the result creates a
+	// separate shared widget, whose identifier is received by the bot only in the field widget_id of queries from
+	// the widget. To send an existing shared widget in response to an inline query, use
+	// InputSharedWidgetMessageContent (https://core.telegram.org/bots/api#inputsharedwidgetmessagecontent) instead.
+	IsShared bool `json:"is_shared,omitempty"`
+}
+
+// ContentType returns InputMessageContent type
+func (i *InputWidgetMessageContent) ContentType() string {
+	return ContentTypeWidget
+}
+
+func (i *InputWidgetMessageContent) iInputMessageContent() {}
+
+// InputSharedWidgetMessageContent - Represents the content
+// (https://core.telegram.org/bots/api#inputmessagecontent) of a message with a shared widget to be sent as the
+// result of an inline query. Currently, widgets can't be sent in response to inline queries in the production
+// environment.
+type InputSharedWidgetMessageContent struct {
+	// WidgetID - Unique identifier of the shared widget created by the bot
+	WidgetID string `json:"widget_id"`
+
+	// ChatData - Optional. Data of the widget, which is specific to the message, 0-1024 bytes
+	ChatData string `json:"chat_data,omitempty"`
+
+	// Caption - Optional. Widget caption, 0-1024 characters after entities parsing
+	Caption string `json:"caption,omitempty"`
+
+	// ParseMode - Optional. Mode for parsing entities in the widget caption. See formatting options
+	// (https://core.telegram.org/bots/api#formatting-options) for more details.
+	ParseMode string `json:"parse_mode,omitempty"`
+
+	// CaptionEntities - Optional. List of special entities that appear in the caption, which can be specified
+	// instead of parse_mode
+	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
+
+	// ShowCaptionAboveMedia - Optional. Pass True if the caption must be shown above the widget
+	ShowCaptionAboveMedia bool `json:"show_caption_above_media,omitempty"`
+}
+
+// ContentType returns InputMessageContent type
+func (i *InputSharedWidgetMessageContent) ContentType() string {
+	return ContentTypeSharedWidget
+}
+
+func (i *InputSharedWidgetMessageContent) iInputMessageContent() {}
 
 // ChosenInlineResult - Represents a result (https://core.telegram.org/bots/api#inlinequeryresult) of an
 // inline query that was chosen by the user and sent to their chat partner.

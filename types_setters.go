@@ -42,6 +42,12 @@ func (r *ReplyParameters) WithQuoteEntities(quoteEntities ...MessageEntity) *Rep
 	return r
 }
 
+// WithQuoteRichTexts adds quote rich texts parameter
+func (r *ReplyParameters) WithQuoteRichTexts(quoteRichTexts ...RichText) *ReplyParameters {
+	r.QuoteRichTexts = quoteRichTexts
+	return r
+}
+
 // WithQuotePosition adds quote position parameter
 func (r *ReplyParameters) WithQuotePosition(quotePosition int) *ReplyParameters {
 	r.QuotePosition = quotePosition
@@ -1308,6 +1314,18 @@ func (r *RichTextBankCardNumber) WithText(text RichText) *RichTextBankCardNumber
 // WithBankCardNumber adds bank card number parameter
 func (r *RichTextBankCardNumber) WithBankCardNumber(bankCardNumber string) *RichTextBankCardNumber {
 	r.BankCardNumber = bankCardNumber
+	return r
+}
+
+// WithText adds text parameter
+func (r *RichTextTonAddress) WithText(text RichText) *RichTextTonAddress {
+	r.Text = text
+	return r
+}
+
+// WithAddress adds address parameter
+func (r *RichTextTonAddress) WithAddress(address string) *RichTextTonAddress {
+	r.Address = address
 	return r
 }
 
@@ -3273,5 +3291,108 @@ func (i *InputInvoiceMessageContent) WithSendEmailToProvider() *InputInvoiceMess
 // WithIsFlexible adds is flexible parameter
 func (i *InputInvoiceMessageContent) WithIsFlexible() *InputInvoiceMessageContent {
 	i.IsFlexible = true
+	return i
+}
+
+// WithHTML adds html parameter
+func (i *InputWidgetMessageContent) WithHTML(html string) *InputWidgetMessageContent {
+	i.HTML = html
+	return i
+}
+
+// WithWidth adds width parameter
+func (i *InputWidgetMessageContent) WithWidth(width int) *InputWidgetMessageContent {
+	i.Width = width
+	return i
+}
+
+// WithHeight adds height parameter
+func (i *InputWidgetMessageContent) WithHeight(height int) *InputWidgetMessageContent {
+	i.Height = height
+	return i
+}
+
+// WithPublicData adds public data parameter
+func (i *InputWidgetMessageContent) WithPublicData(publicData string) *InputWidgetMessageContent {
+	i.PublicData = publicData
+	return i
+}
+
+// WithChatData adds chat data parameter
+func (i *InputWidgetMessageContent) WithChatData(chatData string) *InputWidgetMessageContent {
+	i.ChatData = chatData
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputWidgetMessageContent) WithCaption(caption string) *InputWidgetMessageContent {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputWidgetMessageContent) WithParseMode(parseMode string) *InputWidgetMessageContent {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputWidgetMessageContent) WithCaptionEntities(captionEntities ...MessageEntity) *InputWidgetMessageContent {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (i *InputWidgetMessageContent) WithShowCaptionAboveMedia() *InputWidgetMessageContent {
+	i.ShowCaptionAboveMedia = true
+	return i
+}
+
+// WithAllowQueries adds allow queries parameter
+func (i *InputWidgetMessageContent) WithAllowQueries() *InputWidgetMessageContent {
+	i.AllowQueries = true
+	return i
+}
+
+// WithIsShared adds is shared parameter
+func (i *InputWidgetMessageContent) WithIsShared() *InputWidgetMessageContent {
+	i.IsShared = true
+	return i
+}
+
+// WithWidgetID adds widget ID parameter
+func (i *InputSharedWidgetMessageContent) WithWidgetID(widgetID string) *InputSharedWidgetMessageContent {
+	i.WidgetID = widgetID
+	return i
+}
+
+// WithChatData adds chat data parameter
+func (i *InputSharedWidgetMessageContent) WithChatData(chatData string) *InputSharedWidgetMessageContent {
+	i.ChatData = chatData
+	return i
+}
+
+// WithCaption adds caption parameter
+func (i *InputSharedWidgetMessageContent) WithCaption(caption string) *InputSharedWidgetMessageContent {
+	i.Caption = caption
+	return i
+}
+
+// WithParseMode adds parse mode parameter
+func (i *InputSharedWidgetMessageContent) WithParseMode(parseMode string) *InputSharedWidgetMessageContent {
+	i.ParseMode = parseMode
+	return i
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (i *InputSharedWidgetMessageContent) WithCaptionEntities(captionEntities ...MessageEntity,
+) *InputSharedWidgetMessageContent {
+	i.CaptionEntities = captionEntities
+	return i
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (i *InputSharedWidgetMessageContent) WithShowCaptionAboveMedia() *InputSharedWidgetMessageContent {
+	i.ShowCaptionAboveMedia = true
 	return i
 }

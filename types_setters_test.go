@@ -15,6 +15,7 @@ func TestReplyParameters_Setters(t *testing.T) {
 		WithQuote("Quote").
 		WithQuoteParseMode("QuoteParseMode").
 		WithQuoteEntities([]MessageEntity{{Type: "QuoteEntities"}}...).
+		WithQuoteRichTexts([]RichText{&RichTextBold{}}...).
 		WithQuotePosition(4).
 		WithChecklistTaskID(5).
 		WithPollOptionID("PollOptionID")
@@ -27,6 +28,7 @@ func TestReplyParameters_Setters(t *testing.T) {
 		Quote:                    "Quote",
 		QuoteParseMode:           "QuoteParseMode",
 		QuoteEntities:            []MessageEntity{{Type: "QuoteEntities"}},
+		QuoteRichTexts:           []RichText{&RichTextBold{}},
 		QuotePosition:            4,
 		ChecklistTaskID:          5,
 		PollOptionID:             "PollOptionID",
@@ -794,6 +796,17 @@ func TestRichTextBankCardNumber_Setters(t *testing.T) {
 	assert.Equal(t, &RichTextBankCardNumber{
 		Text:           &RichTextBold{},
 		BankCardNumber: "BankCardNumber",
+	}, r)
+}
+
+func TestRichTextTonAddress_Setters(t *testing.T) {
+	r := (&RichTextTonAddress{}).
+		WithText(&RichTextBold{}).
+		WithAddress("Address")
+
+	assert.Equal(t, &RichTextTonAddress{
+		Text:    &RichTextBold{},
+		Address: "Address",
 	}, r)
 }
 
@@ -1865,5 +1878,53 @@ func TestInputInvoiceMessageContent_Setters(t *testing.T) {
 		SendPhoneNumberToProvider: true,
 		SendEmailToProvider:       true,
 		IsFlexible:                true,
+	}, i)
+}
+
+func TestInputWidgetMessageContent_Setters(t *testing.T) {
+	i := (&InputWidgetMessageContent{}).
+		WithHTML("HTML").
+		WithWidth(1).
+		WithHeight(2).
+		WithPublicData("PublicData").
+		WithChatData("ChatData").
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithAllowQueries().
+		WithIsShared()
+
+	assert.Equal(t, &InputWidgetMessageContent{
+		HTML:                  "HTML",
+		Width:                 1,
+		Height:                2,
+		PublicData:            "PublicData",
+		ChatData:              "ChatData",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		AllowQueries:          true,
+		IsShared:              true,
+	}, i)
+}
+
+func TestInputSharedWidgetMessageContent_Setters(t *testing.T) {
+	i := (&InputSharedWidgetMessageContent{}).
+		WithWidgetID("WidgetID").
+		WithChatData("ChatData").
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia()
+
+	assert.Equal(t, &InputSharedWidgetMessageContent{
+		WidgetID:              "WidgetID",
+		ChatData:              "ChatData",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
 	}, i)
 }

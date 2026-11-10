@@ -107,6 +107,24 @@ func (c MessageEntityCollection) PhoneNumber() MessageEntityCollection {
 	return c
 }
 
+// BankCardNumber assigns bank card number entity and returns a new collection
+func (c MessageEntityCollection) BankCardNumber() MessageEntityCollection {
+	c.entities = append(c.entities, telego.MessageEntity{
+		Type:   telego.EntityTypeBankCardNumber,
+		Length: UTF16TextLen(c.text),
+	})
+	return c
+}
+
+// TonAddress assigns TON address entity and returns a new collection
+func (c MessageEntityCollection) TonAddress() MessageEntityCollection {
+	c.entities = append(c.entities, telego.MessageEntity{
+		Type:   telego.EntityTypeTonAddress,
+		Length: UTF16TextLen(c.text),
+	})
+	return c
+}
+
 // Bold assigns bold entity and returns a new collection
 func (c MessageEntityCollection) Bold() MessageEntityCollection {
 	c.entities = append(c.entities, telego.MessageEntity{

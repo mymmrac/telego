@@ -100,6 +100,8 @@ var typeStructsSetters = []string{
 	"InputVenueMessageContent",
 	"InputContactMessageContent",
 	"InputInvoiceMessageContent",
+	"InputWidgetMessageContent",
+	"InputSharedWidgetMessageContent",
 
 	"InputSticker",
 
@@ -161,6 +163,7 @@ var typeStructsSetters = []string{
 	"RichTextPhoneNumber",
 	"RichTextBankCardNumber",
 	"RichTextMention",
+	"RichTextTonAddress",
 	"RichTextHashtag",
 	"RichTextCashtag",
 	"RichTextBotCommand",

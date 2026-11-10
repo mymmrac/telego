@@ -238,6 +238,8 @@ func parseSetterType(setter tgSetter, counter *int) string {
 		return "[]InputRichMessageMedia{{}}"
 	case "RichText":
 		return "&RichTextBold{}"
+	case "[]RichText":
+		return "[]RichText{&RichTextBold{}}"
 	case "User":
 		return "User{ID: 1}"
 	case "[]InputRichBlockListItem":

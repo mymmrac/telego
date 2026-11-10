@@ -1249,6 +1249,15 @@ func RichTextMention(text telego.RichText, username string) *telego.RichTextMent
 	}
 }
 
+// RichTextTonAddress creates [telego.RichTextTonAddress] with required fields
+func RichTextTonAddress(text telego.RichText, address string) *telego.RichTextTonAddress {
+	return &telego.RichTextTonAddress{
+		Type:    telego.TextTypeTonAddress,
+		Text:    text,
+		Address: address,
+	}
+}
+
 // RichTextHashtag creates [telego.RichTextHashtag] with required fields
 func RichTextHashtag(text telego.RichText, hashtag string) *telego.RichTextHashtag {
 	return &telego.RichTextHashtag{

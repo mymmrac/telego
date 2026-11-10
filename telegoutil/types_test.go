@@ -959,6 +959,11 @@ func TestRichTextMention(t *testing.T) {
 	assert.Equal(t, telego.TextTypeMention, r.Type)
 }
 
+func TestRichTextTonAddress(t *testing.T) {
+	r := RichTextTonAddress(richText1, text2)
+	assert.Equal(t, telego.TextTypeTonAddress, r.Type)
+}
+
 func TestRichTextHashtag(t *testing.T) {
 	r := RichTextHashtag(richText1, text2)
 	assert.Equal(t, telego.TextTypeHashtag, r.Type)

@@ -379,4 +379,8 @@ func fieldSpecialCases(field *tgTypeField, typeName string) {
 	if field.typ == "*RichText" {
 		field.typ = "RichText"
 	}
+
+	if field.typ == "*ChatShareTheme" {
+		field.typ = "ChatShareTheme"
+	}
 }

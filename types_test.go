@@ -69,6 +69,15 @@ func TestTypesRichBlocks(t *testing.T) {
 	assert.Implements(t, (*ReplyMarkup)(nil), &InlineKeyboardMarkup{})
 	assert.Equal(t, MarkupTypeInlineKeyboard, (&InlineKeyboardMarkup{}).ReplyType())
 
+	assert.Implements(t, (*WidgetQueryType)(nil), &WidgetQueryTypeData{})
+	assert.Equal(t, WidgetQueryData, (&WidgetQueryTypeData{}).WidgetQueryType())
+
+	assert.Implements(t, (*WidgetQueryType)(nil), &WidgetQueryTypeSignData{})
+	assert.Equal(t, WidgetQuerySignData, (&WidgetQueryTypeSignData{}).WidgetQueryType())
+
+	assert.Implements(t, (*WidgetQueryType)(nil), &WidgetQueryTypeSentTransaction{})
+	assert.Equal(t, WidgetQuerySendTransaction, (&WidgetQueryTypeSentTransaction{}).WidgetQueryType())
+
 	assert.Implements(t, (*ReplyMarkup)(nil), &ForceReply{})
 	assert.Equal(t, MarkupTypeForceReply, (&ForceReply{}).ReplyType())
 
@@ -89,6 +98,18 @@ func TestTypesRichBlocks(t *testing.T) {
 
 	assert.Implements(t, (*ChatMember)(nil), &ChatMemberBanned{})
 	assert.Equal(t, MemberStatusBanned, (&ChatMemberBanned{}).MemberStatus())
+
+	assert.Implements(t, (*EmojiType)(nil), &EmojiTypeEmoji{})
+	assert.Equal(t, EmojiKindEmoji, (&EmojiTypeEmoji{}).EmojiType())
+
+	assert.Implements(t, (*EmojiType)(nil), &EmojiTypeCustomEmoji{})
+	assert.Equal(t, EmojiKindCustomEmoji, (&EmojiTypeCustomEmoji{}).EmojiType())
+
+	assert.Implements(t, (*ChatShareTheme)(nil), &ChatShareThemeEmoji{})
+	assert.Equal(t, ThemeTypeEmoji, (&ChatShareThemeEmoji{}).ThemeType())
+
+	assert.Implements(t, (*ChatShareTheme)(nil), &ChatShareThemeUniqueGift{})
+	assert.Equal(t, ThemeTypeUniqueGift, (&ChatShareThemeUniqueGift{}).ThemeType())
 
 	assert.Implements(t, (*StoryAreaType)(nil), &StoryAreaTypeLocation{})
 	assert.Equal(t, StoryAreaLocation, (&StoryAreaTypeLocation{}).StoryAreaType())
@@ -284,6 +305,9 @@ func TestTypesRichBlocks(t *testing.T) {
 
 	assert.Implements(t, (*RichText)(nil), &RichTextMention{})
 	assert.Equal(t, TextTypeMention, (&RichTextMention{}).TextType())
+
+	assert.Implements(t, (*RichText)(nil), &RichTextTonAddress{})
+	assert.Equal(t, TextTypeTonAddress, (&RichTextTonAddress{}).TextType())
 
 	assert.Implements(t, (*RichText)(nil), &RichTextHashtag{})
 	assert.Equal(t, TextTypeHashtag, (&RichTextHashtag{}).TextType())
@@ -530,6 +554,12 @@ func TestTypesRichBlocks(t *testing.T) {
 
 	assert.Implements(t, (*InputMessageContent)(nil), &InputInvoiceMessageContent{})
 	assert.Equal(t, ContentTypeInvoice, (&InputInvoiceMessageContent{}).ContentType())
+
+	assert.Implements(t, (*InputMessageContent)(nil), &InputWidgetMessageContent{})
+	assert.Equal(t, ContentTypeWidget, (&InputWidgetMessageContent{}).ContentType())
+
+	assert.Implements(t, (*InputMessageContent)(nil), &InputSharedWidgetMessageContent{})
+	assert.Equal(t, ContentTypeSharedWidget, (&InputSharedWidgetMessageContent{}).ContentType())
 
 	assert.Implements(t, (*RevenueWithdrawalState)(nil), &RevenueWithdrawalStatePending{})
 	assert.Equal(t, WithdrawalStatePending, (&RevenueWithdrawalStatePending{}).WithdrawalState())
@@ -1011,10 +1041,10 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			EntityTypeMention, EntityTypeHashtag, EntityTypeCashtag, EntityTypeBotCommand, EntityTypeURL,
-			EntityTypeEmail, EntityTypePhoneNumber, EntityTypeBold, EntityTypeItalic, EntityTypeUnderline,
-			EntityTypeStrikethrough, EntityTypeSpoiler, EntityTypeBlockquote, EntityTypeExpandableBlockquote,
-			EntityTypeCode, EntityTypePre, EntityTypeTextLink, EntityTypeTextMention, EntityTypeCustomEmoji,
-			EntityTypeDateTime,
+			EntityTypeEmail, EntityTypePhoneNumber, EntityTypeBankCardNumber, EntityTypeTonAddress, EntityTypeBold,
+			EntityTypeItalic, EntityTypeUnderline, EntityTypeStrikethrough, EntityTypeSpoiler, EntityTypeBlockquote,
+			EntityTypeExpandableBlockquote, EntityTypeCode, EntityTypePre, EntityTypeTextLink, EntityTypeTextMention,
+			EntityTypeCustomEmoji, EntityTypeDateTime,
 		},
 		{
 			OriginTypeUser, OriginTypeHiddenUser, OriginTypeChat, OriginTypeChannel,
@@ -1041,8 +1071,17 @@ func TestTypesConstants(t *testing.T) {
 			ButtonStyleDanger, ButtonStyleSuccess, ButtonStylePrimary, ButtonStyleLink,
 		},
 		{
+			WidgetQueryData, WidgetQuerySignData, WidgetQuerySendTransaction,
+		},
+		{
 			MemberStatusCreator, MemberStatusAdministrator, MemberStatusMember, MemberStatusRestricted,
 			MemberStatusLeft, MemberStatusBanned,
+		},
+		{
+			EmojiKindEmoji, EmojiKindCustomEmoji,
+		},
+		{
+			ThemeTypeEmoji, ThemeTypeUniqueGift,
 		},
 		{
 			StoryAreaLocation, StoryAreaSuggestedReaction, StoryAreaLink, StoryAreaWeather, StoryAreaUniqueGift,
@@ -1095,8 +1134,8 @@ func TestTypesConstants(t *testing.T) {
 			TextTypeBold, TextTypeItalic, TextTypeUnderline, TextTypeStrikethrough, TextTypeSpoiler, TextTypeDateTime,
 			TextTypeTextMention, TextTypeSubscript, TextTypeSuperscript, TextTypeMarked, TextTypeCode,
 			TextTypeCustomEmoji, TextTypeMathematicalExpression, TextTypeURL, TextTypeEmailAddress,
-			TextTypePhoneNumber, TextTypeBankCardNumber, TextTypeMention, TextTypeHashtag, TextTypeCashtag,
-			TextTypeBotCommand, TextTypeButton, TextTypeAnchor, TextTypeAnchorLink, TextTypeReference,
+			TextTypePhoneNumber, TextTypeBankCardNumber, TextTypeMention, TextTypeTonAddress, TextTypeHashtag,
+			TextTypeCashtag, TextTypeBotCommand, TextTypeButton, TextTypeAnchor, TextTypeAnchorLink, TextTypeReference,
 			TextTypeReferenceLink,
 		},
 		{
@@ -1130,7 +1169,7 @@ func TestTypesConstants(t *testing.T) {
 		},
 		{
 			ContentTypeText, ContentTypeRich, ContentTypeLocation, ContentTypeVenue, ContentTypeContact,
-			ContentTypeInvoice,
+			ContentTypeInvoice, ContentTypeWidget, ContentTypeSharedWidget,
 		},
 		{
 			WithdrawalStatePending, WithdrawalStateSucceeded, WithdrawalStateFailed,
