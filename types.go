@@ -1057,16 +1057,16 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	type uMessage Message
 	var um uMessage
 
-	if value.Exists("pinned_message") {
-		if value.GetInt("pinned_message", "date") == 0 {
+	if v := value.Get("pinned_message"); v != nil {
+		if v.GetInt("date") == 0 {
 			um.PinnedMessage = &InaccessibleMessage{}
 		} else {
 			um.PinnedMessage = &Message{}
 		}
 	}
 
-	if value.Exists("forward_origin") {
-		forwardOriginType := string(value.GetStringBytes("forward_origin", "type"))
+	if v := value.Get("forward_origin"); v != nil {
+		forwardOriginType := string(v.GetStringBytes("type"))
 		switch forwardOriginType {
 		case OriginTypeUser:
 			um.ForwardOrigin = &MessageOriginUser{}
@@ -1430,14 +1430,15 @@ func (e *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("origin") {
+	v := value.Get("origin")
+	if v == nil {
 		return errors.New("no origin")
 	}
 
 	type uExternalReplyInfo ExternalReplyInfo
 	var ue uExternalReplyInfo
 
-	originType := string(value.GetStringBytes("origin", "type"))
+	originType := string(v.GetStringBytes("type"))
 	switch originType {
 	case OriginTypeUser:
 		ue.Origin = &MessageOriginUser{}
@@ -2020,8 +2021,8 @@ func (m *PaidMediaInfo) UnmarshalJSON(data []byte) error {
 	type uPaidMediaInfo PaidMediaInfo
 	var um uPaidMediaInfo
 
-	if value.Exists("paid_media") {
-		paidMedia := value.GetArray("paid_media")
+	if v := value.Get("paid_media"); v != nil {
+		paidMedia := v.GetArray()
 		um.PaidMedia = make([]PaidMedia, len(paidMedia))
 		for i, media := range paidMedia {
 			mediaType := string(media.GetStringBytes("type"))
@@ -2677,8 +2678,8 @@ func (p *PollOptionAdded) UnmarshalJSON(data []byte) error {
 	type uPollOptionAdded PollOptionAdded
 	var up uPollOptionAdded
 
-	if value.Exists("poll_message") {
-		if value.GetInt("poll_message", "date") == 0 {
+	if v := value.Get("poll_message"); v != nil {
+		if v.GetInt("date") == 0 {
 			up.PollMessage = &InaccessibleMessage{}
 		} else {
 			up.PollMessage = &Message{}
@@ -2723,8 +2724,8 @@ func (p *PollOptionDeleted) UnmarshalJSON(data []byte) error {
 	type uPollOptionAdded PollOptionAdded
 	var up uPollOptionAdded
 
-	if value.Exists("poll_message") {
-		if value.GetInt("poll_message", "date") == 0 {
+	if v := value.Get("poll_message"); v != nil {
+		if v.GetInt("date") == 0 {
 			up.PollMessage = &InaccessibleMessage{}
 		} else {
 			up.PollMessage = &Message{}
@@ -2869,14 +2870,15 @@ func (b *BackgroundTypeFill) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("fill") {
+	v := value.Get("fill")
+	if v == nil {
 		return errors.New("no fill")
 	}
 
 	type uBackgroundTypeFill BackgroundTypeFill
 	var ub uBackgroundTypeFill
 
-	fillType := string(value.GetStringBytes("fill", "type"))
+	fillType := string(v.GetStringBytes("type"))
 	switch fillType {
 	case BackgroundFilledSolid:
 		ub.Fill = &BackgroundFillSolid{}
@@ -2962,14 +2964,15 @@ func (b *BackgroundTypePattern) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("fill") {
+	v := value.Get("fill")
+	if v == nil {
 		return errors.New("no fill")
 	}
 
 	type uBackgroundTypePattern BackgroundTypePattern
 	var ub uBackgroundTypePattern
 
-	fillType := string(value.GetStringBytes("fill", "type"))
+	fillType := string(v.GetStringBytes("type"))
 	switch fillType {
 	case BackgroundFilledSolid:
 		ub.Fill = &BackgroundFillSolid{}
@@ -3024,14 +3027,15 @@ func (c *ChatBackground) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("type") {
+	v := value.Get("type")
+	if v == nil {
 		return errors.New(noTypeErr)
 	}
 
 	type uChatBackground ChatBackground
 	var uc uChatBackground
 
-	backgroundType := string(value.GetStringBytes("type", "type"))
+	backgroundType := string(v.GetStringBytes("type"))
 	switch backgroundType {
 	case BackgroundTypeNameFill:
 		uc.Type = &BackgroundTypeFill{}
@@ -4022,8 +4026,8 @@ func (q *CallbackQuery) UnmarshalJSON(data []byte) error {
 	type uCallbackQuery CallbackQuery
 	var uq uCallbackQuery
 
-	if value.Exists("message") {
-		if value.GetInt("message", "date") == 0 {
+	if v := value.Get("message"); v != nil {
+		if v.GetInt("date") == 0 {
 			uq.Message = &InaccessibleMessage{}
 		} else {
 			uq.Message = &Message{}
@@ -4475,18 +4479,20 @@ func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("old_chat_member") {
+	vo := value.Get("old_chat_member")
+	if vo == nil {
 		return errors.New("no old chat member")
 	}
 
-	if !value.Exists("new_chat_member") {
+	vn := value.Get("new_chat_member")
+	if vn == nil {
 		return errors.New("no new chat member")
 	}
 
 	type uChatMemberUpdated ChatMemberUpdated
 	var uc uChatMemberUpdated
 
-	oldMemberStatus := string(value.GetStringBytes("old_chat_member", "status"))
+	oldMemberStatus := string(vo.GetStringBytes("status"))
 	switch oldMemberStatus {
 	case MemberStatusCreator:
 		uc.OldChatMember = &ChatMemberOwner{}
@@ -4504,7 +4510,7 @@ func (c *ChatMemberUpdated) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("unknown chat member status: %q", oldMemberStatus)
 	}
 
-	newMemberStatus := string(value.GetStringBytes("new_chat_member", "status"))
+	newMemberStatus := string(vn.GetStringBytes("status"))
 	switch newMemberStatus {
 	case MemberStatusCreator:
 		uc.NewChatMember = &ChatMemberOwner{}
@@ -4544,7 +4550,12 @@ func (c *chatMemberData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	memberStatus := string(value.GetStringBytes("status"))
+	v := value.Get("status")
+	if v == nil {
+		return errors.New("no status")
+	}
+
+	memberStatus := string(v.GetStringBytes())
 	switch memberStatus {
 	case MemberStatusCreator:
 		var cm *ChatMemberOwner
@@ -5561,14 +5572,15 @@ func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("type") {
+	v := value.Get("type")
+	if v == nil {
 		return errors.New(noTypeErr)
 	}
 
 	type uReactionCount ReactionCount
 	var uc uReactionCount
 
-	reactionType := string(value.GetStringBytes("type", "type"))
+	reactionType := string(v.GetStringBytes("type"))
 	switch reactionType {
 	case ReactionEmoji:
 		uc.Type = &ReactionTypeEmoji{}
@@ -5622,18 +5634,20 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("old_reaction") {
+	vo := value.Get("old_reaction")
+	if vo == nil {
 		return errors.New("no old reactions")
 	}
 
-	if !value.Exists("new_reaction") {
+	vn := value.Get("new_reaction")
+	if vn == nil {
 		return errors.New("no new reactions")
 	}
 
 	type uMessageReactionUpdated MessageReactionUpdated
 	var uu uMessageReactionUpdated
 
-	oldReactions := value.GetArray("old_reaction")
+	oldReactions := vo.GetArray()
 	uu.OldReaction = make([]ReactionType, len(oldReactions))
 	for i, reaction := range oldReactions {
 		reactionType := string(reaction.GetStringBytes("type"))
@@ -5649,7 +5663,7 @@ func (u *MessageReactionUpdated) UnmarshalJSON(data []byte) error {
 		}
 	}
 
-	newReactions := value.GetArray("new_reaction")
+	newReactions := vn.GetArray()
 	uu.NewReaction = make([]ReactionType, len(newReactions))
 	for i, reaction := range newReactions {
 		reactionType := string(reaction.GetStringBytes("type"))
@@ -6140,8 +6154,8 @@ func (g *OwnedGifts) UnmarshalJSON(data []byte) error {
 	type uOwnedGifts OwnedGifts
 	var ug uOwnedGifts
 
-	if value.Exists("gifts") {
-		gifts := value.GetArray("gifts")
+	if v := value.Get("gifts"); v != nil {
+		gifts := v.GetArray()
 		ug.Gifts = make([]OwnedGift, len(gifts))
 		for i, gift := range gifts {
 			giftType := string(gift.GetStringBytes("type"))
@@ -6457,11 +6471,12 @@ func (m *menuButtonData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("type") {
+	v := value.Get("type")
+	if v == nil {
 		return errors.New(noTypeErr)
 	}
 
-	buttonType := string(value.GetStringBytes("type"))
+	buttonType := string(v.GetStringBytes())
 	switch buttonType {
 	case ButtonTypeCommands:
 		var mb *MenuButtonCommands
@@ -6640,14 +6655,15 @@ func (b *ChatBoost) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("source") {
+	v := value.Get("source")
+	if v == nil {
 		return errors.New("no source")
 	}
 
 	type uChatBoost ChatBoost
 	var ub uChatBoost
 
-	source := string(value.GetStringBytes("source", "source"))
+	source := string(v.GetStringBytes("source"))
 	switch source {
 	case BoostSourcePremium:
 		ub.Source = &ChatBoostSourcePremium{}
@@ -6701,14 +6717,15 @@ func (b *ChatBoostRemoved) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if !value.Exists("source") {
+	v := value.Get("source")
+	if v == nil {
 		return errors.New("no source")
 	}
 
 	type uChatBoostRemoved ChatBoostRemoved
 	var ub uChatBoostRemoved
 
-	source := string(value.GetStringBytes("source", "source"))
+	source := string(v.GetStringBytes("source"))
 	switch source {
 	case BoostSourcePremium:
 		ub.Source = &ChatBoostSourcePremium{}
@@ -12966,8 +12983,8 @@ func (p *TransactionPartnerUser) UnmarshalJSON(data []byte) error {
 	type uTransactionPartnerUser TransactionPartnerUser
 	var up uTransactionPartnerUser
 
-	if value.Exists("paid_media") {
-		paidMedia := value.GetArray("paid_media")
+	if v := value.Get("paid_media"); v != nil {
+		paidMedia := v.GetArray()
 		up.PaidMedia = make([]PaidMedia, len(paidMedia))
 		for i, media := range paidMedia {
 			mediaType := string(media.GetStringBytes("type"))
@@ -13065,8 +13082,8 @@ func (p *TransactionPartnerFragment) UnmarshalJSON(data []byte) error {
 	type uTransactionPartnerFragment TransactionPartnerFragment
 	var up uTransactionPartnerFragment
 
-	if value.Exists("withdrawal_state") {
-		withdrawalStateType := string(value.GetStringBytes("withdrawal_state", "type"))
+	if v := value.Get("withdrawal_state"); v != nil {
+		withdrawalStateType := string(v.GetStringBytes("type"))
 		switch withdrawalStateType {
 		case WithdrawalStatePending:
 			up.WithdrawalState = &RevenueWithdrawalStatePending{}
@@ -13171,8 +13188,8 @@ func (t *StarTransaction) UnmarshalJSON(data []byte) error {
 	type uStarTransaction StarTransaction
 	var ut uStarTransaction
 
-	if value.Exists("source") {
-		partnerType := string(value.GetStringBytes("source", "type"))
+	if v := value.Get("source"); v != nil {
+		partnerType := string(v.GetStringBytes("type"))
 		switch partnerType {
 		case PartnerTypeUser:
 			ut.Source = &TransactionPartnerUser{}
@@ -13193,8 +13210,8 @@ func (t *StarTransaction) UnmarshalJSON(data []byte) error {
 		}
 	}
 
-	if value.Exists("receiver") {
-		partnerType := string(value.GetStringBytes("receiver", "type"))
+	if v := value.Get("receiver"); v != nil {
+		partnerType := string(v.GetStringBytes("type"))
 		switch partnerType {
 		case PartnerTypeUser:
 			ut.Receiver = &TransactionPartnerUser{}
