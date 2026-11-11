@@ -5983,9 +5983,10 @@ func TestMethodsConstants(t *testing.T) {
 			MessageUpdates, EditedMessageUpdates, ChannelPostUpdates, EditedChannelPostUpdates,
 			BusinessConnectionUpdates, BusinessMessageUpdates, EditedBusinessMessageUpdates,
 			DeletedBusinessMessagesUpdates, GuestMessageUpdates, MessageReactionUpdates, MessageReactionCountUpdates,
-			InlineQueryUpdates, ChosenInlineResultUpdates, CallbackQueryUpdates, ShippingQueryUpdates,
-			PreCheckoutQueryUpdates, PurchasedPaidMediaUpdates, PollUpdates, PollAnswerUpdates, MyChatMemberUpdates,
-			ChatMemberUpdates, ChatJoinRequestUpdates, ChatBoostUpdates, RemovedChatBoostUpdates, ManagedBot,
+			InlineQueryUpdates, ChosenInlineResultUpdates, CallbackQueryUpdates, WidgetQueryUpdates,
+			SharedWidgetQueryUpdates, ShippingQueryUpdates, PreCheckoutQueryUpdates, PurchasedPaidMediaUpdates,
+			PollUpdates, PollAnswerUpdates, MyChatMemberUpdates, ChatMemberUpdates, ChatJoinRequestUpdates,
+			ChatBoostUpdates, RemovedChatBoostUpdates, ManagedBot,
 		},
 		{
 			ModeHTML, ModeMarkdown, ModeMarkdownV2,

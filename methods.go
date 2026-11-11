@@ -51,6 +51,8 @@ const (
 	InlineQueryUpdates             = "inline_query"
 	ChosenInlineResultUpdates      = "chosen_inline_result"
 	CallbackQueryUpdates           = "callback_query"
+	WidgetQueryUpdates             = "widget_query"
+	SharedWidgetQueryUpdates       = "shared_widget_query"
 	ShippingQueryUpdates           = "shipping_query"
 	PreCheckoutQueryUpdates        = "pre_checkout_query"
 	PurchasedPaidMediaUpdates      = "purchased_paid_media"
