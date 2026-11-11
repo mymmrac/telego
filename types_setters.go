@@ -343,14 +343,16 @@ func (k *KeyboardButtonRequestChat) WithChatIsCreated(chatIsCreated bool) *Keybo
 }
 
 // WithUserAdministratorRights adds user administrator rights parameter
-func (k *KeyboardButtonRequestChat) WithUserAdministratorRights(userAdministratorRights *ChatAdministratorRights,
+func (k *KeyboardButtonRequestChat) WithUserAdministratorRights(
+	userAdministratorRights *ChatAdministratorRights,
 ) *KeyboardButtonRequestChat {
 	k.UserAdministratorRights = userAdministratorRights
 	return k
 }
 
 // WithBotAdministratorRights adds bot administrator rights parameter
-func (k *KeyboardButtonRequestChat) WithBotAdministratorRights(botAdministratorRights *ChatAdministratorRights,
+func (k *KeyboardButtonRequestChat) WithBotAdministratorRights(
+	botAdministratorRights *ChatAdministratorRights,
 ) *KeyboardButtonRequestChat {
 	k.BotAdministratorRights = botAdministratorRights
 	return k
@@ -393,7 +395,8 @@ func (k *KeyboardButtonRequestManagedBot) WithSuggestedName(suggestedName string
 }
 
 // WithSuggestedUsername adds suggested username parameter
-func (k *KeyboardButtonRequestManagedBot) WithSuggestedUsername(suggestedUsername string,
+func (k *KeyboardButtonRequestManagedBot) WithSuggestedUsername(
+	suggestedUsername string,
 ) *KeyboardButtonRequestManagedBot {
 	k.SuggestedUsername = suggestedUsername
 	return k
@@ -1798,7 +1801,8 @@ func (i *InlineQueryResultArticle) WithTitle(title string) *InlineQueryResultArt
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultArticle) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultArticle) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultArticle {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -1913,7 +1917,8 @@ func (i *InlineQueryResultPhoto) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultPhoto) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultPhoto) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultPhoto {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2082,7 +2087,8 @@ func (i *InlineQueryResultMpeg4Gif) WithReplyMarkup(replyMarkup *InlineKeyboardM
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultMpeg4Gif) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultMpeg4Gif) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultMpeg4Gif {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2173,7 +2179,8 @@ func (i *InlineQueryResultVideo) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultVideo) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultVideo) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultVideo {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2234,7 +2241,8 @@ func (i *InlineQueryResultAudio) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultAudio) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultAudio) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultAudio {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2289,7 +2297,8 @@ func (i *InlineQueryResultVoice) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultVoice) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultVoice) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultVoice {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2350,7 +2359,8 @@ func (i *InlineQueryResultDocument) WithReplyMarkup(replyMarkup *InlineKeyboardM
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultDocument) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultDocument) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultDocument {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2429,7 +2439,8 @@ func (i *InlineQueryResultLocation) WithReplyMarkup(replyMarkup *InlineKeyboardM
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultLocation) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultLocation) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultLocation {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2514,7 +2525,8 @@ func (i *InlineQueryResultVenue) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultVenue) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultVenue) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultVenue {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2575,7 +2587,8 @@ func (i *InlineQueryResultContact) WithReplyMarkup(replyMarkup *InlineKeyboardMa
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultContact) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultContact) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultContact {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2654,7 +2667,8 @@ func (i *InlineQueryResultCachedPhoto) WithParseMode(parseMode string) *InlineQu
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedPhoto) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InlineQueryResultCachedPhoto) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InlineQueryResultCachedPhoto {
 	i.CaptionEntities = captionEntities
 	return i
@@ -2667,14 +2681,16 @@ func (i *InlineQueryResultCachedPhoto) WithShowCaptionAboveMedia() *InlineQueryR
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedPhoto) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedPhoto) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedPhoto {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedPhoto) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedPhoto) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedPhoto {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2729,7 +2745,8 @@ func (i *InlineQueryResultCachedGif) WithReplyMarkup(replyMarkup *InlineKeyboard
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedGif) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedGif) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedGif {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2766,7 +2783,8 @@ func (i *InlineQueryResultCachedMpeg4Gif) WithParseMode(parseMode string) *Inlin
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedMpeg4Gif) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InlineQueryResultCachedMpeg4Gif) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InlineQueryResultCachedMpeg4Gif {
 	i.CaptionEntities = captionEntities
 	return i
@@ -2779,14 +2797,16 @@ func (i *InlineQueryResultCachedMpeg4Gif) WithShowCaptionAboveMedia() *InlineQue
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedMpeg4Gif) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedMpeg4Gif) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedMpeg4Gif {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedMpeg4Gif) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedMpeg4Gif) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedMpeg4Gif {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2805,14 +2825,16 @@ func (i *InlineQueryResultCachedSticker) WithStickerFileID(stickerFileID string)
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedSticker) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedSticker) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedSticker {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedSticker) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedSticker) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedSticker {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2855,21 +2877,24 @@ func (i *InlineQueryResultCachedDocument) WithParseMode(parseMode string) *Inlin
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedDocument) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InlineQueryResultCachedDocument) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InlineQueryResultCachedDocument {
 	i.CaptionEntities = captionEntities
 	return i
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedDocument) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedDocument) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedDocument {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedDocument) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedDocument) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedDocument {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2912,7 +2937,8 @@ func (i *InlineQueryResultCachedVideo) WithParseMode(parseMode string) *InlineQu
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedVideo) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InlineQueryResultCachedVideo) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InlineQueryResultCachedVideo {
 	i.CaptionEntities = captionEntities
 	return i
@@ -2925,14 +2951,16 @@ func (i *InlineQueryResultCachedVideo) WithShowCaptionAboveMedia() *InlineQueryR
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedVideo) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedVideo) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedVideo {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedVideo) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedVideo) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedVideo {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -2969,21 +2997,24 @@ func (i *InlineQueryResultCachedVoice) WithParseMode(parseMode string) *InlineQu
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedVoice) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InlineQueryResultCachedVoice) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InlineQueryResultCachedVoice {
 	i.CaptionEntities = captionEntities
 	return i
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedVoice) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedVoice) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedVoice {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedVoice) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedVoice) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedVoice {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -3014,21 +3045,24 @@ func (i *InlineQueryResultCachedAudio) WithParseMode(parseMode string) *InlineQu
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InlineQueryResultCachedAudio) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InlineQueryResultCachedAudio) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InlineQueryResultCachedAudio {
 	i.CaptionEntities = captionEntities
 	return i
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (i *InlineQueryResultCachedAudio) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (i *InlineQueryResultCachedAudio) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *InlineQueryResultCachedAudio {
 	i.ReplyMarkup = replyMarkup
 	return i
 }
 
 // WithInputMessageContent adds input message content parameter
-func (i *InlineQueryResultCachedAudio) WithInputMessageContent(inputMessageContent InputMessageContent,
+func (i *InlineQueryResultCachedAudio) WithInputMessageContent(
+	inputMessageContent InputMessageContent,
 ) *InlineQueryResultCachedAudio {
 	i.InputMessageContent = inputMessageContent
 	return i
@@ -3385,7 +3419,8 @@ func (i *InputSharedWidgetMessageContent) WithParseMode(parseMode string) *Input
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (i *InputSharedWidgetMessageContent) WithCaptionEntities(captionEntities ...MessageEntity,
+func (i *InputSharedWidgetMessageContent) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *InputSharedWidgetMessageContent {
 	i.CaptionEntities = captionEntities
 	return i

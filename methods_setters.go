@@ -153,7 +153,8 @@ func (p *SendMessageParams) WithMessageEffectID(messageEffectID string) *SendMes
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendMessageParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendMessageParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -220,7 +221,8 @@ func (p *ForwardMessageParams) WithMessageEffectID(messageEffectID string) *Forw
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *ForwardMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *ForwardMessageParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *ForwardMessageParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -359,7 +361,8 @@ func (p *CopyMessageParams) WithMessageEffectID(messageEffectID string) *CopyMes
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *CopyMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *CopyMessageParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *CopyMessageParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -518,7 +521,8 @@ func (p *SendPhotoParams) WithMessageEffectID(messageEffectID string) *SendPhoto
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendPhotoParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendPhotoParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendPhotoParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -635,7 +639,8 @@ func (p *SendLivePhotoParams) WithMessageEffectID(messageEffectID string) *SendL
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendLivePhotoParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendLivePhotoParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendLivePhotoParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -758,7 +763,8 @@ func (p *SendAudioParams) WithMessageEffectID(messageEffectID string) *SendAudio
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendAudioParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendAudioParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendAudioParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -869,7 +875,8 @@ func (p *SendDocumentParams) WithMessageEffectID(messageEffectID string) *SendDo
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendDocumentParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendDocumentParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendDocumentParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1022,7 +1029,8 @@ func (p *SendVideoParams) WithMessageEffectID(messageEffectID string) *SendVideo
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendVideoParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendVideoParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendVideoParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1157,7 +1165,8 @@ func (p *SendAnimationParams) WithMessageEffectID(messageEffectID string) *SendA
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendAnimationParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendAnimationParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendAnimationParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1262,7 +1271,8 @@ func (p *SendVoiceParams) WithMessageEffectID(messageEffectID string) *SendVoice
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendVoiceParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendVoiceParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendVoiceParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1361,7 +1371,8 @@ func (p *SendVideoNoteParams) WithMessageEffectID(messageEffectID string) *SendV
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendVideoNoteParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendVideoNoteParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendVideoNoteParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1662,7 +1673,8 @@ func (p *SendPaidMediaParams) WithAllowPaidBroadcast() *SendPaidMediaParams {
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendPaidMediaParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendPaidMediaParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendPaidMediaParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1833,7 +1845,8 @@ func (p *SendLocationParams) WithMessageEffectID(messageEffectID string) *SendLo
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendLocationParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendLocationParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendLocationParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -1956,7 +1969,8 @@ func (p *SendVenueParams) WithMessageEffectID(messageEffectID string) *SendVenue
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendVenueParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendVenueParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendVenueParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -2055,7 +2069,8 @@ func (p *SendContactParams) WithMessageEffectID(messageEffectID string) *SendCon
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendContactParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendContactParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendContactParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -2536,14 +2551,16 @@ func (p *SetUserEmojiStatusParams) WithUserID(userID int64) *SetUserEmojiStatusP
 }
 
 // WithEmojiStatusCustomEmojiID adds emoji status custom emoji ID parameter
-func (p *SetUserEmojiStatusParams) WithEmojiStatusCustomEmojiID(emojiStatusCustomEmojiID string,
+func (p *SetUserEmojiStatusParams) WithEmojiStatusCustomEmojiID(
+	emojiStatusCustomEmojiID string,
 ) *SetUserEmojiStatusParams {
 	p.EmojiStatusCustomEmojiID = emojiStatusCustomEmojiID
 	return p
 }
 
 // WithEmojiStatusExpirationDate adds emoji status expiration date parameter
-func (p *SetUserEmojiStatusParams) WithEmojiStatusExpirationDate(emojiStatusExpirationDate int64,
+func (p *SetUserEmojiStatusParams) WithEmojiStatusExpirationDate(
+	emojiStatusExpirationDate int64,
 ) *SetUserEmojiStatusParams {
 	p.EmojiStatusExpirationDate = emojiStatusExpirationDate
 	return p
@@ -2760,7 +2777,8 @@ func (p *SetChatAdministratorCustomTitleParams) WithUserID(userID int64) *SetCha
 }
 
 // WithCustomTitle adds custom title parameter
-func (p *SetChatAdministratorCustomTitleParams) WithCustomTitle(customTitle string,
+func (p *SetChatAdministratorCustomTitleParams) WithCustomTitle(
+	customTitle string,
 ) *SetChatAdministratorCustomTitleParams {
 	p.CustomTitle = customTitle
 	return p
@@ -2911,14 +2929,16 @@ func (p *CreateChatSubscriptionInviteLinkParams) WithName(name string) *CreateCh
 }
 
 // WithSubscriptionPeriod adds subscription period parameter
-func (p *CreateChatSubscriptionInviteLinkParams) WithSubscriptionPeriod(subscriptionPeriod int64,
+func (p *CreateChatSubscriptionInviteLinkParams) WithSubscriptionPeriod(
+	subscriptionPeriod int64,
 ) *CreateChatSubscriptionInviteLinkParams {
 	p.SubscriptionPeriod = subscriptionPeriod
 	return p
 }
 
 // WithSubscriptionPrice adds subscription price parameter
-func (p *CreateChatSubscriptionInviteLinkParams) WithSubscriptionPrice(subscriptionPrice int,
+func (p *CreateChatSubscriptionInviteLinkParams) WithSubscriptionPrice(
+	subscriptionPrice int,
 ) *CreateChatSubscriptionInviteLinkParams {
 	p.SubscriptionPrice = subscriptionPrice
 	return p
@@ -2993,7 +3013,8 @@ func (p *AnswerChatJoinRequestQueryParams) WithResult(result string) *AnswerChat
 }
 
 // WithChatJoinRequestQueryID adds chat join request query ID parameter
-func (p *SendChatJoinRequestWebAppParams) WithChatJoinRequestQueryID(chatJoinRequestQueryID string,
+func (p *SendChatJoinRequestWebAppParams) WithChatJoinRequestQueryID(
+	chatJoinRequestQueryID string,
 ) *SendChatJoinRequestWebAppParams {
 	p.ChatJoinRequestQueryID = chatJoinRequestQueryID
 	return p
@@ -3372,7 +3393,8 @@ func (p *GetUserChatBoostsParams) WithUserID(userID int64) *GetUserChatBoostsPar
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *GetBusinessConnectionParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *GetBusinessConnectionParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *GetBusinessConnectionParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3535,7 +3557,8 @@ func (p *GetChatMenuButtonParams) WithChatID(chatID int64) *GetChatMenuButtonPar
 }
 
 // WithRights adds rights parameter
-func (p *SetMyDefaultAdministratorRightsParams) WithRights(rights *ChatAdministratorRights,
+func (p *SetMyDefaultAdministratorRightsParams) WithRights(
+	rights *ChatAdministratorRights,
 ) *SetMyDefaultAdministratorRightsParams {
 	p.Rights = rights
 	return p
@@ -3710,7 +3733,8 @@ func (p *ReadBusinessMessageParams) WithMessageID(messageID int) *ReadBusinessMe
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *DeleteBusinessMessagesParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *DeleteBusinessMessagesParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *DeleteBusinessMessagesParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3723,7 +3747,8 @@ func (p *DeleteBusinessMessagesParams) WithMessageIDs(messageIDs ...int) *Delete
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *SetBusinessAccountNameParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *SetBusinessAccountNameParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *SetBusinessAccountNameParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3742,7 +3767,8 @@ func (p *SetBusinessAccountNameParams) WithLastName(lastName string) *SetBusines
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *SetBusinessAccountUsernameParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *SetBusinessAccountUsernameParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *SetBusinessAccountUsernameParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3755,7 +3781,8 @@ func (p *SetBusinessAccountUsernameParams) WithUsername(username string) *SetBus
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *SetBusinessAccountBioParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *SetBusinessAccountBioParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *SetBusinessAccountBioParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3768,14 +3795,16 @@ func (p *SetBusinessAccountBioParams) WithBio(bio string) *SetBusinessAccountBio
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *SetBusinessAccountProfilePhotoParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *SetBusinessAccountProfilePhotoParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *SetBusinessAccountProfilePhotoParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
 // WithPhoto adds photo parameter
-func (p *SetBusinessAccountProfilePhotoParams) WithPhoto(photo InputProfilePhoto,
+func (p *SetBusinessAccountProfilePhotoParams) WithPhoto(
+	photo InputProfilePhoto,
 ) *SetBusinessAccountProfilePhotoParams {
 	p.Photo = photo
 	return p
@@ -3788,7 +3817,8 @@ func (p *SetBusinessAccountProfilePhotoParams) WithIsPublic() *SetBusinessAccoun
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *RemoveBusinessAccountProfilePhotoParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *RemoveBusinessAccountProfilePhotoParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *RemoveBusinessAccountProfilePhotoParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3801,7 +3831,8 @@ func (p *RemoveBusinessAccountProfilePhotoParams) WithIsPublic() *RemoveBusiness
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *SetBusinessAccountGiftSettingsParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *SetBusinessAccountGiftSettingsParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *SetBusinessAccountGiftSettingsParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3814,21 +3845,24 @@ func (p *SetBusinessAccountGiftSettingsParams) WithShowGiftButton() *SetBusiness
 }
 
 // WithAcceptedGiftTypes adds accepted gift types parameter
-func (p *SetBusinessAccountGiftSettingsParams) WithAcceptedGiftTypes(acceptedGiftTypes AcceptedGiftTypes,
+func (p *SetBusinessAccountGiftSettingsParams) WithAcceptedGiftTypes(
+	acceptedGiftTypes AcceptedGiftTypes,
 ) *SetBusinessAccountGiftSettingsParams {
 	p.AcceptedGiftTypes = acceptedGiftTypes
 	return p
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *GetBusinessAccountStarBalanceParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *GetBusinessAccountStarBalanceParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *GetBusinessAccountStarBalanceParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *TransferBusinessAccountStarsParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *TransferBusinessAccountStarsParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *TransferBusinessAccountStarsParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -3841,7 +3875,8 @@ func (p *TransferBusinessAccountStarsParams) WithStarCount(starCount int) *Trans
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *GetBusinessAccountGiftsParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *GetBusinessAccountGiftsParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *GetBusinessAccountGiftsParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -4094,7 +4129,8 @@ func (p *TransferGiftParams) WithStarCount(starCount int) *TransferGiftParams {
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *DeleteBusinessAccountGiftParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *DeleteBusinessAccountGiftParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *DeleteBusinessAccountGiftParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -4461,7 +4497,8 @@ func (p *EditMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMark
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *EditMessageLiveLocationParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *EditMessageLiveLocationParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -4504,7 +4541,8 @@ func (p *EditMessageLiveLocationParams) WithLivePeriod(livePeriod int) *EditMess
 }
 
 // WithHorizontalAccuracy adds horizontal accuracy parameter
-func (p *EditMessageLiveLocationParams) WithHorizontalAccuracy(horizontalAccuracy float64,
+func (p *EditMessageLiveLocationParams) WithHorizontalAccuracy(
+	horizontalAccuracy float64,
 ) *EditMessageLiveLocationParams {
 	p.HorizontalAccuracy = horizontalAccuracy
 	return p
@@ -4517,21 +4555,24 @@ func (p *EditMessageLiveLocationParams) WithHeading(heading int) *EditMessageLiv
 }
 
 // WithProximityAlertRadius adds proximity alert radius parameter
-func (p *EditMessageLiveLocationParams) WithProximityAlertRadius(proximityAlertRadius int,
+func (p *EditMessageLiveLocationParams) WithProximityAlertRadius(
+	proximityAlertRadius int,
 ) *EditMessageLiveLocationParams {
 	p.ProximityAlertRadius = proximityAlertRadius
 	return p
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *EditMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *EditMessageLiveLocationParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *EditMessageLiveLocationParams {
 	p.ReplyMarkup = replyMarkup
 	return p
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *StopMessageLiveLocationParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *StopMessageLiveLocationParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *StopMessageLiveLocationParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -4556,7 +4597,8 @@ func (p *StopMessageLiveLocationParams) WithInlineMessageID(inlineMessageID stri
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *StopMessageLiveLocationParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *StopMessageLiveLocationParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *StopMessageLiveLocationParams {
 	p.ReplyMarkup = replyMarkup
 	return p
@@ -4641,7 +4683,8 @@ func (p *EditSharedWidgetDataParams) WithCacheTime(cacheTime int) *EditSharedWid
 }
 
 // WithBusinessConnectionID adds business connection ID parameter
-func (p *EditMessageReplyMarkupParams) WithBusinessConnectionID(businessConnectionID string,
+func (p *EditMessageReplyMarkupParams) WithBusinessConnectionID(
+	businessConnectionID string,
 ) *EditMessageReplyMarkupParams {
 	p.BusinessConnectionID = businessConnectionID
 	return p
@@ -4666,7 +4709,8 @@ func (p *EditMessageReplyMarkupParams) WithInlineMessageID(inlineMessageID strin
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *EditMessageReplyMarkupParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *EditMessageReplyMarkupParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *EditMessageReplyMarkupParams {
 	p.ReplyMarkup = replyMarkup
 	return p
@@ -4709,7 +4753,8 @@ func (p *EditEphemeralMessageTextParams) WithReceiverUserID(receiverUserID int64
 }
 
 // WithEphemeralMessageID adds ephemeral message ID parameter
-func (p *EditEphemeralMessageTextParams) WithEphemeralMessageID(ephemeralMessageID int,
+func (p *EditEphemeralMessageTextParams) WithEphemeralMessageID(
+	ephemeralMessageID int,
 ) *EditEphemeralMessageTextParams {
 	p.EphemeralMessageID = ephemeralMessageID
 	return p
@@ -4742,14 +4787,16 @@ func (p *EditEphemeralMessageTextParams) WithRichMessage(
 }
 
 // WithLinkPreviewOptions adds link preview options parameter
-func (p *EditEphemeralMessageTextParams) WithLinkPreviewOptions(linkPreviewOptions *LinkPreviewOptions,
+func (p *EditEphemeralMessageTextParams) WithLinkPreviewOptions(
+	linkPreviewOptions *LinkPreviewOptions,
 ) *EditEphemeralMessageTextParams {
 	p.LinkPreviewOptions = linkPreviewOptions
 	return p
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *EditEphemeralMessageTextParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *EditEphemeralMessageTextParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *EditEphemeralMessageTextParams {
 	p.ReplyMarkup = replyMarkup
 	return p
@@ -4768,7 +4815,8 @@ func (p *EditEphemeralMessageMediaParams) WithReceiverUserID(receiverUserID int6
 }
 
 // WithEphemeralMessageID adds ephemeral message ID parameter
-func (p *EditEphemeralMessageMediaParams) WithEphemeralMessageID(ephemeralMessageID int,
+func (p *EditEphemeralMessageMediaParams) WithEphemeralMessageID(
+	ephemeralMessageID int,
 ) *EditEphemeralMessageMediaParams {
 	p.EphemeralMessageID = ephemeralMessageID
 	return p
@@ -4781,7 +4829,8 @@ func (p *EditEphemeralMessageMediaParams) WithMedia(media InputMedia) *EditEphem
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *EditEphemeralMessageMediaParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *EditEphemeralMessageMediaParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *EditEphemeralMessageMediaParams {
 	p.ReplyMarkup = replyMarkup
 	return p
@@ -4794,14 +4843,16 @@ func (p *EditEphemeralMessageCaptionParams) WithChatID(chatID ChatID) *EditEphem
 }
 
 // WithReceiverUserID adds receiver user ID parameter
-func (p *EditEphemeralMessageCaptionParams) WithReceiverUserID(receiverUserID int64,
+func (p *EditEphemeralMessageCaptionParams) WithReceiverUserID(
+	receiverUserID int64,
 ) *EditEphemeralMessageCaptionParams {
 	p.ReceiverUserID = receiverUserID
 	return p
 }
 
 // WithEphemeralMessageID adds ephemeral message ID parameter
-func (p *EditEphemeralMessageCaptionParams) WithEphemeralMessageID(ephemeralMessageID int,
+func (p *EditEphemeralMessageCaptionParams) WithEphemeralMessageID(
+	ephemeralMessageID int,
 ) *EditEphemeralMessageCaptionParams {
 	p.EphemeralMessageID = ephemeralMessageID
 	return p
@@ -4820,7 +4871,8 @@ func (p *EditEphemeralMessageCaptionParams) WithParseMode(parseMode string) *Edi
 }
 
 // WithCaptionEntities adds caption entities parameter
-func (p *EditEphemeralMessageCaptionParams) WithCaptionEntities(captionEntities ...MessageEntity,
+func (p *EditEphemeralMessageCaptionParams) WithCaptionEntities(
+	captionEntities ...MessageEntity,
 ) *EditEphemeralMessageCaptionParams {
 	p.CaptionEntities = captionEntities
 	return p
@@ -4833,7 +4885,8 @@ func (p *EditEphemeralMessageCaptionParams) WithShowCaptionAboveMedia() *EditEph
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *EditEphemeralMessageCaptionParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *EditEphemeralMessageCaptionParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *EditEphemeralMessageCaptionParams {
 	p.ReplyMarkup = replyMarkup
 	return p
@@ -4846,21 +4899,24 @@ func (p *EditEphemeralMessageReplyMarkupParams) WithChatID(chatID ChatID) *EditE
 }
 
 // WithReceiverUserID adds receiver user ID parameter
-func (p *EditEphemeralMessageReplyMarkupParams) WithReceiverUserID(receiverUserID int64,
+func (p *EditEphemeralMessageReplyMarkupParams) WithReceiverUserID(
+	receiverUserID int64,
 ) *EditEphemeralMessageReplyMarkupParams {
 	p.ReceiverUserID = receiverUserID
 	return p
 }
 
 // WithEphemeralMessageID adds ephemeral message ID parameter
-func (p *EditEphemeralMessageReplyMarkupParams) WithEphemeralMessageID(ephemeralMessageID int,
+func (p *EditEphemeralMessageReplyMarkupParams) WithEphemeralMessageID(
+	ephemeralMessageID int,
 ) *EditEphemeralMessageReplyMarkupParams {
 	p.EphemeralMessageID = ephemeralMessageID
 	return p
 }
 
 // WithReplyMarkup adds reply markup parameter
-func (p *EditEphemeralMessageReplyMarkupParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup,
+func (p *EditEphemeralMessageReplyMarkupParams) WithReplyMarkup(
+	replyMarkup *InlineKeyboardMarkup,
 ) *EditEphemeralMessageReplyMarkupParams {
 	p.ReplyMarkup = replyMarkup
 	return p
@@ -5055,7 +5111,8 @@ func (p *SendStickerParams) WithMessageEffectID(messageEffectID string) *SendSti
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendStickerParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendStickerParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendStickerParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -5278,7 +5335,8 @@ func (p *SetCustomEmojiStickerSetThumbnailParams) WithName(name string) *SetCust
 }
 
 // WithCustomEmojiID adds custom emoji ID parameter
-func (p *SetCustomEmojiStickerSetThumbnailParams) WithCustomEmojiID(customEmojiID string,
+func (p *SetCustomEmojiStickerSetThumbnailParams) WithCustomEmojiID(
+	customEmojiID string,
 ) *SetCustomEmojiStickerSetThumbnailParams {
 	p.CustomEmojiID = customEmojiID
 	return p
@@ -5353,7 +5411,8 @@ func (p *SendRichMessageParams) WithMessageEffectID(messageEffectID string) *Sen
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendRichMessageParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendRichMessageParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendRichMessageParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -5612,7 +5671,8 @@ func (p *SendInvoiceParams) WithMessageEffectID(messageEffectID string) *SendInv
 }
 
 // WithSuggestedPostParameters adds suggested post parameters parameter
-func (p *SendInvoiceParams) WithSuggestedPostParameters(suggestedPostParameters *SuggestedPostParameters,
+func (p *SendInvoiceParams) WithSuggestedPostParameters(
+	suggestedPostParameters *SuggestedPostParameters,
 ) *SendInvoiceParams {
 	p.SuggestedPostParameters = suggestedPostParameters
 	return p
@@ -5835,7 +5895,8 @@ func (p *EditUserStarSubscriptionParams) WithUserID(userID int64) *EditUserStarS
 }
 
 // WithTelegramPaymentChargeID adds telegram payment charge ID parameter
-func (p *EditUserStarSubscriptionParams) WithTelegramPaymentChargeID(telegramPaymentChargeID string,
+func (p *EditUserStarSubscriptionParams) WithTelegramPaymentChargeID(
+	telegramPaymentChargeID string,
 ) *EditUserStarSubscriptionParams {
 	p.TelegramPaymentChargeID = telegramPaymentChargeID
 	return p

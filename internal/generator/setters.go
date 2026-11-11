@@ -126,6 +126,11 @@ func writeSetters(file *os.File, setters tgSetters, receiverDefault bool, noPoin
 			s = fmt.Sprintf("func (%s *%s) With%s(%s %s) *%s {\n", r, setter.structType,
 				setter.fieldName, varName, setter.fieldType, setter.structType)
 
+			if len(s) > 121 {
+				s = fmt.Sprintf("func (%s *%s) With%s(\n\t%s %s) *%s {\n", r, setter.structType,
+					setter.fieldName, varName, setter.fieldType, setter.structType)
+			}
+
 			if convertToPtr {
 				setter.fieldType = "*" + setter.fieldType
 			}
