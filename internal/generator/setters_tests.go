@@ -206,7 +206,7 @@ func parseSetterType(setter tgSetter, counter *int) string {
 	case "InputStoryContent":
 		return "&InputStoryContentPhoto{Photo: testInputFile}"
 	case "[]StoryArea":
-		return "[]StoryArea{{Position: StoryAreaPosition{XPercentage: 1.0}}}"
+		return "[]StoryArea{{Position: AreaPosition{XPercentage: 1.0}}}"
 	case "AcceptedGiftTypes":
 		return "AcceptedGiftTypes{UnlimitedGifts: true}"
 	case "*SwitchInlineQueryChosenChat":

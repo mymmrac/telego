@@ -70,3 +70,7 @@ func (t testNamedReader) Name() string {
 var testInputFile = InputFile{
 	File: testNamedReader{},
 }
+
+var testInputNilFile = InputFile{
+	File: nil,
+}

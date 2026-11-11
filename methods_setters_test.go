@@ -568,6 +568,86 @@ func TestSendVideoNoteParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSendWidgetParams_Setters(t *testing.T) {
+	s := (&SendWidgetParams{}).
+		WithChatID(ChatID{ID: 7}).
+		WithMessageThreadID(1).
+		WithHTML("HTML").
+		WithWidth(2).
+		WithHeight(3).
+		WithPublicData("PublicData").
+		WithChatData("ChatData").
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithAllowQueries().
+		WithIsShared().
+		WithDisableNotification().
+		WithProtectContent().
+		WithAllowPaidBroadcast().
+		WithMessageEffectID("MessageEffectID").
+		WithReplyParameters(&ReplyParameters{MessageID: 4}).
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendWidgetParams{
+		ChatID:                ChatID{ID: 7},
+		MessageThreadID:       1,
+		HTML:                  "HTML",
+		Width:                 2,
+		Height:                3,
+		PublicData:            "PublicData",
+		ChatData:              "ChatData",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		AllowQueries:          true,
+		IsShared:              true,
+		DisableNotification:   true,
+		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
+		MessageEffectID:       "MessageEffectID",
+		ReplyParameters:       &ReplyParameters{MessageID: 4},
+		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
+func TestSendSharedWidgetParams_Setters(t *testing.T) {
+	s := (&SendSharedWidgetParams{}).
+		WithChatID(ChatID{ID: 5}).
+		WithMessageThreadID(1).
+		WithWidgetID("WidgetID").
+		WithChatData("ChatData").
+		WithCaption("Caption").
+		WithParseMode("ParseMode").
+		WithCaptionEntities([]MessageEntity{{Type: "CaptionEntities"}}...).
+		WithShowCaptionAboveMedia().
+		WithDisableNotification().
+		WithProtectContent().
+		WithAllowPaidBroadcast().
+		WithMessageEffectID("MessageEffectID").
+		WithReplyParameters(&ReplyParameters{MessageID: 2}).
+		WithReplyMarkup(&ReplyKeyboardRemove{RemoveKeyboard: true})
+
+	assert.Equal(t, &SendSharedWidgetParams{
+		ChatID:                ChatID{ID: 5},
+		MessageThreadID:       1,
+		WidgetID:              "WidgetID",
+		ChatData:              "ChatData",
+		Caption:               "Caption",
+		ParseMode:             "ParseMode",
+		CaptionEntities:       []MessageEntity{{Type: "CaptionEntities"}},
+		ShowCaptionAboveMedia: true,
+		DisableNotification:   true,
+		ProtectContent:        true,
+		AllowPaidBroadcast:    true,
+		MessageEffectID:       "MessageEffectID",
+		ReplyParameters:       &ReplyParameters{MessageID: 2},
+		ReplyMarkup:           &ReplyKeyboardRemove{RemoveKeyboard: true},
+	}, s)
+}
+
 func TestSendPaidMediaParams_Setters(t *testing.T) {
 	s := (&SendPaidMediaParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
@@ -1582,6 +1662,17 @@ func TestAnswerCallbackQueryParams_Setters(t *testing.T) {
 	}, a)
 }
 
+func TestAnswerWidgetQueryParams_Setters(t *testing.T) {
+	a := (&AnswerWidgetQueryParams{}).
+		WithWidgetQueryID("WidgetQueryID").
+		WithData("Data")
+
+	assert.Equal(t, &AnswerWidgetQueryParams{
+		WidgetQueryID: "WidgetQueryID",
+		Data:          "Data",
+	}, a)
+}
+
 func TestAnswerGuestQueryParams_Setters(t *testing.T) {
 	a := (&AnswerGuestQueryParams{}).
 		WithGuestQueryID("GuestQueryID").
@@ -1840,22 +1931,30 @@ func TestGiftPremiumSubscriptionParams_Setters(t *testing.T) {
 func TestVerifyUserParams_Setters(t *testing.T) {
 	v := (&VerifyUserParams{}).
 		WithUserID(3).
-		WithCustomDescription("CustomDescription")
+		WithCustomDescription("CustomDescription").
+		WithCustomDescriptionParseMode("CustomDescriptionParseMode").
+		WithCustomDescriptionEntities([]MessageEntity{{Type: "CustomDescriptionEntities"}}...)
 
 	assert.Equal(t, &VerifyUserParams{
-		UserID:            3,
-		CustomDescription: "CustomDescription",
+		UserID:                     3,
+		CustomDescription:          "CustomDescription",
+		CustomDescriptionParseMode: "CustomDescriptionParseMode",
+		CustomDescriptionEntities:  []MessageEntity{{Type: "CustomDescriptionEntities"}},
 	}, v)
 }
 
 func TestVerifyChatParams_Setters(t *testing.T) {
 	v := (&VerifyChatParams{}).
 		WithChatID(ChatID{ID: 1}).
-		WithCustomDescription("CustomDescription")
+		WithCustomDescription("CustomDescription").
+		WithCustomDescriptionParseMode("CustomDescriptionParseMode").
+		WithCustomDescriptionEntities([]MessageEntity{{Type: "CustomDescriptionEntities"}}...)
 
 	assert.Equal(t, &VerifyChatParams{
-		ChatID:            ChatID{ID: 1},
-		CustomDescription: "CustomDescription",
+		ChatID:                     ChatID{ID: 1},
+		CustomDescription:          "CustomDescription",
+		CustomDescriptionParseMode: "CustomDescriptionParseMode",
+		CustomDescriptionEntities:  []MessageEntity{{Type: "CustomDescriptionEntities"}},
 	}, v)
 }
 
@@ -2076,6 +2175,15 @@ func TestGetChatGiftsParams_Setters(t *testing.T) {
 	}, g)
 }
 
+func TestGetUniqueGiftParams_Setters(t *testing.T) {
+	g := (&GetUniqueGiftParams{}).
+		WithName("Name")
+
+	assert.Equal(t, &GetUniqueGiftParams{
+		Name: "Name",
+	}, g)
+}
+
 func TestConvertGiftToStarsParams_Setters(t *testing.T) {
 	c := (&ConvertGiftToStarsParams{}).
 		WithBusinessConnectionID("BusinessConnectionID").
@@ -2115,6 +2223,17 @@ func TestTransferGiftParams_Setters(t *testing.T) {
 		NewOwnerChatID:       1,
 		StarCount:            2,
 	}, t1)
+}
+
+func TestDeleteBusinessAccountGiftParams_Setters(t *testing.T) {
+	d := (&DeleteBusinessAccountGiftParams{}).
+		WithBusinessConnectionID("BusinessConnectionID").
+		WithOwnedGiftID("OwnedGiftID")
+
+	assert.Equal(t, &DeleteBusinessAccountGiftParams{
+		BusinessConnectionID: "BusinessConnectionID",
+		OwnedGiftID:          "OwnedGiftID",
+	}, d)
 }
 
 func TestPostStoryParams_Setters(t *testing.T) {
@@ -2365,6 +2484,36 @@ func TestEditMessageChecklistParams_Setters(t *testing.T) {
 		MessageID:            2,
 		Checklist:            InputChecklist{Tasks: []InputChecklistTask{{}}},
 		ReplyMarkup:          &InlineKeyboardMarkup{InlineKeyboard: [][]InlineKeyboardButton{{}}},
+	}, e)
+}
+
+func TestEditMessageWidgetDataParams_Setters(t *testing.T) {
+	e := (&EditMessageWidgetDataParams{}).
+		WithChatID(ChatID{ID: 3}).
+		WithMessageID(1).
+		WithInlineMessageID("InlineMessageID").
+		WithPublicData("PublicData").
+		WithChatData("ChatData")
+
+	assert.Equal(t, &EditMessageWidgetDataParams{
+		ChatID:          ChatID{ID: 3},
+		MessageID:       1,
+		InlineMessageID: "InlineMessageID",
+		PublicData:      "PublicData",
+		ChatData:        "ChatData",
+	}, e)
+}
+
+func TestEditSharedWidgetDataParams_Setters(t *testing.T) {
+	e := (&EditSharedWidgetDataParams{}).
+		WithWidgetID("WidgetID").
+		WithPublicData("PublicData").
+		WithCacheTime(1)
+
+	assert.Equal(t, &EditSharedWidgetDataParams{
+		WidgetID:   "WidgetID",
+		PublicData: "PublicData",
+		CacheTime:  1,
 	}, e)
 }
 

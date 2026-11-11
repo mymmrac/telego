@@ -1379,6 +1379,204 @@ func (p *SendVideoNoteParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendVide
 	return p
 }
 
+// WithChatID adds chat ID parameter
+func (p *SendWidgetParams) WithChatID(chatID ChatID) *SendWidgetParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendWidgetParams) WithMessageThreadID(messageThreadID int) *SendWidgetParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithHTML adds html parameter
+func (p *SendWidgetParams) WithHTML(html string) *SendWidgetParams {
+	p.HTML = html
+	return p
+}
+
+// WithWidth adds width parameter
+func (p *SendWidgetParams) WithWidth(width int) *SendWidgetParams {
+	p.Width = width
+	return p
+}
+
+// WithHeight adds height parameter
+func (p *SendWidgetParams) WithHeight(height int) *SendWidgetParams {
+	p.Height = height
+	return p
+}
+
+// WithPublicData adds public data parameter
+func (p *SendWidgetParams) WithPublicData(publicData string) *SendWidgetParams {
+	p.PublicData = publicData
+	return p
+}
+
+// WithChatData adds chat data parameter
+func (p *SendWidgetParams) WithChatData(chatData string) *SendWidgetParams {
+	p.ChatData = chatData
+	return p
+}
+
+// WithCaption adds caption parameter
+func (p *SendWidgetParams) WithCaption(caption string) *SendWidgetParams {
+	p.Caption = caption
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *SendWidgetParams) WithParseMode(parseMode string) *SendWidgetParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (p *SendWidgetParams) WithCaptionEntities(captionEntities ...MessageEntity) *SendWidgetParams {
+	p.CaptionEntities = captionEntities
+	return p
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (p *SendWidgetParams) WithShowCaptionAboveMedia() *SendWidgetParams {
+	p.ShowCaptionAboveMedia = true
+	return p
+}
+
+// WithAllowQueries adds allow queries parameter
+func (p *SendWidgetParams) WithAllowQueries() *SendWidgetParams {
+	p.AllowQueries = true
+	return p
+}
+
+// WithIsShared adds is shared parameter
+func (p *SendWidgetParams) WithIsShared() *SendWidgetParams {
+	p.IsShared = true
+	return p
+}
+
+// WithDisableNotification adds disable notification parameter
+func (p *SendWidgetParams) WithDisableNotification() *SendWidgetParams {
+	p.DisableNotification = true
+	return p
+}
+
+// WithProtectContent adds protect content parameter
+func (p *SendWidgetParams) WithProtectContent() *SendWidgetParams {
+	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendWidgetParams) WithAllowPaidBroadcast() *SendWidgetParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
+// WithMessageEffectID adds message effect ID parameter
+func (p *SendWidgetParams) WithMessageEffectID(messageEffectID string) *SendWidgetParams {
+	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithReplyParameters adds reply parameters parameter
+func (p *SendWidgetParams) WithReplyParameters(replyParameters *ReplyParameters) *SendWidgetParams {
+	p.ReplyParameters = replyParameters
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *SendWidgetParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendWidgetParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *SendSharedWidgetParams) WithChatID(chatID ChatID) *SendSharedWidgetParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageThreadID adds message thread ID parameter
+func (p *SendSharedWidgetParams) WithMessageThreadID(messageThreadID int) *SendSharedWidgetParams {
+	p.MessageThreadID = messageThreadID
+	return p
+}
+
+// WithWidgetID adds widget ID parameter
+func (p *SendSharedWidgetParams) WithWidgetID(widgetID string) *SendSharedWidgetParams {
+	p.WidgetID = widgetID
+	return p
+}
+
+// WithChatData adds chat data parameter
+func (p *SendSharedWidgetParams) WithChatData(chatData string) *SendSharedWidgetParams {
+	p.ChatData = chatData
+	return p
+}
+
+// WithCaption adds caption parameter
+func (p *SendSharedWidgetParams) WithCaption(caption string) *SendSharedWidgetParams {
+	p.Caption = caption
+	return p
+}
+
+// WithParseMode adds parse mode parameter
+func (p *SendSharedWidgetParams) WithParseMode(parseMode string) *SendSharedWidgetParams {
+	p.ParseMode = parseMode
+	return p
+}
+
+// WithCaptionEntities adds caption entities parameter
+func (p *SendSharedWidgetParams) WithCaptionEntities(captionEntities ...MessageEntity) *SendSharedWidgetParams {
+	p.CaptionEntities = captionEntities
+	return p
+}
+
+// WithShowCaptionAboveMedia adds show caption above media parameter
+func (p *SendSharedWidgetParams) WithShowCaptionAboveMedia() *SendSharedWidgetParams {
+	p.ShowCaptionAboveMedia = true
+	return p
+}
+
+// WithDisableNotification adds disable notification parameter
+func (p *SendSharedWidgetParams) WithDisableNotification() *SendSharedWidgetParams {
+	p.DisableNotification = true
+	return p
+}
+
+// WithProtectContent adds protect content parameter
+func (p *SendSharedWidgetParams) WithProtectContent() *SendSharedWidgetParams {
+	p.ProtectContent = true
+	return p
+}
+
+// WithAllowPaidBroadcast adds allow paid broadcast parameter
+func (p *SendSharedWidgetParams) WithAllowPaidBroadcast() *SendSharedWidgetParams {
+	p.AllowPaidBroadcast = true
+	return p
+}
+
+// WithMessageEffectID adds message effect ID parameter
+func (p *SendSharedWidgetParams) WithMessageEffectID(messageEffectID string) *SendSharedWidgetParams {
+	p.MessageEffectID = messageEffectID
+	return p
+}
+
+// WithReplyParameters adds reply parameters parameter
+func (p *SendSharedWidgetParams) WithReplyParameters(replyParameters *ReplyParameters) *SendSharedWidgetParams {
+	p.ReplyParameters = replyParameters
+	return p
+}
+
+// WithReplyMarkup adds reply markup parameter
+func (p *SendSharedWidgetParams) WithReplyMarkup(replyMarkup ReplyMarkup) *SendSharedWidgetParams {
+	p.ReplyMarkup = replyMarkup
+	return p
+}
+
 // WithBusinessConnectionID adds business connection ID parameter
 func (p *SendPaidMediaParams) WithBusinessConnectionID(businessConnectionID string) *SendPaidMediaParams {
 	p.BusinessConnectionID = businessConnectionID
@@ -3137,6 +3335,18 @@ func (p *AnswerCallbackQueryParams) WithCacheTime(cacheTime int) *AnswerCallback
 	return p
 }
 
+// WithWidgetQueryID adds widget query ID parameter
+func (p *AnswerWidgetQueryParams) WithWidgetQueryID(widgetQueryID string) *AnswerWidgetQueryParams {
+	p.WidgetQueryID = widgetQueryID
+	return p
+}
+
+// WithData adds data parameter
+func (p *AnswerWidgetQueryParams) WithData(data string) *AnswerWidgetQueryParams {
+	p.Data = data
+	return p
+}
+
 // WithGuestQueryID adds guest query ID parameter
 func (p *AnswerGuestQueryParams) WithGuestQueryID(guestQueryID string) *AnswerGuestQueryParams {
 	p.GuestQueryID = guestQueryID
@@ -3433,6 +3643,18 @@ func (p *VerifyUserParams) WithCustomDescription(customDescription string) *Veri
 	return p
 }
 
+// WithCustomDescriptionParseMode adds custom description parse mode parameter
+func (p *VerifyUserParams) WithCustomDescriptionParseMode(customDescriptionParseMode string) *VerifyUserParams {
+	p.CustomDescriptionParseMode = customDescriptionParseMode
+	return p
+}
+
+// WithCustomDescriptionEntities adds custom description entities parameter
+func (p *VerifyUserParams) WithCustomDescriptionEntities(customDescriptionEntities ...MessageEntity) *VerifyUserParams {
+	p.CustomDescriptionEntities = customDescriptionEntities
+	return p
+}
+
 // WithChatID adds chat ID parameter
 func (p *VerifyChatParams) WithChatID(chatID ChatID) *VerifyChatParams {
 	p.ChatID = chatID
@@ -3442,6 +3664,18 @@ func (p *VerifyChatParams) WithChatID(chatID ChatID) *VerifyChatParams {
 // WithCustomDescription adds custom description parameter
 func (p *VerifyChatParams) WithCustomDescription(customDescription string) *VerifyChatParams {
 	p.CustomDescription = customDescription
+	return p
+}
+
+// WithCustomDescriptionParseMode adds custom description parse mode parameter
+func (p *VerifyChatParams) WithCustomDescriptionParseMode(customDescriptionParseMode string) *VerifyChatParams {
+	p.CustomDescriptionParseMode = customDescriptionParseMode
+	return p
+}
+
+// WithCustomDescriptionEntities adds custom description entities parameter
+func (p *VerifyChatParams) WithCustomDescriptionEntities(customDescriptionEntities ...MessageEntity) *VerifyChatParams {
+	p.CustomDescriptionEntities = customDescriptionEntities
 	return p
 }
 
@@ -3793,6 +4027,12 @@ func (p *GetChatGiftsParams) WithLimit(limit int) *GetChatGiftsParams {
 	return p
 }
 
+// WithName adds name parameter
+func (p *GetUniqueGiftParams) WithName(name string) *GetUniqueGiftParams {
+	p.Name = name
+	return p
+}
+
 // WithBusinessConnectionID adds business connection ID parameter
 func (p *ConvertGiftToStarsParams) WithBusinessConnectionID(businessConnectionID string) *ConvertGiftToStarsParams {
 	p.BusinessConnectionID = businessConnectionID
@@ -3850,6 +4090,19 @@ func (p *TransferGiftParams) WithNewOwnerChatID(newOwnerChatID int64) *TransferG
 // WithStarCount adds star count parameter
 func (p *TransferGiftParams) WithStarCount(starCount int) *TransferGiftParams {
 	p.StarCount = starCount
+	return p
+}
+
+// WithBusinessConnectionID adds business connection ID parameter
+func (p *DeleteBusinessAccountGiftParams) WithBusinessConnectionID(businessConnectionID string,
+) *DeleteBusinessAccountGiftParams {
+	p.BusinessConnectionID = businessConnectionID
+	return p
+}
+
+// WithOwnedGiftID adds owned gift ID parameter
+func (p *DeleteBusinessAccountGiftParams) WithOwnedGiftID(ownedGiftID string) *DeleteBusinessAccountGiftParams {
+	p.OwnedGiftID = ownedGiftID
 	return p
 }
 
@@ -4336,6 +4589,54 @@ func (p *EditMessageChecklistParams) WithChecklist(checklist InputChecklist) *Ed
 // WithReplyMarkup adds reply markup parameter
 func (p *EditMessageChecklistParams) WithReplyMarkup(replyMarkup *InlineKeyboardMarkup) *EditMessageChecklistParams {
 	p.ReplyMarkup = replyMarkup
+	return p
+}
+
+// WithChatID adds chat ID parameter
+func (p *EditMessageWidgetDataParams) WithChatID(chatID ChatID) *EditMessageWidgetDataParams {
+	p.ChatID = chatID
+	return p
+}
+
+// WithMessageID adds message ID parameter
+func (p *EditMessageWidgetDataParams) WithMessageID(messageID int) *EditMessageWidgetDataParams {
+	p.MessageID = messageID
+	return p
+}
+
+// WithInlineMessageID adds inline message ID parameter
+func (p *EditMessageWidgetDataParams) WithInlineMessageID(inlineMessageID string) *EditMessageWidgetDataParams {
+	p.InlineMessageID = inlineMessageID
+	return p
+}
+
+// WithPublicData adds public data parameter
+func (p *EditMessageWidgetDataParams) WithPublicData(publicData string) *EditMessageWidgetDataParams {
+	p.PublicData = publicData
+	return p
+}
+
+// WithChatData adds chat data parameter
+func (p *EditMessageWidgetDataParams) WithChatData(chatData string) *EditMessageWidgetDataParams {
+	p.ChatData = chatData
+	return p
+}
+
+// WithWidgetID adds widget ID parameter
+func (p *EditSharedWidgetDataParams) WithWidgetID(widgetID string) *EditSharedWidgetDataParams {
+	p.WidgetID = widgetID
+	return p
+}
+
+// WithPublicData adds public data parameter
+func (p *EditSharedWidgetDataParams) WithPublicData(publicData string) *EditSharedWidgetDataParams {
+	p.PublicData = publicData
+	return p
+}
+
+// WithCacheTime adds cache time parameter
+func (p *EditSharedWidgetDataParams) WithCacheTime(cacheTime int) *EditSharedWidgetDataParams {
+	p.CacheTime = cacheTime
 	return p
 }
 

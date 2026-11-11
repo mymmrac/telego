@@ -619,6 +619,66 @@ func TestBot_SendVideoNote(t *testing.T) {
 	})
 }
 
+func TestBot_SendWidget(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.SendWidget(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.SendWidget(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
+func TestBot_SendSharedWidget(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		resp := telegoResponse(t, expectedMessage)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		message, err := m.Bot.SendSharedWidget(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedMessage, message)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		message, err := m.Bot.SendSharedWidget(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, message)
+	})
+}
+
 func TestBot_SendPaidMedia(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -1962,6 +2022,37 @@ func TestBot_GetChatMember(t *testing.T) {
 	})
 }
 
+func TestBot_GetChatShareThemeBackdrops(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedChatShareThemeBackdrops := &ChatShareThemeBackdrops{}
+		resp := telegoResponse(t, expectedChatShareThemeBackdrops)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		chatShareThemeBackdrops, err := m.Bot.GetChatShareThemeBackdrops(t.Context())
+		require.NoError(t, err)
+		assert.Equal(t, expectedChatShareThemeBackdrops, chatShareThemeBackdrops)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		chatShareThemeBackdrops, err := m.Bot.GetChatShareThemeBackdrops(t.Context())
+		require.Error(t, err)
+		assert.Nil(t, chatShareThemeBackdrops)
+	})
+}
+
 func TestBot_GetUserPersonalChatMessages(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -2433,6 +2524,33 @@ func TestBot_AnswerCallbackQuery(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.AnswerCallbackQuery(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_AnswerWidgetQuery(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.AnswerWidgetQuery(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.AnswerWidgetQuery(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -3662,6 +3780,37 @@ func TestBot_GetChatGifts(t *testing.T) {
 	})
 }
 
+func TestBot_GetUniqueGift(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		expectedUniqueGift := &UniqueGift{}
+		resp := telegoResponse(t, expectedUniqueGift)
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(resp, nil)
+
+		uniqueGift, err := m.Bot.GetUniqueGift(t.Context(), nil)
+		require.NoError(t, err)
+		assert.Equal(t, expectedUniqueGift, uniqueGift)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		uniqueGift, err := m.Bot.GetUniqueGift(t.Context(), nil)
+		require.Error(t, err)
+		assert.Nil(t, uniqueGift)
+	})
+}
+
 func TestBot_ConvertGiftToStars(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := newMockedBot(ctrl)
@@ -3739,6 +3888,33 @@ func TestBot_TransferGift(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.TransferGift(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_DeleteBusinessAccountGift(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.DeleteBusinessAccountGift(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.DeleteBusinessAccountGift(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
@@ -4139,6 +4315,60 @@ func TestBot_EditMessageChecklist(t *testing.T) {
 		message, err := m.Bot.EditMessageChecklist(t.Context(), nil)
 		require.Error(t, err)
 		assert.Nil(t, message)
+	})
+}
+
+func TestBot_EditMessageWidgetData(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditMessageWidgetData(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditMessageWidgetData(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_EditSharedWidgetData(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.EditSharedWidgetData(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.EditSharedWidgetData(t.Context(), nil)
+		require.Error(t, err)
 	})
 }
 
@@ -5439,11 +5669,13 @@ func TestSendVideoParams_fileParameters(t *testing.T) {
 	p := &SendVideoParams{
 		Video:     testInputFile,
 		Thumbnail: &testInputFile,
+		Cover:     &testInputFile,
 	}
 
 	assert.Equal(t, map[string]ta.NamedReader{
 		"video":     testNamedReader{},
 		"thumbnail": testNamedReader{},
+		"cover":     testNamedReader{},
 	}, p.fileParameters())
 }
 
@@ -5578,6 +5810,170 @@ func TestSetStickerSetThumbnailParams_fileParameters(t *testing.T) {
 
 	assert.Equal(t, map[string]ta.NamedReader{
 		"thumbnail": testNamedReader{},
+	}, p.fileParameters())
+}
+
+func TestSendLivePhotoParams_fileParameters(t *testing.T) {
+	p := &SendLivePhotoParams{
+		LivePhoto: testInputFile,
+		Photo:     testInputFile,
+	}
+
+	assert.Equal(t, map[string]ta.NamedReader{
+		"live_photo": testNamedReader{},
+		"photo":      testNamedReader{},
+	}, p.fileParameters())
+}
+
+func TestReplaceStickerInSetParams_fileParameters(t *testing.T) {
+	p := &ReplaceStickerInSetParams{
+		Sticker: InputSticker{Sticker: testInputFile},
+	}
+
+	assert.Equal(t, map[string]ta.NamedReader{
+		"test": testNamedReader{},
+	}, p.fileParameters())
+
+	assert.Equal(t, map[string]ta.NamedReader{}, (&ReplaceStickerInSetParams{}).fileParameters())
+}
+
+func TestEditMessageTextParams_fileParameters(t *testing.T) {
+	p := &EditMessageTextParams{
+		RichMessage: &InputRichMessage{
+			Blocks: []InputRichBlock{
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+			Media: []InputRichMessageMedia{
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+		},
+	}
+
+	assert.Equal(t, map[string]ta.NamedReader{
+		"test": testNamedReader{},
+	}, p.fileParameters())
+}
+
+func TestSendRichMessageParams_fileParameters(t *testing.T) {
+	p := &SendRichMessageParams{
+		RichMessage: InputRichMessage{
+			Blocks: []InputRichBlock{
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+			Media: []InputRichMessageMedia{
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+		},
+	}
+
+	assert.Equal(t, map[string]ta.NamedReader{
+		"test": testNamedReader{},
+	}, p.fileParameters())
+}
+
+func TestSendRichMessageDraftParams_fileParameters(t *testing.T) {
+	p := &SendRichMessageDraftParams{
+		RichMessage: InputRichMessage{
+			Blocks: []InputRichBlock{
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+			Media: []InputRichMessageMedia{
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+		},
+	}
+
+	assert.Equal(t, map[string]ta.NamedReader{
+		"test": testNamedReader{},
+	}, p.fileParameters())
+}
+
+func TestEditEphemeralMessageTextParams_fileParameters(t *testing.T) {
+	p := &EditEphemeralMessageTextParams{
+		RichMessage: &InputRichMessage{
+			Blocks: []InputRichBlock{
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				&InputRichBlockPhoto{
+					Photo: InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+			Media: []InputRichMessageMedia{
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputFile,
+					},
+				},
+				{
+					Media: &InputMediaPhoto{
+						Media: testInputNilFile,
+					},
+				},
+			},
+		},
+	}
+
+	assert.Equal(t, map[string]ta.NamedReader{
+		"test": testNamedReader{},
 	}, p.fileParameters())
 }
 
