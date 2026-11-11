@@ -3,6 +3,7 @@
 package main
 
 import (
+	_ "embed"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,6 +12,9 @@ import (
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
 )
+
+//go:embed files/dice-widget.html
+var diceWidgetHTML string
 
 func TestSendMessage(t *testing.T) {
 	ctx := t.Context()
@@ -103,6 +107,16 @@ func TestSendMessage(t *testing.T) {
 			tu.Entity("a  "), tu.Entity("a"),
 		))
 
+		require.NoError(t, err)
+		assert.NotNil(t, msg)
+	})
+
+	t.Run("dice_widget", func(t *testing.T) {
+		msg, err := bot.SendWidget(ctx, &telego.SendWidgetParams{
+			ChatID: tu.ID(chatID),
+			HTML:   diceWidgetHTML,
+			Width:  200,
+		})
 		require.NoError(t, err)
 		assert.NotNil(t, msg)
 	})

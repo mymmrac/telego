@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: system-ui, sans-serif;
+            color: var(--tg-theme-text-color, #222);
+            background: var(--tg-theme-bg-color, #fff);
+        }
+
+        .widget {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .dice {
+            width: 65%;
+            max-width: 220px;
+            aspect-ratio: 1;
+            padding: 0;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 100ms ease;
+        }
+
+        .dice:active {
+            transform: scale(.94);
+        }
+
+        .dice svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+            filter: drop-shadow(0 5px 8px rgba(0, 0, 0, .18));
+        }
+
+        .dice-face {
+            fill: var(--tg-theme-button-color, #3498db);
+        }
+
+        .dot {
+            fill: var(--tg-theme-button-text-color, #fff);
+        }
+
+        .result {
+            font-size: 22px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+
+        @keyframes rolling {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            20% {
+                transform: rotate(150deg) scale(.85);
+            }
+            45% {
+                transform: rotate(360deg) scale(1.05);
+            }
+            70% {
+                transform: rotate(570deg) scale(.9);
+            }
+            100% {
+                transform: rotate(720deg) scale(1);
+            }
+        }
+
+        .dice.rolling {
+            animation: rolling 900ms cubic-bezier(.22, .8, .25, 1) both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .dice.rolling {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <button class="dice" id="dice" aria-label="Roll dice">
+            <svg viewBox="0 0 100 100">
+                <rect class="dice-face" x="3" y="3" width="94" height="94" rx="17"/>
+                <g id="dots" class="dot"></g>
+            </svg>
+        </button>
+
+        <div class="result" id="result">1</div>
+        <div class="hint">Tap to roll</div>
+    </div>
+
+    <script>
+        const dice = document.getElementById("dice")
+        const dots = document.getElementById("dots")
+        const result = document.getElementById("result")
+
+        const positions = {
+            1: [ [ 50, 50 ] ],
+            2: [ [ 27, 27 ], [ 73, 73 ] ],
+            3: [ [ 27, 27 ], [ 50, 50 ], [ 73, 73 ] ],
+            4: [ [ 27, 27 ], [ 73, 27 ], [ 27, 73 ], [ 73, 73 ] ],
+            5: [ [ 27, 27 ], [ 73, 27 ], [ 50, 50 ], [ 27, 73 ], [ 73, 73 ] ],
+            6: [ [ 27, 25 ], [ 73, 25 ], [ 27, 50 ], [ 73, 50 ], [ 27, 75 ], [ 73, 75 ] ],
+        }
+
+        let current = 1
+        let rolling = false
+
+        function render(value) {
+            dots.innerHTML = positions[value]
+                .map(([ x, y ]) => `<circle cx="${ x }" cy="${ y }" r="7"/>`)
+                .join("")
+
+            result.textContent = value
+        }
+
+        function roll() {
+            if (rolling) return
+
+            rolling = true
+
+            const finalValue = Math.floor(Math.random() * 6) + 1
+            const duration = 900
+            const interval = 75
+            const started = performance.now()
+
+            dice.classList.remove("rolling")
+            void dice.offsetWidth
+            dice.classList.add("rolling")
+
+            function animate(now) {
+                const elapsed = now - started
+
+                if (elapsed >= duration) {
+                    render(finalValue)
+                    current = finalValue
+                    rolling = false
+                    dice.classList.remove("rolling")
+
+                    if (window.Telegram?.WebApp?.HapticFeedback) {
+                        Telegram.WebApp.HapticFeedback.impactOccurred("medium")
+                    }
+
+                    return
+                }
+
+                render(Math.floor(Math.random() * 6) + 1)
+
+                setTimeout(() => requestAnimationFrame(animate), interval)
+            }
+
+            requestAnimationFrame(animate)
+        }
+
+        dice.addEventListener("click", roll)
+
+        render(current)
+    </script>
+</body>
+</html>
