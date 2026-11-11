@@ -311,6 +311,46 @@ func TestBotHandler_HandleCallbackQuery(t *testing.T) {
 	testHandler(t, bh, wg)
 }
 
+func TestBotHandler_HandleWidgetQuery(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleWidgetQuery(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := WidgetQueryHandler(func(_ *Context, _ telego.WidgetQuery) error { wg.Done(); return nil })
+
+	bh.HandleWidgetQuery(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{WidgetQuery: &telego.WidgetQuery{
+		Type: &telego.WidgetQueryTypeData{Type: telego.WidgetQueryData},
+	}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
+func TestBotHandler_HandleSharedWidgetQuery(t *testing.T) {
+	bh := newTestBotHandler(t)
+
+	require.Panics(t, func() { bh.HandleSharedWidgetQuery(nil) })
+
+	wg := &sync.WaitGroup{}
+	handler := SharedWidgetQueryHandler(func(_ *Context, _ telego.SharedWidgetQuery) error { wg.Done(); return nil })
+
+	bh.HandleSharedWidgetQuery(handler)
+	testHandlerSetup(t, bh)
+
+	updates := make(chan telego.Update, 1)
+	updates <- telego.Update{SharedWidgetQuery: &telego.SharedWidgetQuery{
+		Type: &telego.WidgetQueryTypeData{Type: telego.WidgetQueryData},
+	}}
+
+	bh.updates = updates
+	testHandler(t, bh, wg)
+}
+
 func TestBotHandler_HandleShippingQuery(t *testing.T) {
 	bh := newTestBotHandler(t)
 

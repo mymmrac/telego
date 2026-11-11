@@ -955,6 +955,30 @@ func TestPredicates(t *testing.T) {
 			matches:   false,
 		},
 		{
+			name:      "any_widget_query_matches",
+			predicate: AnyWidgetQuery(),
+			update:    telego.Update{WidgetQuery: &telego.WidgetQuery{}},
+			matches:   true,
+		},
+		{
+			name:      "any_widget_query_not_matches",
+			predicate: AnyWidgetQuery(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
+			name:      "any_shared_widget_query_matches",
+			predicate: AnySharedWidgetQuery(),
+			update:    telego.Update{SharedWidgetQuery: &telego.SharedWidgetQuery{}},
+			matches:   true,
+		},
+		{
+			name:      "any_shared_widget_query_not_matches",
+			predicate: AnySharedWidgetQuery(),
+			update:    telego.Update{},
+			matches:   false,
+		},
+		{
 			name:      "any_shipping_query_matches",
 			predicate: AnyShippingQuery(),
 			update:    telego.Update{ShippingQuery: &telego.ShippingQuery{}},

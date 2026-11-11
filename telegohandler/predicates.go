@@ -654,6 +654,20 @@ func CallbackDataMatches(pattern *regexp.Regexp) Predicate {
 	}
 }
 
+// AnyWidgetQuery is true if the widget query isn't nil
+func AnyWidgetQuery() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.WidgetQuery != nil
+	}
+}
+
+// AnySharedWidgetQuery is true if the shared widget query isn't nil
+func AnySharedWidgetQuery() Predicate {
+	return func(_ context.Context, update telego.Update) bool {
+		return update.SharedWidgetQuery != nil
+	}
+}
+
 // AnyShippingQuery is true if shipping query isn't nil
 func AnyShippingQuery() Predicate {
 	return func(_ context.Context, update telego.Update) bool {

@@ -256,6 +256,44 @@ func (h *BotHandler) HandleCallbackQuery(handler CallbackQueryHandler, predicate
 	h.baseGroup.HandleCallbackQuery(handler, predicates...)
 }
 
+// WidgetQueryHandler handles callback queries that came from bot
+type WidgetQueryHandler func(ctx *Context, query telego.WidgetQuery) error
+
+// HandleWidgetQuery same as [BotHandler.Handle], but assumes that the update contains a widget query
+func (h *HandlerGroup) HandleWidgetQuery(handler WidgetQueryHandler, predicates ...Predicate) {
+	if handler == nil {
+		panic("Telego: nil widget query handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.WidgetQuery)
+	}, append([]Predicate{AnyWidgetQuery()}, predicates...)...)
+}
+
+// HandleWidgetQuery same as [BotHandler.Handle], but assumes that the update contains a widget query
+func (h *BotHandler) HandleWidgetQuery(handler WidgetQueryHandler, predicates ...Predicate) {
+	h.baseGroup.HandleWidgetQuery(handler, predicates...)
+}
+
+// SharedWidgetQueryHandler handles callback queries that came from bot
+type SharedWidgetQueryHandler func(ctx *Context, query telego.SharedWidgetQuery) error
+
+// HandleSharedWidgetQuery same as [BotHandler.Handle], but assumes that the update contains a shared widget query
+func (h *HandlerGroup) HandleSharedWidgetQuery(handler SharedWidgetQueryHandler, predicates ...Predicate) {
+	if handler == nil {
+		panic("Telego: nil shared widget query handlers not allowed")
+	}
+
+	h.Handle(func(ctx *Context, update telego.Update) error {
+		return handler(ctx, *update.SharedWidgetQuery)
+	}, append([]Predicate{AnySharedWidgetQuery()}, predicates...)...)
+}
+
+// HandleSharedWidgetQuery same as [BotHandler.Handle], but assumes that the update contains a shared widget query
+func (h *BotHandler) HandleSharedWidgetQuery(handler SharedWidgetQueryHandler, predicates ...Predicate) {
+	h.baseGroup.HandleSharedWidgetQuery(handler, predicates...)
+}
+
 // ShippingQueryHandler handles shipping query that came from bot
 type ShippingQueryHandler func(ctx *Context, query telego.ShippingQuery) error
 
