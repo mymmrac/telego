@@ -4,21 +4,21 @@ go 1.26.11
 
 require (
 	github.com/gofiber/fiber/v3 v3.7.0
-	github.com/mymmrac/telego v1.12.1
+	github.com/mymmrac/telego v1.13.0
 	github.com/valyala/fasthttp v1.78.0
 	golang.ngrok.com/ngrok v1.13.0
 )
 
 require (
 	github.com/bytedance/gopkg v0.1.3 // indirect
-	github.com/bytedance/sonic v1.15.3 // indirect
-	github.com/bytedance/sonic/loader v0.5.2 // indirect
+	github.com/bytedance/sonic v1.15.5 // indirect
+	github.com/bytedance/sonic/loader v0.5.3 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
+	github.com/goccy/go-json v0.12.0 // indirect
 	github.com/gofiber/schema v1.9.3 // indirect
 	github.com/gofiber/utils/v2 v2.6.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/grbit/go-json v0.11.0 // indirect
 	github.com/inconshreveable/log15 v3.0.0-testing.5+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
