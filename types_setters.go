@@ -1572,9 +1572,11 @@ func (i *InputRichBlockBlockQuotation) WithCredit(credit RichText) *InputRichBlo
 	return i
 }
 
-// WithText adds text parameter
-func (i *InputRichBlockExpandableBlockQuotation) WithText(text RichText) *InputRichBlockExpandableBlockQuotation {
-	i.Text = text
+// WithBlocks adds blocks parameter
+func (i *InputRichBlockExpandableBlockQuotation) WithBlocks(
+	blocks ...InputRichBlock,
+) *InputRichBlockExpandableBlockQuotation {
+	i.Blocks = blocks
 	return i
 }
 

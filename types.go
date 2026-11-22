@@ -72,7 +72,8 @@ type Update struct {
 	// ChosenInlineResult - Optional. The result of an inline (https://core.telegram.org/bots/api#inline-mode)
 	// query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback
 	// collecting (https://core.telegram.org/bots/inline#collecting-feedback) for details on how to enable these
-	// updates for your bot.
+	// updates for your bot. The updates can also be enabled using the parameter inline_feedback_share_denominator
+	// of the method setMySettings (https://core.telegram.org/bots/api#setmysettings).
 	ChosenInlineResult *ChosenInlineResult `json:"chosen_inline_result,omitempty"`
 
 	// CallbackQuery - Optional. New incoming callback query
@@ -224,6 +225,69 @@ type WebhookInfo struct {
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
 }
 
+// BotFullInfo - This object contains full information about the bot itself.
+type BotFullInfo struct {
+	// ID - Unique identifier for this bot. This number may have more than 32 significant bits and some
+	// programming languages may have difficulty/silent defects in interpreting it. But it has at most 52
+	// significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+	ID int64 `json:"id"`
+
+	// IsBot - Always True
+	IsBot bool `json:"is_bot"`
+
+	// FirstName - Bot's first name
+	FirstName string `json:"first_name"`
+
+	// Username - Optional. Bot's username
+	Username string `json:"username,omitempty"`
+
+	// ActiveUsernames - Optional. If non-empty, the list of all active usernames
+	// (https://telegram.org/blog/topics-in-groups-collectible-usernames#collectible-usernames) of the bot
+	ActiveUsernames []string `json:"active_usernames,omitempty"`
+
+	// CanJoinGroups - True, if the bot can be added to groups
+	CanJoinGroups bool `json:"can_join_groups"`
+
+	// CanReadAllGroupMessages - True, if privacy mode (https://core.telegram.org/bots/features#privacy-mode) is
+	// disabled for the bot
+	CanReadAllGroupMessages bool `json:"can_read_all_group_messages"`
+
+	// SupportsGuestQueries - True, if the bot supports guest queries from chats it is not a member of
+	SupportsGuestQueries bool `json:"supports_guest_queries"`
+
+	// SupportsInlineQueries - True, if the bot supports inline queries
+	SupportsInlineQueries bool `json:"supports_inline_queries"`
+
+	// InlineQueryPlaceholder - Optional. Placeholder for inline queries, which is shown in the input field
+	// after the bot's username; omitted if the default placeholder is used
+	InlineQueryPlaceholder string `json:"inline_query_placeholder,omitempty"`
+
+	// NeedsInlineQueryLocation - True, if the bot requests the location of the user with every inline query
+	NeedsInlineQueryLocation bool `json:"needs_inline_query_location"`
+
+	// CanConnectToBusiness - True, if the bot can be connected to a user account to manage it
+	CanConnectToBusiness bool `json:"can_connect_to_business"`
+
+	// HasMainWebApp - True, if the bot has a main Web App
+	HasMainWebApp bool `json:"has_main_web_app"`
+
+	// HasTopicsEnabled - True, if the bot has forum topic mode enabled in private chats
+	HasTopicsEnabled bool `json:"has_topics_enabled"`
+
+	// AllowsUsersToCreateTopics - True, if the bot allows users to create and delete topics in private chats
+	AllowsUsersToCreateTopics bool `json:"allows_users_to_create_topics"`
+
+	// HasTopicSidebar - True, if topics in private chats with the bot are shown in a sidebar
+	HasTopicSidebar bool `json:"has_topic_sidebar"`
+
+	// CanManageBots - True, if other bots can be created to be controlled by the bot
+	CanManageBots bool `json:"can_manage_bots"`
+
+	// SupportsJoinRequestQueries - True, if the bot supports join request queries and can be assigned to
+	// process them
+	SupportsJoinRequestQueries bool `json:"supports_join_request_queries"`
+}
+
 // User - This object represents a Telegram user or bot.
 type User struct {
 	// ID - Unique identifier for this user or bot. This number may have more than 32 significant bits and some
@@ -252,47 +316,6 @@ type User struct {
 
 	// AddedToAttachmentMenu - Optional. True, if this user added the bot to the attachment menu
 	AddedToAttachmentMenu bool `json:"added_to_attachment_menu,omitempty"`
-
-	// CanJoinGroups - Optional. True, if the bot can be invited to groups. Returned only in getMe
-	// (https://core.telegram.org/bots/api#getme).
-	CanJoinGroups bool `json:"can_join_groups,omitempty"`
-
-	// CanReadAllGroupMessages - Optional. True, if privacy mode
-	// (https://core.telegram.org/bots/features#privacy-mode) is disabled for the bot. Returned only in getMe
-	// (https://core.telegram.org/bots/api#getme).
-	CanReadAllGroupMessages bool `json:"can_read_all_group_messages,omitempty"`
-
-	// SupportsGuestQueries - Optional. True, if the bot supports guest queries from chats it is not a member
-	// of. Returned only in getMe (https://core.telegram.org/bots/api#getme).
-	SupportsGuestQueries bool `json:"supports_guest_queries,omitempty"`
-
-	// SupportsInlineQueries - Optional. True, if the bot supports inline queries. Returned only in getMe
-	// (https://core.telegram.org/bots/api#getme).
-	SupportsInlineQueries bool `json:"supports_inline_queries,omitempty"`
-
-	// CanConnectToBusiness - Optional. True, if the bot can be connected to a user account to manage it.
-	// Returned only in getMe (https://core.telegram.org/bots/api#getme).
-	CanConnectToBusiness bool `json:"can_connect_to_business,omitempty"`
-
-	// HasMainWebApp - Optional. True, if the bot has a main Web App. Returned only in getMe
-	// (https://core.telegram.org/bots/api#getme).
-	HasMainWebApp bool `json:"has_main_web_app,omitempty"`
-
-	// HasTopicsEnabled - Optional. True, if the bot has forum topic mode enabled in private chats. Returned
-	// only in getMe (https://core.telegram.org/bots/api#getme).
-	HasTopicsEnabled bool `json:"has_topics_enabled,omitempty"`
-
-	// AllowsUsersToCreateTopics - Optional. True, if the bot allows users to create and delete topics in
-	// private chats. Returned only in getMe (https://core.telegram.org/bots/api#getme).
-	AllowsUsersToCreateTopics bool `json:"allows_users_to_create_topics,omitempty"`
-
-	// CanManageBots - Optional. True, if other bots can be created to be controlled by the bot. Returned only
-	// in getMe (https://core.telegram.org/bots/api#getme).
-	CanManageBots bool `json:"can_manage_bots,omitempty"`
-
-	// SupportsJoinRequestQueries - Optional. True, if the bot supports join request queries and can be assigned
-	// to process them. Returned only in getMe (https://core.telegram.org/bots/api#getme).
-	SupportsJoinRequestQueries bool `json:"supports_join_request_queries,omitempty"`
 }
 
 // Chat - This object represents a chat.
@@ -922,7 +945,9 @@ type Message struct {
 
 	// WriteAccessAllowed - Optional. Service message: the user allowed the bot to write messages after adding
 	// it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a
-	// Web App sent by the method requestWriteAccess (https://core.telegram.org/bots/webapps#initializing-mini-apps)
+	// Web App sent by the method requestWriteAccess
+	// (https://core.telegram.org/bots/webapps#initializing-mini-apps), or the user was invited to the private chat
+	// with the bot by the owner of the bot
 	WriteAccessAllowed *WriteAccessAllowed `json:"write_access_allowed,omitempty"`
 
 	// PassportData - Optional. Telegram Passport data
@@ -3199,7 +3224,8 @@ type ChatShared struct {
 // WriteAccessAllowed - This object represents a service message about a user allowing a bot to write
 // messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit
 // request from a Web App sent by the method requestWriteAccess
-// (https://core.telegram.org/bots/webapps#initializing-mini-apps).
+// (https://core.telegram.org/bots/webapps#initializing-mini-apps), or about a user being invited to the private
+// chat with the bot by the owner of the bot.
 type WriteAccessAllowed struct {
 	// FromRequest - Optional. True, if the access was granted after the user accepted an explicit request from
 	// a Web App sent by the method requestWriteAccess
@@ -3213,6 +3239,11 @@ type WriteAccessAllowed struct {
 	// FromAttachmentMenu - Optional. True, if the access was granted when the bot was added to the attachment
 	// or side menu
 	FromAttachmentMenu bool `json:"from_attachment_menu,omitempty"`
+
+	// Inviter - Optional. The owner of the bot, if the access was granted when the owner invited the user to
+	// the private chat with the bot. Bot owners can invite up to 10 users at once by pressing the link
+	// https://t.me/botinvite/<bot_username>.
+	Inviter *User `json:"inviter,omitempty"`
 }
 
 // VideoChatScheduled - This object represents a service message about a video chat scheduled in the chat.
@@ -3663,7 +3694,8 @@ type KeyboardButton struct {
 
 	// RequestManagedBot - Optional. If specified, pressing the button will ask the user to create and share a
 	// bot that will be managed by the current bot. Available for bots that enabled management of other bots in the
-	// @BotFather (https://t.me/BotFather) Mini App. Available in private chats only.
+	// @BotFather (https://t.me/BotFather) Mini App or using the parameter can_manage_bots of the method
+	// setMySettings (https://core.telegram.org/bots/api#setmysettings). Available in private chats only.
 	RequestManagedBot *KeyboardButtonRequestManagedBot `json:"request_managed_bot,omitempty"`
 
 	// RequestContact - Optional. If True, the user's phone number will be sent as a contact when the button is
@@ -3982,10 +4014,13 @@ type CopyTextButton struct {
 type DisabledButton struct{}
 
 // CallbackQuery - This object represents an incoming callback query from a callback button in an inline
-// keyboard (https://core.telegram.org/bots/features#inline-keyboards). If the button that originated the query
-// was attached to a message sent by the bot, the field message will be present. If the button was attached to a
-// message sent via the bot (in inline mode (https://core.telegram.org/bots/api#inline-mode)), the field
-// inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
+// keyboard (https://core.telegram.org/bots/features#inline-keyboards) or in a rich message
+// (https://core.telegram.org/bots/api#richmessage). If the button that originated the query belongs to a
+// message sent by the bot, the field message will be present, unless the field inline_message_id is used
+// instead as specified by the parameter callback_query_mode of the method setMySettings
+// (https://core.telegram.org/bots/api#setmysettings). If the button belongs to a message sent via the bot (in
+// inline mode (https://core.telegram.org/bots/api#inline-mode)), the field inline_message_id will be present.
+// Exactly one of the fields data or game_short_name will be present.
 type CallbackQuery struct {
 	// ID - Unique identifier for this query
 	ID string `json:"id"`
@@ -3997,7 +4032,8 @@ type CallbackQuery struct {
 	Message MaybeInaccessibleMessage `json:"message,omitempty"`
 
 	// InlineMessageID - Optional. Identifier of the message sent via the bot in inline mode, that originated
-	// the query
+	// the query. Can also be present for messages sent by the bot, depending on the parameter callback_query_mode
+	// of the method setMySettings (https://core.telegram.org/bots/api#setmysettings).
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 
 	// ChatInstance - Global identifier, uniquely corresponding to the chat to which the message with the
@@ -9944,8 +9980,8 @@ type RichBlockExpandableBlockQuotation struct {
 	// Type - Type of the block, always “expandable_blockquote”
 	Type string `json:"type"`
 
-	// Text - Content of the block
-	Text RichText `json:"text"`
+	// Blocks - Content of the block
+	Blocks []RichBlock `json:"blocks"`
 
 	// Credit - Optional. Credit of the block
 	Credit RichText `json:"credit,omitempty"`
@@ -9971,7 +10007,7 @@ func (i *RichBlockExpandableBlockQuotation) UnmarshalJSON(data []byte) error {
 	type uRichBlockExpandableBlockQuotation RichBlockExpandableBlockQuotation
 	var ui uRichBlockExpandableBlockQuotation
 
-	ui.Text, err = unmarshalRichText(value.Get("text"))
+	ui.Blocks, err = unmarshalRichBlocks(value.Get("blocks"))
 	if err != nil {
 		return err
 	}
@@ -10753,8 +10789,8 @@ type InputRichBlockExpandableBlockQuotation struct {
 	// Type - Type of the block, always “expandable_blockquote”
 	Type string `json:"type"`
 
-	// Text - Content of the block
-	Text RichText `json:"text"`
+	// Blocks - Content of the block
+	Blocks []InputRichBlock `json:"blocks"`
 
 	// Credit - Optional. Credit of the block
 	Credit RichText `json:"credit,omitempty"`
@@ -11182,7 +11218,9 @@ type InlineQuery struct {
 	// third-party clients, unless the request was sent from a secret chat.
 	ChatType string `json:"chat_type,omitempty"`
 
-	// Location - Optional. Sender location, only for bots that request user location
+	// Location - Optional. Sender location, only for bots that enabled user location requests via @BotFather
+	// (https://t.me/botfather) or using the parameter needs_inline_query_location of the method setMySettings
+	// (https://core.telegram.org/bots/api#setmysettings)
 	Location *Location `json:"location,omitempty"`
 }
 
@@ -12588,7 +12626,9 @@ type ChosenInlineResult struct {
 	// From - The user that chose the result
 	From User `json:"from"`
 
-	// Location - Optional. Sender location, only for bots that require user location
+	// Location - Optional. Sender location, only for bots that enabled user location requests via @BotFather
+	// (https://t.me/botfather) or using the parameter needs_inline_query_location of the method setMySettings
+	// (https://core.telegram.org/bots/api#setmysettings)
 	Location *Location `json:"location,omitempty"`
 
 	// InlineMessageID - Optional. Identifier of the sent inline message. Available only if there is an inline

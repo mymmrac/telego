@@ -1032,11 +1032,11 @@ func TestInputRichBlockBlockQuotation_Setters(t *testing.T) {
 
 func TestInputRichBlockExpandableBlockQuotation_Setters(t *testing.T) {
 	i := (&InputRichBlockExpandableBlockQuotation{}).
-		WithText(&RichTextBold{}).
+		WithBlocks([]InputRichBlock{&InputRichBlockParagraph{}}...).
 		WithCredit(&RichTextBold{})
 
 	assert.Equal(t, &InputRichBlockExpandableBlockQuotation{
-		Text:   &RichTextBold{},
+		Blocks: []InputRichBlock{&InputRichBlockParagraph{}},
 		Credit: &RichTextBold{},
 	}, i)
 }

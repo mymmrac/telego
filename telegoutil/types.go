@@ -869,10 +869,10 @@ func RichBlockBlockQuotation(blocks ...telego.InputRichBlock) *telego.InputRichB
 }
 
 // RichBlockExpandableBlockQuotation creates [telego.InputRichBlockExpandableBlockQuotation] with required fields
-func RichBlockExpandableBlockQuotation(text telego.RichText) *telego.InputRichBlockExpandableBlockQuotation {
+func RichBlockExpandableBlockQuotation(blocks ...telego.InputRichBlock) *telego.InputRichBlockExpandableBlockQuotation {
 	return &telego.InputRichBlockExpandableBlockQuotation{
-		Type: telego.BlockTypeExpandableBlockQuotation,
-		Text: text,
+		Type:   telego.BlockTypeExpandableBlockQuotation,
+		Blocks: blocks,
 	}
 }
 

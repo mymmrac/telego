@@ -709,7 +709,7 @@ func TestRichBlockBlockQuotation(t *testing.T) {
 }
 
 func TestRichBlockExpandableBlockQuotation(t *testing.T) {
-	r := RichBlockExpandableBlockQuotation(richText1)
+	r := RichBlockExpandableBlockQuotation(RichBlockParagraph(richText1))
 	assert.Equal(t, telego.BlockTypeExpandableBlockQuotation, r.Type)
 }
 
