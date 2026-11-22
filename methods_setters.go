@@ -3436,6 +3436,98 @@ func (p *SetManagedBotAccessSettingsParams) WithAddedUserIDs(addedUserIDs ...int
 	return p
 }
 
+// WithSupportsInlineQueries adds supports inline queries parameter
+func (p *SetMySettingsParams) WithSupportsInlineQueries(supportsInlineQueries bool) *SetMySettingsParams {
+	p.SupportsInlineQueries = &supportsInlineQueries
+	return p
+}
+
+// WithInlineQueryPlaceholder adds inline query placeholder parameter
+func (p *SetMySettingsParams) WithInlineQueryPlaceholder(inlineQueryPlaceholder string) *SetMySettingsParams {
+	p.InlineQueryPlaceholder = inlineQueryPlaceholder
+	return p
+}
+
+// WithNeedsInlineQueryLocation adds needs inline query location parameter
+func (p *SetMySettingsParams) WithNeedsInlineQueryLocation(needsInlineQueryLocation bool) *SetMySettingsParams {
+	p.NeedsInlineQueryLocation = &needsInlineQueryLocation
+	return p
+}
+
+// WithInlineFeedbackShareDenominator adds inline feedback share denominator parameter
+func (p *SetMySettingsParams) WithInlineFeedbackShareDenominator(
+	inlineFeedbackShareDenominator int,
+) *SetMySettingsParams {
+	p.InlineFeedbackShareDenominator = inlineFeedbackShareDenominator
+	return p
+}
+
+// WithCanJoinGroups adds can join groups parameter
+func (p *SetMySettingsParams) WithCanJoinGroups(canJoinGroups bool) *SetMySettingsParams {
+	p.CanJoinGroups = &canJoinGroups
+	return p
+}
+
+// WithCanReadAllGroupMessages adds can read all group messages parameter
+func (p *SetMySettingsParams) WithCanReadAllGroupMessages(canReadAllGroupMessages bool) *SetMySettingsParams {
+	p.CanReadAllGroupMessages = &canReadAllGroupMessages
+	return p
+}
+
+// WithCanConnectToBusiness adds can connect to business parameter
+func (p *SetMySettingsParams) WithCanConnectToBusiness(canConnectToBusiness bool) *SetMySettingsParams {
+	p.CanConnectToBusiness = &canConnectToBusiness
+	return p
+}
+
+// WithCanManageBots adds can manage bots parameter
+func (p *SetMySettingsParams) WithCanManageBots(canManageBots bool) *SetMySettingsParams {
+	p.CanManageBots = &canManageBots
+	return p
+}
+
+// WithSupportsGuestQueries adds supports guest queries parameter
+func (p *SetMySettingsParams) WithSupportsGuestQueries(supportsGuestQueries bool) *SetMySettingsParams {
+	p.SupportsGuestQueries = &supportsGuestQueries
+	return p
+}
+
+// WithSupportsJoinRequestQueries adds supports join request queries parameter
+func (p *SetMySettingsParams) WithSupportsJoinRequestQueries(supportsJoinRequestQueries bool) *SetMySettingsParams {
+	p.SupportsJoinRequestQueries = &supportsJoinRequestQueries
+	return p
+}
+
+// WithHasTopicsEnabled adds has topics enabled parameter
+func (p *SetMySettingsParams) WithHasTopicsEnabled(hasTopicsEnabled bool) *SetMySettingsParams {
+	p.HasTopicsEnabled = &hasTopicsEnabled
+	return p
+}
+
+// WithAllowsUsersToCreateTopics adds allows users to create topics parameter
+func (p *SetMySettingsParams) WithAllowsUsersToCreateTopics(allowsUsersToCreateTopics bool) *SetMySettingsParams {
+	p.AllowsUsersToCreateTopics = &allowsUsersToCreateTopics
+	return p
+}
+
+// WithHasTopicSidebar adds has topic sidebar parameter
+func (p *SetMySettingsParams) WithHasTopicSidebar(hasTopicSidebar bool) *SetMySettingsParams {
+	p.HasTopicSidebar = &hasTopicSidebar
+	return p
+}
+
+// WithCanCommunicateWithBots adds can communicate with bots parameter
+func (p *SetMySettingsParams) WithCanCommunicateWithBots(canCommunicateWithBots bool) *SetMySettingsParams {
+	p.CanCommunicateWithBots = &canCommunicateWithBots
+	return p
+}
+
+// WithCallbackQueryMode adds callback query mode parameter
+func (p *SetMySettingsParams) WithCallbackQueryMode(callbackQueryMode string) *SetMySettingsParams {
+	p.CallbackQueryMode = callbackQueryMode
+	return p
+}
+
 // WithCommands adds commands parameter
 func (p *SetMyCommandsParams) WithCommands(commands ...BotCommand) *SetMyCommandsParams {
 	p.Commands = commands

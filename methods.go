@@ -170,15 +170,15 @@ func (b *Bot) GetWebhookInfo(ctx context.Context) (*WebhookInfo, error) {
 	return webhookInfo, nil
 }
 
-// GetMe - A simple method for testing your bot's authentication token. Requires no parameters. Returns basic
-// information about the bot in form of a User (https://core.telegram.org/bots/api#user) object.
-func (b *Bot) GetMe(ctx context.Context) (*User, error) {
-	var user *User
-	err := b.performRequest(ctx, "getMe", nil, &user)
+// GetMe - A simple method for testing your bot's authentication token. Requires no parameters. Returns
+// information about the bot in form of a BotFullInfo (https://core.telegram.org/bots/api#botfullinfo) object.
+func (b *Bot) GetMe(ctx context.Context) (*BotFullInfo, error) {
+	var botFullInfo *BotFullInfo
+	err := b.performRequest(ctx, "getMe", nil, &botFullInfo)
 	if err != nil {
 		return nil, fmt.Errorf("telego: getMe: %w", err)
 	}
-	return user, nil
+	return botFullInfo, nil
 }
 
 // LogOut - Use this method to log out from the cloud Bot API server before launching the bot locally. You
@@ -3609,8 +3609,9 @@ type AnswerCallbackQueryParams struct {
 }
 
 // AnswerCallbackQuery - Use this method to send answers to callback queries sent from inline keyboards
-// (https://core.telegram.org/bots/features#inline-keyboards). The answer will be displayed to the user as a
-// notification at the top of the chat screen or as an alert. On success, True is returned.
+// (https://core.telegram.org/bots/features#inline-keyboards) or rich messages
+// (https://core.telegram.org/bots/api#richmessage). The answer will be displayed to the user as a notification
+// at the top of the chat screen or as an alert. On success, True is returned.
 // Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first
 // create a game for your bot via @BotFather (https://t.me/botfather) and accept the terms. Otherwise, you may
 // use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
@@ -3774,6 +3775,85 @@ func (b *Bot) SetManagedBotAccessSettings(ctx context.Context, params *SetManage
 	err := b.performRequest(ctx, "setManagedBotAccessSettings", params)
 	if err != nil {
 		return fmt.Errorf("telego: setManagedBotAccessSettings: %w", err)
+	}
+	return nil
+}
+
+// SetMySettingsParams - Represents parameters of setMySettings method.
+type SetMySettingsParams struct {
+	// SupportsInlineQueries - Optional. Pass True to enable inline mode
+	// (https://core.telegram.org/bots/api#inline-mode) for the bot or False to disable it
+	SupportsInlineQueries *bool `json:"supports_inline_queries,omitempty"`
+
+	// InlineQueryPlaceholder - Optional. New placeholder for inline queries, which is shown in the input field
+	// after the bot's username. Pass an empty string to use the default placeholder.
+	InlineQueryPlaceholder string `json:"inline_query_placeholder,omitempty"`
+
+	// NeedsInlineQueryLocation - Optional. Pass True to request the location of the user with every inline
+	// query to the bot or False to stop requesting it
+	NeedsInlineQueryLocation *bool `json:"needs_inline_query_location,omitempty"`
+
+	// InlineFeedbackShareDenominator - Optional. Denominator of the share of chosen inline results
+	// (https://core.telegram.org/bots/api#choseninlineresult) received by the bot; the bot receives 1 out of
+	// inline_feedback_share_denominator chosen results. Must be one of 1, 10, 100, or 1000. Pass 0 to stop
+	// receiving chosen inline results.
+	InlineFeedbackShareDenominator int `json:"inline_feedback_share_denominator,omitempty"`
+
+	// CanJoinGroups - Optional. Pass True to allow adding the bot to groups or False to disallow it
+	CanJoinGroups *bool `json:"can_join_groups,omitempty"`
+
+	// CanReadAllGroupMessages - Optional. Pass True to disable privacy mode
+	// (https://core.telegram.org/bots/features#privacy-mode) for the bot or False to enable it
+	CanReadAllGroupMessages *bool `json:"can_read_all_group_messages,omitempty"`
+
+	// CanConnectToBusiness - Optional. Pass True to allow connecting the bot to user accounts to manage them or
+	// False to disallow it
+	CanConnectToBusiness *bool `json:"can_connect_to_business,omitempty"`
+
+	// CanManageBots - Optional. Pass True to allow creating other bots that will be controlled by the bot or
+	// False to disallow it
+	CanManageBots *bool `json:"can_manage_bots,omitempty"`
+
+	// SupportsGuestQueries - Optional. Pass True to allow guest queries to the bot from chats it isn't a member
+	// of or False to disallow them
+	SupportsGuestQueries *bool `json:"supports_guest_queries,omitempty"`
+
+	// SupportsJoinRequestQueries - Optional. Pass True to allow assigning the bot to process join request
+	// queries or False to disallow it
+	SupportsJoinRequestQueries *bool `json:"supports_join_request_queries,omitempty"`
+
+	// HasTopicsEnabled - Optional. Pass True to enable forum topic mode in private chats with the bot or False
+	// to disable it
+	HasTopicsEnabled *bool `json:"has_topics_enabled,omitempty"`
+
+	// AllowsUsersToCreateTopics - Optional. Pass True to allow users to create and delete topics in private
+	// chats with the bot or False to disallow it
+	AllowsUsersToCreateTopics *bool `json:"allows_users_to_create_topics,omitempty"`
+
+	// HasTopicSidebar - Optional. Pass True to show topics in private chats with the bot in a sidebar or False
+	// to stop showing them in a sidebar
+	HasTopicSidebar *bool `json:"has_topic_sidebar,omitempty"`
+
+	// CanCommunicateWithBots - Optional. Pass True to allow the bot to communicate with other bots in groups,
+	// private chats, and through business accounts or False to disallow it
+	CanCommunicateWithBots *bool `json:"can_communicate_with_bots,omitempty"`
+
+	// CallbackQueryMode - Optional. Mode in which the bot receives callback queries
+	// (https://core.telegram.org/bots/api#callbackquery) from buttons in messages sent by the bot. Must be one of
+	// “default” (the field message is always used and contains an InaccessibleMessage
+	// (https://core.telegram.org/bots/api#inaccessiblemessage) if the message is inaccessible to the bot),
+	// “auto” (the field inline_message_id is used instead of the field message if the message is inaccessible
+	// to the bot; the field message can still contain an inaccessible message if the message has just been
+	// deleted), or “inline” (the field inline_message_id is always used instead of the field message).
+	CallbackQueryMode string `json:"callback_query_mode,omitempty"`
+}
+
+// SetMySettings - Use this method to change settings of the bot. Settings that aren't specified remain
+// unchanged. Returns True on success.
+func (b *Bot) SetMySettings(ctx context.Context, params *SetMySettingsParams) error {
+	err := b.performRequest(ctx, "setMySettings", params)
+	if err != nil {
+		return fmt.Errorf("telego: setMySettings: %w", err)
 	}
 	return nil
 }

@@ -1744,6 +1744,43 @@ func TestSetManagedBotAccessSettingsParams_Setters(t *testing.T) {
 	}, s)
 }
 
+func TestSetMySettingsParams_Setters(t *testing.T) {
+	s := (&SetMySettingsParams{}).
+		WithSupportsInlineQueries(true).
+		WithInlineQueryPlaceholder("InlineQueryPlaceholder").
+		WithNeedsInlineQueryLocation(true).
+		WithInlineFeedbackShareDenominator(1).
+		WithCanJoinGroups(true).
+		WithCanReadAllGroupMessages(true).
+		WithCanConnectToBusiness(true).
+		WithCanManageBots(true).
+		WithSupportsGuestQueries(true).
+		WithSupportsJoinRequestQueries(true).
+		WithHasTopicsEnabled(true).
+		WithAllowsUsersToCreateTopics(true).
+		WithHasTopicSidebar(true).
+		WithCanCommunicateWithBots(true).
+		WithCallbackQueryMode("CallbackQueryMode")
+
+	assert.Equal(t, &SetMySettingsParams{
+		SupportsInlineQueries:          new(true),
+		InlineQueryPlaceholder:         "InlineQueryPlaceholder",
+		NeedsInlineQueryLocation:       new(true),
+		InlineFeedbackShareDenominator: 1,
+		CanJoinGroups:                  new(true),
+		CanReadAllGroupMessages:        new(true),
+		CanConnectToBusiness:           new(true),
+		CanManageBots:                  new(true),
+		SupportsGuestQueries:           new(true),
+		SupportsJoinRequestQueries:     new(true),
+		HasTopicsEnabled:               new(true),
+		AllowsUsersToCreateTopics:      new(true),
+		HasTopicSidebar:                new(true),
+		CanCommunicateWithBots:         new(true),
+		CallbackQueryMode:              "CallbackQueryMode",
+	}, s)
+}
+
 func TestSetMyCommandsParams_Setters(t *testing.T) {
 	s := (&SetMyCommandsParams{}).
 		WithCommands([]BotCommand{{Command: "Commands"}}...).

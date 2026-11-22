@@ -383,7 +383,7 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 		parameter.typ = "int64"
 	}
 
-	if methodName == "promoteChatMember" && parameter.typ == "bool" {
+	if (methodName == "promoteChatMember" || methodName == "setMySettings") && parameter.typ == "bool" {
 		parameter.typ = "*bool"
 	}
 

@@ -140,7 +140,7 @@ func TestBot_GetMe(t *testing.T) {
 			JSONRequest(gomock.Any()).
 			Return(data, nil)
 
-		expectedUser := &User{
+		expectedUser := &BotFullInfo{
 			ID: 1,
 		}
 		resp := telegoResponse(t, expectedUser)
@@ -2764,6 +2764,33 @@ func TestBot_SetManagedBotAccessSettings(t *testing.T) {
 			Return(nil, errTest)
 
 		err := m.Bot.SetManagedBotAccessSettings(t.Context(), nil)
+		require.Error(t, err)
+	})
+}
+
+func TestBot_SetMySettings(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	m := newMockedBot(ctrl)
+
+	t.Run("success", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(data, nil)
+
+		m.MockAPICaller.EXPECT().
+			Call(gomock.Any(), gomock.Any(), gomock.Any()).
+			Return(emptyResp, nil)
+
+		err := m.Bot.SetMySettings(t.Context(), nil)
+		require.NoError(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		m.MockRequestConstructor.EXPECT().
+			JSONRequest(gomock.Any()).
+			Return(nil, errTest)
+
+		err := m.Bot.SetMySettings(t.Context(), nil)
 		require.Error(t, err)
 	})
 }
