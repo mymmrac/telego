@@ -3797,7 +3797,7 @@ type SetMySettingsParams struct {
 	// (https://core.telegram.org/bots/api#choseninlineresult) received by the bot; the bot receives 1 out of
 	// inline_feedback_share_denominator chosen results. Must be one of 1, 10, 100, or 1000. Pass 0 to stop
 	// receiving chosen inline results.
-	InlineFeedbackShareDenominator int `json:"inline_feedback_share_denominator,omitempty"`
+	InlineFeedbackShareDenominator *int `json:"inline_feedback_share_denominator,omitempty"`
 
 	// CanJoinGroups - Optional. Pass True to allow adding the bot to groups or False to disallow it
 	CanJoinGroups *bool `json:"can_join_groups,omitempty"`

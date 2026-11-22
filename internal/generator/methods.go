@@ -387,6 +387,10 @@ func parameterSpecialCases(parameter *tgMethodParameter, methodName string) {
 		parameter.typ = "*bool"
 	}
 
+	if methodName == "setMySettings" && parameter.nameSnakeCase == "inline_feedback_share_denominator" {
+		parameter.typ = "*int"
+	}
+
 	if methodName == "editForumTopic" && parameter.nameSnakeCase == "icon_custom_emoji_id" {
 		parameter.typ = "*string"
 	}
