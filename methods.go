@@ -3845,7 +3845,7 @@ type SetMySettingsParams struct {
 	// “auto” (the field inline_message_id is used instead of the field message if the message is inaccessible
 	// to the bot; the field message can still contain an inaccessible message if the message has just been
 	// deleted), or “inline” (the field inline_message_id is always used instead of the field message).
-	CallbackQueryMode string `json:"callback_query_mode,omitempty"`
+	CallbackQueryMode *string `json:"callback_query_mode,omitempty"`
 }
 
 // SetMySettings - Use this method to change settings of the bot. Settings that aren't specified remain

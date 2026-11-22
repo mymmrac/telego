@@ -1766,7 +1766,7 @@ func TestSetMySettingsParams_Setters(t *testing.T) {
 		SupportsInlineQueries:          new(true),
 		InlineQueryPlaceholder:         "InlineQueryPlaceholder",
 		NeedsInlineQueryLocation:       new(true),
-		InlineFeedbackShareDenominator: 1,
+		InlineFeedbackShareDenominator: new(1),
 		CanJoinGroups:                  new(true),
 		CanReadAllGroupMessages:        new(true),
 		CanConnectToBusiness:           new(true),
@@ -1777,7 +1777,7 @@ func TestSetMySettingsParams_Setters(t *testing.T) {
 		AllowsUsersToCreateTopics:      new(true),
 		HasTopicSidebar:                new(true),
 		CanCommunicateWithBots:         new(true),
-		CallbackQueryMode:              "CallbackQueryMode",
+		CallbackQueryMode:              new("CallbackQueryMode"),
 	}, s)
 }
 

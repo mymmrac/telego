@@ -3458,7 +3458,7 @@ func (p *SetMySettingsParams) WithNeedsInlineQueryLocation(needsInlineQueryLocat
 func (p *SetMySettingsParams) WithInlineFeedbackShareDenominator(
 	inlineFeedbackShareDenominator int,
 ) *SetMySettingsParams {
-	p.InlineFeedbackShareDenominator = inlineFeedbackShareDenominator
+	p.InlineFeedbackShareDenominator = &inlineFeedbackShareDenominator
 	return p
 }
 
@@ -3524,7 +3524,7 @@ func (p *SetMySettingsParams) WithCanCommunicateWithBots(canCommunicateWithBots 
 
 // WithCallbackQueryMode adds callback query mode parameter
 func (p *SetMySettingsParams) WithCallbackQueryMode(callbackQueryMode string) *SetMySettingsParams {
-	p.CallbackQueryMode = callbackQueryMode
+	p.CallbackQueryMode = &callbackQueryMode
 	return p
 }
 
