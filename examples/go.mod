@@ -4,7 +4,7 @@ go 1.26.11
 
 require (
 	github.com/gofiber/fiber/v3 v3.7.0
-	github.com/mymmrac/telego v1.13.0
+	github.com/mymmrac/telego v1.14.0
 	github.com/valyala/fasthttp v1.79.0
 	golang.ngrok.com/ngrok v1.13.0
 )
